@@ -24,7 +24,6 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableByteCollection;
 import com.gs.collections.api.collection.primitive.MutableCharCollection;
@@ -333,13 +332,7 @@ public abstract class AbstractLazyIterableTestCase
     {
         Assert.assertEquals(
                 FastList.newListWith("1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 "),
-                this.lazyIterable.collectWith(new Function2<Integer, String, String>()
-                {
-                    public String value(Integer argument1, String argument2)
-                    {
-                        return argument1.toString() + argument2;
-                    }
-                }, " ", FastList.<String>newList()));
+                this.lazyIterable.collectWith((argument1, argument2) -> argument1.toString() + argument2, " ", FastList.<String>newList()));
     }
 
     @Test
@@ -700,13 +693,7 @@ public abstract class AbstractLazyIterableTestCase
     @Test
     public void groupBy()
     {
-        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return IntegerPredicates.isOdd().accept(object);
-            }
-        };
+        Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
 
         MutableMap<Boolean, RichIterable<Integer>> expected =
                 UnifiedMap.<Boolean, RichIterable<Integer>>newWithKeysValues(
@@ -791,13 +778,7 @@ public abstract class AbstractLazyIterableTestCase
     public void chunk()
     {
         LazyIterable<RichIterable<Integer>> groups = this.lazyIterable.chunk(2);
-        RichIterable<Integer> sizes = groups.collect(new Function<RichIterable<Integer>, Integer>()
-        {
-            public Integer valueOf(RichIterable<Integer> richIterable)
-            {
-                return richIterable.size();
-            }
-        });
+        RichIterable<Integer> sizes = groups.collect(RichIterable::size);
         Assert.assertEquals(Bags.mutable.of(2, 2, 2, 1), sizes.toBag());
     }
 
@@ -823,14 +804,7 @@ public abstract class AbstractLazyIterableTestCase
     public void flatCollect()
     {
         LazyIterable<Integer> collection = this.newWith(1, 2, 3, 4);
-        Function<Integer, MutableList<String>> function =
-                new Function<Integer, MutableList<String>>()
-                {
-                    public MutableList<String> valueOf(Integer object)
-                    {
-                        return FastList.newListWith(String.valueOf(object));
-                    }
-                };
+        Function<Integer, MutableList<String>> function = object -> FastList.newListWith(String.valueOf(object));
 
         Verify.assertListsEqual(
                 FastList.newListWith("1", "2", "3", "4"),

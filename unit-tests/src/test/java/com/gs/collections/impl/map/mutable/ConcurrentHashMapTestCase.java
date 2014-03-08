@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,6 @@ import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ConcurrentMutableMap;
 import com.gs.collections.impl.bag.mutable.HashBag;
@@ -60,19 +57,9 @@ public abstract class ConcurrentHashMapTestCase extends MutableMapTestCase
     {
         super.updateValue();
 
-        final ConcurrentMutableMap<Integer, Integer> map = this.newMap();
-        ParallelIterate.forEach(Interval.oneTo(100), new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.updateValue(each % 10, Functions0.value(0), new Function<Integer, Integer>()
-                {
-                    public Integer valueOf(Integer integer)
-                    {
-                        return integer + 1;
-                    }
-                });
-            }
+        ConcurrentMutableMap<Integer, Integer> map = this.newMap();
+        ParallelIterate.forEach(Interval.oneTo(100), each -> {
+            map.updateValue(each % 10, Functions0.value(0), integer -> integer + 1);
         }, 1, this.executor);
         Assert.assertEquals(Interval.zeroTo(9).toSet(), map.keySet());
         Assert.assertEquals(FastList.newList(Collections.nCopies(10, 10)), FastList.newList(map.values()));
@@ -84,21 +71,11 @@ public abstract class ConcurrentHashMapTestCase extends MutableMapTestCase
     {
         super.updateValue_collisions();
 
-        final ConcurrentMutableMap<Integer, Integer> map = this.newMap();
+        ConcurrentMutableMap<Integer, Integer> map = this.newMap();
         MutableList<Integer> list = Interval.oneTo(100).toList();
         Collections.shuffle(list);
-        ParallelIterate.forEach(list, new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.updateValue(each % 50, Functions0.value(0), new Function<Integer, Integer>()
-                {
-                    public Integer valueOf(Integer integer)
-                    {
-                        return integer + 1;
-                    }
-                });
-            }
+        ParallelIterate.forEach(list, each -> {
+            map.updateValue(each % 50, Functions0.value(0), integer -> integer + 1);
         }, 1, this.executor);
         Assert.assertEquals(Interval.zeroTo(49).toSet(), map.keySet());
         Assert.assertEquals(
@@ -113,20 +90,12 @@ public abstract class ConcurrentHashMapTestCase extends MutableMapTestCase
     {
         super.updateValueWith();
 
-        final ConcurrentMutableMap<Integer, Integer> map = this.newMap();
-        ParallelIterate.forEach(Interval.oneTo(100), new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.updateValueWith(each % 10, Functions0.value(0), new Function2<Integer, Object, Integer>()
-                {
-                    public Integer value(Integer integer, Object parameter)
-                    {
-                        Assert.assertEquals("test", parameter);
-                        return integer + 1;
-                    }
-                }, "test");
-            }
+        ConcurrentMutableMap<Integer, Integer> map = this.newMap();
+        ParallelIterate.forEach(Interval.oneTo(100), each -> {
+            map.updateValueWith(each % 10, Functions0.value(0), (integer, parameter) -> {
+                Assert.assertEquals("test", parameter);
+                return integer + 1;
+            }, "test");
         }, 1, this.executor);
         Assert.assertEquals(Interval.zeroTo(9).toSet(), map.keySet());
         Assert.assertEquals(FastList.newList(Collections.nCopies(10, 10)), FastList.newList(map.values()));
@@ -138,22 +107,14 @@ public abstract class ConcurrentHashMapTestCase extends MutableMapTestCase
     {
         super.updateValueWith_collisions();
 
-        final ConcurrentMutableMap<Integer, Integer> map = this.newMap();
+        ConcurrentMutableMap<Integer, Integer> map = this.newMap();
         MutableList<Integer> list = Interval.oneTo(200).toList();
         Collections.shuffle(list);
-        ParallelIterate.forEach(list, new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.updateValueWith(each % 100, Functions0.value(0), new Function2<Integer, Object, Integer>()
-                {
-                    public Integer value(Integer integer, Object parameter)
-                    {
-                        Assert.assertEquals("test", parameter);
-                        return integer + 1;
-                    }
-                }, "test");
-            }
+        ParallelIterate.forEach(list, each -> {
+            map.updateValueWith(each % 100, Functions0.value(0), (integer, parameter) -> {
+                Assert.assertEquals("test", parameter);
+                return integer + 1;
+            }, "test");
         }, 1, this.executor);
         Assert.assertEquals(Interval.zeroTo(99).toSet(), map.keySet());
         Assert.assertEquals(

@@ -25,9 +25,7 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.FixedSizeMap;
 import com.gs.collections.api.map.ImmutableMap;
@@ -117,25 +115,13 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     @Test(expected = UnsupportedOperationException.class)
     public void updateValue()
     {
-        this.classUnderTest().updateValue("1", Functions0.value(""), new Function<String, String>()
-        {
-            public String valueOf(String object)
-            {
-                return object + object;
-            }
-        });
+        this.classUnderTest().updateValue("1", Functions0.value(""), object -> object + object);
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void updateValueWith()
     {
-        this.classUnderTest().updateValueWith("1", Functions0.value(""), new Function2<String, String, String>()
-        {
-            public String value(String argument1, String argument2)
-            {
-                return argument1 + argument2;
-            }
-        }, "!");
+        this.classUnderTest().updateValueWith("1", Functions0.value(""), (argument1, argument2) -> argument1 + argument2, "!");
     }
 
     @Test
@@ -194,13 +180,7 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     public void collectValues()
     {
         MutableMap<String, String> map = this.classUnderTest();
-        MutableMap<String, String> result = map.collectValues(new Function2<String, String, String>()
-        {
-            public String value(String argument1, String argument2)
-            {
-                return new StringBuilder(argument2).reverse().toString();
-            }
-        });
+        MutableMap<String, String> result = map.collectValues((argument1, argument2) -> new StringBuilder(argument2).reverse().toString());
 
         switch (map.size())
         {
@@ -225,13 +205,8 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     public void collect()
     {
         MutableMap<String, String> map = this.classUnderTest();
-        MutableMap<Integer, String> result = map.collect(new Function2<String, String, Pair<Integer, String>>()
-        {
-            public Pair<Integer, String> value(String argument1, String argument2)
-            {
-                return Tuples.pair(Integer.valueOf(argument1), argument1 + ':' + new StringBuilder(argument2).reverse());
-            }
-        });
+        Function2<String, String, Pair<Integer, String>> function = (argument1, argument2) -> Tuples.pair(Integer.valueOf(argument1), argument1 + ':' + new StringBuilder(argument2).reverse());
+        MutableMap<Integer, String> result = map.collect(function);
 
         switch (map.size())
         {
@@ -369,23 +344,11 @@ public abstract class AbstractMemoryEfficientMutableMapTest
         MutableMap<String, String> map = this.classUnderTest();
         MutableMultimap<String, String> multi = map.flip();
 
-        final Set<String> keySet = map.keySet();
-        multi.forEachValue(new Procedure<String>()
-        {
-            public void value(String each)
-            {
-                Verify.assertContains(each, keySet);
-            }
-        });
+        Set<String> keySet = map.keySet();
+        multi.forEachValue(each -> Verify.assertContains(each, keySet));
 
-        final Collection<String> values = map.values();
-        multi.forEachKey(new Procedure<String>()
-        {
-            public void value(String each)
-            {
-                Verify.assertContains(each, values);
-            }
-        });
+        Collection<String> values = map.values();
+        multi.forEachKey(each -> Verify.assertContains(each, values));
 
         Assert.assertEquals(multi.size(), map.size());
         Assert.assertTrue(multi.sizeDistinct() <= map.size()); // should be the same or less since values are degenerate
@@ -447,13 +410,7 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<String, String> map = this.newMapWithKeysValues("1", "One", "3", "Three", "4", "Four");
 
-        MutableMap<Integer, String> actual = map.toMap(new Function<String, Integer>()
-        {
-            public Integer valueOf(String object)
-            {
-                return object.length();
-            }
-        }, Functions.getToString());
+        MutableMap<Integer, String> actual = map.toMap(String::length, Functions.getToString());
 
         switch (map.size())
         {
@@ -565,13 +522,7 @@ public abstract class AbstractMemoryEfficientMutableMapTest
 
         RichIterable<RichIterable<String>> chunks = map.chunk(2).toList();
 
-        RichIterable<Integer> sizes = chunks.collect(new Function<RichIterable<String>, Integer>()
-        {
-            public Integer valueOf(RichIterable<String> object)
-            {
-                return object.size();
-            }
-        });
+        RichIterable<Integer> sizes = chunks.collect(object -> object.size());
 
         switch (map.size())
         {
@@ -821,25 +772,17 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<String, String> map = this.classUnderTest();
 
-        Function0<String> function = new Function0<String>()
-        {
-            public String value()
-            {
-                return "Zero";
-            }
-        };
-
         if (map.isEmpty())
         {
-            String resultNotFound = map.detectIfNone(Predicates.alwaysTrue(), function);
+            String resultNotFound = map.detectIfNone(Predicates.alwaysTrue(), () -> "Zero");
             Assert.assertEquals("Zero", resultNotFound);
         }
         else
         {
-            String resultNotFound = map.detectIfNone(Predicates.equal("Four"), function);
+            String resultNotFound = map.detectIfNone(Predicates.equal("Four"), () -> "Zero");
             Assert.assertEquals("Zero", resultNotFound);
 
-            String resultFound = map.detectIfNone(Predicates.equal("One"), function);
+            String resultFound = map.detectIfNone(Predicates.equal("One"), () -> "Zero");
             Assert.assertEquals("One", resultFound);
         }
     }
@@ -849,21 +792,17 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two");
 
-        Function<String, Iterable<Character>> function = new Function<String, Iterable<Character>>()
-        {
-            public Iterable<Character> valueOf(String object)
+        Function<String, Iterable<Character>> function = object -> {
+            MutableList<Character> result = Lists.mutable.of();
+            if (object != null)
             {
-                MutableList<Character> result = Lists.mutable.of();
-                if (object != null)
+                char[] chars = object.toCharArray();
+                for (char aChar : chars)
                 {
-                    char[] chars = object.toCharArray();
-                    for (char aChar : chars)
-                    {
-                        result.add(Character.valueOf(aChar));
-                    }
+                    result.add(Character.valueOf(aChar));
                 }
-                return result;
             }
+            return result;
         };
 
         RichIterable<Character> blob = map.flatCollect(function);
@@ -910,13 +849,7 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3);
 
-        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return IntegerPredicates.isOdd().accept(object);
-            }
-        };
+        Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
 
         Multimap<Boolean, Integer> expected;
 
@@ -949,34 +882,26 @@ public abstract class AbstractMemoryEfficientMutableMapTest
         MutableMap<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3);
 
         NegativeIntervalFunction function = new NegativeIntervalFunction();
-        final MutableMultimap<Integer, Integer> expected = FastListMultimap.newMultimap();
+        MutableMultimap<Integer, Integer> expected = FastListMultimap.newMultimap();
         for (int i = 1; i < map.size(); i++)
         {
             expected.putAll(-i, Interval.fromTo(i, map.size()));
         }
 
-        final Multimap<Integer, Integer> actual = map.groupByEach(function);
-        expected.forEachKey(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                Assert.assertTrue(actual.containsKey(each));
-                MutableList<Integer> values = actual.get(each).toList();
-                Verify.assertNotEmpty(values);
-                Assert.assertTrue(expected.get(each).containsAllIterable(values));
-            }
+        Multimap<Integer, Integer> actual = map.groupByEach(function);
+        expected.forEachKey(each -> {
+            Assert.assertTrue(actual.containsKey(each));
+            MutableList<Integer> values = actual.get(each).toList();
+            Verify.assertNotEmpty(values);
+            Assert.assertTrue(expected.get(each).containsAllIterable(values));
         });
 
-        final Multimap<Integer, Integer> actualFromTarget = map.groupByEach(function, FastListMultimap.<Integer, Integer>newMultimap());
-        expected.forEachKey(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                Assert.assertTrue(actualFromTarget.containsKey(each));
-                MutableList<Integer> values = actualFromTarget.get(each).toList();
-                Verify.assertNotEmpty(values);
-                Assert.assertTrue(expected.get(each).containsAllIterable(values));
-            }
+        Multimap<Integer, Integer> actualFromTarget = map.groupByEach(function, FastListMultimap.<Integer, Integer>newMultimap());
+        expected.forEachKey(each -> {
+            Assert.assertTrue(actualFromTarget.containsKey(each));
+            MutableList<Integer> values = actualFromTarget.get(each).toList();
+            Verify.assertNotEmpty(values);
+            Assert.assertTrue(expected.get(each).containsAllIterable(values));
         });
     }
 

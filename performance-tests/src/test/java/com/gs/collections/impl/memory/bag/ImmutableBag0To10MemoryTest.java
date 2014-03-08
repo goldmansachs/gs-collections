@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.memory.bag;
 import com.google.common.collect.ImmutableMultiset;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.primitive.IntInterval;
@@ -38,14 +37,7 @@ public class ImmutableBag0To10MemoryTest
     public void memoryForScaledImmutableBags()
     {
         LOGGER.info("Comparing Items: GSC {}, Guava {}", ImmutableBag.class.getSimpleName(), ImmutableMultiset.class.getSimpleName());
-        IntProcedure procedure = new IntProcedure()
-        {
-            public void value(int size)
-            {
-                ImmutableBag0To10MemoryTest.this.memoryForScaledBags(size);
-            }
-        };
-        IntInterval.zeroTo(10).forEach(procedure);
+        IntInterval.zeroTo(10).forEach(this::memoryForScaledBags);
         LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 

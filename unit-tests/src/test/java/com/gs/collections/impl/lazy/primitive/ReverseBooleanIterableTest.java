@@ -19,8 +19,6 @@ package com.gs.collections.impl.lazy.primitive;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
-import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
@@ -92,14 +90,8 @@ public class ReverseBooleanIterableTest
     public void forEach()
     {
         BooleanIterable iterable = BooleanArrayList.newListWith(false, false, true).asReversed();
-        final boolean[] result = {true};
-        iterable.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                result[0] &= each;
-            }
-        });
+        boolean[] result = {true};
+        iterable.forEach(each -> { result[0] &= each; });
 
         Assert.assertFalse(result[0]);
     }
@@ -175,13 +167,7 @@ public class ReverseBooleanIterableTest
     public void collect()
     {
         BooleanIterable iterable = BooleanArrayList.newListWith(false, false, true).asReversed();
-        Verify.assertIterablesEqual(FastList.newListWith(false, true, true), iterable.collect(new BooleanToObjectFunction<Boolean>()
-        {
-            public Boolean valueOf(boolean parameter)
-            {
-                return !parameter;
-            }
-        }));
+        Verify.assertIterablesEqual(FastList.newListWith(false, true, true), iterable.collect(parameter -> !parameter));
     }
 
     @Test

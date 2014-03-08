@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,26 +44,14 @@ public class MultiReaderFastListAsWriteUntouchableTest extends AbstractListTestC
     @Test
     public void asSynchronized()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                MultiReaderFastListAsWriteUntouchableTest.this.newWith().asSynchronized();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.newWith().asSynchronized(); });
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                MultiReaderFastListAsWriteUntouchableTest.this.newWith().asUnmodifiable();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.newWith().asUnmodifiable(); });
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,14 @@ import java.util.List;
 
 import com.gs.collections.api.block.SerializableComparator;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.Interval;
@@ -53,12 +61,8 @@ public class ComparatorsTest
         Assert.assertEquals(
                 FastList.newListWith("1", "2", "3", "4"),
                 list.sortThis(Comparators.naturalOrder()));
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                FastList.newListWith("1", "2", null, "4").sortThis(Comparators.naturalOrder());
-            }
+        Verify.assertThrows(NullPointerException.class, () -> {
+            FastList.newListWith("1", "2", null, "4").sortThis(Comparators.naturalOrder());
         });
     }
 
@@ -78,13 +82,7 @@ public class ComparatorsTest
         Assert.assertEquals(
                 FastList.newListWith("4", "3", "2", "1"),
                 list.sortThis(Comparators.reverse(Comparators.naturalOrder())));
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                Comparators.reverse(null);
-            }
-        });
+        Verify.assertThrows(NullPointerException.class, () -> { Comparators.reverse(null); });
     }
 
     @Test
@@ -100,7 +98,7 @@ public class ComparatorsTest
     @Test
     public void byBooleanFunction()
     {
-        SerializableComparator<Integer> comparator = Comparators.byBooleanFunction(IntegerFunctions.TO_IS_EVEN);
+        SerializableComparator<Integer> comparator = Comparators.byBooleanFunction((BooleanFunction<Integer>) anObject -> anObject.intValue() % 2 == 0);
         Verify.assertPositive(comparator.compare(2, 1));
         Verify.assertZero(comparator.compare(1, 1));
         Verify.assertZero(comparator.compare(2, 2));
@@ -110,43 +108,43 @@ public class ComparatorsTest
     @Test
     public void byByteFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byByteFunction(IntegerFunctions.TO_BYTE));
+        this.assertScalarFunctionParameter(Comparators.byByteFunction((ByteFunction<Integer>) Integer::byteValue));
     }
 
     @Test
     public void byCharFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byCharFunction(IntegerFunctions.TO_CHAR));
+        this.assertScalarFunctionParameter(Comparators.byCharFunction((CharFunction<Integer>) anObject -> (char) anObject.intValue()));
     }
 
     @Test
     public void byDoubleFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byDoubleFunction(IntegerFunctions.TO_DOUBLE));
+        this.assertScalarFunctionParameter(Comparators.byDoubleFunction((DoubleFunction<Integer>) Integer::doubleValue));
     }
 
     @Test
     public void byFloatFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byFloatFunction(IntegerFunctions.TO_FLOAT));
+        this.assertScalarFunctionParameter(Comparators.byFloatFunction((FloatFunction<Integer>) Integer::floatValue));
     }
 
     @Test
     public void byIntFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byIntFunction(IntegerFunctions.TO_INT));
+        this.assertScalarFunctionParameter(Comparators.byIntFunction((IntFunction<Integer>) Integer::intValue));
     }
 
     @Test
     public void byLongFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byLongFunction(IntegerFunctions.TO_LONG));
+        this.assertScalarFunctionParameter(Comparators.byLongFunction((LongFunction<Integer>) Integer::longValue));
     }
 
     @Test
     public void byShortFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byShortFunction(IntegerFunctions.TO_SHORT));
+        this.assertScalarFunctionParameter(Comparators.byShortFunction((ShortFunction<Integer>) Integer::shortValue));
     }
 
     private void assertScalarFunctionParameter(SerializableComparator<Integer> comparator)
@@ -173,13 +171,7 @@ public class ComparatorsTest
     @Test
     public void chainedComparator()
     {
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                Comparators.chain();
-            }
-        });
+        Verify.assertThrows(IllegalArgumentException.class, (Runnable) () -> {Comparators.chain();});
 
         Comparator<Person> byName = Comparators.byFunction(Person.TO_FIRST);
         Comparator<Person> byAge = Comparators.byFunction(Person.TO_AGE);
@@ -329,13 +321,7 @@ public class ComparatorsTest
 
     public static class OneOfEach
     {
-        public static final Function<OneOfEach, Date> TO_DATE_VALUE = new Function<OneOfEach, Date>()
-        {
-            public Date valueOf(OneOfEach oneOfEach)
-            {
-                return new Date(oneOfEach.dateValue.getTime());
-            }
-        };
+        public static final Function<OneOfEach, Date> TO_DATE_VALUE = oneOfEach -> new Date(oneOfEach.dateValue.getTime());
         private Date dateValue = Timestamp.valueOf("2004-12-12 22:20:30");
 
         public OneOfEach(Date dateValue)

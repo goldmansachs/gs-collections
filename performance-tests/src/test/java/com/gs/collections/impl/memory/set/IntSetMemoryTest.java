@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.memory.set;
 import java.util.HashSet;
 
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.set.primitive.IntSet;
 import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.memory.MemoryTestBench;
@@ -73,14 +72,8 @@ public class IntSetMemoryTest
         @Override
         public IntHashSet value()
         {
-            final IntHashSet set = new IntHashSet();
-            this.data.forEach(new IntProcedure()
-            {
-                public void value(int each)
-                {
-                    set.add(each);
-                }
-            });
+            IntHashSet set = new IntHashSet();
+            this.data.forEach(set::add);
             return set;
         }
     }
@@ -97,14 +90,8 @@ public class IntSetMemoryTest
         @Override
         public TIntHashSet value()
         {
-            final TIntHashSet set = new TIntHashSet();
-            this.data.forEach(new IntProcedure()
-            {
-                public void value(int each)
-                {
-                    set.add(each);
-                }
-            });
+            TIntHashSet set = new TIntHashSet();
+            this.data.forEach(set::add);
             return set;
         }
     }
@@ -121,14 +108,8 @@ public class IntSetMemoryTest
         @Override
         public HashSet<Integer> value()
         {
-            final HashSet<Integer> set = new HashSet<Integer>();
-            this.data.forEach(new IntProcedure()
-            {
-                public void value(int each)
-                {
-                    set.add(each);
-                }
-            });
+            HashSet<Integer> set = new HashSet<Integer>();
+            this.data.forEach(set::add);
             return set;
         }
     }

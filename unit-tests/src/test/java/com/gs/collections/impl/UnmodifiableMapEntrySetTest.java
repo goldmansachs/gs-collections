@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,6 @@ package com.gs.collections.impl;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.gs.collections.api.block.function.primitive.BooleanFunction;
-import com.gs.collections.api.block.function.primitive.ByteFunction;
-import com.gs.collections.api.block.function.primitive.CharFunction;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.list.MutableList;
@@ -274,15 +266,9 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
         Iterator<Map.Entry<Integer, Integer>> iterator = objects.iterator();
         for (int i = objects.size(); i-- > 0; )
         {
-            final Map.Entry<Integer, Integer> entry = iterator.next();
+            Map.Entry<Integer, Integer> entry = iterator.next();
             Assert.assertEquals(ImmutableEntry.of(3 - i, 3 - i), entry);
-            Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-            {
-                public void run()
-                {
-                    entry.setValue(0);
-                }
-            });
+            Verify.assertThrows(UnsupportedOperationException.class, () -> { entry.setValue(0); });
         }
     }
 
@@ -305,111 +291,71 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
     @Test
     public void collectBoolean()
     {
-        BooleanFunction<Map.Entry<String, String>> booleanFunction = new BooleanFunction<Map.Entry<String, String>>()
-        {
-            public boolean booleanValueOf(Map.Entry<String, String> entry)
-            {
-                return Boolean.parseBoolean(entry.getValue());
-            }
-        };
-        Assert.assertEquals(BooleanHashSet.newSetWith(false), this.getCollection().collectBoolean(booleanFunction));
+        Assert.assertEquals(
+                BooleanHashSet.newSetWith(false),
+                this.getCollection().collectBoolean(entry -> Boolean.parseBoolean(entry.getValue())));
     }
 
     @Override
     @Test
     public void collectByte()
     {
-        ByteFunction<Map.Entry<String, String>> byteFunction = new ByteFunction<Map.Entry<String, String>>()
-        {
-            public byte byteValueOf(Map.Entry<String, String> entry)
-            {
-                return Byte.parseByte(entry.getValue());
-            }
-        };
-        Assert.assertEquals(ByteHashSet.newSetWith((byte) 1, (byte) 2), this.getCollection().collectByte(byteFunction));
+        Assert.assertEquals(
+                ByteHashSet.newSetWith((byte) 1, (byte) 2),
+                this.getCollection().collectByte(entry -> Byte.parseByte(entry.getValue())));
     }
 
     @Override
     @Test
     public void collectChar()
     {
-        CharFunction<Map.Entry<String, String>> charFunction = new CharFunction<Map.Entry<String, String>>()
-        {
-            public char charValueOf(Map.Entry<String, String> entry)
-            {
-                return (char) Integer.parseInt(entry.getValue());
-            }
-        };
-        Assert.assertEquals(CharHashSet.newSetWith((char) 1, (char) 2), this.getCollection().collectChar(charFunction));
+        Assert.assertEquals(
+                CharHashSet.newSetWith((char) 1, (char) 2),
+                this.getCollection().collectChar(entry -> (char) Integer.parseInt(entry.getValue())));
     }
 
     @Override
     @Test
     public void collectDouble()
     {
-        DoubleFunction<Map.Entry<String, String>> doubleFunction = new DoubleFunction<Map.Entry<String, String>>()
-        {
-            public double doubleValueOf(Map.Entry<String, String> entry)
-            {
-                return Double.parseDouble(entry.getValue());
-            }
-        };
-        Assert.assertEquals(DoubleHashSet.newSetWith(1.0d, 2.0d), this.getCollection().collectDouble(doubleFunction));
+        Assert.assertEquals(
+                DoubleHashSet.newSetWith(1.0d, 2.0d),
+                this.getCollection().collectDouble(entry -> Double.parseDouble(entry.getValue())));
     }
 
     @Override
     @Test
     public void collectFloat()
     {
-        FloatFunction<Map.Entry<String, String>> floatFunction = new FloatFunction<Map.Entry<String, String>>()
-        {
-            public float floatValueOf(Map.Entry<String, String> entry)
-            {
-                return Float.parseFloat(entry.getValue());
-            }
-        };
-        Assert.assertEquals(FloatHashSet.newSetWith(1.0f, 2.0f), this.getCollection().collectFloat(floatFunction));
+        Assert.assertEquals(
+                FloatHashSet.newSetWith(1.0f, 2.0f),
+                this.getCollection().collectFloat(entry -> Float.parseFloat(entry.getValue())));
     }
 
     @Override
     @Test
     public void collectInt()
     {
-        IntFunction<Map.Entry<String, String>> intFunction = new IntFunction<Map.Entry<String, String>>()
-        {
-            public int intValueOf(Map.Entry<String, String> entry)
-            {
-                return Integer.parseInt(entry.getValue());
-            }
-        };
-        Assert.assertEquals(IntHashSet.newSetWith(1, 2), this.getCollection().collectInt(intFunction));
+        Assert.assertEquals(
+                IntHashSet.newSetWith(1, 2),
+                this.getCollection().collectInt(entry -> Integer.parseInt(entry.getValue())));
     }
 
     @Override
     @Test
     public void collectLong()
     {
-        LongFunction<Map.Entry<String, String>> longFunction = new LongFunction<Map.Entry<String, String>>()
-        {
-            public long longValueOf(Map.Entry<String, String> entry)
-            {
-                return Long.parseLong(entry.getValue());
-            }
-        };
-        Assert.assertEquals(LongHashSet.newSetWith(1L, 2L), this.getCollection().collectLong(longFunction));
+        Assert.assertEquals(
+                LongHashSet.newSetWith(1L, 2L),
+                this.getCollection().collectLong(entry -> Long.parseLong(entry.getValue())));
     }
 
     @Override
     @Test
     public void collectShort()
     {
-        ShortFunction<Map.Entry<String, String>> shortFunction = new ShortFunction<Map.Entry<String, String>>()
-        {
-            public short shortValueOf(Map.Entry<String, String> entry)
-            {
-                return Short.parseShort(entry.getValue());
-            }
-        };
-        Assert.assertEquals(ShortHashSet.newSetWith((short) 1, (short) 2), this.getCollection().collectShort(shortFunction));
+        Assert.assertEquals(
+                ShortHashSet.newSetWith((short) 1, (short) 2),
+                this.getCollection().collectShort(entry -> Short.parseShort(entry.getValue())));
     }
 }

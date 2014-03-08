@@ -24,11 +24,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
@@ -370,15 +365,9 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void forEachKeyValue()
     {
-        final MutableBag<String> result = Bags.mutable.of();
+        MutableBag<String> result = Bags.mutable.of();
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three");
-        map.forEachKeyValue(new Procedure2<Integer, String>()
-        {
-            public void value(Integer key, String value)
-            {
-                result.add(key + value);
-            }
-        });
+        map.forEachKeyValue((key, value) -> { result.add(key + value); });
         Assert.assertEquals(Bags.mutable.of("1One", "2Two", "3Three"), result);
     }
 
@@ -489,19 +478,9 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void getIfAbsentPut_block_throws()
     {
-        final MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        Verify.assertThrows(RuntimeException.class, new Runnable()
-        {
-            public void run()
-            {
-                map.getIfAbsentPut(4, new Function0<String>()
-                {
-                    public String value()
-                    {
-                        throw new RuntimeException();
-                    }
-                });
-            }
+        MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        Verify.assertThrows(RuntimeException.class, () -> {
+            map.getIfAbsentPut(4, () -> { throw new RuntimeException(); });
         });
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3"), map);
     }
@@ -509,19 +488,9 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void getIfAbsentPutWith_block_throws()
     {
-        final MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        Verify.assertThrows(RuntimeException.class, new Runnable()
-        {
-            public void run()
-            {
-                map.getIfAbsentPutWith(4, new Function<Object, String>()
-                {
-                    public String valueOf(Object object)
-                    {
-                        throw new RuntimeException();
-                    }
-                }, null);
-            }
+        MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        Verify.assertThrows(RuntimeException.class, () -> {
+            map.getIfAbsentPutWith(4, object -> { throw new RuntimeException(); }, null);
         });
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3"), map);
     }
@@ -613,12 +582,8 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                MutableMapTestCase.this.newMapWithKeysValues(1, 1, 2, 2).asUnmodifiable().put(3, 3);
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.newMapWithKeysValues(1, 1, 2, 2).asUnmodifiable().put(3, 3);
         });
     }
 
@@ -822,19 +787,9 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void updateValue()
     {
-        final MutableMap<Integer, Integer> map = this.newMap();
-        Iterate.forEach(Interval.oneTo(1000), new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.updateValue(each % 10, Functions0.value(0), new Function<Integer, Integer>()
-                {
-                    public Integer valueOf(Integer integer)
-                    {
-                        return integer + 1;
-                    }
-                });
-            }
+        MutableMap<Integer, Integer> map = this.newMap();
+        Iterate.forEach(Interval.oneTo(1000), each -> {
+            map.updateValue(each % 10, Functions0.value(0), integer -> integer + 1);
         });
         Assert.assertEquals(Interval.zeroTo(9).toSet(), map.keySet());
         Assert.assertEquals(FastList.newList(Collections.nCopies(10, 100)), FastList.newList(map.values()));
@@ -843,22 +798,10 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void updateValue_collisions()
     {
-        final MutableMap<Integer, Integer> map = this.newMap();
+        MutableMap<Integer, Integer> map = this.newMap();
         MutableList<Integer> list = Interval.oneTo(2000).toList();
         Collections.shuffle(list);
-        Iterate.forEach(list, new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.updateValue(each % 1000, Functions0.value(0), new Function<Integer, Integer>()
-                {
-                    public Integer valueOf(Integer integer)
-                    {
-                        return integer + 1;
-                    }
-                });
-            }
-        });
+        Iterate.forEach(list, each -> { map.updateValue(each % 1000, Functions0.value(0), integer -> integer + 1); });
         Assert.assertEquals(Interval.zeroTo(999).toSet(), map.keySet());
         Assert.assertEquals(
                 HashBag.newBag(map.values()).toStringOfItemToCount(),
@@ -869,20 +812,12 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void updateValueWith()
     {
-        final MutableMap<Integer, Integer> map = this.newMap();
-        Iterate.forEach(Interval.oneTo(1000), new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.updateValueWith(each % 10, Functions0.value(0), new Function2<Integer, Object, Integer>()
-                {
-                    public Integer value(Integer integer, Object parameter)
-                    {
-                        Assert.assertEquals("test", parameter);
-                        return integer + 1;
-                    }
-                }, "test");
-            }
+        MutableMap<Integer, Integer> map = this.newMap();
+        Iterate.forEach(Interval.oneTo(1000), each -> {
+            map.updateValueWith(each % 10, Functions0.value(0), (integer, parameter) -> {
+                Assert.assertEquals("test", parameter);
+                return integer + 1;
+            }, "test");
         });
         Assert.assertEquals(Interval.zeroTo(9).toSet(), map.keySet());
         Assert.assertEquals(FastList.newList(Collections.nCopies(10, 100)), FastList.newList(map.values()));
@@ -891,22 +826,14 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void updateValueWith_collisions()
     {
-        final MutableMap<Integer, Integer> map = this.newMap();
+        MutableMap<Integer, Integer> map = this.newMap();
         MutableList<Integer> list = Interval.oneTo(2000).toList();
         Collections.shuffle(list);
-        Iterate.forEach(list, new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.updateValueWith(each % 1000, Functions0.value(0), new Function2<Integer, Object, Integer>()
-                {
-                    public Integer value(Integer integer, Object parameter)
-                    {
-                        Assert.assertEquals("test", parameter);
-                        return integer + 1;
-                    }
-                }, "test");
-            }
+        Iterate.forEach(list, each -> {
+            map.updateValueWith(each % 1000, Functions0.value(0), (integer, parameter) -> {
+                Assert.assertEquals("test", parameter);
+                return integer + 1;
+            }, "test");
         });
         Assert.assertEquals(Interval.zeroTo(999).toSet(), map.keySet());
         Assert.assertEquals(

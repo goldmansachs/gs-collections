@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -97,44 +96,26 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         }
         Assert.assertEquals(HashBag.newBagWith(1, 1, 2), HashBag.newBag(validate));
 
-        final Iterator<Integer> iterator = bag.iterator();
+        Iterator<Integer> iterator = bag.iterator();
         MutableBag<Integer> expected = this.newWith(1, 1, 2);
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.remove();
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> {iterator.remove();});
 
         this.assertIteratorRemove(bag, iterator, expected);
         this.assertIteratorRemove(bag, iterator, expected);
         this.assertIteratorRemove(bag, iterator, expected);
         Verify.assertEmpty(bag);
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
     }
 
-    private void assertIteratorRemove(MutableBag<Integer> bag, final Iterator<Integer> iterator, MutableBag<Integer> expected)
+    private void assertIteratorRemove(MutableBag<Integer> bag, Iterator<Integer> iterator, MutableBag<Integer> expected)
     {
         Assert.assertTrue(iterator.hasNext());
         Integer first = iterator.next();
         iterator.remove();
         expected.remove(first);
         Assert.assertEquals(expected, bag);
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.remove();
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> {iterator.remove();});
     }
 
     @Test
@@ -164,34 +145,16 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         bag.addOccurrences(1, 3);
         bag.addOccurrences(2, 2);
         bag.addOccurrences(3, 1);
-        final IntegerSum sum = new IntegerSum(0);
-        bag.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                sum.add(each * index);
-            }
-        });
+        IntegerSum sum = new IntegerSum(0);
+        bag.forEachWithOccurrences((each, index) -> { sum.add(each * index); });
         Assert.assertEquals(10, sum.getIntSum());
         bag.removeOccurrences(2, 1);
-        final IntegerSum sum2 = new IntegerSum(0);
-        bag.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                sum2.add(each * index);
-            }
-        });
+        IntegerSum sum2 = new IntegerSum(0);
+        bag.forEachWithOccurrences((each, index) -> { sum2.add(each * index); });
         Assert.assertEquals(8, sum2.getIntSum());
         bag.removeOccurrences(1, 3);
-        final IntegerSum sum3 = new IntegerSum(0);
-        bag.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                sum3.add(each * index);
-            }
-        });
+        IntegerSum sum3 = new IntegerSum(0);
+        bag.forEachWithOccurrences((each, index) -> { sum3.add(each * index); });
         Assert.assertEquals(5, sum3.getIntSum());
     }
 

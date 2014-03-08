@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,7 @@ import org.junit.Test;
 
 public class LongPredicatesTest
 {
-    private static final Function<Long, Long> LONG_VALUE = new Function<Long, Long>()
-    {
-        public Long valueOf(Long object)
-        {
-            return object.longValue();
-        }
-    };
+    private static final Function<Long, Long> LONG_VALUE = Long::longValue;
 
     @Test
     public void isOdd()

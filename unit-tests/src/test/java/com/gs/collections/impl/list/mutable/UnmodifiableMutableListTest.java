@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.ListIterator;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
@@ -75,50 +74,26 @@ public class UnmodifiableMutableListTest
     @Test
     public void forEachFromTo()
     {
-        final Counter counter = new Counter();
-        this.unmodifiableList.forEach(1, 2, new Procedure<String>()
-        {
-            public void value(String band)
-            {
-                counter.increment();
-            }
-        });
+        Counter counter = new Counter();
+        this.unmodifiableList.forEach(1, 2, band -> counter.increment());
         Assert.assertEquals(2, counter.getCount());
     }
 
     @Test
     public void listIterator()
     {
-        final ListIterator<String> it = this.unmodifiableList.listIterator();
+        ListIterator<String> it = this.unmodifiableList.listIterator();
         Assert.assertFalse(it.hasPrevious());
         Assert.assertEquals(-1, it.previousIndex());
         Assert.assertEquals(METALLICA, it.next());
         Assert.assertTrue(it.hasNext());
         Assert.assertEquals(1, it.nextIndex());
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.set("Rick Astley");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.set("Rick Astley");});
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {it.remove();});
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.add("Gloria Gaynor");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.add("Gloria Gaynor");});
 
         Assert.assertEquals(METALLICA, it.previous());
     }
@@ -126,111 +101,65 @@ public class UnmodifiableMutableListTest
     @Test
     public void sortThis()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableListTest.this.unmodifiableList.sortThis();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {this.unmodifiableList.sortThis();});
     }
 
     @Test
     public void sortThisWithComparator()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableListTest.this.unmodifiableList.sortThis(Comparators.naturalOrder());
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.unmodifiableList.sortThis(Comparators.naturalOrder());
         });
     }
 
     @Test
     public void sortThisBy()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableListTest.this.unmodifiableList.sortThisBy(Functions.getStringToInteger());
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.unmodifiableList.sortThisBy(Functions.getStringToInteger());
         });
     }
 
     @Test
     public void reverseThis()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableListTest.this.unmodifiableList.reverseThis();
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {
+            this.unmodifiableList.reverseThis();
         });
     }
 
     @Test
     public void addAllAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableListTest.this.unmodifiableList.addAll(0, Lists.mutable.of("Madonna"));
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.unmodifiableList.addAll(0, Lists.mutable.of("Madonna"));
         });
     }
 
     @Test
     public void set()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableListTest.this.unmodifiableList.set(0, "Madonna");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.unmodifiableList.set(0, "Madonna"); });
     }
 
     @Test
     public void addAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableListTest.this.unmodifiableList.add(0, "Madonna");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.add(0, "Madonna"));
     }
 
     @Test
     public void removeFromIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableListTest.this.unmodifiableList.remove(0);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.unmodifiableList.remove(0); });
     }
 
     @Test
     public void subList()
     {
-        final MutableList<String> subList = this.unmodifiableList.subList(1, 3);
+        MutableList<String> subList = this.unmodifiableList.subList(1, 3);
         Assert.assertEquals(Lists.immutable.of("Bon Jovi", "Europe"), subList);
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                subList.clear();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {subList.clear();});
     }
 
     @Test
@@ -257,31 +186,23 @@ public class UnmodifiableMutableListTest
     @Test
     public void asSynchronized()
     {
-        final MutableList<String> synchronizedList = this.unmodifiableList.asSynchronized();
+        MutableList<String> synchronizedList = this.unmodifiableList.asSynchronized();
         Verify.assertInstanceOf(SynchronizedMutableList.class, synchronizedList);
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                Iterator<String> iterator = synchronizedList.iterator();
-                iterator.next();
-                iterator.remove();
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            Iterator<String> iterator = synchronizedList.iterator();
+            iterator.next();
+            iterator.remove();
         });
     }
 
     @Test
     public void asReversed()
     {
-        final LazyIterable<String> lazyIterable = this.unmodifiableList.asReversed();
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                Iterator<String> iterator = lazyIterable.iterator();
-                iterator.next();
-                iterator.remove();
-            }
+        LazyIterable<String> lazyIterable = this.unmodifiableList.asReversed();
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            Iterator<String> iterator = lazyIterable.iterator();
+            iterator.next();
+            iterator.remove();
         });
     }
 

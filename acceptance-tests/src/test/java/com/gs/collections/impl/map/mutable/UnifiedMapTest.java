@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.CollidingInt;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -44,21 +41,9 @@ public class UnifiedMapTest
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(UnifiedMapTest.class);
 
-    private static final Comparator<Map.Entry<CollidingInt, String>> ENTRY_COMPARATOR = new Comparator<Map.Entry<CollidingInt, String>>()
-    {
-        public int compare(Map.Entry<CollidingInt, String> o1, Map.Entry<CollidingInt, String> o2)
-        {
-            return o1.getKey().compareTo(o2.getKey());
-        }
-    };
+    private static final Comparator<Map.Entry<CollidingInt, String>> ENTRY_COMPARATOR = (o1, o2) -> o1.getKey().compareTo(o2.getKey());
 
-    private static final Comparator<String> VALUE_COMPARATOR = new Comparator<String>()
-    {
-        public int compare(String o1, String o2)
-        {
-            return Integer.parseInt(o1.substring(1)) - Integer.parseInt(o2.substring(1));
-        }
-    };
+    private static final Comparator<String> VALUE_COMPARATOR = (o1, o2) -> Integer.parseInt(o1.substring(1)) - Integer.parseInt(o2.substring(1));
 
     @Test
     public void forEachWithIndexWithChainedValues()
@@ -70,15 +55,11 @@ public class UnifiedMapTest
         {
             map.put(new CollidingInt(i, 3), UnifiedMapTest.createVal(i));
         }
-        final int[] intArray = new int[1];
+        int[] intArray = new int[1];
         intArray[0] = -1;
-        map.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String value, int index)
-            {
-                Assert.assertEquals(index, intArray[0] + 1);
-                intArray[0] = index;
-            }
+        map.forEachWithIndex((value, index) -> {
+            Assert.assertEquals(index, intArray[0] + 1);
+            intArray[0] = index;
         });
     }
 
@@ -308,14 +289,10 @@ public class UnifiedMapTest
         {
             map.put(new CollidingInt(i, shift), UnifiedMapTest.createVal(i));
         }
-        final int[] count = new int[1];
-        map.forEachKeyValue(new Procedure2<CollidingInt, String>()
-        {
-            public void value(CollidingInt key, String value)
-            {
-                Assert.assertEquals(UnifiedMapTest.createVal(key.getValue()), value);
-                count[0]++;
-            }
+        int[] count = new int[1];
+        map.forEachKeyValue((key, value) -> {
+            Assert.assertEquals(UnifiedMapTest.createVal(key.getValue()), value);
+            count[0]++;
         });
         Assert.assertEquals(size, count[0]);
     }
@@ -338,14 +315,8 @@ public class UnifiedMapTest
         {
             map.put(new CollidingInt(i, shift), UnifiedMapTest.createVal(i));
         }
-        final List<CollidingInt> keys = new ArrayList<CollidingInt>(size);
-        map.forEachKey(new Procedure<CollidingInt>()
-        {
-            public void value(CollidingInt key)
-            {
-                keys.add(key);
-            }
-        });
+        List<CollidingInt> keys = new ArrayList<CollidingInt>(size);
+        map.forEachKey(keys::add);
         Verify.assertSize(size, keys);
         Collections.sort(keys);
 
@@ -373,14 +344,8 @@ public class UnifiedMapTest
         {
             map.put(new CollidingInt(i, shift), UnifiedMapTest.createVal(i));
         }
-        final List<String> values = new ArrayList<String>(size);
-        map.forEachValue(new Procedure<String>()
-        {
-            public void value(String key)
-            {
-                values.add(key);
-            }
-        });
+        List<String> values = new ArrayList<String>(size);
+        map.forEachValue(values::add);
         Verify.assertSize(size, values);
         Collections.sort(values, UnifiedMapTest.VALUE_COMPARATOR);
 

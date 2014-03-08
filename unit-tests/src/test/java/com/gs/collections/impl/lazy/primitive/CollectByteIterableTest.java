@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.ByteIterable;
 import com.gs.collections.api.LazyByteIterable;
-import com.gs.collections.api.block.function.primitive.ByteToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.ByteProcedure;
 import com.gs.collections.api.iterator.ByteIterator;
 import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -67,14 +65,8 @@ public class CollectByteIterableTest
     @Test
     public void forEach()
     {
-        final long[] value = new long[1];
-        this.byteIterable.forEach(new ByteProcedure()
-        {
-            public void value(byte each)
-            {
-                value[0] += each;
-            }
-        });
+        long[] value = new long[1];
+        this.byteIterable.forEach(each -> { value[0] += each; });
         Assert.assertEquals(6L, value[0]);
     }
 
@@ -245,13 +237,7 @@ public class CollectByteIterableTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(FastList.newListWith("1", "2", "3"), this.byteIterable.collect(new ByteToObjectFunction<Object>()
-        {
-            public String valueOf(byte each)
-            {
-                return String.valueOf(each);
-            }
-        }).toList());
+        Assert.assertEquals(FastList.newListWith("1", "2", "3"), this.byteIterable.collect(String::valueOf).toList());
     }
 
     @Test

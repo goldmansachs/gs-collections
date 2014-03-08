@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,6 @@ package com.gs.collections.impl.lazy.primitive;
 import java.util.Arrays;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
-import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
@@ -53,14 +50,8 @@ public class LazyBooleanIterableAdapterTest
     @Test
     public void forEach()
     {
-        final int[] sum = new int[1];
-        this.iterable.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[0] += each ? 1 : 0;
-            }
-        });
+        int[] sum = new int[1];
+        this.iterable.forEach(each -> { sum[0] += each ? 1 : 0; });
         Assert.assertEquals(2, sum[0]);
     }
 
@@ -95,13 +86,7 @@ public class LazyBooleanIterableAdapterTest
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(this.iterable.allSatisfy(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertTrue(this.iterable.allSatisfy(value -> true));
         Assert.assertFalse(this.iterable.allSatisfy(BooleanPredicates.isFalse()));
         Assert.assertFalse(this.iterable.allSatisfy(BooleanPredicates.isTrue()));
     }
@@ -125,25 +110,13 @@ public class LazyBooleanIterableAdapterTest
     {
         Assert.assertTrue(this.iterable.detectIfNone(BooleanPredicates.isTrue(), false));
         Assert.assertFalse(this.iterable.detectIfNone(BooleanPredicates.isFalse(), true));
-        Assert.assertFalse(this.iterable.detectIfNone(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return false;
-            }
-        }, false));
+        Assert.assertFalse(this.iterable.detectIfNone(value -> false, false));
     }
 
     @Test
     public void collect()
     {
-        RichIterable<String> collect = this.iterable.collect(new BooleanToObjectFunction<String>()
-        {
-            public String valueOf(boolean booleanParameter)
-            {
-                return String.valueOf(booleanParameter);
-            }
-        });
+        RichIterable<String> collect = this.iterable.collect(String::valueOf);
         Verify.assertIterableSize(3, collect);
         Assert.assertEquals("truefalsetrue", collect.makeString(""));
     }

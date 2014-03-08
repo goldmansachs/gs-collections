@@ -71,41 +71,21 @@ import org.junit.Test;
 
 public class ParallelIterateTest
 {
-    private static final Procedure<Integer> EXCEPTION_PROCEDURE = new Procedure<Integer>()
-    {
-        public void value(Integer value)
-        {
-            throw new RuntimeException("Thread death on its way!");
-        }
+    private static final Procedure<Integer> EXCEPTION_PROCEDURE = value -> {
+        throw new RuntimeException("Thread death on its way!");
     };
 
-    private static final ObjectIntProcedure<Integer> EXCEPTION_OBJECT_INT_PROCEDURE = new ObjectIntProcedure<Integer>()
-    {
-        public void value(Integer object, int index)
-        {
-            throw new RuntimeException("Thread death on its way!");
-        }
+    private static final ObjectIntProcedure<Integer> EXCEPTION_OBJECT_INT_PROCEDURE = (object, index) -> {
+        throw new RuntimeException("Thread death on its way!");
     };
 
-    private static final Function<Integer, Collection<String>> INT_TO_TWO_STRINGS = new Function<Integer, Collection<String>>()
-    {
-        public Collection<String> valueOf(Integer integer)
-        {
-            return Lists.fixedSize.of(integer.toString(), integer.toString());
-        }
-    };
+    private static final Function<Integer, Collection<String>> INT_TO_TWO_STRINGS = integer -> Lists.fixedSize.of(integer.toString(), integer.toString());
 
     private static final Function0<AtomicInteger> ATOMIC_INTEGER_NEW = Functions0.zeroAtomicInteger();
 
     private static final Function0<Integer> INTEGER_NEW = Functions0.value(0);
 
-    private static final Function<Integer, String> EVEN_OR_ODD = new Function<Integer, String>()
-    {
-        public String valueOf(Integer value)
-        {
-            return value % 2 == 0 ? "Even" : "Odd";
-        }
-    };
+    private static final Function<Integer, String> EVEN_OR_ODD = value -> value % 2 == 0 ? "Even" : "Odd";
 
     private ImmutableList<RichIterable<Integer>> iterables;
     private final ExecutorService executor = Executors.newFixedThreadPool(2);
@@ -287,127 +267,83 @@ public class ParallelIterateTest
     @Test
     public void testForEachWithException()
     {
-        Verify.assertThrows(RuntimeException.class, new Runnable()
-        {
-            public void run()
-            {
-                ParallelIterate.forEach(
+        Verify.assertThrows(
+                RuntimeException.class,
+                () -> ParallelIterate.forEach(
                         createIntegerList(5),
                         new PassThruProcedureFactory<Procedure<Integer>>(EXCEPTION_PROCEDURE),
                         new PassThruCombiner<Procedure<Integer>>(),
                         1,
-                        5);
-            }
-        });
+                        5));
     }
 
     @Test
     public void testForEachWithIndexToArrayUsingFastListSerialPath()
     {
-        final Integer[] array = new Integer[200];
+        Integer[] array = new Integer[200];
         FastList<Integer> list = (FastList<Integer>) Interval.oneTo(200).toList();
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        ParallelIterate.forEachWithIndex(list, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                array[index] = each;
-            }
-        });
+        ParallelIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; });
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
     @Test
     public void testForEachWithIndexToArrayUsingFastList()
     {
-        final Integer[] array = new Integer[200];
+        Integer[] array = new Integer[200];
         FastList<Integer> list = (FastList<Integer>) Interval.oneTo(200).toList();
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        ParallelIterate.forEachWithIndex(list, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                array[index] = each;
-            }
-        }, 10, 10);
+        ParallelIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 10, 10);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
     @Test
     public void testForEachWithIndexToArrayUsingImmutableList()
     {
-        final Integer[] array = new Integer[200];
+        Integer[] array = new Integer[200];
         ImmutableList<Integer> list = Interval.oneTo(200).toList().toImmutable();
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        ParallelIterate.forEachWithIndex(list, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                array[index] = each;
-            }
-        }, 10, 10);
+        ParallelIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 10, 10);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
     @Test
     public void testForEachWithIndexToArrayUsingArrayList()
     {
-        final Integer[] array = new Integer[200];
+        Integer[] array = new Integer[200];
         List<Integer> list = new ArrayList<Integer>(Interval.oneTo(200));
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        ParallelIterate.forEachWithIndex(list, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                array[index] = each;
-            }
-        }, 10, 10);
+        ParallelIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 10, 10);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
     @Test
     public void testForEachWithIndexToArrayUsingFixedArrayList()
     {
-        final Integer[] array = new Integer[10];
+        Integer[] array = new Integer[10];
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        ParallelIterate.forEachWithIndex(list, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                array[index] = each;
-            }
-        }, 1, 2);
+        ParallelIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 1, 2);
         Assert.assertArrayEquals(array, list.toArray(new Integer[list.size()]));
     }
 
     @Test
     public void testForEachWithIndexException()
     {
-        Verify.assertThrows(RuntimeException.class, new Runnable()
-        {
-            public void run()
-            {
-                ParallelIterate.forEachWithIndex(
+        Verify.assertThrows(
+                RuntimeException.class,
+                () -> ParallelIterate.forEachWithIndex(
                         createIntegerList(5),
                         new PassThruObjectIntProcedureFactory<ObjectIntProcedure<Integer>>(EXCEPTION_OBJECT_INT_PROCEDURE),
                         new PassThruCombiner<ObjectIntProcedure<Integer>>(),
                         1,
-                        5);
-            }
-        });
+                        5));
     }
 
     @Test
     public void select()
     {
-        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
-        {
-            public void value(RichIterable<Integer> each)
-            {
-                ParallelIterateTest.this.basicSelect(each);
-            }
-        });
+        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicSelect);
     }
 
     private void basicSelect(RichIterable<Integer> iterable)
@@ -437,13 +373,7 @@ public class ParallelIterateTest
     @Test
     public void count()
     {
-        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
-        {
-            public void value(RichIterable<Integer> each)
-            {
-                ParallelIterateTest.this.basicCount(each);
-            }
-        });
+        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicCount);
     }
 
     private void basicCount(RichIterable<Integer> iterable)
@@ -457,13 +387,7 @@ public class ParallelIterateTest
     @Test
     public void reject()
     {
-        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
-        {
-            public void value(RichIterable<Integer> each)
-            {
-                ParallelIterateTest.this.basicReject(each);
-            }
-        });
+        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicReject);
     }
 
     private void basicReject(RichIterable<Integer> iterable)
@@ -480,13 +404,7 @@ public class ParallelIterateTest
     @Test
     public void collect()
     {
-        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
-        {
-            public void value(RichIterable<Integer> each)
-            {
-                ParallelIterateTest.this.basicCollect(each);
-            }
-        });
+        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicCollect);
     }
 
     private void basicCollect(RichIterable<Integer> iterable)
@@ -505,13 +423,7 @@ public class ParallelIterateTest
     @Test
     public void collectIf()
     {
-        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
-        {
-            public void value(RichIterable<Integer> each)
-            {
-                ParallelIterateTest.this.basicCollectIf(each);
-            }
-        });
+        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicCollectIf);
     }
 
     private void basicCollectIf(RichIterable<Integer> collection)
@@ -584,25 +496,13 @@ public class ParallelIterateTest
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result7));
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result8));
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result9));
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                ParallelIterate.groupBy(null, null, 1);
-            }
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> { ParallelIterate.groupBy(null, null, 1); });
     }
 
     @Test
     public void aggregateInPlaceBy()
     {
-        Procedure2<AtomicInteger, Integer> countAggregator = new Procedure2<AtomicInteger, Integer>()
-        {
-            public void value(AtomicInteger aggregate, Integer value)
-            {
-                aggregate.incrementAndGet();
-            }
-        };
+        Procedure2<AtomicInteger, Integer> countAggregator = (aggregate, value) -> { aggregate.incrementAndGet(); };
         List<Integer> list = Interval.oneTo(2000);
         MutableMap<String, AtomicInteger> aggregation =
                 ParallelIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator);
@@ -616,20 +516,13 @@ public class ParallelIterateTest
     @Test
     public void aggregateInPlaceByWithBatchSize()
     {
-        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
-        {
-            public void value(AtomicInteger aggregate, Integer value)
-            {
-                aggregate.addAndGet(value);
-            }
-        };
         MutableList<Integer> list = LazyIterate.adapt(Collections.nCopies(100, 1))
                 .concatenate(Collections.nCopies(200, 2))
                 .concatenate(Collections.nCopies(300, 3))
                 .toList();
         Collections.shuffle(list);
         MapIterable<String, AtomicInteger> aggregation =
-                ParallelIterate.aggregateInPlaceBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, sumAggregator, 50);
+                ParallelIterate.aggregateInPlaceBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, AtomicInteger::addAndGet, 50);
         Assert.assertEquals(100, aggregation.get("1").intValue());
         Assert.assertEquals(400, aggregation.get("2").intValue());
         Assert.assertEquals(900, aggregation.get("3").intValue());
@@ -638,13 +531,7 @@ public class ParallelIterateTest
     @Test
     public void aggregateBy()
     {
-        Function2<Integer, Integer, Integer> countAggregator = new Function2<Integer, Integer, Integer>()
-        {
-            public Integer value(Integer aggregate, Integer value)
-            {
-                return aggregate + 1;
-            }
-        };
+        Function2<Integer, Integer, Integer> countAggregator = (aggregate, value) -> aggregate + 1;
         List<Integer> list = Interval.oneTo(20000);
         MutableMap<String, Integer> aggregation =
                 ParallelIterate.aggregateBy(list, EVEN_OR_ODD, INTEGER_NEW, countAggregator);
@@ -658,13 +545,7 @@ public class ParallelIterateTest
     @Test
     public void aggregateByWithBatchSize()
     {
-        Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
-        {
-            public Integer value(Integer aggregate, Integer value)
-            {
-                return aggregate + value;
-            }
-        };
+        Function2<Integer, Integer, Integer> sumAggregator = (aggregate, value) -> aggregate + value;
         MutableList<Integer> list = LazyIterate.adapt(Collections.nCopies(1000, 1))
                 .concatenate(Collections.nCopies(2000, 2))
                 .concatenate(Collections.nCopies(3000, 3))
@@ -685,13 +566,7 @@ public class ParallelIterateTest
     @Test
     public void flatCollect()
     {
-        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
-        {
-            public void value(RichIterable<Integer> each)
-            {
-                ParallelIterateTest.this.basicFlatCollect(each);
-            }
-        });
+        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicFlatCollect);
     }
 
     private void basicFlatCollect(RichIterable<Integer> iterable)

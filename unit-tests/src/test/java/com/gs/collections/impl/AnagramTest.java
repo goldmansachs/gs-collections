@@ -49,14 +49,6 @@ public class AnagramTest
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(AnagramTest.class);
 
-    private static final Procedure<String> LOGGING_PROCEDURE = new Procedure<String>()
-    {
-        public void value(String each)
-        {
-            LOGGER.info(each);
-        }
-    };
-
     private static final int SIZE_THRESHOLD = 10;
 
     private static final Function<RichIterable<String>, String> ITERABLE_TO_FORMATTED_STRING =
@@ -71,7 +63,7 @@ public class AnagramTest
             Predicates.attributeGreaterThanOrEqualTo(ITERABLE_SIZE_FUNCTION, SIZE_THRESHOLD);
 
     private static final Procedure<RichIterable<String>> OUTPUT_FORMATTED_ITERABLE =
-            Functions.bind(LOGGING_PROCEDURE, ITERABLE_TO_FORMATTED_STRING);
+            Functions.bind((Procedure<String>) LOGGER::info, ITERABLE_TO_FORMATTED_STRING);
 
     private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION = new AlphagramFunction();
 
@@ -91,7 +83,7 @@ public class AnagramTest
                 .toSortedList(DESCENDING_ITERABLE_SIZE);
         results.asLazy()
                 .collect(ITERABLE_TO_FORMATTED_STRING)
-                .forEach(LOGGING_PROCEDURE);
+                .forEach((Procedure<String>) LOGGER::info);
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
 
@@ -103,7 +95,7 @@ public class AnagramTest
                 .select(ITERABLE_SIZE_AT_THRESHOLD)
                 .toSortedList(DESCENDING_ITERABLE_SIZE);
         results.collect(ITERABLE_TO_FORMATTED_STRING)
-                .forEach(LOGGING_PROCEDURE);
+                .forEach((Procedure<String>) LOGGER::info);
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
 
@@ -120,7 +112,7 @@ public class AnagramTest
                 .multiValuesView()
                 .toSortedList(DESCENDING_ITERABLE_SIZE);
         results.collectIf(ITERABLE_SIZE_AT_THRESHOLD, ITERABLE_TO_FORMATTED_STRING)
-                .forEach(LOGGING_PROCEDURE);
+                .forEach((Procedure<String>) LOGGER::info);
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
 
@@ -142,7 +134,7 @@ public class AnagramTest
                 .toSortedList(DESCENDING_ITERABLE_SIZE);
         results.asLazy()
                 .collectIf(ITERABLE_SIZE_AT_THRESHOLD, ITERABLE_TO_FORMATTED_STRING)
-                .forEach(LOGGING_PROCEDURE);
+                .forEach((Procedure<String>) LOGGER::info);
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
 
@@ -159,13 +151,9 @@ public class AnagramTest
     @Test
     public void anagramsUsingMapGetIfAbsentPutInsteadOfGroupBy()
     {
-        final MutableMap<Alphagram, MutableList<String>> map = UnifiedMap.newMap();
-        this.getWords().forEach(new Procedure<String>()
-        {
-            public void value(String word)
-            {
-                map.getIfAbsentPut(new Alphagram(word), Functions0.<String>newFastList()).add(word);
-            }
+        MutableMap<Alphagram, MutableList<String>> map = UnifiedMap.newMap();
+        this.getWords().forEach((Procedure<String>) word -> {
+            map.getIfAbsentPut(new Alphagram(word), Functions0.<String>newFastList()).add(word);
         });
         MutableList<MutableList<String>> results =
                 map.select(ITERABLE_SIZE_AT_THRESHOLD, Lists.mutable.<MutableList<String>>of())

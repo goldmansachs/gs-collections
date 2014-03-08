@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
@@ -156,15 +155,9 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     @Test
     public void forEachWithIndex()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         MutableCollection<Integer> collection = this.newWith(1, 2, 3, 4);
-        collection.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                result.add(object);
-            }
-        });
+        collection.forEachWithIndex((object, index) -> { result.add(object); });
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }
 
@@ -220,24 +213,8 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     @Test
     public void adaptNull()
     {
-        Verify.assertThrows(
-                NullPointerException.class,
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        new SetAdapter<Object>(null);
-                    }
-                });
+        Verify.assertThrows(NullPointerException.class, () -> { new SetAdapter<Object>(null); });
 
-        Verify.assertThrows(
-                NullPointerException.class,
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        SetAdapter.adapt(null);
-                    }
-                });
+        Verify.assertThrows(NullPointerException.class, () -> { SetAdapter.adapt(null); });
     }
 }

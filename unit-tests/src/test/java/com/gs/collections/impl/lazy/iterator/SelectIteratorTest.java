@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,24 +62,14 @@ public class SelectIteratorTest
     @Test
     public void noSuchElementException()
     {
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                new SelectIterator<Object>(Lists.fixedSize.of(), Predicates.alwaysTrue()).next();
-            }
+        Verify.assertThrows(NoSuchElementException.class, () -> {
+            new SelectIterator<Object>(Lists.fixedSize.of(), Predicates.alwaysTrue()).next();
         });
     }
 
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                new SelectIterator<Object>(Lists.fixedSize.of(), Predicates.alwaysTrue()).remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> new SelectIterator<Object>(Lists.fixedSize.of(), Predicates.alwaysTrue()).remove());
     }
 }

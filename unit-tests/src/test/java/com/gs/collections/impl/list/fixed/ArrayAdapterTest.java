@@ -23,9 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.Function3;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Twin;
@@ -151,67 +148,39 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testForEachWithIndex()
     {
-        final List<Integer> result = new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<Integer>();
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
-        collection.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                result.add(object + index);
-            }
-        });
+        collection.forEachWithIndex((object, index) -> { result.add(object + index); });
         Verify.assertContainsAll(result, 1, 3, 5, 7);
     }
 
     @Test
     public void testAdd()
     {
-        final MutableList<String> collection = ArrayAdapter.newArray();
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                collection.add(null);
-            }
-        });
+        MutableList<String> collection = ArrayAdapter.newArray();
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { collection.add(null); });
     }
 
     @Test
     public void testAddAtIndex()
     {
-        final MutableList<String> collection = ArrayAdapter.newArray();
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                collection.add(0, null);
-            }
-        });
+        MutableList<String> collection = ArrayAdapter.newArray();
+        Verify.assertThrows(UnsupportedOperationException.class, () -> collection.add(0, null));
     }
 
     @Test
     public void testAddAll()
     {
-        final MutableList<String> collection = ArrayAdapter.newArray();
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                collection.addAll(Lists.fixedSize.of(""));
-            }
-        });
+        MutableList<String> collection = ArrayAdapter.newArray();
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { collection.addAll(Lists.fixedSize.of("")); });
     }
 
     @Test
     public void testAddAllAtIndex()
     {
-        final MutableList<String> collection = ArrayAdapter.newArray();
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                collection.addAll(0, Lists.fixedSize.of(""));
-            }
+        MutableList<String> collection = ArrayAdapter.newArray();
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            collection.addAll(0, Lists.fixedSize.of(""));
         });
     }
 
@@ -277,37 +246,23 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testRemoveAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayAdapterTest.this.newWith(1, 2, 3).removeAll(Lists.fixedSize.of(1, 2));
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.newWith(1, 2, 3).removeAll(Lists.fixedSize.of(1, 2));
         });
     }
 
     @Test
     public void testRetainAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayAdapterTest.this.newWith(1, 2, 3).retainAll(Lists.fixedSize.of(1, 2));
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.newWith(1, 2, 3).retainAll(Lists.fixedSize.of(1, 2));
         });
     }
 
     @Test
     public void testClear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayAdapterTest.this.newWith(1, 2, 3).clear();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newWith(1, 2, 3).clear());
     }
 
     @Test
@@ -349,13 +304,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testRemoveObject()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayAdapterTest.this.newWith(1, 2, 3).remove(3);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.newWith(1, 2, 3).remove(3); });
     }
 
     @Test
@@ -370,37 +319,21 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testRemove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayAdapter.newArrayWith(1, 2, 3, null).removeIf(Predicates.isNull());
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ArrayAdapter.newArrayWith(1, 2, 3, null).removeIf(Predicates.isNull()));
     }
 
     @Test
     public void testRemoveAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayAdapter.newArrayWith(1, 2, 3, null).remove(0);
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            ArrayAdapter.newArrayWith(1, 2, 3, null).remove(0);
         });
     }
 
     @Test
     public void testRemoveIfWith()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayAdapter.newArrayWith(1, 2, 3, null).removeIfWith(Predicates2.isNull(), null);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ArrayAdapter.newArrayWith(1, 2, 3, null).removeIfWith(Predicates2.isNull(), null));
     }
 
     @Test
@@ -446,15 +379,9 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testForEachWith()
     {
-        final List<Integer> result = new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<Integer>();
         MutableList<Integer> collection = ArrayAdapter.newArrayWith(1, 2, 3, 4);
-        collection.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 0);
+        collection.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
         Verify.assertSize(4, result);
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }
@@ -535,14 +462,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testCollectWith()
     {
-        Function2<Integer, Integer, Integer> addBlock =
-                new Function2<Integer, Integer, Integer>()
-                {
-                    public Integer value(Integer each, Integer parameter)
-                    {
-                        return each + parameter;
-                    }
-                };
+        Function2<Integer, Integer, Integer> addBlock = (each, parameter) -> each + parameter;
         Assert.assertEquals(
                 FastList.newListWith(2, 3, 4),
                 ArrayAdapter.newArrayWith(1, 2, 3).collectWith(addBlock, 1));
@@ -555,13 +475,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void testInjectIntoWith()
     {
         MutableList<Integer> objects = ArrayAdapter.newArrayWith(1, 2, 3);
-        Integer result = objects.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
-        {
-            public Integer value(Integer injectedValued, Integer item, Integer parameter)
-            {
-                return injectedValued + item + parameter;
-            }
-        }, 0);
+        Integer result = objects.injectIntoWith(1, (injectedValued, item, parameter) -> injectedValued + item + parameter, 0);
         Assert.assertEquals(Integer.valueOf(7), result);
     }
 
@@ -737,7 +651,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void forEachOnRange()
     {
-        final MutableList<Integer> list = this.newWith(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        MutableList<Integer> list = this.newWith(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
         this.validateForEachOnRange(list, 0, 0, FastList.newListWith(0));
         this.validateForEachOnRange(list, 3, 5, FastList.newListWith(3, 4, 5));
@@ -745,33 +659,21 @@ public class ArrayAdapterTest extends AbstractListTestCase
         this.validateForEachOnRange(list, 9, 9, FastList.newListWith(9));
         this.validateForEachOnRange(list, 0, 9, FastList.newListWith(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayAdapterTest.this.validateForEachOnRange(list, 10, 10, FastList.<Integer>newList());
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> this.validateForEachOnRange(list, 10, 10, FastList.<Integer>newList()));
     }
 
     @Override
     @Test
     public void forEachWithIndexOnRange()
     {
-        final MutableList<Integer> list = this.newWith(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        MutableList<Integer> list = this.newWith(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
         this.validateForEachWithIndexOnRange(list, 0, 0, FastList.newListWith(0));
         this.validateForEachWithIndexOnRange(list, 3, 5, FastList.newListWith(3, 4, 5));
         this.validateForEachWithIndexOnRange(list, 4, 6, FastList.newListWith(4, 5, 6));
         this.validateForEachWithIndexOnRange(list, 9, 9, FastList.newListWith(9));
         this.validateForEachWithIndexOnRange(list, 0, 9, FastList.newListWith(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayAdapterTest.this.validateForEachWithIndexOnRange(list, 10, 10, FastList.<Integer>newList());
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> this.validateForEachWithIndexOnRange(list, 10, 10, FastList.<Integer>newList()));
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -50,13 +47,7 @@ import static com.gs.collections.impl.factory.Iterables.*;
 
 public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 {
-    public static final Predicate<String> ERROR_THROWING_PREDICATE = new Predicate<String>()
-    {
-        public boolean accept(String each)
-        {
-            throw new AssertionError();
-        }
-    };
+    public static final Predicate<String> ERROR_THROWING_PREDICATE = each -> { throw new AssertionError(); };
 
     public static final Predicates2<String, Class<Integer>> ERROR_THROWING_PREDICATE_2 = new Predicates2<String, Class<Integer>>()
     {
@@ -429,13 +420,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     @Test
     public void collectBoolean()
     {
-        ImmutableBooleanBag result = this.newBag().collectBoolean(new BooleanFunction<String>()
-        {
-            public boolean booleanValueOf(String s)
-            {
-                return "4".equals(s);
-            }
-        });
+        ImmutableBooleanBag result = this.newBag().collectBoolean("4"::equals);
         Assert.assertEquals(0, result.sizeDistinct());
         Assert.assertEquals(0, result.occurrencesOf(true));
         Assert.assertEquals(0, result.occurrencesOf(false));
@@ -446,13 +431,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     public void collectBooleanWithTarget()
     {
         BooleanHashBag target = new BooleanHashBag();
-        BooleanHashBag result = this.newBag().collectBoolean(new BooleanFunction<String>()
-        {
-            public boolean booleanValueOf(String s)
-            {
-                return "4".equals(s);
-            }
-        }, target);
+        BooleanHashBag result = this.newBag().collectBoolean("4"::equals, target);
         Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(0, result.sizeDistinct());
         Assert.assertEquals(0, result.occurrencesOf(true));
@@ -464,12 +443,8 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     public void collect_target()
     {
         MutableList<Integer> targetCollection = FastList.newList();
-        MutableList<Integer> actual = this.newBag().collect(new Function<String, Integer>()
-        {
-            public Integer valueOf(String object)
-            {
-                throw new AssertionError();
-            }
+        MutableList<Integer> actual = this.newBag().collect(object -> {
+            throw new AssertionError();
         }, targetCollection);
         Assert.assertEquals(targetCollection, actual);
         Assert.assertSame(targetCollection, actual);
@@ -480,12 +455,8 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     public void collectWith_target()
     {
         MutableList<Integer> targetCollection = FastList.newList();
-        MutableList<Integer> actual = this.newBag().collectWith(new Function2<String, Integer, Integer>()
-        {
-            public Integer value(String argument1, Integer argument2)
-            {
-                throw new AssertionError();
-            }
+        MutableList<Integer> actual = this.newBag().collectWith((argument1, argument2) -> {
+            throw new AssertionError();
         }, 1, targetCollection);
         Assert.assertEquals(targetCollection, actual);
         Assert.assertSame(targetCollection, actual);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,9 @@
 
 package com.gs.collections.impl.lazy;
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -87,15 +84,9 @@ public class CompositeIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWithIndex()
     {
-        final MutableList<Integer> list = Lists.mutable.of();
+        MutableList<Integer> list = Lists.mutable.of();
         LazyIterable<Integer> iterables = CompositeIterable.with(Interval.fromTo(6, 10), Interval.oneTo(5));
-        iterables.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                list.add(index, each);
-            }
-        });
+        iterables.forEachWithIndex((each, index) -> list.add(index, each));
         Verify.assertSize(10, list);
         Verify.assertAllSatisfy(list, Predicates.greaterThan(0).and(Predicates.lessThan(11)));
         Verify.assertStartsWith(list, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5);
@@ -104,15 +95,9 @@ public class CompositeIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWith()
     {
-        final MutableList<Integer> list = Lists.mutable.of();
+        MutableList<Integer> list = Lists.mutable.of();
         LazyIterable<Integer> iterables = CompositeIterable.with(Interval.fromTo(6, 10), Interval.oneTo(5));
-        iterables.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer each, Integer parameter)
-            {
-                list.add(parameter.intValue(), each);
-            }
-        }, 0);
+        iterables.forEachWith((each, parameter) -> list.add(parameter.intValue(), each), 0);
         Verify.assertSize(10, list);
         Verify.assertAllSatisfy(list, Predicates.greaterThan(0).and(Predicates.lessThan(11)));
         Verify.assertStartsWith(list, 5, 4, 3, 2, 1, 10, 9, 8, 7, 6);
@@ -124,14 +109,7 @@ public class CompositeIterableTest extends AbstractLazyIterableTestCase
         CompositeIterable<Integer> iterables = new CompositeIterable<Integer>();
         List<Integer> expected = Interval.oneTo(5);
         iterables.add(expected);
-        iterables.add(
-                new Iterable<Integer>()
-                {
-                    public Iterator<Integer> iterator()
-                    {
-                        throw new RuntimeException("Iterator should not be invoked eagerly");
-                    }
-                });
+        iterables.add(() -> { throw new RuntimeException("Iterator should not be invoked eagerly"); });
         Assert.assertEquals(expected, iterables.take(expected.size()).toList());
     }
 

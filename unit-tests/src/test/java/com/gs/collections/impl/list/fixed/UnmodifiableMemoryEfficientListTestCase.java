@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,28 +37,16 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
     public void listIterator()
     {
         MutableList<T> collection = this.getCollection();
-        final ListIterator<T> it = collection.listIterator();
+        ListIterator<T> it = collection.listIterator();
         Assert.assertFalse(it.hasPrevious());
         Assert.assertEquals(-1, it.previousIndex());
         Assert.assertEquals(0, it.nextIndex());
         it.next();
         Assert.assertEquals(1, it.nextIndex());
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {it.remove();});
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.add(null);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> it.add(null));
 
         it.set(null);
         Assert.assertNotEquals(this.getCollection(), collection);
@@ -67,50 +55,28 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
     @Test
     public void addAllAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMemoryEfficientListTestCase.this.getCollection().addAll(0, new FastList<T>().with((T) null));
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.getCollection().addAll(0, new FastList<T>().with((T) null));
         });
     }
 
     @Test
     public void addAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMemoryEfficientListTestCase.this.getCollection().add(0, null);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().add(0, null));
     }
 
     @Test
     public void removeFromIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMemoryEfficientListTestCase.this.getCollection().remove(0);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.getCollection().remove(0); });
     }
 
     @Test
     public void subList()
     {
-        final MutableList<T> subList = this.getCollection().subList(0, 1);
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                subList.clear();
-            }
-        });
+        MutableList<T> subList = this.getCollection().subList(0, 1);
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {subList.clear();});
     }
 
     @Override

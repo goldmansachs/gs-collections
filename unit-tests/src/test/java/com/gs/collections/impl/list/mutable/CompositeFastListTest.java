@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.RandomAccess;
 
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -48,13 +46,7 @@ public class CompositeFastListTest extends AbstractListTestCase
     @Test
     public void testClone()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                CompositeFastListTest.this.newWith().clone();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.newWith().clone(); });
     }
 
     @Test
@@ -70,7 +62,7 @@ public class CompositeFastListTest extends AbstractListTestCase
     @Test
     public void testGet()
     {
-        final MutableList<String> list = new CompositeFastList<String>();
+        MutableList<String> list = new CompositeFastList<String>();
         list.addAll(FastList.newListWith("1", "2", "3", "4"));
         list.addAll(FastList.newListWith("A", "B", "C", "B"));
         list.addAll(FastList.newListWith("Cat", "Dog", "Mouse", "Bird"));
@@ -80,13 +72,7 @@ public class CompositeFastListTest extends AbstractListTestCase
         Assert.assertEquals("4", list.get(3));
         Assert.assertEquals("Cat", list.get(8));
         Assert.assertEquals("Bird", list.get(11));
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.get(12);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { list.get(12); });
     }
 
     @Test
@@ -125,12 +111,8 @@ public class CompositeFastListTest extends AbstractListTestCase
     @Test
     public void addAllAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                CompositeFastListTest.super.addAllAtIndex();
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {
+            CompositeFastListTest.super.addAllAtIndex();
         });
     }
 
@@ -296,17 +278,11 @@ public class CompositeFastListTest extends AbstractListTestCase
     public void forEachWithIndex()
     {
         super.forEachWithIndex();
-        final MutableList<Integer> list = FastList.newList();
+        MutableList<Integer> list = FastList.newList();
         CompositeFastList<Integer> iterables = new CompositeFastList<Integer>();
         iterables.addComposited(Interval.fromTo(6, 10).toList());
         iterables.addComposited(Interval.oneTo(5).toList());
-        iterables.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                list.add(index, each);
-            }
-        });
+        iterables.forEachWithIndex((each, index) -> list.add(index, each));
         Verify.assertSize(10, list);
         Verify.assertAllSatisfy(list, Predicates.greaterThan(0).and(Predicates.lessThan(11)));
         Verify.assertStartsWith(list, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5);
@@ -317,17 +293,11 @@ public class CompositeFastListTest extends AbstractListTestCase
     public void forEachWith()
     {
         super.forEachWith();
-        final MutableList<Integer> list = FastList.newList();
+        MutableList<Integer> list = FastList.newList();
         CompositeFastList<Integer> iterables = new CompositeFastList<Integer>();
         iterables.addComposited(Interval.fromTo(6, 10).toList());
         iterables.addComposited(Interval.oneTo(5).toList());
-        iterables.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer each, Integer parameter)
-            {
-                list.add(parameter.intValue(), each);
-            }
-        }, 0);
+        iterables.forEachWith((each, parameter) -> list.add(parameter.intValue(), each), 0);
         Verify.assertSize(10, list);
         Verify.assertAllSatisfy(list, Predicates.greaterThan(0).and(Predicates.lessThan(11)));
         Verify.assertStartsWith(list, 5, 4, 3, 2, 1, 10, 9, 8, 7, 6);

@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.list.immutable.primitive;
 
-import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import org.junit.Assert;
@@ -49,15 +48,9 @@ public class ImmutableBooleanSingletonListTest extends AbstractImmutableBooleanL
     @Test
     public void forEachWithIndex()
     {
-        final String[] sum = new String[2];
+        String[] sum = new String[2];
         sum[0] = "";
-        this.classUnderTest().forEachWithIndex(new BooleanIntProcedure()
-        {
-            public void value(boolean each, int index)
-            {
-                sum[0] += index + ":" + each;
-            }
-        });
+        this.classUnderTest().forEachWithIndex((each, index) -> { sum[0] += index + ":" + each; });
         Assert.assertEquals("0:true", sum[0]);
     }
 }

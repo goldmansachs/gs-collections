@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -175,19 +174,15 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     public void batchForEachEntry_null_handling()
     {
         //Testing batchForEach handling null keys and null values
-        final Sum sum4 = new IntegerSum(0);
+        Sum sum4 = new IntegerSum(0);
         BatchIterable<Map.Entry<Integer, Integer>> nulls =
                 (BatchIterable<Map.Entry<Integer, Integer>>) UnifiedMap.<Integer, Integer>newMap(100).withKeysValues(
                         null, 10, 1, null, 2, 11, 3, 12).withKeysValues(4, null, 5, null).entrySet();
         for (int i = 0; i < nulls.getBatchCount(7); ++i)
         {
-            nulls.batchForEach(new Procedure<Map.Entry<Integer, Integer>>()
-            {
-                public void value(Map.Entry<Integer, Integer> each)
-                {
-                    sum4.add(each.getKey() == null ? 1 : each.getKey());
-                    sum4.add(each.getValue() == null ? 1 : each.getValue());
-                }
+            nulls.batchForEach(each -> {
+                sum4.add(each.getKey() == null ? 1 : each.getKey());
+                sum4.add(each.getValue() == null ? 1 : each.getValue());
             }, i, nulls.getBatchCount(7));
         }
         Assert.assertEquals(52, sum4.getValue());
@@ -242,16 +237,12 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     private void batchForEachNullHandling(BatchIterable<Integer> batchIterable, int expectedValue)
     {
         //Testing batchForEach handling null keys and null values
-        final Sum sum = new IntegerSum(0);
+        Sum sum = new IntegerSum(0);
 
         for (int i = 0; i < batchIterable.getBatchCount(7); ++i)
         {
-            batchIterable.batchForEach(new Procedure<Integer>()
-            {
-                public void value(Integer each)
-                {
-                    sum.add(each == null ? 1 : each);
-                }
+            batchIterable.batchForEach(each -> {
+                sum.add(each == null ? 1 : each);
             }, i, batchIterable.getBatchCount(7));
         }
         Assert.assertEquals(expectedValue, sum.getValue());
@@ -336,18 +327,14 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     public void batchIterable_forEachEntry_null_handling()
     {
         //Testing batchForEach handling null keys and null values
-        final Sum sum = new IntegerSum(0);
+        Sum sum = new IntegerSum(0);
         BatchIterable<Map.Entry<Integer, Integer>> nulls =
                 (BatchIterable<Map.Entry<Integer, Integer>>) UnifiedMap.<Integer, Integer>newMap(100).withKeysValues(
                         null, 10, 1, null, 2, 11, 3, 12).withKeysValues(4, null, 5, null).entrySet();
 
-        nulls.forEach(new Procedure<Map.Entry<Integer, Integer>>()
-        {
-            public void value(Map.Entry<Integer, Integer> each)
-            {
-                sum.add(each.getKey() == null ? 0 : each.getKey());
-                sum.add(each.getValue() == null ? 0 : each.getValue());
-            }
+        nulls.forEach(each -> {
+            sum.add(each.getKey() == null ? 0 : each.getKey());
+            sum.add(each.getValue() == null ? 0 : each.getValue());
         });
 
         Assert.assertEquals(48, sum.getValue());
@@ -374,14 +361,8 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     private void batchIterable_forEachNullHandling(BatchIterable<Integer> batchIterable, int expectedValue)
     {
         //Testing forEach handling null keys and null values
-        final Sum sum = new IntegerSum(0);
-        batchIterable.forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                sum.add(each == null ? 0 : each);
-            }
-        });
+        Sum sum = new IntegerSum(0);
+        batchIterable.forEach(each -> { sum.add(each == null ? 0 : each); });
         Assert.assertEquals(expectedValue, sum.getValue());
     }
 
@@ -428,26 +409,18 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         super.getIfAbsentPut();
 
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
-        final UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
-        COLLISIONS.subList(0, 5).forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.getIfAbsentPut(each, new PassThruFunction0<Integer>(each));
-            }
+        UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
+        COLLISIONS.subList(0, 5).forEach((Procedure<Integer>) each -> {
+            map.getIfAbsentPut(each, new PassThruFunction0<Integer>(each));
         });
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(5), map);
 
         //Test getting element present in chain
         UnifiedMap<Integer, Integer> map2 = UnifiedMap.newWithKeysValues(COLLISION_1, 1, COLLISION_2, 2, COLLISION_3, 3, COLLISION_4, 4);
-        Assert.assertEquals(Integer.valueOf(3), map2.getIfAbsentPut(COLLISION_3, new Function0<Integer>()
-        {
-            public Integer value()
-            {
-                Assert.fail();
-                return null;
-            }
+        Assert.assertEquals(Integer.valueOf(3), map2.getIfAbsentPut(COLLISION_3, () -> {
+            Assert.fail();
+            return null;
         }));
 
         //Test rehashing while creating a new chained key
@@ -463,26 +436,12 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         super.getIfAbsentPut_block_throws();
 
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
-        final UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
-        COLLISIONS.subList(0, 5).forEach(new Procedure<Integer>()
-        {
-            public void value(final Integer each)
-            {
-                Verify.assertThrows(RuntimeException.class, new Runnable()
-                {
-                    public void run()
-                    {
-                        map.getIfAbsentPut(each, new Function0<Integer>()
-                        {
-                            public Integer value()
-                            {
-                                throw new RuntimeException();
-                            }
-                        });
-                    }
-                });
-                map.put(each, each);
-            }
+        UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
+        COLLISIONS.subList(0, 5).forEach((Procedure<Integer>) each -> {
+            Verify.assertThrows(RuntimeException.class, () -> {
+                map.getIfAbsentPut(each, () -> { throw new RuntimeException(); });
+            });
+            map.put(each, each);
         });
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(5), map);
@@ -495,14 +454,8 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         super.put();
 
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
-        final UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
-        COLLISIONS.subList(0, 5).forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                Assert.assertNull(map.put(each, each));
-            }
-        });
+        UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
+        COLLISIONS.subList(0, 5).forEach((Procedure<Integer>) each -> Assert.assertNull(map.put(each, each)));
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(5), map);
     }

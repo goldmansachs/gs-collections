@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package com.gs.collections.impl.lazy;
 
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.factory.Lists;
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,16 +36,12 @@ public class ZipIterableTest
     @Test
     public void forEachWithIndex()
     {
-        final StringBuilder sb = new StringBuilder();
-        this.zipIterable.forEachWithIndex(new ObjectIntProcedure<Pair<Character, Integer>>()
-        {
-            public void value(Pair<Character, Integer> each, int index)
-            {
-                sb.append('|');
-                sb.append(each.getOne());
-                sb.append(each.getTwo());
-                sb.append(index);
-            }
+        StringBuilder sb = new StringBuilder();
+        this.zipIterable.forEachWithIndex((each, index) -> {
+            sb.append('|');
+            sb.append(each.getOne());
+            sb.append(each.getTwo());
+            sb.append(index);
         });
 
         Assert.assertEquals("|a00|b11|c22", sb.toString());
@@ -57,15 +50,11 @@ public class ZipIterableTest
     @Test
     public void forEachWith()
     {
-        final StringBuilder sb = new StringBuilder();
-        this.zipIterable.forEachWith(new Procedure2<Pair<Character, Integer>, Object>()
-        {
-            public void value(Pair<Character, Integer> each, Object argument2)
-            {
-                sb.append(argument2);
-                sb.append(each.getOne());
-                sb.append(each.getTwo());
-            }
+        StringBuilder sb = new StringBuilder();
+        this.zipIterable.forEachWith((each, argument2) -> {
+            sb.append(argument2);
+            sb.append(each.getOne());
+            sb.append(each.getTwo());
         }, "|");
 
         Assert.assertEquals("|a0|b1|c2", sb.toString());

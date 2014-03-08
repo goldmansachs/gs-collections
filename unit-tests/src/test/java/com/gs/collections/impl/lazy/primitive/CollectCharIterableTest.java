@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.CharIterable;
 import com.gs.collections.api.LazyCharIterable;
-import com.gs.collections.api.block.function.primitive.CharToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.CharProcedure;
 import com.gs.collections.api.iterator.CharIterator;
 import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -67,14 +65,8 @@ public class CollectCharIterableTest
     @Test
     public void forEach()
     {
-        final char[] value = new char[1];
-        this.charIterable.forEach(new CharProcedure()
-        {
-            public void value(char each)
-            {
-                value[0] += each;
-            }
-        });
+        char[] value = new char[1];
+        this.charIterable.forEach(each -> { value[0] += each; });
         Assert.assertEquals(6, value[0]);
     }
 
@@ -245,13 +237,7 @@ public class CollectCharIterableTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(FastList.newListWith("\u0001", "\u0002", "\u0003"), this.charIterable.collect(new CharToObjectFunction<Object>()
-        {
-            public String valueOf(char each)
-            {
-                return String.valueOf(each);
-            }
-        }).toList());
+        Assert.assertEquals(FastList.newListWith("\u0001", "\u0002", "\u0003"), this.charIterable.collect(String::valueOf).toList());
     }
 
     @Test

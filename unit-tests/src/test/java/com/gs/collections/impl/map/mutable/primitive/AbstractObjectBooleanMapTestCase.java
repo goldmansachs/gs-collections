@@ -19,11 +19,6 @@ package com.gs.collections.impl.map.mutable.primitive;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
-import com.gs.collections.api.block.predicate.primitive.ObjectBooleanPredicate;
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
-import com.gs.collections.api.block.procedure.primitive.ObjectBooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.map.primitive.ImmutableObjectBooleanMap;
 import com.gs.collections.api.map.primitive.ObjectBooleanMap;
@@ -82,20 +77,8 @@ public abstract class AbstractObjectBooleanMapTestCase
         Assert.assertTrue(this.classUnderTest().getOrThrow("1"));
         Assert.assertFalse(this.classUnderTest().getOrThrow("2"));
 
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractObjectBooleanMapTestCase.this.classUnderTest().getOrThrow("5");
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractObjectBooleanMapTestCase.this.classUnderTest().getOrThrow(null);
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow("5"); });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow(null); });
     }
 
     @Test
@@ -213,39 +196,21 @@ public abstract class AbstractObjectBooleanMapTestCase
     public void forEachValue()
     {
         ObjectBooleanMap<Integer> map01 = this.newWithKeysValues(0, true, 1, false);
-        final String[] sum01 = new String[1];
+        String[] sum01 = new String[1];
         sum01[0] = "";
-        map01.forEachValue(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum01[0] += String.valueOf(each);
-            }
-        });
+        map01.forEachValue(each -> { sum01[0] += String.valueOf(each); });
         Assert.assertTrue("truefalse".equals(sum01[0]) || "falsetrue".equals(sum01[0]));
 
         ObjectBooleanMap<Integer> map = this.newWithKeysValues(3, true, 4, true);
-        final String[] sum = new String[1];
+        String[] sum = new String[1];
         sum[0] = "";
-        map.forEachValue(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[0] += String.valueOf(each);
-            }
-        });
+        map.forEachValue(each -> { sum[0] += String.valueOf(each); });
         Assert.assertEquals("truetrue", sum[0]);
 
         ObjectBooleanMap<Integer> map1 = this.newWithKeysValues(3, false, null, true);
-        final String[] sum1 = new String[1];
+        String[] sum1 = new String[1];
         sum1[0] = "";
-        map1.forEachValue(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum1[0] += String.valueOf(each);
-            }
-        });
+        map1.forEachValue(each -> { sum1[0] += String.valueOf(each); });
         Assert.assertTrue("truefalse".equals(sum1[0]) || "falsetrue".equals(sum1[0]));
     }
 
@@ -253,39 +218,21 @@ public abstract class AbstractObjectBooleanMapTestCase
     public void forEach()
     {
         ObjectBooleanMap<Integer> map01 = this.newWithKeysValues(0, true, 1, false);
-        final String[] sum01 = new String[1];
+        String[] sum01 = new String[1];
         sum01[0] = "";
-        map01.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum01[0] += String.valueOf(each);
-            }
-        });
+        map01.forEach(each -> { sum01[0] += String.valueOf(each); });
         Assert.assertTrue("truefalse".equals(sum01[0]) || "falsetrue".equals(sum01[0]));
 
         ObjectBooleanMap<Integer> map = this.newWithKeysValues(3, true, 4, true);
-        final String[] sum = new String[1];
+        String[] sum = new String[1];
         sum[0] = "";
-        map.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[0] += String.valueOf(each);
-            }
-        });
+        map.forEach(each -> { sum[0] += String.valueOf(each); });
         Assert.assertEquals("truetrue", sum[0]);
 
         ObjectBooleanMap<Integer> map1 = this.newWithKeysValues(3, false, null, true);
-        final String[] sum1 = new String[1];
+        String[] sum1 = new String[1];
         sum1[0] = "";
-        map1.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum1[0] += String.valueOf(each);
-            }
-        });
+        map1.forEach(each -> { sum1[0] += String.valueOf(each); });
         Assert.assertTrue("truefalse".equals(sum1[0]) || "falsetrue".equals(sum1[0]));
     }
 
@@ -293,26 +240,14 @@ public abstract class AbstractObjectBooleanMapTestCase
     public void forEachKey()
     {
         ObjectBooleanMap<Integer> map01 = this.newWithKeysValues(0, true, 1, false);
-        final int[] sum01 = new int[1];
-        map01.forEachKey(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                sum01[0] += each;
-            }
-        });
+        int[] sum01 = new int[1];
+        map01.forEachKey(each -> { sum01[0] += each; });
         Assert.assertEquals(1, sum01[0]);
 
         ObjectBooleanMap<Integer> map = this.newWithKeysValues(3, false, null, true);
-        final String[] sum = new String[1];
+        String[] sum = new String[1];
         sum[0] = "";
-        map.forEachKey(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                sum[0] += String.valueOf(each);
-            }
-        });
+        map.forEachKey(each -> { sum[0] += String.valueOf(each); });
         Assert.assertTrue("3null".equals(sum[0]) || "null3".equals(sum[0]));
     }
 
@@ -320,32 +255,24 @@ public abstract class AbstractObjectBooleanMapTestCase
     public void forEachKeyValue()
     {
         ObjectBooleanMap<Integer> map01 = this.newWithKeysValues(0, true, 1, false);
-        final String[] sumValue01 = new String[1];
+        String[] sumValue01 = new String[1];
         sumValue01[0] = "";
-        final int[] sumKey01 = new int[1];
-        map01.forEachKeyValue(new ObjectBooleanProcedure<Integer>()
-        {
-            public void value(Integer eachKey, boolean eachValue)
-            {
-                sumKey01[0] += eachKey;
-                sumValue01[0] += eachValue;
-            }
+        int[] sumKey01 = new int[1];
+        map01.forEachKeyValue((eachKey, eachValue) -> {
+            sumKey01[0] += eachKey;
+            sumValue01[0] += eachValue;
         });
         Assert.assertEquals(1, sumKey01[0]);
         Assert.assertTrue("truefalse".equals(sumValue01[0]) || "falsetrue".equals(sumValue01[0]));
 
         ObjectBooleanMap<Integer> map = this.newWithKeysValues(3, true, null, false);
-        final String[] sumKey = new String[1];
+        String[] sumKey = new String[1];
         sumKey[0] = "";
-        final String[] sumValue = new String[1];
+        String[] sumValue = new String[1];
         sumValue[0] = "";
-        map.forEachKeyValue(new ObjectBooleanProcedure<Integer>()
-        {
-            public void value(Integer eachKey, boolean eachValue)
-            {
-                sumKey[0] += String.valueOf(eachKey);
-                sumValue[0] += eachValue;
-            }
+        map.forEachKeyValue((eachKey, eachValue) -> {
+            sumKey[0] += String.valueOf(eachKey);
+            sumValue[0] += eachValue;
         });
         Assert.assertTrue(sumKey[0], "3null".equals(sumKey[0]) || "null3".equals(sumKey[0]));
         Assert.assertTrue("truefalse".equals(sumValue[0]) || "falsetrue".equals(sumValue[0]));
@@ -421,27 +348,9 @@ public abstract class AbstractObjectBooleanMapTestCase
         Assert.assertEquals(BooleanHashBag.newBagWith(true, true, false), this.classUnderTest().select(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())).toBag());
         Assert.assertEquals(new BooleanHashBag(), this.classUnderTest().select(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())).toBag());
 
-        Assert.assertEquals(this.newWithKeysValues("0", true), this.classUnderTest().select(new ObjectBooleanPredicate<String>()
-        {
-            public boolean accept(String object, boolean value)
-            {
-                return (Integer.parseInt(object) & 1) == 0 && value;
-            }
-        }));
-        Assert.assertEquals(this.newWithKeysValues("2", false), this.classUnderTest().select(new ObjectBooleanPredicate<String>()
-        {
-            public boolean accept(String object, boolean value)
-            {
-                return (Integer.parseInt(object) & 1) == 0 && !value;
-            }
-        }));
-        Assert.assertEquals(ObjectBooleanHashMap.newMap(), this.classUnderTest().select(new ObjectBooleanPredicate<String>()
-        {
-            public boolean accept(String object, boolean value)
-            {
-                return (Integer.parseInt(object) & 1) != 0 && !value;
-            }
-        }));
+        Assert.assertEquals(this.newWithKeysValues("0", true), this.classUnderTest().select((object, value) -> (Integer.parseInt(object) & 1) == 0 && value));
+        Assert.assertEquals(this.newWithKeysValues("2", false), this.classUnderTest().select((object, value) -> (Integer.parseInt(object) & 1) == 0 && !value));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), this.classUnderTest().select((object, value) -> (Integer.parseInt(object) & 1) != 0 && !value));
     }
 
     @Test
@@ -452,27 +361,9 @@ public abstract class AbstractObjectBooleanMapTestCase
         Assert.assertEquals(new BooleanHashBag(), this.classUnderTest().reject(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())).toBag());
         Assert.assertEquals(BooleanHashBag.newBagWith(true, true, false), this.classUnderTest().reject(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())).toBag());
 
-        Assert.assertEquals(this.newWithKeysValues("1", true, "2", false), this.classUnderTest().reject(new ObjectBooleanPredicate<String>()
-        {
-            public boolean accept(String object, boolean value)
-            {
-                return (Integer.parseInt(object) & 1) == 0 && value;
-            }
-        }));
-        Assert.assertEquals(this.newWithKeysValues("0", true, "1", true), this.classUnderTest().reject(new ObjectBooleanPredicate<String>()
-        {
-            public boolean accept(String object, boolean value)
-            {
-                return (Integer.parseInt(object) & 1) == 0 && !value;
-            }
-        }));
-        Assert.assertEquals(this.newWithKeysValues("0", true, "1", true, "2", false), this.classUnderTest().reject(new ObjectBooleanPredicate<String>()
-        {
-            public boolean accept(String object, boolean value)
-            {
-                return (Integer.parseInt(object) & 1) != 0 && !value;
-            }
-        }));
+        Assert.assertEquals(this.newWithKeysValues("1", true, "2", false), this.classUnderTest().reject((object, value) -> (Integer.parseInt(object) & 1) == 0 && value));
+        Assert.assertEquals(this.newWithKeysValues("0", true, "1", true), this.classUnderTest().reject((object, value) -> (Integer.parseInt(object) & 1) == 0 && !value));
+        Assert.assertEquals(this.newWithKeysValues("0", true, "1", true, "2", false), this.classUnderTest().reject((object, value) -> (Integer.parseInt(object) & 1) != 0 && !value));
     }
 
     @Test
@@ -525,16 +416,9 @@ public abstract class AbstractObjectBooleanMapTestCase
         ObjectBooleanMap<String> map1 = this.newWithKeysValues("0", true, "1", false);
         ObjectBooleanMap<String> map2 = this.newWithKeysValues("0", true);
         ObjectBooleanMap<String> map3 = this.newWithKeysValues("0", false);
-        BooleanToObjectFunction<String> stringValueOf = new BooleanToObjectFunction<String>()
-        {
-            public String valueOf(boolean booleanParameter)
-            {
-                return String.valueOf(booleanParameter);
-            }
-        };
-        Assert.assertTrue(FastList.newListWith("true", "false").equals(map1.collect(stringValueOf)) || FastList.newListWith("false", "true").equals(map1.collect(stringValueOf)));
-        Assert.assertEquals(FastList.newListWith("true"), map2.collect(stringValueOf));
-        Assert.assertEquals(FastList.newListWith("false"), map3.collect(stringValueOf));
+        Assert.assertTrue(FastList.newListWith("true", "false").equals(map1.collect(String::valueOf)) || FastList.newListWith("false", "true").equals(map1.collect(String::valueOf)));
+        Assert.assertEquals(FastList.newListWith("true"), map2.collect(String::valueOf));
+        Assert.assertEquals(FastList.newListWith("false"), map3.collect(String::valueOf));
     }
 
     @Test
@@ -628,44 +512,26 @@ public abstract class AbstractObjectBooleanMapTestCase
         ObjectBooleanMap<String> map2 = this.newWithKeysValues("0", true);
         ObjectBooleanMap<String> map3 = this.newWithKeysValues("0", false);
 
-        final BooleanIterator iterator1 = map1.booleanIterator();
+        BooleanIterator iterator1 = map1.booleanIterator();
         Assert.assertTrue(iterator1.hasNext());
         boolean first = iterator1.next();
         Assert.assertTrue(iterator1.hasNext());
         boolean second = iterator1.next();
         Assert.assertEquals(first, !second);
         Assert.assertFalse(iterator1.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator1.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator1::next);
 
-        final BooleanIterator iterator2 = map2.booleanIterator();
+        BooleanIterator iterator2 = map2.booleanIterator();
         Assert.assertTrue(iterator2.hasNext());
         Assert.assertTrue(iterator2.next());
         Assert.assertFalse(iterator2.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator2.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator2::next);
 
-        final BooleanIterator iterator3 = map3.booleanIterator();
+        BooleanIterator iterator3 = map3.booleanIterator();
         Assert.assertTrue(iterator3.hasNext());
         Assert.assertFalse(iterator3.next());
         Assert.assertFalse(iterator3.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator3.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator3::next);
     }
 
     @Test

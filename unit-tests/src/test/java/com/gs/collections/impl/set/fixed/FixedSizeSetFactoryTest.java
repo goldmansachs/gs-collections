@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.set.fixed;
 
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.factory.set.FixedSizeSetFactory;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.FixedSizeSet;
@@ -203,16 +202,12 @@ public class FixedSizeSetFactoryTest
     @Test
     public void forEachWithIndex()
     {
-        final int[] indexSum = new int[1];
-        final MutableList<String> result = Lists.mutable.of();
+        int[] indexSum = new int[1];
+        MutableList<String> result = Lists.mutable.of();
         MutableSet<String> source = Sets.fixedSize.of("1", "2", "3", "4");
-        source.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                result.add(each);
-                indexSum[0] += index;
-            }
+        source.forEachWithIndex((each, index) -> {
+            result.add(each);
+            indexSum[0] += index;
         });
         Assert.assertEquals(6, indexSum[0]);
         Assert.assertEquals(FastList.newListWith("1", "2", "3", "4"), result);

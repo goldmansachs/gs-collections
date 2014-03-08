@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,38 +74,14 @@ public class UnmodifiableSortedMapTest
         Assert.assertEquals(1, this.revMap.lastKey().intValue());
     }
 
-    private void checkMutability(final Map<Integer, String> map)
+    private void checkMutability(Map<Integer, String> map)
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                map.put(3, "1");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.put(3, "1"); });
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                map.putAll(SortedMaps.mutable.of(1, "1", 2, "2"));
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.putAll(SortedMaps.mutable.of(1, "1", 2, "2")));
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                map.remove(2);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.remove(2); });
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                map.clear();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) map::clear);
     }
 }

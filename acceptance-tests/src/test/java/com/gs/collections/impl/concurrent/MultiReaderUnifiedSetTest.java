@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.CollidingInt;
@@ -110,14 +108,8 @@ public class MultiReaderUnifiedSetTest
         {
             Assert.assertTrue(set.add(new CollidingInt(i, shift)));
         }
-        final MutableList<CollidingInt> keys = FastList.newList(size);
-        set.forEach(new Procedure<CollidingInt>()
-        {
-            public void value(CollidingInt key)
-            {
-                keys.add(key);
-            }
-        });
+        MutableList<CollidingInt> keys = FastList.newList(size);
+        set.forEach((Procedure<CollidingInt>) keys::add);
         Verify.assertSize(size, keys);
         Collections.sort(keys);
 
@@ -145,14 +137,10 @@ public class MultiReaderUnifiedSetTest
         {
             Assert.assertTrue(set.add(new CollidingInt(i, shift)));
         }
-        final MutableList<CollidingInt> keys = FastList.newList(size);
-        set.forEachWith(new Procedure2<CollidingInt, String>()
-        {
-            public void value(CollidingInt key, String s)
-            {
-                Assert.assertEquals("foo", s);
-                keys.add(key);
-            }
+        MutableList<CollidingInt> keys = FastList.newList(size);
+        set.forEachWith((key, s) -> {
+            Assert.assertEquals("foo", s);
+            keys.add(key);
         }, "foo");
         Verify.assertSize(size, keys);
         Collections.sort(keys);
@@ -181,16 +169,12 @@ public class MultiReaderUnifiedSetTest
         {
             Assert.assertTrue(set.add(new CollidingInt(i, shift)));
         }
-        final MutableList<CollidingInt> keys = FastList.newList(size);
-        final int[] prevIndex = new int[1];
-        set.forEachWithIndex(new ObjectIntProcedure<CollidingInt>()
-        {
-            public void value(CollidingInt key, int index)
-            {
-                Assert.assertEquals(prevIndex[0], index);
-                prevIndex[0]++;
-                keys.add(key);
-            }
+        MutableList<CollidingInt> keys = FastList.newList(size);
+        int[] prevIndex = new int[1];
+        set.forEachWithIndex((key, index) -> {
+            Assert.assertEquals(prevIndex[0], index);
+            prevIndex[0]++;
+            keys.add(key);
         });
         Verify.assertSize(size, keys);
         Collections.sort(keys);
@@ -543,14 +527,10 @@ public class MultiReaderUnifiedSetTest
             Assert.assertFalse(set.add(new CollidingIntWithFlag(i, shift, true)));
         }
         Assert.assertEquals(1000, set.size());
-        set.withReadLockAndDelegate(new Procedure<MutableSet<CollidingIntWithFlag>>()
-        {
-            public void value(MutableSet<CollidingIntWithFlag> delegate)
+        set.withReadLockAndDelegate(delegate -> {
+            for (CollidingIntWithFlag ciwf : delegate)
             {
-                for (CollidingIntWithFlag ciwf : delegate)
-                {
-                    Assert.assertFalse(ciwf.isFlag());
-                }
+                Assert.assertFalse(ciwf.isFlag());
             }
         });
     }

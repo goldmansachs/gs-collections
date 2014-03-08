@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
@@ -139,15 +137,9 @@ public class IntervalTest
     @Test
     public void runWithExecutor() throws InterruptedException
     {
-        final MutableList<String> result = Lists.mutable.of();
+        MutableList<String> result = Lists.mutable.of();
         ExecutorService service = Executors.newSingleThreadExecutor();
-        Interval.oneTo(3).run(new Runnable()
-        {
-            public void run()
-            {
-                result.add(null);
-            }
-        }, service);
+        Interval.oneTo(3).run(() -> { result.add(null); }, service);
         service.shutdown();
         service.awaitTermination(20, TimeUnit.SECONDS);
         Assert.assertEquals(FastList.<String>newListWith(null, null, null), result);
@@ -156,15 +148,9 @@ public class IntervalTest
     @Test
     public void runWithExecutorInReverse() throws InterruptedException
     {
-        final MutableList<String> result = Lists.mutable.of();
+        MutableList<String> result = Lists.mutable.of();
         ExecutorService service = Executors.newSingleThreadExecutor();
-        Interval.fromTo(3, 1).run(new Runnable()
-        {
-            public void run()
-            {
-                result.add(null);
-            }
-        }, service);
+        Interval.fromTo(3, 1).run(() -> { result.add(null); }, service);
         service.shutdown();
         service.awaitTermination(20, TimeUnit.SECONDS);
         Assert.assertEquals(FastList.<String>newListWith(null, null, null), result);
@@ -501,13 +487,7 @@ public class IntervalTest
     @Test
     public void factorial()
     {
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                Interval.fromTo(-1, -5).factorial();
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> { Interval.fromTo(-1, -5).factorial(); });
         Assert.assertEquals(1, Interval.zero().factorial().intValue());
         Assert.assertEquals(1, Interval.oneTo(1).factorial().intValue());
         Assert.assertEquals(6, Interval.oneTo(3).factorial().intValue());
@@ -539,116 +519,58 @@ public class IntervalTest
         Assert.assertEquals(Integer.valueOf(0), zeroIterator.next());
         Assert.assertFalse(zeroIterator.hasNext());
         Interval oneToFive = Interval.oneTo(5);
-        final Iterator<Integer> oneToFiveIterator = oneToFive.iterator();
+        Iterator<Integer> oneToFiveIterator = oneToFive.iterator();
         for (int i = 1; i < 6; i++)
         {
             Assert.assertTrue(oneToFiveIterator.hasNext());
             Assert.assertEquals(Integer.valueOf(i), oneToFiveIterator.next());
         }
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                oneToFiveIterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {oneToFiveIterator.next();});
         Interval threeToNegativeThree = Interval.fromTo(3, -3);
-        final Iterator<Integer> threeToNegativeThreeIterator = threeToNegativeThree.iterator();
+        Iterator<Integer> threeToNegativeThreeIterator = threeToNegativeThree.iterator();
         for (int i = 3; i > -4; i--)
         {
             Assert.assertTrue(threeToNegativeThreeIterator.hasNext());
             Assert.assertEquals(Integer.valueOf(i), threeToNegativeThreeIterator.next());
         }
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                threeToNegativeThreeIterator.next();
-            }
-        });
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                Interval.zeroTo(10).iterator().remove();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {threeToNegativeThreeIterator.next();});
+        Verify.assertThrows(UnsupportedOperationException.class, () -> Interval.zeroTo(10).iterator().remove());
     }
 
     @Test
     public void forEachWithIndex()
     {
-        final IntegerSum sum = new IntegerSum(0);
-        Interval.oneTo(5).forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                sum.add(each + index);
-            }
-        });
+        IntegerSum sum = new IntegerSum(0);
+        Interval.oneTo(5).forEachWithIndex((ObjectIntProcedure<Integer>) (each, index) -> { sum.add(each + index); });
         Assert.assertEquals(25, sum.getIntSum());
-        final IntegerSum zeroSum = new IntegerSum(0);
-        Interval.fromTo(0, -4).forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                zeroSum.add(each + index);
-            }
+        IntegerSum zeroSum = new IntegerSum(0);
+        Interval.fromTo(0, -4).forEachWithIndex((ObjectIntProcedure<Integer>) (each, index) -> {
+            zeroSum.add(each + index);
         });
         Assert.assertEquals(0, zeroSum.getIntSum());
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                Interval.zeroTo(10).forEachWithIndex(null, -1, 10);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> Interval.zeroTo(10).forEachWithIndex(null, -1, 10));
     }
 
     @Test
     public void run()
     {
-        final IntegerSum sum = new IntegerSum(0);
-        Interval.oneTo(5).run(new Runnable()
-        {
-            public void run()
-            {
-                sum.add(1);
-            }
-        });
+        IntegerSum sum = new IntegerSum(0);
+        Interval.oneTo(5).run(() -> { sum.add(1); });
         Assert.assertEquals(5, sum.getIntSum());
-        final IntegerSum sum2 = new IntegerSum(0);
-        Interval.fromTo(5, 1).run(new Runnable()
-        {
-            public void run()
-            {
-                sum2.add(1);
-            }
-        });
+        IntegerSum sum2 = new IntegerSum(0);
+        Interval.fromTo(5, 1).run(() -> { sum2.add(1); });
         Assert.assertEquals(5, sum2.getIntSum());
     }
 
     @Test
     public void forEachWith()
     {
-        final IntegerSum sum = new IntegerSum(0);
-        Interval.oneTo(5).forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer each, Integer parameter)
-            {
-                sum.add(each + parameter);
-            }
-        }, 0);
+        IntegerSum sum = new IntegerSum(0);
+        Interval.oneTo(5).forEachWith((Integer each, Integer parameter) -> { sum.add(each + parameter); }, 0);
         Assert.assertEquals(15, sum.getIntSum());
-        final IntegerSum sum2 = new IntegerSum(0);
-        Interval.fromTo(5, 1).forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer each, Integer parameter)
-            {
-                sum2.add(each + parameter);
-            }
-        }, 0);
+        IntegerSum sum2 = new IntegerSum(0);
+        Interval.fromTo(5, 1).forEachWith((Integer each, Integer parameter) -> { sum2.add(each + parameter); }, 0);
         Assert.assertEquals(15, sum2.getIntSum());
     }
 
@@ -702,7 +624,7 @@ public class IntervalTest
     @Test
     public void forEach_with_start_end()
     {
-        final Interval interval = Interval.fromTo(-10, 12).by(5);
+        Interval interval = Interval.fromTo(-10, 12).by(5);
 
         MutableList<Integer> forwardResult = Lists.mutable.of();
         interval.forEach(CollectionAddProcedure.on(forwardResult), 1, 3);
@@ -712,13 +634,7 @@ public class IntervalTest
         interval.forEach(CollectionAddProcedure.on(backwardsResult), 3, 1);
         Assert.assertEquals(FastList.newListWith(5, 0, -5), backwardsResult);
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                interval.forEach(null, -1, 3);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> interval.forEach(null, -1, 3));
     }
 
     @Test
@@ -799,27 +715,15 @@ public class IntervalTest
     @Test
     public void get()
     {
-        final Interval interval = Interval.fromTo(-10, 12).by(5);
+        Interval interval = Interval.fromTo(-10, 12).by(5);
         Assert.assertEquals(Integer.valueOf(-10), interval.get(0));
         Assert.assertEquals(Integer.valueOf(-5), interval.get(1));
         Assert.assertEquals(Integer.valueOf(0), interval.get(2));
         Assert.assertEquals(Integer.valueOf(5), interval.get(3));
         Assert.assertEquals(Integer.valueOf(10), interval.get(4));
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                interval.get(-1);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                interval.get(5);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { interval.get(-1); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { interval.get(5); });
     }
 
     @Test
@@ -902,13 +806,7 @@ public class IntervalTest
         Assert.assertEquals(FastList.newListWith(1, 2), Interval.fromTo(1, 3).take(2));
         Assert.assertEquals(FastList.newListWith(1, 2), Interval.fromTo(1, 2).take(3));
 
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                Interval.fromTo(1, 3).take(-1);
-            }
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> { Interval.fromTo(1, 3).take(-1); });
     }
 
     @Test
@@ -917,13 +815,7 @@ public class IntervalTest
         Assert.assertEquals(FastList.newListWith(3, 4), Interval.fromTo(1, 4).drop(2));
         Verify.assertIterableEmpty(Interval.fromTo(1, 2).drop(3));
 
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                Interval.fromTo(1, 3).drop(-1);
-            }
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> { Interval.fromTo(1, 3).drop(-1); });
     }
 
     @Test
@@ -935,13 +827,7 @@ public class IntervalTest
                 FastList.newListWith(1, 2, 3, 4, 5),
                 integers.distinct().take(5).toList());
 
-        LazyIterable<Integer> lazyInterval = Interval.oneTo(1000000).flatCollect(new Function<Integer, Iterable<Integer>>()
-        {
-            public Iterable<Integer> valueOf(Integer each)
-            {
-                return Interval.oneTo(each);
-            }
-        });
+        LazyIterable<Integer> lazyInterval = Interval.oneTo(1000000).flatCollect(Interval::oneTo);
         LazyIterable<Integer> distinct = lazyInterval.distinct();
         LazyIterable<Integer> take = distinct.take(5);
         Assert.assertEquals(Lists.immutable.of(1, 2, 3, 4, 5), take.toList());

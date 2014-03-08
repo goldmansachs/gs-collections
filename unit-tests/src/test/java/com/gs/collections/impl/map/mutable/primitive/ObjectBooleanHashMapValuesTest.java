@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ public class ObjectBooleanHashMapValuesTest extends AbstractMutableBooleanCollec
     {
         MutableBooleanCollection bag = this.newWith(true, false, true, true);
         BooleanArrayList list = BooleanArrayList.newListWith(true, false, true, true);
-        final BooleanIterator iterator = bag.booleanIterator();
+        BooleanIterator iterator = bag.booleanIterator();
         for (int i = 0; i < 4; i++)
         {
             Assert.assertTrue(iterator.hasNext());
@@ -82,13 +82,7 @@ public class ObjectBooleanHashMapValuesTest extends AbstractMutableBooleanCollec
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
     }
 
     @Override
@@ -369,13 +363,7 @@ public class ObjectBooleanHashMapValuesTest extends AbstractMutableBooleanCollec
     @Test
     public void collect()
     {
-        BooleanToObjectFunction<Integer> function = new BooleanToObjectFunction<Integer>()
-        {
-            public Integer valueOf(boolean parameter)
-            {
-                return parameter ? 1 : 0;
-            }
-        };
+        BooleanToObjectFunction<Integer> function = parameter -> parameter ? 1 : 0;
         Assert.assertEquals(this.newObjectCollectionWith(1, 0, 1).toBag(), this.newWith(true, false, true).collect(function).toBag());
         Assert.assertEquals(this.newObjectCollectionWith(), this.newWith().collect(function));
     }

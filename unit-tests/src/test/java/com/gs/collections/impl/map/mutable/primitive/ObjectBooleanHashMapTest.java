@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.lang.reflect.Field;
 import java.util.BitSet;
 
 import com.gs.collections.api.block.function.primitive.BooleanToBooleanFunction;
-import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -220,13 +219,7 @@ public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTes
     @Test
     public void updateValue()
     {
-        BooleanToBooleanFunction flip = new BooleanToBooleanFunction()
-        {
-            public boolean valueOf(boolean value)
-            {
-                return !value;
-            }
-        };
+        BooleanToBooleanFunction flip = value -> !value;
 
         ObjectBooleanHashMap<Integer> map1 = ObjectBooleanHashMap.newMap();
         Assert.assertTrue(map1.updateValue(0, false, flip));
@@ -273,17 +266,13 @@ public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTes
     {
         ObjectBooleanHashMap<Integer> hashMap0 = new ObjectBooleanHashMap<Integer>().withKeysValues(1, true, 2, true, 3, false, 4, false);
 
-        Integer total = hashMap0.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
-        {
-            public Integer valueOf(Integer result, boolean value)
+        Integer total = hashMap0.injectInto(Integer.valueOf(0), (result, value) -> {
+            if (value)
             {
-                if (value)
-                {
-                    return result += 2;
-                }
-
-                return result;
+                return result += 2;
             }
+
+            return result;
         });
 
         Assert.assertEquals(Integer.valueOf(4), total);

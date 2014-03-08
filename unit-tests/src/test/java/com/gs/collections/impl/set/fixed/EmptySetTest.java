@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
@@ -105,60 +103,30 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void testForEach()
     {
-        this.emptySet.forEach(new Procedure<Object>()
-        {
-            public void value(Object each)
-            {
-                Assert.fail();
-            }
-        });
+        this.emptySet.forEach((Procedure<Object>) each -> Assert.fail());
     }
 
     @Test
     public void testForEachWithIndex()
     {
-        this.emptySet.forEachWithIndex(new ObjectIntProcedure<Object>()
-        {
-            public void value(Object each, int index)
-            {
-                Assert.fail();
-            }
-        });
+        this.emptySet.forEachWithIndex((each, index) -> Assert.fail());
     }
 
     @Test
     public void testForEachWith()
     {
-        this.emptySet.forEachWith(new Procedure2<Object, Object>()
-        {
-            public void value(Object argument1, Object argument2)
-            {
-                Assert.fail();
-            }
-        }, "param");
+        this.emptySet.forEachWith((argument1, argument2) -> Assert.fail(), "param");
     }
 
     @Test
     public void testIterator()
     {
-        final Iterator<Object> it = this.emptySet.iterator();
+        Iterator<Object> it = this.emptySet.iterator();
         Assert.assertFalse(it.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {it.next();});
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {it.remove();});
     }
 
     @Test

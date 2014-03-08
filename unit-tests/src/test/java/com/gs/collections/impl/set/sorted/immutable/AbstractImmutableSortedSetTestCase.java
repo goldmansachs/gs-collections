@@ -23,11 +23,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -161,30 +157,18 @@ public abstract class AbstractImmutableSortedSetTestCase
     @Test
     public void forEachWith()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         ImmutableSortedSet<Integer> set = this.classUnderTest();
-        set.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 0);
+        set.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
         Verify.assertListsEqual(result, set.toList());
     }
 
     @Test
     public void forEachWithIndex()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         ImmutableSortedSet<Integer> set = this.classUnderTest();
-        set.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                result.add(object);
-            }
-        });
+        set.forEachWithIndex((object, index) -> { result.add(object); });
         Verify.assertListsEqual(result, set.toList());
     }
 
@@ -329,13 +313,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     public void collectWith()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
-        Verify.assertListsEqual(integers.toList(), integers.collectWith(new Function2<Integer, Integer, Integer>()
-        {
-            public Integer value(Integer value, Integer parameter)
-            {
-                return value / parameter;
-            }
-        }, 1).castToList());
+        Verify.assertListsEqual(integers.toList(), integers.collectWith((value, parameter) -> value / parameter, 1).castToList());
     }
 
     @Test
@@ -350,13 +328,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     @Test
     public void flatCollect()
     {
-        ImmutableList<String> actual = this.classUnderTest(Collections.<Integer>reverseOrder()).flatCollect(new Function<Integer, MutableList<String>>()
-        {
-            public MutableList<String> valueOf(Integer integer)
-            {
-                return Lists.fixedSize.of(String.valueOf(integer));
-            }
-        });
+        ImmutableList<String> actual = this.classUnderTest(Collections.<Integer>reverseOrder()).flatCollect(integer -> Lists.fixedSize.of(String.valueOf(integer)));
         ImmutableList<String> expected = this.classUnderTest(Collections.<Integer>reverseOrder()).collect(Functions.getToString());
         Assert.assertEquals(expected, actual);
         Verify.assertListsEqual(expected.toList(), actual.toList());
@@ -365,13 +337,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     @Test
     public void flatCollectWithTarget()
     {
-        MutableSet<String> actual = this.classUnderTest().flatCollect(new Function<Integer, MutableList<String>>()
-        {
-            public MutableList<String> valueOf(Integer integer)
-            {
-                return Lists.fixedSize.of(String.valueOf(integer));
-            }
-        }, UnifiedSet.<String>newSet());
+        MutableSet<String> actual = this.classUnderTest().flatCollect(integer -> Lists.fixedSize.of(String.valueOf(integer)), UnifiedSet.<String>newSet());
 
         ImmutableList<String> expected = this.classUnderTest().collect(Functions.getToString());
         Verify.assertSetsEqual(expected.toSet(), actual);
@@ -584,28 +550,16 @@ public abstract class AbstractImmutableSortedSetTestCase
     public void iterator()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
-        final Iterator<Integer> iterator = integers.iterator();
+        Iterator<Integer> iterator = integers.iterator();
         for (int i = 0; iterator.hasNext(); i++)
         {
             Integer integer = iterator.next();
             Assert.assertEquals(i + 1, integer.intValue());
         }
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
-        final Iterator<Integer> intItr = integers.iterator();
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
+        Iterator<Integer> intItr = integers.iterator();
         intItr.next();
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                intItr.remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {intItr.remove();});
     }
 
     @Test

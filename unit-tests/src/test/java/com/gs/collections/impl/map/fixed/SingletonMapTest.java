@@ -18,8 +18,6 @@ package com.gs.collections.impl.map.fixed;
 
 import java.util.Map;
 
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.FixedSizeMap;
 import com.gs.collections.api.map.MutableMap;
@@ -66,15 +64,9 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void forEachKeyValue()
     {
-        final MutableList<String> collection = Lists.mutable.of();
+        MutableList<String> collection = Lists.mutable.of();
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "One");
-        map.forEachKeyValue(new Procedure2<Integer, String>()
-        {
-            public void value(Integer key, String value)
-            {
-                collection.add(key + value);
-            }
-        });
+        map.forEachKeyValue((key, value) -> { collection.add(key + value); });
         Assert.assertEquals(FastList.newListWith("1One"), collection);
     }
 
@@ -190,13 +182,9 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsentPut()
     {
-        final MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                map.getIfAbsentPut(4, new PassThruFunction0<String>("4"));
-            }
+        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            map.getIfAbsentPut(4, new PassThruFunction0<String>("4"));
         });
         Assert.assertEquals("1", map.getIfAbsentPut(1, new PassThruFunction0<String>("1")));
     }
@@ -205,13 +193,9 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsentPutWith()
     {
-        final MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                map.getIfAbsentPutWith(4, Functions.getToString(), 4);
-            }
+        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            map.getIfAbsentPutWith(4, Functions.getToString(), 4);
         });
         Assert.assertEquals("1", map.getIfAbsentPutWith(1, Functions.getToString(), 1));
     }
@@ -269,15 +253,9 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void forEachWith()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         MutableMap<Integer, Integer> map = new SingletonMap<Integer, Integer>(1, 1);
-        map.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 10);
+        map.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 10);
         Assert.assertEquals(FastList.newListWith(11), result);
     }
 
@@ -285,15 +263,11 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void forEachWithIndex()
     {
-        final MutableList<String> result = Lists.mutable.of();
+        MutableList<String> result = Lists.mutable.of();
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "One");
-        map.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String value, int index)
-            {
-                result.add(value);
-                result.add(String.valueOf(index));
-            }
+        map.forEachWithIndex((value, index) -> {
+            result.add(value);
+            result.add(String.valueOf(index));
         });
         Assert.assertEquals(FastList.newListWith("One", "0"), result);
     }

@@ -28,13 +28,7 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.tuple.Pair;
@@ -214,16 +208,12 @@ public abstract class AbstractParallelIterableTestCase
                 this.getExpected().selectInstancesOf(Integer.class).toBag(),
                 this.classUnderTest().selectInstancesOf(Integer.class).toBag());
 
-        Function<Integer, Number> numberFunction = new Function<Integer, Number>()
-        {
-            public Number valueOf(Integer integer)
+        Function<Integer, Number> numberFunction = integer -> {
+            if (IntegerPredicates.isEven().accept(integer))
             {
-                if (IntegerPredicates.isEven().accept(integer))
-                {
-                    return Double.valueOf(integer.doubleValue());
-                }
-                return integer;
+                return Double.valueOf(integer.doubleValue());
             }
+            return integer;
         };
 
         Assert.assertEquals(
@@ -250,13 +240,7 @@ public abstract class AbstractParallelIterableTestCase
     @Test
     public void collectWith()
     {
-        Function2<Integer, String, String> appendFunction = new Function2<Integer, String, String>()
-        {
-            public String value(Integer argument1, String argument2)
-            {
-                return argument1 + argument2;
-            }
-        };
+        Function2<Integer, String, String> appendFunction = (argument1, argument2) -> argument1 + argument2;
 
         Assert.assertEquals(
                 this.getExpected().collectWith(appendFunction, "!"),
@@ -292,14 +276,7 @@ public abstract class AbstractParallelIterableTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void flatCollect()
     {
-        Function<Integer, Interval> intervalFunction = new Function<Integer, Interval>()
-        {
-            public Interval valueOf(Integer each)
-            {
-                return Interval.oneTo(each);
-            }
-        };
-
+        Function<Integer, Iterable<Integer>> intervalFunction = Interval::oneTo;
         Assert.assertEquals(
                 this.getExpected().flatCollect(intervalFunction),
                 this.getActual(this.classUnderTest().flatCollect(intervalFunction)));
@@ -697,13 +674,7 @@ public abstract class AbstractParallelIterableTestCase
     @Test
     public void groupBy()
     {
-        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return IntegerPredicates.isOdd().accept(object);
-            }
-        };
+        Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
 
         Assert.assertEquals(
                 this.getExpected().groupBy(isOddFunction),
@@ -721,13 +692,7 @@ public abstract class AbstractParallelIterableTestCase
     @Test
     public void aggregateBy()
     {
-        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return IntegerPredicates.isOdd().accept(object);
-            }
-        };
+        Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
 
         Assert.assertEquals(
                 this.getExpected().aggregateBy(isOddFunction, Functions0.value(0), Functions2.integerAddition()),
@@ -737,96 +702,46 @@ public abstract class AbstractParallelIterableTestCase
     @Test
     public void aggregateInPlaceBy()
     {
-        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return IntegerPredicates.isOdd().accept(object);
-            }
-        };
+        Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
 
-        Procedure2<AtomicInteger, Integer> sumAggregator = new
-
-                Procedure2<AtomicInteger, Integer>()
-                {
-                    public void value(AtomicInteger aggregate, Integer value)
-                    {
-                        aggregate.addAndGet(value);
-                    }
-                };
-
-        Function2<Boolean, AtomicInteger, Pair<Boolean, Integer>> atomicIntToInt = new Function2<Boolean, AtomicInteger, Pair<Boolean, Integer>>()
-        {
-            public Pair<Boolean, Integer> value(Boolean argument1, AtomicInteger argument2)
-            {
-                return Tuples.pair(argument1, argument2.get());
-            }
-        };
+        Function2<Boolean, AtomicInteger, Pair<Boolean, Integer>> atomicIntToInt = (argument1, argument2) -> Tuples.pair(argument1, argument2.get());
 
         Assert.assertEquals(
-                this.getExpected().aggregateInPlaceBy(isOddFunction, Functions0.zeroAtomicInteger(), sumAggregator).collect(atomicIntToInt),
-                this.classUnderTest().aggregateInPlaceBy(isOddFunction, Functions0.zeroAtomicInteger(), sumAggregator).collect(atomicIntToInt));
+                this.getExpected().aggregateInPlaceBy(isOddFunction, Functions0.zeroAtomicInteger(), AtomicInteger::addAndGet).collect(atomicIntToInt),
+                this.classUnderTest().aggregateInPlaceBy(isOddFunction, Functions0.zeroAtomicInteger(), AtomicInteger::addAndGet).collect(atomicIntToInt));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void sumOfInt()
     {
-        IntFunction<Integer> intFunction = new IntFunction<Integer>()
-        {
-            public int intValueOf(Integer integer)
-            {
-                return integer.intValue();
-            }
-        };
         Assert.assertEquals(
-                this.getExpected().sumOfInt(intFunction),
-                this.classUnderTest().sumOfInt(intFunction));
+                this.getExpected().sumOfInt(Integer::intValue),
+                this.classUnderTest().sumOfInt(Integer::intValue));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void sumOfLong()
     {
-        LongFunction<Integer> longFunction = new LongFunction<Integer>()
-        {
-            public long longValueOf(Integer integer)
-            {
-                return integer.longValue();
-            }
-        };
         Assert.assertEquals(
-                this.getExpected().sumOfLong(longFunction),
-                this.classUnderTest().sumOfLong(longFunction));
+                this.getExpected().sumOfLong(Integer::longValue),
+                this.classUnderTest().sumOfLong(Integer::longValue));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void sumOfFloat()
     {
-        FloatFunction<Integer> floatFunction = new FloatFunction<Integer>()
-        {
-            public float floatValueOf(Integer integer)
-            {
-                return integer.floatValue();
-            }
-        };
         Assert.assertEquals(
-                this.getExpected().sumOfFloat(floatFunction),
-                this.classUnderTest().sumOfFloat(floatFunction),
+                this.getExpected().sumOfFloat(Integer::floatValue),
+                this.classUnderTest().sumOfFloat(Integer::floatValue),
                 0.0);
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void sumOfDouble()
     {
-        DoubleFunction<Integer> doubleFunction = new DoubleFunction<Integer>()
-        {
-            public double doubleValueOf(Integer integer)
-            {
-                return integer.doubleValue();
-            }
-        };
         Assert.assertEquals(
-                this.getExpected().sumOfDouble(doubleFunction),
-                this.classUnderTest().sumOfDouble(doubleFunction),
+                this.getExpected().sumOfDouble(Integer::doubleValue),
+                this.classUnderTest().sumOfDouble(Integer::doubleValue),
                 0.0);
     }
 
@@ -836,13 +751,7 @@ public abstract class AbstractParallelIterableTestCase
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), this.classUnderTest().asUnique().toSet());
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), this.classUnderTest().asUnique().toList().toSet());
 
-        Assert.assertEquals(FastList.newListWith("!"), this.classUnderTest().collect(new Function<Integer, String>()
-        {
-            public String valueOf(Integer each)
-            {
-                return "!";
-            }
-        }).asUnique().toList());
+        Assert.assertEquals(FastList.newListWith("!"), this.classUnderTest().collect(each -> "!").asUnique().toList());
     }
 
     @Test
@@ -850,13 +759,7 @@ public abstract class AbstractParallelIterableTestCase
     {
         try
         {
-            this.classUnderTest().forEach(new Procedure<Integer>()
-            {
-                public void value(Integer each)
-                {
-                    throw new RuntimeException("Execution exception");
-                }
-            });
+            this.classUnderTest().forEach(each -> { throw new RuntimeException("Execution exception"); });
         }
         catch (RuntimeException e)
         {
@@ -871,13 +774,7 @@ public abstract class AbstractParallelIterableTestCase
     {
         try
         {
-            this.classUnderTest().collect(new Function<Integer, String>()
-            {
-                public String valueOf(Integer each)
-                {
-                    throw new RuntimeException("Execution exception");
-                }
-            }).toString();
+            this.classUnderTest().collect(each -> { throw new RuntimeException("Execution exception"); }).toString();
         }
         catch (RuntimeException e)
         {
@@ -892,13 +789,7 @@ public abstract class AbstractParallelIterableTestCase
     {
         try
         {
-            this.classUnderTest().anySatisfy(new Predicate<Integer>()
-            {
-                public boolean accept(Integer each)
-                {
-                    throw new RuntimeException("Execution exception");
-                }
-            });
+            this.classUnderTest().anySatisfy(each -> { throw new RuntimeException("Execution exception"); });
         }
         catch (RuntimeException e)
         {
@@ -913,13 +804,7 @@ public abstract class AbstractParallelIterableTestCase
     {
         try
         {
-            this.classUnderTest().allSatisfy(new Predicate<Integer>()
-            {
-                public boolean accept(Integer each)
-                {
-                    throw new RuntimeException("Execution exception");
-                }
-            });
+            this.classUnderTest().allSatisfy(each -> { throw new RuntimeException("Execution exception"); });
         }
         catch (RuntimeException e)
         {
@@ -934,13 +819,7 @@ public abstract class AbstractParallelIterableTestCase
     {
         try
         {
-            this.classUnderTest().detect(new Predicate<Integer>()
-            {
-                public boolean accept(Integer each)
-                {
-                    throw new RuntimeException("Execution exception");
-                }
-            });
+            this.classUnderTest().detect(each -> { throw new RuntimeException("Execution exception"); });
         }
         catch (RuntimeException e)
         {
@@ -956,21 +835,15 @@ public abstract class AbstractParallelIterableTestCase
         final MutableCollection<Integer> actual1 = HashBag.<Integer>newBag().asSynchronized();
 
         Thread.currentThread().interrupt();
-        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, new Runnable()
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> this.classUnderTest().forEach(new CheckedProcedure<Integer>()
         {
-            public void run()
+            @Override
+            public void safeValue(Integer each) throws InterruptedException
             {
-                AbstractParallelIterableTestCase.this.classUnderTest().forEach(new CheckedProcedure<Integer>()
-                {
-                    @Override
-                    public void safeValue(Integer each) throws InterruptedException
-                    {
-                        Thread.sleep(1000);
-                        actual1.add(each);
-                    }
-                });
+                Thread.sleep(1000);
+                actual1.add(each);
             }
-        });
+        }));
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
 
@@ -983,20 +856,16 @@ public abstract class AbstractParallelIterableTestCase
     public void anySatisfy_interruptedException()
     {
         Thread.currentThread().interrupt();
-        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> {
+            this.classUnderTest().anySatisfy(new CheckedPredicate<Integer>()
             {
-                AbstractParallelIterableTestCase.this.classUnderTest().anySatisfy(new CheckedPredicate<Integer>()
+                @Override
+                public boolean safeAccept(Integer each) throws InterruptedException
                 {
-                    @Override
-                    public boolean safeAccept(Integer each) throws InterruptedException
-                    {
-                        Thread.sleep(1000);
-                        return each < 1;
-                    }
-                });
-            }
+                    Thread.sleep(1000);
+                    return each < 1;
+                }
+            });
         });
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
@@ -1008,20 +877,16 @@ public abstract class AbstractParallelIterableTestCase
     public void allSatisfy_interruptedException()
     {
         Thread.currentThread().interrupt();
-        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> {
+            this.classUnderTest().allSatisfy(new CheckedPredicate<Integer>()
             {
-                AbstractParallelIterableTestCase.this.classUnderTest().allSatisfy(new CheckedPredicate<Integer>()
+                @Override
+                public boolean safeAccept(Integer each) throws InterruptedException
                 {
-                    @Override
-                    public boolean safeAccept(Integer each) throws InterruptedException
-                    {
-                        Thread.sleep(1000);
-                        return each < 5;
-                    }
-                });
-            }
+                    Thread.sleep(1000);
+                    return each < 5;
+                }
+            });
         });
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
@@ -1033,20 +898,16 @@ public abstract class AbstractParallelIterableTestCase
     public void detect_interruptedException()
     {
         Thread.currentThread().interrupt();
-        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> {
+            this.classUnderTest().detect(new CheckedPredicate<Integer>()
             {
-                AbstractParallelIterableTestCase.this.classUnderTest().detect(new CheckedPredicate<Integer>()
+                @Override
+                public boolean safeAccept(Integer each) throws InterruptedException
                 {
-                    @Override
-                    public boolean safeAccept(Integer each) throws InterruptedException
-                    {
-                        Thread.sleep(1000);
-                        return each.intValue() == 3;
-                    }
-                });
-            }
+                    Thread.sleep(1000);
+                    return each.intValue() == 3;
+                }
+            });
         });
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
@@ -1058,20 +919,16 @@ public abstract class AbstractParallelIterableTestCase
     public void toString_interruptedException()
     {
         Thread.currentThread().interrupt();
-        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> {
+            this.classUnderTest().collect(new CheckedFunction<Integer, String>()
             {
-                AbstractParallelIterableTestCase.this.classUnderTest().collect(new CheckedFunction<Integer, String>()
+                @Override
+                public String safeValueOf(Integer each) throws InterruptedException
                 {
-                    @Override
-                    public String safeValueOf(Integer each) throws InterruptedException
-                    {
-                        Thread.sleep(1000);
-                        return String.valueOf(each);
-                    }
-                }).toString();
-            }
+                    Thread.sleep(1000);
+                    return String.valueOf(each);
+                }
+            }).toString();
         });
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());

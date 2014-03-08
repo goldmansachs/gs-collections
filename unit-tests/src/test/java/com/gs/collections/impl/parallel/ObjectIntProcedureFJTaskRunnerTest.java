@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,27 +44,18 @@ public class ObjectIntProcedureFJTaskRunnerTest
     @Test
     public void taskCompletedUsingNonCombineOne()
     {
-        Verify.assertThrows(CountDownCalledException.class, new Runnable()
-        {
-            public void run()
-            {
-                ObjectIntProcedureFJTaskRunnerTest.this.undertest.taskCompleted(null);
-            }
-        });
+        Verify.assertThrows(CountDownCalledException.class, () -> this.undertest.taskCompleted(null));
     }
 
     @Test
     public void joinUsingNonCombineOne()
     {
-        Verify.assertThrows(AwaitDownCalledException.class, new Runnable()
-        {
-            public void run()
-            {
-                ObjectIntProcedureFJTaskRunnerTest.this.undertest.executeAndCombine(new DoNothingExecutor(),
+        Verify.assertThrows(
+                AwaitDownCalledException.class,
+                () -> this.undertest.executeAndCombine(
+                        new DoNothingExecutor(),
                         new PassThroughObjectIntProcedureFactory(),
-                        FastList.<Integer>newList());
-            }
-        });
+                        FastList.<Integer>newList()));
     }
 
     private static class DoNothingWithFalseCombineOneCombiner implements Combiner<ObjectIntProcedure<Integer>>

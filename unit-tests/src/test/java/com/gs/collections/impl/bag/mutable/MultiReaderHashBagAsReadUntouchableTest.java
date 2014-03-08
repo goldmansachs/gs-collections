@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.gs.collections.impl.bag.mutable;
 
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollectionTestCase;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import org.junit.Assert;
@@ -77,15 +76,11 @@ public class MultiReaderHashBagAsReadUntouchableTest extends UnmodifiableMutable
     @Test
     public void forEachWithOccurrences()
     {
-        final int[] sum = new int[1];
-        this.getCollection().forEachWithOccurrences(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int occurrences)
+        int[] sum = new int[1];
+        this.getCollection().forEachWithOccurrences((each, occurrences) -> {
+            if (occurrences > 1)
             {
-                if (occurrences > 1)
-                {
-                    sum[0] += each * occurrences;
-                }
+                sum[0] += each * occurrences;
             }
         });
 

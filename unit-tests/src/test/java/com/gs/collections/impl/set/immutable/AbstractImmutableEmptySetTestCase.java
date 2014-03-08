@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
@@ -360,12 +358,8 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
     public void collect_target()
     {
         MutableList<Integer> targetCollection = FastList.newList();
-        MutableList<Integer> actual = this.classUnderTest().collect(new Function<Integer, Integer>()
-        {
-            public Integer valueOf(Integer object)
-            {
-                throw new AssertionError();
-            }
+        MutableList<Integer> actual = this.classUnderTest().collect(object -> {
+            throw new AssertionError();
         }, targetCollection);
         Assert.assertEquals(targetCollection, actual);
         Assert.assertSame(targetCollection, actual);
@@ -376,12 +370,8 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
     public void collectWith_target()
     {
         MutableList<Integer> targetCollection = FastList.newList();
-        MutableList<Integer> actual = this.classUnderTest().collectWith(new Function2<Integer, Integer, Integer>()
-        {
-            public Integer value(Integer argument1, Integer argument2)
-            {
-                throw new AssertionError();
-            }
+        MutableList<Integer> actual = this.classUnderTest().collectWith((argument1, argument2) -> {
+            throw new AssertionError();
         }, 1, targetCollection);
         Assert.assertEquals(targetCollection, actual);
         Assert.assertSame(targetCollection, actual);

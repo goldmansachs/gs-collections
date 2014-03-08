@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,13 +71,7 @@ public abstract class AbstractMutableBiMapEntrySetTest
         MutableBiMap<Integer, String> biMap = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         Map.Entry<Integer, String>[] objects = biMap.entrySet().toArray(new Map.Entry[3]);
 
-        Comparator<Map.Entry<Integer, String>> comparator = new Comparator<Map.Entry<Integer, String>>()
-        {
-            public int compare(Map.Entry<Integer, String> o1, Map.Entry<Integer, String> o2)
-            {
-                return o1.getKey().compareTo(o2.getKey());
-            }
-        };
+        Comparator<Map.Entry<Integer, String>> comparator = (o1, o2) -> o1.getKey().compareTo(o2.getKey());
         Arrays.sort(objects, comparator);
 
         for (int i = 0; i < objects.length; i++)
@@ -126,15 +120,9 @@ public abstract class AbstractMutableBiMapEntrySetTest
     public void entry_setValue_throws()
     {
         MutableBiMap<Integer, Character> biMap = this.newMapWithKeysValues(1, 'a', 2, 'b', 3, 'c');
-        final Map.Entry<Integer, Character> entry = Iterate.getFirst(biMap.entrySet());
+        Map.Entry<Integer, Character> entry = Iterate.getFirst(biMap.entrySet());
 
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                entry.setValue('b');
-            }
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> { entry.setValue('b'); });
         Verify.assertContainsKeyValue(2, 'b', biMap);
     }
 

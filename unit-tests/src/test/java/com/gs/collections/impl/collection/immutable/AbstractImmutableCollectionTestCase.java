@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,20 +22,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.primitive.ByteToObjectFunction;
-import com.gs.collections.api.block.function.primitive.CharToObjectFunction;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
-import com.gs.collections.api.block.function.primitive.ShortToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -76,13 +64,7 @@ import static com.gs.collections.impl.factory.Iterables.*;
 
 public abstract class AbstractImmutableCollectionTestCase
 {
-    public static final Predicate<Integer> ERROR_THROWING_PREDICATE = new Predicate<Integer>()
-    {
-        public boolean accept(Integer each)
-        {
-            throw new AssertionError();
-        }
-    };
+    public static final Predicate<Integer> ERROR_THROWING_PREDICATE = each -> { throw new AssertionError(); };
 
     public static final Predicates2<Integer, Class<Integer>> ERROR_THROWING_PREDICATE_2 = new Predicates2<Integer, Class<Integer>>()
     {
@@ -155,13 +137,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         ImmutableCollection<String> expected = integers.collect(Functions.chain(Functions.getToString(), StringFunctions.append("!")));
-        ImmutableCollection<String> actual = integers.collectWith(new Function2<Integer, String, String>()
-        {
-            public String value(Integer argument1, String argument2)
-            {
-                return argument1 + argument2;
-            }
-        }, "!");
+        ImmutableCollection<String> actual = integers.collectWith((argument1, argument2) -> argument1 + argument2, "!");
 
         Assert.assertEquals(expected, actual);
     }
@@ -170,14 +146,8 @@ public abstract class AbstractImmutableCollectionTestCase
     public void collect_target()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        final MutableCollection<String> strings = this.<String>newMutable();
-        integers.forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                strings.add(each.toString());
-            }
-        });
+        MutableCollection<String> strings = this.<String>newMutable();
+        integers.forEach((Procedure<Integer>) each -> { strings.add(each.toString()); });
         MutableCollection<String> target = this.<String>newMutable();
         MutableCollection<String> actual = integers.collect(Functions.getToString(), target);
         Assert.assertEquals(strings, actual);
@@ -190,13 +160,7 @@ public abstract class AbstractImmutableCollectionTestCase
         ImmutableCollection<Integer> integers = this.classUnderTest();
         MutableCollection<String> expected = this.<String>newMutable().with("?").withAll(integers.collect(Functions.chain(Functions.getToString(), StringFunctions.append("!"))));
         MutableCollection<String> targetCollection = this.<String>newMutable().with("?");
-        MutableCollection<String> actual = integers.collectWith(new Function2<Integer, String, String>()
-        {
-            public String value(Integer argument1, String argument2)
-            {
-                return argument1 + argument2;
-            }
-        }, "!", targetCollection);
+        MutableCollection<String> actual = integers.collectWith((argument1, argument2) -> argument1 + argument2, "!", targetCollection);
 
         Assert.assertEquals(expected, actual);
         Assert.assertSame(targetCollection, actual);
@@ -249,13 +213,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Assert.assertEquals(
                 this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_FLOAT),
-                this.classUnderTest().sumOfFloat(new FloatFunction<Integer>()
-                {
-                    public float floatValueOf(Integer integer)
-                    {
-                        return integer.floatValue();
-                    }
-                }),
+                this.classUnderTest().sumOfFloat(Integer::floatValue),
                 0.0);
     }
 
@@ -264,13 +222,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Assert.assertEquals(
                 this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_DOUBLE),
-                this.classUnderTest().sumOfDouble(new DoubleFunction<Integer>()
-                {
-                    public double doubleValueOf(Integer integer)
-                    {
-                        return integer.doubleValue();
-                    }
-                }),
+                this.classUnderTest().sumOfDouble(Integer::doubleValue),
                 0.0);
     }
 
@@ -279,13 +231,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Assert.assertEquals(
                 this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_INT),
-                this.classUnderTest().sumOfInt(new IntFunction<Integer>()
-                {
-                    public int intValueOf(Integer integer)
-                    {
-                        return integer;
-                    }
-                }));
+                this.classUnderTest().sumOfInt(integer -> integer));
     }
 
     @Test
@@ -293,13 +239,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Assert.assertEquals(
                 this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_LONG),
-                this.classUnderTest().sumOfLong(new LongFunction<Integer>()
-                {
-                    public long longValueOf(Integer integer)
-                    {
-                        return integer.longValue();
-                    }
-                }));
+                this.classUnderTest().sumOfLong(Integer::longValue));
     }
 
     @Test
@@ -377,14 +317,7 @@ public abstract class AbstractImmutableCollectionTestCase
         ImmutableCollection<Integer> integers = this.classUnderTest();
         ImmutableByteCollection immutableCollection = integers.collectByte(PrimitiveFunctions.unboxIntegerToByte());
         Verify.assertSize(integers.size(), immutableCollection);
-        ByteToObjectFunction<Integer> function = new ByteToObjectFunction<Integer>()
-        {
-            public Integer valueOf(byte byteParameter)
-            {
-                return Integer.valueOf(byteParameter);
-            }
-        };
-        Assert.assertEquals(integers, immutableCollection.collect(function));
+        Assert.assertEquals(integers, immutableCollection.collect(Integer::valueOf));
     }
 
     @Test
@@ -393,14 +326,7 @@ public abstract class AbstractImmutableCollectionTestCase
         ImmutableCollection<Integer> integers = this.classUnderTest();
         ImmutableCharCollection immutableCollection = integers.collectChar(PrimitiveFunctions.unboxIntegerToChar());
         Verify.assertSize(integers.size(), immutableCollection);
-        CharToObjectFunction<Integer> function = new CharToObjectFunction<Integer>()
-        {
-            public Integer valueOf(char charParameter)
-            {
-                return Integer.valueOf(charParameter);
-            }
-        };
-        Assert.assertEquals(integers, immutableCollection.collect(function));
+        Assert.assertEquals(integers, immutableCollection.collect(Integer::valueOf));
     }
 
     @Test
@@ -409,14 +335,7 @@ public abstract class AbstractImmutableCollectionTestCase
         ImmutableCollection<Integer> integers = this.classUnderTest();
         ImmutableDoubleCollection immutableCollection = integers.collectDouble(PrimitiveFunctions.unboxIntegerToDouble());
         Verify.assertSize(integers.size(), immutableCollection);
-        DoubleToObjectFunction<Integer> function = new DoubleToObjectFunction<Integer>()
-        {
-            public Integer valueOf(double doubleParameter)
-            {
-                return Integer.valueOf((int) doubleParameter);
-            }
-        };
-        Assert.assertEquals(integers, immutableCollection.collect(function));
+        Assert.assertEquals(integers, immutableCollection.collect(doubleParameter -> Integer.valueOf((int) doubleParameter)));
     }
 
     @Test
@@ -425,14 +344,7 @@ public abstract class AbstractImmutableCollectionTestCase
         ImmutableCollection<Integer> integers = this.classUnderTest();
         ImmutableFloatCollection immutableCollection = integers.collectFloat(PrimitiveFunctions.unboxIntegerToFloat());
         Verify.assertSize(integers.size(), immutableCollection);
-        FloatToObjectFunction<Integer> function = new FloatToObjectFunction<Integer>()
-        {
-            public Integer valueOf(float floatParameter)
-            {
-                return Integer.valueOf((int) floatParameter);
-            }
-        };
-        Assert.assertEquals(integers, immutableCollection.collect(function));
+        Assert.assertEquals(integers, immutableCollection.collect(floatParameter -> Integer.valueOf((int) floatParameter)));
     }
 
     @Test
@@ -441,14 +353,7 @@ public abstract class AbstractImmutableCollectionTestCase
         ImmutableCollection<Integer> integers = this.classUnderTest();
         ImmutableIntCollection immutableCollection = integers.collectInt(PrimitiveFunctions.unboxIntegerToInt());
         Verify.assertSize(integers.size(), immutableCollection);
-        IntToObjectFunction<Integer> function = new IntToObjectFunction<Integer>()
-        {
-            public Integer valueOf(int intParameter)
-            {
-                return Integer.valueOf(intParameter);
-            }
-        };
-        Assert.assertEquals(integers, immutableCollection.collect(function));
+        Assert.assertEquals(integers, immutableCollection.collect(Integer::valueOf));
     }
 
     @Test
@@ -457,14 +362,7 @@ public abstract class AbstractImmutableCollectionTestCase
         ImmutableCollection<Integer> integers = this.classUnderTest();
         ImmutableLongCollection immutableCollection = integers.collectLong(PrimitiveFunctions.unboxIntegerToLong());
         Verify.assertSize(integers.size(), immutableCollection);
-        LongToObjectFunction<Integer> function = new LongToObjectFunction<Integer>()
-        {
-            public Integer valueOf(long longParameter)
-            {
-                return Integer.valueOf((int) longParameter);
-            }
-        };
-        Assert.assertEquals(integers, immutableCollection.collect(function));
+        Assert.assertEquals(integers, immutableCollection.collect(longParameter -> Integer.valueOf((int) longParameter)));
     }
 
     @Test
@@ -473,26 +371,13 @@ public abstract class AbstractImmutableCollectionTestCase
         ImmutableCollection<Integer> integers = this.classUnderTest();
         ImmutableShortCollection immutableCollection = integers.collectShort(PrimitiveFunctions.unboxIntegerToShort());
         Verify.assertSize(integers.size(), immutableCollection);
-        ShortToObjectFunction<Integer> function = new ShortToObjectFunction<Integer>()
-        {
-            public Integer valueOf(short shortParameter)
-            {
-                return Integer.valueOf(shortParameter);
-            }
-        };
-        Assert.assertEquals(integers, immutableCollection.collect(function));
+        Assert.assertEquals(integers, immutableCollection.collect(Integer::valueOf));
     }
 
     @Test
     public void flatCollect()
     {
-        RichIterable<String> actual = this.classUnderTest().flatCollect(new Function<Integer, MutableList<String>>()
-        {
-            public MutableList<String> valueOf(Integer integer)
-            {
-                return Lists.fixedSize.of(String.valueOf(integer));
-            }
-        });
+        RichIterable<String> actual = this.classUnderTest().flatCollect(integer -> Lists.fixedSize.of(String.valueOf(integer)));
 
         ImmutableCollection<String> expected = this.classUnderTest().collect(Functions.getToString());
 
@@ -638,19 +523,13 @@ public abstract class AbstractImmutableCollectionTestCase
     public void iterator()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        final Iterator<Integer> iterator = integers.iterator();
+        Iterator<Integer> iterator = integers.iterator();
         for (int i = 0; iterator.hasNext(); i++)
         {
             Integer integer = iterator.next();
             Assert.assertEquals(i + 1, integer.intValue());
         }
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
     }
 
     @Test
@@ -776,106 +655,61 @@ public abstract class AbstractImmutableCollectionTestCase
     @Test
     public void iteratorRemove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableCollectionTestCase.this.classUnderTest().iterator().remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.classUnderTest().iterator().remove());
     }
 
     @Test
     public void add()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).add(1);
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            ((Collection<Integer>) this.classUnderTest()).add(1);
         });
     }
 
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).remove(Integer.valueOf(1));
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            ((Collection<Integer>) this.classUnderTest()).remove(Integer.valueOf(1));
         });
     }
 
     @Test
     public void clear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).clear();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ((Collection<Integer>) this.classUnderTest()).clear());
     }
 
     @Test
     public void removeAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).removeAll(Lists.fixedSize.of());
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            ((Collection<Integer>) this.classUnderTest()).removeAll(Lists.fixedSize.of());
         });
     }
 
     @Test
     public void retainAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).retainAll(Lists.fixedSize.of());
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            ((Collection<Integer>) this.classUnderTest()).retainAll(Lists.fixedSize.of());
         });
     }
 
     @Test
     public void addAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).addAll(Lists.fixedSize.<Integer>of());
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            ((Collection<Integer>) this.classUnderTest()).addAll(Lists.fixedSize.<Integer>of());
         });
     }
 
     @Test
     public void aggregateByMutating()
     {
-        Function0<Counter> valueCreator = new Function0<Counter>()
-        {
-            public Counter value()
-            {
-                return new Counter();
-            }
-        };
-        Procedure2<Counter, Integer> sumAggregator = new Procedure2<Counter, Integer>()
-        {
-            public void value(Counter aggregate, Integer value)
-            {
-                aggregate.add(value);
-            }
-        };
-        MapIterable<String, Counter> actual = this.classUnderTest().aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
-        MapIterable<String, Counter> expected = this.classUnderTest().toBag().aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
+        Procedure2<Counter, Integer> sumAggregator = Counter::add;
+        MapIterable<String, Counter> actual = this.classUnderTest().aggregateInPlaceBy(Functions.getToString(), Counter::new, sumAggregator);
+        MapIterable<String, Counter> expected = this.classUnderTest().toBag().aggregateInPlaceBy(Functions.getToString(), Counter::new, sumAggregator);
         Assert.assertEquals(expected, actual);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.util.Collections;
 
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -267,19 +266,9 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
     @Test
     public void parallelGroupByIntoConcurrentHashMap()
     {
-        final MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnsafe.newMap();
-        ParallelIterate.forEach(Interval.oneTo(100), new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                actual.getIfAbsentPut(each % 10, new Function0<MutableBag<Integer>>()
-                {
-                    public MutableBag<Integer> value()
-                    {
-                        return HashBag.<Integer>newBag().asSynchronized();
-                    }
-                }).add(each);
-            }
+        MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnsafe.newMap();
+        ParallelIterate.forEach(Interval.oneTo(100), each -> {
+            actual.getIfAbsentPut(each % 10, () -> HashBag.<Integer>newBag().asSynchronized()).add(each);
         }, 10, this.executor);
         Verify.assertEqualsAndHashCode(SMALL_BAG_MUTABLE_MAP, actual);
     }
@@ -289,19 +278,9 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
     {
         ConcurrentHashMapUnsafe<Integer, Integer> source =
                 ConcurrentHashMapUnsafe.newMap(Interval.oneTo(100).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
-        final MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnsafe.newMap();
-        Procedure<Integer> procedure = new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                actual.getIfAbsentPut(each % 10, new Function0<MutableBag<Integer>>()
-                {
-                    public MutableBag<Integer> value()
-                    {
-                        return HashBag.<Integer>newBag().asSynchronized();
-                    }
-                }).add(each);
-            }
+        MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnsafe.newMap();
+        Procedure<Integer> procedure = each -> {
+            actual.getIfAbsentPut(each % 10, () -> HashBag.<Integer>newBag().asSynchronized()).add(each);
         };
         source.parallelForEachValue(FastList.newList(Collections.nCopies(5, procedure)), this.executor);
         Verify.assertEqualsAndHashCode(SMALL_BAG_MUTABLE_MAP, actual);
@@ -312,19 +291,9 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
     {
         ConcurrentHashMapUnsafe<Integer, Integer> source =
                 ConcurrentHashMapUnsafe.newMap(Interval.oneTo(100).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
-        final MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnsafe.newMap();
-        Procedure2<Integer, Integer> procedure2 = new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer key, Integer value)
-            {
-                actual.getIfAbsentPut(value % 10, new Function0<MutableBag<Integer>>()
-                {
-                    public MutableBag<Integer> value()
-                    {
-                        return HashBag.<Integer>newBag().asSynchronized();
-                    }
-                }).add(value);
-            }
+        MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnsafe.newMap();
+        Procedure2<Integer, Integer> procedure2 = (key, value) -> {
+            actual.getIfAbsentPut(value % 10, () -> HashBag.<Integer>newBag().asSynchronized()).add(value);
         };
         source.parallelForEachKeyValue(FastList.newList(Collections.nCopies(5, procedure2)), this.executor);
         Verify.assertEqualsAndHashCode(SMALL_BAG_MUTABLE_MAP, actual);
@@ -351,31 +320,27 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
     @Test
     public void concurrentPutGetPutAllRemoveContainsKeyContainsValueGetIfAbsentPutTest()
     {
-        final ConcurrentHashMapUnsafe<Integer, Integer> map1 = ConcurrentHashMapUnsafe.newMap();
-        final ConcurrentHashMapUnsafe<Integer, Integer> map2 = ConcurrentHashMapUnsafe.newMap();
-        ParallelIterate.forEach(Interval.oneTo(100), new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map1.put(each, each);
-                Assert.assertEquals(each, map1.get(each));
-                map2.putAll(Maps.mutable.of(each, each));
-                map1.remove(each);
-                map1.putAll(Maps.mutable.of(each, each));
-                Assert.assertEquals(each, map2.get(each));
-                map2.remove(each);
-                Assert.assertNull(map2.get(each));
-                Assert.assertFalse(map2.containsValue(each));
-                Assert.assertFalse(map2.containsKey(each));
-                Assert.assertEquals(each, map2.getIfAbsentPut(each, Functions.getIntegerPassThru()));
-                Assert.assertTrue(map2.containsValue(each));
-                Assert.assertTrue(map2.containsKey(each));
-                Assert.assertEquals(each, map2.getIfAbsentPut(each, Functions.getIntegerPassThru()));
-                map2.remove(each);
-                Assert.assertEquals(each, map2.getIfAbsentPutWith(each, Functions.getIntegerPassThru(), each));
-                Assert.assertEquals(each, map2.getIfAbsentPutWith(each, Functions.getIntegerPassThru(), each));
-                Assert.assertEquals(each, map2.getIfAbsentPut(each, Functions.getIntegerPassThru()));
-            }
+        ConcurrentHashMapUnsafe<Integer, Integer> map1 = ConcurrentHashMapUnsafe.newMap();
+        ConcurrentHashMapUnsafe<Integer, Integer> map2 = ConcurrentHashMapUnsafe.newMap();
+        ParallelIterate.forEach(Interval.oneTo(100), each -> {
+            map1.put(each, each);
+            Assert.assertEquals(each, map1.get(each));
+            map2.putAll(Maps.mutable.of(each, each));
+            map1.remove(each);
+            map1.putAll(Maps.mutable.of(each, each));
+            Assert.assertEquals(each, map2.get(each));
+            map2.remove(each);
+            Assert.assertNull(map2.get(each));
+            Assert.assertFalse(map2.containsValue(each));
+            Assert.assertFalse(map2.containsKey(each));
+            Assert.assertEquals(each, map2.getIfAbsentPut(each, Functions.getIntegerPassThru()));
+            Assert.assertTrue(map2.containsValue(each));
+            Assert.assertTrue(map2.containsKey(each));
+            Assert.assertEquals(each, map2.getIfAbsentPut(each, Functions.getIntegerPassThru()));
+            map2.remove(each);
+            Assert.assertEquals(each, map2.getIfAbsentPutWith(each, Functions.getIntegerPassThru(), each));
+            Assert.assertEquals(each, map2.getIfAbsentPutWith(each, Functions.getIntegerPassThru(), each));
+            Assert.assertEquals(each, map2.getIfAbsentPut(each, Functions.getIntegerPassThru()));
         }, 1, this.executor);
         Verify.assertEqualsAndHashCode(map1, map2);
     }
@@ -383,21 +348,17 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
     @Test
     public void concurrentPutIfAbsentGetIfPresentPutTest()
     {
-        final ConcurrentHashMapUnsafe<Integer, Integer> map1 = ConcurrentHashMapUnsafe.newMap();
-        final ConcurrentHashMapUnsafe<Integer, Integer> map2 = ConcurrentHashMapUnsafe.newMap();
-        ParallelIterate.forEach(Interval.oneTo(100), new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map1.put(each, each);
-                map1.put(each, each);
-                Assert.assertEquals(each, map1.get(each));
-                map2.putAll(Maps.mutable.of(each, each));
-                map2.putAll(Maps.mutable.of(each, each));
-                map1.remove(each);
-                Assert.assertNull(map1.putIfAbsentGetIfPresent(each, new KeyTransformer(), new ValueFactory(), null, null));
-                Assert.assertEquals(each, map1.putIfAbsentGetIfPresent(each, new KeyTransformer(), new ValueFactory(), null, null));
-            }
+        ConcurrentHashMapUnsafe<Integer, Integer> map1 = ConcurrentHashMapUnsafe.newMap();
+        ConcurrentHashMapUnsafe<Integer, Integer> map2 = ConcurrentHashMapUnsafe.newMap();
+        ParallelIterate.forEach(Interval.oneTo(100), each -> {
+            map1.put(each, each);
+            map1.put(each, each);
+            Assert.assertEquals(each, map1.get(each));
+            map2.putAll(Maps.mutable.of(each, each));
+            map2.putAll(Maps.mutable.of(each, each));
+            map1.remove(each);
+            Assert.assertNull(map1.putIfAbsentGetIfPresent(each, new KeyTransformer(), new ValueFactory(), null, null));
+            Assert.assertEquals(each, map1.putIfAbsentGetIfPresent(each, new KeyTransformer(), new ValueFactory(), null, null));
         }, 1, this.executor);
         Assert.assertEquals(map1, map2);
     }
@@ -405,17 +366,13 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
     @Test
     public void concurrentClear()
     {
-        final ConcurrentHashMapUnsafe<Integer, Integer> map = ConcurrentHashMapUnsafe.newMap();
-        ParallelIterate.forEach(Interval.oneTo(100), new Procedure<Integer>()
-        {
-            public void value(Integer each)
+        ConcurrentHashMapUnsafe<Integer, Integer> map = ConcurrentHashMapUnsafe.newMap();
+        ParallelIterate.forEach(Interval.oneTo(100), each -> {
+            for (int i = 0; i < 10; i++)
             {
-                for (int i = 0; i < 10; i++)
-                {
-                    map.put(each + i * 1000, each);
-                }
-                map.clear();
+                map.put(each + i * 1000, each);
             }
+            map.clear();
         }, 1, this.executor);
         Verify.assertEmpty(map);
     }
@@ -423,32 +380,28 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
     @Test
     public void concurrentRemoveAndPutIfAbsent()
     {
-        final ConcurrentHashMapUnsafe<Integer, Integer> map1 = ConcurrentHashMapUnsafe.newMap();
-        ParallelIterate.forEach(Interval.oneTo(100), new Procedure<Integer>()
-        {
-            public void value(Integer each)
+        ConcurrentHashMapUnsafe<Integer, Integer> map1 = ConcurrentHashMapUnsafe.newMap();
+        ParallelIterate.forEach(Interval.oneTo(100), each -> {
+            Assert.assertNull(map1.put(each, each));
+            map1.remove(each);
+            Assert.assertNull(map1.get(each));
+            Assert.assertEquals(each, map1.getIfAbsentPut(each, Functions.getIntegerPassThru()));
+            map1.remove(each);
+            Assert.assertNull(map1.get(each));
+            Assert.assertEquals(each, map1.getIfAbsentPutWith(each, Functions.getIntegerPassThru(), each));
+            map1.remove(each);
+            Assert.assertNull(map1.get(each));
+            for (int i = 0; i < 10; i++)
             {
-                Assert.assertNull(map1.put(each, each));
-                map1.remove(each);
-                Assert.assertNull(map1.get(each));
-                Assert.assertEquals(each, map1.getIfAbsentPut(each, Functions.getIntegerPassThru()));
-                map1.remove(each);
-                Assert.assertNull(map1.get(each));
-                Assert.assertEquals(each, map1.getIfAbsentPutWith(each, Functions.getIntegerPassThru(), each));
-                map1.remove(each);
-                Assert.assertNull(map1.get(each));
-                for (int i = 0; i < 10; i++)
-                {
-                    Assert.assertNull(map1.putIfAbsent(each + i * 1000, each));
-                }
-                for (int i = 0; i < 10; i++)
-                {
-                    Assert.assertEquals(each, map1.putIfAbsent(each + i * 1000, each));
-                }
-                for (int i = 0; i < 10; i++)
-                {
-                    Assert.assertEquals(each, map1.remove(each + i * 1000));
-                }
+                Assert.assertNull(map1.putIfAbsent(each + i * 1000, each));
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.assertEquals(each, map1.putIfAbsent(each + i * 1000, each));
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                Assert.assertEquals(each, map1.remove(each + i * 1000));
             }
         }, 1, this.executor);
     }

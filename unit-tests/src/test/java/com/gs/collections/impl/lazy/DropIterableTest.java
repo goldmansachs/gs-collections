@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,15 +99,11 @@ public class DropIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWithIndex()
     {
-        final Sum sum = new IntegerSum(0);
-        final FastList<Integer> indices = FastList.newList(5);
-        ObjectIntProcedure<Integer> indexRecordingAndSumProcedure = new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                indices.add(index);
-                sum.add(each);
-            }
+        Sum sum = new IntegerSum(0);
+        FastList<Integer> indices = FastList.newList(5);
+        ObjectIntProcedure<Integer> indexRecordingAndSumProcedure = (each, index) -> {
+            indices.add(index);
+            sum.add(each);
         };
 
         this.dropIterable.forEachWithIndex(indexRecordingAndSumProcedure);
@@ -145,13 +141,7 @@ public class DropIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWith()
     {
-        Procedure2<Integer, Sum> sumAdditionProcedure = new Procedure2<Integer, Sum>()
-        {
-            public void value(Integer each, Sum sum)
-            {
-                sum.add(each);
-            }
-        };
+        Procedure2<Integer, Sum> sumAdditionProcedure = (each, sum) -> { sum.add(each); };
 
         Sum sum1 = new IntegerSum(0);
         this.dropIterable.forEachWith(sumAdditionProcedure, sum1);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,16 +66,10 @@ public class IntListPresizedMemoryTest
         @Override
         public IntArrayList value()
         {
-            final IntArrayList list = new IntArrayList(this.size);
+            IntArrayList list = new IntArrayList(this.size);
             if (this.size > 0)
             {
-                Interval.oneTo(this.size).forEach(new IntProcedure()
-                {
-                    public void value(int each)
-                    {
-                        list.add(each);
-                    }
-                });
+                Interval.oneTo(this.size).forEach((IntProcedure) list::add);
             }
             return list;
         }
@@ -93,16 +87,10 @@ public class IntListPresizedMemoryTest
         @Override
         public TIntArrayList value()
         {
-            final TIntArrayList list = new TIntArrayList(this.size);
+            TIntArrayList list = new TIntArrayList(this.size);
             if (this.size > 0)
             {
-                Interval.oneTo(this.size).forEach(new IntProcedure()
-                {
-                    public void value(int each)
-                    {
-                        list.add(each);
-                    }
-                });
+                Interval.oneTo(this.size).forEach((IntProcedure) list::add);
             }
             return list;
         }

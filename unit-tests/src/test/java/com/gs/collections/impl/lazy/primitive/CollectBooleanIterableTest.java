@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
-import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -70,16 +68,12 @@ public class CollectBooleanIterableTest
     @Test
     public void forEach()
     {
-        final long[] value = new long[2];
-        this.booleanIterable.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
+        long[] value = new long[2];
+        this.booleanIterable.forEach(each -> {
+            value[0]++;
+            if (each)
             {
-                value[0]++;
-                if (each)
-                {
-                    value[1]++;
-                }
+                value[1]++;
             }
         });
         Assert.assertEquals(3, value[0]);
@@ -171,13 +165,7 @@ public class CollectBooleanIterableTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(FastList.newListWith("false", "true", "true"), this.booleanIterable.collect(new BooleanToObjectFunction<Object>()
-        {
-            public String valueOf(boolean each)
-            {
-                return String.valueOf(each);
-            }
-        }).toList());
+        Assert.assertEquals(FastList.newListWith("false", "true", "true"), this.booleanIterable.collect(String::valueOf).toList());
     }
 
     @Test

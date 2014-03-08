@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,7 @@ package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
@@ -31,17 +28,9 @@ import org.junit.Test;
 
 public class CollectIntToObjectIterableTest
 {
-    public static final IntToObjectFunction<Integer> BOX_INT = new IntToObjectFunction<Integer>()
-    {
-        public Integer valueOf(int each)
-        {
-            return Integer.valueOf(each);
-        }
-    };
-
     private LazyIterable<Integer> newPrimitiveWith(int... elements)
     {
-        return new CollectIntToObjectIterable<Integer>(IntArrayList.newListWith(elements), BOX_INT);
+        return new CollectIntToObjectIterable<Integer>(IntArrayList.newListWith(elements), Integer::valueOf);
     }
 
     @Test
@@ -58,14 +47,10 @@ public class CollectIntToObjectIterableTest
     public void forEachWithIndex()
     {
         InternalIterable<Integer> select = this.newPrimitiveWith(1, 2, 3, 4, 5);
-        final StringBuilder builder = new StringBuilder("");
-        select.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                builder.append(object);
-                builder.append(index);
-            }
+        StringBuilder builder = new StringBuilder("");
+        select.forEachWithIndex((object, index) -> {
+            builder.append(object);
+            builder.append(index);
         });
         Assert.assertEquals("1021324354", builder.toString());
     }
@@ -87,13 +72,7 @@ public class CollectIntToObjectIterableTest
     {
         InternalIterable<Integer> select = this.newPrimitiveWith(1, 2, 3, 4, 5);
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith(new Procedure2<Integer, StringBuilder>()
-        {
-            public void value(Integer each, StringBuilder aBuilder)
-            {
-                aBuilder.append(each);
-            }
-        }, builder);
+        select.forEachWith((each, aBuilder) -> { aBuilder.append(each); }, builder);
         Assert.assertEquals("12345", builder.toString());
     }
 

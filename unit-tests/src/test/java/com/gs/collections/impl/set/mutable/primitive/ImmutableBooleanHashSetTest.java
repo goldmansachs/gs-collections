@@ -22,7 +22,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.set.MutableSet;
@@ -248,41 +247,23 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
     @Test
     public void booleanIterator()
     {
-        final BooleanIterator booleanIterator0 = this.set0.booleanIterator();
+        BooleanIterator booleanIterator0 = this.set0.booleanIterator();
         Assert.assertFalse(booleanIterator0.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                booleanIterator0.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) booleanIterator0::next);
 
-        final BooleanIterator booleanIterator1 = this.set1.booleanIterator();
+        BooleanIterator booleanIterator1 = this.set1.booleanIterator();
         Assert.assertTrue(booleanIterator1.hasNext());
         Assert.assertFalse(booleanIterator1.next());
         Assert.assertFalse(booleanIterator1.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                booleanIterator1.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) booleanIterator1::next);
 
-        final BooleanIterator booleanIterator2 = this.set2.booleanIterator();
+        BooleanIterator booleanIterator2 = this.set2.booleanIterator();
         Assert.assertTrue(booleanIterator2.hasNext());
         Assert.assertTrue(booleanIterator2.next());
         Assert.assertFalse(booleanIterator2.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                booleanIterator2.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) booleanIterator2::next);
 
-        final BooleanIterator booleanIterator3 = this.set3.booleanIterator();
+        BooleanIterator booleanIterator3 = this.set3.booleanIterator();
         Assert.assertTrue(booleanIterator3.hasNext());
         BooleanHashSet actual = new BooleanHashSet();
         actual.add(booleanIterator3.next());
@@ -290,55 +271,22 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         actual.add(booleanIterator3.next());
         Assert.assertEquals(BooleanHashSet.newSetWith(true, false), actual);
         Assert.assertFalse(booleanIterator3.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                booleanIterator3.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) booleanIterator3::next);
     }
 
     @Override
     @Test
     public void forEach()
     {
-        final String[] sum = new String[4];
+        String[] sum = new String[4];
         for (int i = 0; i < sum.length; i++)
         {
             sum[i] = "";
         }
-        this.set0.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[0] += each;
-            }
-        });
-
-        this.set1.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[1] += each;
-            }
-        });
-
-        this.set2.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[2] += each;
-            }
-        });
-
-        this.set3.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[3] += each;
-            }
-        });
+        this.set0.forEach(each -> { sum[0] += each; });
+        this.set1.forEach(each -> { sum[1] += each; });
+        this.set2.forEach(each -> { sum[2] += each; });
+        this.set3.forEach(each -> { sum[3] += each; });
 
         Assert.assertEquals("", sum[0]);
         Assert.assertEquals("false", sum[1]);
@@ -350,13 +298,7 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
     @Test
     public void injectInto()
     {
-        ObjectBooleanToObjectFunction<MutableInteger, MutableInteger> function = new ObjectBooleanToObjectFunction<MutableInteger, MutableInteger>()
-        {
-            public MutableInteger valueOf(MutableInteger object, boolean value)
-            {
-                return object.add(value ? 1 : 0);
-            }
-        };
+        ObjectBooleanToObjectFunction<MutableInteger, MutableInteger> function = (object, value) -> object.add(value ? 1 : 0);
         Assert.assertEquals(new MutableInteger(1), BooleanHashSet.newSetWith(true, false, true).injectInto(new MutableInteger(0), function));
         Assert.assertEquals(new MutableInteger(1), BooleanHashSet.newSetWith(true).injectInto(new MutableInteger(0), function));
         Assert.assertEquals(new MutableInteger(0), BooleanHashSet.newSetWith(false).injectInto(new MutableInteger(0), function));
@@ -488,13 +430,7 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
     public void collect()
     {
         super.collect();
-        BooleanToObjectFunction<Boolean> function = new BooleanToObjectFunction<Boolean>()
-        {
-            public Boolean valueOf(boolean parameter)
-            {
-                return !parameter;
-            }
-        };
+        BooleanToObjectFunction<Boolean> function = parameter -> !parameter;
         Assert.assertEquals(UnifiedSet.newSetWith(true, false), this.set3.collect(function));
         Assert.assertEquals(UnifiedSet.newSetWith(false), this.set2.collect(function));
         Assert.assertEquals(UnifiedSet.newSetWith(true), this.set1.collect(function));

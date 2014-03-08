@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.gs.collections.impl.map.immutable.primitive;
 
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
-import com.gs.collections.api.block.predicate.primitive.ObjectBooleanPredicate;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.map.primitive.ImmutableObjectBooleanMap;
 import com.gs.collections.api.map.primitive.ObjectBooleanMap;
@@ -97,13 +95,7 @@ public class ImmutableObjectBooleanEmptyMapTest extends AbstractImmutableObjectB
     @Test
     public void detectIfNone()
     {
-        boolean detect = this.classUnderTest().detectIfNone(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return true;
-            }
-        }, false);
+        boolean detect = this.classUnderTest().detectIfNone(value -> true, false);
         Assert.assertFalse(detect);
     }
 
@@ -125,83 +117,41 @@ public class ImmutableObjectBooleanEmptyMapTest extends AbstractImmutableObjectB
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(this.classUnderTest().allSatisfy(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return false;
-            }
-        }));
+        Assert.assertTrue(this.classUnderTest().allSatisfy(value -> false));
     }
 
     @Override
     @Test
     public void anySatisfy()
     {
-        Assert.assertFalse(this.classUnderTest().anySatisfy(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertFalse(this.classUnderTest().anySatisfy(value -> true));
     }
 
     @Override
     @Test
     public void reject()
     {
-        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().reject(new ObjectBooleanPredicate<String>()
-        {
-            public boolean accept(String object, boolean value)
-            {
-                return false;
-            }
-        }));
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().reject((object, value1) -> false));
 
-        Assert.assertEquals(new BooleanHashBag(), this.classUnderTest().reject(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return false;
-            }
-        }).toBag());
+        Assert.assertEquals(new BooleanHashBag(), this.classUnderTest().reject(value -> false).toBag());
     }
 
     @Override
     @Test
     public void select()
     {
-        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().select(new ObjectBooleanPredicate<String>()
-        {
-            public boolean accept(String object, boolean value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().select((object, value1) -> true));
 
-        Assert.assertEquals(new BooleanHashBag(), this.classUnderTest().select(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return true;
-            }
-        }).toBag());
+        Assert.assertEquals(new BooleanHashBag(), this.classUnderTest().select(value -> true).toBag());
     }
 
     @Override
     @Test
     public void iterator()
     {
-        final BooleanIterator iterator = this.classUnderTest().booleanIterator();
+        BooleanIterator iterator = this.classUnderTest().booleanIterator();
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
     }
 
     @Override
@@ -216,27 +166,9 @@ public class ImmutableObjectBooleanEmptyMapTest extends AbstractImmutableObjectB
     @Test
     public void getOrThrow()
     {
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableObjectBooleanEmptyMapTest.this.classUnderTest().getOrThrow("5");
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableObjectBooleanEmptyMapTest.this.classUnderTest().getOrThrow("0");
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableObjectBooleanEmptyMapTest.this.classUnderTest().getOrThrow(null);
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow("5"); });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow("0"); });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow(null); });
     }
 
     @Override
@@ -252,13 +184,7 @@ public class ImmutableObjectBooleanEmptyMapTest extends AbstractImmutableObjectB
     @Test
     public void count()
     {
-        Assert.assertEquals(0L, this.classUnderTest().count(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertEquals(0L, this.classUnderTest().count(value -> true));
     }
 
     @Override
@@ -323,12 +249,6 @@ public class ImmutableObjectBooleanEmptyMapTest extends AbstractImmutableObjectB
     @Test
     public void noneSatisfy()
     {
-        Assert.assertTrue(this.classUnderTest().noneSatisfy(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertTrue(this.classUnderTest().noneSatisfy(value -> true));
     }
 }

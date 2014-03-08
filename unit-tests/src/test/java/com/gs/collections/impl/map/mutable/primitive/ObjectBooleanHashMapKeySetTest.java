@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -121,45 +121,27 @@ public class ObjectBooleanHashMapKeySetTest
     {
         ObjectBooleanHashMap<String> map = this.newMapWithKeysValues("One", true, "Two", false, "Three", true, null, false);
         Set<String> keySet = map.keySet();
-        final Iterator<String> iterator = keySet.iterator();
+        Iterator<String> iterator = keySet.iterator();
 
         HashBag<String> expected = HashBag.newBagWith("One", "Two", "Three", null);
         HashBag<String> actual = HashBag.newBag();
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.remove();
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> {iterator.remove();});
         for (int i = 0; i < 4; i++)
         {
             Assert.assertTrue(iterator.hasNext());
             actual.add(iterator.next());
         }
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
         Assert.assertEquals(expected, actual);
 
-        final Iterator<String> iterator1 = keySet.iterator();
+        Iterator<String> iterator1 = keySet.iterator();
         for (int i = 4; i > 0; i--)
         {
             Assert.assertTrue(iterator1.hasNext());
             iterator1.next();
             iterator1.remove();
-            Verify.assertThrows(IllegalStateException.class, new Runnable()
-            {
-                public void run()
-                {
-                    iterator1.remove();
-                }
-            });
+            Verify.assertThrows(IllegalStateException.class, (Runnable) iterator1::remove);
             Verify.assertSize(i - 1, keySet);
             Verify.assertSize(i - 1, map);
         }

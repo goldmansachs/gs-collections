@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package com.gs.collections.impl.set.mutable.primitive;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyByteIterable;
-import com.gs.collections.api.block.function.primitive.ByteToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.ByteProcedure;
 import com.gs.collections.api.iterator.ByteIterator;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.MutableByteSet;
@@ -204,7 +202,7 @@ public abstract class AbstractByteSetTestCase extends AbstractMutableByteCollect
         MutableSet<Byte> expected = UnifiedSet.newSetWith((byte) 0, (byte) 1, (byte) 31, (byte) 63, (byte) 100, (byte) 127, (byte) -1, (byte) -35, (byte) -64, (byte) -100, (byte) -128);
         MutableSet<Byte> actual = UnifiedSet.newSet();
         MutableByteSet set = this.newWith((byte) 0, (byte) 1, (byte) 31, (byte) 63, (byte) 100, (byte) 127, (byte) -1, (byte) -35, (byte) -64, (byte) -100, (byte) -128);
-        final ByteIterator iterator = set.byteIterator();
+        ByteIterator iterator = set.byteIterator();
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -229,13 +227,7 @@ public abstract class AbstractByteSetTestCase extends AbstractMutableByteCollect
         actual.add(iterator.next());
         Assert.assertFalse(iterator.hasNext());
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
     }
 
     @Override
@@ -257,15 +249,9 @@ public abstract class AbstractByteSetTestCase extends AbstractMutableByteCollect
     public void forEach()
     {
         super.forEach();
-        final long[] sum = new long[1];
+        long[] sum = new long[1];
         MutableByteSet set = this.newWith((byte) 0, (byte) 1, (byte) 31, (byte) 63, (byte) 65, (byte) 100, (byte) 127, (byte) 12, (byte) -76, (byte) -1, (byte) -54, (byte) -64, (byte) -63, (byte) -95, (byte) -128, (byte) -127);
-        set.forEach(new ByteProcedure()
-        {
-            public void value(byte each)
-            {
-                sum[0] += each;
-            }
-        });
+        set.forEach(each -> { sum[0] += each; });
 
         Assert.assertEquals(-209L, sum[0]);
     }
@@ -327,13 +313,7 @@ public abstract class AbstractByteSetTestCase extends AbstractMutableByteCollect
         super.collect();
         MutableByteSet set = this.newWith((byte) 0, (byte) 1, (byte) 31, (byte) -127, (byte) -63);
 
-        Assert.assertEquals(UnifiedSet.newSetWith((byte) -1, (byte) 0, (byte) 30, (byte) -128, (byte) -64), set.collect(new ByteToObjectFunction<Byte>()
-        {
-            public Byte valueOf(byte byteParameter)
-            {
-                return (byte) (byteParameter - 1);
-            }
-        }));
+        Assert.assertEquals(UnifiedSet.newSetWith((byte) -1, (byte) 0, (byte) 30, (byte) -128, (byte) -64), set.collect(byteParameter -> (byte) (byteParameter - 1)));
     }
 
     @Override

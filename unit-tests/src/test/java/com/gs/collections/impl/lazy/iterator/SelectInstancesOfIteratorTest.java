@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,24 +49,14 @@ public class SelectInstancesOfIteratorTest
     @Test
     public void noSuchElementException()
     {
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                new SelectInstancesOfIterator<Object>(Lists.fixedSize.of(), Object.class).next();
-            }
+        Verify.assertThrows(NoSuchElementException.class, () -> {
+            new SelectInstancesOfIterator<Object>(Lists.fixedSize.of(), Object.class).next();
         });
     }
 
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                new SelectInstancesOfIterator<Object>(Lists.fixedSize.of(), Object.class).remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> new SelectInstancesOfIterator<Object>(Lists.fixedSize.of(), Object.class).remove());
     }
 }

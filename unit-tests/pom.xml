@@ -33,7 +33,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <slf4j.version>1.7.6</slf4j.version>
-        <clover.version>3.2.0</clover.version>
+        <clover.version>3.2.2</clover.version>
         <checkstyle.version>2.10</checkstyle.version>
         <sonar.surefire.reportsPath>${project.basedir}/target/clover/surefire-reports</sonar.surefire.reportsPath>
 
@@ -238,8 +238,8 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
 
@@ -322,7 +322,7 @@
                                     </unCheckedPluginList>
                                 </requirePluginVersions>
                                 <requireJavaVersion>
-                                    <version>1.7.0</version>
+                                    <version>1.8.0</version>
                                 </requireJavaVersion>
                                 <requireMavenVersion>
                                     <version>3.0.2</version>

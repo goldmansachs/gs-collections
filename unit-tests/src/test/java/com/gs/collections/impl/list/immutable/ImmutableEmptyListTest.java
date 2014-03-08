@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
@@ -94,46 +92,22 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
     @Test
     public void forEachFromTo()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
-        final MutableList<Integer> reverseResult = Lists.mutable.of();
-        final ImmutableList<Integer> list = this.classUnderTest();
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.forEach(0, list.size() - 1, CollectionAddProcedure.on(result));
-            }
-        });
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.forEach(list.size() - 1, 0, CollectionAddProcedure.on(reverseResult));
-            }
-        });
+        MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> reverseResult = Lists.mutable.of();
+        ImmutableList<Integer> list = this.classUnderTest();
+        Verify.assertThrows(IllegalArgumentException.class, () -> list.forEach(0, list.size() - 1, CollectionAddProcedure.on(result)));
+        Verify.assertThrows(IllegalArgumentException.class, () -> list.forEach(list.size() - 1, 0, CollectionAddProcedure.on(reverseResult)));
     }
 
     @Override
     @Test
     public void forEachWithIndexFromTo()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
-        final MutableList<Integer> reverseResult = Lists.mutable.of();
-        final ImmutableList<Integer> list = this.classUnderTest();
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.forEachWithIndex(0, list.size() - 1, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(result)));
-            }
-        });
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.forEachWithIndex(list.size() - 1, 0, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResult)));
-            }
-        });
+        MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> reverseResult = Lists.mutable.of();
+        ImmutableList<Integer> list = this.classUnderTest();
+        Verify.assertThrows(IllegalArgumentException.class, () -> list.forEachWithIndex(0, list.size() - 1, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(result))));
+        Verify.assertThrows(IllegalArgumentException.class, () -> list.forEachWithIndex(list.size() - 1, 0, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResult))));
     }
 
     @Override
@@ -413,34 +387,16 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
     @Test
     public void listIterator()
     {
-        final ListIterator<Integer> it = this.classUnderTest().listIterator();
+        ListIterator<Integer> it = this.classUnderTest().listIterator();
         Assert.assertFalse(it.hasPrevious());
         Assert.assertEquals(-1, it.previousIndex());
         Assert.assertEquals(0, it.nextIndex());
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {it.next();});
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {it.remove();});
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.add(null);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.add(null);});
     }
 
     @Override
@@ -448,12 +404,8 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
     public void collect_target()
     {
         MutableList<Integer> targetCollection = FastList.newList();
-        MutableList<Integer> actual = this.classUnderTest().collect(new Function<Integer, Integer>()
-        {
-            public Integer valueOf(Integer object)
-            {
-                throw new AssertionError();
-            }
+        MutableList<Integer> actual = this.classUnderTest().collect(object -> {
+            throw new AssertionError();
         }, targetCollection);
         Assert.assertEquals(targetCollection, actual);
         Assert.assertSame(targetCollection, actual);
@@ -464,12 +416,8 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
     public void collectWith_target()
     {
         MutableList<Integer> targetCollection = FastList.newList();
-        MutableList<Integer> actual = this.classUnderTest().collectWith(new Function2<Integer, Integer, Integer>()
-        {
-            public Integer value(Integer argument1, Integer argument2)
-            {
-                throw new AssertionError();
-            }
+        MutableList<Integer> actual = this.classUnderTest().collectWith((argument1, argument2) -> {
+            throw new AssertionError();
         }, 1, targetCollection);
         Assert.assertEquals(targetCollection, actual);
         Assert.assertSame(targetCollection, actual);

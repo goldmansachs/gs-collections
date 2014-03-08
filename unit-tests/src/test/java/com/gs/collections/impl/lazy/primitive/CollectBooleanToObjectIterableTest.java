@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,7 @@ package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -31,17 +28,9 @@ import org.junit.Test;
 
 public class CollectBooleanToObjectIterableTest
 {
-    public static final BooleanToObjectFunction<Boolean> BOX_BOOLEAN = new BooleanToObjectFunction<Boolean>()
-    {
-        public Boolean valueOf(boolean each)
-        {
-            return Boolean.valueOf(each);
-        }
-    };
-
     private LazyIterable<Boolean> newPrimitiveWith(boolean... elements)
     {
-        return new CollectBooleanToObjectIterable<Boolean>(BooleanArrayList.newListWith(elements), BOX_BOOLEAN);
+        return new CollectBooleanToObjectIterable<Boolean>(BooleanArrayList.newListWith(elements), Boolean::valueOf);
     }
 
     @Test
@@ -58,14 +47,10 @@ public class CollectBooleanToObjectIterableTest
     public void forEachWithIndex()
     {
         InternalIterable<Boolean> select = this.newPrimitiveWith(true, false, true, false, true);
-        final StringBuilder builder = new StringBuilder("");
-        select.forEachWithIndex(new ObjectIntProcedure<Boolean>()
-        {
-            public void value(Boolean object, int index)
-            {
-                builder.append(object);
-                builder.append(index);
-            }
+        StringBuilder builder = new StringBuilder("");
+        select.forEachWithIndex((object, index) -> {
+            builder.append(object);
+            builder.append(index);
         });
         Assert.assertEquals("true0false1true2false3true4", builder.toString());
     }
@@ -87,13 +72,7 @@ public class CollectBooleanToObjectIterableTest
     {
         InternalIterable<Boolean> select = this.newPrimitiveWith(true, false, true, false, true);
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith(new Procedure2<Boolean, StringBuilder>()
-        {
-            public void value(Boolean each, StringBuilder aBuilder)
-            {
-                aBuilder.append(each);
-            }
-        }, builder);
+        select.forEachWith((each, aBuilder) -> { aBuilder.append(each); }, builder);
         Assert.assertEquals("truefalsetruefalsetrue", builder.toString());
     }
 

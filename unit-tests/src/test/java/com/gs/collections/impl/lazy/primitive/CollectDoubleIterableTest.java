@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.DoubleIterable;
 import com.gs.collections.api.LazyDoubleIterable;
-import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
 import com.gs.collections.api.iterator.DoubleIterator;
 import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -67,14 +65,8 @@ public class CollectDoubleIterableTest
     @Test
     public void forEach()
     {
-        final double[] value = new double[1];
-        this.doubleIterable.forEach(new DoubleProcedure()
-        {
-            public void value(double each)
-            {
-                value[0] += each;
-            }
-        });
+        double[] value = new double[1];
+        this.doubleIterable.forEach(each -> { value[0] += each; });
         Assert.assertEquals(6.0d, value[0], 0.001d);
     }
 
@@ -249,13 +241,7 @@ public class CollectDoubleIterableTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(FastList.newListWith("1.0", "2.0", "3.0"), this.doubleIterable.collect(new DoubleToObjectFunction<String>()
-        {
-            public String valueOf(double each)
-            {
-                return String.valueOf(each);
-            }
-        }).toList());
+        Assert.assertEquals(FastList.newListWith("1.0", "2.0", "3.0"), this.doubleIterable.collect(String::valueOf).toList());
     }
 
     @Test

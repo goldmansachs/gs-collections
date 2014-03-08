@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyLongIterable;
 import com.gs.collections.api.LongIterable;
-import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.LongProcedure;
 import com.gs.collections.api.iterator.LongIterator;
 import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -67,14 +65,8 @@ public class CollectLongIterableTest
     @Test
     public void forEach()
     {
-        final long[] value = new long[1];
-        this.longIterable.forEach(new LongProcedure()
-        {
-            public void value(long each)
-            {
-                value[0] += each;
-            }
-        });
+        long[] value = new long[1];
+        this.longIterable.forEach(each -> { value[0] += each; });
         Assert.assertEquals(6, value[0]);
     }
 
@@ -245,13 +237,7 @@ public class CollectLongIterableTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(FastList.newListWith("1", "2", "3"), this.longIterable.collect(new LongToObjectFunction<Object>()
-        {
-            public String valueOf(long each)
-            {
-                return String.valueOf(each);
-            }
-        }).toList());
+        Assert.assertEquals(FastList.newListWith("1", "2", "3"), this.longIterable.collect(String::valueOf).toList());
     }
 
     @Test

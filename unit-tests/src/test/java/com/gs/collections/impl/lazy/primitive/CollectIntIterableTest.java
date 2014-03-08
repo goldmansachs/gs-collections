@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIntIterable;
-import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
 import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -68,14 +66,8 @@ public class CollectIntIterableTest
     @Test
     public void forEach()
     {
-        final AtomicInteger value = new AtomicInteger(0);
-        this.intIterable.forEach(new IntProcedure()
-        {
-            public void value(int each)
-            {
-                value.addAndGet(each);
-            }
-        });
+        AtomicInteger value = new AtomicInteger(0);
+        this.intIterable.forEach(value::addAndGet);
         Assert.assertEquals(6, value.intValue());
     }
 
@@ -246,13 +238,7 @@ public class CollectIntIterableTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(FastList.newListWith("1", "2", "3"), this.intIterable.collect(new IntToObjectFunction<String>()
-        {
-            public String valueOf(int each)
-            {
-                return String.valueOf(each);
-            }
-        }).toList());
+        Assert.assertEquals(FastList.newListWith("1", "2", "3"), this.intIterable.collect(String::valueOf).toList());
     }
 
     @Test

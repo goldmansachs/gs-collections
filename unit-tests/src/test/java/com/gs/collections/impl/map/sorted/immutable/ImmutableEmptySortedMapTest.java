@@ -229,13 +229,7 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
         ImmutableSortedMap<Integer, String> revMap = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder());
 
-        Function2<Integer, String, Pair<Integer, String>> alwaysTrueFunction = new Function2<Integer, String, Pair<Integer, String>>()
-        {
-            public Pair<Integer, String> value(Integer argument1, String argument2)
-            {
-                return Tuples.pair(argument1, argument2);
-            }
-        };
+        Function2<Integer, String, Pair<Integer, String>> alwaysTrueFunction = Tuples::pair;
         ImmutableMap<Integer, String> collect = map.collect(alwaysTrueFunction);
         ImmutableMap<Integer, String> revCollect = revMap.collect(alwaysTrueFunction);
 

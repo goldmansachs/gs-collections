@@ -27,13 +27,9 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
@@ -143,24 +139,12 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void forEachFromTo()
     {
-        final MutableList<Integer> result = FastList.newList();
-        final MutableList<Integer> collection = FastList.newListWith(1, 2, 3, 4);
+        MutableList<Integer> result = FastList.newList();
+        MutableList<Integer> collection = FastList.newListWith(1, 2, 3, 4);
         collection.forEach(2, 3, CollectionAddProcedure.on(result));
         Assert.assertEquals(this.newWith(3, 4), result);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                collection.forEach(-1, 0, CollectionAddProcedure.on(result));
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                collection.forEach(0, -1, CollectionAddProcedure.on(result));
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> collection.forEach(-1, 0, CollectionAddProcedure.on(result)));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> collection.forEach(0, -1, CollectionAddProcedure.on(result)));
     }
 
     @Override
@@ -220,13 +204,7 @@ public class FastListTest extends AbstractListTestCase
     public void forEachWithIndex()
     {
         MutableList<Integer> list = FastList.newList(Interval.oneTo(5));
-        list.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                Assert.assertEquals(index, object - 1);
-            }
-        });
+        list.forEachWithIndex((object, index) -> Assert.assertEquals(index, object - 1));
     }
 
     @Override
@@ -241,15 +219,11 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void testForEachInBoth()
     {
-        final MutableList<Twin<String>> list = FastList.newList();
+        MutableList<Twin<String>> list = FastList.newList();
         MutableList<String> list1 = this.newWith("1", "2");
         MutableList<String> list2 = this.newWith("a", "b");
-        ListIterate.forEachInBoth(list1, list2, new Procedure2<String, String>()
-        {
-            public void value(String argument1, String argument2)
-            {
-                list.add(Tuples.twin(argument1, argument2));
-            }
+        ListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> {
+            list.add(Tuples.twin(argument1, argument2));
         });
         Assert.assertEquals(this.newWith(Tuples.twin("1", "a"), Tuples.twin("2", "b")), list);
     }
@@ -410,15 +384,9 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void forEachWith()
     {
-        final MutableList<Integer> result = FastList.newList();
+        MutableList<Integer> result = FastList.newList();
         MutableList<Integer> list = FastList.newListWith(1, 2, 3, 4);
-        list.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 0);
+        list.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
         Verify.assertSize(4, result);
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }
@@ -489,13 +457,7 @@ public class FastListTest extends AbstractListTestCase
     public void injectIntoWith()
     {
         MutableList<Integer> objects = FastList.newListWith(1, 2, 3);
-        Integer result = objects.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
-        {
-            public Integer value(Integer injectedValued, Integer item, Integer parameter)
-            {
-                return injectedValued + item + parameter;
-            }
-        }, 0);
+        Integer result = objects.injectIntoWith(1, (injectedValued, item, parameter) -> injectedValued + item + parameter, 0);
         Assert.assertEquals(Integer.valueOf(7), result);
     }
 
@@ -734,14 +696,8 @@ public class FastListTest extends AbstractListTestCase
                         FastList.newList(),
                         FastList.newList());
 
-        final List<List<Object>> arrayList = new ArrayList<List<Object>>();
-        Interval.oneTo(8).forEach(new Procedure<Integer>()
-        {
-            public void value(Integer object)
-            {
-                arrayList.add(new ArrayList<Object>());
-            }
-        });
+        List<List<Object>> arrayList = new ArrayList<List<Object>>();
+        Interval.oneTo(8).forEach((Procedure<Integer>) object -> { arrayList.add(new ArrayList<Object>()); });
         ByteArrayOutputStream stream2 = SerializeTestHelper.getByteArrayOutputStream(arrayList);
 //        LOGGER.info("ArrayList size: " + stream2.size());
 //        LOGGER.info(stream2.toString());
@@ -764,13 +720,7 @@ public class FastListTest extends AbstractListTestCase
         Verify.assertStartsWith(integers, 1, 2, 3, 4, 1, 2, 3, 4);
         Assert.assertTrue(integers.addAll(mSet(5)));
         Verify.assertStartsWith(integers, 1, 2, 3, 4, 1, 2, 3, 4, 5);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                FastList.newList().addAll(1, null);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { FastList.newList().addAll(1, null); });
     }
 
     @Override
@@ -861,16 +811,10 @@ public class FastListTest extends AbstractListTestCase
         Verify.assertStartsWith(zeroSizedList, "1", "3");
         zeroSizedList.add(1, "2");
         Verify.assertStartsWith(zeroSizedList, "1", "2", "3");
-        final FastList<Integer> midList = FastList.<Integer>newList(2).with(1, 3);
+        FastList<Integer> midList = FastList.<Integer>newList(2).with(1, 3);
         midList.add(1, 2);
         Verify.assertStartsWith(midList, 1, 2, 3);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                midList.add(-1, -1);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> midList.add(-1, -1));
     }
 
     @Test
@@ -955,14 +899,8 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void testOutOfBoundsCondition()
     {
-        final MutableList<Integer> integers = this.newWith(1, 2, 3, 4);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                integers.get(4);
-            }
-        });
+        MutableList<Integer> integers = this.newWith(1, 2, 3, 4);
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { integers.get(4); });
     }
 
     @Override
@@ -1215,16 +1153,9 @@ public class FastListTest extends AbstractListTestCase
     public void testLazyFlattenForEach()
     {
         FastList<Integer> list = (FastList<Integer>) Interval.oneTo(5).toList();
-        LazyIterable<String> select =
-                LazyIterate.flatCollect(
-                        list,
-                        new Function<Integer, MutableList<String>>()
-                        {
-                            public MutableList<String> valueOf(Integer object)
-                            {
-                                return FastListTest.this.newWith(String.valueOf(object));
-                            }
-                        });
+        LazyIterable<String> select = LazyIterate.flatCollect(
+                list,
+                object -> this.newWith(String.valueOf(object)));
         Appendable builder = new StringBuilder();
         Procedure<String> appendProcedure = Procedures.append(builder);
         select.forEach(appendProcedure);

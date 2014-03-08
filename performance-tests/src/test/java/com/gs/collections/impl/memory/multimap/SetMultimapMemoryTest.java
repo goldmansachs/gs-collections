@@ -67,15 +67,11 @@ public class SetMultimapMemoryTest
         @Override
         public HashMultimap<Integer, Integer> value()
         {
-            final HashMultimap<Integer, Integer> mm = HashMultimap.create();
-            this.data.forEach(new Procedure<Integer>()
-            {
-                public void value(Integer each)
+            HashMultimap<Integer, Integer> mm = HashMultimap.create();
+            this.data.forEach((Procedure<Integer>) each -> {
+                for (int j = 0; j < 10; j++)
                 {
-                    for (int j = 0; j < 10; j++)
-                    {
-                        mm.put(each, Integer.valueOf(j));
-                    }
+                    mm.put(each, Integer.valueOf(j));
                 }
             });
             return mm;
@@ -94,15 +90,11 @@ public class SetMultimapMemoryTest
         @Override
         public UnifiedSetMultimap<Integer, Integer> value()
         {
-            final UnifiedSetMultimap<Integer, Integer> mm = UnifiedSetMultimap.newMultimap();
-            this.data.forEach(new Procedure<Integer>()
-            {
-                public void value(Integer each)
+            UnifiedSetMultimap<Integer, Integer> mm = UnifiedSetMultimap.newMultimap();
+            this.data.forEach((Procedure<Integer>) each -> {
+                for (int j = 0; j < 10; j++)
                 {
-                    for (int j = 0; j < 10; j++)
-                    {
-                        mm.put(each, Integer.valueOf(j));
-                    }
+                    mm.put(each, Integer.valueOf(j));
                 }
             });
             return mm;

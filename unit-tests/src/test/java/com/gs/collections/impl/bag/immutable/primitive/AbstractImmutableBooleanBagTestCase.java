@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
-import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
-import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
@@ -72,13 +70,9 @@ public abstract class AbstractImmutableBooleanBagTestCase extends AbstractImmuta
     @Test
     public void forEachWithOccurrences()
     {
-        final StringBuilder stringBuilder = new StringBuilder();
-        this.classUnderTest().forEachWithOccurrences(new BooleanIntProcedure()
-        {
-            public void value(boolean argument1, int argument2)
-            {
-                stringBuilder.append(argument1).append(argument2);
-            }
+        StringBuilder stringBuilder = new StringBuilder();
+        this.classUnderTest().forEachWithOccurrences((argument1, argument2) -> {
+            stringBuilder.append(argument1).append(argument2);
         });
         String string = stringBuilder.toString();
         Assert.assertTrue("true2false1".equals(string)
@@ -113,15 +107,11 @@ public abstract class AbstractImmutableBooleanBagTestCase extends AbstractImmuta
     public void anySatisfy()
     {
         super.anySatisfy();
-        final long[] count = {0};
+        long[] count = {0};
         ImmutableBooleanBag bag = this.newWith(false, true, false);
-        Assert.assertTrue(bag.anySatisfy(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                count[0]++;
-                return value;
-            }
+        Assert.assertTrue(bag.anySatisfy(value -> {
+            count[0]++;
+            return value;
         }));
         Assert.assertEquals(2L, count[0]);
     }
@@ -131,15 +121,11 @@ public abstract class AbstractImmutableBooleanBagTestCase extends AbstractImmuta
     public void allSatisfy()
     {
         super.allSatisfy();
-        final int[] count = {0};
+        int[] count = {0};
         ImmutableBooleanBag bag = this.newWith(false, true, false);
-        Assert.assertFalse(bag.allSatisfy(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                count[0]++;
-                return !value;
-            }
+        Assert.assertFalse(bag.allSatisfy(value -> {
+            count[0]++;
+            return !value;
         }));
         Assert.assertEquals(2L, count[0]);
     }
@@ -150,13 +136,7 @@ public abstract class AbstractImmutableBooleanBagTestCase extends AbstractImmuta
     {
         super.noneSatisfy();
         ImmutableBooleanBag bag = this.newWith(false, true, false);
-        Assert.assertFalse(bag.noneSatisfy(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return value;
-            }
-        }));
+        Assert.assertFalse(bag.noneSatisfy(value -> value));
     }
 
     @Override
@@ -165,13 +145,7 @@ public abstract class AbstractImmutableBooleanBagTestCase extends AbstractImmuta
     {
         super.collect();
         ImmutableBooleanBag bag = this.newWith(true, false, false, true, true, true);
-        BooleanToObjectFunction<String> stringValueOf = new BooleanToObjectFunction<String>()
-        {
-            public String valueOf(boolean parameter)
-            {
-                return parameter ? "true" : "false";
-            }
-        };
+        BooleanToObjectFunction<String> stringValueOf = parameter -> parameter ? "true" : "false";
         Assert.assertEquals(HashBag.newBagWith("true", "false", "false", "true", "true", "true"), bag.collect(stringValueOf));
         ImmutableBooleanBag bag1 = this.newWith(false, false);
         Assert.assertEquals(HashBag.newBagWith("false", "false"), bag1.collect(stringValueOf));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,15 +86,9 @@ public abstract class AbstractMutableObjectBooleanMapTestCase extends AbstractOb
     public void getOrThrow()
     {
         super.getOrThrow();
-        final MutableObjectBooleanMap<String> map1 = this.classUnderTest();
+        MutableObjectBooleanMap<String> map1 = this.classUnderTest();
         map1.removeKey("0");
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                map1.getOrThrow("0");
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> { map1.getOrThrow("0"); });
         map1.put("0", false);
         Assert.assertFalse(map1.getOrThrow("0"));
 
@@ -370,46 +364,25 @@ public abstract class AbstractMutableObjectBooleanMapTestCase extends AbstractOb
     @Test
     public void getIfAbsentPut_Function()
     {
-        BooleanFunction0 factory = new BooleanFunction0()
-        {
-            public boolean value()
-            {
-                return true;
-            }
-        };
-
         MutableObjectBooleanMap<Integer> map1 = this.getEmptyMap();
-        Assert.assertTrue(map1.getIfAbsentPut(0, factory));
-        BooleanFunction0 factoryThrows = new BooleanFunction0()
-        {
-            public boolean value()
-            {
-                throw new AssertionError();
-            }
-        };
+        Assert.assertTrue(map1.getIfAbsentPut(0, () -> true));
+        BooleanFunction0 factoryThrows = () -> { throw new AssertionError(); };
         Assert.assertTrue(map1.getIfAbsentPut(0, factoryThrows));
         Assert.assertEquals(this.newWithKeysValues(0, true), map1);
-        Assert.assertTrue(map1.getIfAbsentPut(1, factory));
+        Assert.assertTrue(map1.getIfAbsentPut(1, () -> true));
         Assert.assertTrue(map1.getIfAbsentPut(1, factoryThrows));
         Assert.assertEquals(this.newWithKeysValues(0, true, 1, true), map1);
 
         MutableObjectBooleanMap<Integer> map2 = this.getEmptyMap();
-        BooleanFunction0 factoryFalse = new BooleanFunction0()
-        {
-            public boolean value()
-            {
-                return false;
-            }
-        };
-        Assert.assertFalse(map2.getIfAbsentPut(1, factoryFalse));
+        Assert.assertFalse(map2.getIfAbsentPut(1, () -> false));
         Assert.assertFalse(map2.getIfAbsentPut(1, factoryThrows));
         Assert.assertEquals(this.newWithKeysValues(1, false), map2);
-        Assert.assertFalse(map2.getIfAbsentPut(0, factoryFalse));
+        Assert.assertFalse(map2.getIfAbsentPut(0, () -> false));
         Assert.assertFalse(map2.getIfAbsentPut(0, factoryThrows));
         Assert.assertEquals(this.newWithKeysValues(0, false, 1, false), map2);
 
         MutableObjectBooleanMap<Integer> map3 = this.getEmptyMap();
-        Assert.assertTrue(map3.getIfAbsentPut(null, factory));
+        Assert.assertTrue(map3.getIfAbsentPut(null, () -> true));
         Assert.assertTrue(map3.getIfAbsentPut(null, factoryThrows));
         Assert.assertEquals(this.newWithKeysValues(null, true), map3);
     }
@@ -417,23 +390,11 @@ public abstract class AbstractMutableObjectBooleanMapTestCase extends AbstractOb
     @Test
     public void getIfAbsentPutWith()
     {
-        BooleanFunction<String> functionLengthEven = new BooleanFunction<String>()
-        {
-            public boolean booleanValueOf(String string)
-            {
-                return (string.length() & 1) == 0;
-            }
-        };
+        BooleanFunction<String> functionLengthEven = string -> (string.length() & 1) == 0;
 
         MutableObjectBooleanMap<Integer> map1 = this.getEmptyMap();
         Assert.assertFalse(map1.getIfAbsentPutWith(0, functionLengthEven, "123456789"));
-        BooleanFunction<String> functionThrows = new BooleanFunction<String>()
-        {
-            public boolean booleanValueOf(String string)
-            {
-                throw new AssertionError();
-            }
-        };
+        BooleanFunction<String> functionThrows = string -> { throw new AssertionError(); };
         Assert.assertFalse(map1.getIfAbsentPutWith(0, functionThrows, "unused"));
         Assert.assertEquals(this.newWithKeysValues(0, false), map1);
         Assert.assertFalse(map1.getIfAbsentPutWith(1, functionLengthEven, "123456789"));
@@ -457,23 +418,11 @@ public abstract class AbstractMutableObjectBooleanMapTestCase extends AbstractOb
     @Test
     public void getIfAbsentPutWithKey()
     {
-        BooleanFunction<Integer> function = new BooleanFunction<Integer>()
-        {
-            public boolean booleanValueOf(Integer anObject)
-            {
-                return anObject == null || (anObject & 1) == 0;
-            }
-        };
+        BooleanFunction<Integer> function = anObject -> anObject == null || (anObject & 1) == 0;
 
         MutableObjectBooleanMap<Integer> map1 = this.getEmptyMap();
         Assert.assertTrue(map1.getIfAbsentPutWithKey(0, function));
-        BooleanFunction<Integer> functionThrows = new BooleanFunction<Integer>()
-        {
-            public boolean booleanValueOf(Integer anObject)
-            {
-                throw new AssertionError();
-            }
-        };
+        BooleanFunction<Integer> functionThrows = anObject -> { throw new AssertionError(); };
         Assert.assertTrue(map1.getIfAbsentPutWithKey(0, functionThrows));
         Assert.assertEquals(this.newWithKeysValues(0, true), map1);
         Assert.assertFalse(map1.getIfAbsentPutWithKey(1, function));

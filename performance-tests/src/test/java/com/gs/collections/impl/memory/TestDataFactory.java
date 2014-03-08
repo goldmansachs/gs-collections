@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,14 +29,6 @@ import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 
 public final class TestDataFactory
 {
-    public static final IntToObjectFunction<Integer> INTEGER_VALUE_OF = new IntToObjectFunction<Integer>()
-    {
-        public Integer valueOf(int each)
-        {
-            return Integer.valueOf(each);
-        }
-    };
-
     private TestDataFactory()
     {
     }
@@ -68,7 +60,7 @@ public final class TestDataFactory
     public static ImmutableList<Integer> createImmutableList(int size)
     {
         return TestDataFactory.create(size)
-                .collect(INTEGER_VALUE_OF)
+                .collect((IntToObjectFunction<Integer>) Integer::valueOf)
                 .toList()
                 .toImmutable();
     }
@@ -76,7 +68,7 @@ public final class TestDataFactory
     public static ImmutableList<Integer> createRandomImmutableList(int size)
     {
         return TestDataFactory.createRandomSet(size)
-                .collect(INTEGER_VALUE_OF)
+                .collect((IntToObjectFunction<Integer>) Integer::valueOf)
                 .toList()
                 .toImmutable();
     }

@@ -21,7 +21,6 @@ import java.util.Iterator;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.HashingStrategy;
-import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.set.ImmutableSet;
@@ -102,13 +101,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
 
         UnifiedSetWithHashingStrategy<Person> people = UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).withAll(PEOPLE.castToList());
         Verify.assertSetsEqual(LAST_NAME_HASHED_SET.castToSet(), people);
-        Verify.assertSetsEqual(UnifiedSet.newSetWith(JOHNSMITH), people.select(new Predicate<Person>()
-        {
-            public boolean accept(Person each)
-            {
-                return "Smith".equals(each.getLastName());
-            }
-        }).with(JANESMITH));
+        Verify.assertSetsEqual(UnifiedSet.newSetWith(JOHNSMITH), people.select(each -> "Smith".equals(each.getLastName())).with(JANESMITH));
     }
 
     @Override
@@ -118,13 +111,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         super.reject();
 
         UnifiedSetWithHashingStrategy<Person> people = UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).withAll(PEOPLE.castToList());
-        Verify.assertSetsEqual(UnifiedSet.newSetWith(JOHNSMITH), people.reject(new Predicate<Person>()
-        {
-            public boolean accept(Person each)
-            {
-                return "Doe".equals(each.getLastName());
-            }
-        }).with(JANESMITH));
+        Verify.assertSetsEqual(UnifiedSet.newSetWith(JOHNSMITH), people.reject(each -> "Doe".equals(each.getLastName())).with(JANESMITH));
     }
 
     /**
@@ -215,12 +202,8 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Assert.assertEquals(UnifiedSetWithHashingStrategy.newSetWith(INTEGER_HASHING_STRATEGY, 1, 2, 3), set1);
 
         //testing null
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnifiedSetWithHashingStrategy.newSet(INTEGER_HASHING_STRATEGY, null);
-            }
+        Verify.assertThrows(NullPointerException.class, () -> {
+            UnifiedSetWithHashingStrategy.newSet(INTEGER_HASHING_STRATEGY, null);
         });
     }
 
@@ -316,12 +299,8 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Verify.assertSetsEqual(UnifiedSet.newSetWith(null, 1, 2, 3), caseB);
 
         //Testing add throws NullPointerException if the hashingStrategy is not null safe
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).add(null);
-            }
+        Verify.assertThrows(NullPointerException.class, () -> {
+            UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).add(null);
         });
     }
 
@@ -378,12 +357,8 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Verify.assertSetsEqual(UnifiedSet.newSet(LAST_NAME_HASHED_SET).with(notInSet, null), people);
 
         //Testing addAllIterable throws NullPointerException if the hashingStrategy is not null safe
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).addAllIterable(UnifiedSet.newSetWith((Person) null));
-            }
+        Verify.assertThrows(NullPointerException.class, () -> {
+            UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).addAllIterable(UnifiedSet.newSetWith((Person) null));
         });
     }
 
@@ -436,12 +411,8 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Assert.assertNull(people.get(new Person("John", "NotHere")));
 
         //Testing get throws NullPointerException if the hashingStrategy is not null safe
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).get(null);
-            }
+        Verify.assertThrows(NullPointerException.class, () -> {
+            UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).get(null);
         });
     }
 
@@ -523,12 +494,8 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Verify.assertSize(4, people);
 
         //Testing put throws NullPointerException if the hashingStrategy is not null safe
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).put(null);
-            }
+        Verify.assertThrows(NullPointerException.class, () -> {
+            UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).put(null);
         });
     }
 
@@ -581,35 +548,27 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
     @Test
     public void removeFromPool()
     {
-        final Pool<Integer> unifiedSet = UnifiedSetWithHashingStrategy.newSet(
+        Pool<Integer> unifiedSet = UnifiedSetWithHashingStrategy.newSet(
                 INTEGER_HASHING_STRATEGY, 8).withAll(COLLISIONS);
-        COLLISIONS.reverseForEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                Assert.assertNull(unifiedSet.removeFromPool(null));
-                Assert.assertSame(each, unifiedSet.removeFromPool(each));
-                Assert.assertNull(unifiedSet.removeFromPool(each));
-                Assert.assertNull(unifiedSet.removeFromPool(null));
-                Assert.assertNull(unifiedSet.removeFromPool(COLLISION_10));
-            }
+        COLLISIONS.reverseForEach(each -> {
+            Assert.assertNull(unifiedSet.removeFromPool(null));
+            Assert.assertSame(each, unifiedSet.removeFromPool(each));
+            Assert.assertNull(unifiedSet.removeFromPool(each));
+            Assert.assertNull(unifiedSet.removeFromPool(null));
+            Assert.assertNull(unifiedSet.removeFromPool(COLLISION_10));
         });
 
         Assert.assertEquals(UnifiedSetWithHashingStrategy.newSet(INTEGER_HASHING_STRATEGY), unifiedSet);
 
-        COLLISIONS.forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                Pool<Integer> unifiedSet2 = UnifiedSetWithHashingStrategy.newSet(
-                        INTEGER_HASHING_STRATEGY, 8).withAll(COLLISIONS);
+        COLLISIONS.forEach((Procedure<Integer>) each -> {
+            Pool<Integer> unifiedSet2 = UnifiedSetWithHashingStrategy.newSet(
+                    INTEGER_HASHING_STRATEGY, 8).withAll(COLLISIONS);
 
-                Assert.assertNull(unifiedSet2.removeFromPool(null));
-                Assert.assertSame(each, unifiedSet2.removeFromPool(each));
-                Assert.assertNull(unifiedSet2.removeFromPool(each));
-                Assert.assertNull(unifiedSet2.removeFromPool(null));
-                Assert.assertNull(unifiedSet2.removeFromPool(COLLISION_10));
-            }
+            Assert.assertNull(unifiedSet2.removeFromPool(null));
+            Assert.assertSame(each, unifiedSet2.removeFromPool(each));
+            Assert.assertNull(unifiedSet2.removeFromPool(each));
+            Assert.assertNull(unifiedSet2.removeFromPool(null));
+            Assert.assertNull(unifiedSet2.removeFromPool(COLLISION_10));
         });
 
         // search a chain for a non-existent element
@@ -701,33 +660,29 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
     @Test
     public void null_behavior()
     {
-        final UnifiedSetWithHashingStrategy<Integer> unifiedSet = UnifiedSetWithHashingStrategy.newSet(
+        UnifiedSetWithHashingStrategy<Integer> unifiedSet = UnifiedSetWithHashingStrategy.newSet(
                 INTEGER_HASHING_STRATEGY, 8).withAll(MORE_COLLISIONS);
-        MORE_COLLISIONS.clone().reverseForEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                Assert.assertTrue(unifiedSet.add(null));
-                Assert.assertFalse(unifiedSet.add(null));
-                Verify.assertContains(null, unifiedSet);
-                Verify.assertPostSerializedEqualsAndHashCode(unifiedSet);
+        MORE_COLLISIONS.clone().reverseForEach(each -> {
+            Assert.assertTrue(unifiedSet.add(null));
+            Assert.assertFalse(unifiedSet.add(null));
+            Verify.assertContains(null, unifiedSet);
+            Verify.assertPostSerializedEqualsAndHashCode(unifiedSet);
 
-                Assert.assertTrue(unifiedSet.remove(null));
-                Assert.assertFalse(unifiedSet.remove(null));
-                Verify.assertNotContains(null, unifiedSet);
+            Assert.assertTrue(unifiedSet.remove(null));
+            Assert.assertFalse(unifiedSet.remove(null));
+            Verify.assertNotContains(null, unifiedSet);
 
-                Verify.assertPostSerializedEqualsAndHashCode(unifiedSet);
+            Verify.assertPostSerializedEqualsAndHashCode(unifiedSet);
 
-                Assert.assertNull(unifiedSet.put(null));
-                Assert.assertNull(unifiedSet.put(null));
-                Assert.assertNull(unifiedSet.removeFromPool(null));
-                Assert.assertNull(unifiedSet.removeFromPool(null));
+            Assert.assertNull(unifiedSet.put(null));
+            Assert.assertNull(unifiedSet.put(null));
+            Assert.assertNull(unifiedSet.removeFromPool(null));
+            Assert.assertNull(unifiedSet.removeFromPool(null));
 
-                Verify.assertContains(each, unifiedSet);
-                Assert.assertTrue(unifiedSet.remove(each));
-                Assert.assertFalse(unifiedSet.remove(each));
-                Verify.assertNotContains(each, unifiedSet);
-            }
+            Verify.assertContains(each, unifiedSet);
+            Assert.assertTrue(unifiedSet.remove(each));
+            Assert.assertFalse(unifiedSet.remove(each));
+            Verify.assertNotContains(each, unifiedSet);
         });
     }
 

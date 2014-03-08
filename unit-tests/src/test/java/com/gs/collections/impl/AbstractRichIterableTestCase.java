@@ -35,12 +35,6 @@ import com.gs.collections.api.ShortIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableByteCollection;
 import com.gs.collections.api.collection.primitive.MutableCharCollection;
@@ -165,15 +159,9 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void forEachWith()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         RichIterable<Integer> collection = this.newWith(1, 2, 3, 4);
-        collection.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 0);
+        collection.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
         Verify.assertSize(4, result);
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }
@@ -181,16 +169,12 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void forEachWithIndex()
     {
-        final MutableBag<Integer> elements = Bags.mutable.of();
-        final MutableBag<Integer> indexes = Bags.mutable.of();
+        MutableBag<Integer> elements = Bags.mutable.of();
+        MutableBag<Integer> indexes = Bags.mutable.of();
         RichIterable<Integer> collection = this.newWith(1, 2, 3, 4);
-        collection.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                elements.add(object);
-                indexes.add(index);
-            }
+        collection.forEachWithIndex((object, index) -> {
+            elements.add(object);
+            indexes.add(index);
         });
         Assert.assertEquals(Bags.mutable.of(1, 2, 3, 4), elements);
         Assert.assertEquals(Bags.mutable.of(0, 1, 2, 3), indexes);
@@ -477,14 +461,7 @@ public abstract class AbstractRichIterableTestCase
     public void flatCollect()
     {
         RichIterable<Integer> collection = this.newWith(1, 2, 3, 4);
-        Function<Integer, MutableList<String>> function =
-                new Function<Integer, MutableList<String>>()
-                {
-                    public MutableList<String> valueOf(Integer object)
-                    {
-                        return FastList.newListWith(String.valueOf(object));
-                    }
-                };
+        Function<Integer, MutableList<String>> function = object -> FastList.newListWith(String.valueOf(object));
 
         Verify.assertListsEqual(
                 FastList.newListWith("1", "2", "3", "4"),
@@ -799,13 +776,7 @@ public abstract class AbstractRichIterableTestCase
     {
         RichIterable<Integer> objects = this.newWith(1, 2, 3);
         float expected = objects.injectInto(0, AddFunction.INTEGER_TO_FLOAT);
-        double actual = objects.sumOfFloat(new FloatFunction<Integer>()
-        {
-            public float floatValueOf(Integer integer)
-            {
-                return integer.floatValue();
-            }
-        });
+        double actual = objects.sumOfFloat(Integer::floatValue);
         Assert.assertEquals(expected, actual, 0.001);
     }
 
@@ -814,13 +785,7 @@ public abstract class AbstractRichIterableTestCase
     {
         RichIterable<Integer> objects = this.newWith(1, 2, 3);
         double expected = objects.injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
-        double actual = objects.sumOfDouble(new DoubleFunction<Integer>()
-        {
-            public double doubleValueOf(Integer integer)
-            {
-                return integer.doubleValue();
-            }
-        });
+        double actual = objects.sumOfDouble(Integer::doubleValue);
         Assert.assertEquals(expected, actual, 0.001);
     }
 
@@ -829,13 +794,7 @@ public abstract class AbstractRichIterableTestCase
     {
         RichIterable<Integer> objects = this.newWith(1, 2, 3);
         long expected = objects.injectInto(0L, AddFunction.INTEGER_TO_LONG);
-        long actual = objects.sumOfInt(new IntFunction<Integer>()
-        {
-            public int intValueOf(Integer integer)
-            {
-                return integer;
-            }
-        });
+        long actual = objects.sumOfInt(integer -> integer);
         Assert.assertEquals(expected, actual);
     }
 
@@ -844,13 +803,7 @@ public abstract class AbstractRichIterableTestCase
     {
         RichIterable<Integer> objects = this.newWith(1, 2, 3);
         long expected = objects.injectInto(0, AddFunction.INTEGER_TO_LONG);
-        long actual = objects.sumOfLong(new LongFunction<Integer>()
-        {
-            public long longValueOf(Integer integer)
-            {
-                return integer.longValue();
-            }
-        });
+        long actual = objects.sumOfLong(Integer::longValue);
         Assert.assertEquals(expected, actual);
     }
 
@@ -1051,13 +1004,7 @@ public abstract class AbstractRichIterableTestCase
     public void groupBy()
     {
         RichIterable<Integer> collection = this.newWith(1, 2, 3, 4, 5, 6, 7);
-        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return IntegerPredicates.isOdd().accept(object);
-            }
-        };
+        Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
 
         MutableMap<Boolean, RichIterable<Integer>> expected =
                 UnifiedMap.newWithKeysValues(
@@ -1067,16 +1014,10 @@ public abstract class AbstractRichIterableTestCase
         Multimap<Boolean, Integer> multimap = collection.groupBy(isOddFunction);
         Assert.assertEquals(expected, multimap.toMap());
 
-        Function<Integer, Boolean> booleanFunction = new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return true;
-            }
-        };
+        Function<Integer, Boolean> function = (Integer object) -> true;
         MutableMultimap<Boolean, Integer> multimap2 = collection.groupBy(
                 isOddFunction,
-                this.<Integer>newWith().groupBy(booleanFunction).toMutable());
+                this.<Integer>newWith().groupBy(function).toMutable());
         Assert.assertEquals(expected, multimap2.toMap());
     }
 
@@ -1155,13 +1096,7 @@ public abstract class AbstractRichIterableTestCase
     {
         RichIterable<String> collection = this.newWith("1", "2", "3", "4", "5", "6", "7");
         RichIterable<RichIterable<String>> groups = collection.chunk(2);
-        RichIterable<Integer> sizes = groups.collect(new Function<RichIterable<String>, Integer>()
-        {
-            public Integer valueOf(RichIterable<String> richIterable)
-            {
-                return richIterable.size();
-            }
-        });
+        RichIterable<Integer> sizes = groups.collect(RichIterable::size);
         Assert.assertEquals(FastList.newListWith(2, 2, 2, 1), sizes);
     }
 
@@ -1198,15 +1133,8 @@ public abstract class AbstractRichIterableTestCase
     public void aggregateByMutating()
     {
         Function0<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
-        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
-        {
-            public void value(AtomicInteger aggregate, Integer value)
-            {
-                aggregate.addAndGet(value);
-            }
-        };
         RichIterable<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
-        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, AtomicInteger::addAndGet);
         if (collection instanceof Set)
         {
             Assert.assertEquals(1, aggregation.get("1").intValue());

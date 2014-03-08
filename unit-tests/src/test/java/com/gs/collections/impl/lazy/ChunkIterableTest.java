@@ -18,8 +18,6 @@ package com.gs.collections.impl.lazy;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,27 +37,17 @@ public class ChunkIterableTest
     @Test
     public void forEach()
     {
-        this.undertest.forEach(new Procedure<RichIterable<Integer>>()
-        {
-            public void value(RichIterable<Integer> argument1)
-            {
-                ChunkIterableTest.this.buffer.append(argument1);
-            }
-        });
+        this.undertest.forEach((Procedure<RichIterable<Integer>>) this.buffer::append);
         Assert.assertEquals("[1, 2][3, 4][5]", this.buffer.toString());
     }
 
     @Test
     public void forEachWithIndex()
     {
-        this.undertest.forEachWithIndex(new ObjectIntProcedure<RichIterable<Integer>>()
-        {
-            public void value(RichIterable<Integer> each, int index)
-            {
-                ChunkIterableTest.this.buffer.append('|');
-                ChunkIterableTest.this.buffer.append(each);
-                ChunkIterableTest.this.buffer.append(index);
-            }
+        this.undertest.forEachWithIndex((each, index) -> {
+            this.buffer.append('|');
+            this.buffer.append(each);
+            this.buffer.append(index);
         });
 
         Assert.assertEquals("|[1, 2]0|[3, 4]1|[5]2", this.buffer.toString());
@@ -68,14 +56,10 @@ public class ChunkIterableTest
     @Test
     public void forEachWith()
     {
-        this.undertest.forEachWith(new Procedure2<RichIterable<Integer>, Character>()
-        {
-            public void value(RichIterable<Integer> argument1, Character argument2)
-            {
-                ChunkIterableTest.this.buffer.append('|');
-                ChunkIterableTest.this.buffer.append(argument1);
-                ChunkIterableTest.this.buffer.append(argument2);
-            }
+        this.undertest.forEachWith((argument1, argument2) -> {
+            this.buffer.append('|');
+            this.buffer.append(argument1);
+            this.buffer.append(argument2);
         }, 'A');
         Assert.assertEquals("|[1, 2]A|[3, 4]A|[5]A", this.buffer.toString());
     }

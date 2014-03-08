@@ -21,12 +21,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.ImmutableSet;
@@ -145,15 +139,9 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     @Test
     public void forEachWithIndex()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         ImmutableSet<Integer> set = this.newSetWith(1, 2, 3, 4);
-        set.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                result.add(object + index);
-            }
-        });
+        set.forEachWithIndex((object, index) -> { result.add(object + index); });
         Verify.assertContainsAll(result, 1, 3, 5, 7);
     }
 
@@ -304,13 +292,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void sumFloat()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        double actual = objects.sumOfFloat(new FloatFunction<Integer>()
-        {
-            public float floatValueOf(Integer integer)
-            {
-                return integer.floatValue();
-            }
-        });
+        double actual = objects.sumOfFloat(Integer::floatValue);
         Assert.assertEquals(6.0f, actual, 0.001);
     }
 
@@ -318,13 +300,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void sumDouble()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        double actual = objects.sumOfDouble(new DoubleFunction<Integer>()
-        {
-            public double doubleValueOf(Integer integer)
-            {
-                return integer.doubleValue();
-            }
-        });
+        double actual = objects.sumOfDouble(Integer::doubleValue);
         Assert.assertEquals(6.0d, actual, 0.001);
     }
 
@@ -332,13 +308,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void sumInteger()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        long actual = objects.sumOfInt(new IntFunction<Integer>()
-        {
-            public int intValueOf(Integer integer)
-            {
-                return integer;
-            }
-        });
+        long actual = objects.sumOfInt(integer -> integer);
         Assert.assertEquals(6, actual);
     }
 
@@ -346,13 +316,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void sumLong()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        long actual = objects.sumOfLong(new LongFunction<Integer>()
-        {
-            public long longValueOf(Integer integer)
-            {
-                return integer.longValue();
-            }
-        });
+        long actual = objects.sumOfLong(Integer::longValue);
         Assert.assertEquals(6, actual);
     }
 
@@ -385,15 +349,9 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     @Test
     public void forEachWith()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         ImmutableSet<Integer> collection = this.newSetWith(1, 2, 3, 4);
-        collection.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 0);
+        collection.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
         Verify.assertSize(4, result);
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }

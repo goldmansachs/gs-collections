@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -38,7 +37,7 @@ public class FixedSizeListFactoryTest
     @Test
     public void createEmpty()
     {
-        final MutableList<String> list = Lists.fixedSize.of();
+        MutableList<String> list = Lists.fixedSize.of();
         Assert.assertSame(list, Lists.fixedSize.of());
         Verify.assertInstanceOf(EmptyList.class, list);
         Verify.assertSize(0, list);
@@ -46,20 +45,8 @@ public class FixedSizeListFactoryTest
         Assert.assertFalse(list.notEmpty());
         Assert.assertNull(list.getFirst());
         Assert.assertNull(list.getLast());
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.get(0);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.set(0, "nope");
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { list.get(0); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { list.set(0, "nope"); });
     }
 
     @Test
@@ -216,16 +203,12 @@ public class FixedSizeListFactoryTest
     @Test
     public void forEachWithIndex()
     {
-        final int[] indexSum = new int[1];
-        final MutableList<String> result = Lists.mutable.of();
+        int[] indexSum = new int[1];
+        MutableList<String> result = Lists.mutable.of();
         MutableList<String> source = Lists.fixedSize.of("1", "2", "3", "4", "5", "6");
-        source.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                result.add(each);
-                indexSum[0] += index;
-            }
+        source.forEachWithIndex((each, index) -> {
+            result.add(each);
+            indexSum[0] += index;
         });
         Assert.assertEquals(FastList.newListWith("1", "2", "3", "4", "5", "6"), result);
         Assert.assertEquals(15, indexSum[0]);

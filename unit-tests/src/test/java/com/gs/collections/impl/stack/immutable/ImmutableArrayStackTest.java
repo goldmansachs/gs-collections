@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,13 +83,7 @@ public class ImmutableArrayStackTest extends ImmutableStackTestCase
     @Test
     public void pop()
     {
-        Verify.assertThrows(EmptyStackException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableArrayStackTest.this.newStackWith().pop();
-            }
-        });
+        Verify.assertThrows(EmptyStackException.class, () -> { this.newStackWith().pop(); });
 
         ImmutableStack<Integer> stack = this.newStackWith(1, 2, 3);
         ImmutableStack<Integer> modifiedStack = stack.pop();
@@ -107,13 +101,7 @@ public class ImmutableArrayStackTest extends ImmutableStackTestCase
     @Test
     public void popCount()
     {
-        Verify.assertThrows(EmptyStackException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableArrayStackTest.this.newStackWith().pop(1);
-            }
-        });
+        Verify.assertThrows(EmptyStackException.class, () -> { this.newStackWith().pop(1); });
 
         Assert.assertEquals(this.newStackWith(), this.newStackWith().pop(0));
 
@@ -123,14 +111,8 @@ public class ImmutableArrayStackTest extends ImmutableStackTestCase
         Assert.assertNotSame(modifiedStack, stack);
         Assert.assertNotSame(this.newStackWith(1, 2, 3), stack);
 
-        final ImmutableStack<Integer> stack1 = this.newStackWith(1);
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                stack1.pop(2);
-            }
-        });
+        ImmutableStack<Integer> stack1 = this.newStackWith(1);
+        Verify.assertThrows(IllegalArgumentException.class, () -> { stack1.pop(2); });
         ImmutableStack<Integer> modifiedStack1 = stack1.pop(1);
         Assert.assertEquals(this.newStackWith(), modifiedStack1);
         Assert.assertNotSame(modifiedStack1, stack1);

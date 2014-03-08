@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
@@ -383,15 +381,9 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     @Test
     public void iterator()
     {
-        final Iterator<Integer> iterator = this.classUnderTest().iterator();
+        Iterator<Integer> iterator = this.classUnderTest().iterator();
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
     }
 
     @Override
@@ -471,13 +463,7 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     public void collectWith()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
-        Verify.assertIterableEmpty(integers.collectWith(new Function2<Integer, Integer, Integer>()
-        {
-            public Integer value(Integer value, Integer parameter)
-            {
-                return value / parameter;
-            }
-        }, 1));
+        Verify.assertIterableEmpty(integers.collectWith((value, parameter) -> value / parameter, 1));
     }
 
     @Override
@@ -661,13 +647,7 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     public void collectChar()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
-        Assert.assertEquals(CharArrayList.newListWith(), integers.collectChar(new CharFunction<Integer>()
-        {
-            public char charValueOf(Integer integer)
-            {
-                return (char) (integer.intValue() + 64);
-            }
-        }));
+        Assert.assertEquals(CharArrayList.newListWith(), integers.collectChar(integer -> (char) (integer.intValue() + 64)));
     }
 
     @Override

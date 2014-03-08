@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,15 +77,11 @@ public class ListMultimapMemoryTest
         @Override
         public ArrayListMultimap<Integer, String> value()
         {
-            final ArrayListMultimap<Integer, String> mm = ArrayListMultimap.create();
-            this.data.forEach(new Procedure<Integer>()
-            {
-                public void value(Integer each)
+            ArrayListMultimap<Integer, String> mm = ArrayListMultimap.create();
+            this.data.forEach((Procedure<Integer>) each -> {
+                for (int j = 0; j < 10; j++)
                 {
-                    for (int j = 0; j < 10; j++)
-                    {
-                        mm.put(each, "dummy");
-                    }
+                    mm.put(each, "dummy");
                 }
             });
             return mm;
@@ -104,15 +100,11 @@ public class ListMultimapMemoryTest
         @Override
         public FastListMultimap<Integer, String> value()
         {
-            final FastListMultimap<Integer, String> mm = FastListMultimap.newMultimap();
-            this.data.forEach(new Procedure<Integer>()
-            {
-                public void value(Integer each)
+            FastListMultimap<Integer, String> mm = FastListMultimap.newMultimap();
+            this.data.forEach((Procedure<Integer>) each -> {
+                for (int j = 0; j < 10; j++)
                 {
-                    for (int j = 0; j < 10; j++)
-                    {
-                        mm.put(each, "dummy");
-                    }
+                    mm.put(each, "dummy");
                 }
             });
             return mm;

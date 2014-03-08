@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyShortIterable;
 import com.gs.collections.api.ShortIterable;
-import com.gs.collections.api.block.function.primitive.ShortToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.ShortProcedure;
 import com.gs.collections.api.iterator.ShortIterator;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -67,14 +65,8 @@ public class CollectShortIterableTest
     @Test
     public void forEach()
     {
-        final short[] value = new short[1];
-        this.shortIterable.forEach(new ShortProcedure()
-        {
-            public void value(short each)
-            {
-                value[0] += each;
-            }
-        });
+        short[] value = new short[1];
+        this.shortIterable.forEach(each -> { value[0] += each; });
         Assert.assertEquals(6, value[0]);
     }
 
@@ -245,13 +237,7 @@ public class CollectShortIterableTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(FastList.newListWith("1", "2", "3"), this.shortIterable.collect(new ShortToObjectFunction<Object>()
-        {
-            public String valueOf(short each)
-            {
-                return String.valueOf(each);
-            }
-        }).toList());
+        Assert.assertEquals(FastList.newListWith("1", "2", "3"), this.shortIterable.collect(String::valueOf).toList());
     }
 
     @Test

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,22 +69,10 @@ public class MapAdapterTest extends MutableMapTestCase
     {
         Verify.assertThrows(
                 NullPointerException.class,
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        new MapAdapter<Object, Object>(null);
-                    }
-                });
+                () -> { new MapAdapter<Object, Object>(null); });
 
         Verify.assertThrows(
                 NullPointerException.class,
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        MapAdapter.adapt(null);
-                    }
-                });
+                () -> { MapAdapter.adapt(null); });
     }
 }

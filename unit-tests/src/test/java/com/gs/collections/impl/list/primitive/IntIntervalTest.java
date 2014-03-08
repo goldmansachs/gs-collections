@@ -19,11 +19,6 @@ package com.gs.collections.impl.list.primitive;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIntIterable;
-import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
-import com.gs.collections.api.block.function.primitive.ObjectIntIntToObjectFunction;
-import com.gs.collections.api.block.function.primitive.ObjectIntToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.IntIntProcedure;
-import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
 import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
@@ -132,14 +127,8 @@ public class IntIntervalTest
     @Test
     public void forEach()
     {
-        final long[] sum = new long[1];
-        this.intInterval.forEach(new IntProcedure()
-        {
-            public void value(int each)
-            {
-                sum[0] += each;
-            }
-        });
+        long[] sum = new long[1];
+        this.intInterval.forEach(each -> { sum[0] += each; });
 
         Assert.assertEquals(6L, sum[0]);
     }
@@ -148,13 +137,7 @@ public class IntIntervalTest
     public void injectInto()
     {
         IntInterval intInterval = IntInterval.oneTo(3);
-        MutableInteger result = intInterval.injectInto(new MutableInteger(0), new ObjectIntToObjectFunction<MutableInteger, MutableInteger>()
-        {
-            public MutableInteger valueOf(MutableInteger object, int value)
-            {
-                return object.add(value);
-            }
-        });
+        MutableInteger result = intInterval.injectInto(new MutableInteger(0), MutableInteger::add);
         Assert.assertEquals(new MutableInteger(6), result);
     }
 
@@ -162,14 +145,8 @@ public class IntIntervalTest
     public void injectIntoWithIndex()
     {
         IntInterval list1 = this.intInterval;
-        final IntInterval list2 = IntInterval.oneTo(3);
-        MutableInteger result = list1.injectIntoWithIndex(new MutableInteger(0), new ObjectIntIntToObjectFunction<MutableInteger, MutableInteger>()
-        {
-            public MutableInteger valueOf(MutableInteger object, int value, int index)
-            {
-                return object.add(value * list2.get(index));
-            }
-        });
+        IntInterval list2 = IntInterval.oneTo(3);
+        MutableInteger result = list1.injectIntoWithIndex(new MutableInteger(0), (object, value, index) -> object.add(value * list2.get(index)));
         Assert.assertEquals(new MutableInteger(14), result);
     }
 
@@ -259,13 +236,7 @@ public class IntIntervalTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(FastList.newListWith(0, 1, 2), this.intInterval.collect(new IntToObjectFunction<Integer>()
-        {
-            public Integer valueOf(int parameter)
-            {
-                return parameter - 1;
-            }
-        }).toList());
+        Assert.assertEquals(FastList.newListWith(0, 1, 2), this.intInterval.collect(parameter -> parameter - 1).toList());
     }
 
     @Test
@@ -526,55 +497,31 @@ public class IntIntervalTest
         Assert.assertEquals(0, zeroIterator.next());
         Assert.assertFalse(zeroIterator.hasNext());
         IntInterval oneToFive = IntInterval.oneTo(5);
-        final IntIterator oneToFiveIterator = oneToFive.intIterator();
+        IntIterator oneToFiveIterator = oneToFive.intIterator();
         for (int i = 1; i < 6; i++)
         {
             Assert.assertTrue(oneToFiveIterator.hasNext());
             Assert.assertEquals(i, oneToFiveIterator.next());
         }
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                oneToFiveIterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) oneToFiveIterator::next);
         IntInterval threeToNegativeThree = IntInterval.fromTo(3, -3);
-        final IntIterator threeToNegativeThreeIterator = threeToNegativeThree.intIterator();
+        IntIterator threeToNegativeThreeIterator = threeToNegativeThree.intIterator();
         for (int i = 3; i > -4; i--)
         {
             Assert.assertTrue(threeToNegativeThreeIterator.hasNext());
             Assert.assertEquals(i, threeToNegativeThreeIterator.next());
         }
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                threeToNegativeThreeIterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) threeToNegativeThreeIterator::next);
     }
 
     @Test
     public void forEachWithIndex()
     {
-        final IntegerSum sum = new IntegerSum(0);
-        IntInterval.oneTo(5).forEachWithIndex(new IntIntProcedure()
-        {
-            public void value(int each, int index)
-            {
-                sum.add(each + index);
-            }
-        });
+        IntegerSum sum = new IntegerSum(0);
+        IntInterval.oneTo(5).forEachWithIndex((each, index) -> { sum.add(each + index); });
         Assert.assertEquals(25, sum.getIntSum());
-        final IntegerSum zeroSum = new IntegerSum(0);
-        IntInterval.fromTo(0, -4).forEachWithIndex(new IntIntProcedure()
-        {
-            public void value(int each, int index)
-            {
-                zeroSum.add(each + index);
-            }
-        });
+        IntegerSum zeroSum = new IntegerSum(0);
+        IntInterval.fromTo(0, -4).forEachWithIndex((each, index) -> { zeroSum.add(each + index); });
         Assert.assertEquals(0, zeroSum.getIntSum());
     }
 
@@ -659,27 +606,15 @@ public class IntIntervalTest
     @Test
     public void get()
     {
-        final IntInterval interval = IntInterval.fromTo(-10, 12).by(5);
+        IntInterval interval = IntInterval.fromTo(-10, 12).by(5);
         Assert.assertEquals(-10, interval.get(0));
         Assert.assertEquals(-5, interval.get(1));
         Assert.assertEquals(0, interval.get(2));
         Assert.assertEquals(5, interval.get(3));
         Assert.assertEquals(10, interval.get(4));
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                interval.get(-1);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                interval.get(5);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { interval.get(-1); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { interval.get(5); });
     }
 
     @Test

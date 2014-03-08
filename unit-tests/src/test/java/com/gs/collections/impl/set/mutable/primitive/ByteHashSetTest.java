@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.gs.collections.impl.set.mutable.primitive;
 
 import com.gs.collections.api.block.function.primitive.ByteToObjectFunction;
-import com.gs.collections.api.block.function.primitive.ObjectByteToObjectFunction;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.MutableByteSet;
 import com.gs.collections.impl.block.factory.primitive.BytePredicates;
@@ -67,13 +66,7 @@ public class ByteHashSetTest extends AbstractByteSetTestCase
     {
         super.injectInto();
         ByteHashSet set = ByteHashSet.newSetWith((byte) 0, (byte) 1, (byte) 31, (byte) -1, (byte) -2, (byte) -64, (byte) -128, (byte) 64);
-        Byte sum = set.injectInto(Byte.valueOf((byte) 0), new ObjectByteToObjectFunction<Byte, Byte>()
-        {
-            public Byte valueOf(Byte result, byte value)
-            {
-                return Byte.valueOf((byte) (result + value));
-            }
-        });
+        Byte sum = set.injectInto(Byte.valueOf((byte) 0), (result, value) -> Byte.valueOf((byte) (result + value)));
         Assert.assertEquals(Byte.valueOf((byte) -99), sum);
     }
 
@@ -128,13 +121,7 @@ public class ByteHashSetTest extends AbstractByteSetTestCase
     public void collect()
     {
         super.collect();
-        ByteToObjectFunction<Byte> function = new ByteToObjectFunction<Byte>()
-        {
-            public Byte valueOf(byte parameter)
-            {
-                return (byte) (parameter - 1);
-            }
-        };
+        ByteToObjectFunction<Byte> function = parameter -> (byte) (parameter - 1);
 
         ByteHashSet set = ByteHashSet.newSetWith((byte) 0, (byte) 1, (byte) 31, (byte) -1, (byte) -2, (byte) -64, (byte) 111, (byte) 64);
         MutableSet<Byte> actualSet = set.collect(function);

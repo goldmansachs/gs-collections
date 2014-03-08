@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,6 @@ import java.util.Iterator;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function3;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
@@ -91,37 +88,19 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                SingletonListTest.this.list.remove(0);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.remove(0); });
     }
 
     @Test
     public void addAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                SingletonListTest.this.list.add(0, "1");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.list.add(0, "1"));
     }
 
     @Test
     public void add()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                SingletonListTest.this.list.add("1");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.add("1"); });
     }
 
     @Test
@@ -137,20 +116,8 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void get()
     {
         Verify.assertItemAtIndex("1", 0, this.list);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                SingletonListTest.this.list.get(1);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                SingletonListTest.this.list.get(-1);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { this.list.get(1); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { this.list.get(-1); });
     }
 
     @Test
@@ -170,30 +137,18 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void forEachWith()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         MutableList<Integer> collection = newWith(1);
-        collection.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 0);
+        collection.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
         Assert.assertEquals(FastList.newListWith(1), result);
     }
 
     @Test
     public void forEachWithIndex()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         MutableList<Integer> collection = newWith(1);
-        collection.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                result.add(object + index);
-            }
-        });
+        collection.forEachWithIndex((object, index) -> { result.add(object + index); });
         Verify.assertContainsAll(result, 1);
     }
 
@@ -202,13 +157,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     {
         Assert.assertEquals("1", this.list.set(0, "2"));
         Assert.assertEquals(FastList.newListWith("2"), this.list);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                SingletonListTest.this.list.set(1, "2");
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { this.list.set(1, "2"); });
     }
 
     @Test
@@ -254,14 +203,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void flatCollect()
     {
-        Function<Integer, MutableSet<String>> function =
-                new Function<Integer, MutableSet<String>>()
-                {
-                    public MutableSet<String> valueOf(Integer object)
-                    {
-                        return UnifiedSet.newSetWith(object.toString());
-                    }
-                };
+        Function<Integer, MutableSet<String>> function = object -> UnifiedSet.newSetWith(object.toString());
         Verify.assertListsEqual(FastList.newListWith("1"), newWith(1).flatCollect(function));
         Verify.assertSetsEqual(
                 UnifiedSet.newSetWith("1"),
@@ -397,40 +339,24 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void removeAll()
     {
-        final MutableList<Integer> objects = newWith(1);
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                objects.removeAll(Lists.fixedSize.of(1, 2));
-            }
+        MutableList<Integer> objects = newWith(1);
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            objects.removeAll(Lists.fixedSize.of(1, 2));
         });
     }
 
     @Test
     public void retainAll()
     {
-        final MutableList<Integer> objects = newWith(1);
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                objects.retainAll(newWith(2));
-            }
-        });
+        MutableList<Integer> objects = newWith(1);
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { objects.retainAll(newWith(2)); });
     }
 
     @Test
     public void clear()
     {
-        final MutableList<Integer> objects = newWith(1);
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                objects.clear();
-            }
-        });
+        MutableList<Integer> objects = newWith(1);
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {objects.clear();});
     }
 
     @Test
@@ -457,14 +383,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void injectIntoWith()
     {
         MutableList<Integer> objects = newWith(1);
-        Integer result =
-                objects.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
-                {
-                    public Integer value(Integer injectedValued, Integer item, Integer parameter)
-                    {
-                        return injectedValued + item + parameter;
-                    }
-                }, 0);
+        Integer result = objects.injectIntoWith(1, (injectedValued, item, parameter) -> injectedValued + item + parameter, 0);
         Assert.assertEquals(Integer.valueOf(2), result);
     }
 
@@ -490,14 +409,8 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void removeWithPredicate()
     {
-        final MutableList<Integer> objects = newWith(1);
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                objects.removeIf(Predicates.isNull());
-            }
-        });
+        MutableList<Integer> objects = newWith(1);
+        Verify.assertThrows(UnsupportedOperationException.class, () -> objects.removeIf(Predicates.isNull()));
     }
 
     @Test

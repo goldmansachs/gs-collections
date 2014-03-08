@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.set.sorted.immutable;
 import java.util.Collections;
 import java.util.Comparator;
 
-import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -121,13 +120,7 @@ public class ImmutableTreeSetTest
     public void collectChar()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
-        Assert.assertEquals(CharArrayList.newListWith('D', 'C', 'B', 'A'), integers.collectChar(new CharFunction<Integer>()
-        {
-            public char charValueOf(Integer integer)
-            {
-                return (char) (integer.intValue() + 64);
-            }
-        }));
+        Assert.assertEquals(CharArrayList.newListWith('D', 'C', 'B', 'A'), integers.collectChar(integer -> (char) (integer.intValue() + 64)));
     }
 
     @Override

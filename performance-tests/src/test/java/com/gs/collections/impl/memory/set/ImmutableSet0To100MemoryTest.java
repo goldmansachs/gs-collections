@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
@@ -46,14 +45,7 @@ public class ImmutableSet0To100MemoryTest
                 com.gs.collections.api.set.ImmutableSet.class.getSimpleName(),
                 ImmutableSet.class.getSimpleName());
 
-        IntProcedure procedure = new IntProcedure()
-        {
-            public void value(int size)
-            {
-                ImmutableSet0To100MemoryTest.this.memoryForScaledSets(size);
-            }
-        };
-        IntInterval.fromToBy(0, 100, 10).forEach(procedure);
+        IntInterval.fromToBy(0, 100, 10).forEach(this::memoryForScaledSets);
         LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 

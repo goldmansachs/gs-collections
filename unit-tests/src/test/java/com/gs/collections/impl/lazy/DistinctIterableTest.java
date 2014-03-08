@@ -21,8 +21,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.iterator.DistinctIterator;
@@ -53,14 +51,10 @@ public class DistinctIterableTest extends AbstractLazyIterableTestCase
     public void forEachWithIndex()
     {
         InternalIterable<Integer> distinct = new DistinctIterable<Integer>(FastList.newListWith(1, 2, 1, 3, 2, 4, 3, 5, 4, 6, 5, 7, 6, 8, 7, 9));
-        final StringBuilder builder = new StringBuilder("");
-        distinct.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                builder.append(object);
-                builder.append(index);
-            }
+        StringBuilder builder = new StringBuilder("");
+        distinct.forEachWithIndex((object, index) -> {
+            builder.append(object);
+            builder.append(index);
         });
         Assert.assertEquals("102132435465768798", builder.toString());
     }
@@ -83,13 +77,7 @@ public class DistinctIterableTest extends AbstractLazyIterableTestCase
     {
         InternalIterable<Integer> distinct = new DistinctIterable<Integer>(FastList.newListWith(1, 3, 3, 2, 5, 4, 2, 5, 4));
         StringBuilder builder = new StringBuilder("");
-        distinct.forEachWith(new Procedure2<Integer, StringBuilder>()
-        {
-            public void value(Integer each, StringBuilder aBuilder)
-            {
-                aBuilder.append(each);
-            }
-        }, builder);
+        distinct.forEachWith((each, aBuilder) -> { aBuilder.append(each); }, builder);
         Assert.assertEquals("13254", builder.toString());
     }
 

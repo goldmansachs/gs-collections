@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,38 +73,18 @@ public class HashBiMapTest extends AbstractMutableBiMapTestCase
     @Test
     public void newMap_throws()
     {
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                new HashBiMap<Object, Object>(UnifiedMap.newMap(), null);
-            }
+        Verify.assertThrows(IllegalArgumentException.class, () -> {
+            new HashBiMap<Object, Object>(UnifiedMap.newMap(), null);
         });
 
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                new HashBiMap<Object, Object>(null, null);
-            }
+        Verify.assertThrows(IllegalArgumentException.class, () -> { new HashBiMap<Object, Object>(null, null); });
+
+        Verify.assertThrows(IllegalArgumentException.class, () -> {
+            new HashBiMap<Object, Object>(null, UnifiedMap.newMap());
         });
 
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                new HashBiMap<Object, Object>(null, UnifiedMap.newMap());
-            }
-        });
-
-        final UnifiedMap<Object, Object> map = UnifiedMap.newMap();
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                new HashBiMap<Object, Object>(map, map);
-            }
-        });
+        UnifiedMap<Object, Object> map = UnifiedMap.newMap();
+        Verify.assertThrows(IllegalArgumentException.class, () -> { new HashBiMap<Object, Object>(map, map); });
     }
 
     @Test

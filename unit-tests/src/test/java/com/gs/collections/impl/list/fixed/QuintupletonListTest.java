@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.list.fixed;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -75,39 +74,21 @@ public class QuintupletonListTest extends AbstractMemoryEfficientMutableListTest
     @Test
     public void testRemove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                QuintupletonListTest.this.list.remove(0);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.remove(0); });
         this.assertUnchanged();
     }
 
     @Test
     public void testAddAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                QuintupletonListTest.this.list.add(0, "1");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.list.add(0, "1"));
         this.assertUnchanged();
     }
 
     @Test
     public void testAdd()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                QuintupletonListTest.this.list.add("1");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.add("1"); });
         this.assertUnchanged();
     }
 
@@ -123,32 +104,20 @@ public class QuintupletonListTest extends AbstractMemoryEfficientMutableListTest
     public void testGet()
     {
         Verify.assertStartsWith(this.list, "1", "2", "3", "4", "5");
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                QuintupletonListTest.this.list.get(5);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { this.list.get(5); });
     }
 
     @Test
     public void testSet()
     {
-        final MutableList<String> list = Lists.fixedSize.of("1", "2", "3", "4", "5");
+        MutableList<String> list = Lists.fixedSize.of("1", "2", "3", "4", "5");
         Assert.assertEquals("1", list.set(0, "5"));
         Assert.assertEquals("2", list.set(1, "4"));
         Assert.assertEquals("3", list.set(2, "3"));
         Assert.assertEquals("4", list.set(3, "2"));
         Assert.assertEquals("5", list.set(4, "1"));
         Assert.assertEquals(FastList.newListWith("5", "4", "3", "2", "1"), list);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.set(5, "0");
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { list.set(5, "0"); });
     }
 
     private void assertUnchanged()
@@ -186,16 +155,12 @@ public class QuintupletonListTest extends AbstractMemoryEfficientMutableListTest
     @Test
     public void testForEachWithIndex()
     {
-        final int[] indexSum = new int[1];
-        final MutableList<String> result = Lists.mutable.of();
+        int[] indexSum = new int[1];
+        MutableList<String> result = Lists.mutable.of();
         MutableList<String> source = Lists.fixedSize.of("1", "2", "3", "4", "5");
-        source.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                result.add(each);
-                indexSum[0] += index;
-            }
+        source.forEachWithIndex((each, index) -> {
+            result.add(each);
+            indexSum[0] += index;
         });
         Assert.assertEquals(FastList.newListWith("1", "2", "3", "4", "5"), result);
         Assert.assertEquals(10, indexSum[0]);

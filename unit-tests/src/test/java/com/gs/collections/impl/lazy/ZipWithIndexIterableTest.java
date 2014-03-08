@@ -17,8 +17,6 @@
 package com.gs.collections.impl.lazy;
 
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.factory.Lists;
 import org.junit.Assert;
@@ -44,14 +42,10 @@ public class ZipWithIndexIterableTest
     @Test
     public void forEach()
     {
-        this.iterableUnderTest.forEach(new Procedure<Pair<Integer, Integer>>()
-        {
-            public void value(Pair<Integer, Integer> argument1)
-            {
-                ZipWithIndexIterableTest.this.buffer.append("(");
-                ZipWithIndexIterableTest.this.buffer.append(argument1.toString());
-                ZipWithIndexIterableTest.this.buffer.append(")");
-            }
+        this.iterableUnderTest.forEach((Procedure<Pair<Integer, Integer>>) argument1 -> {
+            this.buffer.append("(");
+            this.buffer.append(argument1.toString());
+            this.buffer.append(")");
         });
         this.assertBufferContains("(1:0)(2:1)(3:2)(4:3)");
     }
@@ -59,15 +53,11 @@ public class ZipWithIndexIterableTest
     @Test
     public void forEachWIthIndex()
     {
-        this.iterableUnderTest.forEachWithIndex(new ObjectIntProcedure<Pair<Integer, Integer>>()
-        {
-            public void value(Pair<Integer, Integer> each, int index)
-            {
-                ZipWithIndexIterableTest.this.buffer.append("|(");
-                ZipWithIndexIterableTest.this.buffer.append(each.toString());
-                ZipWithIndexIterableTest.this.buffer.append("),");
-                ZipWithIndexIterableTest.this.buffer.append(index);
-            }
+        this.iterableUnderTest.forEachWithIndex((each, index) -> {
+            this.buffer.append("|(");
+            this.buffer.append(each.toString());
+            this.buffer.append("),");
+            this.buffer.append(index);
         });
         this.assertBufferContains("|(1:0),0|(2:1),1|(3:2),2|(4:3),3");
     }
@@ -75,15 +65,11 @@ public class ZipWithIndexIterableTest
     @Test
     public void forEachWith()
     {
-        this.iterableUnderTest.forEachWith(new Procedure2<Pair<Integer, Integer>, String>()
-        {
-            public void value(Pair<Integer, Integer> argument1, String argument2)
-            {
-                ZipWithIndexIterableTest.this.buffer.append("|(");
-                ZipWithIndexIterableTest.this.buffer.append(argument1.toString());
-                ZipWithIndexIterableTest.this.buffer.append("),");
-                ZipWithIndexIterableTest.this.buffer.append(argument2);
-            }
+        this.iterableUnderTest.forEachWith((argument1, argument2) -> {
+            this.buffer.append("|(");
+            this.buffer.append(argument1.toString());
+            this.buffer.append("),");
+            this.buffer.append(argument2);
         }, "A");
         this.assertBufferContains("|(1:0),A|(2:1),A|(3:2),A|(4:3),A");
     }

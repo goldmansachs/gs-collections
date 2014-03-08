@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.primitive.IntInterval;
@@ -47,14 +46,7 @@ public class ImmutableList0to10MemoryTest
                 com.gs.collections.api.list.ImmutableList.class.getSimpleName(),
                 ImmutableList.class.getSimpleName());
 
-        IntProcedure procedure = new IntProcedure()
-        {
-            public void value(int size)
-            {
-                ImmutableList0to10MemoryTest.this.memoryForScaledLists(size);
-            }
-        };
-        IntInterval.zeroTo(10).forEach(procedure);
+        IntInterval.zeroTo(10).forEach(this::memoryForScaledLists);
         LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 

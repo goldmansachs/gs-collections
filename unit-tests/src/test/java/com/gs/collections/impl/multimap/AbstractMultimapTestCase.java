@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.multimap;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.tuple.Pair;
@@ -129,16 +128,10 @@ public abstract class AbstractMultimapTestCase
     @Test
     public void forEachKeyValue()
     {
-        final MutableBag<String> collection = Bags.mutable.of();
+        MutableBag<String> collection = Bags.mutable.of();
         Multimap<Integer, String> multimap =
                 this.newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three");
-        multimap.forEachKeyValue(new Procedure2<Integer, String>()
-        {
-            public void value(Integer key, String value)
-            {
-                collection.add(key + value);
-            }
-        });
+        multimap.forEachKeyValue((key, value) -> { collection.add(key + value); });
         Assert.assertEquals(HashBag.newBagWith("1One", "2Two", "3Three"), collection);
     }
 
@@ -188,21 +181,10 @@ public abstract class AbstractMultimapTestCase
     {
         Multimap<Integer, String> multimap = this.newMultimapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertEquals(Bags.mutable.of(1, 2, 3),
-                multimap.keyMultiValuePairsView().collect(new Function<Pair<Integer, RichIterable<String>>, Integer>()
-                {
-                    public Integer valueOf(Pair<Integer, RichIterable<String>> pair)
-                    {
-                        return pair.getOne();
-                    }
-                }).toBag());
-        Assert.assertEquals(Bags.mutable.of("1", "2", "3"),
-                multimap.keyMultiValuePairsView().flatCollect(new Function<Pair<Integer, RichIterable<String>>, RichIterable<String>>()
-                {
-                    public RichIterable<String> valueOf(Pair<Integer, RichIterable<String>> pair)
-                    {
-                        return pair.getTwo();
-                    }
-                }).toBag());
+                multimap.keyMultiValuePairsView().collect(Pair::getOne).toBag());
+        Assert.assertEquals(
+                Bags.mutable.of("1", "2", "3"),
+                multimap.keyMultiValuePairsView().flatCollect(Functions.secondOfPair()).toBag());
     }
 
     @Test

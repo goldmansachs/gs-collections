@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,14 +64,8 @@ public class BagMemoryTest
         @Override
         public HashMultiset<Integer> value()
         {
-            final HashMultiset<Integer> hashMultiset = HashMultiset.create();
-            this.data.forEach(new Procedure<Integer>()
-            {
-                public void value(Integer each)
-                {
-                    hashMultiset.add(each, 10);
-                }
-            });
+            HashMultiset<Integer> hashMultiset = HashMultiset.create();
+            this.data.forEach((Procedure<Integer>) each -> { hashMultiset.add(each, 10); });
             return hashMultiset;
         }
     }
@@ -88,14 +82,8 @@ public class BagMemoryTest
         @Override
         public HashBag<Integer> value()
         {
-            final HashBag<Integer> hashBag = HashBag.newBag();
-            this.data.forEach(new Procedure<Integer>()
-            {
-                public void value(Integer each)
-                {
-                    hashBag.addOccurrences(each, 10);
-                }
-            });
+            HashBag<Integer> hashBag = HashBag.newBag();
+            this.data.forEach((Procedure<Integer>) each -> hashBag.addOccurrences(each, 10));
             return hashBag;
         }
     }

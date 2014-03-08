@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.gs.collections.impl.bag.mutable;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.block.function.primitive.CharFunction;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
@@ -108,14 +106,8 @@ public class UnmodifiableBagTest
     @Test
     public void forEachWithOccurrences()
     {
-        final MutableList<Pair<Object, Integer>> list = Lists.mutable.of();
-        this.getCollection().forEachWithOccurrences(new ObjectIntProcedure<Object>()
-        {
-            public void value(Object each, int index)
-            {
-                list.add(Tuples.pair(each, index));
-            }
-        });
+        MutableList<Pair<Object, Integer>> list = Lists.mutable.of();
+        this.getCollection().forEachWithOccurrences((each, index) -> { list.add(Tuples.pair(each, index)); });
         Assert.assertEquals(FastList.newListWith(Tuples.pair("", 1)), list);
     }
 
@@ -164,13 +156,7 @@ public class UnmodifiableBagTest
     {
         MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(1, 2, 2, 3, 3, 3));
         Assert.assertEquals(CharHashBag.newBagWith('A', 'B', 'B', 'C', 'C', 'C'),
-                integers.collectChar(new CharFunction<Integer>()
-                {
-                    public char charValueOf(Integer integer)
-                    {
-                        return (char) (integer.intValue() + 64);
-                    }
-                }));
+                integers.collectChar(integer -> (char) (integer.intValue() + 64)));
     }
 
     @Override

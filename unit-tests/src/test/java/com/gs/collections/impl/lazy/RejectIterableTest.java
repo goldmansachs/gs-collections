@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.gs.collections.impl.lazy;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -51,14 +49,10 @@ public class RejectIterableTest extends AbstractLazyIterableTestCase
     public void forEachWithIndex()
     {
         InternalIterable<Integer> select = new RejectIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(2).or(Predicates.greaterThan(3)));
-        final Sum sum = new IntegerSum(0);
-        select.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                sum.add(object);
-                sum.add(index);
-            }
+        Sum sum = new IntegerSum(0);
+        select.forEachWithIndex((object, index) -> {
+            sum.add(object);
+            sum.add(index);
         });
         Assert.assertEquals(6, sum.getValue().intValue());
     }
@@ -81,13 +75,7 @@ public class RejectIterableTest extends AbstractLazyIterableTestCase
     {
         InternalIterable<Integer> select = new RejectIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
-        select.forEachWith(new Procedure2<Integer, Sum>()
-        {
-            public void value(Integer each, Sum aSum)
-            {
-                aSum.add(each);
-            }
-        }, sum);
+        select.forEachWith((each, aSum) -> { aSum.add(each); }, sum);
         Assert.assertEquals(5, sum.getValue().intValue());
     }
 

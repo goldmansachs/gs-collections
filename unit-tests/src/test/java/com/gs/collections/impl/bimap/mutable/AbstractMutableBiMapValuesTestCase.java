@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,7 +129,7 @@ public abstract class AbstractMutableBiMapValuesTestCase
         MutableSet<String> expected = UnifiedSet.newSetWith("zero", "thirtyOne", null);
         MutableSet<String> actual = UnifiedSet.newSet();
 
-        final Iterator<String> iterator = HashBiMap.newWithKeysValues(0.0f, "zero", 31.0f, "thirtyOne", 32.0f, null).iterator();
+        Iterator<String> iterator = HashBiMap.newWithKeysValues(0.0f, "zero", 31.0f, "thirtyOne", 32.0f, null).iterator();
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -139,23 +139,11 @@ public abstract class AbstractMutableBiMapValuesTestCase
         Assert.assertFalse(iterator.hasNext());
 
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
 
         MutableBiMap<Float, String> map1 = this.newMapWithKeysValues(0.0f, "zero", 1.0f, null);
-        final Iterator<String> iterator1 = map1.iterator();
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator1.remove();
-            }
-        });
+        Iterator<String> iterator1 = map1.iterator();
+        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> iterator1.remove());
         iterator1.next();
         iterator1.remove();
         Assert.assertTrue(map1.toString(), HashBiMap.newWithKeysValues(0.0f, "zero").equals(map1)
@@ -165,23 +153,11 @@ public abstract class AbstractMutableBiMapValuesTestCase
         iterator1.next();
         iterator1.remove();
         Assert.assertEquals(HashBiMap.newMap(), map1);
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator1.remove();
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> {iterator1.remove();});
 
         MutableBiMap<Float, String> map2 = this.newMapWithKeysValues(0.0f, null, 9.0f, "nine");
-        final Iterator<String> iterator2 = map2.iterator();
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator2.remove();
-            }
-        });
+        Iterator<String> iterator2 = map2.iterator();
+        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> {iterator2.remove();});
         iterator2.next();
         iterator2.remove();
         Assert.assertTrue(map2.toString(), HashBiMap.newWithKeysValues(0.0f, null).equals(map2)
@@ -193,14 +169,8 @@ public abstract class AbstractMutableBiMapValuesTestCase
         Assert.assertEquals(HashBiMap.newMap(), map2);
 
         MutableBiMap<Float, String> map3 = this.newMapWithKeysValues(8.0f, "eight", 9.0f, null);
-        final Iterator<String> iterator3 = map3.iterator();
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator3.remove();
-            }
-        });
+        Iterator<String> iterator3 = map3.iterator();
+        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> {iterator3.remove();});
         iterator3.next();
         iterator3.remove();
         Assert.assertTrue(map3.toString(), HashBiMap.newWithKeysValues(8.0f, "eight").equals(map3)

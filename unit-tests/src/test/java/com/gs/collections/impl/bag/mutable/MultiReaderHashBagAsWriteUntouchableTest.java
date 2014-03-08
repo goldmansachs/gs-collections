@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,25 +33,13 @@ public class MultiReaderHashBagAsWriteUntouchableTest extends AbstractCollection
     @Override
     public void asSynchronized()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                MultiReaderHashBagAsWriteUntouchableTest.this.newWith().asSynchronized();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.newWith().asSynchronized(); });
     }
 
     @Override
     public void asUnmodifiable()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                MultiReaderHashBagAsWriteUntouchableTest.this.newWith().asUnmodifiable();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.newWith().asUnmodifiable(); });
     }
 
     @Test

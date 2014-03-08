@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,15 +65,9 @@ public class ConcurrentMapMemoryTest
             this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
-        protected <R extends Map<Integer, String>> R fill(final R map)
+        protected <R extends Map<Integer, String>> R fill(R map)
         {
-            this.data.forEach(new Procedure<Integer>()
-            {
-                public void value(Integer each)
-                {
-                    map.put(each, "dummy");
-                }
-            });
+            this.data.forEach((Procedure<Integer>) each -> { map.put(each, "dummy"); });
             return map;
         }
     }

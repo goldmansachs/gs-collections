@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,12 +52,6 @@ public class SynchronizedStackTest extends MutableStackTestCase
     @Test
     public void testNullStack()
     {
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                SynchronizedStack.of(null);
-            }
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> { SynchronizedStack.of(null); });
     }
 }

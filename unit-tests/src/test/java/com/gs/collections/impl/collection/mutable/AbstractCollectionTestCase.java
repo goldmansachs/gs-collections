@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.collection.mutable;
 
-import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
@@ -202,13 +201,7 @@ public abstract class AbstractCollectionTestCase extends AbstractRichIterableTes
     public void injectIntoWith()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
-        Integer result = objects.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
-        {
-            public Integer value(Integer injectedValued, Integer item, Integer parameter)
-            {
-                return injectedValued + item + parameter;
-            }
-        }, 0);
+        Integer result = objects.injectIntoWith(1, (injectedValued, item, parameter) -> injectedValued + item + parameter, 0);
         Assert.assertEquals(Integer.valueOf(7), result);
     }
 

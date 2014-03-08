@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -326,73 +326,37 @@ public class StringIterateTest
     @Test
     public void forEach()
     {
-        final StringBuffer buffer = new StringBuffer();
-        StringIterate.forEach("1a2b3c", new CharProcedure()
-        {
-            public void value(char character)
-            {
-                buffer.append(character);
-            }
-        });
+        StringBuffer buffer = new StringBuffer();
+        StringIterate.forEach("1a2b3c", (CharProcedure) buffer::append);
         Assert.assertEquals("1a2b3c", buffer.toString());
     }
 
     @Test
     public void forEachCodePoint()
     {
-        final StringBuffer buffer = new StringBuffer();
-        StringIterate.forEach("1a2b3c", new CodePointProcedure()
-        {
-            public void value(int character)
-            {
-                buffer.appendCodePoint(character);
-            }
-        });
+        StringBuffer buffer = new StringBuffer();
+        StringIterate.forEach("1a2b3c", (CodePointProcedure) buffer::appendCodePoint);
         Assert.assertEquals("1a2b3c", buffer.toString());
     }
 
     @Test
     public void reverseForEach()
     {
-        final StringBuffer buffer = new StringBuffer();
-        StringIterate.reverseForEach("1a2b3c", new CharProcedure()
-        {
-            public void value(char character)
-            {
-                buffer.append(character);
-            }
-        });
+        StringBuffer buffer = new StringBuffer();
+        StringIterate.reverseForEach("1a2b3c", (CharProcedure) buffer::append);
         Assert.assertEquals("c3b2a1", buffer.toString());
 
-        StringIterate.reverseForEach("", new CharProcedure()
-        {
-            public void value(char character)
-            {
-                Assert.fail();
-            }
-        });
+        StringIterate.reverseForEach("", (char character) -> Assert.fail());
     }
 
     @Test
     public void reverseForEachCodePoint()
     {
-        final StringBuffer buffer = new StringBuffer();
-        StringIterate.reverseForEach("1a2b3c", new CodePointProcedure()
-        {
-            public void value(int character)
-            {
-                buffer.appendCodePoint(character);
-            }
-        });
+        StringBuffer buffer = new StringBuffer();
+        StringIterate.reverseForEach("1a2b3c", (CodePointProcedure) buffer::appendCodePoint);
         Assert.assertEquals("c3b2a1", buffer.toString());
 
-        StringIterate.reverseForEach("", new CodePointProcedure()
-        {
-            public void value(int codePoint)
-            {
-                Assert.fail();
-            }
-        });
+        StringIterate.reverseForEach("", (int codePoint) -> Assert.fail());
     }
 
     @Test
@@ -564,7 +528,7 @@ public class StringIterateTest
     @Test
     public void splitAtIndex()
     {
-        final String oompaLoompa = "oompaloompa";
+        String oompaLoompa = "oompaloompa";
 
         Assert.assertEquals(Tuples.twin("oompa", "loompa"), StringIterate.splitAtIndex(oompaLoompa, 5));
         Assert.assertEquals(Tuples.twin("", oompaLoompa), StringIterate.splitAtIndex(oompaLoompa, 0));
@@ -572,20 +536,11 @@ public class StringIterateTest
 
         Assert.assertEquals(Tuples.twin("", ""), StringIterate.splitAtIndex("", 0));
 
-        Verify.assertThrows(StringIndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                StringIterate.splitAtIndex(oompaLoompa, 17);
-            }
+        Verify.assertThrows(StringIndexOutOfBoundsException.class, () -> {
+            StringIterate.splitAtIndex(oompaLoompa, 17);
         });
-
-        Verify.assertThrows(StringIndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                StringIterate.splitAtIndex(oompaLoompa, -8);
-            }
+        Verify.assertThrows(StringIndexOutOfBoundsException.class, () -> {
+            StringIterate.splitAtIndex(oompaLoompa, -8);
         });
     }
 

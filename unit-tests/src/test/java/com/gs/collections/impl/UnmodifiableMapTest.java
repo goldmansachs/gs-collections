@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,13 +48,7 @@ public class UnmodifiableMapTest
     @Test
     public void testNullConstructorArgument()
     {
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                new UnmodifiableMap<Object, Object>(null);
-            }
-        });
+        Verify.assertThrows(NullPointerException.class, () -> { new UnmodifiableMap<Object, Object>(null); });
     }
 
     @Test
@@ -90,49 +84,29 @@ public class UnmodifiableMapTest
     @Test
     public void testPut()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMapTest.this.unmodifiableMap.put("foo", Lists.mutable.<String>of());
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.unmodifiableMap.put("foo", Lists.mutable.<String>of());
         });
     }
 
     @Test
     public void testRemove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMapTest.this.unmodifiableMap.remove(ROCK_OUT);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.unmodifiableMap.remove(ROCK_OUT); });
     }
 
     @Test
     public void testPutAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMapTest.this.unmodifiableMap.putAll(Maps.mutable.<String, List<String>>of());
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.unmodifiableMap.putAll(Maps.mutable.<String, List<String>>of());
         });
     }
 
     @Test
     public void testClear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMapTest.this.unmodifiableMap.clear();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {this.unmodifiableMap.clear();});
     }
 
     @Test

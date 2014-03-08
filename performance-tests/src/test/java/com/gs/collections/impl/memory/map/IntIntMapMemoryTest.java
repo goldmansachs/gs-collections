@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.memory.map;
 import java.util.HashMap;
 
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.set.primitive.IntSet;
 import com.gs.collections.impl.MemoryTests;
@@ -73,14 +72,8 @@ public class IntIntMapMemoryTest
         @Override
         public IntIntHashMap value()
         {
-            final IntIntHashMap map = new IntIntHashMap();
-            this.data.forEach(new IntProcedure()
-            {
-                public void value(int each)
-                {
-                    map.put(each, each);
-                }
-            });
+            IntIntHashMap map = new IntIntHashMap();
+            this.data.forEach(each -> map.put(each, each));
             return map;
         }
     }
@@ -97,14 +90,8 @@ public class IntIntMapMemoryTest
         @Override
         public TIntIntHashMap value()
         {
-            final TIntIntHashMap map = new TIntIntHashMap();
-            this.data.forEach(new IntProcedure()
-            {
-                public void value(int each)
-                {
-                    map.put(each, each);
-                }
-            });
+            TIntIntHashMap map = new TIntIntHashMap();
+            this.data.forEach(each -> { map.put(each, each); });
             return map;
         }
     }
@@ -121,14 +108,8 @@ public class IntIntMapMemoryTest
         @Override
         public HashMap<Integer, Integer> value()
         {
-            final HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-            this.data.forEach(new IntProcedure()
-            {
-                public void value(int each)
-                {
-                    map.put(each, each);
-                }
-            });
+            HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+            this.data.forEach(each -> { map.put(each, each); });
             return map;
         }
     }

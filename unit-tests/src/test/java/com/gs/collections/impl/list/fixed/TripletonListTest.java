@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.gs.collections.impl.list.fixed;
 
 import java.util.ListIterator;
 
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -66,39 +65,21 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void testRemove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                TripletonListTest.this.list.remove(0);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.remove(0); });
         this.assertUnchanged();
     }
 
     @Test
     public void testAddAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                TripletonListTest.this.list.add(0, "1");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.list.add(0, "1"));
         this.assertUnchanged();
     }
 
     @Test
     public void testAdd()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                TripletonListTest.this.list.add("1");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.add("1"); });
         this.assertUnchanged();
     }
 
@@ -114,30 +95,18 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void testGet()
     {
         Verify.assertStartsWith(this.list, "1", "2", "3");
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                TripletonListTest.this.list.get(3);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { this.list.get(3); });
     }
 
     @Test
     public void testSet()
     {
-        final MutableList<String> list = Lists.fixedSize.of("1", "2", "3");
+        MutableList<String> list = Lists.fixedSize.of("1", "2", "3");
         Assert.assertEquals("1", list.set(0, "3"));
         Assert.assertEquals("2", list.set(1, "2"));
         Assert.assertEquals("3", list.set(2, "1"));
         Assert.assertEquals(FastList.newListWith("3", "2", "1"), list);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.set(3, "0");
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { list.set(3, "0"); });
     }
 
     private void assertUnchanged()
@@ -194,16 +163,12 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void testForEachWithIndex()
     {
-        final int[] indexSum = new int[1];
-        final MutableList<String> result = Lists.mutable.of();
+        int[] indexSum = new int[1];
+        MutableList<String> result = Lists.mutable.of();
         MutableList<String> source = Lists.fixedSize.of("1", "2", "3");
-        source.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                result.add(each);
-                indexSum[0] += index;
-            }
+        source.forEachWithIndex((each, index) -> {
+            result.add(each);
+            indexSum[0] += index;
         });
         Assert.assertEquals(FastList.newListWith("1", "2", "3"), result);
         Assert.assertEquals(3, indexSum[0]);
@@ -212,16 +177,12 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void testForEachWithIndexFromTo()
     {
-        final int[] indexSum = new int[1];
-        final MutableList<String> result = Lists.mutable.of();
+        int[] indexSum = new int[1];
+        MutableList<String> result = Lists.mutable.of();
         MutableList<String> source = Lists.fixedSize.of("1", "2", "3");
-        source.forEachWithIndex(0, 2, new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                result.add(each);
-                indexSum[0] += index;
-            }
+        source.forEachWithIndex(0, 2, (each, index) -> {
+            result.add(each);
+            indexSum[0] += index;
         });
         Assert.assertEquals(FastList.newListWith("1", "2", "3"), result);
         Assert.assertEquals(3, indexSum[0]);
@@ -349,15 +310,11 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
     {
         MutableList<String> list = Lists.fixedSize.of("1", "2", "3");
         MutableList<String> source = list.subList(1, 3);
-        final int[] indexSum = new int[1];
-        final MutableList<String> result = Lists.mutable.of();
-        source.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                result.add(each);
-                indexSum[0] += index;
-            }
+        int[] indexSum = new int[1];
+        MutableList<String> result = Lists.mutable.of();
+        source.forEachWithIndex((each, index) -> {
+            result.add(each);
+            indexSum[0] += index;
         });
         Assert.assertEquals(FastList.newListWith("2", "3"), result);
         Assert.assertEquals(1, indexSum[0]);

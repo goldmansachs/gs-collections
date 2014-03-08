@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.set.MutableSet;
@@ -95,13 +93,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     @Test
     public void iterator()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                MultiReaderUnifiedSet.newSet().iterator();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { MultiReaderUnifiedSet.newSet().iterator(); });
     }
 
     @Test
@@ -316,15 +308,8 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     public void aggregateByMutating()
     {
         Function0<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
-        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
-        {
-            public void value(AtomicInteger aggregate, Integer value)
-            {
-                aggregate.addAndGet(value);
-            }
-        };
         MutableCollection<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
-        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, AtomicInteger::addAndGet);
         Assert.assertEquals(1, aggregation.get("1").intValue());
         Assert.assertEquals(2, aggregation.get("2").intValue());
         Assert.assertEquals(3, aggregation.get("3").intValue());
@@ -347,14 +332,10 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     public void withReadLockAndDelegate()
     {
         MultiReaderUnifiedSet<Integer> set = MultiReaderUnifiedSet.newSetWith(1);
-        final Object[] result = new Object[1];
-        set.withReadLockAndDelegate(new Procedure<MutableSet<Integer>>()
-        {
-            public void value(MutableSet<Integer> delegate)
-            {
-                result[0] = delegate.getFirst();
-                MultiReaderUnifiedSetTest.this.verifyDelegateIsUnmodifiable(delegate);
-            }
+        Object[] result = new Object[1];
+        set.withReadLockAndDelegate(delegate -> {
+            result[0] = delegate.getFirst();
+            this.verifyDelegateIsUnmodifiable(delegate);
         });
         Assert.assertNotNull(result[0]);
     }
@@ -363,54 +344,26 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     public void withWriteLockAndDelegate()
     {
         MultiReaderUnifiedSet<Integer> set = MultiReaderUnifiedSet.newSetWith(2);
-        final AtomicReference<MutableSet<?>> delegateList = new AtomicReference<MutableSet<?>>();
-        final AtomicReference<Iterator<?>> iterator = new AtomicReference<Iterator<?>>();
-        set.withWriteLockAndDelegate(new Procedure<MutableSet<Integer>>()
-        {
-            public void value(MutableSet<Integer> delegate)
-            {
-                delegate.add(1);
-                delegate.add(2);
-                delegate.add(3);
-                delegate.add(4);
-                delegateList.set(delegate);
-                iterator.set(delegate.iterator());
-            }
+        AtomicReference<MutableSet<?>> delegateList = new AtomicReference<MutableSet<?>>();
+        AtomicReference<Iterator<?>> iterator = new AtomicReference<Iterator<?>>();
+        set.withWriteLockAndDelegate(delegate -> {
+            delegate.add(1);
+            delegate.add(2);
+            delegate.add(3);
+            delegate.add(4);
+            delegateList.set(delegate);
+            iterator.set(delegate.iterator());
         });
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), set);
 
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.get().hasNext();
-            }
-        });
+        Verify.assertThrows(NullPointerException.class, () -> { iterator.get().hasNext(); });
 
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                delegateList.get().iterator();
-            }
-        });
+        Verify.assertThrows(NullPointerException.class, () -> { delegateList.get().iterator(); });
     }
 
-    private void verifyDelegateIsUnmodifiable(final MutableSet<Integer> delegate)
+    private void verifyDelegateIsUnmodifiable(MutableSet<Integer> delegate)
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                delegate.add(2);
-            }
-        });
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                delegate.remove(0);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.add(2); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.remove(0); });
     }
 }

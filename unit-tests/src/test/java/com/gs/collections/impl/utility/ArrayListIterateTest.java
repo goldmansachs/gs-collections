@@ -22,10 +22,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
@@ -155,111 +153,63 @@ public class ArrayListIterateTest
     @Test
     public void forEachUsingFromTo()
     {
-        final ArrayList<Integer> integers = Interval.oneTo(5).addAllTo(new ArrayList<Integer>());
+        ArrayList<Integer> integers = Interval.oneTo(5).addAllTo(new ArrayList<Integer>());
         ArrayList<Integer> results = new ArrayList<Integer>();
         ArrayListIterate.forEach(integers, 0, 4, CollectionAddProcedure.on(results));
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        final CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
+        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
         ArrayListIterate.forEach(integers, 4, 0, procedure);
         Assert.assertEquals(ListIterate.reverseThis(integers), reverseResults);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayListIterate.forEach(integers, 4, -1, procedure);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayListIterate.forEach(integers, -1, 4, procedure);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(integers, 4, -1, procedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(integers, -1, 4, procedure));
     }
 
     @Test
     public void forEachUsingFromToWithOptimisable()
     {
         ArrayList<Integer> expected = Interval.oneTo(5).addAllTo(new ArrayList<Integer>());
-        final ArrayList<Integer> optimisableList = Interval.oneTo(105).addAllTo(new ArrayList<Integer>());
+        ArrayList<Integer> optimisableList = Interval.oneTo(105).addAllTo(new ArrayList<Integer>());
         ArrayList<Integer> results = new ArrayList<Integer>();
         ArrayListIterate.forEach(optimisableList, 0, 4, CollectionAddProcedure.on(results));
         Assert.assertEquals(expected, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        final CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
+        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
         ArrayListIterate.forEach(optimisableList, 4, 0, procedure);
         Assert.assertEquals(ListIterate.reverseThis(expected), reverseResults);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayListIterate.forEach(optimisableList, 104, -1, procedure);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayListIterate.forEach(optimisableList, -1, 4, procedure);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(optimisableList, 104, -1, procedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(optimisableList, -1, 4, procedure));
     }
 
     @Test
     public void forEachWithIndexUsingFromTo()
     {
-        final ArrayList<Integer> integers = Interval.oneTo(5).addAllTo(new ArrayList<Integer>());
+        ArrayList<Integer> integers = Interval.oneTo(5).addAllTo(new ArrayList<Integer>());
         ArrayList<Integer> results = new ArrayList<Integer>();
         ArrayListIterate.forEachWithIndex(integers, 0, 4, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(results)));
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        final ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
+        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
         ArrayListIterate.forEachWithIndex(integers, 4, 0, objectIntProcedure);
         Assert.assertEquals(ListIterate.reverseThis(integers), reverseResults);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayListIterate.forEachWithIndex(integers, 4, -1, objectIntProcedure);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayListIterate.forEachWithIndex(integers, -1, 4, objectIntProcedure);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEachWithIndex(integers, 4, -1, objectIntProcedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEachWithIndex(integers, -1, 4, objectIntProcedure));
     }
 
     @Test
     public void forEachWithIndexUsingFromToWithOptimisableList()
     {
         ArrayList<Integer> optimisableList = Interval.oneTo(105).addAllTo(new ArrayList<Integer>());
-        final ArrayList<Integer> expected = Interval.oneTo(105).addAllTo(new ArrayList<Integer>());
+        ArrayList<Integer> expected = Interval.oneTo(105).addAllTo(new ArrayList<Integer>());
         ArrayList<Integer> results = new ArrayList<Integer>();
         ArrayListIterate.forEachWithIndex(optimisableList, 0, 104, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(results)));
         Assert.assertEquals(expected, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        final ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
+        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
         ArrayListIterate.forEachWithIndex(expected, 104, 0, objectIntProcedure);
         Assert.assertEquals(ListIterate.reverseThis(expected), reverseResults);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayListIterate.forEachWithIndex(expected, 104, -1, objectIntProcedure);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayListIterate.forEachWithIndex(expected, -1, 104, objectIntProcedure);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEachWithIndex(expected, 104, -1, objectIntProcedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEachWithIndex(expected, -1, 104, objectIntProcedure));
     }
 
     @Test
@@ -785,13 +735,7 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> list = this.getIntegerList();
         Iterate.sortThis(list);
-        ArrayListIterate.forEachWithIndex(list, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                Assert.assertEquals(index, object - 1);
-            }
-        });
+        ArrayListIterate.forEachWithIndex(list, (object, index) -> Assert.assertEquals(index, object - 1));
     }
 
     @Test
@@ -799,13 +743,7 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
         Iterate.sortThis(list);
-        ArrayListIterate.forEachWithIndex(list, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                Assert.assertEquals(index, object - 1);
-            }
-        });
+        ArrayListIterate.forEachWithIndex(list, (object, index) -> Assert.assertEquals(index, object - 1));
     }
 
     @Test
@@ -857,17 +795,12 @@ public class ArrayListIterateTest
     @Test
     public void forEachInBoth()
     {
-        final MutableList<Pair<String, String>> list = Lists.mutable.of();
+        MutableList<Pair<String, String>> list = Lists.mutable.of();
         ArrayList<String> list1 = new ArrayList<String>(mList("1", "2"));
         ArrayList<String> list2 = new ArrayList<String>(mList("a", "b"));
-        ArrayListIterate.forEachInBoth(list1, list2,
-                new Procedure2<String, String>()
-                {
-                    public void value(String argument1, String argument2)
-                    {
-                        list.add(Tuples.twin(argument1, argument2));
-                    }
-                });
+        ArrayListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> {
+            list.add(Tuples.twin(argument1, argument2));
+        });
 
         Assert.assertEquals(FastList.newListWith(Tuples.twin("1", "a"), Tuples.twin("2", "b")), list);
     }
@@ -1030,18 +963,11 @@ public class ArrayListIterateTest
         list.add(new CollectionCreator(1));
         list.add(new CollectionCreator(2));
 
-        Function<CollectionCreator, Collection<Integer>> flatteningFunction = new Function<CollectionCreator, Collection<Integer>>()
-        {
-            public Collection<Integer> valueOf(CollectionCreator object)
-            {
-                return object.getCollection();
-            }
-        };
-        List<Integer> results1 = ArrayListIterate.flatCollect(list, flatteningFunction);
+        List<Integer> results1 = ArrayListIterate.flatCollect(list, CollectionCreator::getCollection);
         Verify.assertListsEqual(FastList.newListWith(1, 1, 2, 2), results1);
 
         MutableList<Integer> target1 = Lists.mutable.of();
-        MutableList<Integer> results2 = ArrayListIterate.flatCollect(list, flatteningFunction, target1);
+        MutableList<Integer> results2 = ArrayListIterate.flatCollect(list, CollectionCreator::getCollection, target1);
         Assert.assertSame(results2, target1);
 
         Verify.assertListsEqual(FastList.newListWith(1, 1, 2, 2), results2);
@@ -1204,13 +1130,7 @@ public class ArrayListIterateTest
     public void collectWithOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        ArrayList<String> result = ArrayListIterate.collectWith(list, new Function2<Integer, Integer, String>()
-        {
-            public String value(Integer argument1, Integer argument2)
-            {
-                return argument1.equals(argument2) ? "101" : null;
-            }
-        }, 101);
+        ArrayList<String> result = ArrayListIterate.collectWith(list, (argument1, argument2) -> argument1.equals(argument2) ? "101" : null, 101);
         Verify.assertSize(101, result);
         Verify.assertContainsAll(result, null, "101");
         Assert.assertEquals(100, Iterate.count(result, Predicates.isNull()));
@@ -1257,13 +1177,7 @@ public class ArrayListIterateTest
     {
         Sum result = new IntegerSum(0);
         Integer parameter = 2;
-        Function3<Sum, Integer, Integer, Sum> function = new Function3<Sum, Integer, Integer, Sum>()
-        {
-            public Sum value(Sum sum, Integer element, Integer withValue)
-            {
-                return sum.add((element.intValue() - element.intValue()) * withValue.intValue());
-            }
-        };
+        Function3<Sum, Integer, Integer, Sum> function = (sum, element, withValue) -> sum.add((element.intValue() - element.intValue()) * withValue.intValue());
         Sum sumOfDoubledValues = ArrayListIterate.injectIntoWith(result, this.getOver100IntegerList(), function, parameter);
         Assert.assertEquals(0, sumOfDoubledValues.getValue().intValue());
     }
@@ -1518,13 +1432,7 @@ public class ArrayListIterateTest
     public void groupByEachWithOptimisedList()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.toReverseList(1, 105));
-        Function<Integer, Iterable<String>> function = new Function<Integer, Iterable<String>>()
-        {
-            public Iterable<String> valueOf(Integer object)
-            {
-                return FastList.newListWith(object.toString(), object.toString() + '*');
-            }
-        };
+        Function<Integer, Iterable<String>> function = object -> FastList.newListWith(object.toString(), object.toString() + '*');
         MutableMultimap<String, Integer> target = new FastListMultimap<String, Integer>();
         MutableMultimap<String, Integer> result = ArrayListIterate.groupByEach(list, function, target);
         Assert.assertEquals(result.get("105"), FastList.newListWith(105));

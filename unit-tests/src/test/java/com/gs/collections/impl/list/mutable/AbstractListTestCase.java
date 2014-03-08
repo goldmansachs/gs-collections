@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.ListIterable;
@@ -79,12 +77,8 @@ public abstract class AbstractListTestCase
     @Test
     public void randomAccess_throws()
     {
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                new ListAdapter<Integer>(FastList.newListWith(1, 2, 3));
-            }
+        Verify.assertThrows(IllegalArgumentException.class, () -> {
+            new ListAdapter<Integer>(FastList.newListWith(1, 2, 3));
         });
     }
 
@@ -550,7 +544,7 @@ public abstract class AbstractListTestCase
     @Test
     public void forEachOnRange()
     {
-        final MutableList<Integer> list = this.newWith();
+        MutableList<Integer> list = this.newWith();
 
         list.addAll(FastList.newListWith(0, 1, 2, 3));
         list.addAll(FastList.newListWith(4, 5, 6));
@@ -563,25 +557,15 @@ public abstract class AbstractListTestCase
         this.validateForEachOnRange(list, 9, 9, FastList.newListWith(9));
         this.validateForEachOnRange(list, 0, 9, FastList.newListWith(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractListTestCase.this.validateForEachOnRange(list, 10, 10, FastList.<Integer>newList());
-            }
-        });
+        Verify.assertThrows(
+                IndexOutOfBoundsException.class,
+                () -> this.validateForEachOnRange(list, 10, 10, FastList.<Integer>newList()));
     }
 
     protected void validateForEachOnRange(MutableList<Integer> list, int from, int to, List<Integer> expectedOutput)
     {
-        final List<Integer> outputList = Lists.mutable.of();
-        list.forEach(from, to, new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                outputList.add(each);
-            }
-        });
+        List<Integer> outputList = Lists.mutable.of();
+        list.forEach(from, to, outputList::add);
 
         Assert.assertEquals(expectedOutput, outputList);
     }
@@ -589,7 +573,7 @@ public abstract class AbstractListTestCase
     @Test
     public void forEachWithIndexOnRange()
     {
-        final MutableList<Integer> list = this.newWith();
+        MutableList<Integer> list = this.newWith();
 
         list.addAll(FastList.newListWith(0, 1, 2, 3));
         list.addAll(FastList.newListWith(4, 5, 6));
@@ -601,13 +585,9 @@ public abstract class AbstractListTestCase
         this.validateForEachWithIndexOnRange(list, 4, 6, FastList.newListWith(4, 5, 6));
         this.validateForEachWithIndexOnRange(list, 9, 9, FastList.newListWith(9));
         this.validateForEachWithIndexOnRange(list, 0, 9, FastList.newListWith(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractListTestCase.this.validateForEachWithIndexOnRange(list, 10, 10, FastList.<Integer>newList());
-            }
-        });
+        Verify.assertThrows(
+                IndexOutOfBoundsException.class,
+                () -> this.validateForEachWithIndexOnRange(list, 10, 10, FastList.<Integer>newList()));
     }
 
     protected void validateForEachWithIndexOnRange(
@@ -616,14 +596,8 @@ public abstract class AbstractListTestCase
             int to,
             List<Integer> expectedOutput)
     {
-        final MutableList<Integer> outputList = Lists.mutable.of();
-        list.forEachWithIndex(from, to, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                outputList.add(each);
-            }
-        });
+        MutableList<Integer> outputList = Lists.mutable.of();
+        list.forEachWithIndex(from, to, (each, index) -> { outputList.add(each); });
 
         Assert.assertEquals(expectedOutput, outputList);
     }
@@ -678,29 +652,21 @@ public abstract class AbstractListTestCase
     @Test
     public void testGetWithIndexOutOfBoundsException()
     {
-        final Object item = new Object();
+        Object item = new Object();
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractListTestCase.this.newWith(item).get(1);
-            }
-        });
+        Verify.assertThrows(
+                IndexOutOfBoundsException.class,
+                () -> { this.newWith(item).get(1); });
     }
 
     @Test
     public void testGetWithArrayIndexOutOfBoundsException()
     {
-        final Object item = new Object();
+        Object item = new Object();
 
-        Verify.assertThrows(ArrayIndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractListTestCase.this.newWith(item).get(-1);
-            }
-        });
+        Verify.assertThrows(
+                ArrayIndexOutOfBoundsException.class,
+                () -> { this.newWith(item).get(-1); });
     }
 
     @Test

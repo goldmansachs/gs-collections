@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -46,14 +45,7 @@ public class ImmutableMap0To10MemoryTest
                 Map.class.getSimpleName(),
                 com.gs.collections.api.map.ImmutableMap.class.getSimpleName(),
                 ImmutableMap.class.getSimpleName());
-        IntProcedure procedure = new IntProcedure()
-        {
-            public void value(int size)
-            {
-                ImmutableMap0To10MemoryTest.this.memoryForScaledMaps(size);
-            }
-        };
-        IntInterval.zeroTo(10).forEach(procedure);
+        IntInterval.zeroTo(10).forEach(this::memoryForScaledMaps);
         LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 

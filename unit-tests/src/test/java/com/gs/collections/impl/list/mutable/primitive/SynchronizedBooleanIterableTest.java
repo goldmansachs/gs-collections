@@ -69,7 +69,7 @@ public class SynchronizedBooleanIterableTest extends AbstractBooleanIterableTest
     {
         BooleanIterable iterable = this.newWith(true, true, false, false);
         BooleanArrayList list = BooleanArrayList.newListWith(true, true, false, false);
-        final BooleanIterator iterator = iterable.booleanIterator();
+        BooleanIterator iterator = iterable.booleanIterator();
         for (int i = 0; i < 4; i++)
         {
             Assert.assertTrue(iterator.hasNext());
@@ -78,13 +78,7 @@ public class SynchronizedBooleanIterableTest extends AbstractBooleanIterableTest
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
     }
 
     @Override

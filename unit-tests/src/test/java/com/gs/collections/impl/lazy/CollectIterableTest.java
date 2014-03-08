@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package com.gs.collections.impl.lazy;
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.Interval;
@@ -51,14 +49,10 @@ public class CollectIterableTest extends AbstractLazyIterableTestCase
     public void forEachWithIndex()
     {
         InternalIterable<String> select = new CollectIterable<Integer, String>(Interval.oneTo(5), Functions.getToString());
-        final StringBuilder builder = new StringBuilder("");
-        select.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String object, int index)
-            {
-                builder.append(object);
-                builder.append(index);
-            }
+        StringBuilder builder = new StringBuilder("");
+        select.forEachWithIndex((object, index) -> {
+            builder.append(object);
+            builder.append(index);
         });
         Assert.assertEquals("1021324354", builder.toString());
     }
@@ -81,13 +75,7 @@ public class CollectIterableTest extends AbstractLazyIterableTestCase
     {
         InternalIterable<String> select = new CollectIterable<Integer, String>(Interval.oneTo(5), Functions.getToString());
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith(new Procedure2<String, StringBuilder>()
-        {
-            public void value(String each, StringBuilder aBuilder)
-            {
-                aBuilder.append(each);
-            }
-        }, builder);
+        select.forEachWith((each, aBuilder) -> { aBuilder.append(each); }, builder);
         Assert.assertEquals("12345", builder.toString());
     }
 

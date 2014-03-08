@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -195,104 +195,56 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     @Test
     public void collectInt()
     {
-        IntFunction<T> intFunction = new IntFunction<T>()
-        {
-            public int intValueOf(T anObject)
-            {
-                return anObject == null ? 0 : 1;
-            }
-        };
+        IntFunction<T> intFunction = anObject -> anObject == null ? 0 : 1;
         Verify.assertSize(this.getCollection().size(), this.getCollection().collectInt(intFunction));
     }
 
     @Test
     public void collectBoolean()
     {
-        BooleanFunction<T> booleanFunction = new BooleanFunction<T>()
-        {
-            public boolean booleanValueOf(T anObject)
-            {
-                return anObject == null;
-            }
-        };
+        BooleanFunction<T> booleanFunction = anObject -> anObject == null;
         Verify.assertSize(this.getCollection().size(), this.getCollection().collectBoolean(booleanFunction));
     }
 
     @Test
     public void collectByte()
     {
-        ByteFunction<T> byteFunction = new ByteFunction<T>()
-        {
-            public byte byteValueOf(T anObject)
-            {
-                return anObject == null ? (byte) 0 : (byte) 1;
-            }
-        };
+        ByteFunction<T> byteFunction = anObject -> anObject == null ? (byte) 0 : (byte) 1;
         Verify.assertSize(this.getCollection().size(), this.getCollection().collectByte(byteFunction));
     }
 
     @Test
     public void collectChar()
     {
-        CharFunction<T> charFunction = new CharFunction<T>()
-        {
-            public char charValueOf(T anObject)
-            {
-                return anObject == null ? '0' : '1';
-            }
-        };
+        CharFunction<T> charFunction = anObject -> anObject == null ? '0' : '1';
         Verify.assertSize(this.getCollection().size(), this.getCollection().collectChar(charFunction));
     }
 
     @Test
     public void collectDouble()
     {
-        DoubleFunction<T> doubleFunction = new DoubleFunction<T>()
-        {
-            public double doubleValueOf(T anObject)
-            {
-                return anObject == null ? 0.0d : 1.0d;
-            }
-        };
+        DoubleFunction<T> doubleFunction = anObject -> anObject == null ? 0.0d : 1.0d;
         Verify.assertSize(this.getCollection().size(), this.getCollection().collectDouble(doubleFunction));
     }
 
     @Test
     public void collectFloat()
     {
-        FloatFunction<T> floatFunction = new FloatFunction<T>()
-        {
-            public float floatValueOf(T anObject)
-            {
-                return anObject == null ? 0.0f : 1.0f;
-            }
-        };
+        FloatFunction<T> floatFunction = anObject -> anObject == null ? 0.0f : 1.0f;
         Verify.assertSize(this.getCollection().size(), this.getCollection().collectFloat(floatFunction));
     }
 
     @Test
     public void collectLong()
     {
-        LongFunction<T> longFunction = new LongFunction<T>()
-        {
-            public long longValueOf(T anObject)
-            {
-                return anObject == null ? 0L : 1L;
-            }
-        };
+        LongFunction<T> longFunction = anObject -> anObject == null ? 0L : 1L;
         Verify.assertSize(this.getCollection().size(), this.getCollection().collectLong(longFunction));
     }
 
     @Test
     public void collectShort()
     {
-        ShortFunction<T> shortFunction = new ShortFunction<T>()
-        {
-            public short shortValueOf(T anObject)
-            {
-                return (short) (anObject == null ? 0 : 1);
-            }
-        };
+        ShortFunction<T> shortFunction = anObject -> (short) (anObject == null ? 0 : 1);
         Verify.assertSize(this.getCollection().size(), this.getCollection().collectShort(shortFunction));
     }
 
@@ -380,13 +332,7 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
         MutableCollection<Object> collection = (MutableCollection<Object>) this.getCollection();
         Assert.assertEquals(
                 this.getCollection().toBag(),
-                collection.flatCollect(new Function<Object, Iterable<Object>>()
-                {
-                    public Iterable<Object> valueOf(Object object)
-                    {
-                        return Lists.fixedSize.of(object);
-                    }
-                }).toBag());
+                collection.flatCollect((Function<Object, Iterable<Object>>) Lists.fixedSize::of).toBag());
     }
 
     @Test(expected = UnsupportedOperationException.class)

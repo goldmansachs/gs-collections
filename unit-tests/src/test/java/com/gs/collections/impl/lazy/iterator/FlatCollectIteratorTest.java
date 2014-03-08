@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.lazy.iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.factory.Lists;
 import org.junit.Assert;
@@ -27,24 +26,16 @@ import org.junit.Test;
 
 public class FlatCollectIteratorTest
 {
-    private static final Function<Object, Iterable<Object>> FUNCTION = new Function<Object, Iterable<Object>>()
-    {
-        public Iterable<Object> valueOf(Object object)
-        {
-            return null;
-        }
-    };
-
     @Test(expected = NoSuchElementException.class)
     public void nextIfDoesntHaveAnything()
     {
-        new FlatCollectIterator<Object, Object>(Lists.immutable.of(), FUNCTION).next();
+        new FlatCollectIterator<Object, Object>(Lists.immutable.of(), object -> null).next();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void removeIsUnsupported()
     {
-        new FlatCollectIterator<Object, Object>(Lists.immutable.of().iterator(), FUNCTION).remove();
+        new FlatCollectIterator<Object, Object>(Lists.immutable.of().iterator(), object -> null).remove();
     }
 
     @Test

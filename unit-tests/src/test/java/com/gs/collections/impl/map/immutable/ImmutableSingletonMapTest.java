@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package com.gs.collections.impl.map.immutable;
 
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
@@ -173,15 +171,9 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     public void forEachWith()
     {
         super.forEachWith();
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         ImmutableMap<Integer, Integer> map = new ImmutableSingletonMap<Integer, Integer>(1, 1);
-        map.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 10);
+        map.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 10);
         Assert.assertEquals(FastList.newListWith(11), result);
     }
 
@@ -190,15 +182,11 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     public void forEachWithIndex()
     {
         super.forEachWithIndex();
-        final MutableList<String> result = Lists.mutable.of();
+        MutableList<String> result = Lists.mutable.of();
         ImmutableMap<Integer, String> map = new ImmutableSingletonMap<Integer, String>(1, "One");
-        map.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String value, int index)
-            {
-                result.add(value);
-                result.add(String.valueOf(index));
-            }
+        map.forEachWithIndex((value, index) -> {
+            result.add(value);
+            result.add(String.valueOf(index));
         });
         Assert.assertEquals(FastList.newListWith("One", "0"), result);
     }

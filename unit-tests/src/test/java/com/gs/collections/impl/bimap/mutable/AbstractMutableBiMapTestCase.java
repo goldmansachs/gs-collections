@@ -21,7 +21,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.bimap.BiMap;
 import com.gs.collections.api.bimap.MutableBiMap;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.MutableSet;
@@ -115,7 +114,7 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
     @Test
     public void put()
     {
-        final MutableBiMap<Integer, Character> biMap = this.classUnderTest();
+        MutableBiMap<Integer, Character> biMap = this.classUnderTest();
         Assert.assertNull(biMap.put(4, 'd'));
         assertBiMapsEqual(HashBiMap.newWithKeysValues(1, null, null, 'b', 3, 'c', 4, 'd'), biMap);
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, null, null, 'b', 3, 'c', 4, 'd'), biMap);
@@ -132,24 +131,12 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
         Verify.assertSize(4, biMap);
         Verify.assertSize(4, biMap.inverse());
 
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                biMap.put(5, 'e');
-            }
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> { biMap.put(5, 'e'); });
         assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'e', null, 'b', 3, 'c', 4, 'd'), biMap);
         Verify.assertSize(4, biMap);
         Verify.assertSize(4, biMap.inverse());
 
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                biMap.put(4, 'e');
-            }
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> { biMap.put(4, 'e'); });
         assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'e', null, 'b', 3, 'c', 4, 'd'), biMap);
         Verify.assertSize(4, biMap);
         Verify.assertSize(4, biMap.inverse());
@@ -420,15 +407,9 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
         MutableSet<Character> expected = UnifiedSet.newSetWith(null, 'b', 'c');
         MutableSet<Character> actual = UnifiedSet.newSet();
         MutableBiMap<Integer, Character> biMap = this.classUnderTest();
-        final Iterator<Character> iterator = biMap.iterator();
+        Iterator<Character> iterator = biMap.iterator();
         Assert.assertTrue(iterator.hasNext());
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.remove();
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> {iterator.remove();});
         Verify.assertSize(3, biMap);
         Verify.assertSize(3, biMap.inverse());
         for (int i = 0; i < 3; i++)
@@ -438,15 +419,9 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
         }
         Assert.assertEquals(expected, actual);
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
 
-        final Iterator<Character> iteratorRemove = biMap.iterator();
+        Iterator<Character> iteratorRemove = biMap.iterator();
 
         Assert.assertTrue(iteratorRemove.hasNext());
         Character first = iteratorRemove.next();
@@ -477,13 +452,7 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
         Verify.assertEmpty(biMap.inverse());
 
         Assert.assertFalse(iteratorRemove.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iteratorRemove.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iteratorRemove.next();});
     }
 
     @Override
@@ -491,13 +460,7 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
     public void updateValueWith()
     {
         MutableBiMap<Integer, Character> biMap = this.classUnderTest();
-        Function2<Character, Boolean, Character> toUpperOrLowerCase = new Function2<Character, Boolean, Character>()
-        {
-            public Character value(Character character, Boolean parameter)
-            {
-                return parameter ? Character.toUpperCase(character) : Character.toLowerCase(character);
-            }
-        };
+        Function2<Character, Boolean, Character> toUpperOrLowerCase = (character, parameter) -> parameter ? Character.toUpperCase(character) : Character.toLowerCase(character);
         Assert.assertEquals(Character.valueOf('D'), biMap.updateValueWith(4, Functions0.value('d'), toUpperOrLowerCase, true));
         assertBiMapsEqual(HashBiMap.newWithKeysValues(1, null, null, 'b', 3, 'c', 4, 'D'), biMap);
         Assert.assertEquals(Character.valueOf('B'), biMap.updateValueWith(null, Functions0.value('d'), toUpperOrLowerCase, true));
@@ -511,16 +474,9 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
     public void updateValue()
     {
         MutableBiMap<Integer, Character> biMap = this.classUnderTest();
-        Function<Character, Character> toUpperCase = new Function<Character, Character>()
-        {
-            public Character valueOf(Character character)
-            {
-                return Character.toUpperCase(character);
-            }
-        };
-        Assert.assertEquals(Character.valueOf('D'), biMap.updateValue(4, Functions0.value('d'), toUpperCase));
+        Assert.assertEquals(Character.valueOf('D'), biMap.updateValue(4, Functions0.value('d'), Character::toUpperCase));
         assertBiMapsEqual(HashBiMap.newWithKeysValues(1, null, null, 'b', 3, 'c', 4, 'D'), biMap);
-        Assert.assertEquals(Character.valueOf('B'), biMap.updateValue(null, Functions0.value('d'), toUpperCase));
+        Assert.assertEquals(Character.valueOf('B'), biMap.updateValue(null, Functions0.value('d'), Character::toUpperCase));
         assertBiMapsEqual(HashBiMap.newWithKeysValues(1, null, null, 'B', 3, 'c', 4, 'D'), biMap);
     }
 

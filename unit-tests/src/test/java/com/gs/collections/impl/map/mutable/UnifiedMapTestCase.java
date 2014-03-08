@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
@@ -258,15 +256,9 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         return this.populateMapWithCollisionsOfSize(size, map);
     }
 
-    protected <M extends MutableMap<Integer, Integer>> M populateMapWithCollisionsOfSize(int size, final M map)
+    protected <M extends MutableMap<Integer, Integer>> M populateMapWithCollisionsOfSize(int size, M map)
     {
-        MORE_COLLISIONS.subList(0, size).forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.put(each, each);
-            }
-        });
+        MORE_COLLISIONS.subList(0, size).forEach((Procedure<Integer>) each -> { map.put(each, each); });
         return map;
     }
 
@@ -450,16 +442,12 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         for (int i = 1; i < COLLISIONS.size(); i++)
         {
             MutableMap<Integer, Integer> map = this.mapWithCollisionsOfSize(i);
-            final Object sentinal = new Object();
-            final UnifiedSet<Integer> result = UnifiedSet.newSet();
-            map.forEachWith(new Procedure2<Integer, Object>()
-            {
-                public void value(Integer argument1, Object argument2)
-                {
-                    Assert.assertSame(sentinal, argument2);
-                    result.add(argument1);
-                }
-            }, sentinal);
+            Object sentinel = new Object();
+            UnifiedSet<Integer> result = UnifiedSet.newSet();
+            map.forEachWith((argument1, argument2) -> {
+                Assert.assertSame(sentinel, argument2);
+                result.add(argument1);
+            }, sentinel);
             Assert.assertEquals(map.keySet(), result);
         }
     }
@@ -724,30 +712,18 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
     {
         super.forEachWithIndex();
 
-        final UnifiedSet<String> set = UnifiedSet.newSet();
+        UnifiedSet<String> set = UnifiedSet.newSet();
 
         // map with a chain and no empty slots
         MutableMap<Integer, Integer> map = this.mapWithCollisionsOfSize(2);
-        map.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                set.add(index + ":" + each.toString());
-            }
-        });
+        map.forEachWithIndex((each, index) -> { set.add(index + ":" + each.toString()); });
         Assert.assertEquals(UnifiedSet.newSetWith("0:0", "1:17"), set);
 
         set.clear();
 
         // map with a chain and empty slots
         MutableMap<Integer, Integer> map2 = this.mapWithCollisionsOfSize(5);
-        map2.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                set.add(index + ":" + each.toString());
-            }
-        });
+        map2.forEachWithIndex((each, index) -> { set.add(index + ":" + each.toString()); });
         Assert.assertEquals(UnifiedSet.newSetWith("0:0", "1:17", "2:34", "3:51", "4:68"), set);
     }
 
@@ -757,17 +733,11 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
     {
         super.forEachKey();
 
-        final UnifiedSet<String> set = UnifiedSet.newSet(5);
+        UnifiedSet<String> set = UnifiedSet.newSet(5);
 
         // map with a chain and empty slots
         MutableMap<Integer, Integer> map = this.mapWithCollisionsOfSize(5);
-        map.forEachKey(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                set.add(each.toString());
-            }
-        });
+        map.forEachKey(each -> { set.add(each.toString()); });
         Assert.assertEquals(UnifiedSet.newSetWith("0", "17", "34", "51", "68"), set);
     }
 
@@ -778,14 +748,10 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         super.forEachValue();
 
         MutableMap<Integer, Integer> map = this.mapWithCollisionsOfSize(9).withKeyValue(null, null);
-        final MutableSet<Integer> result = UnifiedSet.newSet();
-        map.forEachValue(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                Assert.assertTrue(each == null || each.getClass() == Integer.class);
-                result.add(each);
-            }
+        MutableSet<Integer> result = UnifiedSet.newSet();
+        map.forEachValue(each -> {
+            Assert.assertTrue(each == null || each.getClass() == Integer.class);
+            result.add(each);
         });
         Assert.assertEquals(MORE_COLLISIONS.toSet().with(null), result);
     }

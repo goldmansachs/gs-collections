@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,326 +47,262 @@ public class CheckedBlocksTest
     @Test
     public void checkedFunction2CheckedException()
     {
-        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, new Runnable()
-        {
-            public void run()
-            {
-                CheckedFunction2<String, String, String> block =
-                        new CheckedFunction2<String, String, String>()
+        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, () -> {
+            CheckedFunction2<String, String, String> block =
+                    new CheckedFunction2<String, String, String>()
+                    {
+                        @Override
+                        public String safeValue(String argument1, String argument2) throws IOException
                         {
-                            @Override
-                            public String safeValue(String argument1, String argument2) throws IOException
-                            {
-                                throw new IOException("fail");
-                            }
-                        };
-                block.value("1", "2");
-            }
+                            throw new IOException("fail");
+                        }
+                    };
+            block.value("1", "2");
         });
     }
 
     @Test
     public void checkedFunction2RuntimeException()
     {
-        Verify.assertThrows(LocalException.class, new Runnable()
-        {
-            public void run()
-            {
-                CheckedFunction2<String, String, String> block =
-                        new CheckedFunction2<String, String, String>()
+        Verify.assertThrows(LocalException.class, () -> {
+            CheckedFunction2<String, String, String> block =
+                    new CheckedFunction2<String, String, String>()
+                    {
+                        @Override
+                        public String safeValue(String argument1, String argument2)
                         {
-                            @Override
-                            public String safeValue(String argument1, String argument2)
-                            {
-                                throw new LocalException();
-                            }
-                        };
-                block.value("1", "2");
-            }
+                            throw new LocalException();
+                        }
+                    };
+            block.value("1", "2");
         });
     }
 
     @Test
     public void checkedCodeBlockCheckedException()
     {
-        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, () -> {
+            CheckedFunction0<String> function = new CheckedFunction0<String>()
             {
-                CheckedFunction0<String> function = new CheckedFunction0<String>()
+                @Override
+                public String safeValue() throws IOException
                 {
-                    @Override
-                    public String safeValue() throws IOException
-                    {
-                        throw new IOException("fail");
-                    }
-                };
-                function.value();
-            }
+                    throw new IOException("fail");
+                }
+            };
+            function.value();
         });
     }
 
     @Test
     public void checkedCodeBlockRuntimeException()
     {
-        Verify.assertThrows(LocalException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrows(LocalException.class, () -> {
+            CheckedFunction0<String> function = new CheckedFunction0<String>()
             {
-                CheckedFunction0<String> function = new CheckedFunction0<String>()
+                @Override
+                public String safeValue()
                 {
-                    @Override
-                    public String safeValue()
-                    {
-                        throw new LocalException();
-                    }
-                };
-                function.value();
-            }
+                    throw new LocalException();
+                }
+            };
+            function.value();
         });
     }
 
     @Test
     public void checkedProcedureCheckedException()
     {
-        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, () -> {
+            CheckedProcedure<String> block = new CheckedProcedure<String>()
             {
-                CheckedProcedure<String> block = new CheckedProcedure<String>()
+                @Override
+                public void safeValue(String object) throws IOException
                 {
-                    @Override
-                    public void safeValue(String object) throws IOException
-                    {
-                        throw new IOException("fail");
-                    }
-                };
-                block.value("1");
-            }
+                    throw new IOException("fail");
+                }
+            };
+            block.value("1");
         });
     }
 
     @Test
     public void checkedProcedureRuntimeException()
     {
-        Verify.assertThrows(LocalException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrows(LocalException.class, () -> {
+            CheckedProcedure<String> block = new CheckedProcedure<String>()
             {
-                CheckedProcedure<String> block = new CheckedProcedure<String>()
+                @Override
+                public void safeValue(String object)
                 {
-                    @Override
-                    public void safeValue(String object)
-                    {
-                        throw new LocalException();
-                    }
-                };
-                block.value("1");
-            }
+                    throw new LocalException();
+                }
+            };
+            block.value("1");
         });
     }
 
     @Test
     public void checkedObjectIntProcedureCheckedException()
     {
-        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, () -> {
+            CheckedObjectIntProcedure<String> block = new CheckedObjectIntProcedure<String>()
             {
-                CheckedObjectIntProcedure<String> block = new CheckedObjectIntProcedure<String>()
+                @Override
+                public void safeValue(String object, int index) throws IOException
                 {
-                    @Override
-                    public void safeValue(String object, int index) throws IOException
-                    {
-                        throw new IOException("fail");
-                    }
-                };
-                block.value("1", 1);
-            }
+                    throw new IOException("fail");
+                }
+            };
+            block.value("1", 1);
         });
     }
 
     @Test
     public void checkedObjectIntProcedureRuntimeException()
     {
-        Verify.assertThrows(LocalException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrows(LocalException.class, () -> {
+            CheckedObjectIntProcedure<String> block = new CheckedObjectIntProcedure<String>()
             {
-                CheckedObjectIntProcedure<String> block = new CheckedObjectIntProcedure<String>()
+                @Override
+                public void safeValue(String object, int index)
                 {
-                    @Override
-                    public void safeValue(String object, int index)
-                    {
-                        throw new LocalException();
-                    }
-                };
-                block.value("1", 1);
-            }
+                    throw new LocalException();
+                }
+            };
+            block.value("1", 1);
         });
     }
 
     @Test
     public void checkedFunctionCheckedException()
     {
-        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, new Runnable()
-        {
-            public void run()
-            {
-                CheckedFunction<String, String> block =
-                        new CheckedFunction<String, String>()
+        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, () -> {
+            CheckedFunction<String, String> block =
+                    new CheckedFunction<String, String>()
+                    {
+                        @Override
+                        public String safeValueOf(String object) throws IOException
                         {
-                            @Override
-                            public String safeValueOf(String object) throws IOException
-                            {
-                                throw new IOException("fail");
-                            }
-                        };
-                block.valueOf("1");
-            }
+                            throw new IOException("fail");
+                        }
+                    };
+            block.valueOf("1");
         });
     }
 
     @Test
     public void checkedFunctionRuntimeException()
     {
-        Verify.assertThrows(LocalException.class, new Runnable()
-        {
-            public void run()
-            {
-                CheckedFunction<String, String> block =
-                        new CheckedFunction<String, String>()
+        Verify.assertThrows(LocalException.class, () -> {
+            CheckedFunction<String, String> block =
+                    new CheckedFunction<String, String>()
+                    {
+                        @Override
+                        public String safeValueOf(String object)
                         {
-                            @Override
-                            public String safeValueOf(String object)
-                            {
-                                throw new LocalException();
-                            }
-                        };
-                block.valueOf("1");
-            }
+                            throw new LocalException();
+                        }
+                    };
+            block.valueOf("1");
         });
     }
 
     @Test
     public void checkedPredicateCheckedException()
     {
-        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, () -> {
+            CheckedPredicate<String> block = new CheckedPredicate<String>()
             {
-                CheckedPredicate<String> block = new CheckedPredicate<String>()
+                @Override
+                public boolean safeAccept(String object) throws IOException
                 {
-                    @Override
-                    public boolean safeAccept(String object) throws IOException
-                    {
-                        throw new IOException("fail");
-                    }
-                };
-                block.accept("1");
-            }
+                    throw new IOException("fail");
+                }
+            };
+            block.accept("1");
         });
     }
 
     @Test
     public void checkedPredicateRuntimeException()
     {
-        Verify.assertThrows(LocalException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrows(LocalException.class, () -> {
+            CheckedPredicate<String> block = new CheckedPredicate<String>()
             {
-                CheckedPredicate<String> block = new CheckedPredicate<String>()
+                @Override
+                public boolean safeAccept(String object)
                 {
-                    @Override
-                    public boolean safeAccept(String object)
-                    {
-                        throw new LocalException();
-                    }
-                };
-                block.accept("1");
-            }
+                    throw new LocalException();
+                }
+            };
+            block.accept("1");
         });
     }
 
     @Test
     public void checkedPredicate2CheckedException()
     {
-        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, new Runnable()
-        {
-            public void run()
-            {
-                CheckedPredicate2<String, String> block =
-                        new CheckedPredicate2<String, String>()
+        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, () -> {
+            CheckedPredicate2<String, String> block =
+                    new CheckedPredicate2<String, String>()
+                    {
+                        @Override
+                        public boolean safeAccept(String object, String param) throws IOException
                         {
-                            @Override
-                            public boolean safeAccept(String object, String param) throws IOException
-                            {
-                                throw new IOException("fail");
-                            }
-                        };
-                block.accept("1", "2");
-            }
+                            throw new IOException("fail");
+                        }
+                    };
+            block.accept("1", "2");
         });
     }
 
     @Test
     public void checkedPredicate2RuntimeException()
     {
-        Verify.assertThrows(LocalException.class, new Runnable()
-        {
-            public void run()
-            {
-                CheckedPredicate2<String, String> block =
-                        new CheckedPredicate2<String, String>()
+        Verify.assertThrows(LocalException.class, () -> {
+            CheckedPredicate2<String, String> block =
+                    new CheckedPredicate2<String, String>()
+                    {
+                        @Override
+                        public boolean safeAccept(String object, String param)
                         {
-                            @Override
-                            public boolean safeAccept(String object, String param)
-                            {
-                                throw new LocalException();
-                            }
-                        };
-                block.accept("1", "2");
-            }
+                            throw new LocalException();
+                        }
+                    };
+            block.accept("1", "2");
         });
     }
 
     @Test
     public void checkedProcedure2CheckedException()
     {
-        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, () -> {
+            CheckedProcedure2<String, String> block = new CheckedProcedure2<String, String>()
             {
-                CheckedProcedure2<String, String> block = new CheckedProcedure2<String, String>()
+                @Override
+                public void safeValue(String object, String parameter) throws IOException
                 {
-                    @Override
-                    public void safeValue(String object, String parameter) throws IOException
-                    {
-                        throw new IOException("fail");
-                    }
-                };
-                block.value("1", "2");
-            }
+                    throw new IOException("fail");
+                }
+            };
+            block.value("1", "2");
         });
     }
 
     @Test
     public void checkedProcedure2RuntimeException()
     {
-        Verify.assertThrows(LocalException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrows(LocalException.class, () -> {
+            CheckedProcedure2<String, String> block = new CheckedProcedure2<String, String>()
             {
-                CheckedProcedure2<String, String> block = new CheckedProcedure2<String, String>()
+                @Override
+                public void safeValue(String object, String parameter)
                 {
-                    @Override
-                    public void safeValue(String object, String parameter)
-                    {
-                        throw new LocalException();
-                    }
-                };
-                block.value("1", "2");
-            }
+                    throw new LocalException();
+                }
+            };
+            block.value("1", "2");
         });
     }
 

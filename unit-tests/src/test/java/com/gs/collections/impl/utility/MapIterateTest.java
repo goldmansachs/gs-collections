@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import java.util.Map;
 
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
@@ -124,21 +123,9 @@ public class MapIterateTest
     {
         MutableMap<Locale, Currency> input = Maps.fixedSize.of(Locale.UK, Currency.getInstance(Locale.UK), Locale.JAPAN, Currency.getInstance(Locale.JAPAN));
 
-        Function<Locale, String> countryFunction = new Function<Locale, String>()
-        {
-            public String valueOf(Locale locale)
-            {
-                return locale.getCountry();
-            }
-        };
-        Function<Currency, String> currencyCodeFunction = new Function<Currency, String>()
-        {
-            public String valueOf(Currency currency)
-            {
-                return currency.getCurrencyCode();
-            }
-        };
-        MutableMap<String, String> result = MapIterate.collect(input, countryFunction, currencyCodeFunction);
+        Function<Locale, String> getCountry = Locale::getCountry;
+        Function<Currency, String> getCurrencyCode = Currency::getCurrencyCode;
+        MutableMap<String, String> result = MapIterate.collect(input, getCountry, getCurrencyCode);
         Verify.assertContainsKeyValue("GB", "GBP", result);
         Verify.assertContainsKeyValue("JP", "JPY", result);
         Verify.assertSize(2, result);
@@ -149,13 +136,8 @@ public class MapIterateTest
     {
         MutableMap<Locale, Currency> input = Maps.fixedSize.of(Locale.UK, Currency.getInstance(Locale.UK), Locale.JAPAN, Currency.getInstance(Locale.JAPAN));
 
-        MutableMap<String, String> result = MapIterate.collect(input, new Function2<Locale, Currency, Pair<String, String>>()
-        {
-            public Pair<String, String> value(Locale locale, Currency currency)
-            {
-                return Tuples.pair(locale.getDisplayCountry() + ':' + currency.getCurrencyCode(), currency.getCurrencyCode());
-            }
-        });
+        Function2<Locale, Currency, Pair<String, String>> function = (locale, currency) -> Tuples.pair(locale.getDisplayCountry() + ':' + currency.getCurrencyCode(), currency.getCurrencyCode());
+        MutableMap<String, String> result = MapIterate.collect(input, function);
 
         Verify.assertContainsKeyValue("United Kingdom:GBP", "GBP", result);
         Verify.assertContainsKeyValue("Japan:JPY", "JPY", result);
@@ -167,19 +149,7 @@ public class MapIterateTest
     {
         MutableMap<Locale, Currency> input = UnifiedMap.newWithKeysValues(Locale.UK, Currency.getInstance(Locale.UK), Locale.JAPAN, Currency.getInstance(Locale.JAPAN), Locale.CHINA, Currency.getInstance(Locale.GERMANY), Locale.GERMANY, Currency.getInstance(Locale.CHINA));
 
-        MutableMap<String, String> result = MapIterate.collectIf(input, new Function2<Locale, Currency, Pair<String, String>>()
-                {
-                    public Pair<String, String> value(Locale locale, Currency currency)
-                    {
-                        return Tuples.pair(locale.getDisplayCountry() + ':' + currency.getCurrencyCode(), currency.getCurrencyCode());
-                    }
-                }, new Predicate2<Locale, Currency>()
-                {
-                    public boolean accept(Locale locale, Currency currency)
-                    {
-                        return Currency.getInstance(locale).equals(currency);
-                    }
-                });
+        MutableMap<String, String> result = MapIterate.collectIf(input, (locale, currency) -> Tuples.pair(locale.getDisplayCountry() + ':' + currency.getCurrencyCode(), currency.getCurrencyCode()), (locale, currency) -> Currency.getInstance(locale).equals(currency));
 
         Verify.assertContainsKeyValue("United Kingdom:GBP", "GBP", result);
         Verify.assertContainsKeyValue("Japan:JPY", "JPY", result);
@@ -326,20 +296,13 @@ public class MapIterateTest
     {
         MutableMap<String, String> unifiedMap = UnifiedMap.newMap();
         Map<String, String> hashMap = new HashMap<String, String>();
-        Function0<String> function = new Function0<String>()
-        {
-            public String value()
-            {
-                //noinspection RedundantStringConstructorCall
-                return new String("value");  // deliberate copy of "value" for testing purposes
-            }
-        };
-        String value1 = MapIterate.getIfAbsentPut(unifiedMap, "key", function);
-        String value2 = MapIterate.getIfAbsentPut(unifiedMap, "key", function);
+        String value = new String("value");
+        String value1 = MapIterate.getIfAbsentPut(unifiedMap, "key", () -> value);
+        String value2 = MapIterate.getIfAbsentPut(unifiedMap, "key", () -> value);
         Assert.assertEquals("value", value1);
         Assert.assertSame(value1, value2);
-        String value3 = MapIterate.getIfAbsentPut(hashMap, "key", function);
-        String value4 = MapIterate.getIfAbsentPut(hashMap, "key", function);
+        String value3 = MapIterate.getIfAbsentPut(hashMap, "key", () -> value);
+        String value4 = MapIterate.getIfAbsentPut(hashMap, "key", () -> value);
         Assert.assertEquals("value", value3);
         Assert.assertSame(value3, value4);
     }
@@ -348,13 +311,7 @@ public class MapIterateTest
     public void getIfAbsentPutWith()
     {
         MutableMap<String, String> map = UnifiedMap.newMap();
-        Function<String, String> function = new Function<String, String>()
-        {
-            public String valueOf(String object)
-            {
-                return "value:" + object;
-            }
-        };
+        Function<String, String> function = object -> "value:" + object;
         String value1 = MapIterate.getIfAbsentPutWith(map, "key", function, "1");
         String value2 = MapIterate.getIfAbsentPutWith(map, "key", function, "2");
         Assert.assertSame(value1, value2);
@@ -365,14 +322,7 @@ public class MapIterateTest
     {
         MutableMap<String, String> map = UnifiedMap.newMap();
         map.put("nullValueKey", null);
-        Function0<String> function = new Function0<String>()
-        {
-            public String value()
-            {
-                return "aValue";
-            }
-        };
-        Assert.assertNull(MapIterate.getIfAbsentPut(map, "nullValueKey", function));
+        Assert.assertNull(MapIterate.getIfAbsentPut(map, "nullValueKey", () -> "aValue"));
     }
 
     @Test
@@ -380,24 +330,16 @@ public class MapIterateTest
     {
         MutableMap<String, String> unifiedMap = UnifiedMap.newMapWith(Tuples.pair("key1", "key1Value"));
         Map<String, String> hashMap = new HashMap<String, String>(unifiedMap);
-        Function0<String> function = new Function0<String>()
-        {
-            public String value()
-            {
-                //noinspection RedundantStringConstructorCall
-                return new String("value");  // a deliberate copy of the string
-            }
-        };
-        String value1 = MapIterate.getIfAbsent(unifiedMap, "key", function);
-        String value2 = MapIterate.getIfAbsent(unifiedMap, "key", function);
-        String value3 = MapIterate.getIfAbsent(hashMap, "key", function);
+        String value1 = MapIterate.getIfAbsent(unifiedMap, "key", () -> new String("value"));
+        String value2 = MapIterate.getIfAbsent(unifiedMap, "key", () -> new String("value"));
+        String value3 = MapIterate.getIfAbsent(hashMap, "key", () -> new String("value"));
         Assert.assertEquals("value", value1);
         Assert.assertEquals("value", value2);
         Assert.assertEquals("value", value3);
         Assert.assertNotSame(value1, value2);
         Assert.assertNotSame(value1, value3);
-        Assert.assertEquals("key1Value", MapIterate.getIfAbsent(hashMap, "key1", function));
-        Assert.assertEquals("key1Value", MapIterate.getIfAbsent(unifiedMap, "key1", function));
+        Assert.assertEquals("key1Value", MapIterate.getIfAbsent(hashMap, "key1", () -> new String("value")));
+        Assert.assertEquals("key1Value", MapIterate.getIfAbsent(unifiedMap, "key1", () -> new String("value")));
     }
 
     @Test
@@ -428,38 +370,19 @@ public class MapIterateTest
     public void withNullValue()
     {
         MutableMap<String, String> map = UnifiedMap.newWithKeysValues("key", null);
-        Function0<String> function = new Function0<String>()
-        {
-            public String value()
-            {
-                return "value";
-            }
-        };
-        Assert.assertNull(MapIterate.getIfAbsent(map, "key", function));
-        Assert.assertNull(MapIterate.getIfAbsentPut(map, "key", function));
-        Assert.assertEquals("result", MapIterate.ifPresentApply(map, "key", new Function<String, Object>()
-        {
-            public Object valueOf(String object)
-            {
-                return "result";
-            }
-        }));
+        String value = "value";
+        Assert.assertNull(MapIterate.getIfAbsent(map, "key", () -> value));
+        Assert.assertNull(MapIterate.getIfAbsentPut(map, "key", () -> value));
+        Assert.assertEquals("result", MapIterate.ifPresentApply(map, "key", object -> "result"));
     }
 
     @Test
     public void ifPresentApply()
     {
-        Function<String, String> function = new Function<String, String>()
-        {
-            public String valueOf(String anObject)
-            {
-                return anObject.toUpperCase();
-            }
-        };
         MutableMap<String, String> unifiedMap = UnifiedMap.newWithKeysValues("testKey", "testValue");
         Map<String, String> hashMap = new HashMap<String, String>(unifiedMap);
-        Assert.assertEquals("TESTVALUE", MapIterate.ifPresentApply(unifiedMap, "testKey", function));
-        Assert.assertEquals("TESTVALUE", MapIterate.ifPresentApply(hashMap, "testKey", function));
+        Assert.assertEquals("TESTVALUE", MapIterate.ifPresentApply(unifiedMap, "testKey", String::toUpperCase));
+        Assert.assertEquals("TESTVALUE", MapIterate.ifPresentApply(hashMap, "testKey", String::toUpperCase));
     }
 
     @Test
@@ -469,13 +392,7 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        MutableMap<String, String> resultMap = MapIterate.selectMapOnEntry(map, new Predicate2<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return "1".equals(argument1) || "1".equals(argument2);
-            }
-        });
+        MutableMap<String, String> resultMap = MapIterate.selectMapOnEntry(map, (argument1, argument2) -> "1".equals(argument1) || "1".equals(argument2));
         Verify.assertSize(2, resultMap);
         Verify.assertContainsKeyValue("1", "2", resultMap);
         Verify.assertContainsKeyValue("2", "1", resultMap);
@@ -488,13 +405,7 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        MutableMap<String, String> resultMap = MapIterate.rejectMapOnEntry(map, new Predicate2<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return "1".equals(argument1) || "1".equals(argument2);
-            }
-        });
+        MutableMap<String, String> resultMap = MapIterate.rejectMapOnEntry(map, (argument1, argument2) -> "1".equals(argument1) || "1".equals(argument2));
         Verify.assertSize(1, resultMap);
         Verify.assertContainsKeyValue("3", "3", resultMap);
     }
@@ -693,7 +604,8 @@ public class MapIterateTest
 
     @Test
     public void collectByteWithTarget()
-    {   ByteHashBag target = new ByteHashBag();
+    {
+        ByteHashBag target = new ByteHashBag();
         ByteHashBag result = MapIterate.collectByte(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToByte(), target);
         Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2), result.toBag());
         Assert.assertSame("Target sent as parameter was not returned as result", target, result);
@@ -798,13 +710,7 @@ public class MapIterateTest
     @Test
     public void collectValues()
     {
-        MutableMap<Character, String> result = MapIterate.collectValues(newLittleMap(), new Function2<Character, Integer, String>()
-        {
-            public String value(Character argument1, Integer argument2)
-            {
-                return argument2.toString();
-            }
-        });
+        MutableMap<Character, String> result = MapIterate.collectValues(newLittleMap(), (argument1, argument2) -> argument2.toString());
         Assert.assertEquals(UnifiedMap.newWithKeysValues('a', "1", 'b', "2").toBag(), result.toBag());
     }
 

@@ -22,8 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
@@ -87,16 +85,12 @@ public abstract class ImmutableMapTestCase
     @Test
     public void forEachKeyValue()
     {
-        final MutableSet<Integer> actualKeys = UnifiedSet.newSet();
-        final MutableSet<String> actualValues = UnifiedSet.newSet();
+        MutableSet<Integer> actualKeys = UnifiedSet.newSet();
+        MutableSet<String> actualValues = UnifiedSet.newSet();
 
-        this.classUnderTest().forEachKeyValue(new Procedure2<Integer, String>()
-        {
-            public void value(Integer key, String value)
-            {
-                actualKeys.add(key);
-                actualValues.add(value);
-            }
+        this.classUnderTest().forEachKeyValue((key, value) -> {
+            actualKeys.add(key);
+            actualValues.add(value);
         });
 
         MutableSet<Integer> expectedKeys = this.expectedKeys();
@@ -144,13 +138,9 @@ public abstract class ImmutableMapTestCase
     @Test
     public void iteratorThrows()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                Iterator<String> iterator = ImmutableMapTestCase.this.classUnderTest().iterator();
-                iterator.remove();
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            Iterator<String> iterator = this.classUnderTest().iterator();
+            iterator.remove();
         });
     }
 
@@ -252,16 +242,12 @@ public abstract class ImmutableMapTestCase
     {
         Object actualParameter = new Object();
 
-        final MutableSet<String> actualValues = UnifiedSet.newSet();
-        final MutableList<Object> actualParameters = Lists.mutable.of();
+        MutableSet<String> actualValues = UnifiedSet.newSet();
+        MutableList<Object> actualParameters = Lists.mutable.of();
 
-        this.classUnderTest().forEachWith(new Procedure2<String, Object>()
-        {
-            public void value(String eachValue, Object parameter)
-            {
-                actualValues.add(eachValue);
-                actualParameters.add(parameter);
-            }
+        this.classUnderTest().forEachWith((eachValue, parameter) -> {
+            actualValues.add(eachValue);
+            actualParameters.add(parameter);
         }, actualParameter);
 
         Assert.assertEquals(this.expectedKeys().collect(Functions.getToString()), actualValues);
@@ -271,16 +257,12 @@ public abstract class ImmutableMapTestCase
     @Test
     public void forEachWithIndex()
     {
-        final MutableSet<String> actualValues = UnifiedSet.newSet();
-        final MutableList<Integer> actualIndices = Lists.mutable.of();
+        MutableSet<String> actualValues = UnifiedSet.newSet();
+        MutableList<Integer> actualIndices = Lists.mutable.of();
 
-        this.classUnderTest().forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String eachValue, int index)
-            {
-                actualValues.add(eachValue);
-                actualIndices.add(index);
-            }
+        this.classUnderTest().forEachWithIndex((eachValue, index) -> {
+            actualValues.add(eachValue);
+            actualIndices.add(index);
         });
 
         Assert.assertEquals(this.expectedKeys().collect(Functions.getToString()), actualValues);
@@ -332,25 +314,13 @@ public abstract class ImmutableMapTestCase
     @Test
     public void putAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Map<Integer, String>) ImmutableMapTestCase.this.classUnderTest()).putAll(null);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ((Map<Integer, String>) this.classUnderTest()).putAll(null));
     }
 
     @Test
     public void clear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Map<Integer, String>) ImmutableMapTestCase.this.classUnderTest()).clear();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ((Map<Integer, String>) this.classUnderTest()).clear());
     }
 
     @Test
@@ -411,24 +381,16 @@ public abstract class ImmutableMapTestCase
     @Test
     public void put()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Map<Integer, String>) ImmutableMapTestCase.this.classUnderTest()).put(null, null);
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            ((Map<Integer, String>) this.classUnderTest()).put(null, null);
         });
     }
 
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Map<Integer, String>) ImmutableMapTestCase.this.classUnderTest()).remove(null);
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            ((Map<Integer, String>) this.classUnderTest()).remove(null);
         });
     }
 

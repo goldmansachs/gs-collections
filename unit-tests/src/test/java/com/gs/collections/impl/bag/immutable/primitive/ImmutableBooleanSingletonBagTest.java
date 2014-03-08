@@ -17,7 +17,6 @@
 package com.gs.collections.impl.bag.immutable.primitive;
 
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
-import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.impl.factory.primitive.BooleanBags;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -38,13 +37,9 @@ public class ImmutableBooleanSingletonBagTest extends AbstractImmutableBooleanBa
     @Test
     public void forEachWithOccurrences()
     {
-        final StringBuilder stringBuilder = new StringBuilder();
-        this.classUnderTest().forEachWithOccurrences(new BooleanIntProcedure()
-        {
-            public void value(boolean argument1, int argument2)
-            {
-                stringBuilder.append(argument1).append(argument2);
-            }
+        StringBuilder stringBuilder = new StringBuilder();
+        this.classUnderTest().forEachWithOccurrences((argument1, argument2) -> {
+            stringBuilder.append(argument1).append(argument2);
         });
         String string = stringBuilder.toString();
         Assert.assertEquals("true1", string);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,13 +42,7 @@ public class EmptyIteratorTest
     @Test
     public void previous()
     {
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                EmptyIteratorTest.this.emptyIterator.previous();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {this.emptyIterator.previous();});
     }
 
     @Test
@@ -60,24 +54,12 @@ public class EmptyIteratorTest
     @Test
     public void set()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                EmptyIteratorTest.this.emptyIterator.set(1);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.emptyIterator.set(1));
     }
 
     @Test
     public void add()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                EmptyIteratorTest.this.emptyIterator.add(1);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.emptyIterator.add(1));
     }
 }

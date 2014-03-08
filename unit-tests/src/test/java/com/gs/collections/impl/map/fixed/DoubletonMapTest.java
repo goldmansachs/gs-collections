@@ -18,9 +18,6 @@ package com.gs.collections.impl.map.fixed;
 
 import java.util.Map;
 
-import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.FixedSizeMap;
 import com.gs.collections.api.map.MutableMap;
@@ -67,15 +64,9 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void forEachKeyValue()
     {
-        final MutableList<String> collection = Lists.mutable.of();
+        MutableList<String> collection = Lists.mutable.of();
         MutableMap<Integer, String> map = new DoubletonMap<Integer, String>(1, "One", 2, "Two");
-        map.forEachKeyValue(new Procedure2<Integer, String>()
-        {
-            public void value(Integer key, String value)
-            {
-                collection.add(key + value);
-            }
-        });
+        map.forEachKeyValue((key, value) -> { collection.add(key + value); });
         Assert.assertEquals(FastList.newListWith("1One", "2Two"), collection);
     }
 
@@ -199,13 +190,9 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsentPut()
     {
-        final MutableMap<Integer, String> map = new DoubletonMap<Integer, String>(1, "1", 2, "2");
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                map.getIfAbsentPut(4, new PassThruFunction0<String>("4"));
-            }
+        MutableMap<Integer, String> map = new DoubletonMap<Integer, String>(1, "1", 2, "2");
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            map.getIfAbsentPut(4, new PassThruFunction0<String>("4"));
         });
         Assert.assertEquals("1", map.getIfAbsentPut(1, new PassThruFunction0<String>("1")));
     }
@@ -214,13 +201,9 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsentPutWith()
     {
-        final MutableMap<Integer, String> map = new DoubletonMap<Integer, String>(1, "1", 2, "2");
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                map.getIfAbsentPutWith(4, Functions.getToString(), 4);
-            }
+        MutableMap<Integer, String> map = new DoubletonMap<Integer, String>(1, "1", 2, "2");
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            map.getIfAbsentPutWith(4, Functions.getToString(), 4);
         });
         Assert.assertEquals("1", map.getIfAbsentPutWith(1, Functions.getToString(), 1));
     }
@@ -276,15 +259,9 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void forEachWith()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         MutableMap<Integer, Integer> map = new DoubletonMap<Integer, Integer>(1, 1, 2, 2);
-        map.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 10);
+        map.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 10);
         Assert.assertEquals(FastList.newListWith(11, 12), result);
     }
 
@@ -292,15 +269,11 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void forEachWithIndex()
     {
-        final MutableList<String> result = Lists.mutable.of();
+        MutableList<String> result = Lists.mutable.of();
         MutableMap<Integer, String> map = new DoubletonMap<Integer, String>(1, "One", 2, "Two");
-        map.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String value, int index)
-            {
-                result.add(value);
-                result.add(String.valueOf(index));
-            }
+        map.forEachWithIndex((value, index) -> {
+            result.add(value);
+            result.add(String.valueOf(index));
         });
         Assert.assertEquals(FastList.newListWith("One", "0", "Two", "1"), result);
     }
@@ -389,23 +362,11 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
         MutableMap<String, String> full = map.select(Predicates2.alwaysTrue());
         Assert.assertEquals(map, full);
 
-        MutableMap<String, String> one = map.select(new Predicate2<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return "1".equals(argument1);
-            }
-        });
+        MutableMap<String, String> one = map.select((argument1, argument2) -> "1".equals(argument1));
         Verify.assertInstanceOf(SingletonMap.class, one);
         Assert.assertEquals(new SingletonMap<String, String>("1", "One"), one);
 
-        MutableMap<String, String> two = map.select(new Predicate2<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return "2".equals(argument1);
-            }
-        });
+        MutableMap<String, String> two = map.select((argument1, argument2) -> "2".equals(argument1));
         Verify.assertInstanceOf(SingletonMap.class, two);
         Assert.assertEquals(new SingletonMap<String, String>("2", "Two"), two);
     }
@@ -423,23 +384,11 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
         Verify.assertInstanceOf(DoubletonMap.class, full);
         Assert.assertEquals(map, full);
 
-        MutableMap<String, String> one = map.reject(new Predicate2<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return "2".equals(argument1);
-            }
-        });
+        MutableMap<String, String> one = map.reject((argument1, argument2) -> "2".equals(argument1));
         Verify.assertInstanceOf(SingletonMap.class, one);
         Assert.assertEquals(new SingletonMap<String, String>("1", "One"), one);
 
-        MutableMap<String, String> two = map.reject(new Predicate2<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return "1".equals(argument1);
-            }
-        });
+        MutableMap<String, String> two = map.reject((argument1, argument2) -> "1".equals(argument1));
         Verify.assertInstanceOf(SingletonMap.class, two);
         Assert.assertEquals(new SingletonMap<String, String>("2", "Two"), two);
     }
@@ -453,13 +402,7 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
         Pair<String, String> one = map.detect(Predicates2.alwaysTrue());
         Assert.assertEquals(Tuples.pair("1", "One"), one);
 
-        Pair<String, String> two = map.detect(new Predicate2<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return "2".equals(argument1);
-            }
-        });
+        Pair<String, String> two = map.detect((argument1, argument2) -> "2".equals(argument1));
         Assert.assertEquals(Tuples.pair("2", "Two"), two);
 
         Assert.assertNull(map.detect(Predicates2.alwaysFalse()));

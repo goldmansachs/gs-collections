@@ -26,8 +26,6 @@ import java.util.Random;
 import java.util.Set;
 
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.CollidingInt;
@@ -225,14 +223,8 @@ public class UnifiedSetTest
         {
             Assert.assertTrue(set.add(new CollidingInt(i, shift)));
         }
-        final MutableList<CollidingInt> keys = FastList.newList(size);
-        set.forEach(new Procedure<CollidingInt>()
-        {
-            public void value(CollidingInt key)
-            {
-                keys.add(key);
-            }
-        });
+        MutableList<CollidingInt> keys = FastList.newList(size);
+        set.forEach((Procedure<CollidingInt>) keys::add);
         Verify.assertSize(size, keys);
         Collections.sort(keys);
 
@@ -260,14 +252,10 @@ public class UnifiedSetTest
         {
             Assert.assertTrue(set.add(new CollidingInt(i, shift)));
         }
-        final MutableList<CollidingInt> keys = FastList.newList(size);
-        set.forEachWith(new Procedure2<CollidingInt, String>()
-        {
-            public void value(CollidingInt key, String s)
-            {
-                Assert.assertEquals("foo", s);
-                keys.add(key);
-            }
+        MutableList<CollidingInt> keys = FastList.newList(size);
+        set.forEachWith((key, s) -> {
+            Assert.assertEquals("foo", s);
+            keys.add(key);
         }, "foo");
         Verify.assertSize(size, keys);
         Collections.sort(keys);
@@ -296,16 +284,12 @@ public class UnifiedSetTest
         {
             Assert.assertTrue(set.add(new CollidingInt(i, shift)));
         }
-        final MutableList<CollidingInt> keys = FastList.newList(size);
-        final int[] prevIndex = new int[1];
-        set.forEachWithIndex(new ObjectIntProcedure<CollidingInt>()
-        {
-            public void value(CollidingInt key, int index)
-            {
-                Assert.assertEquals(prevIndex[0], index);
-                prevIndex[0]++;
-                keys.add(key);
-            }
+        MutableList<CollidingInt> keys = FastList.newList(size);
+        int[] prevIndex = new int[1];
+        set.forEachWithIndex((key, index) -> {
+            Assert.assertEquals(prevIndex[0], index);
+            prevIndex[0]++;
+            keys.add(key);
         });
         Verify.assertSize(size, keys);
         Collections.sort(keys);

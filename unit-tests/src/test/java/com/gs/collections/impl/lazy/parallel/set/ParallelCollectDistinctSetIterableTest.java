@@ -32,15 +32,10 @@ public class ParallelCollectDistinctSetIterableTest extends AbstractParallelIter
     @Override
     protected ParallelIterable<Integer> classUnderTest()
     {
+        Function<Double, Integer> function = Double::intValue;
         return UnifiedSet.newSetWith(1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4)
                 .asParallel(this.executorService, 2)
-                .collect(new Function<Double, Integer>()
-                {
-                    public Integer valueOf(Double aDouble)
-                    {
-                        return aDouble.intValue();
-                    }
-                })
+                .collect(function)
                 .asUnique();
     }
 
@@ -66,13 +61,7 @@ public class ParallelCollectDistinctSetIterableTest extends AbstractParallelIter
     @Override
     public void groupBy()
     {
-        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return IntegerPredicates.isOdd().accept(object);
-            }
-        };
+        Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
 
         Assert.assertEquals(
                 this.getExpected().toSet().groupBy(isOddFunction),

@@ -87,7 +87,7 @@ public class BooleanHashBagTest extends AbstractMutableBooleanBagTestCase
     {
         super.booleanIterator();
         BooleanHashBag bag = this.newWith(true, false, false, true, true, true);
-        final BooleanIterator iterator = bag.booleanIterator();
+        BooleanIterator iterator = bag.booleanIterator();
         Assert.assertTrue(iterator.hasNext());
         Assert.assertFalse(iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -102,13 +102,7 @@ public class BooleanHashBagTest extends AbstractMutableBooleanBagTestCase
         Assert.assertTrue(iterator.next());
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
     }
 
     @Override

@@ -23,10 +23,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
@@ -145,26 +142,14 @@ public class IterableIterateTest
     public void forEachWithIndex()
     {
         Iterable<Integer> iterable = new IterableAdapter<Integer>(Iterate.sortThis(this.getIntegerList()));
-        Iterate.forEachWithIndex(iterable, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                Assert.assertEquals(index, object - 1);
-            }
-        });
+        Iterate.forEachWithIndex(iterable, (object, index) -> Assert.assertEquals(index, object - 1));
     }
 
     @Test
     public void forEachWithIndexOver30()
     {
         Iterable<Integer> iterable = new IterableAdapter<Integer>(Iterate.sortThis(Interval.oneTo(31).toList()));
-        Iterate.forEachWithIndex(iterable, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                Assert.assertEquals(index, object - 1);
-            }
-        });
+        Iterate.forEachWithIndex(iterable, (object, index) -> Assert.assertEquals(index, object - 1));
     }
 
     @Test
@@ -303,13 +288,7 @@ public class IterableIterateTest
     {
         Sum result = new IntegerSum(0);
         Iterable<Integer> iterable = new IterableAdapter<Integer>(Interval.oneTo(5));
-        Function3<Sum, Integer, Integer, Sum> function = new Function3<Sum, Integer, Integer, Sum>()
-        {
-            public Sum value(Sum sum, Integer element, Integer withValue)
-            {
-                return sum.add(element.intValue() * withValue.intValue());
-            }
-        };
+        Function3<Sum, Integer, Integer, Sum> function = (sum, element, withValue) -> sum.add(element.intValue() * withValue.intValue());
         Sum sumOfDoubledValues = Iterate.injectIntoWith(result, iterable, function, 2);
         Assert.assertEquals(30, sumOfDoubledValues.getValue().intValue());
     }
@@ -429,13 +408,7 @@ public class IterableIterateTest
     {
         List<Integer> list = Interval.oneTo(31);
         Iterable<Integer> iterable = new IterableAdapter<Integer>(list);
-        Collection<String> result = Iterate.collectWith(iterable, new Function2<Integer, Integer, String>()
-        {
-            public String value(Integer argument1, Integer argument2)
-            {
-                return argument1.equals(argument2) ? "31" : null;
-            }
-        }, 31);
+        Collection<String> result = Iterate.collectWith(iterable, (argument1, argument2) -> argument1.equals(argument2) ? "31" : null, 31);
         Verify.assertSize(31, result);
         Verify.assertContainsAll(result, null, "31");
         Verify.assertCount(30, result, Predicates.isNull());
@@ -465,13 +438,7 @@ public class IterableIterateTest
         Sum result = new IntegerSum(0);
         Integer parameter = 2;
         List<Integer> integers = Interval.oneTo(31);
-        Function3<Sum, Integer, Integer, Sum> function = new Function3<Sum, Integer, Integer, Sum>()
-        {
-            public Sum value(Sum sum, Integer element, Integer withValue)
-            {
-                return sum.add((element.intValue() - element.intValue()) * withValue.intValue());
-            }
-        };
+        Function3<Sum, Integer, Integer, Sum> function = (sum, element, withValue) -> sum.add((element.intValue() - element.intValue()) * withValue.intValue());
         Sum sumOfDoubledValues = Iterate.injectIntoWith(result, integers, function, parameter);
         Assert.assertEquals(0, sumOfDoubledValues.getValue().intValue());
     }
@@ -541,30 +508,18 @@ public class IterableIterateTest
     @Test
     public void forEach()
     {
-        final MutableList<Integer> newCollection = Lists.mutable.of();
+        MutableList<Integer> newCollection = Lists.mutable.of();
         IterableAdapter<Integer> iterable = new IterableAdapter<Integer>(Interval.oneTo(10));
-        Iterate.forEach(iterable, new Procedure<Integer>()
-        {
-            public void value(Integer value)
-            {
-                newCollection.add(value);
-            }
-        });
+        Iterate.forEach(iterable, newCollection::add);
         Assert.assertEquals(Interval.oneTo(10), newCollection);
     }
 
     @Test
     public void forEachWith()
     {
-        final Sum result = new IntegerSum(0);
+        Sum result = new IntegerSum(0);
         Iterable<Integer> integers = new IterableAdapter<Integer>(Interval.oneTo(5));
-        Iterate.forEachWith(integers, new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer each, Integer parm)
-            {
-                result.add(each.intValue() * parm.intValue());
-            }
-        }, 2);
+        Iterate.forEachWith(integers, (each, parm) -> { result.add(each.intValue() * parm.intValue()); }, 2);
         Assert.assertEquals(30, result.getValue().intValue());
     }
 
@@ -575,13 +530,7 @@ public class IterableIterateTest
                 new IterableAdapter<Boolean>(FastList.<Boolean>newList().with(Boolean.TRUE, Boolean.FALSE));
         Assert.assertEquals(
                 FastList.newListWith("true", "false"),
-                Iterate.collectWith(iterable, new Function2<Boolean, Boolean, String>()
-                {
-                    public String value(Boolean argument1, Boolean argument2)
-                    {
-                        return Boolean.toString(argument1.booleanValue() && argument2.booleanValue());
-                    }
-                }, Boolean.TRUE));
+                Iterate.collectWith(iterable, (argument1, argument2) -> Boolean.toString(argument1.booleanValue() && argument2.booleanValue()), Boolean.TRUE));
     }
 
     @Test
@@ -591,13 +540,7 @@ public class IterableIterateTest
                 new IterableAdapter<Boolean>(FastList.<Boolean>newList().with(Boolean.TRUE, Boolean.FALSE));
         Assert.assertEquals(
                 FastList.newListWith("true", "false"),
-                Iterate.collectWith(iterable, new Function2<Boolean, Boolean, String>()
-                {
-                    public String value(Boolean argument1, Boolean argument2)
-                    {
-                        return Boolean.toString(argument1.booleanValue() && argument2.booleanValue());
-                    }
-                }, Boolean.TRUE, new ArrayList<String>()));
+                Iterate.collectWith(iterable, (argument1, argument2) -> Boolean.toString(argument1.booleanValue() && argument2.booleanValue()), Boolean.TRUE, new ArrayList<String>()));
     }
 
     @Test
@@ -707,28 +650,16 @@ public class IterableIterateTest
         this.assertForEachUsingFromTo(new LinkedList<Integer>(integers));
     }
 
-    private void assertForEachUsingFromTo(final List<Integer> integers)
+    private void assertForEachUsingFromTo(List<Integer> integers)
     {
         MutableList<Integer> results = Lists.mutable.of();
         IterableIterate.forEach(integers, 0, 4, CollectionAddProcedure.on(results));
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        final CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
+        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ListIterate.forEach(integers, 4, -1, procedure);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ListIterate.forEach(integers, -1, 4, procedure);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, 4, -1, procedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, -1, 4, procedure));
     }
 
     @Test
@@ -739,27 +670,15 @@ public class IterableIterateTest
         this.assertForEachWithIndexUsingFromTo(new LinkedList<Integer>(integers));
     }
 
-    private void assertForEachWithIndexUsingFromTo(final List<Integer> integers)
+    private void assertForEachWithIndexUsingFromTo(List<Integer> integers)
     {
         MutableList<Integer> results = Lists.mutable.of();
         IterableIterate.forEachWithIndex(integers, 0, 4, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(results)));
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        final ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                IterableIterate.forEachWithIndex(integers, 4, -1, objectIntProcedure);
-            }
-        });
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                IterableIterate.forEachWithIndex(integers, -1, 4, objectIntProcedure);
-            }
-        });
+        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
+        Verify.assertThrows(IllegalArgumentException.class, () -> IterableIterate.forEachWithIndex(integers, 4, -1, objectIntProcedure));
+        Verify.assertThrows(IllegalArgumentException.class, () -> IterableIterate.forEachWithIndex(integers, -1, 4, objectIntProcedure));
     }
 
     @Test

@@ -21,9 +21,6 @@ import java.util.Iterator;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function3;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
@@ -180,14 +177,8 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void forEachWith()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
-        this.intSet.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 0);
+        MutableList<Integer> result = Lists.mutable.of();
+        this.intSet.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
         Verify.assertSize(1, result);
         Verify.assertContainsAll(result, 1);
     }
@@ -195,14 +186,8 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void forEachWithIndex()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
-        this.intSet.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                result.add(object + index);
-            }
-        });
+        MutableList<Integer> result = Lists.mutable.of();
+        this.intSet.forEachWithIndex((object, index) -> { result.add(object + index); });
         Verify.assertContainsAll(result, 1);
     }
 
@@ -278,13 +263,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     public void flatCollect()
     {
         Function<Integer, MutableSet<String>> function =
-                new Function<Integer, MutableSet<String>>()
-                {
-                    public MutableSet<String> valueOf(Integer object)
-                    {
-                        return UnifiedSet.newSetWith(String.valueOf(object));
-                    }
-                };
+                object -> UnifiedSet.newSetWith(String.valueOf(object));
         Verify.assertSetsEqual(UnifiedSet.newSetWith("1"), this.intSet.flatCollect(function));
         Verify.assertListsEqual(
                 FastList.newListWith("1"),
@@ -422,37 +401,23 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void removeAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                SingletonSetTest.this.intSet.removeAll(Lists.fixedSize.of(1, 2));
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.intSet.removeAll(Lists.fixedSize.of(1, 2));
         });
     }
 
     @Test
     public void retainAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                SingletonSetTest.this.intSet.retainAll(Lists.fixedSize.of(2));
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.intSet.retainAll(Lists.fixedSize.of(2));
         });
     }
 
     @Test
     public void clear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                SingletonSetTest.this.intSet.clear();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) this.intSet::clear);
     }
 
     @Override
@@ -478,17 +443,10 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void injectIntoWith()
     {
-        Integer result =
-                this.intSet.injectIntoWith(
-                        1,
-                        new Function3<Integer, Integer, Integer, Integer>()
-                        {
-                            public Integer value(Integer injectedValued, Integer item, Integer parameter)
-                            {
-                                return injectedValued + item + parameter;
-                            }
-                        },
-                        0);
+        Integer result = this.intSet.injectIntoWith(
+                1,
+                (injectedValued, item, parameter) -> injectedValued + item + parameter,
+                0);
         Assert.assertEquals(Integer.valueOf(2), result);
     }
 
@@ -513,13 +471,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void removeWithPredicate()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                SingletonSetTest.this.intSet.removeIf(Predicates.isNull());
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.intSet.removeIf(Predicates.isNull()));
     }
 
     @Test

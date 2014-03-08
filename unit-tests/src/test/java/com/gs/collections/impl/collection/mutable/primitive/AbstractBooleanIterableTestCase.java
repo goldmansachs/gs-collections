@@ -22,9 +22,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
-import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
@@ -192,27 +189,15 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void forEach()
     {
-        final long[] sum = new long[1];
-        this.classUnderTest().forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[0] += each ? 1 : 0;
-            }
-        });
+        long[] sum = new long[1];
+        this.classUnderTest().forEach(each -> { sum[0] += each ? 1 : 0; });
 
         int size = this.classUnderTest().size();
         int halfSize = size / 2;
         Assert.assertEquals((size & 1) == 0 ? halfSize : halfSize + 1, sum[0]);
 
-        final long[] sum1 = new long[1];
-        this.newWith(true, false, false, true, true, true).forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum1[0] += each ? 1 : 2;
-            }
-        });
+        long[] sum1 = new long[1];
+        this.newWith(true, false, false, true, true, true).forEach(each -> { sum1[0] += each ? 1 : 2; });
 
         Assert.assertEquals(8L, sum1[0]);
     }
@@ -347,37 +332,18 @@ public abstract class AbstractBooleanIterableTestCase
             objects.add((i & 1) == 0 ? 1 : 0);
         }
         RichIterable<Object> expected = this.newObjectCollectionWith(objects.toArray());
-        Assert.assertEquals(expected, this.classUnderTest().collect(new BooleanToObjectFunction<Object>()
-        {
-            public Object valueOf(boolean value)
-            {
-                return Integer.valueOf(value ? 1 : 0);
-            }
-        }));
+        Assert.assertEquals(expected, this.classUnderTest().collect(value -> Integer.valueOf(value ? 1 : 0)));
 
-        BooleanToObjectFunction<Boolean> booleanToObjectFunction = new BooleanToObjectFunction<Boolean>()
-        {
-            public Boolean valueOf(boolean parameter)
-            {
-                return !parameter;
-            }
-        };
-        Assert.assertEquals(this.newObjectCollectionWith(false, true, false), this.newWith(true, false, true).collect(booleanToObjectFunction));
-        Assert.assertEquals(this.newObjectCollectionWith(), this.newWith().collect(booleanToObjectFunction));
-        Assert.assertEquals(this.newObjectCollectionWith(true), this.newWith(false).collect(booleanToObjectFunction));
+        Assert.assertEquals(this.newObjectCollectionWith(false, true, false), this.newWith(true, false, true).collect(parameter -> !parameter));
+        Assert.assertEquals(this.newObjectCollectionWith(), this.newWith().collect(parameter -> !parameter));
+        Assert.assertEquals(this.newObjectCollectionWith(true), this.newWith(false).collect(parameter -> !parameter));
     }
 
     @Test
     public void injectInto()
     {
         BooleanIterable iterable = this.newWith(true, false, true);
-        MutableInteger result = iterable.injectInto(new MutableInteger(0), new ObjectBooleanToObjectFunction<MutableInteger, MutableInteger>()
-        {
-            public MutableInteger valueOf(MutableInteger object, boolean value)
-            {
-                return object.add(value ? 1 : 0);
-            }
-        });
+        MutableInteger result = iterable.injectInto(new MutableInteger(0), (object, value) -> object.add(value ? 1 : 0));
         Assert.assertEquals(new MutableInteger(2), result);
     }
 

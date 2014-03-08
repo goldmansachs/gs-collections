@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
@@ -54,14 +52,6 @@ import static com.gs.collections.impl.factory.Iterables.*;
 
 public class ListIterateTest
 {
-    private static final Function<Number, Integer> INT_VALUE = new Function<Number, Integer>()
-    {
-        public Integer valueOf(Number number)
-        {
-            return number.intValue();
-        }
-    };
-
     @Test
     public void injectInto()
     {
@@ -98,26 +88,14 @@ public class ListIterateTest
     @Test
     public void forEachWith()
     {
-        final MutableList<Integer> result = FastList.newList();
+        MutableList<Integer> result = FastList.newList();
         MutableList<Integer> list = FastList.newListWith(1, 2, 3, 4);
-        ListIterate.forEachWith(list, new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 1);
+        ListIterate.forEachWith(list, (argument1, argument2) -> { result.add(argument1 + argument2); }, 1);
         Assert.assertEquals(FastList.newListWith(2, 3, 4, 5), result);
 
-        final List<Integer> result2 = new LinkedList<Integer>();
+        List<Integer> result2 = new LinkedList<Integer>();
         List<Integer> linkedList = new LinkedList<Integer>(FastList.newListWith(1, 2, 3, 4));
-        ListIterate.forEachWith(linkedList, new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result2.add(argument1 + argument2);
-            }
-        }, 1);
+        ListIterate.forEachWith(linkedList, (argument1, argument2) -> { result2.add(argument1 + argument2); }, 1);
         Assert.assertEquals(FastList.newListWith(2, 3, 4, 5), result2);
     }
 
@@ -211,24 +189,12 @@ public class ListIterateTest
 
     private void assertFlatten(List<MutableList<Boolean>> list)
     {
-        MutableList<Boolean> newList = ListIterate.flatCollect(list, new Function<MutableList<Boolean>, MutableList<Boolean>>()
-        {
-            public MutableList<Boolean> valueOf(MutableList<Boolean> list)
-            {
-                return list.toList();
-            }
-        });
+        MutableList<Boolean> newList = ListIterate.flatCollect(list, aList -> aList.toList());
         Verify.assertListsEqual(
                 FastList.newListWith(true, false, true, null),
                 newList);
 
-        MutableSet<Boolean> newSet = ListIterate.flatCollect(list, new Function<MutableList<Boolean>, MutableSet<Boolean>>()
-        {
-            public MutableSet<Boolean> valueOf(MutableList<Boolean> list)
-            {
-                return list.toSet();
-            }
-        }, UnifiedSet.<Boolean>newSet());
+        MutableSet<Boolean> newSet = ListIterate.flatCollect(list, aList -> aList.toSet(), UnifiedSet.<Boolean>newSet());
         Verify.assertSetsEqual(
                 UnifiedSet.newSetWith(true, false, null),
                 newSet);
@@ -267,9 +233,9 @@ public class ListIterateTest
 
     private void assertOccurrencesOfAttributeNamedOnList(List<Integer> list)
     {
-        int result = ListIterate.count(list, Predicates.attributeEqual(INT_VALUE, 3));
+        int result = ListIterate.count(list, Predicates.attributeEqual(Number::intValue, 3));
         Assert.assertEquals(1, result);
-        int result2 = ListIterate.count(list, Predicates.attributeEqual(INT_VALUE, 6));
+        int result2 = ListIterate.count(list, Predicates.attributeEqual(Number::intValue, 6));
         Assert.assertEquals(0, result2);
     }
 
@@ -289,13 +255,7 @@ public class ListIterateTest
     private void assertForEachWithIndex(List<Integer> list)
     {
         Iterate.sortThis(list);
-        ListIterate.forEachWithIndex(list, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                Assert.assertEquals(index, object - 1);
-            }
-        });
+        ListIterate.forEachWithIndex(list, (object, index) -> Assert.assertEquals(index, object - 1));
     }
 
     @Test
@@ -310,35 +270,17 @@ public class ListIterateTest
         this.assertForEachUsingFromTo(new LinkedList<Integer>(integers));
     }
 
-    private void assertForEachUsingFromTo(final List<Integer> integers)
+    private void assertForEachUsingFromTo(List<Integer> integers)
     {
         MutableList<Integer> results = Lists.mutable.of();
         ListIterate.forEach(integers, 0, 4, CollectionAddProcedure.on(results));
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        final CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
+        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ListIterate.forEach(integers, 4, -1, procedure);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ListIterate.forEach(integers, -1, 4, procedure);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ListIterate.forEach(integers, 0, 5, procedure);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, 4, -1, procedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, -1, 4, procedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, 0, 5, procedure));
     }
 
     private void assertReverseForEachUsingFromTo(List<Integer> integers, MutableList<Integer> reverseResults, CollectionAddProcedure<Integer> procedure)
@@ -358,27 +300,15 @@ public class ListIterateTest
         this.assertReverseForEachIndexUsingFromTo(integers, reverseResults, objectIntProcedure);
     }
 
-    private void assertForEachWithIndexUsingFromTo(final List<Integer> integers)
+    private void assertForEachWithIndexUsingFromTo(List<Integer> integers)
     {
         MutableList<Integer> results = Lists.mutable.of();
         ListIterate.forEachWithIndex(integers, 0, 4, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(results)));
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        final ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ListIterate.forEachWithIndex(integers, 4, -1, objectIntProcedure);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ListIterate.forEachWithIndex(integers, -1, 4, objectIntProcedure);
-            }
-        });
+        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEachWithIndex(integers, 4, -1, objectIntProcedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEachWithIndex(integers, -1, 4, objectIntProcedure));
     }
 
     private void assertReverseForEachIndexUsingFromTo(List<Integer> integers, MutableList<Integer> reverseResults, ObjectIntProcedure<Integer> objectIntProcedure)
@@ -415,15 +345,11 @@ public class ListIterateTest
 
     private void assertReverseForEachWithIndex(List<Integer> list)
     {
-        final Counter counter = new Counter();
-        ListIterate.reverseForEachWithIndex(list, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                Assert.assertEquals(counter.getCount() + 1, object.longValue());
-                Assert.assertEquals(4 - counter.getCount(), index);
-                counter.increment();
-            }
+        Counter counter = new Counter();
+        ListIterate.reverseForEachWithIndex(list, (object, index) -> {
+            Assert.assertEquals(counter.getCount() + 1, object.longValue());
+            Assert.assertEquals(4 - counter.getCount(), index);
+            counter.increment();
         });
     }
 
@@ -437,38 +363,21 @@ public class ListIterateTest
         this.assertForEachInBoth(new LinkedList<String>(list1), list2);
         this.assertForEachInBoth(new LinkedList<String>(list1), new LinkedList<String>(list2));
 
-        ListIterate.forEachInBoth(null, null, new Procedure2<Object, Object>()
-        {
-            public void value(Object argument1, Object argument2)
-            {
-                Assert.fail();
-            }
-        });
+        ListIterate.forEachInBoth(null, null, (argument1, argument2) -> Assert.fail());
     }
 
     @Test(expected = RuntimeException.class)
     public void forEachInBothThrowsOnDifferentLengthLists()
     {
-        ListIterate.forEachInBoth(FastList.newListWith(1, 2, 3), FastList.newListWith(1, 2), new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                Assert.fail();
-            }
-        });
+        ListIterate.forEachInBoth(FastList.newListWith(1, 2, 3), FastList.newListWith(1, 2), (argument1, argument2) -> Assert.fail());
     }
 
     private void assertForEachInBoth(List<String> list1, List<String> list2)
     {
-        final List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
-        ListIterate.forEachInBoth(list1, list2,
-                new Procedure2<String, String>()
-                {
-                    public void value(String argument1, String argument2)
-                    {
-                        list.add(Tuples.twin(argument1, argument2));
-                    }
-                });
+        List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
+        ListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> {
+            list.add(Tuples.twin(argument1, argument2));
+        });
         Assert.assertEquals(FastList.newListWith(Tuples.twin("1", "a"), Tuples.twin("2", "b")), list);
     }
 
@@ -682,13 +591,7 @@ public class ListIterateTest
     {
         MutableList<String> list = FastList.newListWith("1", "2", "3", "4", "5", "6", "7");
         RichIterable<RichIterable<String>> groups = ListIterate.chunk(list, 2);
-        RichIterable<Integer> sizes = groups.collect(new Function<RichIterable<String>, Integer>()
-        {
-            public Integer valueOf(RichIterable<String> richIterable)
-            {
-                return richIterable.size();
-            }
-        });
+        RichIterable<Integer> sizes = groups.collect(RichIterable::size);
         Assert.assertEquals(FastList.newListWith(2, 2, 2, 1), sizes);
     }
 

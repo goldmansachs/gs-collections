@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,14 +73,8 @@ public class ProceduresTest
     {
         ImmutableList<String> expectedResults = Lists.immutable.of("zero0", "one1", "two2");
 
-        final MutableList<String> actualResults = Lists.mutable.of();
-        ObjectIntProcedure<String> objectIntProcedure = new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                actualResults.add(each + index);
-            }
-        };
+        MutableList<String> actualResults = Lists.mutable.of();
+        ObjectIntProcedure<String> objectIntProcedure = (each, index) -> { actualResults.add(each + index); };
 
         ImmutableList<String> numberStrings = Lists.immutable.of("zero", "one", "two");
         Procedure<String> procedure = Procedures.fromObjectIntProcedure(objectIntProcedure);
@@ -102,21 +96,9 @@ public class ProceduresTest
     @Test
     public void ifElse()
     {
-        final MutableMap<String, Integer> pathCalled = UnifiedMap.newWithKeysValues("result", 0);
-        Procedure<Integer> ifBlock = new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                pathCalled.put("result", 1);
-            }
-        };
-        Procedure<Integer> elseBlock = new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                pathCalled.put("result", -1);
-            }
-        };
+        MutableMap<String, Integer> pathCalled = UnifiedMap.newWithKeysValues("result", 0);
+        Procedure<Integer> ifBlock = each -> { pathCalled.put("result", 1); };
+        Procedure<Integer> elseBlock = each -> { pathCalled.put("result", -1); };
 
         Procedures.ifElse(Predicates.alwaysTrue(), ifBlock, elseBlock).value(1);
         Verify.assertContainsKeyValue("result", 1, pathCalled);
@@ -128,41 +110,17 @@ public class ProceduresTest
     @Test
     public void caseDefault()
     {
-        Procedure<Object> defaultBlock = new Procedure<Object>()
-        {
-            public void value(Object each)
-            {
-                throw new ProceduresTest.BlockCalledException();
-            }
-        };
-        final CaseProcedure<Object> undertest = Procedures.caseDefault(defaultBlock);
-        Verify.assertThrows(BlockCalledException.class, new Runnable()
-        {
-            public void run()
-            {
-                undertest.value(1);
-            }
-        });
+        Procedure<Object> defaultBlock = each -> { throw new BlockCalledException(); };
+        CaseProcedure<Object> undertest = Procedures.caseDefault(defaultBlock);
+        Verify.assertThrows(BlockCalledException.class, () -> undertest.value(1));
     }
 
     @Test
     public void caseDefaultWithACase()
     {
-        Procedure<Object> caseBlock = new Procedure<Object>()
-        {
-            public void value(Object each)
-            {
-                throw new ProceduresTest.BlockCalledException();
-            }
-        };
-        final CaseProcedure<Object> undertest = Procedures.caseDefault(DoNothingProcedure.DO_NOTHING, Predicates.alwaysTrue(), caseBlock);
-        Verify.assertThrows(BlockCalledException.class, new Runnable()
-        {
-            public void run()
-            {
-                undertest.value(1);
-            }
-        });
+        Procedure<Object> caseBlock = each -> { throw new BlockCalledException(); };
+        CaseProcedure<Object> undertest = Procedures.caseDefault(DoNothingProcedure.DO_NOTHING, Predicates.alwaysTrue(), caseBlock);
+        Verify.assertThrows(BlockCalledException.class, () -> undertest.value(1));
     }
 
     private static final class TestPrintStream

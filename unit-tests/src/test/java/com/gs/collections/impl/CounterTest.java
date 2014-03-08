@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public class CounterTest
     @Test
     public void basicLifecycle()
     {
-        final Counter counter = new Counter();
+        Counter counter = new Counter();
 
         Assert.assertEquals(0, counter.getCount());
         counter.increment();
@@ -36,13 +36,7 @@ public class CounterTest
         Assert.assertEquals(2, counter.getCount());
         counter.add(16);
         Assert.assertEquals(18, counter.getCount());
-        Interval.oneTo(1000).forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                counter.increment();
-            }
-        });
+        Interval.oneTo(1000).forEach((Procedure<Integer>) each -> counter.increment());
         Assert.assertEquals(1018, counter.getCount());
         Assert.assertEquals("1018", counter.toString());
 

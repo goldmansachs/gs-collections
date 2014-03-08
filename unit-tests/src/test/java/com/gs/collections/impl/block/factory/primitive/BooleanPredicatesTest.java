@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.block.factory.primitive;
 
-import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -59,15 +58,8 @@ public final class BooleanPredicatesTest
         Assert.assertFalse(BooleanPredicates.and(BooleanPredicates.isFalse(), BooleanPredicates.equal(true)).accept(true));
         Assert.assertFalse(BooleanPredicates.and(BooleanPredicates.isFalse(), BooleanPredicates.equal(false)).accept(true));
 
-        BooleanPredicate falsePredicate = new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return !value;
-            }
-        };
-        Assert.assertFalse(BooleanPredicates.and(BooleanPredicates.isFalse(), falsePredicate).accept(true));
-        Assert.assertTrue(BooleanPredicates.and(BooleanPredicates.isFalse(), falsePredicate).accept(false));
+        Assert.assertFalse(BooleanPredicates.and(BooleanPredicates.isFalse(), value -> !value).accept(true));
+        Assert.assertTrue(BooleanPredicates.and(BooleanPredicates.isFalse(), value -> !value).accept(false));
     }
 
     @Test
@@ -83,15 +75,8 @@ public final class BooleanPredicatesTest
         Assert.assertTrue(BooleanPredicates.or(BooleanPredicates.isFalse(), BooleanPredicates.equal(true)).accept(true));
         Assert.assertFalse(BooleanPredicates.or(BooleanPredicates.isFalse(), BooleanPredicates.equal(false)).accept(true));
 
-        BooleanPredicate falsePredicate = new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return !value;
-            }
-        };
-        Assert.assertTrue(BooleanPredicates.or(BooleanPredicates.isFalse(), falsePredicate).accept(false));
-        Assert.assertFalse(BooleanPredicates.or(BooleanPredicates.isFalse(), falsePredicate).accept(true));
+        Assert.assertTrue(BooleanPredicates.or(BooleanPredicates.isFalse(), value -> !value).accept(false));
+        Assert.assertFalse(BooleanPredicates.or(BooleanPredicates.isFalse(), value -> !value).accept(true));
     }
 
     @Test

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,24 +72,16 @@ public class ParallelArrayIterateTest
     @Test
     public void parallelForEachException()
     {
-        Verify.assertThrows(RuntimeException.class, new Runnable()
-        {
-            public void run()
-            {
-                ParallelArrayIterate.forEach(
+        Verify.assertThrows(
+                RuntimeException.class,
+                () -> ParallelArrayIterate.forEach(
                         Interval.zeroTo(5).toArray(),
-                        new PassThruProcedureFactory<Procedure<Object>>(new Procedure<Object>()
-                        {
-                            public void value(Object object)
-                            {
-                                throw new RuntimeException("Thread death on its way!");
-                            }
+                        new PassThruProcedureFactory<Procedure<Object>>(object -> {
+                            throw new RuntimeException("Thread death on its way!");
                         }),
                         new PassThruCombiner<Procedure<Object>>(),
                         1,
-                        5);
-            }
-        });
+                        5));
     }
 
     private Sum parallelSum(Object[] array, Sum parallelSum)
@@ -98,24 +90,12 @@ public class ParallelArrayIterateTest
         return parallelSum;
     }
 
-    private void basicTestParallelSums(final Object[] array, final Sum parallelSum1, final Sum parallelSum2)
+    private void basicTestParallelSums(Object[] array, Sum parallelSum1, Sum parallelSum2)
             throws InterruptedException
     {
-        Thread thread1 = new Thread(new Runnable()
-        {
-            public void run()
-            {
-                ParallelArrayIterateTest.this.parallelSum(array, parallelSum1);
-            }
-        });
+        Thread thread1 = new Thread(() -> { this.parallelSum(array, parallelSum1); });
         thread1.start();
-        Thread thread2 = new Thread(new Runnable()
-        {
-            public void run()
-            {
-                ParallelArrayIterateTest.this.parallelSum(array, parallelSum2);
-            }
-        });
+        Thread thread2 = new Thread(() -> { this.parallelSum(array, parallelSum2); });
         thread2.start();
         thread1.join();
         thread2.join();
@@ -147,25 +127,13 @@ public class ParallelArrayIterateTest
     }
 
     private void basicTestLinearSums(
-            final Object[] array,
-            final Sum linearSum1,
-            final Sum linearSum2) throws InterruptedException
+            Object[] array,
+            Sum linearSum1,
+            Sum linearSum2) throws InterruptedException
     {
-        Thread thread1 = new Thread(new Runnable()
-        {
-            public void run()
-            {
-                ParallelArrayIterateTest.this.linearSum(array, linearSum1);
-            }
-        });
+        Thread thread1 = new Thread(() -> this.linearSum(array, linearSum1));
         thread1.start();
-        Thread thread2 = new Thread(new Runnable()
-        {
-            public void run()
-            {
-                ParallelArrayIterateTest.this.linearSum(array, linearSum2);
-            }
-        });
+        Thread thread2 = new Thread(() -> this.linearSum(array, linearSum2));
         thread2.start();
         thread1.join();
         thread2.join();

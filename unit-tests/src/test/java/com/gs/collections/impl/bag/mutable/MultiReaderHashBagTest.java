@@ -24,7 +24,6 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -163,14 +162,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     public void flatCollect()
     {
         MutableBag<Integer> collection = MultiReaderHashBag.newBagWith(1, 1, 2, 3, 4);
-        Function<Integer, MutableBag<String>> function =
-                new Function<Integer, MutableBag<String>>()
-                {
-                    public MutableBag<String> valueOf(Integer object)
-                    {
-                        return HashBag.newBagWith(String.valueOf(object));
-                    }
-                };
+        Function<Integer, MutableBag<String>> function = object -> HashBag.newBagWith(String.valueOf(object));
 
         MutableBagTestCase.assertBagsEqual(
                 HashBag.newBagWith("1", "1", "2", "3", "4"),
@@ -197,14 +189,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     @Test
     public void collectWith()
     {
-        Function2<Integer, Integer, Integer> addZeroFunction =
-                new Function2<Integer, Integer, Integer>()
-                {
-                    public Integer value(Integer each, Integer parameter)
-                    {
-                        return each + parameter;
-                    }
-                };
+        Function2<Integer, Integer, Integer> addZeroFunction = (each, parameter) -> each + parameter;
         Verify.assertContainsAll(MultiReaderHashBag.newBagWith(1, 1, 2, 3).collectWith(addZeroFunction, 0), 1, 2, 3);
         Verify.assertContainsAll(
                 MultiReaderHashBag.newBagWith(1, 1, 2, 3).collectWith(
@@ -343,15 +328,11 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     public void forEachWithOccurrences()
     {
         MutableBag<Integer> bag = MultiReaderHashBag.newBagWith(1, 2, 2, 3, 3, 3);
-        final int[] sum = new int[1];
-        bag.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int occurrences)
+        int[] sum = new int[1];
+        bag.forEachWithOccurrences((each, occurrences) -> {
+            if (occurrences > 1)
             {
-                if (occurrences > 1)
-                {
-                    sum[0] += each * occurrences;
-                }
+                sum[0] += each * occurrences;
             }
         });
 
@@ -434,36 +415,20 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
         Assert.assertEquals(collection, deserializedCollection);
     }
 
-    private void verifyDelegateIsUnmodifiable(final MutableBag<Integer> delegate)
+    private void verifyDelegateIsUnmodifiable(MutableBag<Integer> delegate)
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                delegate.add(2);
-            }
-        });
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                delegate.remove(0);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.add(2); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.remove(0); });
     }
 
     @Test
     public void withReadLockAndDelegate()
     {
         MultiReaderHashBag<Integer> bag = MultiReaderHashBag.newBagWith(1);
-        final Object[] result = new Object[1];
-        bag.withReadLockAndDelegate(new Procedure<MutableBag<Integer>>()
-        {
-            public void value(MutableBag<Integer> delegate)
-            {
-                result[0] = delegate.getFirst();
-                MultiReaderHashBagTest.this.verifyDelegateIsUnmodifiable(delegate);
-            }
+        Object[] result = new Object[1];
+        bag.withReadLockAndDelegate(delegate -> {
+            result[0] = delegate.getFirst();
+            this.verifyDelegateIsUnmodifiable(delegate);
         });
         Assert.assertNotNull(result[0]);
     }
@@ -495,14 +460,8 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     @Test
     public void iterator()
     {
-        final MultiReaderHashBag<Integer> integers = MultiReaderHashBag.newBagWith(1, 1, 2, 3, 4);
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                integers.iterator();
-            }
-        });
+        MultiReaderHashBag<Integer> integers = MultiReaderHashBag.newBagWith(1, 1, 2, 3, 4);
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {integers.iterator();});
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -516,76 +475,46 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     public void withWriteLockAndDelegate()
     {
         MultiReaderHashBag<Integer> bag = MultiReaderHashBag.newBagWith(2);
-        final AtomicReference<MutableBag<?>> delegateList = new AtomicReference<MutableBag<?>>();
-        final AtomicReference<Iterator<?>> iterator = new AtomicReference<Iterator<?>>();
-        bag.withWriteLockAndDelegate(new Procedure<MutableBag<Integer>>()
-        {
-            public void value(MutableBag<Integer> delegate)
-            {
-                delegate.add(1);
-                delegate.add(2);
-                delegate.add(3);
-                delegate.add(4);
-                delegateList.set(delegate);
-                iterator.set(delegate.iterator());
-            }
+        AtomicReference<MutableBag<?>> delegateList = new AtomicReference<MutableBag<?>>();
+        AtomicReference<Iterator<?>> iterator = new AtomicReference<Iterator<?>>();
+        bag.withWriteLockAndDelegate(delegate -> {
+            delegate.add(1);
+            delegate.add(2);
+            delegate.add(3);
+            delegate.add(4);
+            delegateList.set(delegate);
+            iterator.set(delegate.iterator());
         });
         Assert.assertEquals(HashBag.newBagWith(1, 2, 2, 3, 4), bag);
 
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.get().hasNext();
-            }
-        });
+        Verify.assertThrows(NullPointerException.class, () -> { iterator.get().hasNext(); });
 
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                delegateList.get().iterator();
-            }
-        });
+        Verify.assertThrows(NullPointerException.class, () -> { delegateList.get().iterator(); });
     }
 
     @Test
     public void concurrentWrite()
     {
-        final MultiReaderHashBag<Integer> numbers = this.newWith();
+        MultiReaderHashBag<Integer> numbers = this.newWith();
         Interval interval = Interval.oneTo(100);
-        ParallelIterate.forEach(interval, new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                numbers.add(each);
-                Verify.assertSize(1, numbers.select(Predicates.equal(each)));
-                numbers.add(each);
-                Assert.assertEquals(2, numbers.count(Predicates.equal(each)));
-                numbers.add(each);
-                final Integer[] removed = new Integer[1];
-                numbers.withWriteLockAndDelegate(new Procedure<MutableBag<Integer>>()
-                {
-                    public void value(MutableBag<Integer> bag)
-                    {
-                        Iterator<Integer> iterator = bag.iterator();
-                        removed[0] = iterator.next();
-                        bag.remove(removed[0]);
-                        bag.add(removed[0]);
-                    }
-                });
-                numbers.add(each);
-                Assert.assertEquals(4, numbers.count(Predicates.equal(each)));
-            }
+        ParallelIterate.forEach(interval, each -> {
+            numbers.add(each);
+            Verify.assertSize(1, numbers.select(Predicates.equal(each)));
+            numbers.add(each);
+            Assert.assertEquals(2, numbers.count(Predicates.equal(each)));
+            numbers.add(each);
+            Integer[] removed = new Integer[1];
+            numbers.withWriteLockAndDelegate(bag -> {
+                Iterator<Integer> iterator = bag.iterator();
+                removed[0] = iterator.next();
+                bag.remove(removed[0]);
+                bag.add(removed[0]);
+            });
+            numbers.add(each);
+            Assert.assertEquals(4, numbers.count(Predicates.equal(each)));
         }, 1);
 
-        interval.forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                Assert.assertEquals(4, numbers.occurrencesOf(each));
-            }
-        });
+        interval.forEach((Procedure<Integer>) each -> Assert.assertEquals(4, numbers.occurrencesOf(each)));
     }
 
     @Test

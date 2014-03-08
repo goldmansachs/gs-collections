@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.set.sorted.mutable;
 
-import java.util.Comparator;
 import java.util.TreeSet;
 
 import com.gs.collections.api.collection.MutableCollection;
@@ -72,13 +71,7 @@ public class SynchronizedSortedSetTest extends AbstractSynchronizedCollectionTes
     @Test
     public void selectInstancesOf()
     {
-        MutableSortedSet<Number> numbers = new SynchronizedSortedSet<Number>(SortedSetAdapter.adapt(new TreeSet<Number>(new Comparator<Number>()
-        {
-            public int compare(Number o1, Number o2)
-            {
-                return Double.compare(o1.doubleValue(), o2.doubleValue());
-            }
-        }))).withAll(FastList.newListWith(1, 2.0, 3, 4.0, 5));
+        MutableSortedSet<Number> numbers = new SynchronizedSortedSet<Number>(SortedSetAdapter.adapt(new TreeSet<Number>((o1, o2) -> Double.compare(o1.doubleValue(), o2.doubleValue())))).withAll(FastList.newListWith(1, 2.0, 3, 4.0, 5));
         MutableSortedSet<Integer> integers = numbers.selectInstancesOf(Integer.class);
         Assert.assertEquals(UnifiedSet.newSetWith(1, 3, 5), integers);
         Assert.assertEquals(FastList.newListWith(1, 3, 5), integers.toList());

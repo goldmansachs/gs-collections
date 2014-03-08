@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,7 @@ package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
@@ -31,17 +28,9 @@ import org.junit.Test;
 
 public class CollectDoubleToObjectIterableTest
 {
-    public static final DoubleToObjectFunction<Double> BOX_DOUBLE = new DoubleToObjectFunction<Double>()
-    {
-        public Double valueOf(double each)
-        {
-            return Double.valueOf(each);
-        }
-    };
-
     private LazyIterable<Double> newPrimitiveWith(double... elements)
     {
-        return new CollectDoubleToObjectIterable<Double>(DoubleArrayList.newListWith(elements), BOX_DOUBLE);
+        return new CollectDoubleToObjectIterable<Double>(DoubleArrayList.newListWith(elements), Double::valueOf);
     }
 
     @Test
@@ -58,14 +47,10 @@ public class CollectDoubleToObjectIterableTest
     public void forEachWithIndex()
     {
         InternalIterable<Double> select = this.newPrimitiveWith(1.0, 2.0, 3.0, 4.0, 5.0);
-        final StringBuilder builder = new StringBuilder("");
-        select.forEachWithIndex(new ObjectIntProcedure<Double>()
-        {
-            public void value(Double object, int index)
-            {
-                builder.append(object);
-                builder.append(index);
-            }
+        StringBuilder builder = new StringBuilder("");
+        select.forEachWithIndex((object, index) -> {
+            builder.append(object);
+            builder.append(index);
         });
         Assert.assertEquals("1.002.013.024.035.04", builder.toString());
     }
@@ -87,13 +72,7 @@ public class CollectDoubleToObjectIterableTest
     {
         InternalIterable<Double> select = this.newPrimitiveWith(1.0, 2.0, 3.0, 4.0, 5.0);
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith(new Procedure2<Double, StringBuilder>()
-        {
-            public void value(Double each, StringBuilder aBuilder)
-            {
-                aBuilder.append(each);
-            }
-        }, builder);
+        select.forEachWith((each, aBuilder) -> { aBuilder.append(each); }, builder);
         Assert.assertEquals("1.02.03.04.05.0", builder.toString());
     }
 

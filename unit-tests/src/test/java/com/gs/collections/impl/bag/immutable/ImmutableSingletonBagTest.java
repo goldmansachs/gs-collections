@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,7 @@ import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
@@ -379,13 +375,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void flatCollect()
     {
         super.flatCollect();
-        ImmutableBag<Integer> result = this.newBag().flatCollect(new Function<String, Iterable<Integer>>()
-        {
-            public Iterable<Integer> valueOf(String object)
-            {
-                return Bags.mutable.of(1, 2, 3, 4, 5);
-            }
-        });
+        ImmutableBag<Integer> result = this.newBag().flatCollect(object -> Bags.mutable.of(1, 2, 3, 4, 5));
         Assert.assertEquals(Bags.immutable.of(1, 2, 3, 4, 5), result);
     }
 
@@ -395,13 +385,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     {
         super.flatCollectWithTarget();
         MutableBag<Integer> target = Bags.mutable.of();
-        MutableBag<Integer> result = this.newBag().flatCollect(new Function<String, Iterable<Integer>>()
-        {
-            public Iterable<Integer> valueOf(String object)
-            {
-                return Bags.mutable.of(1, 2, 3, 4, 5);
-            }
-        }, target);
+        MutableBag<Integer> result = this.newBag().flatCollect(object -> Bags.mutable.of(1, 2, 3, 4, 5), target);
         Assert.assertEquals(Bags.mutable.of(1, 2, 3, 4, 5), result);
     }
 
@@ -486,14 +470,10 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     @Test
     public void testForEachWithOccurrences()
     {
-        final Object[] results = new Object[2];
-        this.newBag().forEachWithOccurrences(new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                results[0] = each;
-                results[1] = index;
-            }
+        Object[] results = new Object[2];
+        this.newBag().forEachWithOccurrences((each, index) -> {
+            results[0] = each;
+            results[1] = index;
         });
         Assert.assertEquals(VAL, results[0]);
         Assert.assertEquals(1, results[1]);
@@ -523,14 +503,8 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void forEach()
     {
         super.forEach();
-        final Object[] results = new Object[1];
-        this.newBag().forEach(new Procedure<String>()
-        {
-            public void value(String each)
-            {
-                results[0] = each;
-            }
-        });
+        Object[] results = new Object[1];
+        this.newBag().forEach((Procedure<String>) each -> { results[0] = each; });
         Assert.assertEquals(VAL, results[0]);
     }
 
@@ -539,14 +513,10 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void forEachWithIndex()
     {
         super.forEachWithIndex();
-        final Object[] results = new Object[2];
-        this.newBag().forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                results[0] = each;
-                results[1] = index;
-            }
+        Object[] results = new Object[2];
+        this.newBag().forEachWithIndex((each, index) -> {
+            results[0] = each;
+            results[1] = index;
         });
         Assert.assertEquals(VAL, results[0]);
         Assert.assertEquals(0, results[1]);
@@ -557,14 +527,10 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void forEachWith()
     {
         super.forEachWith();
-        final Object[] results = new Object[2];
-        this.newBag().forEachWith(new Procedure2<String, Object>()
-        {
-            public void value(String each, Object index)
-            {
-                results[0] = each;
-                results[1] = index;
-            }
+        Object[] results = new Object[2];
+        this.newBag().forEachWith((each, index) -> {
+            results[0] = each;
+            results[1] = index;
         }, "second");
         Assert.assertEquals(VAL, results[0]);
         Assert.assertEquals("second", results[1]);
@@ -599,13 +565,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     @Test
     public void collectBoolean()
     {
-        ImmutableBooleanBag result = this.newBag().collectBoolean(new BooleanFunction<String>()
-        {
-            public boolean booleanValueOf(String s)
-            {
-                return "4".equals(s);
-            }
-        });
+        ImmutableBooleanBag result = this.newBag().collectBoolean("4"::equals);
         Assert.assertEquals(1, result.sizeDistinct());
         Assert.assertEquals(0, result.occurrencesOf(true));
         Assert.assertEquals(1, result.occurrencesOf(false));
@@ -616,13 +576,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void collectBooleanWithTarget()
     {
         BooleanHashBag target = new BooleanHashBag();
-        BooleanHashBag result = this.newBag().collectBoolean(new BooleanFunction<String>()
-        {
-            public boolean booleanValueOf(String s)
-            {
-                return "4".equals(s);
-            }
-        }, target);
+        BooleanHashBag result = this.newBag().collectBoolean("4"::equals, target);
         Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(1, result.sizeDistinct());
         Assert.assertEquals(0, result.occurrencesOf(true));

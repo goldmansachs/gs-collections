@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -847,38 +847,20 @@ public class ArrayIterateTest
                         "2", "b",
                         "3", "c"),
                 map);
-        ArrayIterate.forEachInBoth(null, null, new Procedure2<Object, Object>()
-        {
-            public void value(Object argument1, Object argument2)
-            {
-                Assert.fail();
-            }
-        });
+        ArrayIterate.forEachInBoth(null, null, (argument1, argument2) -> Assert.fail());
     }
 
     @Test(expected = RuntimeException.class)
     public void forEachInBothThrowsOnDifferentLengthArrays()
     {
-        ArrayIterate.forEachInBoth(new Integer[]{1, 2, 3}, new Integer[]{1, 2}, new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                Assert.fail();
-            }
-        });
+        ArrayIterate.forEachInBoth(new Integer[]{1, 2, 3}, new Integer[]{1, 2}, (argument1, argument2) -> Assert.fail());
     }
 
     @Test
     public void forEachWithIndex()
     {
         Integer[] objectArray = {1, 2, 3, 4};
-        ArrayIterate.forEachWithIndex(objectArray, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer i, int index)
-            {
-                Assert.assertEquals(index, i - 1);
-            }
-        });
+        ArrayIterate.forEachWithIndex(objectArray, (i, index) -> Assert.assertEquals(index, i - 1));
     }
 
     private Integer[] createIntegerArray(int size)
@@ -895,13 +877,7 @@ public class ArrayIterateTest
     public void detect()
     {
         Integer[] array = this.createIntegerArray(1);
-        Assert.assertEquals(Integer.valueOf(1), ArrayIterate.detect(array, new Predicate<Integer>()
-        {
-            public boolean accept(Integer integer)
-            {
-                return integer == 1;
-            }
-        }));
+        Assert.assertEquals(Integer.valueOf(1), ArrayIterate.detect(array, integer -> integer == 1));
     }
 
     @Test
@@ -983,13 +959,7 @@ public class ArrayIterateTest
     public void groupBy()
     {
         Integer[] array = {1, 2, 3, 4, 5, 6, 7};
-        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return IntegerPredicates.isOdd().accept(object);
-            }
-        };
+        Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
 
         MutableMap<Boolean, RichIterable<Integer>> expected =
                 UnifiedMap.<Boolean, RichIterable<Integer>>newWithKeysValues(
@@ -1067,13 +1037,7 @@ public class ArrayIterateTest
     {
         String[] array = {"1", "2", "3", "4", "5", "6", "7"};
         RichIterable<RichIterable<String>> groups = ArrayIterate.chunk(array, 2);
-        RichIterable<Integer> sizes = groups.collect(new Function<RichIterable<String>, Integer>()
-        {
-            public Integer valueOf(RichIterable<String> richIterable)
-            {
-                return richIterable.size();
-            }
-        });
+        RichIterable<Integer> sizes = groups.collect(RichIterable::size);
         Assert.assertEquals(FastList.newListWith(2, 2, 2, 1), sizes);
     }
 

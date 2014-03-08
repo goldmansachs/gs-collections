@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.gs.collections.impl.utility;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Functions;
@@ -48,14 +46,10 @@ public class LazyIterateTest
     public void selectForEachWithIndex()
     {
         LazyIterable<Integer> select = LazyIterate.select(Interval.oneTo(5), Predicates.lessThan(5));
-        final Sum sum = new IntegerSum(0);
-        select.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                sum.add(object);
-                sum.add(index);
-            }
+        Sum sum = new IntegerSum(0);
+        select.forEachWithIndex((object, index) -> {
+            sum.add(object);
+            sum.add(index);
         });
         Assert.assertEquals(16, sum.getValue().intValue());
     }
@@ -77,13 +71,7 @@ public class LazyIterateTest
     {
         LazyIterable<Integer> select = LazyIterate.select(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
-        select.forEachWith(new Procedure2<Integer, Sum>()
-        {
-            public void value(Integer each, Sum aSum)
-            {
-                aSum.add(each);
-            }
-        }, sum);
+        select.forEachWith((each, aSum) -> { aSum.add(each); }, sum);
         Assert.assertEquals(10, sum.getValue().intValue());
     }
 
@@ -99,14 +87,10 @@ public class LazyIterateTest
     public void rejectForEachWithIndex()
     {
         LazyIterable<Integer> select = LazyIterate.reject(Interval.oneTo(5), Predicates.lessThan(5));
-        final Sum sum = new IntegerSum(0);
-        select.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                sum.add(object);
-                sum.add(index);
-            }
+        Sum sum = new IntegerSum(0);
+        select.forEachWithIndex((object, index) -> {
+            sum.add(object);
+            sum.add(index);
         });
         Assert.assertEquals(5, sum.getValue().intValue());
     }
@@ -128,13 +112,7 @@ public class LazyIterateTest
     {
         LazyIterable<Integer> select = LazyIterate.reject(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
-        select.forEachWith(new Procedure2<Integer, Sum>()
-        {
-            public void value(Integer each, Sum aSum)
-            {
-                aSum.add(each);
-            }
-        }, sum);
+        select.forEachWith((each, aSum) -> { aSum.add(each); }, sum);
         Assert.assertEquals(5, sum.getValue().intValue());
     }
 
@@ -152,14 +130,10 @@ public class LazyIterateTest
     public void collectForEachWithIndex()
     {
         LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), Functions.getToString());
-        final StringBuilder builder = new StringBuilder("");
-        select.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String object, int index)
-            {
-                builder.append(object);
-                builder.append(index);
-            }
+        StringBuilder builder = new StringBuilder("");
+        select.forEachWithIndex((object, index) -> {
+            builder.append(object);
+            builder.append(index);
         });
         Assert.assertEquals("1021324354", builder.toString());
     }
@@ -181,13 +155,7 @@ public class LazyIterateTest
     {
         LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), Functions.getToString());
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith(new Procedure2<String, StringBuilder>()
-        {
-            public void value(String each, StringBuilder aBuilder)
-            {
-                aBuilder.append(each);
-            }
-        }, builder);
+        select.forEachWith((each, aBuilder) -> { aBuilder.append(each); }, builder);
         Assert.assertEquals("12345", builder.toString());
     }
 

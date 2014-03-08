@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.memory.list;
 import java.util.ArrayList;
 
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
@@ -73,14 +72,8 @@ public class IntListMemoryTest
         @Override
         public IntArrayList value()
         {
-            final IntArrayList list = new IntArrayList();
-            this.data.forEach(new IntProcedure()
-            {
-                public void value(int each)
-                {
-                    list.add(each);
-                }
-            });
+            IntArrayList list = new IntArrayList();
+            this.data.forEach(list::add);
             return list;
         }
     }
@@ -97,14 +90,8 @@ public class IntListMemoryTest
         @Override
         public TIntArrayList value()
         {
-            final TIntArrayList list = new TIntArrayList();
-            this.data.forEach(new IntProcedure()
-            {
-                public void value(int each)
-                {
-                    list.add(each);
-                }
-            });
+            TIntArrayList list = new TIntArrayList();
+            this.data.forEach(list::add);
             return list;
         }
     }
@@ -121,14 +108,8 @@ public class IntListMemoryTest
         @Override
         public ArrayList<Integer> value()
         {
-            final ArrayList<Integer> list = new ArrayList<Integer>();
-            this.data.forEach(new IntProcedure()
-            {
-                public void value(int each)
-                {
-                    list.add(each);
-                }
-            });
+            ArrayList<Integer> list = new ArrayList<Integer>();
+            this.data.forEach(list::add);
             return list;
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,13 +35,6 @@ import org.junit.Test;
 
 public class PredicatesTest
 {
-    private static final Function<List<Object>, Boolean> IS_EMPTY = new Function<List<Object>, Boolean>()
-    {
-        public Boolean valueOf(List<Object> list)
-        {
-            return list.isEmpty();
-        }
-    };
     private Employee alice;
     private Employee bob;
     private Employee charlie;
@@ -358,13 +351,13 @@ public class PredicatesTest
     @Test
     public void ifTrue()
     {
-        assertIf(Predicates.ifTrue(IS_EMPTY), true);
+        assertIf(Predicates.ifTrue(List::isEmpty), true);
     }
 
     @Test
     public void ifFalse()
     {
-        assertIf(Predicates.ifFalse(IS_EMPTY), false);
+        assertIf(Predicates.ifFalse(List::isEmpty), false);
     }
 
     private static void assertIf(Predicate<List<Object>> predicate, boolean bool)
@@ -447,19 +440,13 @@ public class PredicatesTest
     @Test
     public void attributeAnySatisfy()
     {
-        Function<Address, String> stateAbbreviation = new Function<Address, String>()
-        {
-            public String valueOf(Address address)
-            {
-                return address.getState().getAbbreviation();
-            }
-        };
+        Function<Address, String> stateAbbreviation = address -> address.getState().getAbbreviation();
         Predicates<Address> inArizona = Predicates.attributeEqual(stateAbbreviation, "AZ");
-        MutableCollection<Employee> azResidents = this.employees.select(Predicates.attributeAnySatisfy(Employee.TO_ADDRESSES, inArizona));
+        MutableCollection<Employee> azResidents = this.employees.select(Predicates.attributeAnySatisfy(employee -> employee.addresses, inArizona));
         Assert.assertEquals(FastList.newListWith(this.alice, this.charlie), azResidents);
 
         Predicates<Address> inAlaska = Predicates.attributeEqual(stateAbbreviation, "AK");
-        MutableCollection<Employee> akResidents = this.employees.select(Predicates.attributeAnySatisfy(Employee.TO_ADDRESSES, inAlaska));
+        MutableCollection<Employee> akResidents = this.employees.select(Predicates.attributeAnySatisfy(employee -> employee.addresses, inAlaska));
         Assert.assertEquals(FastList.newListWith(this.bob, this.diane), akResidents);
         assertToString(inArizona);
     }
@@ -474,15 +461,9 @@ public class PredicatesTest
     @Test
     public void attributeNoneSatisfy()
     {
-        Function<Address, String> stateAbbreviation = new Function<Address, String>()
-        {
-            public String valueOf(Address address)
-            {
-                return address.getState().getAbbreviation();
-            }
-        };
+        Function<Address, String> stateAbbreviation = address -> address.getState().getAbbreviation();
         Predicates<Address> inAlabama = Predicates.attributeEqual(stateAbbreviation, "AL");
-        MutableCollection<Employee> notAlResidents = this.employees.select(Predicates.attributeNoneSatisfy(Employee.TO_ADDRESSES, inAlabama));
+        MutableCollection<Employee> notAlResidents = this.employees.select(Predicates.attributeNoneSatisfy(employee -> employee.addresses, inAlabama));
         Assert.assertEquals(FastList.newListWith(this.alice, this.bob, this.charlie, this.diane), notAlResidents);
     }
 

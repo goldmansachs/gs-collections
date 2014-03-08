@@ -235,33 +235,25 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
     @Test
     public void removeFromPool()
     {
-        final Pool<Integer> unifiedSet = UnifiedSet.<Integer>newSet(8).withAll(COLLISIONS);
-        COLLISIONS.reverseForEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                Assert.assertNull(unifiedSet.removeFromPool(null));
-                Assert.assertSame(each, unifiedSet.removeFromPool(each));
-                Assert.assertNull(unifiedSet.removeFromPool(each));
-                Assert.assertNull(unifiedSet.removeFromPool(null));
-                Assert.assertNull(unifiedSet.removeFromPool(COLLISION_10));
-            }
+        Pool<Integer> unifiedSet = UnifiedSet.<Integer>newSet(8).withAll(COLLISIONS);
+        COLLISIONS.reverseForEach(each -> {
+            Assert.assertNull(unifiedSet.removeFromPool(null));
+            Assert.assertSame(each, unifiedSet.removeFromPool(each));
+            Assert.assertNull(unifiedSet.removeFromPool(each));
+            Assert.assertNull(unifiedSet.removeFromPool(null));
+            Assert.assertNull(unifiedSet.removeFromPool(COLLISION_10));
         });
 
         Assert.assertEquals(UnifiedSet.<Integer>newSet(), unifiedSet);
 
-        COLLISIONS.forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                Pool<Integer> unifiedSet2 = UnifiedSet.<Integer>newSet(8).withAll(COLLISIONS);
+        COLLISIONS.forEach((Procedure<Integer>) each -> {
+            Pool<Integer> unifiedSet2 = UnifiedSet.<Integer>newSet(8).withAll(COLLISIONS);
 
-                Assert.assertNull(unifiedSet2.removeFromPool(null));
-                Assert.assertSame(each, unifiedSet2.removeFromPool(each));
-                Assert.assertNull(unifiedSet2.removeFromPool(each));
-                Assert.assertNull(unifiedSet2.removeFromPool(null));
-                Assert.assertNull(unifiedSet2.removeFromPool(COLLISION_10));
-            }
+            Assert.assertNull(unifiedSet2.removeFromPool(null));
+            Assert.assertSame(each, unifiedSet2.removeFromPool(each));
+            Assert.assertNull(unifiedSet2.removeFromPool(each));
+            Assert.assertNull(unifiedSet2.removeFromPool(null));
+            Assert.assertNull(unifiedSet2.removeFromPool(COLLISION_10));
         });
 
         // search a chain for a non-existent element
@@ -300,32 +292,28 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
     @Test
     public void null_behavior()
     {
-        final UnifiedSet<Integer> unifiedSet = UnifiedSet.<Integer>newSet(10).withAll(MORE_COLLISIONS);
-        MORE_COLLISIONS.clone().reverseForEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                Assert.assertTrue(unifiedSet.add(null));
-                Assert.assertFalse(unifiedSet.add(null));
-                Verify.assertContains(null, unifiedSet);
-                Verify.assertPostSerializedEqualsAndHashCode(unifiedSet);
+        UnifiedSet<Integer> unifiedSet = UnifiedSet.<Integer>newSet(10).withAll(MORE_COLLISIONS);
+        MORE_COLLISIONS.clone().reverseForEach(each -> {
+            Assert.assertTrue(unifiedSet.add(null));
+            Assert.assertFalse(unifiedSet.add(null));
+            Verify.assertContains(null, unifiedSet);
+            Verify.assertPostSerializedEqualsAndHashCode(unifiedSet);
 
-                Assert.assertTrue(unifiedSet.remove(null));
-                Assert.assertFalse(unifiedSet.remove(null));
-                Verify.assertNotContains(null, unifiedSet);
+            Assert.assertTrue(unifiedSet.remove(null));
+            Assert.assertFalse(unifiedSet.remove(null));
+            Verify.assertNotContains(null, unifiedSet);
 
-                Verify.assertPostSerializedEqualsAndHashCode(unifiedSet);
+            Verify.assertPostSerializedEqualsAndHashCode(unifiedSet);
 
-                Assert.assertNull(unifiedSet.put(null));
-                Assert.assertNull(unifiedSet.put(null));
-                Assert.assertNull(unifiedSet.removeFromPool(null));
-                Assert.assertNull(unifiedSet.removeFromPool(null));
+            Assert.assertNull(unifiedSet.put(null));
+            Assert.assertNull(unifiedSet.put(null));
+            Assert.assertNull(unifiedSet.removeFromPool(null));
+            Assert.assertNull(unifiedSet.removeFromPool(null));
 
-                Verify.assertContains(each, unifiedSet);
-                Assert.assertTrue(unifiedSet.remove(each));
-                Assert.assertFalse(unifiedSet.remove(each));
-                Verify.assertNotContains(each, unifiedSet);
-            }
+            Verify.assertContains(each, unifiedSet);
+            Assert.assertTrue(unifiedSet.remove(each));
+            Assert.assertFalse(unifiedSet.remove(each));
+            Verify.assertNotContains(each, unifiedSet);
         });
     }
 

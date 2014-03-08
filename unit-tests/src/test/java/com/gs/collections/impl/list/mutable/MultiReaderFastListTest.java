@@ -24,11 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
@@ -162,13 +158,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void forEachWithIndex()
     {
         MutableList<Integer> list = MultiReaderFastList.newList(Interval.oneTo(5));
-        list.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                Assert.assertEquals(index, object - 1);
-            }
-        });
+        list.forEachWithIndex((object, index) -> Assert.assertEquals(index, object - 1));
     }
 
     @Override
@@ -183,15 +173,11 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     @Test
     public void forEachInBoth()
     {
-        final MutableList<Pair<String, String>> list = MultiReaderFastList.newList();
+        MutableList<Pair<String, String>> list = MultiReaderFastList.newList();
         MutableList<String> list1 = MultiReaderFastList.newListWith("1", "2");
         MutableList<String> list2 = MultiReaderFastList.newListWith("a", "b");
-        ListIterate.forEachInBoth(list1, list2, new Procedure2<String, String>()
-        {
-            public void value(String argument1, String argument2)
-            {
-                list.add(Tuples.pair(argument1, argument2));
-            }
+        ListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> {
+            list.add(Tuples.pair(argument1, argument2));
         });
         Assert.assertEquals(FastList.newListWith(Tuples.pair("1", "a"), Tuples.pair("2", "b")), list);
     }
@@ -353,15 +339,9 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     @Test
     public void forEachWith()
     {
-        final MutableList<Integer> result = FastList.newList();
+        MutableList<Integer> result = FastList.newList();
         MutableList<Integer> collection = MultiReaderFastList.newListWith(1, 2, 3, 4);
-        collection.forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 0);
+        collection.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), result);
     }
 
@@ -412,14 +392,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     @Test
     public void collectWith()
     {
-        Function2<Integer, Integer, Integer> addZeroFunction =
-                new Function2<Integer, Integer, Integer>()
-                {
-                    public Integer value(Integer each, Integer parameter)
-                    {
-                        return each + parameter;
-                    }
-                };
+        Function2<Integer, Integer, Integer> addZeroFunction = (each, parameter) -> each + parameter;
         Verify.assertContainsAll(MultiReaderFastList.newListWith(1, 2, 3).collectWith(addZeroFunction, 0), 1, 2, 3);
         Verify.assertContainsAll(
                 MultiReaderFastList.newListWith(1, 2, 3).collectWith(
@@ -433,13 +406,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void injectIntoWith()
     {
         MutableList<Integer> objects = MultiReaderFastList.newListWith(1, 2, 3);
-        Integer result = objects.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
-        {
-            public Integer value(Integer injectedValued, Integer item, Integer parameter)
-            {
-                return injectedValued + item + parameter;
-            }
-        }, 0);
+        Integer result = objects.injectIntoWith(1, (injectedValued, item, parameter) -> injectedValued + item + parameter, 0);
         Assert.assertEquals(Integer.valueOf(7), result);
     }
 
@@ -735,16 +702,10 @@ public class MultiReaderFastListTest extends AbstractListTestCase
         Verify.assertStartsWith(zeroSizedList, "1", "3");
         zeroSizedList.add(1, "2");
         Verify.assertStartsWith(zeroSizedList, "1", "2", "3");
-        final MutableList<Integer> midList = FastList.<Integer>newList(2).with(1, 3);
+        MutableList<Integer> midList = FastList.<Integer>newList(2).with(1, 3);
         midList.add(1, 2);
         Verify.assertStartsWith(midList, 1, 2, 3);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                midList.add(-1, -1);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> midList.add(-1, -1));
     }
 
     @Override
@@ -836,14 +797,8 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     @Test
     public void outOfBoundsCondition()
     {
-        final MutableList<Integer> integers = this.newWith(1, 2, 3, 4);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                integers.get(4);
-            }
-        });
+        MutableList<Integer> integers = this.newWith(1, 2, 3, 4);
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { integers.get(4); });
     }
 
     @Override
@@ -1002,14 +957,8 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     @Test
     public void iterator()
     {
-        final MultiReaderFastList<Integer> integers = this.newWith(1, 2, 3, 4);
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                integers.iterator();
-            }
-        });
+        MultiReaderFastList<Integer> integers = this.newWith(1, 2, 3, 4);
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {integers.iterator();});
     }
 
     @Override
@@ -1045,25 +994,21 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void withWritelockAndDelegate()
     {
         MultiReaderFastList<Integer> list = MultiReaderFastList.newList(2);
-        final AtomicReference<MutableList<?>> delegateList = new AtomicReference<MutableList<?>>();
-        final AtomicReference<MutableList<?>> subLists = new AtomicReference<MutableList<?>>();
-        final AtomicReference<Iterator<?>> iterator = new AtomicReference<Iterator<?>>();
-        final AtomicReference<Iterator<?>> listIterator = new AtomicReference<Iterator<?>>();
-        final AtomicReference<Iterator<?>> listIteratorWithPosition = new AtomicReference<Iterator<?>>();
-        list.withWriteLockAndDelegate(new Procedure<MutableList<Integer>>()
-        {
-            public void value(MutableList<Integer> delegate)
-            {
-                delegate.add(1);
-                delegate.add(2);
-                delegate.add(3);
-                delegate.add(4);
-                delegateList.set(delegate);
-                subLists.set(delegate.subList(1, 3));
-                iterator.set(delegate.iterator());
-                listIterator.set(delegate.listIterator());
-                listIteratorWithPosition.set(delegate.listIterator(3));
-            }
+        AtomicReference<MutableList<?>> delegateList = new AtomicReference<MutableList<?>>();
+        AtomicReference<MutableList<?>> subLists = new AtomicReference<MutableList<?>>();
+        AtomicReference<Iterator<?>> iterator = new AtomicReference<Iterator<?>>();
+        AtomicReference<Iterator<?>> listIterator = new AtomicReference<Iterator<?>>();
+        AtomicReference<Iterator<?>> listIteratorWithPosition = new AtomicReference<Iterator<?>>();
+        list.withWriteLockAndDelegate(delegate -> {
+            delegate.add(1);
+            delegate.add(2);
+            delegate.add(3);
+            delegate.add(4);
+            delegateList.set(delegate);
+            subLists.set(delegate.subList(1, 3));
+            iterator.set(delegate.iterator());
+            listIterator.set(delegate.listIterator());
+            listIteratorWithPosition.set(delegate.listIterator(3));
         });
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), list);
 
@@ -1074,60 +1019,32 @@ public class MultiReaderFastListTest extends AbstractListTestCase
         this.assertIteratorThrows(listIteratorWithPosition.get());
     }
 
-    private void assertIteratorThrows(final Iterator<?> iterator)
+    private void assertIteratorThrows(Iterator<?> iterator)
     {
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.hasNext();
-            }
-        });
+        Verify.assertThrows(NullPointerException.class, (Runnable) () -> {iterator.hasNext();});
     }
 
-    private void assertIteratorThrows(final MutableList<?> list)
+    private void assertIteratorThrows(MutableList<?> list)
     {
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.iterator();
-            }
-        });
+        Verify.assertThrows(NullPointerException.class, (Runnable) () -> {list.iterator();});
     }
 
     @Test
     public void withReadLockAndDelegate()
     {
         MultiReaderFastList<Integer> list = this.newWith(1);
-        final Object[] result = new Object[1];
-        list.withReadLockAndDelegate(new Procedure<MutableList<Integer>>()
-        {
-            public void value(MutableList<Integer> delegate)
-            {
-                result[0] = delegate.getFirst();
-                MultiReaderFastListTest.this.verifyDelegateIsUnmodifiable(delegate);
-            }
+        Object[] result = new Object[1];
+        list.withReadLockAndDelegate(delegate -> {
+            result[0] = delegate.getFirst();
+            this.verifyDelegateIsUnmodifiable(delegate);
         });
         Assert.assertNotNull(result[0]);
     }
 
-    private void verifyDelegateIsUnmodifiable(final MutableList<Integer> delegate)
+    private void verifyDelegateIsUnmodifiable(MutableList<Integer> delegate)
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                delegate.add(2);
-            }
-        });
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                delegate.remove(0);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.add(2); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.remove(0); });
     }
 
     @Override
@@ -1165,12 +1082,6 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void asReversed()
     {
         MultiReaderFastList<Integer> multiReaderFastList = this.newWith(1, 2, 3, 4);
-        multiReaderFastList.withReadLockAndDelegate(new Procedure<MutableList<Integer>>()
-        {
-            public void value(MutableList<Integer> delegate)
-            {
-                Verify.assertIterablesEqual(iList(4, 3, 2, 1), delegate.asReversed());
-            }
-        });
+        multiReaderFastList.withReadLockAndDelegate(delegate -> Verify.assertIterablesEqual(iList(4, 3, 2, 1), delegate.asReversed()));
     }
 }

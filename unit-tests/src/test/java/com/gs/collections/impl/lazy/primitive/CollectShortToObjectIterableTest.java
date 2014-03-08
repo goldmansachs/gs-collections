@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,7 @@ package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.primitive.ShortToObjectFunction;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
@@ -31,17 +28,9 @@ import org.junit.Test;
 
 public class CollectShortToObjectIterableTest
 {
-    public static final ShortToObjectFunction<Short> BOX_SHORT = new ShortToObjectFunction<Short>()
-    {
-        public Short valueOf(short each)
-        {
-            return Short.valueOf(each);
-        }
-    };
-
     private LazyIterable<Short> newPrimitiveWith(short... elements)
     {
-        return new CollectShortToObjectIterable<Short>(ShortArrayList.newListWith(elements), BOX_SHORT);
+        return new CollectShortToObjectIterable<Short>(ShortArrayList.newListWith(elements), Short::valueOf);
     }
 
     @Test
@@ -58,14 +47,10 @@ public class CollectShortToObjectIterableTest
     public void forEachWithIndex()
     {
         InternalIterable<Short> select = this.newPrimitiveWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5);
-        final StringBuilder builder = new StringBuilder("");
-        select.forEachWithIndex(new ObjectIntProcedure<Short>()
-        {
-            public void value(Short object, int index)
-            {
-                builder.append(object);
-                builder.append(index);
-            }
+        StringBuilder builder = new StringBuilder("");
+        select.forEachWithIndex((object, index) -> {
+            builder.append(object);
+            builder.append(index);
         });
         Assert.assertEquals("1021324354", builder.toString());
     }
@@ -87,13 +72,7 @@ public class CollectShortToObjectIterableTest
     {
         InternalIterable<Short> select = this.newPrimitiveWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5);
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith(new Procedure2<Short, StringBuilder>()
-        {
-            public void value(Short each, StringBuilder aBuilder)
-            {
-                aBuilder.append(each);
-            }
-        }, builder);
+        select.forEachWith((each, aBuilder) -> { aBuilder.append(each); }, builder);
         Assert.assertEquals("12345", builder.toString());
     }
 

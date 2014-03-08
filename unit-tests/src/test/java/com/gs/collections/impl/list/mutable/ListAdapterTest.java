@@ -211,38 +211,15 @@ public class ListAdapterTest extends AbstractListTestCase
     @Test
     public void testGetWithArrayIndexOutOfBoundsException()
     {
-        final Object item = new Object();
+        Object item = new Object();
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                ListAdapterTest.this.newWith(item).get(-1);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { this.newWith(item).get(-1); });
     }
 
     @Test
     public void adaptNull()
     {
-        Verify.assertThrows(
-                NullPointerException.class,
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        new ListAdapter<Object>(null);
-                    }
-                });
-
-        Verify.assertThrows(
-                NullPointerException.class,
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        ListAdapter.adapt(null);
-                    }
-                });
+        Verify.assertThrows(NullPointerException.class, () -> { new ListAdapter<Object>(null); });
+        Verify.assertThrows(NullPointerException.class, () -> { ListAdapter.adapt(null); });
     }
 }

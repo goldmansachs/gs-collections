@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.gs.collections.impl.map.mutable.primitive;
 
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
-import com.gs.collections.api.block.function.primitive.BooleanFunction0;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.test.Verify;
@@ -141,42 +140,20 @@ public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBoole
     @Test
     public void getIfAbsentPut_Function()
     {
-        BooleanFunction0 factory = new BooleanFunction0()
-        {
-            public boolean value()
-            {
-                return false;
-            }
-        };
-
-        Assert.assertTrue(this.map.getIfAbsentPut("0", factory));
+        Assert.assertTrue(this.map.getIfAbsentPut("0", () -> false));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPut_FunctionThrowsException()
     {
-        BooleanFunction0 factory = new BooleanFunction0()
-        {
-            public boolean value()
-            {
-                return false;
-            }
-        };
-
-        this.map.getIfAbsentPut("10", factory);
+        this.map.getIfAbsentPut("10", () -> false);
     }
 
     @Override
     @Test
     public void getIfAbsentPutWith()
     {
-        BooleanFunction<String> functionLengthEven = new BooleanFunction<String>()
-        {
-            public boolean booleanValueOf(String string)
-            {
-                return (string.length() & 1) == 0;
-            }
-        };
+        BooleanFunction<String> functionLengthEven = string -> (string.length() & 1) == 0;
 
         Assert.assertTrue(this.map.getIfAbsentPutWith("0", functionLengthEven, "zeroValue"));
     }
@@ -184,13 +161,7 @@ public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBoole
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithThrowsException()
     {
-        BooleanFunction<String> functionLengthEven = new BooleanFunction<String>()
-        {
-            public boolean booleanValueOf(String string)
-            {
-                return (string.length() & 1) == 0;
-            }
-        };
+        BooleanFunction<String> functionLengthEven = string -> (string.length() & 1) == 0;
 
         this.map.getIfAbsentPutWith("10", functionLengthEven, "zeroValue");
     }
@@ -199,13 +170,7 @@ public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBoole
     @Test
     public void getIfAbsentPutWithKey()
     {
-        BooleanFunction<Integer> function = new BooleanFunction<Integer>()
-        {
-            public boolean booleanValueOf(Integer anObject)
-            {
-                return anObject == null || (anObject & 1) == 0;
-            }
-        };
+        BooleanFunction<Integer> function = anObject -> anObject == null || (anObject & 1) == 0;
 
         Assert.assertTrue(this.newWithKeysValues(0, true).getIfAbsentPutWithKey(0, function));
     }
@@ -213,13 +178,7 @@ public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBoole
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithKeyThrowsException()
     {
-        BooleanFunction<Integer> function = new BooleanFunction<Integer>()
-        {
-            public boolean booleanValueOf(Integer anObject)
-            {
-                return anObject == null || (anObject & 1) == 0;
-            }
-        };
+        BooleanFunction<Integer> function = anObject -> anObject == null || (anObject & 1) == 0;
 
         this.<Integer>getEmptyMap().getIfAbsentPutWithKey(10, function);
     }
@@ -232,20 +191,8 @@ public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBoole
         Assert.assertTrue(this.map.getOrThrow("1"));
         Assert.assertFalse(this.map.getOrThrow("2"));
 
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableObjectBooleanMapTest.this.map.getOrThrow("5");
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableObjectBooleanMapTest.this.map.getOrThrow(null);
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow("5"); });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(null); });
     }
 
     @Override

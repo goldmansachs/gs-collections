@@ -25,15 +25,9 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.Multimap;
@@ -133,22 +127,10 @@ public abstract class StackIterableTestCase
     @Test
     public void peek_illegal_arguments()
     {
-        final StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                stack.peek(-1);
-            }
-        });
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        Verify.assertThrows(IllegalArgumentException.class, () -> { stack.peek(-1); });
 
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                stack.peek(4);
-            }
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> { stack.peek(4); });
 
         Assert.assertEquals(FastList.newListWith(1, 2, 3), stack.peek(3));
     }
@@ -172,14 +154,8 @@ public abstract class StackIterableTestCase
     @Test
     public void peekAt_illegal_arguments()
     {
-        final StackIterable<String> stack = this.newStackWith("1", "2", "3");
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                stack.peekAt(stack.size());
-            }
-        });
+        StackIterable<String> stack = this.newStackWith("1", "2", "3");
+        Verify.assertThrows(IllegalArgumentException.class, () -> { stack.peekAt(stack.size()); });
     }
 
     @Test
@@ -214,13 +190,7 @@ public abstract class StackIterableTestCase
         StackIterable<Integer> stack = this.newStackWith(1, 2, 3);
         Assert.assertEquals(Integer.valueOf(3), stack.getFirst());
         Assert.assertEquals(stack.peek(), stack.getFirst());
-        Verify.assertThrows(EmptyStackException.class, new Runnable()
-        {
-            public void run()
-            {
-                StackIterableTestCase.this.newStackWith().getFirst();
-            }
-        });
+        Verify.assertThrows(EmptyStackException.class, () -> { this.newStackWith().getFirst(); });
         StackIterable<Integer> stack2 = this.newStackFromTopToBottom(1, 2, 3);
         Assert.assertEquals(Integer.valueOf(1), stack2.getFirst());
     }
@@ -460,18 +430,14 @@ public abstract class StackIterableTestCase
     {
         StackIterable<String> stack = this.newStackFromTopToBottom("1", "One", "2", "Two");
 
-        CountingFunction<String, Iterable<Character>> function = CountingFunction.of(new Function<String, Iterable<Character>>()
-        {
-            public Iterable<Character> valueOf(String object)
+        CountingFunction<String, Iterable<Character>> function = CountingFunction.of(object -> {
+            MutableList<Character> result = Lists.mutable.of();
+            char[] chars = object.toCharArray();
+            for (char aChar : chars)
             {
-                MutableList<Character> result = Lists.mutable.of();
-                char[] chars = object.toCharArray();
-                for (char aChar : chars)
-                {
-                    result.add(Character.valueOf(aChar));
-                }
-                return result;
+                result.add(Character.valueOf(aChar));
             }
+            return result;
         });
 
         Assert.assertEquals(
@@ -761,37 +727,10 @@ public abstract class StackIterableTestCase
     public void sumOf()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3, 4);
-        Assert.assertEquals(10, stack.sumOfInt(new IntFunction<Integer>()
-        {
-            public int intValueOf(Integer integer)
-            {
-                return integer;
-            }
-        }));
-
-        Assert.assertEquals(10, stack.sumOfLong(new LongFunction<Integer>()
-        {
-            public long longValueOf(Integer integer)
-            {
-                return integer.longValue();
-            }
-        }));
-
-        Assert.assertEquals(10.0d, stack.sumOfDouble(new DoubleFunction<Integer>()
-        {
-            public double doubleValueOf(Integer integer)
-            {
-                return integer.doubleValue();
-            }
-        }), 0.001);
-
-        Assert.assertEquals(10.0f, stack.sumOfFloat(new FloatFunction<Integer>()
-        {
-            public float floatValueOf(Integer integer)
-            {
-                return integer.floatValue();
-            }
-        }), 0.001);
+        Assert.assertEquals(10, stack.sumOfInt(integer -> integer));
+        Assert.assertEquals(10, stack.sumOfLong(Integer::longValue));
+        Assert.assertEquals(10.0d, stack.sumOfDouble(Integer::doubleValue), 0.001);
+        Assert.assertEquals(10.0f, stack.sumOfFloat(Integer::floatValue), 0.001);
     }
 
     @Test
@@ -875,36 +814,17 @@ public abstract class StackIterableTestCase
                 Tuples.pair(Boolean.TRUE, "3"),
                 Tuples.pair(Boolean.FALSE, "2"),
                 Tuples.pair(Boolean.TRUE, "1"));
-        Assert.assertEquals(expected, stack.groupBy(new Function<String, Boolean>()
-        {
-            public Boolean valueOf(String object)
-            {
-                return IntegerPredicates.isOdd().accept(Integer.parseInt(object));
-            }
-        }));
-
-        Assert.assertEquals(expected, stack.groupBy(new Function<String, Boolean>()
-        {
-            public Boolean valueOf(String object)
-            {
-                return IntegerPredicates.isOdd().accept(Integer.parseInt(object));
-            }
-        }, FastListMultimap.<Boolean, String>newMultimap()));
+        Assert.assertEquals(expected, stack.groupBy(object -> IntegerPredicates.isOdd().accept(Integer.parseInt(object))));
+        Assert.assertEquals(expected, stack.groupBy(object -> IntegerPredicates.isOdd().accept(Integer.parseInt(object)), FastListMultimap.<Boolean, String>newMultimap()));
     }
 
     @Test
     public void groupByEach()
     {
-        final StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
 
-        final MutableMultimap<Integer, Integer> expected = FastListMultimap.newMultimap();
-        stack.forEach(new Procedure<Integer>()
-        {
-            public void value(Integer value)
-            {
-                expected.putAll(-value, Interval.fromTo(value, stack.size()));
-            }
-        });
+        MutableMultimap<Integer, Integer> expected = FastListMultimap.newMultimap();
+        stack.forEach((Procedure<Integer>) value -> { expected.putAll(-value, Interval.fromTo(value, stack.size())); });
 
         Multimap<Integer, Integer> actual =
                 stack.groupByEach(new NegativeIntervalFunction());
@@ -941,14 +861,8 @@ public abstract class StackIterableTestCase
     public void forEachWith()
     {
         StackIterable<String> stack = this.newStackWith("1", "2", "3", "4");
-        final StringBuilder builder = new StringBuilder();
-        stack.forEachWith(new Procedure2<String, Integer>()
-        {
-            public void value(String argument1, Integer argument2)
-            {
-                builder.append(argument1).append(argument2);
-            }
-        }, 0);
+        StringBuilder builder = new StringBuilder();
+        stack.forEachWith((argument1, argument2) -> { builder.append(argument1).append(argument2); }, 0);
         Assert.assertEquals("40302010", builder.toString());
     }
 
@@ -956,14 +870,8 @@ public abstract class StackIterableTestCase
     public void forEachWithIndex()
     {
         StackIterable<String> stack = this.newStackFromTopToBottom("5", "4", "3", "2", "1");
-        final StringBuilder builder = new StringBuilder();
-        stack.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                builder.append(each).append(index);
-            }
-        });
+        StringBuilder builder = new StringBuilder();
+        stack.forEachWithIndex((each, index) -> { builder.append(each).append(index); });
         Assert.assertEquals("5041322314", builder.toString());
     }
 
@@ -1130,15 +1038,8 @@ public abstract class StackIterableTestCase
     public void aggregateByMutating()
     {
         Function0<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
-        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
-        {
-            public void value(AtomicInteger aggregate, Integer value)
-            {
-                aggregate.addAndGet(value);
-            }
-        };
         StackIterable<Integer> collection = this.newStackWith(1, 1, 1, 2, 2, 3);
-        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, AtomicInteger::addAndGet);
         Assert.assertEquals(3, aggregation.get("1").intValue());
         Assert.assertEquals(4, aggregation.get("2").intValue());
         Assert.assertEquals(3, aggregation.get("3").intValue());

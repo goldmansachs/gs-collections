@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,25 +38,11 @@ public class ParallelIterate2Test
     public void creationAndExecution() throws InterruptedException
     {
         int howManyTimes = 200;
-        final AtomicInteger counter = new AtomicInteger(0);
+        AtomicInteger counter = new AtomicInteger(0);
 
-        final Callable<Integer> task = new Callable<Integer>()
-        {
-            public Integer call()
-            {
-                return counter.getAndIncrement();
-            }
-        };
+        Collection<Callable<Integer>> tasks = new ArrayList<Callable<Integer>>();
 
-        final Collection<Callable<Integer>> tasks = new ArrayList<Callable<Integer>>();
-
-        Interval.oneTo(howManyTimes).run(new Runnable()
-        {
-            public void run()
-            {
-                tasks.add(task);
-            }
-        });
+        Interval.oneTo(howManyTimes).run(() -> { tasks.add(counter::getAndIncrement); });
 
         ExecutorService executorService1 = ParallelIterate.newPooledExecutor(4, "test pool 2 4", true);
         executorService1.invokeAll(tasks);

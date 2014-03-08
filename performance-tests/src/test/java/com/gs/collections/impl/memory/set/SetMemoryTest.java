@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,15 +69,9 @@ public class SetMemoryTest
             this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
-        protected <R extends Set<Integer>> R fill(final R set)
+        protected <R extends Set<Integer>> R fill(R set)
         {
-            this.data.forEach(new Procedure<Integer>()
-            {
-                public void value(Integer each)
-                {
-                    set.add(each);
-                }
-            });
+            this.data.forEach((Procedure<Integer>) set::add);
             return set;
         }
     }
@@ -142,14 +136,8 @@ public class SetMemoryTest
         @Override
         public scala.collection.mutable.HashSet<Integer> value()
         {
-            final scala.collection.mutable.HashSet<Integer> set = new scala.collection.mutable.HashSet<Integer>();
-            this.data.forEach(new Procedure<Integer>()
-            {
-                public void value(Integer each)
-                {
-                    set.add(each);
-                }
-            });
+            scala.collection.mutable.HashSet<Integer> set = new scala.collection.mutable.HashSet<Integer>();
+            this.data.forEach((Procedure<Integer>) each -> { set.add(each); });
             return set;
         }
     }

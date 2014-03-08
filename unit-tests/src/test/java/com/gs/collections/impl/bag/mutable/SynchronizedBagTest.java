@@ -18,8 +18,6 @@ package com.gs.collections.impl.bag.mutable;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
@@ -78,13 +76,7 @@ public class SynchronizedBagTest extends AbstractSynchronizedCollectionTestCase
     {
         RichIterable<Integer> list = this.newWith(1, 2, 3, 4, 5, 6, 7);
         Multimap<Boolean, Integer> multimap =
-                list.groupBy(new Function<Integer, Boolean>()
-                {
-                    public Boolean valueOf(Integer object)
-                    {
-                        return IntegerPredicates.isOdd().accept(object);
-                    }
-                });
+                list.groupBy(object -> IntegerPredicates.isOdd().accept(object));
 
         Assert.assertEquals(Bags.mutable.of(1, 3, 5, 7), multimap.get(Boolean.TRUE));
         Assert.assertEquals(Bags.mutable.of(2, 4, 6), multimap.get(Boolean.FALSE));
@@ -197,14 +189,8 @@ public class SynchronizedBagTest extends AbstractSynchronizedCollectionTestCase
     public void forEachWithOccurrences()
     {
         MutableBag<Integer> integers = this.newWith(1, 1, 1, 1, 2, 2, 2, 3, 3, 4);
-        final MutableBag<Integer> result = HashBag.newBag();
-        integers.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int parameter)
-            {
-                result.setOccurrences(each, parameter);
-            }
-        });
+        MutableBag<Integer> result = HashBag.newBag();
+        integers.forEachWithOccurrences(result::setOccurrences);
         Assert.assertEquals(integers, result);
     }
 }

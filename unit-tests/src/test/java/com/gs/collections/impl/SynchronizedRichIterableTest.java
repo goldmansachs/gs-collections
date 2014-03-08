@@ -17,7 +17,6 @@
 package com.gs.collections.impl;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
@@ -72,14 +71,7 @@ public class SynchronizedRichIterableTest extends AbstractRichIterableTestCase
     public void groupBy()
     {
         RichIterable<Integer> list = this.newWith(1, 2, 3, 4, 5, 6, 7);
-        Multimap<Boolean, Integer> multimap =
-                list.groupBy(new Function<Integer, Boolean>()
-                {
-                    public Boolean valueOf(Integer object)
-                    {
-                        return IntegerPredicates.isOdd().accept(object);
-                    }
-                });
+        Multimap<Boolean, Integer> multimap = list.groupBy(object -> IntegerPredicates.isOdd().accept(object));
 
         Assert.assertEquals(FastList.newListWith(1, 3, 5, 7), multimap.get(Boolean.TRUE));
         Assert.assertEquals(FastList.newListWith(2, 4, 6), multimap.get(Boolean.FALSE));
@@ -90,13 +82,7 @@ public class SynchronizedRichIterableTest extends AbstractRichIterableTestCase
     {
         RichIterable<Integer> list = this.newWith(1, 2, 3, 4, 5, 6, 7);
         MutableMultimap<Boolean, Integer> multimap = new FastListMultimap<Boolean, Integer>();
-        list.groupBy(new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return IntegerPredicates.isOdd().accept(object);
-            }
-        }, multimap);
+        list.groupBy(object -> IntegerPredicates.isOdd().accept(object), multimap);
 
         Assert.assertEquals(FastList.newListWith(1, 3, 5, 7), multimap.get(Boolean.TRUE));
         Assert.assertEquals(FastList.newListWith(2, 4, 6), multimap.get(Boolean.FALSE));

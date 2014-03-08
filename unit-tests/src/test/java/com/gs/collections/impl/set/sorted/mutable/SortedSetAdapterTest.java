@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
@@ -160,15 +159,9 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void forEachWithIndex()
     {
         super.forEachWithIndex();
-        final MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.of();
         MutableCollection<Integer> collection = this.newWith(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4);
-        collection.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                result.add(object);
-            }
-        });
+        collection.forEachWithIndex((object, index) -> { result.add(object); });
         Verify.assertListsEqual(FastList.newListWith(4, 3, 2, 1), result);
     }
 
@@ -179,12 +172,8 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         super.getFirst();
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getFirst());
         Assert.assertEquals(Integer.valueOf(3), this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 3).getFirst());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                new SortedSetAdapter<Object>(new TreeSet<Object>()).getFirst();
-            }
+        Verify.assertThrows(NoSuchElementException.class, () -> {
+            new SortedSetAdapter<Object>(new TreeSet<Object>()).getFirst();
         });
     }
 
@@ -196,12 +185,8 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         Assert.assertNotNull(this.<Object>newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(1), this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 3).getLast());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                new SortedSetAdapter<Object>(new TreeSet<Object>()).getLast();
-            }
+        Verify.assertThrows(NoSuchElementException.class, () -> {
+            new SortedSetAdapter<Object>(new TreeSet<Object>()).getLast();
         });
     }
 
@@ -242,24 +227,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     @Test
     public void adaptNull()
     {
-        Verify.assertThrows(
-                NullPointerException.class,
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        new SortedSetAdapter<Object>(null);
-                    }
-                });
-
-        Verify.assertThrows(
-                NullPointerException.class,
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        SortedSetAdapter.adapt(null);
-                    }
-                });
+        Verify.assertThrows(NullPointerException.class, () -> { new SortedSetAdapter<Object>(null); });
+        Verify.assertThrows(NullPointerException.class, () -> { SortedSetAdapter.adapt(null); });
     }
 }

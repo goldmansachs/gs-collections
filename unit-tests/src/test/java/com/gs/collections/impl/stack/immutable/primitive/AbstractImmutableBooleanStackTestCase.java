@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.gs.collections.impl.stack.immutable.primitive;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
 import com.gs.collections.api.stack.primitive.MutableBooleanStack;
 import com.gs.collections.impl.factory.primitive.BooleanStacks;
@@ -163,14 +162,8 @@ public abstract class AbstractImmutableBooleanStackTestCase extends AbstractBool
     @Test
     public void toList()
     {
-        final BooleanArrayList expected = BooleanArrayList.newListWith();
-        this.classUnderTest().forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                expected.add(each);
-            }
-        });
+        BooleanArrayList expected = BooleanArrayList.newListWith();
+        this.classUnderTest().forEach(expected::add);
         Assert.assertEquals(expected, this.classUnderTest().toList());
     }
 

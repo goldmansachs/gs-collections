@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -220,23 +220,11 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
     {
         Verify.assertThrows(
                 NullPointerException.class,
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        new RandomAccessListAdapter<Object>(null);
-                    }
-                });
+                () -> { new RandomAccessListAdapter<Object>(null); });
 
         Verify.assertThrows(
                 NullPointerException.class,
-                new Runnable()
-                {
-                    public void run()
-                    {
-                        RandomAccessListAdapter.adapt(null);
-                    }
-                });
+                () -> { RandomAccessListAdapter.adapt(null); });
     }
 
     @Test

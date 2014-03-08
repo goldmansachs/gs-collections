@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.list.fixed;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -66,37 +65,19 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void testRemove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                DoubletonListTest.this.list.remove(0);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.remove(0); });
     }
 
     @Test
     public void testAddAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                DoubletonListTest.this.list.add(0, "1");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.list.add(0, "1"));
     }
 
     @Test
     public void testAdd()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                DoubletonListTest.this.list.add("1");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.add("1"); });
     }
 
     @Test
@@ -111,13 +92,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void testGet()
     {
         Verify.assertStartsWith(this.list, "1", "2");
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                DoubletonListTest.this.list.get(2);
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { this.list.get(2); });
     }
 
     @Test
@@ -126,13 +101,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
         Assert.assertEquals("1", this.list.set(0, "2"));
         Assert.assertEquals("2", this.list.set(1, "1"));
         Assert.assertEquals(FastList.newListWith("2", "1"), this.list);
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                DoubletonListTest.this.list.set(2, "0");
-            }
-        });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { this.list.set(2, "0"); });
     }
 
     @Test
@@ -168,16 +137,12 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void testForEachWithIndex()
     {
-        final int[] indexSum = new int[1];
-        final MutableList<String> result = Lists.mutable.of();
+        int[] indexSum = new int[1];
+        MutableList<String> result = Lists.mutable.of();
         MutableList<String> source = this.classUnderTest();
-        source.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                result.add(each);
-                indexSum[0] += index;
-            }
+        source.forEachWithIndex((each, index) -> {
+            result.add(each);
+            indexSum[0] += index;
         });
         Assert.assertEquals(FastList.newListWith("1", "2"), result);
         Assert.assertEquals(1, indexSum[0]);

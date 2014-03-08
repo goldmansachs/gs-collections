@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,13 +54,7 @@ public class FunctionComparatorTest
     @Test
     public void functionComparatorBuiltTheHardWay()
     {
-        Comparator<Band> byName = new Comparator<Band>()
-        {
-            public int compare(Band bandA, Band bandB)
-            {
-                return Band.TO_NAME.valueOf(bandA).compareTo(Band.TO_NAME.valueOf(bandB));
-            }
-        };
+        Comparator<Band> byName = (bandA, bandB) -> Band.TO_NAME.valueOf(bandA).compareTo(Band.TO_NAME.valueOf(bandB));
         MutableList<Band> sortedList = this.createTestList().sortThis(byName);
         Assert.assertEquals(FastList.newListWith(BON_JOVI, METALLICA, SCORPIONS, VAN_HALEN), sortedList);
     }

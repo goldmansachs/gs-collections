@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,7 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
@@ -169,21 +166,9 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     @Test
     public void get()
     {
-        final ImmutableList<Integer> list = this.classUnderTest();
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.get(list.size() + 1);
-            }
-        });
-        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.get(-1);
-            }
-        });
+        ImmutableList<Integer> list = this.classUnderTest();
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { list.get(list.size() + 1); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { list.get(-1); });
     }
 
     @Test
@@ -231,14 +216,8 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     @Test
     public void forEachWith()
     {
-        final MutableCollection<Integer> result = Lists.mutable.of();
-        this.classUnderTest().forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 0);
+        MutableCollection<Integer> result = Lists.mutable.of();
+        this.classUnderTest().forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
         Assert.assertEquals(this.classUnderTest(), result);
     }
 
@@ -246,21 +225,9 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     public void forEachWithIndex()
     {
         ImmutableList<Integer> list = this.classUnderTest();
-        final MutableList<Integer> result = Lists.mutable.of();
-        list.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                result.add(object + index);
-            }
-        });
-        result.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                Assert.assertEquals(object, result.set(index, object - index));
-            }
-        });
+        MutableList<Integer> result = Lists.mutable.of();
+        list.forEachWithIndex((object, index) -> { result.add(object + index); });
+        result.forEachWithIndex((object, index) -> Assert.assertEquals(object, result.set(index, object - index)));
         Assert.assertEquals(list, result);
     }
 
@@ -283,13 +250,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     @Test
     public void flatCollectWithTarget()
     {
-        MutableCollection<String> actual = this.classUnderTest().flatCollect(new Function<Integer, MutableList<String>>()
-        {
-            public MutableList<String> valueOf(Integer integer)
-            {
-                return Lists.fixedSize.of(String.valueOf(integer));
-            }
-        }, FastList.<String>newList());
+        MutableCollection<String> actual = this.classUnderTest().flatCollect(integer -> Lists.fixedSize.of(String.valueOf(integer)), FastList.<String>newList());
 
         ImmutableCollection<String> expected = this.classUnderTest().collect(Functions.getToString());
 
@@ -375,105 +336,59 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     @Test
     public void removeAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableListTestCase.this.classUnderTest().castToList().remove(1);
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.classUnderTest().castToList().remove(1);
         });
     }
 
     @Test
     public void set()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableListTestCase.this.classUnderTest().castToList().set(0, 1);
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.classUnderTest().castToList().set(0, 1);
         });
     }
 
     @Test
     public void addAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableListTestCase.this.classUnderTest().castToList().add(0, 1);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.classUnderTest().castToList().add(0, 1));
     }
 
     @Test
     public void addAllAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableListTestCase.this.classUnderTest().castToList().addAll(0, Lists.fixedSize.<Integer>of());
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.classUnderTest().castToList().addAll(0, Lists.fixedSize.<Integer>of());
         });
     }
 
     @Test
     public void subList()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableListTestCase.this.classUnderTest().castToList().subList(0, 1);
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.classUnderTest().castToList().subList(0, 1);
         });
     }
 
     @Test
     public void listIterator()
     {
-        final ListIterator<Integer> it = this.classUnderTest().listIterator();
+        ListIterator<Integer> it = this.classUnderTest().listIterator();
         Assert.assertFalse(it.hasPrevious());
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.previous();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {it.previous();});
 
         Assert.assertEquals(-1, it.previousIndex());
         Assert.assertEquals(0, it.nextIndex());
         it.next();
         Assert.assertEquals(1, it.nextIndex());
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {it.remove();});
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.add(null);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.add(null);});
 
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                it.set(null);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.set(null);});
     }
 
     @Test
@@ -528,13 +443,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         ImmutableList<Integer> list = this.classUnderTest();
         ImmutableListMultimap<Boolean, Integer> multimap =
-                list.groupBy(new Function<Integer, Boolean>()
-                {
-                    public Boolean valueOf(Integer integer)
-                    {
-                        return IntegerPredicates.isOdd().accept(integer);
-                    }
-                });
+                list.groupBy(integer -> IntegerPredicates.isOdd().accept(integer));
 
         MutableMap<Boolean, RichIterable<Integer>> actualMap = multimap.toMap();
         int halfSize = this.classUnderTest().size() / 2;
@@ -546,19 +455,12 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     @Test
     public void groupByEach()
     {
-        final ImmutableList<Integer> list = this.classUnderTest();
+        ImmutableList<Integer> list = this.classUnderTest();
 
-        final MutableMultimap<Integer, Integer> expected = FastListMultimap.newMultimap();
-        list.forEach(new Procedure<Integer>()
-        {
-            public void value(Integer value)
-            {
-                expected.putAll(-value, Interval.fromTo(value, list.size()));
-            }
-        });
+        MutableMultimap<Integer, Integer> expected = FastListMultimap.newMultimap();
+        list.forEach((Procedure<Integer>) value -> { expected.putAll(-value, Interval.fromTo(value, list.size())); });
 
-        Multimap<Integer, Integer> actual =
-                list.groupByEach(new NegativeIntervalFunction());
+        Multimap<Integer, Integer> actual = list.groupByEach(new NegativeIntervalFunction());
         Assert.assertEquals(expected, actual);
 
         Multimap<Integer, Integer> actualWithTarget =

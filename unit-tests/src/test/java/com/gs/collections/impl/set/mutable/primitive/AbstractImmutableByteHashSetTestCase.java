@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package com.gs.collections.impl.set.mutable.primitive;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyByteIterable;
-import com.gs.collections.api.block.function.primitive.ByteToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.ByteProcedure;
 import com.gs.collections.api.iterator.ByteIterator;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.ImmutableByteSet;
@@ -77,7 +75,7 @@ public abstract class AbstractImmutableByteHashSetTestCase extends AbstractImmut
         MutableSet<Byte> expected = UnifiedSet.newSetWith((byte) 0, (byte) 1, (byte) 31);
         MutableSet<Byte> actual = UnifiedSet.newSet();
         ImmutableByteSet set = this.newWith((byte) 0, (byte) 1, (byte) 31);
-        final ByteIterator iterator = set.byteIterator();
+        ByteIterator iterator = set.byteIterator();
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -86,13 +84,7 @@ public abstract class AbstractImmutableByteHashSetTestCase extends AbstractImmut
         actual.add(iterator.next());
         Assert.assertFalse(iterator.hasNext());
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
     }
 
     @Override
@@ -114,15 +106,9 @@ public abstract class AbstractImmutableByteHashSetTestCase extends AbstractImmut
     public void forEach()
     {
         super.forEach();
-        final long[] sum = new long[1];
+        long[] sum = new long[1];
         ImmutableByteSet set = this.newWith((byte) 0, (byte) 1, (byte) 31);
-        set.forEach(new ByteProcedure()
-        {
-            public void value(byte each)
-            {
-                sum[0] += each;
-            }
-        });
+        set.forEach(each -> { sum[0] += each; });
 
         Assert.assertEquals(32L, sum[0]);
     }
@@ -175,13 +161,7 @@ public abstract class AbstractImmutableByteHashSetTestCase extends AbstractImmut
     {
         super.collect();
         ImmutableByteSet set = this.newWith((byte) 0, (byte) 1, (byte) 31);
-        Assert.assertEquals(UnifiedSet.newSetWith((byte) -1, (byte) 0, (byte) 30), set.collect(new ByteToObjectFunction<Byte>()
-        {
-            public Byte valueOf(byte byteParameter)
-            {
-                return (byte) (byteParameter - 1);
-            }
-        }));
+        Assert.assertEquals(UnifiedSet.newSetWith((byte) -1, (byte) 0, (byte) 30), set.collect(byteParameter -> (byte) (byteParameter - 1)));
     }
 
     @Override

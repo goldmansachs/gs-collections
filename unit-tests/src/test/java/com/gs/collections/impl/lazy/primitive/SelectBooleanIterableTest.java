@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,6 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
-import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
-import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -44,28 +41,16 @@ public class SelectBooleanIterableTest
     @Test
     public void forEach()
     {
-        final String[] concat = new String[1];
+        String[] concat = new String[1];
         concat[0] = "";
-        this.iterable.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                concat[0] += each;
-            }
-        });
+        this.iterable.forEach(each -> { concat[0] += each; });
         Assert.assertEquals("truetrue", concat[0]);
     }
 
     @Test
     public void injectInto()
     {
-        MutableInteger result = this.iterable.injectInto(new MutableInteger(0), new ObjectBooleanToObjectFunction<MutableInteger, MutableInteger>()
-        {
-            public MutableInteger valueOf(MutableInteger object, boolean value)
-            {
-                return object.add(value ? 1 : 0);
-            }
-        });
+        MutableInteger result = this.iterable.injectInto(new MutableInteger(0), (object, value) -> object.add(value ? 1 : 0));
         Assert.assertEquals(new MutableInteger(2), result);
     }
 
@@ -127,13 +112,7 @@ public class SelectBooleanIterableTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(2L, this.iterable.collect(new BooleanToObjectFunction<String>()
-        {
-            public String valueOf(boolean booleanParameter)
-            {
-                return String.valueOf(booleanParameter);
-            }
-        }).size());
+        Assert.assertEquals(2L, this.iterable.collect(String::valueOf).size());
     }
 
     @Test

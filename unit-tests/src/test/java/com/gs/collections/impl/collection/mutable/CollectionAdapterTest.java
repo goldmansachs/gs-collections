@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -160,15 +160,7 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     {
         super.flatCollect();
 
-        Function<Integer, Collection<Integer>> function =
-                new Function<Integer, Collection<Integer>>()
-                {
-                    public Collection<Integer> valueOf(Integer object)
-                    {
-                        return Interval.oneTo(object);
-                    }
-                };
-
+        Function<Integer, Iterable<Integer>> function = Interval::oneTo;
         Assert.assertEquals(
                 FastList.newListWith(1, 1, 2, 1, 2, 3, 1, 2, 3, 4),
                 this.<Integer>newList().with(1, 2, 3, 4).flatCollect(function));
@@ -224,14 +216,7 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     public void groupBy()
     {
         RichIterable<Integer> list = this.newWith(1, 2, 3, 4, 5, 6, 7);
-        Multimap<Boolean, Integer> multimap =
-                list.groupBy(new Function<Integer, Boolean>()
-                {
-                    public Boolean valueOf(Integer object)
-                    {
-                        return IntegerPredicates.isOdd().accept(object);
-                    }
-                });
+        Multimap<Boolean, Integer> multimap = list.groupBy(object -> IntegerPredicates.isOdd().accept(object));
 
         MutableMap<Boolean, RichIterable<Integer>> expected =
                 UnifiedMap.<Boolean, RichIterable<Integer>>newWithKeysValues(

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,7 @@ import org.junit.Test;
 
 public class IntegerPredicatesTest
 {
-    private static final Function<Integer, Integer> INT_VALUE = new Function<Integer, Integer>()
-    {
-        public Integer valueOf(Integer integer)
-        {
-            return integer;
-        }
-    };
+    private static final Function<Integer, Integer> INT_VALUE = integer -> integer;
 
     @Test
     public void isOdd()

@@ -139,22 +139,10 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
         Assert.assertEquals(Integer.valueOf(-1), revIterator.next());
         Assert.assertFalse(revIterator.hasNext());
 
-        final Iterator<Integer> iterator3 = this.newWith(Comparators.reverseNaturalOrder(), 2, 1, 1, 0, -1).iterator();
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator3.remove();
-            }
-        });
+        Iterator<Integer> iterator3 = this.newWith(Comparators.reverseNaturalOrder(), 2, 1, 1, 0, -1).iterator();
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {iterator3.remove();});
         Assert.assertEquals(Integer.valueOf(2), iterator3.next());
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator3.remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {iterator3.remove();});
     }
 
     @Test

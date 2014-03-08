@@ -25,10 +25,6 @@ import java.util.SortedMap;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
@@ -120,16 +116,12 @@ public abstract class ImmutableSortedMapTestCase
     @Test
     public void forEachKeyValue()
     {
-        final MutableList<Integer> actualKeys = Lists.mutable.of();
-        final MutableList<String> actualValues = Lists.mutable.of();
+        MutableList<Integer> actualKeys = Lists.mutable.of();
+        MutableList<String> actualValues = Lists.mutable.of();
 
-        this.classUnderTest().forEachKeyValue(new Procedure2<Integer, String>()
-        {
-            public void value(Integer key, String value)
-            {
-                actualKeys.add(key);
-                actualValues.add(value);
-            }
+        this.classUnderTest().forEachKeyValue((key, value) -> {
+            actualKeys.add(key);
+            actualValues.add(value);
         });
 
         MutableList<Integer> expectedKeys = this.expectedKeys();
@@ -138,16 +130,12 @@ public abstract class ImmutableSortedMapTestCase
         MutableList<String> expectedValues = expectedKeys.collect(Functions.getToString());
         Verify.assertListsEqual(expectedValues, actualValues);
 
-        final MutableList<Integer> revActualKeys = Lists.mutable.of();
-        final MutableList<String> revActualValues = Lists.mutable.of();
+        MutableList<Integer> revActualKeys = Lists.mutable.of();
+        MutableList<String> revActualValues = Lists.mutable.of();
 
-        this.classUnderTest(REV_INT_COMPARATOR).forEachKeyValue(new Procedure2<Integer, String>()
-        {
-            public void value(Integer key, String value)
-            {
-                revActualKeys.add(key);
-                revActualValues.add(value);
-            }
+        this.classUnderTest(REV_INT_COMPARATOR).forEachKeyValue((key, value) -> {
+            revActualKeys.add(key);
+            revActualValues.add(value);
         });
 
         MutableList<Integer> reverseKeys = expectedKeys.reverseThis();
@@ -202,13 +190,9 @@ public abstract class ImmutableSortedMapTestCase
     @Test
     public void iteratorThrows()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                Iterator<String> iterator = ImmutableSortedMapTestCase.this.classUnderTest().iterator();
-                iterator.remove();
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            Iterator<String> iterator = this.classUnderTest().iterator();
+            iterator.remove();
         });
     }
 
@@ -314,31 +298,23 @@ public abstract class ImmutableSortedMapTestCase
     {
         Object actualParameter = new Object();
 
-        final MutableList<String> actualValues = Lists.mutable.of();
-        final MutableList<Object> actualParameters = Lists.mutable.of();
+        MutableList<String> actualValues = Lists.mutable.of();
+        MutableList<Object> actualParameters = Lists.mutable.of();
 
-        this.classUnderTest().forEachWith(new Procedure2<String, Object>()
-        {
-            public void value(String eachValue, Object parameter)
-            {
-                actualValues.add(eachValue);
-                actualParameters.add(parameter);
-            }
+        this.classUnderTest().forEachWith((eachValue, parameter) -> {
+            actualValues.add(eachValue);
+            actualParameters.add(parameter);
         }, actualParameter);
 
         Verify.assertListsEqual(this.expectedKeys().collect(Functions.getToString()), actualValues);
         Verify.assertListsEqual(Collections.nCopies(this.size(), actualParameter), actualParameters);
 
-        final MutableList<String> revActualValues = Lists.mutable.of();
-        final MutableList<Object> revActualParameters = Lists.mutable.of();
+        MutableList<String> revActualValues = Lists.mutable.of();
+        MutableList<Object> revActualParameters = Lists.mutable.of();
 
-        this.classUnderTest(REV_INT_COMPARATOR).forEachWith(new Procedure2<String, Object>()
-        {
-            public void value(String eachValue, Object parameter)
-            {
-                revActualValues.add(eachValue);
-                revActualParameters.add(parameter);
-            }
+        this.classUnderTest(REV_INT_COMPARATOR).forEachWith((eachValue, parameter) -> {
+            revActualValues.add(eachValue);
+            revActualParameters.add(parameter);
         }, actualParameter);
 
         Verify.assertListsEqual(this.expectedKeys().collect(Functions.getToString()).reverseThis(), revActualValues);
@@ -348,31 +324,23 @@ public abstract class ImmutableSortedMapTestCase
     @Test
     public void forEachWithIndex()
     {
-        final MutableList<String> actualValues = Lists.mutable.of();
-        final MutableList<Integer> actualIndices = Lists.mutable.of();
+        MutableList<String> actualValues = Lists.mutable.of();
+        MutableList<Integer> actualIndices = Lists.mutable.of();
 
-        this.classUnderTest().forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String eachValue, int index)
-            {
-                actualValues.add(eachValue);
-                actualIndices.add(index);
-            }
+        this.classUnderTest().forEachWithIndex((eachValue, index) -> {
+            actualValues.add(eachValue);
+            actualIndices.add(index);
         });
 
         Verify.assertListsEqual(this.expectedKeys().collect(Functions.getToString()), actualValues);
         Verify.assertListsEqual(this.expectedIndices(), actualIndices);
 
-        final MutableList<String> revActualValues = Lists.mutable.of();
-        final MutableList<Integer> revActualIndices = Lists.mutable.of();
+        MutableList<String> revActualValues = Lists.mutable.of();
+        MutableList<Integer> revActualIndices = Lists.mutable.of();
 
-        this.classUnderTest(REV_INT_COMPARATOR).forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String eachValue, int index)
-            {
-                revActualValues.add(eachValue);
-                revActualIndices.add(index);
-            }
+        this.classUnderTest(REV_INT_COMPARATOR).forEachWithIndex((eachValue, index) -> {
+            revActualValues.add(eachValue);
+            revActualIndices.add(index);
         });
 
         Verify.assertListsEqual(this.expectedKeys().collect(Functions.getToString()).reverseThis(), revActualValues);
@@ -419,25 +387,13 @@ public abstract class ImmutableSortedMapTestCase
     @Test
     public void putAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Map<Integer, String>) ImmutableSortedMapTestCase.this.classUnderTest()).putAll(null);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ((Map<Integer, String>) this.classUnderTest()).putAll(null));
     }
 
     @Test
     public void clear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Map<Integer, String>) ImmutableSortedMapTestCase.this.classUnderTest()).clear();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ((Map<Integer, String>) this.classUnderTest()).clear());
     }
 
     @Test
@@ -452,13 +408,7 @@ public abstract class ImmutableSortedMapTestCase
     public void select()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
-        RichIterable<String> select = map.select(new Predicate<String>()
-        {
-            public boolean accept(String each)
-            {
-                return Integer.valueOf(each) > 0;
-            }
-        });
+        RichIterable<String> select = map.select(each -> Integer.valueOf(each) > 0);
         Assert.assertEquals(HashBag.newBag(map), select.toBag());
     }
 
@@ -466,13 +416,7 @@ public abstract class ImmutableSortedMapTestCase
     public void selectWith()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
-        RichIterable<String> select = map.selectWith(new Predicate2<String, Integer>()
-        {
-            public boolean accept(String each, Integer parameter)
-            {
-                return Integer.valueOf(each + parameter) > 0;
-            }
-        }, 0);
+        RichIterable<String> select = map.selectWith((each, parameter) -> Integer.valueOf(each + parameter) > 0, 0);
         Assert.assertEquals(HashBag.newBag(map), select.toBag());
     }
 
@@ -480,13 +424,7 @@ public abstract class ImmutableSortedMapTestCase
     public void reject()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
-        RichIterable<String> select = map.reject(new Predicate<String>()
-        {
-            public boolean accept(String each)
-            {
-                return Integer.valueOf(each) < 0;
-            }
-        });
+        RichIterable<String> select = map.reject(each -> Integer.valueOf(each) < 0);
         Assert.assertEquals(HashBag.newBag(map), select.toBag());
     }
 
@@ -502,13 +440,7 @@ public abstract class ImmutableSortedMapTestCase
     public void collectWith()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
-        RichIterable<String> collect = map.collectWith(new Function2<String, String, String>()
-        {
-            public String value(String value, String parameter)
-            {
-                return value + parameter;
-            }
-        }, "");
+        RichIterable<String> collect = map.collectWith((value, parameter) -> value + parameter, "");
 
         Assert.assertEquals(HashBag.newBag(map), collect.toBag());
     }
@@ -517,25 +449,13 @@ public abstract class ImmutableSortedMapTestCase
     public void selectMap()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
-        ImmutableSortedMap<Integer, String> select = map.select(new Predicate2<Integer, String>()
-        {
-            public boolean accept(Integer argument1, String argument2)
-            {
-                return argument1 < ImmutableSortedMapTestCase.this.size();
-            }
-        });
+        ImmutableSortedMap<Integer, String> select = map.select((argument1, argument2) -> argument1 < this.size());
         Verify.assertListsEqual(Interval.oneTo(this.size() - 1), select.keysView().toList());
         Verify.assertListsEqual(Interval.oneTo(this.size() - 1).collect(Functions.getToString()).toList(),
                 select.valuesView().toList());
 
         ImmutableSortedMap<Integer, String> revMap = this.classUnderTest(REV_INT_COMPARATOR);
-        ImmutableSortedMap<Integer, String> revSelect = revMap.select(new Predicate2<Integer, String>()
-        {
-            public boolean accept(Integer argument1, String argument2)
-            {
-                return argument1 < ImmutableSortedMapTestCase.this.size();
-            }
-        });
+        ImmutableSortedMap<Integer, String> revSelect = revMap.select((argument1, argument2) -> argument1 < this.size());
         Verify.assertListsEqual(Interval.oneTo(this.size() - 1).reverseThis(), revSelect.keysView().toList());
         Verify.assertListsEqual(Interval.oneTo(this.size() - 1).collect(Functions.getToString()).toList().reverseThis(),
                 revSelect.valuesView().toList());
@@ -545,25 +465,13 @@ public abstract class ImmutableSortedMapTestCase
     public void rejectMap()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
-        ImmutableSortedMap<Integer, String> reject = map.reject(new Predicate2<Integer, String>()
-        {
-            public boolean accept(Integer argument1, String argument2)
-            {
-                return argument1 == 1;
-            }
-        });
+        ImmutableSortedMap<Integer, String> reject = map.reject((argument1, argument2) -> argument1 == 1);
         Verify.assertListsEqual(Interval.fromTo(2, this.size()), reject.keysView().toList());
         Verify.assertListsEqual(Interval.fromTo(2, this.size()).collect(Functions.getToString()).toList(),
                 reject.valuesView().toList());
 
         ImmutableSortedMap<Integer, String> revMap = this.classUnderTest(REV_INT_COMPARATOR);
-        ImmutableSortedMap<Integer, String> revReject = revMap.reject(new Predicate2<Integer, String>()
-        {
-            public boolean accept(Integer argument1, String argument2)
-            {
-                return argument1 == 1;
-            }
-        });
+        ImmutableSortedMap<Integer, String> revReject = revMap.reject((argument1, argument2) -> argument1 == 1);
         Verify.assertListsEqual(Interval.fromTo(2, this.size()).reverseThis(), revReject.keysView().toList());
         Verify.assertListsEqual(Interval.fromTo(2, this.size()).collect(Functions.getToString()).toList().reverseThis(),
                 revReject.valuesView().toList());
@@ -573,24 +481,13 @@ public abstract class ImmutableSortedMapTestCase
     public void collectMap()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
-        ImmutableMap<String, Integer> collect = map.collect(new Function2<Integer, String, Pair<String, Integer>>()
-        {
-            public Pair<String, Integer> value(Integer argument1, String argument2)
-            {
-                return Tuples.pair(argument2, argument1);
-            }
-        });
+        Function2<Integer, String, Pair<String, Integer>> function = (Integer argument1, String argument2) -> Tuples.pair(argument2, argument1);
+        ImmutableMap<String, Integer> collect = map.collect(function);
         Verify.assertSetsEqual(Interval.oneTo(this.size()).collect(Functions.getToString()).toSet(), collect.keysView().toSet());
         Verify.assertSetsEqual(Interval.oneTo(this.size()).toSet(), collect.valuesView().toSet());
 
         ImmutableSortedMap<Integer, String> revMap = this.classUnderTest(REV_INT_COMPARATOR);
-        ImmutableMap<String, Integer> revCollect = revMap.collect(new Function2<Integer, String, Pair<String, Integer>>()
-        {
-            public Pair<String, Integer> value(Integer argument1, String argument2)
-            {
-                return Tuples.pair(argument2, argument1);
-            }
-        });
+        ImmutableMap<String, Integer> revCollect = revMap.collect(function);
         Verify.assertSetsEqual(Interval.oneTo(this.size()).collect(Functions.getToString()).toSet(), revCollect.keysView().toSet());
         Verify.assertSetsEqual(Interval.oneTo(this.size()).toSet(), revCollect.valuesView().toSet());
     }
@@ -599,23 +496,11 @@ public abstract class ImmutableSortedMapTestCase
     public void collectValues()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
-        ImmutableSortedMap<Integer, Integer> result = map.collectValues(new Function2<Integer, String, Integer>()
-        {
-            public Integer value(Integer argument1, String argument2)
-            {
-                return argument1;
-            }
-        });
+        ImmutableSortedMap<Integer, Integer> result = map.collectValues((argument1, argument2) -> argument1);
         Verify.assertListsEqual(result.keysView().toList(), result.valuesView().toList());
 
         ImmutableSortedMap<Integer, String> revMap = this.classUnderTest(REV_INT_COMPARATOR);
-        ImmutableSortedMap<Integer, Integer> revResult = revMap.collectValues(new Function2<Integer, String, Integer>()
-        {
-            public Integer value(Integer argument1, String argument2)
-            {
-                return argument1;
-            }
-        });
+        ImmutableSortedMap<Integer, Integer> revResult = revMap.collectValues((argument1, argument2) -> argument1);
 
         Verify.assertListsEqual(revResult.keysView().toList(), revResult.valuesView().toList());
     }
@@ -669,24 +554,16 @@ public abstract class ImmutableSortedMapTestCase
     @Test
     public void put()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Map<Integer, String>) ImmutableSortedMapTestCase.this.classUnderTest()).put(null, null);
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            ((Map<Integer, String>) this.classUnderTest()).put(null, null);
         });
     }
 
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ((Map<Integer, String>) ImmutableSortedMapTestCase.this.classUnderTest()).remove(null);
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            ((Map<Integer, String>) this.classUnderTest()).remove(null);
         });
     }
 

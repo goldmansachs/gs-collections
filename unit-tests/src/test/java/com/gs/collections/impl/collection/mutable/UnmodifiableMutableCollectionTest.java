@@ -24,8 +24,6 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableByteCollection;
@@ -120,13 +118,7 @@ public class UnmodifiableMutableCollectionTest
                 this.unmodifiableCollection.collect(Functions.getStringPassThru(),
                         FastList.<String>newList()));
 
-        Function<String, Collection<String>> flattenFunction = new Function<String, Collection<String>>()
-        {
-            public Collection<String> valueOf(String object)
-            {
-                return FastList.newListWith(object, object);
-            }
-        };
+        Function<String, Collection<String>> flattenFunction = object -> FastList.newListWith(object, object);
         Verify.assertSize(8, this.unmodifiableCollection.flatCollect(flattenFunction));
         Verify.assertSize(8, this.unmodifiableCollection.flatCollect(flattenFunction, FastList.<String>newList()));
 
@@ -199,86 +191,52 @@ public class UnmodifiableMutableCollectionTest
     @Test
     public void nullCollection()
     {
-        Verify.assertThrows(NullPointerException.class, new Runnable()
-        {
-            public void run()
-            {
-                new UnmodifiableMutableCollection<Object>(null);
-            }
-        });
+        Verify.assertThrows(NullPointerException.class, () -> { new UnmodifiableMutableCollection<Object>(null); });
     }
 
     @Test
     public void add()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableCollectionTest.this.unmodifiableCollection.add("Madonna");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.unmodifiableCollection.add("Madonna"); });
     }
 
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableCollectionTest.this.unmodifiableCollection.remove(METALLICA);
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.unmodifiableCollection.remove(METALLICA);
         });
     }
 
     @Test
     public void addAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableCollectionTest.this.unmodifiableCollection.addAll(FastList.<String>newList().with("Madonna"));
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.unmodifiableCollection.addAll(FastList.<String>newList().with("Madonna"));
         });
     }
 
     @Test
     public void removeAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableCollectionTest.this.unmodifiableCollection.removeAll(FastList.<String>newList().with(
-                        METALLICA));
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.unmodifiableCollection.removeAll(FastList.<String>newList().with(METALLICA));
         });
     }
 
     @Test
     public void retainAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableCollectionTest.this.unmodifiableCollection.retainAll(FastList.<String>newList().with(
-                        METALLICA));
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {
+            this.unmodifiableCollection.retainAll(FastList.<String>newList().with(METALLICA));
         });
     }
 
     @Test
     public void clear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableCollectionTest.this.unmodifiableCollection.clear();
-            }
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {
+            this.unmodifiableCollection.clear();
         });
     }
 
@@ -292,13 +250,7 @@ public class UnmodifiableMutableCollectionTest
     @Test
     public void collectWith()
     {
-        Function2<String, String, String> function = new Function2<String, String, String>()
-        {
-            public String value(String band, String parameter)
-            {
-                return parameter + band.charAt(0);
-            }
-        };
+        Function2<String, String, String> function = (band, parameter) -> parameter + band.charAt(0);
         Assert.assertEquals(
                 FastList.newListWith(">M", ">B", ">E", ">S"),
                 this.unmodifiableCollection.collectWith(function, ">"));
@@ -308,13 +260,7 @@ public class UnmodifiableMutableCollectionTest
     @Test
     public void injectInto()
     {
-        Function2<String, String, String> function = new Function2<String, String, String>()
-        {
-            public String value(String injectValue, String band)
-            {
-                return injectValue + band.charAt(0);
-            }
-        };
+        Function2<String, String, String> function = (injectValue, band) -> injectValue + band.charAt(0);
         Assert.assertEquals(">MBES", this.unmodifiableCollection.injectInto(">", function));
     }
 
@@ -322,39 +268,20 @@ public class UnmodifiableMutableCollectionTest
     public void injectIntoWith()
     {
         Function3<String, String, String, String> function =
-                new Function3<String, String, String, String>()
-                {
-                    public String value(String injectValue, String band, String parameter)
-                    {
-                        return injectValue + band.charAt(0) + parameter;
-                    }
-                };
+                (injectValue, band, parameter) -> injectValue + band.charAt(0) + parameter;
         Assert.assertEquals(">M*B*E*S*", this.unmodifiableCollection.injectIntoWith(">", function, "*"));
     }
 
     @Test
     public void removeIf()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableCollectionTest.this.unmodifiableCollection.removeIf(Predicates.notNull());
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableCollection.removeIf(Predicates.notNull()));
     }
 
     @Test
     public void removeIfWith()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                UnmodifiableMutableCollectionTest.this.unmodifiableCollection.removeIfWith(Predicates2.alwaysTrue(),
-                        METALLICA);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableCollection.removeIfWith(Predicates2.alwaysTrue(), METALLICA));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -395,27 +322,17 @@ public class UnmodifiableMutableCollectionTest
     @Test
     public void forEach()
     {
-        final Counter counter = new Counter();
-        this.unmodifiableCollection.forEach(new Procedure<String>()
-        {
-            public void value(String band)
-            {
-                counter.increment();
-            }
-        });
+        Counter counter = new Counter();
+        this.unmodifiableCollection.forEach((Procedure<String>) band -> counter.increment());
         Assert.assertEquals(4, counter.getCount());
     }
 
     @Test
     public void forEachWith()
     {
-        final StringBuilder buf = new StringBuilder();
-        this.unmodifiableCollection.forEachWith(new Procedure2<String, String>()
-        {
-            public void value(String band, String param)
-            {
-                buf.append(param).append('<').append(band).append('>');
-            }
+        StringBuilder buf = new StringBuilder();
+        this.unmodifiableCollection.forEachWith((band, param) -> {
+            buf.append(param).append('<').append(band).append('>');
         }, "GreatBand");
         Assert.assertEquals("GreatBand<Metallica>GreatBand<Bon Jovi>GreatBand<Europe>GreatBand<Scorpions>", buf.toString());
     }
@@ -423,14 +340,8 @@ public class UnmodifiableMutableCollectionTest
     @Test
     public void forEachWithIndex()
     {
-        final Counter counter = new Counter();
-        this.unmodifiableCollection.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String band, int index)
-            {
-                counter.add(index);
-            }
-        });
+        Counter counter = new Counter();
+        this.unmodifiableCollection.forEachWithIndex((band, index) -> counter.add(index));
         Assert.assertEquals(6, counter.getCount());
     }
 
@@ -447,13 +358,7 @@ public class UnmodifiableMutableCollectionTest
     public void groupBy()
     {
         RichIterable<Integer> list = this.newWith(1, 2, 3, 4, 5, 6, 7);
-        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return IntegerPredicates.isOdd().accept(object);
-            }
-        };
+        Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
 
         MutableMap<Boolean, RichIterable<Integer>> expected =
                 UnifiedMap.<Boolean, RichIterable<Integer>>newWithKeysValues(

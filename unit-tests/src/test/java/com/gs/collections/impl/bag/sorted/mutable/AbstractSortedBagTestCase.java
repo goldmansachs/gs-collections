@@ -27,14 +27,8 @@ import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.Function3;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
@@ -416,7 +410,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.collect();
 
         MutableSortedBag<Integer> integers = TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 4, 3, 1, 1);
-        MutableList<Holder> holders = integers.collect(Holder.FROM_INT);
+        MutableList<Holder> holders = integers.collect(Holder::new);
         Assert.assertEquals(FastList.newListWith(new Holder(4), new Holder(3), new Holder(1), new Holder(1)), holders);
     }
 
@@ -468,7 +462,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Assert.assertEquals(
                 this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 1, 2, 3, 4, 5, 5).collectIf(
                         Predicates.lessThan(4),
-                        Holder.FROM_INT),
+                        Holder::new),
                 FastList.newListWith(new Holder(3), new Holder(2), new Holder(1), new Holder(1), new Holder(1)));
     }
 
@@ -498,13 +492,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     {
         super.groupBy();
         MutableSortedBag<Integer> integers = this.newWith(Collections.<Integer>reverseOrder(), 1, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
-        {
-            public Boolean valueOf(Integer object)
-            {
-                return IntegerPredicates.isOdd().accept(object);
-            }
-        };
+        Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
         MutableSortedBagMultimap<Boolean, Integer> map = integers.groupBy(isOddFunction);
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Collections.<Integer>reverseOrder(), 9, 7, 5, 3, 1, 1, 1), map.get(Boolean.TRUE));
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Collections.<Integer>reverseOrder(), 8, 6, 4, 2), map.get(Boolean.FALSE));
@@ -597,13 +585,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     @Override
     public void selectInstancesOf()
     {
-        MutableSortedBag<Number> numbers = this.<Number>newWith(new Comparator<Number>()
-        {
-            public int compare(Number o1, Number o2)
-            {
-                return Double.compare(o2.doubleValue(), o1.doubleValue());
-            }
-        }, 5, 4.0, 3, 2.0, 1, 1);
+        MutableSortedBag<Number> numbers = this.<Number>newWith((o1, o2) -> Double.compare(o2.doubleValue(), o1.doubleValue()), 5, 4.0, 3, 2.0, 1, 1);
         MutableSortedBag<Integer> integers = numbers.selectInstancesOf(Integer.class);
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.<Integer>reverseNaturalOrder(), 5, 3, 1, 1), integers);
     }
@@ -677,15 +659,9 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         }
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Collections.reverseOrder(), 1, 1, 1, 1, 2), TreeBag.newBag(Collections.reverseOrder(), validate));
 
-        final Iterator<Integer> sortedBagIterator = sortedBag.iterator();
+        Iterator<Integer> sortedBagIterator = sortedBag.iterator();
         MutableSortedBag<Integer> expected = this.newWith(Collections.reverseOrder(), 1, 1, 1, 1, 2);
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                sortedBagIterator.remove();
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> {sortedBagIterator.remove();});
 
         this.assertIteratorRemove(sortedBag, sortedBagIterator, expected);
         this.assertIteratorRemove(sortedBag, sortedBagIterator, expected);
@@ -694,29 +670,17 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         this.assertIteratorRemove(sortedBag, sortedBagIterator, expected);
         Verify.assertEmpty(sortedBag);
         Assert.assertFalse(sortedBagIterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                sortedBagIterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {sortedBagIterator.next();});
     }
 
-    private void assertIteratorRemove(MutableSortedBag<Integer> bag, final Iterator<Integer> iterator, MutableSortedBag<Integer> expected)
+    private void assertIteratorRemove(MutableSortedBag<Integer> bag, Iterator<Integer> iterator, MutableSortedBag<Integer> expected)
     {
         Assert.assertTrue(iterator.hasNext());
         Integer first = iterator.next();
         iterator.remove();
         expected.remove(first);
         Verify.assertSortedBagsEqual(expected, bag);
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.remove();
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> {iterator.remove();});
     }
 
     @Override
@@ -748,14 +712,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.forEach();
 
         MutableSortedBag<Integer> bag = this.newWith(Collections.reverseOrder(), 1, 1, 2);
-        final MutableList<Integer> actual = FastList.newList();
-        bag.forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                actual.add(each);
-            }
-        });
+        MutableList<Integer> actual = FastList.newList();
+        bag.forEach((Procedure<Integer>) actual::add);
         Assert.assertEquals(FastList.newListWith(2, 1, 1), actual);
     }
 
@@ -763,15 +721,11 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     public void forEachWithOccurrences()
     {
         MutableSortedBag<Integer> bag = this.newWith(Collections.reverseOrder(), 3, 3, 3, 2, 2, 1);
-        final MutableList<Integer> actualItems = FastList.newList();
-        final MutableList<Integer> actualIndexes = FastList.newList();
-        bag.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                actualItems.add(each);
-                actualIndexes.add(index);
-            }
+        MutableList<Integer> actualItems = FastList.newList();
+        MutableList<Integer> actualIndexes = FastList.newList();
+        bag.forEachWithOccurrences((each, index) -> {
+            actualItems.add(each);
+            actualIndexes.add(index);
         });
         Assert.assertEquals(FastList.newListWith(3, 2, 1), actualItems);
         Assert.assertEquals(FastList.newListWith(3, 2, 1), actualIndexes);
@@ -780,36 +734,20 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         bag2.addOccurrences(1, 10);
         bag2.addOccurrences(2, 10);
         bag2.addOccurrences(3, 10);
-        final IntegerSum sum = new IntegerSum(0);
-        final Counter counter = new Counter();
-        bag2.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int occurrences)
-            {
-                counter.increment();
-                sum.add(each * occurrences * counter.getCount());
-            }
+        IntegerSum sum = new IntegerSum(0);
+        Counter counter = new Counter();
+        bag2.forEachWithOccurrences((each, occurrences) -> {
+            counter.increment();
+            sum.add(each * occurrences * counter.getCount());
         });
         Assert.assertEquals(140, sum.getIntSum());
         bag2.removeOccurrences(2, 1);
-        final IntegerSum sum2 = new IntegerSum(0);
-        bag2.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int occurrences)
-            {
-                sum2.add(each * occurrences);
-            }
-        });
+        IntegerSum sum2 = new IntegerSum(0);
+        bag2.forEachWithOccurrences((each, occurrences) -> { sum2.add(each * occurrences); });
         Assert.assertEquals(58, sum2.getIntSum());
         bag2.removeOccurrences(1, 3);
-        final IntegerSum sum3 = new IntegerSum(0);
-        bag2.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int occurrences)
-            {
-                sum3.add(each * occurrences);
-            }
-        });
+        IntegerSum sum3 = new IntegerSum(0);
+        bag2.forEachWithOccurrences((each, occurrences) -> { sum3.add(each * occurrences); });
         Assert.assertEquals(55, sum3.getIntSum());
     }
 
@@ -1119,14 +1057,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.forEachWith();
 
         MutableSortedBag<String> bag = this.newWith(Collections.reverseOrder(), "1", "2", "2", "3", "4");
-        final StringBuilder builder = new StringBuilder();
-        bag.forEachWith(new Procedure2<String, Integer>()
-        {
-            public void value(String argument1, Integer argument2)
-            {
-                builder.append(argument1).append(argument2);
-            }
-        }, 0);
+        StringBuilder builder = new StringBuilder();
+        bag.forEachWith((argument1, argument2) -> { builder.append(argument1).append(argument2); }, 0);
         Assert.assertEquals("4030202010", builder.toString());
     }
 
@@ -1137,14 +1069,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.forEachWithIndex();
 
         MutableSortedBag<String> bag = this.newWith(Collections.reverseOrder(), "1", "2", "2", "3", "4");
-        final StringBuilder builder = new StringBuilder();
-        bag.forEachWithIndex(new ObjectIntProcedure<String>()
-        {
-            public void value(String each, int index)
-            {
-                builder.append(each).append(index);
-            }
-        });
+        StringBuilder builder = new StringBuilder();
+        bag.forEachWithIndex((each, index) -> { builder.append(each).append(index); });
         Assert.assertEquals("4031222314", builder.toString());
     }
 
@@ -1513,13 +1439,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.injectIntoWith();
 
         MutableSortedBag<Integer> bag = this.newWith(Collections.reverseOrder(), 1, 1, 2, 3);
-        Integer result = bag.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
-        {
-            public Integer value(Integer injectedValued, Integer item, Integer parameter)
-            {
-                return injectedValued + item + parameter;
-            }
-        }, 0);
+        Integer result = bag.injectIntoWith(1, (injectedValued, item, parameter) -> injectedValued + item + parameter, 0);
         Assert.assertEquals(Integer.valueOf(8), result);
     }
 
@@ -1574,13 +1494,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.sumFloat();
 
         MutableSortedBag<Integer> bag = this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3, 4, 5);
-        Assert.assertEquals(16.0f, bag.sumOfFloat(new FloatFunction<Integer>()
-        {
-            public float floatValueOf(Integer integer)
-            {
-                return integer.floatValue();
-            }
-        }), 0.001);
+        Assert.assertEquals(16.0f, bag.sumOfFloat(Integer::floatValue), 0.001);
     }
 
     @Override
@@ -1590,13 +1504,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.sumDouble();
 
         MutableSortedBag<Integer> bag = this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3, 4, 5);
-        Assert.assertEquals(16.0d, bag.sumOfDouble(new DoubleFunction<Integer>()
-        {
-            public double doubleValueOf(Integer integer)
-            {
-                return integer.doubleValue();
-            }
-        }), 0.001);
+        Assert.assertEquals(16.0d, bag.sumOfDouble(Integer::doubleValue), 0.001);
     }
 
     @Override
@@ -1606,13 +1514,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.sumInteger();
 
         MutableSortedBag<Integer> bag = this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3, 4, 5);
-        Assert.assertEquals(16, bag.sumOfLong(new LongFunction<Integer>()
-        {
-            public long longValueOf(Integer integer)
-            {
-                return integer.longValue();
-            }
-        }));
+        Assert.assertEquals(16, bag.sumOfLong(Integer::longValue));
     }
 
     @Override
@@ -1622,13 +1524,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.sumLong();
 
         MutableSortedBag<Integer> bag = this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3, 4, 5);
-        Assert.assertEquals(16, bag.sumOfLong(new LongFunction<Integer>()
-        {
-            public long longValueOf(Integer integer)
-            {
-                return integer.longValue();
-            }
-        }));
+        Assert.assertEquals(16, bag.sumOfLong(Integer::longValue));
     }
 
     @Override
@@ -1666,17 +1562,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.aggregateByMutating();
 
         Function0<AtomicInteger> zeroValueFactory = Functions0.zeroAtomicInteger();
-        Procedure2<AtomicInteger, Integer> sumAggregator = new
-
-                Procedure2<AtomicInteger, Integer>()
-                {
-                    public void value(AtomicInteger aggregate, Integer value)
-                    {
-                        aggregate.addAndGet(value);
-                    }
-                };
         MutableSortedBag<Integer> sortedBag = this.newWith(Comparators.reverseNaturalOrder(), 3, 2, 2, 1, 1, 1);
-        MapIterable<String, AtomicInteger> aggregation = sortedBag.aggregateInPlaceBy(Functions.getToString(), zeroValueFactory, sumAggregator);
+        MapIterable<String, AtomicInteger> aggregation = sortedBag.aggregateInPlaceBy(Functions.getToString(), zeroValueFactory, AtomicInteger::addAndGet);
         Assert.assertEquals(3, aggregation.get("1").intValue());
         Assert.assertEquals(4, aggregation.get("2").intValue());
         Assert.assertEquals(3, aggregation.get("3").intValue());
@@ -1700,27 +1587,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     // Like Integer, but not Comparable
     public static final class Holder
     {
-        private static final Function<Integer, Holder> FROM_INT = new Function<Integer, Holder>()
-        {
-            public Holder valueOf(Integer object)
-            {
-                return new Holder(object);
-            }
-        };
-        private static final Function2<Integer, Integer, Holder> FROM_INT_INT = new Function2<Integer, Integer, Holder>()
-        {
-            public Holder value(Integer each, Integer each2)
-            {
-                return new Holder(each + each2);
-            }
-        };
-        private static final Function<Integer, MutableList<Holder>> FROM_LIST = new Function<Integer, MutableList<Holder>>()
-        {
-            public MutableList<Holder> valueOf(Integer object)
-            {
-                return FastList.newListWith(new Holder(object), new Holder(object));
-            }
-        };
+        private static final Function2<Integer, Integer, Holder> FROM_INT_INT = (each, each2) -> new Holder(each + each2);
+        private static final Function<Integer, MutableList<Holder>> FROM_LIST = object -> FastList.newListWith(new Holder(object), new Holder(object));
         private static final IntFunction<Holder> TO_NUMBER = new IntFunction<Holder>()
         {
             public int intValueOf(Holder holder)

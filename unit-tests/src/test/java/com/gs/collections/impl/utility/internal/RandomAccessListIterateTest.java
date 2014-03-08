@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -54,14 +53,6 @@ import static com.gs.collections.impl.factory.Iterables.*;
 
 public class RandomAccessListIterateTest
 {
-    private static final Function<Number, Integer> INT_VALUE = new Function<Number, Integer>()
-    {
-        public Integer valueOf(Number number)
-        {
-            return number.intValue();
-        }
-    };
-
     @Test(expected = IllegalArgumentException.class)
     public void forEachWithNegativeFroms()
     {
@@ -178,24 +169,12 @@ public class RandomAccessListIterateTest
         MutableList<MutableList<Boolean>> list = Lists.fixedSize.<MutableList<Boolean>>of(
                 Lists.fixedSize.of(true, false),
                 Lists.fixedSize.of(true, null));
-        MutableList<Boolean> newList = RandomAccessListIterate.flatCollect(list, new Function<MutableList<Boolean>, MutableList<Boolean>>()
-        {
-            public MutableList<Boolean> valueOf(MutableList<Boolean> mutableList)
-            {
-                return mutableList.toList();
-            }
-        });
+        MutableList<Boolean> newList = RandomAccessListIterate.flatCollect(list, mutableList -> mutableList.toList());
         Verify.assertListsEqual(
                 FastList.newListWith(true, false, true, null),
                 newList);
 
-        MutableSet<Boolean> newSet = RandomAccessListIterate.flatCollect(list, new Function<MutableList<Boolean>, MutableSet<Boolean>>()
-        {
-            public MutableSet<Boolean> valueOf(MutableList<Boolean> mutableList)
-            {
-                return mutableList.toSet();
-            }
-        }, UnifiedSet.<Boolean>newSet());
+        MutableSet<Boolean> newSet = RandomAccessListIterate.flatCollect(list, mutableList -> mutableList.toSet(), UnifiedSet.<Boolean>newSet());
         Verify.assertSetsEqual(
                 UnifiedSet.newSetWith(true, false, null),
                 newSet);
@@ -219,9 +198,9 @@ public class RandomAccessListIterateTest
     public void count()
     {
         MutableList<Integer> list = this.getIntegerList();
-        int result = RandomAccessListIterate.count(list, Predicates.attributeEqual(INT_VALUE, 3));
+        int result = RandomAccessListIterate.count(list, Predicates.attributeEqual(Number::intValue, 3));
         Assert.assertEquals(1, result);
-        int result2 = RandomAccessListIterate.count(list, Predicates.attributeEqual(INT_VALUE, 6));
+        int result2 = RandomAccessListIterate.count(list, Predicates.attributeEqual(Number::intValue, 6));
         Assert.assertEquals(0, result2);
     }
 
@@ -235,13 +214,7 @@ public class RandomAccessListIterateTest
     {
         MutableList<Integer> list = this.getIntegerList();
         Iterate.sortThis(list);
-        RandomAccessListIterate.forEachWithIndex(list, new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                Assert.assertEquals(index, object - 1);
-            }
-        });
+        RandomAccessListIterate.forEachWithIndex(list, (object, index) -> Assert.assertEquals(index, object - 1));
     }
 
     @Test
@@ -255,28 +228,16 @@ public class RandomAccessListIterateTest
         this.assertReverseForEachUsingFromTo(integers, reverseResults, procedure);
     }
 
-    private void assertForEachUsingFromTo(final List<Integer> integers)
+    private void assertForEachUsingFromTo(List<Integer> integers)
     {
         MutableList<Integer> results = Lists.mutable.of();
         RandomAccessListIterate.forEach(integers, 0, 4, CollectionAddProcedure.on(results));
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        final CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
+        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
 
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                RandomAccessListIterate.forEach(integers, 4, -1, procedure);
-            }
-        });
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                RandomAccessListIterate.forEach(integers, -1, 4, procedure);
-            }
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEach(integers, 4, -1, procedure));
+        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEach(integers, -1, 4, procedure));
     }
 
     private void assertReverseForEachUsingFromTo(List<Integer> integers, MutableList<Integer> reverseResults, CollectionAddProcedure<Integer> procedure)
@@ -295,27 +256,15 @@ public class RandomAccessListIterateTest
         this.assertReverseForEachIndexUsingFromTo(integers, reverseResults, objectIntProcedure);
     }
 
-    private void assertForEachWithIndexUsingFromTo(final List<Integer> integers)
+    private void assertForEachWithIndexUsingFromTo(List<Integer> integers)
     {
         MutableList<Integer> results = Lists.mutable.of();
         RandomAccessListIterate.forEachWithIndex(integers, 0, 4, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(results)));
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        final ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                RandomAccessListIterate.forEachWithIndex(integers, 4, -1, objectIntProcedure);
-            }
-        });
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                RandomAccessListIterate.forEachWithIndex(integers, -1, 4, objectIntProcedure);
-            }
-        });
+        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
+        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEachWithIndex(integers, 4, -1, objectIntProcedure));
+        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEachWithIndex(integers, -1, 4, objectIntProcedure));
     }
 
     private void assertReverseForEachIndexUsingFromTo(MutableList<Integer> integers, MutableList<Integer> reverseResults, ObjectIntProcedure<Integer> objectIntProcedure)
@@ -329,15 +278,10 @@ public class RandomAccessListIterateTest
     {
         MutableList<String> list1 = Lists.fixedSize.of("1", "2");
         MutableList<String> list2 = Lists.fixedSize.of("a", "b");
-        final List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
-        RandomAccessListIterate.forEachInBoth(list1, list2,
-                new Procedure2<String, String>()
-                {
-                    public void value(String argument1, String argument2)
-                    {
-                        list.add(Tuples.twin(argument1, argument2));
-                    }
-                });
+        List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
+        RandomAccessListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> {
+            list.add(Tuples.twin(argument1, argument2));
+        });
         Assert.assertEquals(FastList.newListWith(Tuples.twin("1", "a"), Tuples.twin("2", "b")), list);
     }
 

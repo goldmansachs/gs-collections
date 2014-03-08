@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
@@ -141,28 +138,16 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void forEachWith()
     {
-        final MutableCollection<Integer> result = UnifiedSet.newSet();
-        this.classUnderTest().forEachWith(new Procedure2<Integer, Integer>()
-        {
-            public void value(Integer argument1, Integer argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, 0);
+        MutableCollection<Integer> result = UnifiedSet.newSet();
+        this.classUnderTest().forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
         Assert.assertEquals(this.classUnderTest(), result);
     }
 
     @Test
     public void forEachWithIndex()
     {
-        final MutableCollection<Integer> result = UnifiedSet.newSet();
-        this.classUnderTest().forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                result.add(object);
-            }
-        });
+        MutableCollection<Integer> result = UnifiedSet.newSet();
+        this.classUnderTest().forEachWithIndex((object, index) -> { result.add(object); });
         Assert.assertEquals(this.classUnderTest(), result);
     }
 
@@ -185,13 +170,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void flatCollectWithTarget()
     {
-        MutableCollection<String> actual = this.classUnderTest().flatCollect(new Function<Integer, MutableList<String>>()
-        {
-            public MutableList<String> valueOf(Integer integer)
-            {
-                return Lists.fixedSize.of(String.valueOf(integer));
-            }
-        }, UnifiedSet.<String>newSet());
+        MutableCollection<String> actual = this.classUnderTest().flatCollect(integer -> Lists.fixedSize.of(String.valueOf(integer)), UnifiedSet.<String>newSet());
 
         ImmutableCollection<String> expected = this.classUnderTest().collect(Functions.getToString());
 

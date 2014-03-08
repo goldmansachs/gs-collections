@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
@@ -162,20 +161,14 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableSet<String> set = this.classUnderTest();
         int size = set.size();
 
-        final Iterator<String> iterator = set.iterator();
+        Iterator<String> iterator = set.iterator();
         for (int i = size; i-- > 0; )
         {
             String integerString = iterator.next();
             Assert.assertEquals(size, Integer.parseInt(integerString) + i);
         }
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -242,13 +235,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     {
         MutableSet<String> set = this.classUnderTest();
         MutableSetMultimap<Boolean, String> multimap =
-                set.groupBy(new Function<String, Boolean>()
-                {
-                    public Boolean valueOf(String object)
-                    {
-                        return IntegerPredicates.isOdd().accept(Integer.parseInt(object));
-                    }
-                });
+                set.groupBy(object -> IntegerPredicates.isOdd().accept(Integer.parseInt(object)));
 
         MutableMap<Boolean, RichIterable<String>> actualMap = multimap.toMap();
         int halfSize = this.classUnderTest().size() / 2;
@@ -260,16 +247,10 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void groupByEach()
     {
-        final MutableSet<Integer> set = this.classUnderTest().collect(StringFunctions.toInteger());
+        MutableSet<Integer> set = this.classUnderTest().collect(StringFunctions.toInteger());
 
-        final MutableMultimap<Integer, Integer> expected = UnifiedSetMultimap.newMultimap();
-        set.forEach(new Procedure<Integer>()
-        {
-            public void value(Integer value)
-            {
-                expected.putAll(-value, Interval.fromTo(value, set.size()));
-            }
-        });
+        MutableMultimap<Integer, Integer> expected = UnifiedSetMultimap.newMultimap();
+        set.forEach((Procedure<Integer>) value -> { expected.putAll(-value, Interval.fromTo(value, set.size())); });
 
         Multimap<Integer, Integer> actual =
                 set.groupByEach(new NegativeIntervalFunction());
@@ -385,13 +366,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     {
         MutableSet<String> set = this.classUnderTest();
         RichIterable<RichIterable<String>> chunks = set.chunk(2);
-        MutableList<Integer> sizes = chunks.collect(new Function<RichIterable<String>, Integer>()
-        {
-            public Integer valueOf(RichIterable<String> richIterable)
-            {
-                return richIterable.size();
-            }
-        }, FastList.<Integer>newList());
+        MutableList<Integer> sizes = chunks.collect(RichIterable::size, FastList.<Integer>newList());
         MutableBag<Integer> hashBag = Bags.mutable.of();
         hashBag.addOccurrences(2, this.classUnderTest().size() / 2);
         if (this.classUnderTest().size() % 2 != 0)
@@ -577,17 +552,13 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void without()
     {
-        final MutableSet<String> set = this.classUnderTest();
+        MutableSet<String> set = this.classUnderTest();
         Assert.assertSame(set, set.without("11"));
         MutableList<String> list = set.toList();
-        list.forEach(new Procedure<String>()
-        {
-            public void value(String each)
-            {
-                MutableSet<String> setWithout = set.without(each);
-                Assert.assertFalse(setWithout.contains(each));
-                assertSetType(set, setWithout);
-            }
+        list.forEach((Procedure<String>) each -> {
+            MutableSet<String> setWithout = set.without(each);
+            Assert.assertFalse(setWithout.contains(each));
+            assertSetType(set, setWithout);
         });
     }
 

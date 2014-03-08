@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -152,22 +152,9 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     public void aggregateByMutating()
     {
         Function<String, String> groupBy = Functions.getStringPassThru();
-        Function0<Counter> valueCreator = new Function0<Counter>()
-        {
-            public Counter value()
-            {
-                return new Counter();
-            }
-        };
-        Procedure2<Counter, String> sumAggregator = new Procedure2<Counter, String>()
-        {
-            public void value(Counter aggregate, String value)
-            {
-                aggregate.add(Integer.parseInt(value));
-            }
-        };
-        MapIterable<String, Counter> actual = this.classUnderTest().aggregateInPlaceBy(groupBy, valueCreator, sumAggregator);
-        MapIterable<String, Counter> expected = FastList.newList(this.classUnderTest()).aggregateInPlaceBy(groupBy, valueCreator, sumAggregator);
+        Procedure2<Counter, String> sumAggregator = (aggregate, value) -> aggregate.add(Integer.parseInt(value));
+        MapIterable<String, Counter> actual = this.classUnderTest().aggregateInPlaceBy(groupBy, Counter::new, sumAggregator);
+        MapIterable<String, Counter> expected = FastList.newList(this.classUnderTest()).aggregateInPlaceBy(groupBy, Counter::new, sumAggregator);
         Assert.assertEquals(expected, actual);
     }
 
@@ -176,13 +163,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     {
         Function<String, String> groupBy = Functions.getStringPassThru();
         Function0<Integer> valueCreator = Functions0.value(0);
-        Function2<Integer, String, Integer> sumAggregator = new Function2<Integer, String, Integer>()
-        {
-            public Integer value(Integer aggregate, String value)
-            {
-                return aggregate + Integer.parseInt(value);
-            }
-        };
+        Function2<Integer, String, Integer> sumAggregator = (aggregate, value) -> aggregate + Integer.parseInt(value);
         MapIterable<String, Integer> actual = this.classUnderTest().aggregateBy(groupBy, valueCreator, sumAggregator);
         MapIterable<String, Integer> expected = FastList.newList(this.classUnderTest()).aggregateBy(groupBy, valueCreator, sumAggregator);
         Assert.assertEquals(expected, actual);

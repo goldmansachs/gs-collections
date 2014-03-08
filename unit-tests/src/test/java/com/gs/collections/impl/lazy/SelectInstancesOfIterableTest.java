@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package com.gs.collections.impl.lazy;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
@@ -53,16 +51,12 @@ public class SelectInstancesOfIterableTest extends AbstractLazyIterableTestCase
     public void forEachWithIndex()
     {
         InternalIterable<Integer> select = new SelectInstancesOfIterable<Integer>(FastList.newListWith(1, 2.0, 3, 4.0, 5), Integer.class);
-        final Sum sum = new IntegerSum(0);
-        select.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                sum.add(object);
-                sum.add(index);
+        Sum sum = new IntegerSum(0);
+        select.forEachWithIndex((object, index) -> {
+            sum.add(object);
+            sum.add(index);
 
-                LOGGER.info("value={} index={}", object, index);
-            }
+            LOGGER.info("value={} index={}", object, index);
         });
         Assert.assertEquals(12, sum.getValue().intValue());
     }
@@ -85,13 +79,7 @@ public class SelectInstancesOfIterableTest extends AbstractLazyIterableTestCase
     {
         InternalIterable<Integer> select = new SelectInstancesOfIterable<Integer>(FastList.newListWith(1, 2.0, 3, 4.0, 5), Integer.class);
         Sum sum = new IntegerSum(0);
-        select.forEachWith(new Procedure2<Integer, Sum>()
-        {
-            public void value(Integer each, Sum aSum)
-            {
-                aSum.add(each);
-            }
-        }, sum);
+        select.forEachWith((each, aSum) -> { aSum.add(each); }, sum);
         Assert.assertEquals(9, sum.getValue().intValue());
     }
 

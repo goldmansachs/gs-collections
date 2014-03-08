@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
@@ -72,167 +71,78 @@ public class SerialParallelPerformanceTest
     private static final int MEDIUM_COUNT = 1000 * SCALE_FACTOR;
     private static final int LARGE_COUNT = 10000 * SCALE_FACTOR;
 
-    private static final Function<Integer, Pair<Integer, Integer>> PAIR_FUNCTION =
-            new Function<Integer, Pair<Integer, Integer>>()
-            {
-                public Pair<Integer, Integer> valueOf(Integer value)
-                {
-                    return Tuples.pair(value, value);
-                }
-            };
+    private static final Function<Integer, Pair<Integer, Integer>> PAIR_FUNCTION = value -> Tuples.pair(value, value);
 
-    private static final Function<Integer, Long> LONG_FUNCTION =
-            new Function<Integer, Long>()
-            {
-                public Long valueOf(Integer value)
-                {
-                    return value.longValue();
-                }
-            };
+    private static final Function<Integer, Long> LONG_FUNCTION = Integer::longValue;
 
-    private static final Function<Integer, Short> SHORT_FUNCTION =
-            new Function<Integer, Short>()
-            {
-                public Short valueOf(Integer value)
-                {
-                    return value.shortValue();
-                }
-            };
+    private static final Function<Integer, Short> SHORT_FUNCTION = Integer::shortValue;
 
-    private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION =
-            new Function<String, Alphagram>()
-            {
-                @SuppressWarnings("ClassEscapesDefinedScope")
-                public Alphagram valueOf(String value)
-                {
-                    return new Alphagram(value);
-                }
-            };
+    private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION = Alphagram::new;
 
     private static final Function0<Integer> INTEGER_NEW = Functions0.value(0);
 
-    private static final Function2<Integer, String, Integer> COUNT_AGGREGATOR = new Function2<Integer, String, Integer>()
-    {
-        public Integer value(Integer aggregate, String word)
-        {
-            return aggregate + 1;
-        }
-    };
+    private static final Function2<Integer, String, Integer> COUNT_AGGREGATOR = (aggregate, word) -> aggregate + 1;
 
     @Test
     @Category(ParallelTests.class)
     public void select()
     {
-        this.measureAlgorithmForIntegerIterable("Select", new Procedure<Function0<Iterable<Integer>>>()
-        {
-            public void value(Function0<Iterable<Integer>> each)
-            {
-                SerialParallelPerformanceTest.this.select(each.value());
-            }
-        });
+        this.measureAlgorithmForIntegerIterable("Select", each -> this.select(each.value()));
     }
 
     @Test
     @Category(ParallelTests.class)
     public void reject()
     {
-        this.measureAlgorithmForIntegerIterable("Reject", new Procedure<Function0<Iterable<Integer>>>()
-        {
-            public void value(Function0<Iterable<Integer>> each)
-            {
-                SerialParallelPerformanceTest.this.reject(each.value());
-            }
-        });
+        this.measureAlgorithmForIntegerIterable("Reject", each -> this.reject(each.value()));
     }
 
     @Test
     @Category(ParallelTests.class)
     public void count()
     {
-        this.measureAlgorithmForIntegerIterable("Count", new Procedure<Function0<Iterable<Integer>>>()
-        {
-            public void value(Function0<Iterable<Integer>> each)
-            {
-                SerialParallelPerformanceTest.this.count(each.value());
-            }
-        });
+        this.measureAlgorithmForIntegerIterable("Count", each -> this.count(each.value()));
     }
 
     @Test
     @Category(ParallelTests.class)
     public void collectIf()
     {
-        this.measureAlgorithmForIntegerIterable("CollectIf", new Procedure<Function0<Iterable<Integer>>>()
-        {
-            public void value(Function0<Iterable<Integer>> each)
-            {
-                SerialParallelPerformanceTest.this.collectIf(each.value());
-            }
-        });
+        this.measureAlgorithmForIntegerIterable("CollectIf", each -> this.collectIf(each.value()));
     }
 
     @Test
     @Category(ParallelTests.class)
     public void collect()
     {
-        this.measureAlgorithmForIntegerIterable("Collect", new Procedure<Function0<Iterable<Integer>>>()
-        {
-            public void value(Function0<Iterable<Integer>> each)
-            {
-                SerialParallelPerformanceTest.this.collect(each.value());
-            }
-        });
+        this.measureAlgorithmForIntegerIterable("Collect", each -> this.collect(each.value()));
     }
 
     @Test
     @Category(ParallelTests.class)
     public void groupBy()
     {
-        this.measureAlgorithmForRandomStringIterable("GroupBy", new Procedure<Function0<Iterable<String>>>()
-        {
-            public void value(Function0<Iterable<String>> each)
-            {
-                SerialParallelPerformanceTest.this.groupBy(each.value());
-            }
-        });
+        this.measureAlgorithmForRandomStringIterable("GroupBy", each -> this.groupBy(each.value()));
     }
 
     @Test
     @Category(ParallelTests.class)
     public void aggregateBy()
     {
-        this.measureAlgorithmForRandomStringIterable("AggregateBy", new Procedure<Function0<Iterable<String>>>()
-        {
-            public void value(Function0<Iterable<String>> each)
-            {
-                SerialParallelPerformanceTest.this.aggregateBy(each.value());
-            }
-        });
+        this.measureAlgorithmForRandomStringIterable("AggregateBy", each -> this.aggregateBy(each.value()));
     }
 
     @Test
     @Category(ParallelTests.class)
     public void aggregateInPlaceBy()
     {
-        this.measureAlgorithmForRandomStringIterable("AggregateInPlaceBy", new Procedure<Function0<Iterable<String>>>()
-        {
-            public void value(Function0<Iterable<String>> each)
-            {
-                SerialParallelPerformanceTest.this.aggregateInPlaceBy(each.value());
-            }
-        });
+        this.measureAlgorithmForRandomStringIterable("AggregateInPlaceBy", each -> this.aggregateInPlaceBy(each.value()));
     }
 
     public MutableList<String> generateWordsList(int count)
     {
-        final FastList<String> words = FastList.newList();
-        Interval.oneTo(count).forEach(new IntProcedure()
-        {
-            public void value(int each)
-            {
-                words.add(RandomStringUtils.randomAlphabetic(2));
-            }
-        });
+        FastList<String> words = FastList.newList();
+        Interval.oneTo(count).forEach((int each) -> { words.add(RandomStringUtils.randomAlphabetic(2)); });
         return words;
     }
 
@@ -254,19 +164,15 @@ public class SerialParallelPerformanceTest
 
     private static void forceGC()
     {
-        IntInterval.oneTo(20).forEach(new IntProcedure()
-        {
-            public void value(int each)
+        IntInterval.oneTo(20).forEach(each -> {
+            System.gc();
+            try
             {
-                System.gc();
-                try
-                {
-                    Thread.sleep(100);
-                }
-                catch (InterruptedException e)
-                {
-                    throw new RuntimeException(e);
-                }
+                Thread.sleep(100);
+            }
+            catch (InterruptedException e)
+            {
+                throw new RuntimeException(e);
             }
         });
     }
@@ -292,339 +198,141 @@ public class SerialParallelPerformanceTest
 
     private MutableList<Function0<Iterable<Integer>>> getIntegerListGenerators(int count)
     {
-        final Interval interval = Interval.fromTo(-(count / 2), count / 2 - 1);
+        Interval interval = Interval.fromTo(-(count / 2), count / 2 - 1);
         MutableList<Function0<Iterable<Integer>>> generators = FastList.newList();
-        generators.add(new Function0<Iterable<Integer>>()
-        {
-            public Iterable<Integer> value()
-            {
-                MutableList<Integer> integers = interval.toList();
-                Collections.shuffle(integers);
-                return integers;
-            }
+        generators.add(() -> {
+            MutableList<Integer> integers = interval.toList();
+            Collections.shuffle(integers);
+            return integers;
         });
-        generators.add(new Function0<Iterable<Integer>>()
-        {
-            public Iterable<Integer> value()
-            {
-                MutableList<Integer> integers = interval.toList();
-                Collections.shuffle(integers);
-                return integers.toImmutable();
-            }
+        generators.add(() -> {
+            MutableList<Integer> integers = interval.toList();
+            Collections.shuffle(integers);
+            return integers.toImmutable();
         });
-        generators.add(new Function0<Iterable<Integer>>()
-        {
-            public Iterable<Integer> value()
-            {
-                return interval.toSet();
-            }
-        });
+        generators.add(interval::toSet);
         Collections.shuffle(generators);
         return generators;
     }
 
-    private MutableList<Function0<Iterable<String>>> getRandomWordsGenerators(final int count)
+    private MutableList<Function0<Iterable<String>>> getRandomWordsGenerators(int count)
     {
         MutableList<Function0<Iterable<String>>> generators = FastList.newList();
-        generators.add(new Function0<Iterable<String>>()
-        {
-            public Iterable<String> value()
-            {
-                return SerialParallelPerformanceTest.this.generateWordsList(count);
-            }
-        });
-        generators.add(new Function0<Iterable<String>>()
-        {
-            public Iterable<String> value()
-            {
-                return SerialParallelPerformanceTest.this.generateWordsList(count).toImmutable();
-            }
-        });
-        generators.add(new Function0<Iterable<String>>()
-        {
-            public Iterable<String> value()
-            {
-                return SerialParallelPerformanceTest.this.generateWordsSet(count);
-            }
-        });
+        generators.add(() -> this.generateWordsList(count));
+        generators.add(() -> this.generateWordsList(count).toImmutable());
+        generators.add(() -> this.generateWordsSet(count));
         Collections.shuffle(generators);
         return generators;
     }
 
-    private void measureAlgorithmForIntegerIterable(String algorithmName, final Procedure<Function0<Iterable<Integer>>> algorithm)
+    private void measureAlgorithmForIntegerIterable(String algorithmName, Procedure<Function0<Iterable<Integer>>> algorithm)
     {
         this.printMachineAndTestConfiguration(algorithmName);
         for (int i = 0; i < 4; i++)
         {
-            this.getSizes().forEach(new Procedure<Integer>()
-            {
-                public void value(Integer count)
-                {
-                    SerialParallelPerformanceTest.this.getIntegerListGenerators(count).forEach(algorithm);
-                }
-            });
+            this.getSizes().forEach((Procedure<Integer>) count -> this.getIntegerListGenerators(count).forEach(algorithm));
         }
     }
 
-    private void measureAlgorithmForRandomStringIterable(String algorithmName, final Procedure<Function0<Iterable<String>>> algorithm)
+    private void measureAlgorithmForRandomStringIterable(String algorithmName, Procedure<Function0<Iterable<String>>> algorithm)
     {
         this.printMachineAndTestConfiguration(algorithmName);
         for (int i = 0; i < 4; i++)
         {
-            this.getSizes().forEach(new Procedure<Integer>()
-            {
-                public void value(Integer count)
-                {
-                    SerialParallelPerformanceTest.this.getRandomWordsGenerators(count).forEach(algorithm);
-                }
-            });
+            this.getSizes().forEach((Procedure<Integer>) count -> this.getRandomWordsGenerators(count).forEach(algorithm));
         }
     }
 
-    private void aggregateBy(final Iterable<String> words)
+    private void aggregateBy(Iterable<String> words)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicSerialAggregateByPerformance(words, SERIAL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicParallelAggregateByPerformance(words, PARALLEL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicForkJoinAggregateByPerformance(words, PARALLEL_RUN_COUNT);
-            }
-        });
+        runnables.add(() -> { this.basicSerialAggregateByPerformance(words, SERIAL_RUN_COUNT); });
+        runnables.add(() -> { this.basicParallelAggregateByPerformance(words, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> { this.basicForkJoinAggregateByPerformance(words, PARALLEL_RUN_COUNT); });
         this.shuffleAndRun(runnables);
     }
 
-    private void aggregateInPlaceBy(final Iterable<String> words)
+    private void aggregateInPlaceBy(Iterable<String> words)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicSerialAggregateInPlaceByPerformance(words, SERIAL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicParallelAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicForkJoinAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT);
-            }
-        });
+        runnables.add(() -> { this.basicSerialAggregateInPlaceByPerformance(words, SERIAL_RUN_COUNT); });
+        runnables.add(() -> { this.basicParallelAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> { this.basicForkJoinAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT); });
         this.shuffleAndRun(runnables);
     }
 
-    private void groupBy(final Iterable<String> words)
+    private void groupBy(Iterable<String> words)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicSerialGroupByPerformance(words, SERIAL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicParallelGroupByPerformance(words, PARALLEL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicForkJoinGroupByPerformance(words, PARALLEL_RUN_COUNT);
-            }
-        });
+        runnables.add(() -> { this.basicSerialGroupByPerformance(words, SERIAL_RUN_COUNT); });
+        runnables.add(() -> { this.basicParallelGroupByPerformance(words, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> { this.basicForkJoinGroupByPerformance(words, PARALLEL_RUN_COUNT); });
         this.shuffleAndRun(runnables);
     }
 
-    private void collect(final Iterable<Integer> collection)
+    private void collect(Iterable<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicSerialCollectPerformance(collection, SERIAL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicParallelCollectPerformance(collection, PARALLEL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicForkJoinCollectPerformance(collection, PARALLEL_RUN_COUNT);
-            }
-        });
+        runnables.add(() -> { this.basicSerialCollectPerformance(collection, SERIAL_RUN_COUNT); });
+        runnables.add(() -> { this.basicParallelCollectPerformance(collection, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> { this.basicForkJoinCollectPerformance(collection, PARALLEL_RUN_COUNT); });
         this.shuffleAndRun(runnables);
     }
 
-    private void collectIf(final Iterable<Integer> collection)
+    private void collectIf(Iterable<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicSerialCollectIfPerformance(collection, PREDICATES, SERIAL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicParallelCollectIfPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicForkJoinCollectIfPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
-            }
-        });
+        runnables.add(() -> { this.basicSerialCollectIfPerformance(collection, PREDICATES, SERIAL_RUN_COUNT); });
+        runnables.add(() -> { this.basicParallelCollectIfPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> { this.basicForkJoinCollectIfPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
         this.shuffleAndRun(runnables);
     }
 
-    private void count(final Iterable<Integer> collection)
+    private void count(Iterable<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicSerialCountPerformance(collection, PREDICATES, SERIAL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicParallelCountPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicForkJoinCountPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
-            }
-        });
+        runnables.add(() -> { this.basicSerialCountPerformance(collection, PREDICATES, SERIAL_RUN_COUNT); });
+        runnables.add(() -> { this.basicParallelCountPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> { this.basicForkJoinCountPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
         this.shuffleAndRun(runnables);
     }
 
     private void shuffleAndRun(MutableList<Runnable> runnables)
     {
         Collections.shuffle(runnables);
-        runnables.forEach(new Procedure<Runnable>()
-        {
-            public void value(Runnable runnable)
-            {
-                runnable.run();
-            }
-        });
+        runnables.forEach((Procedure<Runnable>) Runnable::run);
     }
 
-    private void reject(final Iterable<Integer> collection)
+    private void reject(Iterable<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicSerialRejectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicParallelRejectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicForkJoinRejectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
-            }
-        });
+        runnables.add(() -> { this.basicSerialRejectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT); });
+        runnables.add(() -> { this.basicParallelRejectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> { this.basicForkJoinRejectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
         this.shuffleAndRun(runnables);
     }
 
-    private void select(final Iterable<Integer> collection)
+    private void select(Iterable<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicSerialSelectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicParallelSelectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
-            }
-        });
-        runnables.add(new Runnable()
-        {
-            public void run()
-            {
-                SerialParallelPerformanceTest.this.basicForkJoinSelectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
-            }
-        });
+        runnables.add(() -> { this.basicSerialSelectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT); });
+        runnables.add(() -> { this.basicParallelSelectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> { this.basicForkJoinSelectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
         this.shuffleAndRun(runnables);
     }
 
     private double basicSerialSelectPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicateList,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicateList,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("Serial** Select: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(Iterate.select(iterable, predicateList.get(0), FastList.<Integer>newList()));
-                Verify.assertNotEmpty(Iterate.select(iterable, predicateList.get(1), FastList.<Integer>newList()));
-                Verify.assertNotEmpty(Iterate.select(iterable, predicateList.get(2), FastList.<Integer>newList()));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Verify.assertNotEmpty(Iterate.select(iterable, predicateList.get(0), FastList.<Integer>newList()));
+            Verify.assertNotEmpty(Iterate.select(iterable, predicateList.get(1), FastList.<Integer>newList()));
+            Verify.assertNotEmpty(Iterate.select(iterable, predicateList.get(2), FastList.<Integer>newList()));
         }, count, WARM_UP_COUNT);
     }
 
@@ -634,64 +342,56 @@ public class SerialParallelPerformanceTest
     }
 
     private double basicParallelSelectPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicateList,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicateList,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("Parallel Select: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(ParallelIterate.select(
-                        iterable,
-                        predicateList.get(0),
-                        new CompositeFastList<Integer>(),
-                        true));
-                Verify.assertNotEmpty(ParallelIterate.select(
-                        iterable,
-                        predicateList.get(1),
-                        new CompositeFastList<Integer>(),
-                        true));
-                Verify.assertNotEmpty(ParallelIterate.select(
-                        iterable,
-                        predicateList.get(2),
-                        new CompositeFastList<Integer>(),
-                        true));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Verify.assertNotEmpty(ParallelIterate.select(
+                    iterable,
+                    predicateList.get(0),
+                    new CompositeFastList<Integer>(),
+                    true));
+            Verify.assertNotEmpty(ParallelIterate.select(
+                    iterable,
+                    predicateList.get(1),
+                    new CompositeFastList<Integer>(),
+                    true));
+            Verify.assertNotEmpty(ParallelIterate.select(
+                    iterable,
+                    predicateList.get(2),
+                    new CompositeFastList<Integer>(),
+                    true));
         }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinSelectPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicateList,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicateList,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin Select: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(FJIterate.select(
-                        iterable,
-                        predicateList.get(0),
-                        new CompositeFastList<Integer>(),
-                        true));
-                Verify.assertNotEmpty(FJIterate.select(
-                        iterable,
-                        predicateList.get(1),
-                        new CompositeFastList<Integer>(),
-                        true));
-                Verify.assertNotEmpty(FJIterate.select(
-                        iterable,
-                        predicateList.get(2),
-                        new CompositeFastList<Integer>(),
-                        true));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Verify.assertNotEmpty(FJIterate.select(
+                    iterable,
+                    predicateList.get(0),
+                    new CompositeFastList<Integer>(),
+                    true));
+            Verify.assertNotEmpty(FJIterate.select(
+                    iterable,
+                    predicateList.get(1),
+                    new CompositeFastList<Integer>(),
+                    true));
+            Verify.assertNotEmpty(FJIterate.select(
+                    iterable,
+                    predicateList.get(2),
+                    new CompositeFastList<Integer>(),
+                    true));
         }, count, WARM_UP_COUNT);
     }
 
@@ -701,272 +401,232 @@ public class SerialParallelPerformanceTest
     }
 
     private double basicSerialCountPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicateList,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicateList,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("Serial** Count: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Assert.assertTrue(Iterate.count(iterable, predicateList.get(0)) > 0);
-                Assert.assertTrue(Iterate.count(iterable, predicateList.get(1)) > 0);
-                Assert.assertTrue(Iterate.count(iterable, predicateList.get(2)) > 0);
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Assert.assertTrue(Iterate.count(iterable, predicateList.get(0)) > 0);
+            Assert.assertTrue(Iterate.count(iterable, predicateList.get(1)) > 0);
+            Assert.assertTrue(Iterate.count(iterable, predicateList.get(2)) > 0);
         }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelCountPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicateList,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicateList,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("Parallel Count: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Assert.assertTrue(ParallelIterate.count(iterable, predicateList.get(0)) > 0);
-                Assert.assertTrue(ParallelIterate.count(iterable, predicateList.get(1)) > 0);
-                Assert.assertTrue(ParallelIterate.count(iterable, predicateList.get(2)) > 0);
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Assert.assertTrue(ParallelIterate.count(iterable, predicateList.get(0)) > 0);
+            Assert.assertTrue(ParallelIterate.count(iterable, predicateList.get(1)) > 0);
+            Assert.assertTrue(ParallelIterate.count(iterable, predicateList.get(2)) > 0);
         }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinCountPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicateList,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicateList,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin Count: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Assert.assertTrue(FJIterate.count(iterable, predicateList.get(0)) > 0);
-                Assert.assertTrue(FJIterate.count(iterable, predicateList.get(1)) > 0);
-                Assert.assertTrue(FJIterate.count(iterable, predicateList.get(2)) > 0);
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Assert.assertTrue(FJIterate.count(iterable, predicateList.get(0)) > 0);
+            Assert.assertTrue(FJIterate.count(iterable, predicateList.get(1)) > 0);
+            Assert.assertTrue(FJIterate.count(iterable, predicateList.get(2)) > 0);
         }, count, WARM_UP_COUNT);
     }
 
     private double basicSerialRejectPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicateList,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicateList,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("Serial** Reject: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(Iterate.reject(iterable, predicateList.get(0), FastList.<Integer>newList()));
-                Verify.assertNotEmpty(Iterate.reject(iterable, predicateList.get(1), FastList.<Integer>newList()));
-                Verify.assertNotEmpty(Iterate.reject(iterable, predicateList.get(2), FastList.<Integer>newList()));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Verify.assertNotEmpty(Iterate.reject(iterable, predicateList.get(0), FastList.<Integer>newList()));
+            Verify.assertNotEmpty(Iterate.reject(iterable, predicateList.get(1), FastList.<Integer>newList()));
+            Verify.assertNotEmpty(Iterate.reject(iterable, predicateList.get(2), FastList.<Integer>newList()));
         }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelRejectPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicateList,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicateList,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("Parallel Reject: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(ParallelIterate.reject(
-                        iterable,
-                        predicateList.get(0),
-                        new CompositeFastList<Integer>(),
-                        true));
-                Verify.assertNotEmpty(ParallelIterate.reject(
-                        iterable,
-                        predicateList.get(1),
-                        new CompositeFastList<Integer>(),
-                        true));
-                Verify.assertNotEmpty(ParallelIterate.reject(
-                        iterable,
-                        predicateList.get(2),
-                        new CompositeFastList<Integer>(),
-                        true));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Verify.assertNotEmpty(ParallelIterate.reject(
+                    iterable,
+                    predicateList.get(0),
+                    new CompositeFastList<Integer>(),
+                    true));
+            Verify.assertNotEmpty(ParallelIterate.reject(
+                    iterable,
+                    predicateList.get(1),
+                    new CompositeFastList<Integer>(),
+                    true));
+            Verify.assertNotEmpty(ParallelIterate.reject(
+                    iterable,
+                    predicateList.get(2),
+                    new CompositeFastList<Integer>(),
+                    true));
         }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinRejectPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicateList,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicateList,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin Reject: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(FJIterate.reject(
-                        iterable,
-                        predicateList.get(0),
-                        new CompositeFastList<Integer>(),
-                        true));
-                Verify.assertNotEmpty(FJIterate.reject(
-                        iterable,
-                        predicateList.get(1),
-                        new CompositeFastList<Integer>(),
-                        true));
-                Verify.assertNotEmpty(FJIterate.reject(
-                        iterable,
-                        predicateList.get(2),
-                        new CompositeFastList<Integer>(),
-                        true));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Verify.assertNotEmpty(FJIterate.reject(
+                    iterable,
+                    predicateList.get(0),
+                    new CompositeFastList<Integer>(),
+                    true));
+            Verify.assertNotEmpty(FJIterate.reject(
+                    iterable,
+                    predicateList.get(1),
+                    new CompositeFastList<Integer>(),
+                    true));
+            Verify.assertNotEmpty(FJIterate.reject(
+                    iterable,
+                    predicateList.get(2),
+                    new CompositeFastList<Integer>(),
+                    true));
         }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelCollectIfPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicates,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicates,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("Parallel CollectIf: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(ParallelIterate.collectIf(
-                        iterable,
-                        predicates.get(0),
-                        PAIR_FUNCTION,
-                        new CompositeFastList<Pair<Integer, Integer>>(),
-                        true));
-                Verify.assertNotEmpty(ParallelIterate.collectIf(
-                        iterable,
-                        predicates.get(1),
-                        LONG_FUNCTION,
-                        new CompositeFastList<Long>(),
-                        true));
-                Verify.assertNotEmpty(ParallelIterate.collectIf(
-                        iterable,
-                        predicates.get(0),
-                        SHORT_FUNCTION,
-                        new CompositeFastList<Short>(),
-                        true));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Verify.assertNotEmpty(ParallelIterate.collectIf(
+                    iterable,
+                    predicates.get(0),
+                    PAIR_FUNCTION,
+                    new CompositeFastList<Pair<Integer, Integer>>(),
+                    true));
+            Verify.assertNotEmpty(ParallelIterate.collectIf(
+                    iterable,
+                    predicates.get(1),
+                    LONG_FUNCTION,
+                    new CompositeFastList<Long>(),
+                    true));
+            Verify.assertNotEmpty(ParallelIterate.collectIf(
+                    iterable,
+                    predicates.get(0),
+                    SHORT_FUNCTION,
+                    new CompositeFastList<Short>(),
+                    true));
         }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinCollectIfPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicates,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicates,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin CollectIf: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(FJIterate.collectIf(
-                        iterable,
-                        predicates.get(0),
-                        PAIR_FUNCTION,
-                        new CompositeFastList<Pair<Integer, Integer>>(),
-                        true));
-                Verify.assertNotEmpty(FJIterate.collectIf(
-                        iterable,
-                        predicates.get(1),
-                        LONG_FUNCTION,
-                        new CompositeFastList<Long>(),
-                        true));
-                Verify.assertNotEmpty(FJIterate.collectIf(
-                        iterable,
-                        predicates.get(0),
-                        SHORT_FUNCTION,
-                        new CompositeFastList<Short>(),
-                        true));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Verify.assertNotEmpty(FJIterate.collectIf(
+                    iterable,
+                    predicates.get(0),
+                    PAIR_FUNCTION,
+                    new CompositeFastList<Pair<Integer, Integer>>(),
+                    true));
+            Verify.assertNotEmpty(FJIterate.collectIf(
+                    iterable,
+                    predicates.get(1),
+                    LONG_FUNCTION,
+                    new CompositeFastList<Long>(),
+                    true));
+            Verify.assertNotEmpty(FJIterate.collectIf(
+                    iterable,
+                    predicates.get(0),
+                    SHORT_FUNCTION,
+                    new CompositeFastList<Short>(),
+                    true));
         }, count, WARM_UP_COUNT);
     }
 
     private double basicSerialCollectIfPerformance(
-            final Iterable<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicates,
+            Iterable<Integer> iterable,
+            MutableList<Predicate<Integer>> predicates,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("Serial** CollectIf: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(Iterate.collectIf(
-                        iterable,
-                        predicates.get(0),
-                        PAIR_FUNCTION,
-                        FastList.<Pair<Integer, Integer>>newList()));
-                Verify.assertNotEmpty(Iterate.collectIf(
-                        iterable,
-                        predicates.get(1),
-                        LONG_FUNCTION,
-                        FastList.<Long>newList()));
-                Verify.assertNotEmpty(Iterate.collectIf(
-                        iterable,
-                        predicates.get(2),
-                        SHORT_FUNCTION,
-                        FastList.<Short>newList()));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Verify.assertNotEmpty(Iterate.collectIf(
+                    iterable,
+                    predicates.get(0),
+                    PAIR_FUNCTION,
+                    FastList.<Pair<Integer, Integer>>newList()));
+            Verify.assertNotEmpty(Iterate.collectIf(
+                    iterable,
+                    predicates.get(1),
+                    LONG_FUNCTION,
+                    FastList.<Long>newList()));
+            Verify.assertNotEmpty(Iterate.collectIf(
+                    iterable,
+                    predicates.get(2),
+                    SHORT_FUNCTION,
+                    FastList.<Short>newList()));
         }, count, WARM_UP_COUNT);
     }
 
     private double basicSerialCollectPerformance(
-            final Iterable<Integer> iterable,
+            Iterable<Integer> iterable,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("Serial** Collect: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                int initialCapacity = Iterate.sizeOf(iterable);
-                Verify.assertNotEmpty(Iterate.collect(
-                        iterable,
-                        PAIR_FUNCTION,
-                        FastList.<Pair<Integer, Integer>>newList(initialCapacity)));
-                Verify.assertNotEmpty(Iterate.collect(
-                        iterable,
-                        LONG_FUNCTION,
-                        FastList.<Long>newList(initialCapacity)));
-                Verify.assertNotEmpty(Iterate.collect(
-                        iterable,
-                        SHORT_FUNCTION,
-                        FastList.<Short>newList(initialCapacity)));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            int initialCapacity = Iterate.sizeOf(iterable);
+            Verify.assertNotEmpty(Iterate.collect(
+                    iterable,
+                    PAIR_FUNCTION,
+                    FastList.<Pair<Integer, Integer>>newList(initialCapacity)));
+            Verify.assertNotEmpty(Iterate.collect(
+                    iterable,
+                    LONG_FUNCTION,
+                    FastList.<Long>newList(initialCapacity)));
+            Verify.assertNotEmpty(Iterate.collect(
+                    iterable,
+                    SHORT_FUNCTION,
+                    FastList.<Short>newList(initialCapacity)));
         }, count, 10);
     }
 
     private double basicSerialGroupByPerformance(
-            final Iterable<String> iterable,
+            Iterable<String> iterable,
             int count)
     {
         Assert.assertEquals(HashBagMultimap.newMultimap(ParallelIterate.groupBy(iterable, ALPHAGRAM_FUNCTION)),
@@ -974,43 +634,37 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRun("Serial** GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(Iterate.groupBy(
-                        iterable,
-                        ALPHAGRAM_FUNCTION));
-            }
-        }, count, 10);
+                + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(Iterate.groupBy(
+                iterable,
+                ALPHAGRAM_FUNCTION)), count, 10);
     }
 
     private double basicSerialAggregateInPlaceByPerformance(
-            final Iterable<String> iterable,
+            Iterable<String> iterable,
             int count)
     {
         Assert.assertEquals(
-                ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT),
-                Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT));
+                ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                    value.incrementAndGet();
+                }),
+                Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                    value.incrementAndGet();
+                }));
         return TimeKeeper.logAverageMillisecondsToRun("Serial** AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(
-                        Iterate.aggregateInPlaceBy(
-                                iterable,
-                                ALPHAGRAM_FUNCTION,
-                                AtomicIntegerWithEquals.NEW_INSTANCE,
-                                AtomicIntegerWithEquals.INCREMENT));
-            }
-        }, count, 10);
+                + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
+                Iterate.aggregateInPlaceBy(
+                        iterable,
+                        ALPHAGRAM_FUNCTION,
+                        (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0),
+                        (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                            value.incrementAndGet();
+                        })), count, 10);
     }
 
     private double basicSerialAggregateByPerformance(
-            final Iterable<String> iterable,
+            Iterable<String> iterable,
             int count)
     {
         Assert.assertEquals(
@@ -1019,157 +673,131 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRun("Serial** AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(
-                        Iterate.aggregateBy(
-                                iterable,
-                                ALPHAGRAM_FUNCTION,
-                                INTEGER_NEW,
-                                COUNT_AGGREGATOR));
-            }
-        }, count, 10);
+                + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
+                Iterate.aggregateBy(
+                        iterable,
+                        ALPHAGRAM_FUNCTION,
+                        INTEGER_NEW,
+                        COUNT_AGGREGATOR)), count, 10);
     }
 
-    private double basicParallelCollectPerformance(final Iterable<Integer> iterable, int count)
+    private double basicParallelCollectPerformance(Iterable<Integer> iterable, int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("Parallel Collect: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(ParallelIterate.collect(
-                        iterable,
-                        PAIR_FUNCTION,
-                        new CompositeFastList<Pair<Integer, Integer>>(),
-                        true));
-                Verify.assertNotEmpty(ParallelIterate.collect(
-                        iterable,
-                        LONG_FUNCTION,
-                        new CompositeFastList<Long>(),
-                        true));
-                Verify.assertNotEmpty(ParallelIterate.collect(
-                        iterable,
-                        SHORT_FUNCTION,
-                        new CompositeFastList<Short>(),
-                        true));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Verify.assertNotEmpty(ParallelIterate.collect(
+                    iterable,
+                    PAIR_FUNCTION,
+                    new CompositeFastList<Pair<Integer, Integer>>(),
+                    true));
+            Verify.assertNotEmpty(ParallelIterate.collect(
+                    iterable,
+                    LONG_FUNCTION,
+                    new CompositeFastList<Long>(),
+                    true));
+            Verify.assertNotEmpty(ParallelIterate.collect(
+                    iterable,
+                    SHORT_FUNCTION,
+                    new CompositeFastList<Short>(),
+                    true));
         }, count, WARM_UP_COUNT);
     }
 
-    private double basicForkJoinCollectPerformance(final Iterable<Integer> iterable, int count)
+    private double basicForkJoinCollectPerformance(Iterable<Integer> iterable, int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin Collect: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(FJIterate.collect(
-                        iterable,
-                        PAIR_FUNCTION,
-                        new CompositeFastList<Pair<Integer, Integer>>(),
-                        true));
-                Verify.assertNotEmpty(FJIterate.collect(
-                        iterable,
-                        LONG_FUNCTION,
-                        new CompositeFastList<Long>(),
-                        true));
-                Verify.assertNotEmpty(FJIterate.collect(
-                        iterable,
-                        SHORT_FUNCTION,
-                        new CompositeFastList<Short>(),
-                        true));
-            }
+                + this.formatSizeOf(iterable), () -> {
+            Verify.assertNotEmpty(FJIterate.collect(
+                    iterable,
+                    PAIR_FUNCTION,
+                    new CompositeFastList<Pair<Integer, Integer>>(),
+                    true));
+            Verify.assertNotEmpty(FJIterate.collect(
+                    iterable,
+                    LONG_FUNCTION,
+                    new CompositeFastList<Long>(),
+                    true));
+            Verify.assertNotEmpty(FJIterate.collect(
+                    iterable,
+                    SHORT_FUNCTION,
+                    new CompositeFastList<Short>(),
+                    true));
         }, count, WARM_UP_COUNT);
     }
 
-    private double basicParallelGroupByPerformance(final Iterable<String> iterable, int count)
+    private double basicParallelGroupByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(HashBagMultimap.newMultimap(ParallelIterate.groupBy(iterable, ALPHAGRAM_FUNCTION)),
                 HashBagMultimap.newMultimap(Iterate.groupBy(iterable, ALPHAGRAM_FUNCTION)));
         return TimeKeeper.logAverageMillisecondsToRun("Parallel GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(ParallelIterate.groupBy(
-                        iterable,
-                        ALPHAGRAM_FUNCTION));
-            }
-        }, count, WARM_UP_COUNT);
+                + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(ParallelIterate.groupBy(
+                iterable,
+                ALPHAGRAM_FUNCTION)), count, WARM_UP_COUNT);
     }
 
-    private double basicForkJoinGroupByPerformance(final Iterable<String> iterable, int count)
+    private double basicForkJoinGroupByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(HashBagMultimap.newMultimap(FJIterate.groupBy(iterable, ALPHAGRAM_FUNCTION)),
                 HashBagMultimap.newMultimap(Iterate.groupBy(iterable, ALPHAGRAM_FUNCTION)));
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(FJIterate.groupBy(
-                        iterable,
-                        ALPHAGRAM_FUNCTION));
-            }
-        }, count, WARM_UP_COUNT);
+                + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(FJIterate.groupBy(
+                iterable,
+                ALPHAGRAM_FUNCTION)), count, WARM_UP_COUNT);
     }
 
-    private double basicParallelAggregateInPlaceByPerformance(final Iterable<String> iterable, int count)
+    private double basicParallelAggregateInPlaceByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
-                ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT),
-                Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT));
+                ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                    value.incrementAndGet();
+                }),
+                Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                    value.incrementAndGet();
+                }));
         return TimeKeeper.logAverageMillisecondsToRun("Parallel AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(
-                        ParallelIterate.aggregateInPlaceBy(
-                                iterable,
-                                ALPHAGRAM_FUNCTION,
-                                AtomicIntegerWithEquals.NEW_INSTANCE,
-                                AtomicIntegerWithEquals.INCREMENT));
-            }
-        }, count, WARM_UP_COUNT);
+                + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
+                ParallelIterate.aggregateInPlaceBy(
+                        iterable,
+                        ALPHAGRAM_FUNCTION,
+                        (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0),
+                        (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                            value.incrementAndGet();
+                        })), count, WARM_UP_COUNT);
     }
 
-    private double basicForkJoinAggregateInPlaceByPerformance(final Iterable<String> iterable, int count)
+    private double basicForkJoinAggregateInPlaceByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
-                FJIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT),
-                Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT));
+                FJIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                    value.incrementAndGet();
+                }),
+                Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                    value.incrementAndGet();
+                }));
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(
-                        FJIterate.aggregateInPlaceBy(
-                                iterable,
-                                ALPHAGRAM_FUNCTION,
-                                AtomicIntegerWithEquals.NEW_INSTANCE,
-                                AtomicIntegerWithEquals.INCREMENT));
-            }
-        }, count, WARM_UP_COUNT);
+                + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
+                FJIterate.aggregateInPlaceBy(
+                        iterable,
+                        ALPHAGRAM_FUNCTION,
+                        (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0),
+                        (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                            value.incrementAndGet();
+                        })), count, WARM_UP_COUNT);
     }
 
-    private double basicParallelAggregateByPerformance(final Iterable<String> iterable, int count)
+    private double basicParallelAggregateByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
                 ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
@@ -1177,17 +805,11 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRun("Parallel AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(
-                        ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
-            }
-        }, count, WARM_UP_COUNT);
+                + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
+                ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR)), count, WARM_UP_COUNT);
     }
 
-    private double basicForkJoinAggregateByPerformance(final Iterable<String> iterable, int count)
+    private double basicForkJoinAggregateByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
                 FJIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
@@ -1195,14 +817,8 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable), new Runnable()
-        {
-            public void run()
-            {
-                Verify.assertNotEmpty(
-                        FJIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
-            }
-        }, count, WARM_UP_COUNT);
+                + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
+                FJIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR)), count, WARM_UP_COUNT);
     }
 
     static final class TimeKeeper
@@ -1359,22 +975,6 @@ public class SerialParallelPerformanceTest
 
     public static final class AtomicIntegerWithEquals extends AtomicInteger
     {
-        private static final Function0<AtomicIntegerWithEquals> NEW_INSTANCE = new Function0<AtomicIntegerWithEquals>()
-        {
-            public AtomicIntegerWithEquals value()
-            {
-                return new AtomicIntegerWithEquals(0);
-            }
-        };
-
-        private static final Procedure2<AtomicIntegerWithEquals, String> INCREMENT = new Procedure2<AtomicIntegerWithEquals, String>()
-        {
-            public void value(AtomicIntegerWithEquals value, String each)
-            {
-                value.incrementAndGet();
-            }
-        };
-
         private AtomicIntegerWithEquals(int initialValue)
         {
             super(initialValue);

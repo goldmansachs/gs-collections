@@ -32,15 +32,8 @@ import com.gs.collections.api.bag.primitive.ImmutableFloatBag;
 import com.gs.collections.api.bag.primitive.ImmutableIntBag;
 import com.gs.collections.api.bag.primitive.ImmutableLongBag;
 import com.gs.collections.api.bag.primitive.ImmutableShortBag;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.primitive.BooleanFunction;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
@@ -206,15 +199,9 @@ public abstract class ImmutableBagTestCase
     @Test
     public void forEachWith()
     {
-        final MutableBag<String> result = Bags.mutable.of();
+        MutableBag<String> result = Bags.mutable.of();
         ImmutableBag<String> bag = this.newBag();
-        bag.forEachWith(new Procedure2<String, String>()
-        {
-            public void value(String argument1, String argument2)
-            {
-                result.add(argument1 + argument2);
-            }
-        }, "");
+        bag.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, "");
         Assert.assertEquals(bag, result);
     }
 
@@ -231,13 +218,7 @@ public abstract class ImmutableBagTestCase
     public void selectByOccurrences()
     {
         ImmutableBag<String> strings = this.newBag().selectByOccurrences(IntPredicates.isEven());
-        ImmutableBag<Integer> collect = strings.collect(new Function<String, Integer>()
-        {
-            public Integer valueOf(String each)
-            {
-                return Integer.valueOf(each);
-            }
-        });
+        ImmutableBag<Integer> collect = strings.collect(Integer::valueOf);
         Verify.assertAllSatisfy(collect, IntegerPredicates.isEven());
     }
 
@@ -343,13 +324,7 @@ public abstract class ImmutableBagTestCase
     @Test
     public void collectBoolean()
     {
-        ImmutableBooleanBag result = this.newBag().collectBoolean(new BooleanFunction<String>()
-        {
-            public boolean booleanValueOf(String s)
-            {
-                return "4".equals(s);
-            }
-        });
+        ImmutableBooleanBag result = this.newBag().collectBoolean("4"::equals);
         Assert.assertEquals(2, result.sizeDistinct());
         Assert.assertEquals(4, result.occurrencesOf(true));
         Assert.assertEquals(6, result.occurrencesOf(false));
@@ -359,13 +334,7 @@ public abstract class ImmutableBagTestCase
     public void collectBooleanWithTarget()
     {
         BooleanHashBag target = new BooleanHashBag();
-        BooleanHashBag result = this.newBag().collectBoolean(new BooleanFunction<String>()
-        {
-            public boolean booleanValueOf(String s)
-            {
-                return "4".equals(s);
-            }
-        }, target);
+        BooleanHashBag result = this.newBag().collectBoolean("4"::equals, target);
         Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(2, result.sizeDistinct());
         Assert.assertEquals(4, result.occurrencesOf(true));
@@ -539,15 +508,11 @@ public abstract class ImmutableBagTestCase
         }
     }
 
-    private Function2<String, String, String> generateAssertingPassThroughFunction2(final String valueToAssert)
+    private Function2<String, String, String> generateAssertingPassThroughFunction2(String valueToAssert)
     {
-        return new Function2<String, String, String>()
-        {
-            public String value(String argument1, String argument2)
-            {
-                Assert.assertEquals(valueToAssert, argument2);
-                return argument1;
-            }
+        return (argument1, argument2) -> {
+            Assert.assertEquals(valueToAssert, argument2);
+            return argument1;
         };
     }
 
@@ -586,13 +551,7 @@ public abstract class ImmutableBagTestCase
     @Test
     public void flatCollect()
     {
-        ImmutableBag<String> actual = this.newBag().flatCollect(new Function<String, MutableList<String>>()
-        {
-            public MutableList<String> valueOf(String string)
-            {
-                return Lists.fixedSize.of(string);
-            }
-        });
+        ImmutableBag<String> actual = this.newBag().flatCollect(Lists.fixedSize::of);
 
         ImmutableBag<String> expected = this.newBag().collect(Functions.getToString());
 
@@ -602,13 +561,7 @@ public abstract class ImmutableBagTestCase
     @Test
     public void flatCollectWithTarget()
     {
-        MutableBag<String> actual = this.newBag().flatCollect(new Function<String, MutableList<String>>()
-        {
-            public MutableList<String> valueOf(String string)
-            {
-                return Lists.fixedSize.of(string);
-            }
-        }, HashBag.<String>newBag());
+        MutableBag<String> actual = this.newBag().flatCollect(Lists.fixedSize::of, HashBag.<String>newBag());
 
         ImmutableBag<String> expected = this.newBag().collect(Functions.getToString());
 
@@ -860,7 +813,7 @@ public abstract class ImmutableBagTestCase
     {
         ImmutableBag<String> strings = this.newBag();
         MutableBag<String> result = Bags.mutable.of();
-        final Iterator<String> iterator = strings.iterator();
+        Iterator<String> iterator = strings.iterator();
         for (int i = 0; iterator.hasNext(); i++)
         {
             String string = iterator.next();
@@ -868,13 +821,7 @@ public abstract class ImmutableBagTestCase
         }
         Assert.assertEquals(strings, result);
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Test
@@ -897,13 +844,7 @@ public abstract class ImmutableBagTestCase
     @Test
     public void injectIntoInt()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(new Function<String, Integer>()
-        {
-            public Integer valueOf(String string)
-            {
-                return Integer.valueOf(string);
-            }
-        });
+        ImmutableBag<Integer> integers = this.newBag().collect(Integer::valueOf);
         int result = integers.injectInto(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT), result);
     }
@@ -938,13 +879,7 @@ public abstract class ImmutableBagTestCase
     public void sumFloat()
     {
         ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
-        double result = integers.sumOfFloat(new FloatFunction<Integer>()
-        {
-            public float floatValueOf(Integer integer)
-            {
-                return integer.floatValue();
-            }
-        });
+        double result = integers.sumOfFloat(Integer::floatValue);
         float expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_FLOAT);
         Assert.assertEquals(expected, result, 0.001);
     }
@@ -953,13 +888,7 @@ public abstract class ImmutableBagTestCase
     public void sumDouble()
     {
         ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
-        double result = integers.sumOfDouble(new DoubleFunction<Integer>()
-        {
-            public double doubleValueOf(Integer integer)
-            {
-                return integer.doubleValue();
-            }
-        });
+        double result = integers.sumOfDouble(Integer::doubleValue);
         double expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
         Assert.assertEquals(expected, result, 0.001);
     }
@@ -968,13 +897,7 @@ public abstract class ImmutableBagTestCase
     public void sumInteger()
     {
         ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
-        long result = integers.sumOfInt(new IntFunction<Integer>()
-        {
-            public int intValueOf(Integer integer)
-            {
-                return integer;
-            }
-        });
+        long result = integers.sumOfInt(integer -> integer);
         int expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(expected, result);
     }
@@ -983,13 +906,7 @@ public abstract class ImmutableBagTestCase
     public void sumLong()
     {
         ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
-        long result = integers.sumOfLong(new LongFunction<Integer>()
-        {
-            public long longValueOf(Integer integer)
-            {
-                return integer.longValue();
-            }
-        });
+        long result = integers.sumOfLong(Integer::longValue);
         long expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_LONG);
         Assert.assertEquals(expected, result);
     }
@@ -1058,13 +975,7 @@ public abstract class ImmutableBagTestCase
     @Test
     public void iteratorRemove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableBagTestCase.this.newBag().iterator().remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newBag().iterator().remove());
     }
 
     @Test
@@ -1094,13 +1005,7 @@ public abstract class ImmutableBagTestCase
     @Test
     public void groupBy()
     {
-        ImmutableBagMultimap<Boolean, String> multimap = this.newBag().groupBy(new Function<String, Boolean>()
-        {
-            public Boolean valueOf(String string)
-            {
-                return IntegerPredicates.isOdd().accept(Integer.valueOf(string));
-            }
-        });
+        ImmutableBagMultimap<Boolean, String> multimap = this.newBag().groupBy(string -> IntegerPredicates.isOdd().accept(Integer.valueOf(string)));
 
         this.groupByAssertions(multimap);
     }
@@ -1108,13 +1013,7 @@ public abstract class ImmutableBagTestCase
     @Test
     public void groupBy_with_target()
     {
-        ImmutableBagMultimap<Boolean, String> multimap = this.newBag().groupBy(new Function<String, Boolean>()
-        {
-            public Boolean valueOf(String string)
-            {
-                return IntegerPredicates.isOdd().accept(Integer.valueOf(string));
-            }
-        }, new HashBagMultimap<Boolean, String>()).toImmutable();
+        ImmutableBagMultimap<Boolean, String> multimap = this.newBag().groupBy(string -> IntegerPredicates.isOdd().accept(Integer.valueOf(string)), new HashBagMultimap<Boolean, String>()).toImmutable();
 
         this.groupByAssertions(multimap);
     }

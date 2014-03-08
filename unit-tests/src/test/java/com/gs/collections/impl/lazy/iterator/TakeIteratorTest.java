@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,32 +64,18 @@ public class TakeIteratorTest
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                new TakeIterator<Integer>(Lists.fixedSize.<Integer>of(), 0).remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> new TakeIterator<Integer>(Lists.fixedSize.<Integer>of(), 0).remove());
     }
 
     @Test
     public void noSuchElementException()
     {
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                new TakeIterator<Integer>(Lists.fixedSize.<Integer>of(), 0).next();
-            }
+        Verify.assertThrows(NoSuchElementException.class, () -> {
+            new TakeIterator<Integer>(Lists.fixedSize.<Integer>of(), 0).next();
         });
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                new TakeIterator<Integer>(Lists.fixedSize.of(1, 2, 3), 0).next();
-            }
+        Verify.assertThrows(NoSuchElementException.class, () -> {
+            new TakeIterator<Integer>(Lists.fixedSize.of(1, 2, 3), 0).next();
         });
     }
 }

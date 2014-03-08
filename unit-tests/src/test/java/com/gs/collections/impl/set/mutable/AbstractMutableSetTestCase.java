@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
@@ -352,7 +350,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     public void add()
     {
         MutableSet<IntegerWithCast> set = this.newWith();
-        MutableList<IntegerWithCast> collisions = COLLISIONS.collect(IntegerWithCast.CONSTRUCT);
+        MutableList<IntegerWithCast> collisions = COLLISIONS.collect(IntegerWithCast::new);
         set.addAll(collisions);
         set.removeAll(collisions);
         for (Integer integer : COLLISIONS)
@@ -369,36 +367,28 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     {
         super.remove();
 
-        final MutableSet<IntegerWithCast> set = this.newWith();
-        final MutableList<IntegerWithCast> collisions = COLLISIONS.collect(IntegerWithCast.CONSTRUCT);
+        MutableSet<IntegerWithCast> set = this.newWith();
+        MutableList<IntegerWithCast> collisions = COLLISIONS.collect(IntegerWithCast::new);
         set.addAll(collisions);
-        collisions.reverseForEach(new Procedure<IntegerWithCast>()
-        {
-            public void value(IntegerWithCast each)
-            {
-                Assert.assertFalse(set.remove(null));
-                Assert.assertTrue(set.remove(each));
-                Assert.assertFalse(set.remove(each));
-                Assert.assertFalse(set.remove(null));
-                Assert.assertFalse(set.remove(new IntegerWithCast(COLLISION_10)));
-            }
+        collisions.reverseForEach(each -> {
+            Assert.assertFalse(set.remove(null));
+            Assert.assertTrue(set.remove(each));
+            Assert.assertFalse(set.remove(each));
+            Assert.assertFalse(set.remove(null));
+            Assert.assertFalse(set.remove(new IntegerWithCast(COLLISION_10)));
         });
 
         Assert.assertEquals(UnifiedSet.<IntegerWithCast>newSet(), set);
 
-        collisions.forEach(new Procedure<IntegerWithCast>()
-        {
-            public void value(IntegerWithCast each)
-            {
-                MutableSet<IntegerWithCast> set2 = AbstractMutableSetTestCase.this.newWith();
-                set2.addAll(collisions);
+        collisions.forEach((Procedure<IntegerWithCast>) each -> {
+            MutableSet<IntegerWithCast> set2 = this.newWith();
+            set2.addAll(collisions);
 
-                Assert.assertFalse(set2.remove(null));
-                Assert.assertTrue(set2.remove(each));
-                Assert.assertFalse(set2.remove(each));
-                Assert.assertFalse(set2.remove(null));
-                Assert.assertFalse(set2.remove(new IntegerWithCast(COLLISION_10)));
-            }
+            Assert.assertFalse(set2.remove(null));
+            Assert.assertTrue(set2.remove(each));
+            Assert.assertFalse(set2.remove(each));
+            Assert.assertFalse(set2.remove(null));
+            Assert.assertFalse(set2.remove(new IntegerWithCast(COLLISION_10)));
         });
 
         // remove the second-to-last item in a fully populated single chain to cause the last item to move
@@ -490,14 +480,8 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         // test iterating on a bucket with only one element
         MutableSet<Integer> set = this.newWith(COLLISION_1, COLLISION_2);
         set.remove(COLLISION_2);
-        final Counter counter = new Counter();
-        set.forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                counter.increment();
-            }
-        });
+        Counter counter = new Counter();
+        set.forEach((Procedure<Integer>) each -> counter.increment());
         Assert.assertEquals(1, counter.getCount());
     }
 
@@ -507,21 +491,17 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     {
         super.forEachWith();
 
-        final Object sentinel = new Object();
+        Object sentinel = new Object();
         int size = MORE_COLLISIONS.size();
         for (int i = 1; i < size; i++)
         {
             MutableSet<Integer> set = this.newWith();
             set.addAll(MORE_COLLISIONS.subList(0, i));
-            final MutableSet<Integer> result = UnifiedSet.newSet();
+            MutableSet<Integer> result = UnifiedSet.newSet();
 
-            set.forEachWith(new Procedure2<Integer, Object>()
-            {
-                public void value(Integer argument1, Object argument2)
-                {
-                    Assert.assertSame(sentinel, argument2);
-                    result.add(argument1);
-                }
+            set.forEachWith((argument1, argument2) -> {
+                Assert.assertSame(sentinel, argument2);
+                result.add(argument1);
             }, sentinel);
             Assert.assertEquals(set, result);
         }
@@ -530,13 +510,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         MutableSet<Integer> set = this.newWith(COLLISION_1, COLLISION_2);
         set.remove(COLLISION_2);
         Counter counter = new Counter();
-        set.forEachWith(new Procedure2<Integer, Counter>()
-        {
-            public void value(Integer argument1, Counter argument2)
-            {
-                argument2.increment();
-            }
-        }, counter);
+        set.forEachWith((argument1, argument2) -> argument2.increment(), counter);
         Assert.assertEquals(1, counter.getCount());
     }
 
@@ -551,15 +525,11 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         {
             MutableSet<Integer> set = this.newWith();
             set.addAll(MORE_COLLISIONS.subList(0, i));
-            final MutableSet<Integer> result = UnifiedSet.newSet();
-            final MutableList<Integer> indexes = Lists.mutable.of();
-            set.forEachWithIndex(new ObjectIntProcedure<Integer>()
-            {
-                public void value(Integer each, int index)
-                {
-                    result.add(each);
-                    indexes.add(index);
-                }
+            MutableSet<Integer> result = UnifiedSet.newSet();
+            MutableList<Integer> indexes = Lists.mutable.of();
+            set.forEachWithIndex((each, index) -> {
+                result.add(each);
+                indexes.add(index);
             });
             Assert.assertEquals(set, result);
             Assert.assertEquals(Interval.zeroTo(i - 1), indexes);
@@ -568,14 +538,8 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         // test iterating on a bucket with only one element
         UnifiedSet<Integer> set = UnifiedSet.newSetWith(COLLISION_1, COLLISION_2);
         set.remove(COLLISION_2);
-        final Counter counter = new Counter();
-        set.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer each, int index)
-            {
-                counter.increment();
-            }
-        });
+        Counter counter = new Counter();
+        set.forEachWithIndex((each, index) -> counter.increment());
         Assert.assertEquals(1, counter.getCount());
     }
 

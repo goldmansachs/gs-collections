@@ -16,9 +16,6 @@
 
 package com.gs.collections.impl.list.mutable.primitive;
 
-import com.gs.collections.api.block.function.primitive.ObjectBooleanIntToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
@@ -276,23 +273,11 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     public void forEach()
     {
         super.forEach();
-        final String[] sum = new String[2];
+        String[] sum = new String[2];
         sum[0] = "";
         sum[1] = "";
-        this.classUnderTest().forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[0] += each + " ";
-            }
-        });
-        this.newWith().forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[1] += each;
-            }
-        });
+        this.classUnderTest().forEach(each -> { sum[0] += each + " "; });
+        this.newWith().forEach(each -> { sum[1] += each; });
         Assert.assertEquals("true false true ", sum[0]);
         Assert.assertEquals("", sum[1]);
     }
@@ -337,36 +322,18 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     public void injectIntoWithIndex()
     {
         MutableBooleanList list = this.newWith(true, false, true);
-        MutableInteger result = list.injectIntoWithIndex(new MutableInteger(0), new ObjectBooleanIntToObjectFunction<MutableInteger, MutableInteger>()
-        {
-            public MutableInteger valueOf(MutableInteger object, boolean value, int index)
-            {
-                return object.add((value ? 1 : 0) + index);
-            }
-        });
+        MutableInteger result = list.injectIntoWithIndex(new MutableInteger(0), (object, value, index) -> object.add((value ? 1 : 0) + index));
         Assert.assertEquals(new MutableInteger(5), result);
     }
 
     @Test
     public void forEachWithIndex()
     {
-        final String[] sum = new String[2];
+        String[] sum = new String[2];
         sum[0] = "";
         sum[1] = "";
-        this.classUnderTest().forEachWithIndex(new BooleanIntProcedure()
-        {
-            public void value(boolean each, int index)
-            {
-                sum[0] += index + ":" + each;
-            }
-        });
-        this.newWith().forEachWithIndex(new BooleanIntProcedure()
-        {
-            public void value(boolean each, int index)
-            {
-                sum[1] += index + ":" + each;
-            }
-        });
+        this.classUnderTest().forEachWithIndex((each, index) -> { sum[0] += index + ":" + each; });
+        this.newWith().forEachWithIndex((each, index) -> { sum[1] += index + ":" + each; });
         Assert.assertEquals("0:true1:false2:true", sum[0]);
         Assert.assertEquals("", sum[1]);
     }

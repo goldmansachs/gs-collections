@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
 package com.gs.collections.impl.lazy;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -60,16 +58,12 @@ public class LazyIterableAdapterTest extends AbstractLazyIterableTestCase
     public void forEachWithIndex()
     {
         LazyIterable<Integer> select = new LazyIterableAdapter<Integer>(Interval.oneTo(5));
-        final Sum sum = new IntegerSum(0);
-        select.forEachWithIndex(new ObjectIntProcedure<Integer>()
-        {
-            public void value(Integer object, int index)
-            {
-                sum.add(object);
-                sum.add(index);
+        Sum sum = new IntegerSum(0);
+        select.forEachWithIndex((object, index) -> {
+            sum.add(object);
+            sum.add(index);
 
-                LOGGER.info("value={} index={}", object, index);
-            }
+            LOGGER.info("value={} index={}", object, index);
         });
         Assert.assertEquals(25, sum.getValue().intValue());
     }
@@ -92,13 +86,7 @@ public class LazyIterableAdapterTest extends AbstractLazyIterableTestCase
     {
         LazyIterable<Integer> select = new LazyIterableAdapter<Integer>(Interval.oneTo(5));
         Sum sum = new IntegerSum(0);
-        select.forEachWith(new Procedure2<Integer, Sum>()
-        {
-            public void value(Integer each, Sum aSum)
-            {
-                aSum.add(each);
-            }
-        }, sum);
+        select.forEachWith((each, aSum) -> { aSum.add(each); }, sum);
         Assert.assertEquals(15, sum.getValue().intValue());
     }
 

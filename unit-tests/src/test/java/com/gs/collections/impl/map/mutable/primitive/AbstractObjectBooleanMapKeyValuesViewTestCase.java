@@ -25,16 +25,7 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
@@ -129,16 +120,12 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     @Test
     public void forEachWith()
     {
-        final MutableBag<ObjectBooleanPair<Integer>> result = Bags.mutable.of();
-        final MutableBag<Integer> result2 = Bags.mutable.of();
+        MutableBag<ObjectBooleanPair<Integer>> result = Bags.mutable.of();
+        MutableBag<Integer> result2 = Bags.mutable.of();
         RichIterable<ObjectBooleanPair<Integer>> collection = this.newWith(1, true, 2, false, 3, true);
-        collection.forEachWith(new Procedure2<ObjectBooleanPair<Integer>, Integer>()
-        {
-            public void value(ObjectBooleanPair<Integer> argument1, Integer argument2)
-            {
-                result.add(argument1);
-                result2.add(argument2);
-            }
+        collection.forEachWith((argument1, argument2) -> {
+            result.add(argument1);
+            result2.add(argument2);
         }, 0);
 
         Assert.assertEquals(Bags.immutable.of(PrimitiveTuples.pair(Integer.valueOf(1), true), PrimitiveTuples.pair(Integer.valueOf(2), false), PrimitiveTuples.pair(Integer.valueOf(3), true)), result);
@@ -148,16 +135,12 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     @Test
     public void forEachWithIndex()
     {
-        final MutableBag<ObjectBooleanPair<Integer>> elements = Bags.mutable.of();
-        final MutableBag<Integer> indexes = Bags.mutable.of();
+        MutableBag<ObjectBooleanPair<Integer>> elements = Bags.mutable.of();
+        MutableBag<Integer> indexes = Bags.mutable.of();
         RichIterable<ObjectBooleanPair<Integer>> collection = this.newWith(1, true, 2, false, 3, true);
-        collection.forEachWithIndex(new ObjectIntProcedure<ObjectBooleanPair<Integer>>()
-        {
-            public void value(ObjectBooleanPair<Integer> object, int index)
-            {
-                elements.add(object);
-                indexes.add(index);
-            }
+        collection.forEachWithIndex((object, index) -> {
+            elements.add(object);
+            indexes.add(index);
         });
         Assert.assertEquals(Bags.mutable.of(PrimitiveTuples.pair(Integer.valueOf(1), true), PrimitiveTuples.pair(Integer.valueOf(2), false), PrimitiveTuples.pair(Integer.valueOf(3), true)), elements);
         Assert.assertEquals(Bags.mutable.of(0, 1, 2), indexes);
@@ -224,13 +207,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     @Test
     public void collect()
     {
-        RichIterable<Integer> result1 = this.newWith(2, true, 3, false, 4, true).collect(new Function<ObjectBooleanPair<Integer>, Integer>()
-        {
-            public Integer valueOf(ObjectBooleanPair<Integer> object)
-            {
-                return (int) object.getOne();
-            }
-        });
+        RichIterable<Integer> result1 = this.newWith(2, true, 3, false, 4, true).collect(object -> (int) object.getOne());
 
         Assert.assertEquals(HashBag.newBagWith(2, 3, 4), result1.toBag());
     }
@@ -240,13 +217,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     {
         RichIterable<ObjectBooleanPair<Integer>> collection = this.newWith(1, true, 2, false, 3, true);
         Function<ObjectBooleanPair<Integer>, MutableList<String>> function =
-                new Function<ObjectBooleanPair<Integer>, MutableList<String>>()
-                {
-                    public MutableList<String> valueOf(ObjectBooleanPair<Integer> object)
-                    {
-                        return FastList.newListWith(String.valueOf(object));
-                    }
-                };
+                object -> FastList.newListWith(String.valueOf(object));
 
         Verify.assertListsEqual(
                 FastList.newListWith("1:true", "2:false", "3:true"),
@@ -303,25 +274,15 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     @Test
     public void minBy()
     {
-        Assert.assertEquals(PrimitiveTuples.pair(Integer.valueOf(2), true), this.newWith(2, true, 3, false, 4, true).minBy(new Function<ObjectBooleanPair<Integer>, Integer>()
-        {
-            public Integer valueOf(ObjectBooleanPair<Integer> object)
-            {
-                return (int) object.getOne();
-            }
-        }));
+        Function<ObjectBooleanPair<Integer>, Integer> function = object -> object.getOne();
+        Assert.assertEquals(PrimitiveTuples.pair(Integer.valueOf(2), true), this.newWith(2, true, 3, false, 4, true).minBy(function));
     }
 
     @Test
     public void maxBy()
     {
-        Assert.assertEquals(PrimitiveTuples.pair(Integer.valueOf(3), false), this.newWith(2, true, 3, false, 4, true).maxBy(new Function<ObjectBooleanPair<Integer>, Integer>()
-        {
-            public Integer valueOf(ObjectBooleanPair<Integer> object)
-            {
-                return (int) object.getOne() & 1;
-            }
-        }));
+        Function<ObjectBooleanPair<Integer>, Integer> function = object -> (int) object.getOne() & 1;
+        Assert.assertEquals(PrimitiveTuples.pair(Integer.valueOf(3), false), this.newWith(2, true, 3, false, 4, true).maxBy(function));
     }
 
     @Test
@@ -430,13 +391,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     {
         Assert.assertEquals(
                 Bags.mutable.of(5L, 7L, 9L),
-                this.newWith(2, true, 3, false, 4, true).collectWith(new Function2<ObjectBooleanPair<Integer>, Long, Long>()
-                {
-                    public Long value(ObjectBooleanPair<Integer> argument1, Long argument2)
-                    {
-                        return (long) (argument1.getOne() + argument1.getOne() + argument2);
-                    }
-                }, 1L).toBag());
+                this.newWith(2, true, 3, false, 4, true).collectWith((argument1, argument2) -> (long) (argument1.getOne() + argument1.getOne() + argument2), 1L).toBag());
     }
 
     @Test
@@ -444,13 +399,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     {
         Assert.assertEquals(
                 Bags.mutable.of(5L, 7L, 9L),
-                this.newWith(2, true, 3, false, 4, true).collectWith(new Function2<ObjectBooleanPair<Integer>, Long, Long>()
-                {
-                    public Long value(ObjectBooleanPair<Integer> argument1, Long argument2)
-                    {
-                        return (long) (argument1.getOne() + argument1.getOne() + argument2);
-                    }
-                }, 1L, HashBag.<Long>newBag()));
+                this.newWith(2, true, 3, false, 4, true).collectWith((argument1, argument2) -> (long) (argument1.getOne() + argument1.getOne() + argument2), 1L, HashBag.<Long>newBag()));
     }
 
     @Test
@@ -486,7 +435,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(1, true, 2, false, 3, true);
         MutableBag<ObjectBooleanPair<Integer>> actual = Bags.mutable.of();
-        final Iterator<ObjectBooleanPair<Integer>> iterator = objects.iterator();
+        Iterator<ObjectBooleanPair<Integer>> iterator = objects.iterator();
         for (int i = objects.size(); i-- > 0; )
         {
             Assert.assertTrue(iterator.hasNext());
@@ -494,13 +443,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
         }
 
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {iterator.remove();});
         Assert.assertEquals(objects.toBag(), actual);
     }
 
@@ -522,13 +465,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void injectInto()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        Long result = objects.injectInto(1L, new Function2<Long, ObjectBooleanPair<Integer>, Long>()
-        {
-            public Long value(Long argument1, ObjectBooleanPair<Integer> argument2)
-            {
-                return (long) (argument1 + argument2.getOne() + argument2.getOne());
-            }
-        });
+        Long result = objects.injectInto(1L, (Long argument1, ObjectBooleanPair<Integer> argument2) -> (long) (argument1 + argument2.getOne() + argument2.getOne()));
         Assert.assertEquals(Long.valueOf(19), result);
     }
 
@@ -536,13 +473,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void injectIntoInt()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        int result = objects.injectInto(1, new IntObjectToIntFunction<ObjectBooleanPair<Integer>>()
-        {
-            public int intValueOf(int intParameter, ObjectBooleanPair<Integer> argument2)
-            {
-                return (int) (intParameter + argument2.getOne() + argument2.getOne());
-            }
-        });
+        int result = objects.injectInto(1, (int intParameter, ObjectBooleanPair<Integer> argument2) -> (int) (intParameter + argument2.getOne() + argument2.getOne()));
         Assert.assertEquals(19, result);
     }
 
@@ -550,13 +481,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void injectIntoLong()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        long result = objects.injectInto(1L, new LongObjectToLongFunction<ObjectBooleanPair<Integer>>()
-        {
-            public long longValueOf(long parameter, ObjectBooleanPair<Integer> argument2)
-            {
-                return (long) (parameter + argument2.getOne() + argument2.getOne());
-            }
-        });
+        long result = objects.injectInto(1L, (long parameter, ObjectBooleanPair<Integer> argument2) -> (long) (parameter + argument2.getOne() + argument2.getOne()));
         Assert.assertEquals(19, result);
     }
 
@@ -564,13 +489,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void injectIntoDouble()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        double result = objects.injectInto(1.0, new DoubleObjectToDoubleFunction<ObjectBooleanPair<Integer>>()
-        {
-            public double doubleValueOf(double parameter, ObjectBooleanPair<Integer> argument2)
-            {
-                return (double) (parameter + argument2.getOne() + argument2.getOne());
-            }
-        });
+        double result = objects.injectInto(1.0, (parameter, argument2) -> (double) (parameter + argument2.getOne() + argument2.getOne()));
         Assert.assertEquals(19.0, result, 0.0);
     }
 
@@ -578,13 +497,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void injectIntoFloat()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        float result = objects.injectInto(1.0f, new FloatObjectToFloatFunction<ObjectBooleanPair<Integer>>()
-        {
-            public float floatValueOf(float parameter, ObjectBooleanPair<Integer> argument2)
-            {
-                return (float) (parameter + argument2.getOne() + argument2.getOne());
-            }
-        });
+        float result = objects.injectInto(1.0f, (float parameter, ObjectBooleanPair<Integer> argument2) -> (float) (parameter + argument2.getOne() + argument2.getOne()));
         Assert.assertEquals(19.0, result, 0.0);
     }
 
@@ -592,13 +505,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void sumFloat()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        double actual = objects.sumOfFloat(new FloatFunction<ObjectBooleanPair<Integer>>()
-        {
-            public float floatValueOf(ObjectBooleanPair<Integer> each)
-            {
-                return (float) (each.getOne() + each.getOne());
-            }
-        });
+        double actual = objects.sumOfFloat(each -> (float) (each.getOne() + each.getOne()));
         Assert.assertEquals(18.0, actual, 0.0);
     }
 
@@ -606,13 +513,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void sumDouble()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        double actual = objects.sumOfDouble(new DoubleFunction<ObjectBooleanPair<Integer>>()
-        {
-            public double doubleValueOf(ObjectBooleanPair<Integer> each)
-            {
-                return (double) (each.getOne() + each.getOne());
-            }
-        });
+        double actual = objects.sumOfDouble(each -> (double) (each.getOne() + each.getOne()));
         Assert.assertEquals(18.0, actual, 0.0);
     }
 
@@ -620,13 +521,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void sumInteger()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        long actual = objects.sumOfInt(new IntFunction<ObjectBooleanPair<Integer>>()
-        {
-            public int intValueOf(ObjectBooleanPair<Integer> each)
-            {
-                return (int) (each.getOne() + each.getOne());
-            }
-        });
+        long actual = objects.sumOfInt(each -> (int) (each.getOne() + each.getOne()));
         Assert.assertEquals(18, actual);
     }
 
@@ -634,13 +529,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void sumLong()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        long actual = objects.sumOfLong(new LongFunction<ObjectBooleanPair<Integer>>()
-        {
-            public long longValueOf(ObjectBooleanPair<Integer> each)
-            {
-                return (long) (each.getOne() + each.getOne());
-            }
-        });
+        long actual = objects.sumOfLong(each -> (long) (each.getOne() + each.getOne()));
         Assert.assertEquals(18, actual);
     }
 
@@ -826,13 +715,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void groupBy()
     {
         RichIterable<ObjectBooleanPair<Integer>> collection = this.newWith(1, true, 2, false, 3, true);
-        Function<ObjectBooleanPair<Integer>, Boolean> function = new Function<ObjectBooleanPair<Integer>, Boolean>()
-        {
-            public Boolean valueOf(ObjectBooleanPair<Integer> object)
-            {
-                return PrimitiveTuples.pair(Integer.valueOf(1), true).equals(object);
-            }
-        };
+        Function<ObjectBooleanPair<Integer>, Boolean> function = object -> PrimitiveTuples.pair(Integer.valueOf(1), true).equals(object);
 
         Multimap<Boolean, ObjectBooleanPair<Integer>> multimap = collection.groupBy(function);
         Assert.assertEquals(3, multimap.size());
@@ -845,13 +728,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void groupByEach()
     {
         RichIterable<ObjectBooleanPair<Integer>> collection = this.newWith(1, true, 2, false, 3, true);
-        Function<ObjectBooleanPair<Integer>, MutableList<Boolean>> function = new Function<ObjectBooleanPair<Integer>, MutableList<Boolean>>()
-        {
-            public MutableList<Boolean> valueOf(ObjectBooleanPair<Integer> object)
-            {
-                return Lists.mutable.of(PrimitiveTuples.pair(Integer.valueOf(1), true).equals(object));
-            }
-        };
+        Function<ObjectBooleanPair<Integer>, MutableList<Boolean>> function = object -> Lists.mutable.of(PrimitiveTuples.pair(Integer.valueOf(1), true).equals(object));
 
         Multimap<Boolean, ObjectBooleanPair<Integer>> multimap = collection.groupByEach(function);
         Assert.assertEquals(3, multimap.size());
@@ -922,12 +799,8 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void aggregateByMutating()
     {
         Function0<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
-        Procedure2<AtomicInteger, ObjectBooleanPair<Integer>> sumAggregator = new Procedure2<AtomicInteger, ObjectBooleanPair<Integer>>()
-        {
-            public void value(AtomicInteger aggregate, ObjectBooleanPair<Integer> value)
-            {
-                aggregate.addAndGet((int) value.getOne());
-            }
+        Procedure2<AtomicInteger, ObjectBooleanPair<Integer>> sumAggregator = (aggregate, value) -> {
+            aggregate.addAndGet((int) value.getOne());
         };
         RichIterable<ObjectBooleanPair<Integer>> collection = this.newWith(2, true, 3, false, 4, true);
         MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
@@ -940,13 +813,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void aggregateByNonMutating()
     {
         Function0<Integer> valueCreator = Functions0.value(0);
-        Function2<Integer, ObjectBooleanPair<Integer>, Integer> sumAggregator = new Function2<Integer, ObjectBooleanPair<Integer>, Integer>()
-        {
-            public Integer value(Integer aggregate, ObjectBooleanPair<Integer> value)
-            {
-                return (int) (aggregate + value.getOne());
-            }
-        };
+        Function2<Integer, ObjectBooleanPair<Integer>, Integer> sumAggregator = (aggregate, value) -> (int) (aggregate + value.getOne());
         RichIterable<ObjectBooleanPair<Integer>> collection = this.newWith(1, false, 1, false, 2, true);
         MapIterable<String, Integer> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
         Assert.assertEquals(2, aggregation.get("2:true").intValue());

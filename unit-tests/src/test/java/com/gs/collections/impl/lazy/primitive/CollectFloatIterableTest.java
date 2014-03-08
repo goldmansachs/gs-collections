@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.FloatIterable;
 import com.gs.collections.api.LazyFloatIterable;
-import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
 import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -67,14 +65,8 @@ public class CollectFloatIterableTest
     @Test
     public void forEach()
     {
-        final float[] value = new float[1];
-        this.floatIterable.forEach(new FloatProcedure()
-        {
-            public void value(float each)
-            {
-                value[0] += each;
-            }
-        });
+        float[] value = new float[1];
+        this.floatIterable.forEach(each -> { value[0] += each; });
         Assert.assertEquals(6.0f, value[0], 0.0);
     }
 
@@ -237,13 +229,7 @@ public class CollectFloatIterableTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(FastList.newListWith("1.0", "2.0", "3.0"), this.floatIterable.collect(new FloatToObjectFunction<String>()
-        {
-            public String valueOf(float each)
-            {
-                return String.valueOf(each);
-            }
-        }).toList());
+        Assert.assertEquals(FastList.newListWith("1.0", "2.0", "3.0"), this.floatIterable.collect(String::valueOf).toList());
     }
 
     @Test
