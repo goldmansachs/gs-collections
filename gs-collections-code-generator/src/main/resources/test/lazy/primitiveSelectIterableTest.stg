@@ -57,14 +57,8 @@ public class Select<name>IterableTest
     @Test
     public void forEach()
     {
-        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
-        this.iterable.forEach(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
+        <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.iterable.forEach((<type> each) -> sum[0] += each);
         Assert.assertEquals(<(wideLiteral.(type))("3")>, sum[0]<(wideDelta.(type))>);
     }
 
@@ -137,13 +131,7 @@ public class Select<name>IterableTest
     @Test
     public void collect()
     {
-        Verify.assertIterableSize(2, this.iterable.collect(new <name>ToObjectFunction\<String>()
-        {
-            public String valueOf(<type> <type>Parameter)
-            {
-                return String.valueOf(<type>Parameter);
-            }
-        }));
+        Verify.assertIterableSize(2, this.iterable.collect((<type> <type>Parameter) -> String.valueOf(<type>Parameter)));
     }
 
     @Test
@@ -293,13 +281,7 @@ public class Select<name>IterableTest
     @Test
     public void injectInto()
     {
-        Mutable<wrapperName> result = this.iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
-        {
-            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
-            {
-                return object.add(value);
-            }
-        });
+        Mutable<wrapperName> result = this.iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), (Mutable<wrapperName> object, <type> value) -> object.add(value));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("3")>), result);
     }
 }

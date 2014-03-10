@@ -130,15 +130,9 @@ public abstract class AbstractImmutable<name>HashSetTestCase extends AbstractImm
     public void forEach()
     {
         super.forEach();
-        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        <wideType.(type)>[] sum = new <wideType.(type)>[1];
         Immutable<name>Set set = this.newWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, AbstractImmutable<name>HashSetTestCase.generateCollisions().getFirst(), AbstractImmutable<name>HashSetTestCase.generateCollisions().get(1));
-        set.forEach(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
+        set.forEach((<type> each) -> sum[0] += each);
 
         Assert.assertEquals(32L + AbstractImmutable<name>HashSetTestCase.generateCollisions().getFirst() + AbstractImmutable<name>HashSetTestCase.generateCollisions().get(1), sum[0]<(delta.(type))>);
     }

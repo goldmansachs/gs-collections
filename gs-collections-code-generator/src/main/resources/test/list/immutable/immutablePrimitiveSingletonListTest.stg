@@ -64,13 +64,7 @@ public class Immutable<name>SingletonListTest extends AbstractImmutable<name>Lis
     public void injectInto()
     {
         Immutable<name>SingletonList iterable = new Immutable<name>SingletonList(<(literal.(type))("1")>);
-        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("1")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
-        {
-            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
-            {
-                return object.add(value);
-            }
-        });
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("1")>), (Mutable<wrapperName> object, <type> value) -> object.add(value));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("2")>), result);
     }
 
@@ -79,14 +73,8 @@ public class Immutable<name>SingletonListTest extends AbstractImmutable<name>Lis
     public void injectIntoWithIndex()
     {
         Immutable<name>List list1 = this.newWith(<["1"]:(literal.(type))(); separator=", ">);
-        final Immutable<name>List list2 = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
-        Mutable<wrapperName> result = list1.injectIntoWithIndex(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>IntToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
-        {
-            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value, int index)
-            {
-                return object.add(<(castIntToNarrowTypeWithParens.(type))("value * list2.get(index)")>);
-            }
-        });
+        Immutable<name>List list2 = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        Mutable<wrapperName> result = list1.injectIntoWithIndex(new Mutable<wrapperName>(<(literal.(type))("0")>), (Mutable<wrapperName> object, <type> value, int index) -> object.add(<(castIntToNarrowTypeWithParens.(type))("value * list2.get(index)")>));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("1")>), result);
     }
 
@@ -101,14 +89,8 @@ public class Immutable<name>SingletonListTest extends AbstractImmutable<name>Lis
     @Test
     public void forEachWithIndex()
     {
-        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
-        this.classUnderTest().forEachWithIndex(new <name>IntProcedure()
-        {
-            public void value(<type> each, int index)
-            {
-                sum[0] += each + index;
-            }
-        });
+        <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.classUnderTest().forEachWithIndex((<type> each, int index) -> sum[0] += each + index);
 
         Assert.assertEquals(1, sum[0], <(literal.(type))("0")>);
     }

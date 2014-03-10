@@ -86,13 +86,7 @@ public class Immutable<name>EmptyStackTest extends AbstractImmutable<name>StackT
     public void peekWithCount()
     {
         Assert.assertEquals(<name>ArrayList.newListWith(), this.classUnderTest().peek(0));
-        Verify.assertThrows(EmptyStackException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name>EmptyStackTest.this.classUnderTest().peek(1);
-            }
-        });
+        Verify.assertThrows(EmptyStackException.class, () -> {this.classUnderTest().peek(1);});
     }
 
     @Override
@@ -155,13 +149,7 @@ public class Immutable<name>EmptyStackTest extends AbstractImmutable<name>StackT
     public void injectInto()
     {
         Immutable<name>EmptyStack iterable = new Immutable<name>EmptyStack();
-        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
-        {
-            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
-            {
-                return object.add(value);
-            }
-        });
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), (Mutable<wrapperName> object, <type> value) -> object.add(value));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("0")>), result);
     }
 }

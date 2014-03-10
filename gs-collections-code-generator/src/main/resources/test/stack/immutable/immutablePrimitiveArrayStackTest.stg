@@ -56,13 +56,7 @@ public class Immutable<name>ArrayStackTest extends AbstractImmutable<name>StackT
     public void injectInto()
     {
         Immutable<name>ArrayStack iterable = Immutable<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
-        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
-        {
-            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
-            {
-                return object.add(value);
-            }
-        });
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), (Mutable<wrapperName> object, <type> value) -> object.add(value));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("6")>), result);
     }
 }

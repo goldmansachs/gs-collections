@@ -78,13 +78,7 @@ public class <name>HashBagTest extends AbstractMutable<name>BagTestCase
     public void injectInto()
     {
         <name>HashBag hashBag = <name>HashBag.newBagWith(<["1", "1", "2", "2", "2", "2", "3"]:(literal.(type))(); separator=", ">);
-        <wrapperName> sum = hashBag.injectInto(<wrapperName>.valueOf(<(literal.(type))("4")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<wrapperName> result, <type> value)
-            {
-                return <wrapperName>.valueOf((<type>) (result + value));
-            }
-        });
+        <wrapperName> sum = hashBag.injectInto(<wrapperName>.valueOf(<(literal.(type))("4")>), (<wrapperName> result, <type> value) -> <wrapperName>.valueOf((<type>) (result + value)));
         Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("17")>), sum);
     }
 }

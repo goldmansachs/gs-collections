@@ -120,14 +120,8 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
     @Test
     public void forEachWithIndex()
     {
-        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
-        this.classUnderTest().forEachWithIndex(new <name>IntProcedure()
-        {
-            public void value(<type> each, int index)
-            {
-                sum[0] += each + index;
-            }
-        });
+        <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.classUnderTest().forEachWithIndex((<type> each, int index) -> sum[0] += each + index);
 
         Assert.assertEquals(<(wideLiteral.(type))("9")>, sum[0]<wideDelta.(type)>);
     }

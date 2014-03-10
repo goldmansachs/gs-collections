@@ -41,14 +41,8 @@ public class Immutable<name>SingletonBagTest extends AbstractImmutable<name>BagT
     @Test
     public void forEachWithOccurrences()
     {
-        final StringBuilder stringBuilder = new StringBuilder();
-        this.classUnderTest().forEachWithOccurrences(new <name>IntProcedure()
-        {
-            public void value(<type> argument1, int argument2)
-            {
-                stringBuilder.append(argument1).append(argument2);
-            }
-        });
+        StringBuilder stringBuilder = new StringBuilder();
+        this.classUnderTest().forEachWithOccurrences((<type> argument1, int argument2) -> stringBuilder.append(argument1).append(argument2));
         String string = stringBuilder.toString();
         Assert.assertEquals("<(toStringLiteral.(type))("1")>1", string);
     }
@@ -57,13 +51,7 @@ public class Immutable<name>SingletonBagTest extends AbstractImmutable<name>BagT
     public void injectInto()
     {
         Immutable<name>SingletonBag iterable = new Immutable<name>SingletonBag(<(literal.(type))("1")>);
-        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("1")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
-        {
-            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
-            {
-                return object.add(value);
-            }
-        });
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("1")>), (Mutable<wrapperName> object, <type> value) -> object.add(value));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("2")>), result);
     }
 }

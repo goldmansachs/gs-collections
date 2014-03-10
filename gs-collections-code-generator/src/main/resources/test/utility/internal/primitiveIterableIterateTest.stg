@@ -41,14 +41,8 @@ public class <name>IterableIterateTest
     @Test
     public void forEach()
     {
-        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
-        <name>IterableIterate.forEach(this.iterable, new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
+        <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        <name>IterableIterate.forEach(this.iterable, (<type> each) -> sum[0] += each);
         Assert.assertEquals(<(wideLiteral.(type))("6")>, sum[0]<(wideDelta.(type))>);
     }
 
@@ -70,13 +64,7 @@ public class <name>IterableIterateTest
     @Test
     public void collect_target()
     {
-        Verify.assertIterableSize(3, <name>IterableIterate.collect(this.iterable, new <name>ToObjectFunction\<String>()
-        {
-            public String valueOf(<type> <type>Parameter)
-            {
-                return String.valueOf(<type>Parameter);
-            }
-        }, FastList.\<String>newList()));
+        Verify.assertIterableSize(3, <name>IterableIterate.collect(this.iterable, (<type> <type>Parameter) -> String.valueOf(<type>Parameter), FastList.\<String>newList()));
     }
 }
 >>

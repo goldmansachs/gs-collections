@@ -103,14 +103,8 @@ public class Reverse<name>IterableTest
     public void forEach()
     {
         <name>Iterable iterable = <name>ArrayList.newListWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).asReversed();
-        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
-        iterable.forEach(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
+        <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        iterable.forEach((<type> each) -> sum[0] += each);
 
         Assert.assertEquals(<(wideLiteral.(type))("6")>, sum[0]<(wideDelta.(type))>);
     }
@@ -186,13 +180,7 @@ public class Reverse<name>IterableTest
     public void collect()
     {
         <name>Iterable iterable = <name>ArrayList.newListWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).asReversed();
-        Verify.assertIterablesEqual(FastList.newListWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), iterable.collect(new <name>ToObjectFunction\<<wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<type> parameter)
-            {
-                return <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>;
-            }
-        }));
+        Verify.assertIterablesEqual(FastList.newListWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), iterable.collect((<type> parameter) -> <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>));
     }
 
     @Test

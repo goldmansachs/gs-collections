@@ -107,14 +107,8 @@ public abstract class AbstractImmutable<name>BagTestCase extends AbstractImmutab
     public void forEach()
     {
         super.forEach();
-        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
-        this.newWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">).forEach(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
+        <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.newWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">).forEach((<type> each) -> sum[0] += each);
 
         Assert.assertEquals(14L, sum[0]<(delta.(type))>);
     }
