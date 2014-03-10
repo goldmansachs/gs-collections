@@ -80,26 +80,14 @@ public abstract class AbstractImmutableObject<name>MapTestCase extends AbstractO
     public void keySet()
     {
         super.keySet();
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableObject<name>MapTestCase.this.classUnderTest().keySet().remove("0");
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {this.classUnderTest().keySet().remove("0");});
     }
 
     @Override
     public void values()
     {
         super.values();
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableObject<name>MapTestCase.this.classUnderTest().values().remove(<(literal.(type))("0")>);
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {this.classUnderTest().values().remove(<(literal.(type))("0")>);});
     }
 }
 

@@ -125,13 +125,7 @@ public class Immutable<name>BooleanSingletonMapTest extends AbstractImmutable<na
         Assert.assertTrue(iterator.hasNext());
         Assert.assertTrue(iterator.next());
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Override
@@ -140,21 +134,8 @@ public class Immutable<name>BooleanSingletonMapTest extends AbstractImmutable<na
     {
         Assert.assertTrue(this.classUnderTest().getOrThrow(<(literal.(type))("0")>));
 
-
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name>BooleanSingletonMapTest.this.classUnderTest().getOrThrow(<(literal.(type))("31")>);
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name>BooleanSingletonMapTest.this.classUnderTest().getOrThrow(<(literal.(type))("32")>);
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow(<(literal.(type))("31")>);});
+        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow(<(literal.(type))("32")>);});
     }
 
     @Override
@@ -230,21 +211,9 @@ public class Immutable<name>BooleanSingletonMapTest extends AbstractImmutable<na
     @Test
     public void select()
     {
-        <name>BooleanMap actual1 = this.classUnderTest().select(new <name>BooleanPredicate()
-        {
-            public boolean accept(<type> key, boolean value)
-            {
-                return <(equals.(type))("key", {<(literal.(type))("0")>})>;
-            }
-        });
+        <name>BooleanMap actual1 = this.classUnderTest().select((<type> key, boolean value) -> <(equals.(type))("key", {<(literal.(type))("0")>})>);
         Assert.assertEquals(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("0")>, true), actual1);
-        <name>BooleanMap actual2 = this.classUnderTest().select(new <name>BooleanPredicate()
-        {
-            public boolean accept(<type> key, boolean value)
-            {
-                return <(equals.(type))("key", {<(literal.(type))("1")>})>;
-            }
-        });
+        <name>BooleanMap actual2 = this.classUnderTest().select((<type> key, boolean value) -> <(equals.(type))("key", {<(literal.(type))("1")>})>);
         Assert.assertEquals(this.getEmptyMap(), actual2);
     }
 
@@ -252,21 +221,9 @@ public class Immutable<name>BooleanSingletonMapTest extends AbstractImmutable<na
     @Test
     public void reject()
     {
-        <name>BooleanMap actual1 = this.classUnderTest().reject(new <name>BooleanPredicate()
-        {
-            public boolean accept(<type> key, boolean value)
-            {
-                return <(equals.(type))("key", {<(literal.(type))("1")>})>;
-            }
-        });
+        <name>BooleanMap actual1 = this.classUnderTest().reject((<type> key, boolean value) -> <(equals.(type))("key", {<(literal.(type))("1")>})>);
         Assert.assertEquals(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("0")>, true), actual1);
-        <name>BooleanMap actual2 = this.classUnderTest().reject(new <name>BooleanPredicate()
-        {
-            public boolean accept(<type> key, boolean value)
-            {
-                return <(equals.(type))("key", {<(literal.(type))("0")>})>;
-            }
-        });
+        <name>BooleanMap actual2 = this.classUnderTest().reject((<type> key, boolean value) -> <(equals.(type))("key", {<(literal.(type))("0")>})>);
         Assert.assertEquals(this.getEmptyMap(), actual2);
     }
 

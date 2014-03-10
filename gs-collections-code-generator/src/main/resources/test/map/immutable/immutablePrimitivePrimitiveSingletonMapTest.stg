@@ -131,13 +131,7 @@ public class Immutable<name1><name2>SingletonMapTest extends AbstractImmutable<n
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals(<(wideLiteral.(type2))("0")>, iterator.next()<wideDelta.(type2)>);
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Override
@@ -146,21 +140,8 @@ public class Immutable<name1><name2>SingletonMapTest extends AbstractImmutable<n
     {
         Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getOrThrow(<(literal.(type1))("0")>)<wideDelta.(type2)>);
 
-
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name1><name2>SingletonMapTest.this.map.getOrThrow(<(literal.(type1))("31")>);
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name1><name2>SingletonMapTest.this.map.getOrThrow(<(literal.(type1))("32")>);
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow(<(literal.(type1))("31")>);});
+        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow(<(literal.(type1))("32")>);});
     }
 
     @Override
@@ -219,21 +200,9 @@ public class Immutable<name1><name2>SingletonMapTest extends AbstractImmutable<n
     @Test
     public void select()
     {
-        <name1><name2>Map actual1 = this.classUnderTest().select(new <name1><name2>Predicate()
-        {
-            public boolean accept(<type1> key, <type2> value)
-            {
-                return <(equals.(type1))("key", {<(literal.(type1))("0")>})>;
-            }
-        });
+        <name1><name2>Map actual1 = this.classUnderTest().select((<type1> key, <type2> value) -> <(equals.(type1))("key", {<(literal.(type1))("0")>})>);
         Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>), actual1);
-        <name1><name2>Map actual2 = this.classUnderTest().select(new <name1><name2>Predicate()
-        {
-            public boolean accept(<type1> key, <type2> value)
-            {
-                return <(equals.(type1))("key", {<(literal.(type1))("1")>})>;
-            }
-        });
+        <name1><name2>Map actual2 = this.classUnderTest().select((<type1> key, <type2> value) -> <(equals.(type1))("key", {<(literal.(type1))("1")>})>);
         Assert.assertEquals(this.getEmptyMap(), actual2);
     }
 
@@ -241,21 +210,9 @@ public class Immutable<name1><name2>SingletonMapTest extends AbstractImmutable<n
     @Test
     public void reject()
     {
-        <name1><name2>Map actual1 = this.classUnderTest().reject(new <name1><name2>Predicate()
-        {
-            public boolean accept(<type1> key, <type2> value)
-            {
-                return <(equals.(type1))("key", {<(literal.(type1))("1")>})>;
-            }
-        });
+        <name1><name2>Map actual1 = this.classUnderTest().reject((<type1> key, <type2> value) -> <(equals.(type1))("key", {<(literal.(type1))("1")>})>);
         Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>), actual1);
-        <name1><name2>Map actual2 = this.classUnderTest().reject(new <name1><name2>Predicate()
-        {
-            public boolean accept(<type1> key, <type2> value)
-            {
-                return <(equals.(type1))("key", {<(literal.(type1))("0")>})>;
-            }
-        });
+        <name1><name2>Map actual2 = this.classUnderTest().reject((<type1> key, <type2> value) -> <(equals.(type1))("key", {<(literal.(type1))("0")>})>);
         Assert.assertEquals(this.getEmptyMap(), actual2);
     }
 
@@ -293,13 +250,7 @@ public class Immutable<name1><name2>SingletonMapTest extends AbstractImmutable<n
     public void injectInto()
     {
         Immutable<name1><name2>SingletonMap iterable = new Immutable<name1><name2>SingletonMap(<["1"]:keyValue(); separator=", ">);
-        Mutable<primitive2.wrapperName> result = iterable.injectInto(new Mutable<primitive2.wrapperName>(<(literal.(type2))("0")>), new Object<name2>ToObjectFunction\<Mutable<primitive2.wrapperName>, Mutable<primitive2.wrapperName>\>()
-        {
-            public Mutable<primitive2.wrapperName> valueOf(Mutable<primitive2.wrapperName> object, <type2> value)
-            {
-                return object.add(value);
-            }
-        });
+        Mutable<primitive2.wrapperName> result = iterable.injectInto(new Mutable<primitive2.wrapperName>(<(literal.(type2))("0")>), (Mutable<primitive2.wrapperName> object, <type2> value) -> object.add(value));
         Assert.assertEquals(new Mutable<primitive2.wrapperName>(<(literal.(type2))("1")>), result);
     }
 }

@@ -87,13 +87,7 @@ public class Object<name>HashMapValuesTest extends AbstractMutable<name>Collecti
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Override
@@ -357,13 +351,7 @@ public class Object<name>HashMapValuesTest extends AbstractMutable<name>Collecti
     @Test
     public void collect()
     {
-        <name>ToObjectFunction\<<wrapperName>\> function = new <name>ToObjectFunction\<<wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<type> parameter)
-            {
-                return <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>;
-            }
-        };
+        <name>ToObjectFunction\<<wrapperName>\> function = (<type> parameter) -> <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>;
         Assert.assertEquals(this.newObjectCollectionWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">).toBag(), this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).collect(function).toBag());
         <name>Iterable iterable = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
         Assert.assertEquals(this.newObjectCollectionWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">).toBag(), iterable.collect(function).toBag());

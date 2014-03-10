@@ -80,7 +80,7 @@ public class Synchronized<name1><name2>MapValuesTest extends AbstractMutable<nam
     {
         Mutable<name2>Collection bag = this.newWith(<["0", "1", "2", "3"]:(literal.(type2))(); separator=", ">);
         <name2>ArrayList list = <name2>ArrayList.newListWith(<["0", "1", "2", "3"]:(literal.(type2))(); separator=", ">);
-        final <name2>Iterator iterator = bag.<type2>Iterator();
+        <name2>Iterator iterator = bag.<type2>Iterator();
         for (int i = 0; i \< 4; i++)
         {
             Assert.assertTrue(iterator.hasNext());
@@ -89,13 +89,7 @@ public class Synchronized<name1><name2>MapValuesTest extends AbstractMutable<nam
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Override
@@ -386,13 +380,7 @@ public class Synchronized<name1><name2>MapValuesTest extends AbstractMutable<nam
     @Test
     public void collect()
     {
-        <name2>ToObjectFunction\<<wrapperName>\> function = new <name2>ToObjectFunction\<<wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<type2> parameter)
-            {
-                return <(castIntToNarrowTypeWithParens.(type2))("parameter - 1")>;
-            }
-        };
+        <name2>ToObjectFunction\<<wrapperName>\> function = (<type2> parameter) -> <(castIntToNarrowTypeWithParens.(type2))("parameter - 1")>;
         Assert.assertEquals(this.newObjectCollectionWith(<["0", "1", "2"]:(literal.(type2))(); separator=", ">).toBag(), this.newWith(<["1", "2", "3"]:(literal.(type2))(); separator=", ">).collect(function).toBag());
         <name2>Iterable iterable = this.newWith(<["1", "2", "3"]:(literal.(type2))(); separator=", ">);
         Assert.assertEquals(this.newObjectCollectionWith(<["0", "1", "2"]:(literal.(type2))(); separator=", ">).toBag(), iterable.collect(function).toBag());

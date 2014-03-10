@@ -73,14 +73,8 @@ public abstract class AbstractLazy<name>IterableTestCase
     @Test
     public void forEach()
     {
-        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
-        this.classUnderTest().forEach(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
+        <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.classUnderTest().forEach(each -> sum[0] += each);
         Assert.assertEquals(<(wideLiteral.(type))("6")>, sum[0]<(wideDelta.(type))>);
     }
 
@@ -187,13 +181,7 @@ public abstract class AbstractLazy<name>IterableTestCase
     @Test
     public void collect()
     {
-        Verify.assertIterableSize(3, this.classUnderTest().collect(new <name>ToObjectFunction\<String>()
-        {
-            public String valueOf(<type> <type>Parameter)
-            {
-                return String.valueOf(<type>Parameter);
-            }
-        }));
+        Verify.assertIterableSize(3, this.classUnderTest().collect(String::valueOf));
     }
 
     @Test

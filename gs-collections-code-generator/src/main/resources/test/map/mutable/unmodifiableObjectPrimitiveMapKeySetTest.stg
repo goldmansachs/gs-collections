@@ -109,7 +109,7 @@ public class UnmodifiableObject<name>MapKeySetTest
     {
         UnmodifiableObject<name>Map\<String> map = this.newMapWithKeysValues("One", <(literal.(type))("1")>, "Two", <(literal.(type))("2")>, "Three", <(literal.(type))("3")>, null, <(literal.(type))("4")>);
         Set\<String> keySet = map.keySet();
-        final Iterator\<String> iterator = keySet.iterator();
+        Iterator\<String> iterator = keySet.iterator();
 
         HashBag\<String> expected = HashBag.newBagWith("One", "Two", "Three", null);
         HashBag\<String> actual = HashBag.newBag();
@@ -119,13 +119,7 @@ public class UnmodifiableObject<name>MapKeySetTest
             actual.add(iterator.next());
         }
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
         Assert.assertEquals(expected, actual);
     }
 

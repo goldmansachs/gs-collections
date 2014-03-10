@@ -141,7 +141,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
     RichIterable<Pair<K, V>> keyValuesView();
 
     /**
-     * Given a map from Domain->Range return a multimap from Range->Domain. We chose the name 'flip'
+     * Given a map from Domain -> Range return a multimap from Range -> Domain. We chose the name 'flip'
      * rather than 'invert' or 'transpose' since this method does not have the property of applying twice
      * returns the original.
      * <p/>

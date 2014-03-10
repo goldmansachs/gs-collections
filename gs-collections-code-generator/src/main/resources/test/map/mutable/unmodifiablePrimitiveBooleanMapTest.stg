@@ -169,13 +169,7 @@ public class Unmodifiable<name>BooleanMapTest extends AbstractMutable<name>Boole
         Assert.assertFalse(this.classUnderTest().getOrThrow(<(literal.(type))("31")>));
         Assert.assertTrue(this.classUnderTest().getOrThrow(<(literal.(type))("32")>));
 
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                Unmodifiable<name>BooleanMapTest.this.classUnderTest().getOrThrow(<(literal.(type))("33")>);
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow(<(literal.(type))("33")>);});
     }
 
     @Override
@@ -195,13 +189,7 @@ public class Unmodifiable<name>BooleanMapTest extends AbstractMutable<name>Boole
     @Test
     public void getIfAbsentPut_Function()
     {
-        BooleanFunction0 factory = new BooleanFunction0()
-        {
-            public boolean value()
-            {
-                return true;
-            }
-        };
+        BooleanFunction0 factory = () -> true;
 
         Assert.assertTrue(this.classUnderTest().getIfAbsentPut(<(literal.(type))("0")>, factory));
     }
@@ -209,13 +197,7 @@ public class Unmodifiable<name>BooleanMapTest extends AbstractMutable<name>Boole
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPut_FunctionThrowsException()
     {
-        BooleanFunction0 factory = new BooleanFunction0()
-        {
-            public boolean value()
-            {
-                return true;
-            }
-        };
+        BooleanFunction0 factory = () -> true;
 
         this.classUnderTest().getIfAbsentPut(<(literal.(type))("10")>, factory);
     }
@@ -224,13 +206,7 @@ public class Unmodifiable<name>BooleanMapTest extends AbstractMutable<name>Boole
     @Test
     public void getIfAbsentPutWith()
     {
-        BooleanFunction\<String> functionLengthEven = new BooleanFunction\<String>()
-        {
-            public boolean booleanValueOf(String string)
-            {
-                return (string.length() & 1) == <(literal.(type))("0")>;
-            }
-        };
+        BooleanFunction\<String> functionLengthEven = (String string) -> (string.length() & 1) == <(literal.(type))("0")>;
 
         Assert.assertTrue(this.classUnderTest().getIfAbsentPutWith(<(literal.(type))("0")>, functionLengthEven, "12345678"));
     }
@@ -238,13 +214,7 @@ public class Unmodifiable<name>BooleanMapTest extends AbstractMutable<name>Boole
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithThrowsException()
     {
-        BooleanFunction\<String> functionLengthEven = new BooleanFunction\<String>()
-        {
-            public boolean booleanValueOf(String string)
-            {
-                return (string.length() & 1) == <(literal.(type))("0")>;
-            }
-        };
+        BooleanFunction\<String> functionLengthEven = (String string) -> (string.length() & 1) == <(literal.(type))("0")>;
 
         this.classUnderTest().getIfAbsentPutWith(<(literal.(type))("10")>, functionLengthEven, "unused");
     }
@@ -253,13 +223,7 @@ public class Unmodifiable<name>BooleanMapTest extends AbstractMutable<name>Boole
     @Test
     public void getIfAbsentPutWithKey()
     {
-        <name>ToBooleanFunction keyIsEven = new <name>ToBooleanFunction()
-        {
-            public boolean valueOf(<type> parameter)
-            {
-                return (<(castRealTypeToInt.(type))("parameter")> & 1) == <(literal.(type))("0")>;
-            }
-        };
+        <name>ToBooleanFunction keyIsEven = (<type> parameter) -> (<(castRealTypeToInt.(type))("parameter")> & 1) == <(literal.(type))("0")>;
 
         Assert.assertTrue(this.classUnderTest().getIfAbsentPutWithKey(<(literal.(type))("0")>, keyIsEven));
     }
@@ -267,13 +231,7 @@ public class Unmodifiable<name>BooleanMapTest extends AbstractMutable<name>Boole
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithKeyThrowsException()
     {
-        <name>ToBooleanFunction keyIsEven = new <name>ToBooleanFunction()
-        {
-            public boolean valueOf(<type> parameter)
-            {
-                return (<(castRealTypeToInt.(type))("parameter")> & 1) == <(literal.(type))("0")>;
-            }
-        };
+        <name>ToBooleanFunction keyIsEven = (<type> parameter) -> (<(castRealTypeToInt.(type))("parameter")> & 1) == <(literal.(type))("0")>;
 
         this.classUnderTest().getIfAbsentPutWithKey(<(literal.(type))("10")>, keyIsEven);
     }
@@ -282,13 +240,7 @@ public class Unmodifiable<name>BooleanMapTest extends AbstractMutable<name>Boole
     @Test(expected = UnsupportedOperationException.class)
     public void updateValue()
     {
-        BooleanToBooleanFunction flip = new BooleanToBooleanFunction()
-        {
-            public boolean valueOf(boolean value)
-            {
-                return !value;
-            }
-        };
+        BooleanToBooleanFunction flip = (boolean value) -> !value;
 
         this.classUnderTest().updateValue(<(literal.(type))("0")>, false, flip);
     }

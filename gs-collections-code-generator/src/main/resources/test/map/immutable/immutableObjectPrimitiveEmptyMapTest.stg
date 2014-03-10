@@ -104,13 +104,7 @@ public class ImmutableObject<name>EmptyMapTest extends AbstractImmutableObject<n
     @Test
     public void detectIfNone()
     {
-        <type> detect = this.classUnderTest().detectIfNone(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return true;
-            }
-        }, <(literal.(type))("5")>);
+        <type> detect = this.classUnderTest().detectIfNone((<type> value) -> true, <(literal.(type))("5")>);
         Assert.assertEquals(<(literal.(type))("5")>, detect<delta.(type)>);
     }
 
@@ -146,68 +140,32 @@ public class ImmutableObject<name>EmptyMapTest extends AbstractImmutableObject<n
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(this.classUnderTest().allSatisfy(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return false;
-            }
-        }));
+        Assert.assertTrue(this.classUnderTest().allSatisfy((<type> value) -> false));
     }
 
     @Override
     @Test
     public void anySatisfy()
     {
-        Assert.assertFalse(this.classUnderTest().anySatisfy(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertFalse(this.classUnderTest().anySatisfy((<type> value) -> true));
     }
 
     @Override
     @Test
     public void reject()
     {
-        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().reject(new Object<name>Predicate\<String>()
-        {
-            public boolean accept(String object, <type> value)
-            {
-                return false;
-            }
-        }));
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().reject((String object, <type> value) -> false));
 
-        Assert.assertEquals(new <name>HashBag(), this.classUnderTest().reject(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return false;
-            }
-        }).toBag());
+        Assert.assertEquals(new <name>HashBag(), this.classUnderTest().reject((<type> value) -> false).toBag());
     }
 
     @Override
     @Test
     public void select()
     {
-        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().select(new Object<name>Predicate\<String>()
-        {
-            public boolean accept(String object, <type> value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().select((String object, <type> value) -> true));
 
-        Assert.assertEquals(new <name>HashBag(), this.classUnderTest().select(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return true;
-            }
-        }).toBag());
+        Assert.assertEquals(new <name>HashBag(), this.classUnderTest().select((<type> value) -> true).toBag());
     }
 
     @Test
@@ -220,15 +178,9 @@ public class ImmutableObject<name>EmptyMapTest extends AbstractImmutableObject<n
     @Test
     public void <type>Iterator()
     {
-        final <name>Iterator iterator = this.classUnderTest().<type>Iterator();
+        <name>Iterator iterator = this.classUnderTest().<type>Iterator();
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Override
@@ -251,27 +203,9 @@ public class ImmutableObject<name>EmptyMapTest extends AbstractImmutableObject<n
     @Test
     public void getOrThrow()
     {
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableObject<name>EmptyMapTest.this.classUnderTest().getOrThrow("5");
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableObject<name>EmptyMapTest.this.classUnderTest().getOrThrow("0");
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableObject<name>EmptyMapTest.this.classUnderTest().getOrThrow(null);
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow("5");});
+        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow("0");});
+        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow(null);});
     }
 
     @Override
@@ -308,13 +242,7 @@ public class ImmutableObject<name>EmptyMapTest extends AbstractImmutableObject<n
     @Test
     public void count()
     {
-        Assert.assertEquals(0L, this.classUnderTest().count(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertEquals(0L, this.classUnderTest().count((<type> value) -> true));
     }
 
     @Override
@@ -387,26 +315,14 @@ public class ImmutableObject<name>EmptyMapTest extends AbstractImmutableObject<n
     @Test
     public void noneSatisfy()
     {
-        Assert.assertTrue(this.classUnderTest().noneSatisfy(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertTrue(this.classUnderTest().noneSatisfy((<type> value) -> true));
     }
 
     @Test
     public void injectInto()
     {
         ImmutableObject<name>EmptyMap\<Object> iterable = new ImmutableObject<name>EmptyMap\<Object>();
-        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
-        {
-            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
-            {
-                return object.add(value);
-            }
-        });
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), (Mutable<wrapperName> object, <type> value) -> object.add(value));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("0")>), result);
     }
 }

@@ -163,13 +163,7 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     @Test
     public void getIfAbsent()
     {
-        Function0\<String> ifAbsent = new Function0\<String>()
-        {
-            public String value()
-            {
-                return "ifAbsent";
-            }
-        };
+        Function0\<String> ifAbsent = () -> "ifAbsent";
 
         Assert.assertEquals("zero", this.map.getIfAbsent(<(literal.(type))("0")>, ifAbsent));
         Assert.assertEquals("thirtyOne", this.map.getIfAbsent(<(literal.(type))("31")>, ifAbsent));
@@ -196,38 +190,20 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     @Test
     public void getIfAbsentPut_Function()
     {
-        Assert.assertEquals("zero", this.map.getIfAbsentPut(<(literal.(type))("0")>, new Function0\<String>()
-        {
-            public String value()
-            {
-                return "zeroValue";
-            }
-        }));
+        Assert.assertEquals("zero", this.map.getIfAbsentPut(<(literal.(type))("0")>, () -> "zeroValue"));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPut_Function_throws()
     {
-        this.map.getIfAbsentPut(<(literal.(type))("1")>, new Function0\<String>()
-        {
-            public String value()
-            {
-                return "oneValue";
-            }
-        });
+        this.map.getIfAbsentPut(<(literal.(type))("1")>, () -> "oneValue");
     }
 
     @Override
     @Test
     public void getIfAbsentPutWith()
     {
-        Function\<String, String> toUpperCase = new Function\<String, String>()
-        {
-            public String valueOf(String string)
-            {
-                return string.toUpperCase();
-            }
-        };
+        Function\<String, String> toUpperCase = (String string) -> string.toUpperCase();
 
         Assert.assertEquals("zero", this.map.getIfAbsentPutWith(<(literal.(type))("0")>, toUpperCase, "zeroValue"));
     }
@@ -235,13 +211,7 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithThrowsException()
     {
-        Function\<String, String> toUpperCase = new Function\<String, String>()
-        {
-            public String valueOf(String string)
-            {
-                return string.toUpperCase();
-            }
-        };
+        Function\<String, String> toUpperCase = (String string) -> string.toUpperCase();
 
         this.map.getIfAbsentPutWith(<(literal.(type))("1")>, toUpperCase, "zeroValue");
     }
@@ -250,13 +220,7 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     @Test
     public void getIfAbsentPutWithKey()
     {
-        <name>ToObjectFunction\<String> toString = new <name>ToObjectFunction\<String>()
-        {
-            public String valueOf(<type> <type>Parameter)
-            {
-                return String.valueOf(<type>Parameter);
-            }
-        };
+        <name>ToObjectFunction\<String> toString = (<type> <type>Parameter) -> String.valueOf(<type>Parameter);
 
         Assert.assertEquals("zero", this.map.getIfAbsentPutWithKey(<(literal.(type))("0")>, toString));
     }
@@ -264,13 +228,7 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithKeyThrowsException()
     {
-        <name>ToObjectFunction\<String> toString = new <name>ToObjectFunction\<String>()
-        {
-            public String valueOf(<type> <type>Parameter)
-            {
-                return String.valueOf(<type>Parameter);
-            }
-        };
+        <name>ToObjectFunction\<String> toString = (<type> <type>Parameter) -> String.valueOf(<type>Parameter);
 
         this.map.getIfAbsentPutWithKey(<(literal.(type))("1")>, toString);
     }
@@ -279,13 +237,7 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     @Test(expected = UnsupportedOperationException.class)
     public void updateValue()
     {
-        Function\<Integer, Integer> incrementFunction = new Function\<Integer, Integer>()
-        {
-            public Integer valueOf(Integer integer)
-            {
-                return integer + 1;
-            }
-        };
+        Function\<Integer, Integer> incrementFunction = (Integer integer) -> integer + 1;
         Function0\<Integer> zeroFactory = Functions0.value(0);
 
         this.\<Integer>getEmptyMap().updateValue(<(literal.(type))("0")>, zeroFactory, incrementFunction);
@@ -362,7 +314,7 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
         MutableSet\<String> expected = UnifiedSet.newSetWith("zero", "one", "thirtyOne", "thirtyTwo");
         MutableSet\<String> actual = UnifiedSet.newSet();
 
-        final Iterator\<String> iterator = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero",
+        Iterator\<String> iterator = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero",
                 <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, "thirtyTwo")
                 .withKeyValue(<(literal.(type))("1")>, "one").asUnmodifiable().iterator();
         Assert.assertTrue(iterator.hasNext());
@@ -376,31 +328,13 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
         Assert.assertFalse(iterator.hasNext());
 
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
 
         Unmodifiable<name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
-        final Iterator\<String> iterator1 = map1.iterator();
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator1.remove();
-            }
-        });
+        Iterator\<String> iterator1 = map1.iterator();
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {iterator1.remove();});
         iterator1.next();
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator1.remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {iterator1.remove();});
     }
 }
 

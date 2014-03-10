@@ -184,20 +184,8 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
         Assert.assertEquals(<(wideLiteral.(type2))("31")>, this.map.getOrThrow(<(literal.(type1))("31")>)<(wideDelta.(type2))>);
         Assert.assertEquals(<(wideLiteral.(type2))("32")>, this.map.getOrThrow(<(literal.(type1))("32")>)<(wideDelta.(type2))>);
 
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                Unmodifiable<name1><name2>MapTest.this.map.getOrThrow(<(literal.(type1))("1")>);
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                Unmodifiable<name1><name2>MapTest.this.map.getOrThrow(<(literal.(type1))("33")>);
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow(<(literal.(type1))("1")>);});
+        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow(<(literal.(type1))("33")>);});
     }
 
     @Override
@@ -217,13 +205,7 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
     @Test
     public void getIfAbsentPut_Function()
     {
-        <name2>Function0 factory = new <name2>Function0()
-        {
-            public <type2> value()
-            {
-                return <(literal.(type2))("100")>;
-            }
-        };
+        <name2>Function0 factory = () -> <(literal.(type2))("100")>;
 
         Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getIfAbsentPut(<(literal.(type1))("0")>, factory)<(wideDelta.(type2))>);
     }
@@ -231,13 +213,7 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPut_FunctionThrowsException()
     {
-        <name2>Function0 factory = new <name2>Function0()
-        {
-            public <type2> value()
-            {
-                return <(literal.(type2))("100")>;
-            }
-        };
+        <name2>Function0 factory = () -> <(literal.(type2))("100")>;
 
         this.map.getIfAbsentPut(<(literal.(type1))("10")>, factory);
     }
@@ -246,13 +222,7 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
     @Test
     public void getIfAbsentPutWith()
     {
-        <name2>Function\<String> functionLength = new <name2>Function\<String>()
-        {
-            public <type2> <type2>ValueOf(String string)
-            {
-                return <(castFromInt.(type2))("string.length()")>;
-            }
-        };
+        <name2>Function\<String> functionLength = (String string) -> <(castFromInt.(type2))("string.length()")>;
 
         Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getIfAbsentPutWith(<(literal.(type1))("0")>, functionLength, "123456789")<(wideDelta.(type2))>);
     }
@@ -260,13 +230,7 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithThrowsException()
     {
-        <name2>Function\<String> functionLength = new <name2>Function\<String>()
-        {
-            public <type2> <type2>ValueOf(String string)
-            {
-                return <(castFromInt.(type2))("string.length()")>;
-            }
-        };
+        <name2>Function\<String> functionLength = (String string) -> <(castFromInt.(type2))("string.length()")>;
 
         this.map.getIfAbsentPutWith(<(literal.(type1))("10")>, functionLength, "unused");
     }
@@ -275,26 +239,14 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
     @Test
     public void getIfAbsentPutWithKey()
     {
-        <name1>To<name2>Function function = new <name1>To<name2>Function()
-        {
-            public <type2> valueOf(<type1> <type1>Parameter)
-            {
-                return <castExactly(type2, {<type1>Parameter}, sameTwoPrimitives)>;
-            }
-        };
+        <name1>To<name2>Function function = (<type1> <type1>Parameter) -> <castExactly(type2, {<type1>Parameter}, sameTwoPrimitives)>;
         Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getIfAbsentPutWithKey(<(literal.(type1))("0")>, function)<(wideDelta.(type2))>);
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithKeyThrowsException()
     {
-        <name1>To<name2>Function function = new <name1>To<name2>Function()
-        {
-            public <type2> valueOf(<type1> <type1>Parameter)
-            {
-                return <castExactly(type2, {<type1>Parameter}, sameTwoPrimitives)>;
-            }
-        };
+        <name1>To<name2>Function function = (<type1> <type1>Parameter) -> <castExactly(type2, {<type1>Parameter}, sameTwoPrimitives)>;
         this.map.getIfAbsentPutWithKey(<(literal.(type1))("10")>, function);
     }
 
@@ -309,13 +261,7 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
     @Test(expected = UnsupportedOperationException.class)
     public void updateValue()
     {
-        <name2>To<name2>Function incrementFunction = new <name2>To<name2>Function()
-        {
-            public <type2> valueOf(<type2> value)
-            {
-                return <(castIntToNarrowTypeWithParens.(type2))({value + <(literal.(type2))("1")>})>;
-            }
-        };
+        <name2>To<name2>Function incrementFunction = (<type2> value) -> <(castIntToNarrowTypeWithParens.(type2))({value + <(literal.(type2))("1")>})>;
         this.map.updateValue(<keyValue("0")>, incrementFunction);
     }
 

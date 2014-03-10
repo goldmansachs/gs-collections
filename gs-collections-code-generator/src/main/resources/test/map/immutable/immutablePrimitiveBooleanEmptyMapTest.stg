@@ -112,33 +112,15 @@ public class Immutable<name>BooleanEmptyMapTest extends AbstractImmutable<name>B
     {
         final BooleanIterator iterator = this.classUnderTest().booleanIterator();
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Override
     @Test
     public void getOrThrow()
     {
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name>BooleanEmptyMapTest.this.classUnderTest().getOrThrow(<(literal.(type))("0")>);
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name>BooleanEmptyMapTest.this.classUnderTest().getOrThrow(<(literal.(type))("32")>);
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow(<(literal.(type))("0")>);});
+        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow(<(literal.(type))("32")>);});
     }
 
     @Override
@@ -224,61 +206,31 @@ public class Immutable<name>BooleanEmptyMapTest extends AbstractImmutable<name>B
     @Override
     public void select()
     {
-        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().select(new <name>BooleanPredicate()
-        {
-            public boolean accept(<type> value1, boolean value2)
-            {
-                return true;
-            }
-        }));
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().select((<type> value1, boolean value2) -> true));
     }
 
     @Override
     public void reject()
     {
-        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().reject(new <name>BooleanPredicate()
-        {
-            public boolean accept(<type> value1, boolean value2)
-            {
-                return false;
-            }
-        }));
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().reject((<type> value1, boolean value2) -> false));
     }
 
     @Override
     public void select_value()
     {
-        Assert.assertEquals(BooleanArrayList.newListWith(), this.classUnderTest().select(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertEquals(BooleanArrayList.newListWith(), this.classUnderTest().select((boolean value) -> true));
     }
 
     @Override
     public void reject_value()
     {
-        Assert.assertEquals(BooleanArrayList.newListWith(), this.classUnderTest().reject(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return false;
-            }
-        }));
+        Assert.assertEquals(BooleanArrayList.newListWith(), this.classUnderTest().reject((boolean value) -> false));
     }
 
     @Override
     public void count()
     {
-        Assert.assertEquals(0, this.classUnderTest().count(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertEquals(0, this.classUnderTest().count((boolean value) -> true));
     }
 }
 

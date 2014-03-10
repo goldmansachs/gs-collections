@@ -144,13 +144,7 @@ public class <name>BooleanHashMapKeysViewTest
         actual.add(iterator.next());
         Assert.assertFalse(iterator.hasNext());
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -241,13 +235,9 @@ public class <name>BooleanHashMapKeysViewTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(UnifiedSet.newSetWith(<(literal.(type))("-1")>, <(literal.(type))("0")>, <(literal.(type))("30")>, <(castIntToNarrowTypeWithParens.(type))("generateCollisions1().getFirst() - 1")>, <(castIntToNarrowTypeWithParens.(type))("generateCollisions1().get(1) - 1")>), this.iterable.collect(new <name>ToObjectFunction\<<wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<type> parameter)
-            {
-                return <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>;
-            }
-        }).toSet());
+        Assert.assertEquals(
+            UnifiedSet.newSetWith(<(literal.(type))("-1")>, <(literal.(type))("0")>, <(literal.(type))("30")>, <(castIntToNarrowTypeWithParens.(type))("generateCollisions1().getFirst() - 1")>, <(castIntToNarrowTypeWithParens.(type))("generateCollisions1().get(1) - 1")>),
+            this.iterable.collect((<type> parameter) -> <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>).toSet());
     }
 
     @Test

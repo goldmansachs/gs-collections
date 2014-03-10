@@ -87,13 +87,7 @@ public class Synchronized<name>BooleanMapValuesTest extends AbstractMutableBoole
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Override
@@ -393,13 +387,7 @@ public class Synchronized<name>BooleanMapValuesTest extends AbstractMutableBoole
     @Test
     public void collect()
     {
-        BooleanToObjectFunction\<Integer> function = new BooleanToObjectFunction\<Integer>()
-        {
-            public Integer valueOf(boolean parameter)
-            {
-                return parameter ? 1 : 0;
-            }
-        };
+        BooleanToObjectFunction\<Integer> function = (boolean parameter) -> parameter ? 1 : 0;
         Assert.assertEquals(this.newObjectCollectionWith(1, 0, 1).toBag(), this.newWith(true, false, true).collect(function).toBag());
         Assert.assertEquals(this.newObjectCollectionWith(), this.newWith().collect(function));
     }

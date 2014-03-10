@@ -264,13 +264,7 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
         Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
         Assert.assertEquals(3, occupiedWithData.get(hashMap));
 
-        <name2>To<name2>Function function = new <name2>To<name2>Function()
-        {
-            public <type2> valueOf(<type2> <type2>Parameter)
-            {
-                return <type2>Parameter;
-            }
-        };
+        <name2>To<name2>Function function = (<type2> <type2>Parameter) -> <type2>Parameter;
 
         hashMap.updateValue(<(literal.(type1))("2")>, <(literal.(type2))("0")>, function);
         Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
@@ -352,13 +346,7 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
         occupiedWithSentinels.setAccessible(true);
         <name1><name2>HashMap hashMap = <name1><name2>HashMap.newWithKeysValues(<["2", "3", "4"]:keyValue(); separator=", ">);
 
-        <name2>Function0 function = new <name2>Function0()
-        {
-            public <type2> value()
-            {
-                return <(literal.(type2))("5")>;
-            }
-        };
+        <name2>Function0 function = () -> <(literal.(type2))("5")>;
 
         hashMap.getIfAbsentPut(<(literal.(type1))("2")>, function);
         Assert.assertEquals(3, occupiedWithData.get(hashMap));
@@ -386,13 +374,7 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
         occupiedWithSentinels.setAccessible(true);
         <name1><name2>HashMap hashMap = <name1><name2>HashMap.newWithKeysValues(<["2", "3", "4"]:keyValue(); separator=", ">);
 
-        <name2>Function\<<wrapperName2>\> function = new <name2>Function\<<wrapperName2>\>()
-        {
-            public <type2> <type2>ValueOf(<wrapperName2> object)
-            {
-                return object.<type2>Value();
-            }
-        };
+        <name2>Function\<<wrapperName2>\> function = (<wrapperName2> object) -> object.<type2>Value();
 
         hashMap.getIfAbsentPutWith(<(literal.(type1))("2")>, function, <wrapperName2>.valueOf(<(literal.(type2))("5")>));
         Assert.assertEquals(3, occupiedWithData.get(hashMap));
@@ -420,13 +402,7 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
         occupiedWithSentinels.setAccessible(true);
         <name1><name2>HashMap hashMap = <name1><name2>HashMap.newWithKeysValues(<["2", "3", "4"]:keyValue(); separator=", ">);
 
-        <name1>To<name2>Function function = new <name1>To<name2>Function()
-        {
-            public <type2> valueOf(<type1> <type1>Parameter)
-            {
-                return (<type2>) <type1>Parameter;
-            }
-        };
+        <name1>To<name2>Function function = (<type1> <type1>Parameter) -> (<type2>) <type1>Parameter;
 
         hashMap.getIfAbsentPutWithKey(<(literal.(type1))("2")>, function);
         Assert.assertEquals(3, occupiedWithData.get(hashMap));
@@ -517,26 +493,14 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
     public void injectInto()
     {
         <name1><name2>HashMap hashMap = new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("2")>, <(literal.(type2))("3")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>, <(literal.(type1))("4")>, <(literal.(type2))("5")>);
-        <wrapperName2> sum = hashMap.injectInto(<wrapperName2>.valueOf(<(literal.(type2))("1")>), new Object<name2>ToObjectFunction\<<wrapperName2>, <wrapperName2>\>()
-        {
-            public <wrapperName2> valueOf(<wrapperName2> result, <type2> value)
-            {
-                return <wrapperName2>.valueOf((<type2>) (result + value));
-            }
-        });
+        <wrapperName2> sum = hashMap.injectInto(<wrapperName2>.valueOf(<(literal.(type2))("1")>), (<wrapperName2> result, <type2> value) -> <wrapperName2>.valueOf((<type2>) (result + value)));
         Assert.assertEquals(<wrapperName2>.valueOf(<(literal.(type2))("15")>), sum);
     }
 
     @Test
     public void updateValue_every_slot()
     {
-        <name2>To<name2>Function incrementFunction = new <name2>To<name2>Function()
-        {
-            public <type2> valueOf(<type2> value)
-            {
-                return <(castIntToNarrowTypeWithParens.(type2))({value + <(literal.(type2))("1")>})>;
-            }
-        };
+        <name2>To<name2>Function incrementFunction = (<type2> value) -> <(castIntToNarrowTypeWithParens.(type2))({value + <(literal.(type2))("1")>})>;
 
         Mutable<name1><name2>Map hashMap = this.getEmptyMap();
 

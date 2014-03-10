@@ -314,14 +314,8 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     @Test
     public void forEachWithIndex()
     {
-        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
-        this.classUnderTest().forEachWithIndex(new <name>IntProcedure()
-        {
-            public void value(<type> each, int index)
-            {
-                sum[0] += each + index;
-            }
-        });
+        <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.classUnderTest().forEachWithIndex((<type> each, int index) -> sum[0] += each + index);
 
         Assert.assertEquals(<(wideLiteral.(type))("9")>, sum[0]<wideDelta.(type)>);
     }
@@ -389,13 +383,7 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     public void injectInto()
     {
         <name>ArrayList arrayList = <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
-        Mutable<wrapperName> result = arrayList.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
-        {
-            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
-            {
-                return object.add(value);
-            }
-        });
+        Mutable<wrapperName> result = arrayList.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), (Mutable<wrapperName> object, <type> value) -> object.add(value));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("6")>), result);
     }
 
@@ -405,13 +393,8 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     {
         Mutable<name>List list1 = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
         final Mutable<name>List list2 = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
-        Mutable<wrapperName> result = list1.injectIntoWithIndex(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>IntToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
-        {
-            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value, int index)
-            {
-                return object.add(<(castIntToNarrowTypeWithParens.(type))("value * list2.get(index)")>);
-            }
-        });
+        Mutable<wrapperName> result = list1.injectIntoWithIndex(new Mutable<wrapperName>(<(literal.(type))("0")>),
+            (Mutable<wrapperName> object, <type> value, int index) -> object.add(<(castIntToNarrowTypeWithParens.(type))("value * list2.get(index)")>));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("14")>), result);
     }
 }

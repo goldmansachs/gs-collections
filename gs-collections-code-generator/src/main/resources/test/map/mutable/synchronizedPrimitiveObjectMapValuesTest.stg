@@ -146,7 +146,7 @@ public class Synchronized<name>ObjectMapValuesTest
         MutableSet\<String> expected = UnifiedSet.newSetWith("zero", "thirtyOne", null);
         MutableSet\<String> actual = UnifiedSet.newSet();
 
-        final Iterator\<String> iterator = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, null).iterator();
+        Iterator\<String> iterator = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, null).iterator();
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -156,23 +156,11 @@ public class Synchronized<name>ObjectMapValuesTest
         Assert.assertFalse(iterator.hasNext());
 
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
 
         Mutable<name>ObjectMap\<String> map1 = this.newMapWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, null);
-        final Iterator\<String> iterator1 = map1.iterator();
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator1.remove();
-            }
-        });
+        Iterator\<String> iterator1 = map1.iterator();
+        Verify.assertThrows(IllegalStateException.class, () -> {iterator1.remove();});
         iterator1.next();
         iterator1.remove();
         Assert.assertTrue(map1.toString(), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero").equals(map1)
@@ -180,23 +168,11 @@ public class Synchronized<name>ObjectMapValuesTest
         iterator1.next();
         iterator1.remove();
         Assert.assertEquals(<name>ObjectHashMap.newMap(), map1);
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator1.remove();
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> {iterator1.remove();});
 
         Mutable<name>ObjectMap\<String> map2 = this.newMapWithKeysValues(<(literal.(type))("0")>, null, <(literal.(type))("9")>, "nine");
-        final Iterator\<String> iterator2 = map2.iterator();
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator2.remove();
-            }
-        });
+        Iterator\<String> iterator2 = map2.iterator();
+        Verify.assertThrows(IllegalStateException.class, () -> {iterator2.remove();});
         iterator2.next();
         iterator2.remove();
         Assert.assertTrue(map2.toString(), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, null).equals(map2)
@@ -206,14 +182,8 @@ public class Synchronized<name>ObjectMapValuesTest
         Assert.assertEquals(<name>ObjectHashMap.newMap(), map2);
 
         Mutable<name>ObjectMap\<String> map3 = this.newMapWithKeysValues(<(literal.(type))("8")>, "eight", <(literal.(type))("9")>, null);
-        final Iterator\<String> iterator3 = map3.iterator();
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator3.remove();
-            }
-        });
+        Iterator\<String> iterator3 = map3.iterator();
+        Verify.assertThrows(IllegalStateException.class, () -> {iterator3.remove();});
         iterator3.next();
         iterator3.remove();
         Assert.assertTrue(map3.toString(), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("8")>, "eight").equals(map3)

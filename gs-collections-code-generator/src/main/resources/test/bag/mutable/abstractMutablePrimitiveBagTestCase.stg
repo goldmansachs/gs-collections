@@ -110,13 +110,7 @@ public abstract class AbstractMutable<name>BagTestCase extends AbstractMutable<n
     public void forEachWithOccurrences()
     {
         final StringBuilder stringBuilder = new StringBuilder();
-        this.newWith(<["1", "1", "2"]:(literal.(type))(); separator=", ">).forEachWithOccurrences(new <name>IntProcedure()
-        {
-            public void value(<type> argument1, int argument2)
-            {
-                stringBuilder.append(argument1).append(argument2);
-            }
-        });
+        this.newWith(<["1", "1", "2"]:(literal.(type))(); separator=", ">).forEachWithOccurrences((<type> argument1, int argument2) -> stringBuilder.append(argument1).append(argument2));
         String string = stringBuilder.toString();
         Assert.assertTrue("<(toStringLiteral.(type))("1")>2<(toStringLiteral.(type))("2")>1".equals(string)
                 || "<(toStringLiteral.(type))("2")>1<(toStringLiteral.(type))("1")>2".equals(string));
@@ -183,13 +177,7 @@ public abstract class AbstractMutable<name>BagTestCase extends AbstractMutable<n
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Test

@@ -82,13 +82,7 @@ public abstract class AbstractMutable<name1><name2>MapTestCase extends Abstract<
         super.getOrThrow();
         final Mutable<name1><name2>Map map1 = this.classUnderTest();
         map1.removeKey(<(literal.(type1))("0")>);
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                map1.getOrThrow(<(literal.(type1))("0")>);
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> {map1.getOrThrow(<(literal.(type1))("0")>);});
         map1.put(<(literal.(type1))("0")>, <(literal.(type2))("1")>);
         Assert.assertEquals(<(literal.(type2))("1")>, map1.getOrThrow(<(literal.(type1))("0")>)<wideDelta.(type2)>);
 
@@ -497,21 +491,8 @@ public abstract class AbstractMutable<name1><name2>MapTestCase extends Abstract<
     @Test
     public void getIfAbsentPut_Function()
     {
-        <name2>Function0 factory = new <name2>Function0()
-        {
-            public <type2> value()
-            {
-                return <(literal.(type2))("100")>;
-            }
-        };
-
-        <name2>Function0 factoryThrows = new <name2>Function0()
-        {
-            public <type2> value()
-            {
-                throw new AssertionError();
-            }
-        };
+        <name2>Function0 factory = () -> <(literal.(type2))("100")>;
+        <name2>Function0 factoryThrows = () -> {throw new AssertionError();};
 
         Mutable<name1><name2>Map map1 = this.getEmptyMap();
         Assert.assertEquals(<(wideLiteral.(type2))("100")>, map1.getIfAbsentPut(<(literal.(type1))("0")>, factory)<(wideDelta.(type2))>);
@@ -543,21 +524,8 @@ public abstract class AbstractMutable<name1><name2>MapTestCase extends Abstract<
     @Test
     public void getIfAbsentPutWith()
     {
-        <name2>Function\<String> functionLength = new <name2>Function\<String>()
-        {
-            public <type2> <type2>ValueOf(String string)
-            {
-                return (<type2>) string.length();
-            }
-        };
-
-        <name2>Function\<String> functionThrows = new <name2>Function\<String>()
-        {
-            public <type2> <type2>ValueOf(String string)
-            {
-                throw new AssertionError();
-            }
-        };
+        <name2>Function\<String> functionLength = (String string) -> (<type2>) string.length();
+        <name2>Function\<String> functionThrows = (String string) -> {throw new AssertionError();};
 
         Mutable<name1><name2>Map map1 = this.getEmptyMap();
         Assert.assertEquals(<(literal.(type2))("9")>, map1.getIfAbsentPutWith(<(literal.(type1))("0")>, functionLength, "123456789")<wideDelta.(type2)>);
@@ -589,21 +557,8 @@ public abstract class AbstractMutable<name1><name2>MapTestCase extends Abstract<
     @Test
     public void getIfAbsentPutWithKey()
     {
-        <name1>To<name2>Function function = new <name1>To<name2>Function()
-        {
-            public <type2> valueOf(<type1> <type1>Parameter)
-            {
-                return (<type2>) <type1>Parameter;
-            }
-        };
-
-        <name1>To<name2>Function functionThrows = new <name1>To<name2>Function()
-        {
-            public <type2> valueOf(<type1> <type1>Parameter)
-            {
-                throw new AssertionError();
-            }
-        };
+        <name1>To<name2>Function function = (<type1> <type1>Parameter) -> (<type2>) <type1>Parameter;
+        <name1>To<name2>Function functionThrows = (<type1> <type1>Parameter) -> {throw new AssertionError();};
 
         Mutable<name1><name2>Map map1 = this.getEmptyMap();
         Assert.assertEquals(<(wideLiteral.(type2))("0")>, map1.getIfAbsentPutWithKey(<(literal.(type1))("0")>, function)<(wideDelta.(type2))>);
@@ -635,13 +590,7 @@ public abstract class AbstractMutable<name1><name2>MapTestCase extends Abstract<
     @Test
     public void updateValue()
     {
-        <name2>To<name2>Function incrementFunction = new <name2>To<name2>Function()
-        {
-            public <type2> valueOf(<type2> value)
-            {
-                return <(castIntToNarrowTypeWithParens.(type2))({value + <(literal.(type2))("1")>})>;
-            }
-        };
+        <name2>To<name2>Function incrementFunction = (<type2> value) -> <(castIntToNarrowTypeWithParens.(type2))({value + <(literal.(type2))("1")>})>;
 
         Mutable<name1><name2>Map map1 = this.getEmptyMap();
         Assert.assertEquals(<(wideLiteral.(type2))("1")>, map1.updateValue(<keyValue("0")>, incrementFunction)<(wideDelta.(type2))>);

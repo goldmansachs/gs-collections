@@ -30,6 +30,7 @@ import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -67,21 +68,9 @@ import org.junit.Test;
  */
 public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>ObjectMapTestCase
 {
-    public static final Predicates2\<String, String> ERROR_THROWING_PREDICATE_2 = new Predicates2\<String, String>()
-    {
-        public boolean accept(String argument1, String argument2)
-        {
-            throw new AssertionError();
-        }
-    };
+    public static final Predicate2\<String, String> ERROR_THROWING_PREDICATE_2 = (String argument1, String argument2) -> {throw new AssertionError();};
 
-    public static final Predicate\<String> ERROR_THROWING_PREDICATE = new Predicate\<String>()
-    {
-        public boolean accept(String each)
-        {
-            throw new AssertionError();
-        }
-    };
+    public static final Predicate\<String> ERROR_THROWING_PREDICATE = (String each) -> {throw new AssertionError();};
 
     @Override
     protected Immutable<name>ObjectMap\<String> classUnderTest()
@@ -158,13 +147,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void getIfAbsent()
     {
-        Function0\<String> ifAbsent = new Function0\<String>()
-        {
-            public String value()
-            {
-                return "ifAbsent";
-            }
-        };
+        Function0\<String> ifAbsent = () -> "ifAbsent";
 
         Assert.assertEquals("ifAbsent", this.classUnderTest().getIfAbsent(<(literal.(type))("0")>, ifAbsent));
         Assert.assertEquals("ifAbsent", this.classUnderTest().getIfAbsent(<(literal.(type))("31")>, ifAbsent));
@@ -189,22 +172,10 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void iterator()
     {
-        final Iterator\<String> iterator = this.classUnderTest().iterator();
+        Iterator\<String> iterator = this.classUnderTest().iterator();
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.remove();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {iterator.remove();});
     }
 
     @Override
@@ -252,65 +223,35 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void forEachWithIndex()
     {
-        this.classUnderTest().forEachWithIndex(new ObjectIntProcedure\<String>()
-        {
-            public void value(String each, int param)
-            {
-                Assert.fail();
-            }
-        });
+        this.classUnderTest().forEachWithIndex((String each, int param) -> Assert.fail());
     }
 
     @Override
     @Test
     public void forEachWith()
     {
-        this.classUnderTest().forEachWith(new Procedure2\<String, String>()
-        {
-            public void value(String each, String param)
-            {
-                Assert.fail();
-            }
-        }, "");
+        this.classUnderTest().forEachWith((String each, String param) -> Assert.fail(), "");
     }
 
     @Override
     @Test
     public void forEachKey()
     {
-        this.classUnderTest().forEachKey(new <name>Procedure()
-        {
-            public void value(<primitive.type> each)
-            {
-                Assert.fail();
-            }
-        });
+        this.classUnderTest().forEachKey((<primitive.type> each) -> Assert.fail());
     }
 
     @Override
     @Test
     public void forEachValue()
     {
-        this.classUnderTest().forEachValue(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                Assert.fail();
-            }
-        });
+        this.classUnderTest().forEachValue((String each) -> Assert.fail());
     }
 
     @Override
     @Test
     public void forEachKeyValue()
     {
-        this.classUnderTest().forEachKeyValue(new <name>ObjectProcedure\<String>()
-        {
-            public void value(<primitive.type> eachKey, String eachValue)
-            {
-                Assert.fail();
-            }
-        });
+        this.classUnderTest().forEachKeyValue((<primitive.type> eachKey, String eachValue) -> Assert.fail());
     }
 
     @Override
@@ -318,13 +259,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     public void select()
     {
         Verify.assertIterableEmpty(this.classUnderTest().select(Predicates.alwaysTrue()));
-        Verify.assertIterableEmpty(this.classUnderTest().select(new <name>ObjectPredicate\<String>()
-        {
-            public boolean accept(<primitive.type> value, String object)
-            {
-                return true;
-            }
-        }));
+        Verify.assertIterableEmpty(this.classUnderTest().select((<primitive.type> value, String object) -> true));
 
         FastList\<String> target = FastList.newList();
         Assert.assertSame(target, this.classUnderTest().select(Predicates.alwaysTrue(), target));
@@ -359,13 +294,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     public void reject()
     {
         Verify.assertIterableEmpty(this.classUnderTest().reject(Predicates.alwaysFalse()));
-        Verify.assertIterableEmpty(this.classUnderTest().reject(new <name>ObjectPredicate\<String>()
-        {
-            public boolean accept(<primitive.type> value, String object)
-            {
-                return false;
-            }
-        }));
+        Verify.assertIterableEmpty(this.classUnderTest().reject((<primitive.type> value, String object) -> false));
 
         FastList\<String> target = FastList.newList();
         Assert.assertSame(target, this.classUnderTest().reject(Predicates.alwaysFalse(), target));
@@ -493,129 +422,69 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void min_withComparator()
     {
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().min(Comparators.naturalOrder());
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().min(Comparators.naturalOrder());});
     }
 
     @Test
     public void max_withComparator()
     {
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().max(Comparators.naturalOrder());
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().max(Comparators.naturalOrder());});
     }
 
     @Override
     @Test
     public void minBy()
     {
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().minBy(Functions.getToString());
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().minBy(Functions.getToString());});
     }
 
     @Override
     @Test
     public void maxBy()
     {
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().maxBy(Functions.getToString());
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().maxBy(Functions.getToString());});
     }
 
     @Override
     @Test
     public void min()
     {
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().min();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().min();});
     }
 
     @Override
     @Test
     public void max()
     {
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().max();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().max();});
     }
 
     @Override
     @Test
     public void sumOfInt()
     {
-        Assert.assertEquals(0L, this.classUnderTest().sumOfInt(new IntFunction\<String>()
-        {
-            public int intValueOf(String value)
-            {
-                return value.length();
-            }
-        }));
+        Assert.assertEquals(0L, this.classUnderTest().sumOfInt((String value) -> value.length()));
     }
 
     @Override
     @Test
     public void sumOfFloat()
     {
-        Assert.assertEquals(0.0d, this.classUnderTest().sumOfFloat(new FloatFunction\<String>()
-        {
-            public float floatValueOf(String value)
-            {
-                return (float) value.length();
-            }
-        }), 0.0d);
+        Assert.assertEquals(0.0d, this.classUnderTest().sumOfFloat((String value) -> (float) value.length()), 0.0d);
     }
 
     @Override
     @Test
     public void sumOfLong()
     {
-        Assert.assertEquals(0L, this.classUnderTest().sumOfLong(new LongFunction\<String>()
-        {
-            public long longValueOf(String value)
-            {
-                return (long) value.length();
-            }
-        }));
+        Assert.assertEquals(0L, this.classUnderTest().sumOfLong((String value) -> (long) value.length()));
     }
 
     @Override
     @Test
     public void sumOfDouble()
     {
-        Assert.assertEquals(0.0d, this.classUnderTest().sumOfDouble(new DoubleFunction\<String>()
-        {
-            public double doubleValueOf(String value)
-            {
-                return (double) value.length();
-            }
-        }), 0.0d);
+        Assert.assertEquals(0.0d, this.classUnderTest().sumOfDouble((String value) -> (double) value.length()), 0.0d);
     }
 
     @Override
@@ -630,13 +499,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void flatCollect()
     {
-        Function\<String, Iterable\<Character>\> function = new Function\<String, Iterable\<Character>\>()
-        {
-            public Iterable\<Character> valueOf(String value)
-            {
-                return StringIterate.toSet(value);
-            }
-        };
+        Function\<String, Iterable\<Character>\> function = (String value) -> StringIterate.toSet(value);
         Verify.assertIterableEmpty(this.classUnderTest().flatCollect(function));
         UnifiedSet\<Character> target = UnifiedSet.newSet();
         Assert.assertSame(target, this.classUnderTest().flatCollect(function, target));
@@ -658,13 +521,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void collectWith()
     {
-        Function2\<String, String, String> function = new Function2\<String, String, String>()
-        {
-            public String value(String each, String param)
-            {
-                return each.toUpperCase() + param;
-            }
-        };
+        Function2\<String, String, String> function = (String each, String param) -> each.toUpperCase() + param;
         Verify.assertIterableEmpty(this.classUnderTest().collectWith(function, "!"));
 
         FastList\<String> target = FastList.newList();

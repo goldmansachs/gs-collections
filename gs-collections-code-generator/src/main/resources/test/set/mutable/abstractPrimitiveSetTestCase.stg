@@ -286,13 +286,7 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
         actual.add(iterator.next());
         Assert.assertFalse(iterator.hasNext());
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Override
@@ -313,13 +307,7 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
     public void injectInto()
     {
         Mutable<name>Set set = this.newWith(<["0", "2", "31"]:(literal.(type))(); separator=", ">);
-        <wrapperName> sum = set.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<wrapperName> result, <type> value)
-            {
-                return <wrapperName>.valueOf((<type>)(result + value));
-            }
-        });
+        <wrapperName> sum = set.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, <type> value) -> <wrapperName>.valueOf((<type>)(result + value)));
         Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("33")>), sum);
     }
 
@@ -389,13 +377,9 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
     {
         super.collect();
         Mutable<name>Set set = this.newWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, Abstract<name>SetTestCase.generateCollisions1().getFirst(), Abstract<name>SetTestCase.generateCollisions1().get(1));
-        Assert.assertEquals(UnifiedSet.newSetWith(<["-1", "0", "30"]:(literal.(type))(); separator=", ">, <(castIntToNarrowTypeWithParens.(type))({Abstract<name>SetTestCase.generateCollisions1().getFirst() - 1})>, <(castIntToNarrowTypeWithParens.(type))({Abstract<name>SetTestCase.generateCollisions1().get(1) - 1})>), set.collect(new <name>ToObjectFunction\<<wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<type> byteParameter)
-            {
-                return <(castIntToNarrowTypeWithParens.(type))("byteParameter - 1")>;
-            }
-        }));
+        Assert.assertEquals(
+            UnifiedSet.newSetWith(<["-1", "0", "30"]:(literal.(type))(); separator=", ">, <(castIntToNarrowTypeWithParens.(type))({Abstract<name>SetTestCase.generateCollisions1().getFirst() - 1})>, <(castIntToNarrowTypeWithParens.(type))({Abstract<name>SetTestCase.generateCollisions1().get(1) - 1})>),
+            set.collect((<type> byteParameter) -> <(castIntToNarrowTypeWithParens.(type))("byteParameter - 1")>));
     }
 
     @Override

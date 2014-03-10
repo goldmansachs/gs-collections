@@ -145,13 +145,7 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void getIfAbsent()
     {
-        Function0\<String> ifAbsent = new Function0\<String>()
-        {
-            public String value()
-            {
-                return "ifAbsent";
-            }
-        };
+        Function0\<String> ifAbsent = () -> "ifAbsent";
 
         Assert.assertEquals("zero", this.classUnderTest().getIfAbsent(<(literal.(type))("0")>, ifAbsent));
         Assert.assertEquals("ifAbsent", this.classUnderTest().getIfAbsent(<(literal.(type))("31")>, ifAbsent));
@@ -179,21 +173,9 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
         final Iterator\<String> iterator = this.classUnderTest().iterator();
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals("zero", iterator.next());
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {iterator.remove();});
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Override
@@ -233,14 +215,11 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     {
         final String[] concat = {""};
 
-        this.classUnderTest().forEachWithIndex(new ObjectIntProcedure\<String>()
-        {
-            public void value(String each, int parameter)
+        this.classUnderTest().forEachWithIndex((String each, int parameter) ->
             {
                 concat[0] += each;
                 concat[0] += parameter;
-            }
-        });
+            });
 
         Assert.assertEquals("zero0", concat[0]);
     }
@@ -249,16 +228,13 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void forEachWith()
     {
-        final String[] concat = {""};
+        String[] concat = {""};
 
-        this.classUnderTest().forEachWith(new Procedure2\<String, String>()
-        {
-            public void value(String argument1, String argument2)
+        this.classUnderTest().forEachWith((String argument1, String argument2) ->
             {
                 concat[0] += argument1;
                 concat[0] += argument2;
-            }
-        }, "-");
+            }, "-");
 
         Assert.assertEquals("zero-", concat[0]);
     }
@@ -267,15 +243,9 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void forEachValue()
     {
-        final String[] concat = {""};
+        String[] concat = {""};
 
-        this.classUnderTest().forEachValue(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                concat[0] += each;
-            }
-        });
+        this.classUnderTest().forEachValue((String each) -> concat[0] += each);
 
         Assert.assertEquals("zero", concat[0]);
     }
@@ -284,15 +254,9 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void forEachKey()
     {
-        final <wideType.(type)>[] sum = new <wideType.(type)>[4];
+        <wideType.(type)>[] sum = new <wideType.(type)>[4];
 
-        this.classUnderTest().forEachKey(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
+        this.classUnderTest().forEachKey((<type> each) -> sum[0] += each);
 
         Assert.assertEquals(<(wideLiteral.(type))("0")>, sum[0]<(wideDelta.(type))>);
     }
@@ -301,16 +265,13 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void forEachKeyValue()
     {
-        final String[] concat = {""};
+        String[] concat = {""};
 
-        this.classUnderTest().forEachKeyValue(new <name>ObjectProcedure\<String>()
-        {
-            public void value(<type> each, String parameter)
+        this.classUnderTest().forEachKeyValue((<type> each, String parameter) ->
             {
                 concat[0] += each;
                 concat[0] += parameter;
-            }
-        });
+            });
 
         Assert.assertEquals("<(toStringLiteral.(type))("0")>zero", concat[0]);
     }
@@ -321,21 +282,9 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     {
         Assert.assertEquals(
                 <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero"),
-                this.classUnderTest().select(new <name>ObjectPredicate\<String>()
-                {
-                    public boolean accept(<type> value, String object)
-                    {
-                        return value == 0;
-                    }
-                }));
+                this.classUnderTest().select((<type> value, String object) -> value == 0));
 
-        Verify.assertIterableEmpty(this.classUnderTest().select(new <name>ObjectPredicate\<String>()
-        {
-            public boolean accept(<type> value, String object)
-            {
-                return value != 0;
-            }
-        }));
+        Verify.assertIterableEmpty(this.classUnderTest().select((<type> value, String object) -> value != 0));
 
         Assert.assertEquals(FastList.newListWith("zero"), this.classUnderTest().select(Predicates.equal("zero")));
         Verify.assertIterableEmpty(this.classUnderTest().select(Predicates.equal("one")));
@@ -563,52 +512,28 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void sumOfInt()
     {
-        Assert.assertEquals(4L, this.classUnderTest().sumOfInt(new IntFunction\<String>()
-        {
-            public int intValueOf(String value)
-            {
-                return value.length();
-            }
-        }));
+        Assert.assertEquals(4L, this.classUnderTest().sumOfInt((String value) -> value.length()));
     }
 
     @Override
     @Test
     public void sumOfFloat()
     {
-        Assert.assertEquals(4.0d, this.classUnderTest().sumOfFloat(new FloatFunction\<String>()
-        {
-            public float floatValueOf(String value)
-            {
-                return (float) value.length();
-            }
-        }), 0.0d);
+        Assert.assertEquals(4.0d, this.classUnderTest().sumOfFloat((String value) -> (float) value.length()), 0.0d);
     }
 
     @Override
     @Test
     public void sumOfLong()
     {
-        Assert.assertEquals(4L, this.classUnderTest().sumOfLong(new LongFunction\<String>()
-        {
-            public long longValueOf(String value)
-            {
-                return (long) value.length();
-            }
-        }));
+        Assert.assertEquals(4L, this.classUnderTest().sumOfLong((String value) -> (long) value.length()));
     }
 
     @Override
     @Test
     public void sumOfDouble()
     {
-        Assert.assertEquals(4.0d, this.classUnderTest().sumOfDouble(new DoubleFunction\<String>()
-        {
-            public double doubleValueOf(String value)
-            {
-                return (double) value.length();
-            }
-        }), 0.0d);
+        Assert.assertEquals(4.0d, this.classUnderTest().sumOfDouble((String value) -> (double) value.length()), 0.0d);
     }
 
     @Override
@@ -630,13 +555,7 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void flatCollect()
     {
-        Function\<String, Iterable\<Character>\> function = new Function\<String, Iterable\<Character>\>()
-        {
-            public Iterable\<Character> valueOf(String value)
-            {
-                return StringIterate.toSet(value);
-            }
-        };
+        Function\<String, Iterable\<Character>\> function = (String value) -> StringIterate.toSet(value);
         Verify.assertListsEqual(FastList.newListWith('e', 'o', 'r', 'z'), this.classUnderTest().flatCollect(function).toSortedList());
         UnifiedSet\<Character> target = UnifiedSet.newSet();
         Assert.assertSame(target, this.classUnderTest().flatCollect(function, target));
@@ -658,13 +577,7 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void collectWith()
     {
-        Function2\<String, String, String> function = new Function2\<String, String, String>()
-        {
-            public String value(String each, String param)
-            {
-                return each.toUpperCase() + param;
-            }
-        };
+        Function2\<String, String, String> function = (String each, String param) -> each.toUpperCase() + param;
         Assert.assertEquals(FastList.newListWith("ZERO!"), this.classUnderTest().collectWith(function, "!"));
 
         FastList\<String> target = FastList.newList();

@@ -49,13 +49,7 @@ public abstract class AbstractObject<name>MapKeysViewTestCase extends AbstractLa
         final Iterator\<String> iterator = this.newWithKeysValues("zero", <(literal.(type))("0")>, "thirtyOne", <(literal.(type))("31")>, "thirtyTwo", <(literal.(type))("32")>).keysView().iterator();
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.remove();
-            }
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> {iterator.remove();});
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -63,13 +57,7 @@ public abstract class AbstractObject<name>MapKeysViewTestCase extends AbstractLa
         Assert.assertFalse(iterator.hasNext());
 
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 }
 

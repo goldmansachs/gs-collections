@@ -421,13 +421,7 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
         occupiedWithSentinels.setAccessible(true);
         <name>ObjectHashMap\<Float> hashMap = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("2")>, 2.0f, <(literal.(type))("3")>, 3.0f, <(literal.(type))("4")>, 4.0f);
 
-        <name>ToObjectFunction\<Float> function = new <name>ToObjectFunction\<Float>()
-        {
-            public Float valueOf(<type> <type>Parameter)
-            {
-                return (float) <type>Parameter;
-            }
-        };
+        <name>ToObjectFunction\<Float> function = (<type> <type>Parameter) -> (float) <type>Parameter;
 
         hashMap.getIfAbsentPutWithKey(<(literal.(type))("2")>, function);
         Assert.assertEquals(3, occupiedWithData.get(hashMap));
@@ -512,13 +506,7 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
     @Test
     public void getIfAbsentPutWith_every_slot()
     {
-        Function\<String, String> toUpperCase = new Function\<String, String>()
-        {
-            public String valueOf(String string)
-            {
-                return string.toUpperCase();
-            }
-        };
+        Function\<String, String> toUpperCase = (String string) -> string.toUpperCase();
 
         Mutable<name>ObjectMap\<String> hashMap = this.getEmptyMap();
         for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)

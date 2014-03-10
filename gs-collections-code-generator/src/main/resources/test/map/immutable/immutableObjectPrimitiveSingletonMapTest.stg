@@ -113,22 +113,10 @@ public class ImmutableObject<name>SingletonMapTest extends AbstractImmutableObje
     @Test
     public void detectIfNone()
     {
-        <type> detect = this.classUnderTest().detectIfNone(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return true;
-            }
-        }, <(literal.(type))("5")>);
+        <type> detect = this.classUnderTest().detectIfNone((<type> value) -> true, <(literal.(type))("5")>);
         Assert.assertEquals(<(literal.(type))("1")>, detect<delta.(type)>);
 
-        <type> detect1 = this.classUnderTest().detectIfNone(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return false;
-            }
-        }, <(literal.(type))("5")>);
+        <type> detect1 = this.classUnderTest().detectIfNone((<type> value) -> false, <(literal.(type))("5")>);
         Assert.assertEquals(<(literal.(type))("5")>, detect1<delta.(type)>);
     }
 
@@ -164,95 +152,35 @@ public class ImmutableObject<name>SingletonMapTest extends AbstractImmutableObje
     @Test
     public void allSatisfy()
     {
-        Assert.assertFalse(this.classUnderTest().allSatisfy(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return false;
-            }
-        }));
+        Assert.assertFalse(this.classUnderTest().allSatisfy((<type> value) -> false));
 
-        Assert.assertTrue(this.classUnderTest().allSatisfy(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertTrue(this.classUnderTest().allSatisfy((<type> value) -> true));
     }
 
     @Override
     @Test
     public void reject()
     {
-        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().reject(new Object<name>Predicate\<String>()
-        {
-            public boolean accept(String object, <type> value)
-            {
-                return false;
-            }
-        }));
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().reject((String object, <type> value) -> false));
 
-        Assert.assertEquals(this.getEmptyMap(), this.classUnderTest().reject(new Object<name>Predicate\<String>()
-        {
-            public boolean accept(String object, <type> value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertEquals(this.getEmptyMap(), this.classUnderTest().reject((String object, <type> value) -> true));
 
-        Assert.assertEquals(new <name>HashBag(), this.classUnderTest().reject(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return true;
-            }
-        }).toBag());
+        Assert.assertEquals(new <name>HashBag(), this.classUnderTest().reject((<type> value) -> true).toBag());
 
-        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("1")>), this.classUnderTest().reject(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return false;
-            }
-        }).toBag());
+        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("1")>), this.classUnderTest().reject((<type> value) -> false).toBag());
     }
 
     @Override
     @Test
     public void select()
     {
-        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().select(new Object<name>Predicate\<String>()
-        {
-            public boolean accept(String object, <type> value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().select((String object, <type> value) -> true));
 
-        Assert.assertEquals(this.getEmptyMap(), this.classUnderTest().select(new Object<name>Predicate\<String>()
-        {
-            public boolean accept(String object, <type> value)
-            {
-                return false;
-            }
-        }));
+        Assert.assertEquals(this.getEmptyMap(), this.classUnderTest().select((String object, <type> value) -> false));
 
-        Assert.assertEquals(new <name>HashBag(), this.classUnderTest().select(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return false;
-            }
-        }).toBag());
+        Assert.assertEquals(new <name>HashBag(), this.classUnderTest().select((<type> value) -> false).toBag());
 
-        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("1")>), this.classUnderTest().select(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return true;
-            }
-        }).toBag());
+        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("1")>), this.classUnderTest().select((<type> value) -> true).toBag());
     }
 
     @Test
@@ -269,13 +197,7 @@ public class ImmutableObject<name>SingletonMapTest extends AbstractImmutableObje
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals(<(wideLiteral.(type))("1")>, iterator.next()<wideDelta.(type)>);
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Override
@@ -292,27 +214,9 @@ public class ImmutableObject<name>SingletonMapTest extends AbstractImmutableObje
     public void getOrThrow()
     {
         Assert.assertEquals(<(literal.(type))("1")>, this.classUnderTest().getOrThrow("1")<delta.(type)>);
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableObject<name>SingletonMapTest.this.classUnderTest().getOrThrow("5");
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableObject<name>SingletonMapTest.this.classUnderTest().getOrThrow("0");
-            }
-        });
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                ImmutableObject<name>SingletonMapTest.this.classUnderTest().getOrThrow(null);
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow("5");});
+        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow("0");});
+        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow(null);});
     }
 
     @Override
@@ -349,21 +253,8 @@ public class ImmutableObject<name>SingletonMapTest extends AbstractImmutableObje
     @Test
     public void count()
     {
-        Assert.assertEquals(1L, this.classUnderTest().count(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return true;
-            }
-        }));
-
-        Assert.assertEquals(0L, this.classUnderTest().count(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return false;
-            }
-        }));
+        Assert.assertEquals(1L, this.classUnderTest().count((<type> value) -> true));
+        Assert.assertEquals(0L, this.classUnderTest().count((<type> value) -> false));
     }
 
     @Override
@@ -439,34 +330,16 @@ public class ImmutableObject<name>SingletonMapTest extends AbstractImmutableObje
     @Test
     public void noneSatisfy()
     {
-        Assert.assertFalse(this.classUnderTest().noneSatisfy(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return true;
-            }
-        }));
+        Assert.assertFalse(this.classUnderTest().noneSatisfy((<type> value) -> true));
 
-        Assert.assertTrue(this.classUnderTest().noneSatisfy(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return false;
-            }
-        }));
+        Assert.assertTrue(this.classUnderTest().noneSatisfy((<type> value) -> false));
     }
 
     @Test
     public void injectInto()
     {
         ImmutableObject<name>SingletonMap\<String> iterable = new ImmutableObject<name>SingletonMap\<String>("1", <(literal.(type))("1")>);
-        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("1")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
-        {
-            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
-            {
-                return object.add(value);
-            }
-        });
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("1")>), (Mutable<wrapperName> object, <type> value) -> object.add(value));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("2")>), result);
     }
 }

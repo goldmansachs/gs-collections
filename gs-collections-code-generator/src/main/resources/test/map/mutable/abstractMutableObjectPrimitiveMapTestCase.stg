@@ -264,13 +264,7 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
         super.getOrThrow();
 
         this.map.removeKey("0");
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractMutableObject<name>MapTestCase.this.map.getOrThrow("0");
-            }
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow("0");});
 
         this.map.put("0", <(literal.(type))("1")>);
         Assert.assertEquals(<(literal.(type))("1")>, this.map.getOrThrow("0")<delta.(type)>);
@@ -330,23 +324,13 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
     @Test
     public void getIfAbsentPut_Function()
     {
-        <name>Function0 factory = new <name>Function0()
-        {
-            public <type> value()
-            {
-                return <(literal.(type))("100")>;
-            }
-        };
+        <name>Function0 factory = () -> <(literal.(type))("100")>;
 
         MutableObject<name>Map\<Integer> map1 = this.getEmptyMap();
         Assert.assertEquals(<(literal.(type))("100")>, map1.getIfAbsentPut(0, factory)<delta.(type)>);
-        <name>Function0 factoryThrows = new <name>Function0()
-        {
-            public <type> value()
-            {
-                throw new AssertionError();
-            }
-        };
+
+        <name>Function0 factoryThrows = () -> {throw new AssertionError();};
+
         Assert.assertEquals(<(literal.(type))("100")>, map1.getIfAbsentPut(0, factoryThrows)<delta.(type)>);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(0, <(literal.(type))("100")>), map1);
         Assert.assertEquals(<(literal.(type))("100")>, map1.getIfAbsentPut(1, factory)<delta.(type)>);
@@ -370,23 +354,11 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
     @Test
     public void getIfAbsentPutWith()
     {
-        <name>Function\<String> functionLength = new <name>Function\<String>()
-        {
-            public <type> <type>ValueOf(String string)
-            {
-                return <(castIntToNarrowType.(type))("string.length()")>;
-            }
-        };
+        <name>Function\<String> functionLength = (String string) -> <(castIntToNarrowType.(type))("string.length()")>;
 
         MutableObject<name>Map\<Integer> map1 = this.getEmptyMap();
         Assert.assertEquals(<(literal.(type))("9")>, map1.getIfAbsentPutWith(0, functionLength, "123456789")<delta.(type)>);
-        <name>Function\<String> functionThrows = new <name>Function\<String>()
-        {
-            public <type> <type>ValueOf(String string)
-            {
-                throw new AssertionError();
-            }
-        };
+        <name>Function\<String> functionThrows = (String each) -> {throw new AssertionError();};
         Assert.assertEquals(<(literal.(type))("9")>, map1.getIfAbsentPutWith(0, functionThrows, "unused")<delta.(type)>);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(0, <(literal.(type))("9")>), map1);
         Assert.assertEquals(<(literal.(type))("9")>, map1.getIfAbsentPutWith(1, functionLength, "123456789")<delta.(type)>);
@@ -410,23 +382,11 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
     @Test
     public void getIfAbsentPutWithKey()
     {
-        <name>Function\<Integer> function = new <name>Function\<Integer>()
-        {
-            public <type> <type>ValueOf(Integer anObject)
-            {
-                return anObject == null ? <(literal.(type))("32")> : <(castIntToNarrowType.(type))("anObject.intValue()")>;
-            }
-        };
+        <name>Function\<Integer> function = (Integer anObject) -> anObject == null ? <(literal.(type))("32")> : <(castIntToNarrowType.(type))("anObject.intValue()")>;
 
         MutableObject<name>Map\<Integer> map1 = this.getEmptyMap();
         Assert.assertEquals(<(literal.(type))("0")>, map1.getIfAbsentPutWithKey(0, function)<delta.(type)>);
-        <name>Function\<Integer> functionThrows = new <name>Function\<Integer>()
-        {
-            public <type> <type>ValueOf(Integer <type>Parameter)
-            {
-                throw new AssertionError();
-            }
-        };
+        <name>Function\<Integer> functionThrows = (Integer <type>Parameter) -> {throw new AssertionError();};
         Assert.assertEquals(<(literal.(type))("0")>, map1.getIfAbsentPutWithKey(0, functionThrows)<delta.(type)>);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(0, <(literal.(type))("0")>), map1);
         Assert.assertEquals(<(literal.(type))("1")>, map1.getIfAbsentPutWithKey(1, function)<delta.(type)>);
@@ -450,13 +410,7 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
     @Test
     public void updateValue()
     {
-        <name>To<name>Function incrementFunction = new <name>To<name>Function()
-        {
-            public <type> valueOf(<type> value)
-            {
-                return <(castIntToNarrowTypeWithParens.(type))("value + 1")>;
-            }
-        };
+        <name>To<name>Function incrementFunction = (<type> value) -> <(castIntToNarrowTypeWithParens.(type))("value + 1")>;
 
         MutableObject<name>Map\<Integer> map1 = this.getEmptyMap();
         Assert.assertEquals(<(literal.(type))("1")>, map1.updateValue(0, <(literal.(type))("0")>, incrementFunction)<delta.(type)>);

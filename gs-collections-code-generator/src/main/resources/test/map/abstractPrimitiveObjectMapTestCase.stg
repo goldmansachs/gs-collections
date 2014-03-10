@@ -134,21 +134,11 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
         <name>ObjectMap\<String> map4 = this.newWithKeysValues(<(literal.(type))("5")>, "five", <(literal.(type))("9")>, "nine");
 
-        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine"), map1.select(new <name>ObjectPredicate\<String>()
-        {
-            public boolean accept(<type> value, String object)
-            {
-                return (value % 2) != 0;
-            }
-        }));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine"),
+            map1.select((<type> value, String object) -> (value % 2) != 0));
 
-        <name>ObjectPredicate\<String> keyGreaterThanOrEqualToSeven = new <name>ObjectPredicate\<String>()
-        {
-            public boolean accept(<type> value, String object)
-            {
-                return value \<= 7;
-            }
-        };
+        <name>ObjectPredicate\<String> keyGreaterThanOrEqualToSeven = (<type> value, String object) -> value \<= 7;
+
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one"), map1.select(keyGreaterThanOrEqualToSeven));
 
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero"), map2.select(keyGreaterThanOrEqualToSeven));
@@ -157,13 +147,8 @@ public abstract class Abstract<name>ObjectMapTestCase
 
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "five"), map4.select(keyGreaterThanOrEqualToSeven));
 
-        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine"), map1.select(new <name>ObjectPredicate\<String>()
-        {
-            public boolean accept(<type> value, String object)
-            {
-                return object.endsWith("ne");
-            }
-        }));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine"),
+            map1.select((<type> value, String object) -> object.endsWith("ne")));
 
         RichIterable\<String> actual1 = map1.select(StringPredicates.endsWith("ne"));
         Assert.assertTrue(FastList.newListWith("one", "nine").equals(actual1) || FastList.newListWith("nine", "one").equals(actual1));
@@ -362,13 +347,8 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Assert.assertEquals(FastList.newListWith("ZERO!", "ONE!", "NINE!"), map1.collectWith(new Function2\<String, String, String>()
-        {
-            public String value(String argument1, String argument2)
-            {
-                return argument1.toUpperCase() + argument2;
-            }
-        }, "!"));
+        Assert.assertEquals(FastList.newListWith("ZERO!", "ONE!", "NINE!"),
+            map1.collectWith((String argument1, String argument2) -> argument1.toUpperCase() + argument2, "!"));
     }
 
     @Test
@@ -376,13 +356,8 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Assert.assertEquals(FastList.newListWith("ZERO!", "ONE!", "NINE!"), map1.collectWith(new Function2\<String, String, String>()
-        {
-            public String value(String argument1, String argument2)
-            {
-                return argument1.toUpperCase() + argument2;
-            }
-        }, "!", FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("ZERO!", "ONE!", "NINE!"),
+            map1.collectWith((String argument1, String argument2) -> argument1.toUpperCase() + argument2, "!", FastList.\<String>newList()));
     }
 
     @Test
@@ -402,9 +377,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "five", <(literal.(type))("9")>, "nine");
 
-        Function\<String, FastList\<Character>\> toChars = new Function\<String, FastList\<Character>\>()
-        {
-            public FastList\<Character> valueOf(String object)
+        Function\<String, FastList\<Character>\> toChars = (String object) ->
             {
                 FastList\<Character> list = FastList.newList();
                 char[] chars = object.toCharArray();
@@ -413,8 +386,7 @@ public abstract class Abstract<name>ObjectMapTestCase
                     list.add(aChar);
                 }
                 return list;
-            }
-        };
+            };
 
         Assert.assertEquals(UnifiedSet.newSetWith('z', 'e', 'r', 'o', 'n', 'i'), map1.flatCollect(toChars).toSet());
         Assert.assertEquals(UnifiedSet.newSetWith('o', 'n', 'e', 'i'), map2.flatCollect(toChars).toSet());
@@ -447,13 +419,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Function0\<String> ifNone = new Function0\<String>()
-        {
-            public String value()
-            {
-                return "ifNone";
-            }
-        };
+        Function0\<String> ifNone = () -> "ifNone";
         Assert.assertTrue("one".equals(map1.detectIfNone(StringPredicates.endsWith("ne"), ifNone))
             || "nine".equals(map1.detectIfNone(StringPredicates.endsWith("ne"), ifNone)));
         Assert.assertEquals("zero", map1.detectIfNone(StringPredicates.endsWith("o"), ifNone));
@@ -466,13 +432,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Function0\<String> ifNone = new Function0\<String>()
-        {
-            public String value()
-            {
-                return "ifNone";
-            }
-        };
+        Function0\<String> ifNone = () -> "ifNone";
         Assert.assertTrue("one".equals(map1.detectWithIfNone(StringPredicates2.endsWith(), "ne", ifNone))
             || "nine".equals(map1.detectWithIfNone(StringPredicates2.endsWith(), "ne", ifNone)));
         Assert.assertEquals("zero", map1.detectWithIfNone(StringPredicates2.endsWith(), "o", ifNone));
@@ -579,13 +539,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "five", <(literal.(type))("9")>, "nine");
 
-        Function2\<String, String, String> concat = new Function2\<String, String, String>()
-        {
-            public String value(String argument1, String argument2)
-            {
-                return argument1 + '-' + argument2;
-            }
-        };
+        Function2\<String, String, String> concat = (String argument1, String argument2) -> argument1 + '-' + argument2;
 
         Assert.assertTrue("Start-zero-nine".equals(map1.injectInto("Start", concat))
                 || "Start-nine-zero".equals(map1.injectInto("Start", concat)));
@@ -602,13 +556,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "abc", <(literal.(type))("9")>, "abcd");
 
-        IntObjectToIntFunction\<String> function = new IntObjectToIntFunction\<String>()
-        {
-            public int intValueOf(int intParameter, String objectParameter)
-            {
-                return intParameter + objectParameter.length();
-            }
-        };
+        IntObjectToIntFunction\<String> function = (int intParameter, String objectParameter) -> intParameter + objectParameter.length();
         Assert.assertEquals(6, map1.injectInto(1, function));
         Assert.assertEquals(7, map2.injectInto(1, function));
         Assert.assertEquals(8, map3.injectInto(1, function));
@@ -621,13 +569,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "abc", <(literal.(type))("9")>, "abcd");
 
-        LongObjectToLongFunction\<String> function = new LongObjectToLongFunction\<String>()
-        {
-            public long longValueOf(long longParameter, String objectParameter)
-            {
-                return longParameter + objectParameter.length();
-            }
-        };
+        LongObjectToLongFunction\<String> function = (long longParameter, String objectParameter) -> longParameter + objectParameter.length();
         Assert.assertEquals(6L, map1.injectInto(1L, function));
         Assert.assertEquals(7L, map2.injectInto(1L, function));
         Assert.assertEquals(8L, map3.injectInto(1L, function));
@@ -640,13 +582,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "abc", <(literal.(type))("9")>, "abcd");
 
-        FloatObjectToFloatFunction\<String> function = new FloatObjectToFloatFunction\<String>()
-        {
-            public float floatValueOf(float floatParameter, String objectParameter)
-            {
-                return floatParameter + objectParameter.length();
-            }
-        };
+        FloatObjectToFloatFunction\<String> function = (float floatParameter, String objectParameter) -> floatParameter + objectParameter.length();
         Assert.assertEquals(6.0f, map1.injectInto(1.0f, function), 0.0);
         Assert.assertEquals(7.0f, map2.injectInto(1.0f, function), 0.0);
         Assert.assertEquals(8.0f, map3.injectInto(1.0f, function), 0.0);
@@ -659,13 +595,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "abc", <(literal.(type))("9")>, "abcd");
 
-        DoubleObjectToDoubleFunction\<String> function = new DoubleObjectToDoubleFunction\<String>()
-        {
-            public double doubleValueOf(double doubleParameter, String objectParameter)
-            {
-                return doubleParameter + objectParameter.length();
-            }
-        };
+        DoubleObjectToDoubleFunction\<String> function = (double doubleParameter, String objectParameter) -> doubleParameter + objectParameter.length();
         Assert.assertEquals(6.0, map1.injectInto(1.0, function), 0.0);
         Assert.assertEquals(7.0, map2.injectInto(1.0, function), 0.0);
         Assert.assertEquals(8.0, map3.injectInto(1.0, function), 0.0);
@@ -699,26 +629,14 @@ public abstract class Abstract<name>ObjectMapTestCase
                 FastList.newListWith("nine", "one"), map2.toSortedList());
         Assert.assertEquals(map3.toSortedList().toString(), FastList.newListWith("five", "nine"), map3.toSortedList());
 
-        Comparator\<String> comparator = new Comparator\<String>()
-        {
-            public int compare(String o1, String o2)
-            {
-                return o1.substring(1).compareTo(o2.substring(1));
-            }
-        };
+        Comparator\<String> comparator = (String o1, String o2) -> o1.substring(1).compareTo(o2.substring(1));
         Assert.assertEquals(map1.toSortedList(comparator).toString(),
                 FastList.newListWith("zero", "nine"), map1.toSortedList(comparator));
         Assert.assertEquals(map2.toSortedList(comparator).toString(),
                 FastList.newListWith("nine", "one"), map2.toSortedList(comparator));
         Assert.assertEquals(map3.toSortedList(comparator).toString(), FastList.newListWith("nine", "five"), map3.toSortedList(comparator));
 
-        Function\<String, String> substring = new Function\<String, String>()
-        {
-            public String valueOf(String object)
-            {
-                return object.substring(1);
-            }
-        };
+        Function\<String, String> substring = (String object) -> object.substring(1);
         Assert.assertEquals(map1.toSortedListBy(substring).toString(),
                 FastList.newListWith("zero", "nine"), map1.toSortedListBy(substring));
         Assert.assertEquals(map2.toSortedListBy(substring).toString(),
@@ -750,25 +668,13 @@ public abstract class Abstract<name>ObjectMapTestCase
                 TreeSortedSet.newSetWith("nine", "one"), map2.toSortedSet());
         Assert.assertEquals(TreeSortedSet.newSetWith("five", "nine"), map3.toSortedSet());
 
-        Comparator\<String> comparator = new Comparator\<String>()
-        {
-            public int compare(String o1, String o2)
-            {
-                return o1.substring(1).compareTo(o2.substring(1));
-            }
-        };
+        Comparator\<String> comparator = (String o1, String o2) -> o1.substring(1).compareTo(o2.substring(1));
         Assert.assertEquals(TreeSortedSet.newSetWith("zero", "nine"), map1.toSortedSet(comparator));
         Assert.assertEquals(map2.toSortedSet(comparator).toString(),
                 TreeSortedSet.newSetWith("nine", "one"), map2.toSortedSet(comparator));
         Assert.assertEquals(TreeSortedSet.newSetWith("nine", "five"), map3.toSortedSet(comparator));
 
-        Function\<String, String> substring = new Function\<String, String>()
-        {
-            public String valueOf(String object)
-            {
-                return object.substring(1);
-            }
-        };
+        Function\<String, String> substring = (String object) -> object.substring(1);
         Assert.assertEquals(TreeSortedSet.newSetWith("zero", "nine"), map1.toSortedSetBy(substring));
         Assert.assertEquals(TreeSortedSet.newSetWith("nine", "one"), map2.toSortedSetBy(substring));
         Assert.assertEquals(map3.toSortedSetBy(substring).toString(), TreeSortedSet.newSetWith("nine", "five"), map3.toSortedSetBy(substring));
@@ -793,13 +699,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "abc", <(literal.(type))("9")>, "abcd");
 
-        Function\<String, Integer> keyFunction = new Function\<String, Integer>()
-        {
-            public Integer valueOf(String object)
-            {
-                return object.length();
-            }
-        };
+        Function\<String, Integer> keyFunction = StringFunctions.length();
         Function\<String, String> valueFunction = Functions.getPassThru();
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "a", 4, "abcd"), map1.toMap(keyFunction, valueFunction));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(2, "ab", 4, "abcd"), map2.toMap(keyFunction, valueFunction));
@@ -813,13 +713,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "zyx", <(literal.(type))("9")>, "abcd");
 
-        Function\<String, Integer> keyFunction = new Function\<String, Integer>()
-        {
-            public Integer valueOf(String object)
-            {
-                return object.length();
-            }
-        };
+        Function\<String, Integer> keyFunction = StringFunctions.length();
         Function\<String, String> valueFunction = Functions.getPassThru();
         Assert.assertEquals(UnifiedMap.newWithKeysValues(4, "abcd", 1, "z"), map1.toSortedMap(keyFunction, valueFunction));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(2, "ab", 4, "abcd"), map2.toSortedMap(keyFunction, valueFunction));
@@ -875,24 +769,12 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<Class\<?>\> map2 = this.newWithKeysValues(<(literal.(type))("1")>, <name>ObjectHashMapTest.class, <(literal.(type))("9")>, <name>ObjectHashMap.class);
         <name>ObjectMap\<Class\<?>\> map3 = this.newWithKeysValues(<(literal.(type))("5")>, <name>ObjectHashMap.class, <(literal.(type))("9")>, <name>ObjectHashMapTest.class);
 
-        final Function\<Class\<?>, Integer> classNameLength = new Function\<Class\<?>, Integer>()
-        {
-            public Integer valueOf(Class\<?> aClass)
-            {
-                return aClass.getName().length();
-            }
-        };
+        final Function\<Class\<?>, Integer> classNameLength = (Class\<?> aClass) -> aClass.getName().length();
         Assert.assertEquals(<name>ObjectHashMapTest.class, map1.maxBy(classNameLength));
         Assert.assertEquals(<name>ObjectHashMapTest.class, map2.maxBy(classNameLength));
         Assert.assertEquals(<name>ObjectHashMapTest.class, map3.maxBy(classNameLength));
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                <name>ObjectHashMap.\<Class\<?>\>newMap().maxBy(classNameLength);
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {<name>ObjectHashMap.\<Class\<?>\>newMap().maxBy(classNameLength);});
     }
 
     @Test
@@ -921,24 +803,12 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<Class\<?>\> map2 = this.newWithKeysValues(<(literal.(type))("1")>, <name>ObjectHashMapTest.class, <(literal.(type))("9")>, <name>ObjectHashMap.class);
         <name>ObjectMap\<Class\<?>\> map3 = this.newWithKeysValues(<(literal.(type))("5")>, <name>ObjectHashMap.class, <(literal.(type))("9")>, <name>ObjectHashMapTest.class);
 
-        final Function\<Class\<?>, Integer> classNameLength = new Function\<Class\<?>, Integer>()
-        {
-            public Integer valueOf(Class\<?> object)
-            {
-                return object.getName().length();
-            }
-        };
+        final Function\<Class\<?>, Integer> classNameLength = (Class\<?> object) -> object.getName().length();
         Assert.assertEquals(<name>ObjectHashMap.class, map1.minBy(classNameLength));
         Assert.assertEquals(<name>ObjectHashMap.class, map2.minBy(classNameLength));
         Assert.assertEquals(<name>ObjectHashMap.class, map3.minBy(classNameLength));
 
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                <name>ObjectHashMap.\<Class\<?>\>newMap().minBy(classNameLength);
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {<name>ObjectHashMap.\<Class\<?>\>newMap().minBy(classNameLength);});
     }
 
     @Test
@@ -948,13 +818,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "zyx", <(literal.(type))("9")>, "abcd");
 
-        IntFunction\<String> function = new IntFunction\<String>()
-        {
-            public int intValueOf(String anObject)
-            {
-                return anObject.length();
-            }
-        };
+        IntFunction\<String> function = StringFunctions.length();
         Assert.assertEquals(5L, map1.sumOfInt(function));
         Assert.assertEquals(6L, map2.sumOfInt(function));
         Assert.assertEquals(7L, map3.sumOfInt(function));
@@ -967,13 +831,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "zyx", <(literal.(type))("9")>, "abcd");
 
-        LongFunction\<String> function = new LongFunction\<String>()
-        {
-            public long longValueOf(String anObject)
-            {
-                return anObject.length();
-            }
-        };
+        LongFunction\<String> function = (String anObject) -> anObject.length();
         Assert.assertEquals(5L, map1.sumOfLong(function));
         Assert.assertEquals(6L, map2.sumOfLong(function));
         Assert.assertEquals(7L, map3.sumOfLong(function));
@@ -986,13 +844,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "zyx", <(literal.(type))("9")>, "abcd");
 
-        DoubleFunction\<String> function = new DoubleFunction\<String>()
-        {
-            public double doubleValueOf(String anObject)
-            {
-                return anObject.length();
-            }
-        };
+        DoubleFunction\<String> function = (String anObject) -> anObject.length();
         Assert.assertEquals(5.0, map1.sumOfDouble(function), 0.0);
         Assert.assertEquals(6.0, map2.sumOfDouble(function), 0.0);
         Assert.assertEquals(7.0, map3.sumOfDouble(function), 0.0);
@@ -1005,13 +857,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("5")>, "zyx", <(literal.(type))("9")>, "abcd");
 
-        FloatFunction\<String> function = new FloatFunction\<String>()
-        {
-            public float floatValueOf(String anObject)
-            {
-                return anObject.length();
-            }
-        };
+        FloatFunction\<String> function = (String anObject) -> anObject.length();
         Assert.assertEquals(5.0, map1.sumOfFloat(function), 0.0);
         Assert.assertEquals(6.0, map2.sumOfFloat(function), 0.0);
         Assert.assertEquals(7.0, map3.sumOfFloat(function), 0.0);
@@ -1032,48 +878,25 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
         <name>ObjectMap\<String> map4 = this.newWithKeysValues(<(literal.(type))("5")>, "five", <(literal.(type))("9")>, "nine");
 
-        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine"), map1.reject(new <name>ObjectPredicate\<String>()
-        {
-            public boolean accept(<type> value, String object)
-            {
-                return (value % 2) == 0;
-            }
-        }));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine"),
+            map1.reject((<type> value, String object) -> (value % 2) == 0));
 
-        <name>ObjectPredicate\<String> keyLessThanSeven = new <name>ObjectPredicate\<String>()
-        {
-            public boolean accept(<type> value, String object)
-            {
-                return value > 7;
-            }
-        };
+        <name>ObjectPredicate\<String> keyLessThanSeven = (<type> value, String object) -> value > 7;
+
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one"), map1.reject(keyLessThanSeven));
-
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero"), map2.reject(keyLessThanSeven));
-
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one"), map3.reject(keyLessThanSeven));
-
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "five"), map4.reject(keyLessThanSeven));
 
-        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine"), map1.reject(new <name>ObjectPredicate\<String>()
-        {
-            public boolean accept(<type> value, String object)
-            {
-                return !object.endsWith("ne");
-            }
-        }));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine"),
+            map1.reject((<type> value, String object) -> !object.endsWith("ne")));
 
         RichIterable\<String> actual1 = map1.reject(StringPredicates.endsWith("ne").not());
         Assert.assertTrue(FastList.newListWith("one", "nine").equals(actual1) || FastList.newListWith("nine", "one").equals(actual1));
-
         Assert.assertEquals(FastList.newListWith("nine"), map1.reject(Predicates.equal("nine").not()));
-
         Assert.assertEquals(FastList.newListWith("zero"), map1.reject(StringPredicates.endsWith("o").not()));
-
         Assert.assertEquals(FastList.newListWith("nine"), map1.reject(Predicates.equal("nine").not(), FastList.\<String>newList()));
-
         Assert.assertEquals(FastList.newListWith("one", "nine"), map1.reject(StringPredicates.endsWith("ne").not(), FastList.\<String>newList()));
-
         Assert.assertEquals(FastList.newListWith("zero"), map1.reject(StringPredicates.endsWith("o").not(), FastList.\<String>newList()));
     }
 
@@ -1083,9 +906,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
         Assert.assertEquals(FastList.newListWith("one", "nine"), map1.rejectWith(StringPredicates2.notEndsWith(), "ne"));
-
         Assert.assertEquals(FastList.newListWith("nine"), map1.rejectWith(Predicates2.notEqual(), "nine"));
-
         Assert.assertEquals(FastList.newListWith("zero"), map1.rejectWith(StringPredicates2.notEndsWith(), "o"));
     }
 
@@ -1095,9 +916,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
         Assert.assertEquals(FastList.newListWith("one", "nine"), map1.rejectWith(StringPredicates2.notEndsWith(), "ne", FastList.\<String>newList()));
-
         Assert.assertEquals(FastList.newListWith("nine"), map1.rejectWith(Predicates2.notEqual(), "nine", FastList.\<String>newList()));
-
         Assert.assertEquals(FastList.newListWith("zero"), map1.rejectWith(StringPredicates2.notEndsWith(), "o", FastList.\<String>newList()));
     }
 
@@ -1142,13 +961,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     @Test
     public void getIfAbsent()
     {
-        Function0\<String> ifAbsent = new Function0\<String>()
-        {
-            public String value()
-            {
-                return "ifAbsent";
-            }
-        };
+        Function0\<String> ifAbsent = () -> "ifAbsent";
 
         Assert.assertEquals("zero", this.classUnderTest().getIfAbsent(<(literal.(type))("0")>, ifAbsent));
         Assert.assertEquals("thirtyOne", this.classUnderTest().getIfAbsent(<(literal.(type))("31")>, ifAbsent));
@@ -1190,36 +1003,12 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("0")>, "zero");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("2")>, "two", <(literal.(type))("5")>, "five");
         <name>ObjectMap\<String> map4 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "five");
-        final String[] concat = {"", "", "", ""};
+        String[] concat = {"", "", "", ""};
 
-        map1.forEachValue(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                concat[0] += each;
-            }
-        });
-        map2.forEachValue(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                concat[1] += each;
-            }
-        });
-        map3.forEachValue(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                concat[2] += each;
-            }
-        });
-        map4.forEachValue(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                concat[3] += each;
-            }
-        });
+        map1.forEachValue((String each) -> concat[0] += each);
+        map2.forEachValue((String each) -> concat[1] += each);
+        map3.forEachValue((String each) -> concat[2] += each);
+        map4.forEachValue((String each) -> concat[3] += each);
 
         Assert.assertTrue(concat[0], "onefive".equals(concat[0]) || "fiveone".equals(concat[0]));
         Assert.assertTrue(concat[1], "onezero".equals(concat[1]) || "zeroone".equals(concat[1]));
@@ -1234,36 +1023,12 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("0")>, "zero");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("2")>, "two", <(literal.(type))("5")>, "five");
         <name>ObjectMap\<String> map4 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "five");
-        final <wideType.(type)>[] sum = new <wideType.(type)>[4];
+        <wideType.(type)>[] sum = new <wideType.(type)>[4];
 
-        map1.forEachKey(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
-        map2.forEachKey(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[1] += each;
-            }
-        });
-        map3.forEachKey(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[2] += each;
-            }
-        });
-        map4.forEachKey(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[3] += each;
-            }
-        });
+        map1.forEachKey((<type> each) -> sum[0] += each);
+        map2.forEachKey((<type> each) -> sum[1] += each);
+        map3.forEachKey((<type> each) -> sum[2] += each);
+        map4.forEachKey((<type> each) -> sum[3] += each);
 
         Assert.assertEquals(<(wideLiteral.(type))("6")>, sum[0]<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("1")>, sum[1]<(wideDelta.(type))>);
@@ -1278,39 +1043,27 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("0")>, "zero");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("2")>, "two", <(literal.(type))("5")>, "five");
         <name>ObjectMap\<String> map4 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "five");
-        final String[] concat = {"", "", "", ""};
+        String[] concat = {"", "", "", ""};
 
-        map1.forEachKeyValue(new <name>ObjectProcedure\<String>()
+        map1.forEachKeyValue((<type> each, String parameter) ->
         {
-            public void value(<type> each, String parameter)
-            {
-                concat[0] += each;
-                concat[0] += parameter;
-            }
+            concat[0] += each;
+            concat[0] += parameter;
         });
-        map2.forEachKeyValue(new <name>ObjectProcedure\<String>()
+        map2.forEachKeyValue((<type> each, String parameter) ->
         {
-            public void value(<type> each, String parameter)
-            {
-                concat[1] += each;
-                concat[1] += parameter;
-            }
+            concat[1] += each;
+            concat[1] += parameter;
         });
-        map3.forEachKeyValue(new <name>ObjectProcedure\<String>()
+        map3.forEachKeyValue((<type> each, String parameter) ->
         {
-            public void value(<type> each, String parameter)
-            {
-                concat[2] += each;
-                concat[2] += parameter;
-            }
+            concat[2] += each;
+            concat[2] += parameter;
         });
-        map4.forEachKeyValue(new <name>ObjectProcedure\<String>()
+        map4.forEachKeyValue((<type> each, String parameter) ->
         {
-            public void value(<type> each, String parameter)
-            {
-                concat[3] += each;
-                concat[3] += parameter;
-            }
+            concat[3] += each;
+            concat[3] += parameter;
         });
 
         Assert.assertTrue(concat[0], "<(toStringLiteral.(type))("1")>one<(toStringLiteral.(type))("5")>five".equals(concat[0]) || "<(toStringLiteral.(type))("5")>five<(toStringLiteral.(type))("1")>one".equals(concat[0]));
@@ -1557,13 +1310,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     public void aggregateInPlaceBy()
     {
         Function0\<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
-        Procedure2\<AtomicInteger, Integer> sumAggregator = new Procedure2\<AtomicInteger, Integer>()
-        {
-            public void value(AtomicInteger aggregate, Integer value)
-            {
-                aggregate.addAndGet(value);
-            }
-        };
+        Procedure2\<AtomicInteger, Integer> sumAggregator = (AtomicInteger aggregate, Integer value) -> aggregate.addAndGet(value);
         <name>ObjectMap\<Integer> collection = this.newWithKeysValues(<(literal.(type))("1")>, 1, <(literal.(type))("2")>, 2, <(literal.(type))("3")>, 3);
         MapIterable\<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
         Assert.assertEquals(1, aggregation.get("1").intValue());
@@ -1575,13 +1322,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     public void aggregateBy()
     {
         Function0\<Integer> valueCreator = Functions0.value(0);
-        Function2\<Integer, Integer, Integer> sumAggregator = new Function2\<Integer, Integer, Integer>()
-        {
-            public Integer value(Integer aggregate, Integer value)
-            {
-                return aggregate + value;
-            }
-        };
+        Function2\<Integer, Integer, Integer> sumAggregator = (Integer aggregate, Integer value) -> aggregate + value;
         <name>ObjectMap\<Integer> collection = this.newWithKeysValues(<(literal.(type))("1")>, 1, <(literal.(type))("2")>, 2, <(literal.(type))("3")>, 3);
         MapIterable\<String, Integer> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
         Assert.assertEquals(1, aggregation.get("1").intValue());
@@ -1598,44 +1339,20 @@ public abstract class Abstract<name>ObjectMapTestCase
         FastListMultimap\<Character, String> expected1 = FastListMultimap.newMultimap(Tuples.pair('z', "zero"), Tuples.pair('o', "one"));
         FastListMultimap\<Character, String> expected2 = FastListMultimap.newMultimap(Tuples.pair('t', "two"), Tuples.pair('t', "three"));
 
-        Function\<String, Character> firstChar = new Function\<String, Character>()
-        {
-            public Character valueOf(String object)
-            {
-                return object.charAt(0);
-            }
-        };
+        Function\<String, Character> firstChar = (String object) -> object.charAt(0);
 
         final Multimap\<Character, String> actual1 = map1.groupBy(firstChar);
         final Multimap\<Character, String> actual2 = map2.groupBy(firstChar);
         final Multimap\<Character, String> actual3 = map2.groupBy(firstChar, FastListMultimap.\<Character, String>newMultimap());
 
         Verify.assertSize(expected1.size(), actual1);
-        expected1.forEachKeyValue(new Procedure2\<Character, String>()
-        {
-            public void value(Character argument1, String argument2)
-            {
-                Assert.assertTrue(actual1.containsKeyAndValue(argument1, argument2));
-            }
-        });
+        expected1.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual1.containsKeyAndValue(argument1, argument2)));
 
         Verify.assertSize(expected2.size(), actual2);
-        expected2.forEachKeyValue(new Procedure2\<Character, String>()
-        {
-            public void value(Character argument1, String argument2)
-            {
-                Assert.assertTrue(actual2.containsKeyAndValue(argument1, argument2));
-            }
-        });
+        expected2.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual2.containsKeyAndValue(argument1, argument2)));
 
         Verify.assertSize(expected2.size(), actual3);
-        expected2.forEachKeyValue(new Procedure2\<Character, String>()
-        {
-            public void value(Character argument1, String argument2)
-            {
-                Assert.assertTrue(actual3.containsKeyAndValue(argument1, argument2));
-            }
-        });
+        expected2.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual3.containsKeyAndValue(argument1, argument2)));
     }
 
     @Test
@@ -1643,9 +1360,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("9")>, "nine");
 
-        Function\<String, UnifiedSet\<Character>\> toChars = new Function\<String, UnifiedSet\<Character>\>()
-        {
-            public UnifiedSet\<Character> valueOf(String object)
+        Function\<String, UnifiedSet\<Character>\> toChars = (String object) ->
             {
                 UnifiedSet\<Character> list = UnifiedSet.newSet();
                 char[] chars = object.toCharArray();
@@ -1654,28 +1369,15 @@ public abstract class Abstract<name>ObjectMapTestCase
                     list.add(aChar);
                 }
                 return list;
-            }
-        };
+            };
 
         FastListMultimap\<Character, String> expected = FastListMultimap.newMultimap(Tuples.pair('z', "zero"), Tuples.pair('e', "zero"), Tuples.pair('r', "zero"), Tuples.pair('o', "zero"), Tuples.pair('n', "nine"), Tuples.pair('i', "nine"), Tuples.pair('e', "nine"));
         final Multimap\<Character, String> actual = map1.groupByEach(toChars);
         final Multimap\<Character, String> actual1 = map1.groupByEach(toChars, FastListMultimap.\<Character, String>newMultimap());
 
-        expected.forEachKeyValue(new Procedure2\<Character, String>()
-        {
-            public void value(Character argument1, String argument2)
-            {
-                Assert.assertTrue(actual.containsKeyAndValue(argument1, argument2));
-            }
-        });
+        expected.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual.containsKeyAndValue(argument1, argument2)));
 
-        expected.forEachKeyValue(new Procedure2\<Character, String>()
-        {
-            public void value(Character argument1, String argument2)
-            {
-                Assert.assertTrue(actual1.containsKeyAndValue(argument1, argument2));
-            }
-        });
+        expected.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual1.containsKeyAndValue(argument1, argument2)));
     }
 
     @Test
@@ -1813,39 +1515,27 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("0")>, "zero");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("2")>, "two", <(literal.(type))("5")>, "five");
         <name>ObjectMap\<String> map4 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "five");
-        final String[] concat = {"", "", "", ""};
+        String[] concat = {"", "", "", ""};
 
-        map1.forEachWithIndex(new ObjectIntProcedure\<String>()
+        map1.forEachWithIndex((String each, int parameter) ->
         {
-            public void value(String each, int parameter)
-            {
-                concat[0] += each;
-                concat[0] += parameter;
-            }
+            concat[0] += each;
+            concat[0] += parameter;
         });
-        map2.forEachWithIndex(new ObjectIntProcedure\<String>()
+        map2.forEachWithIndex((String each, int parameter) ->
         {
-            public void value(String each, int parameter)
-            {
-                concat[1] += each;
-                concat[1] += parameter;
-            }
+            concat[1] += each;
+            concat[1] += parameter;
         });
-        map3.forEachWithIndex(new ObjectIntProcedure\<String>()
+        map3.forEachWithIndex((String each, int parameter) ->
         {
-            public void value(String each, int parameter)
-            {
-                concat[2] += each;
-                concat[2] += parameter;
-            }
+            concat[2] += each;
+            concat[2] += parameter;
         });
-        map4.forEachWithIndex(new ObjectIntProcedure\<String>()
+        map4.forEachWithIndex((String each, int parameter) ->
         {
-            public void value(String each, int parameter)
-            {
-                concat[3] += each;
-                concat[3] += parameter;
-            }
+            concat[3] += each;
+            concat[3] += parameter;
         });
 
         Assert.assertTrue(concat[0], "one0five1".equals(concat[0]) || "five0one1".equals(concat[0]));
@@ -1861,40 +1551,28 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("0")>, "zero");
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("2")>, "two", <(literal.(type))("5")>, "five");
         <name>ObjectMap\<String> map4 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "five");
-        final String[] concat = {"", "", "", ""};
+        String[] concat = {"", "", "", ""};
 
-        map1.forEachWith(new Procedure2\<String, String>()
-        {
-            public void value(String argument1, String argument2)
+        map1.forEachWith((String argument1, String argument2) ->
             {
                 concat[0] += argument1;
                 concat[0] += argument2;
-            }
-        }, "-");
-        map2.forEachWith(new Procedure2\<String, String>()
-        {
-            public void value(String argument1, String argument2)
+            }, "-");
+        map2.forEachWith((String argument1, String argument2) ->
             {
                 concat[1] += argument1;
                 concat[1] += argument2;
-            }
-        }, "-");
-        map3.forEachWith(new Procedure2\<String, String>()
-        {
-            public void value(String argument1, String argument2)
+            }, "-");
+        map3.forEachWith((String argument1, String argument2) ->
             {
                 concat[2] += argument1;
                 concat[2] += argument2;
-            }
-        }, "-");
-        map4.forEachWith(new Procedure2\<String, String>()
-        {
-            public void value(String argument1, String argument2)
+            }, "-");
+        map4.forEachWith((String argument1, String argument2) ->
             {
                 concat[3] += argument1;
                 concat[3] += argument2;
-            }
-        }, "-");
+            }, "-");
 
         Assert.assertTrue(concat[0], "one-five-".equals(concat[0]) || "five-one-".equals(concat[0]));
         Assert.assertTrue(concat[1], "one-zero-".equals(concat[1]) || "zero-one-".equals(concat[1]));
@@ -1918,13 +1596,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         Assert.assertFalse(iterator.hasNext());
 
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
     }
 
     @Test

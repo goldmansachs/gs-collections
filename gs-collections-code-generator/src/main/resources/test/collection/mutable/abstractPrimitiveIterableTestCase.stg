@@ -242,14 +242,8 @@ public abstract class Abstract<name>IterableTestCase
     @Test
     public void forEach()
     {
-        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
-        this.classUnderTest().forEach(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
+        <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.classUnderTest().forEach(each -> sum[0] += each);
 
         int size = this.classUnderTest().size();
         long sum1 = (long) ((size * (size + 1)) / 2);
@@ -283,13 +277,7 @@ public abstract class Abstract<name>IterableTestCase
         Assert.assertFalse(this.newWith(<["1", "-1", "31", "32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.equal(<(literal.(type))("0")>)));
         Assert.assertTrue(this.newWith(<["32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         <name>Iterable iterable = this.newWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">);
-        Assert.assertTrue(iterable.anySatisfy(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return <(lessThan.(type))("value", {<(literal.(type))("3")>})>;
-            }
-        }));
+        Assert.assertTrue(iterable.anySatisfy(value -> <(lessThan.(type))("value", {<(literal.(type))("3")>})>));
         Assert.assertFalse(iterable.anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
 
         <name>Iterable iterable1 = this.classUnderTest();
@@ -309,13 +297,7 @@ public abstract class Abstract<name>IterableTestCase
         Assert.assertFalse(this.newWith(<["32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.equal(<(literal.(type))("33")>)));
         Assert.assertFalse(this.newWith(<["-32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.equal(<(literal.(type))("33")>)));
         <name>Iterable iterable = this.newWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">);
-        Assert.assertFalse(iterable.allSatisfy(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return <(lessThan.(type))({<(literal.(type))("3")>}, "value")>;
-            }
-        }));
+        Assert.assertFalse(iterable.allSatisfy(value -> <(lessThan.(type))({<(literal.(type))("3")>}, "value")>));
         Assert.assertTrue(iterable.allSatisfy(<name>Predicates.lessThan(<(literal.(type))("3")>)));
 
         <name>Iterable iterable1 = this.classUnderTest();
@@ -334,13 +316,7 @@ public abstract class Abstract<name>IterableTestCase
         Assert.assertTrue(this.newWith(<["1", "2", "31", "32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.lessThan(<(literal.(type))("0")>)));
         Assert.assertFalse(this.newWith(<["32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         <name>Iterable iterable = this.newWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">);
-        Assert.assertFalse(iterable.noneSatisfy(new <name>Predicate()
-        {
-            public boolean accept(<type> value)
-            {
-                return <(lessThan.(type))({<(literal.(type))("1")>}, "value")>;
-            }
-        }));
+        Assert.assertFalse(iterable.noneSatisfy(value -> <(lessThan.(type))({<(literal.(type))("1")>}, "value")>));
         Assert.assertTrue(iterable.noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
 
         <name>Iterable iterable1 = this.classUnderTest();
@@ -352,13 +328,7 @@ public abstract class Abstract<name>IterableTestCase
     @Test
     public void collect()
     {
-        <name>ToObjectFunction\<<wrapperName>\> function = new <name>ToObjectFunction\<<wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<type> parameter)
-            {
-                return <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>;
-            }
-        };
+        <name>ToObjectFunction\<<wrapperName>\> function = parameter -> <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>;
         Assert.assertEquals(this.newObjectCollectionWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).collect(function));
         <name>Iterable iterable = this.newWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
         Assert.assertEquals(this.newObjectCollectionWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">), iterable.collect(function));
@@ -797,13 +767,7 @@ public abstract class Abstract<name>IterableTestCase
     public void injectInto()
     {
         <name>Iterable iterable = this.newWith(<["0", "2", "31"]:(literal.(type))(); separator=", ">);
-        <wrapperName> sum = iterable.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<wrapperName> result, <type> value)
-            {
-                return <wrapperName>.valueOf((<type>)(result + value));
-            }
-        });
+        <wrapperName> sum = iterable.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, <type> value) -> <wrapperName>.valueOf((<type>)(result + value)));
         Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("33")>), sum);
     }
 }
