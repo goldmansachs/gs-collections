@@ -17,22 +17,13 @@
 package com.gs.collections.impl;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
-import com.gs.collections.impl.block.function.primitive.IntegerFunctionImpl;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -51,22 +42,6 @@ public class AnagramTest
 
     private static final int SIZE_THRESHOLD = 10;
 
-    private static final Function<RichIterable<String>, String> ITERABLE_TO_FORMATTED_STRING =
-            new ListToStringFunction<String>();
-
-    private static final Function<RichIterable<String>, Integer> ITERABLE_SIZE_FUNCTION = new ListSizeFunction<String>();
-
-    private static final Comparator<RichIterable<String>> ASCENDING_ITERABLE_SIZE = Comparators.byFunction(ITERABLE_SIZE_FUNCTION);
-    private static final Comparator<RichIterable<String>> DESCENDING_ITERABLE_SIZE = Collections.reverseOrder(ASCENDING_ITERABLE_SIZE);
-
-    private static final Predicate<RichIterable<String>> ITERABLE_SIZE_AT_THRESHOLD =
-            Predicates.attributeGreaterThanOrEqualTo(ITERABLE_SIZE_FUNCTION, SIZE_THRESHOLD);
-
-    private static final Procedure<RichIterable<String>> OUTPUT_FORMATTED_ITERABLE =
-            Functions.bind((Procedure<String>) LOGGER::info, ITERABLE_TO_FORMATTED_STRING);
-
-    private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION = new AlphagramFunction();
-
     private MutableList<String> getWords()
     {
         return FastList.newListWith(
@@ -77,24 +52,24 @@ public class AnagramTest
     @Test
     public void anagramsWithMultimapInlined()
     {
-        MutableList<RichIterable<String>> results = this.getWords().groupBy(ALPHAGRAM_FUNCTION)
+        MutableList<RichIterable<String>> results = this.getWords().groupBy(Alphagram::new)
                 .multiValuesView()
-                .select(ITERABLE_SIZE_AT_THRESHOLD)
-                .toSortedList(DESCENDING_ITERABLE_SIZE);
-        results.asLazy()
-                .collect(ITERABLE_TO_FORMATTED_STRING)
+                .select(iterable -> iterable.size() >= SIZE_THRESHOLD)
+                .toSortedListBy(RichIterable::size);
+        results.asReversed()
+                .collect(iterable -> iterable.size() + ": " + iterable)
                 .forEach((Procedure<String>) LOGGER::info);
-        Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
+        Verify.assertIterableSize(SIZE_THRESHOLD, results.getFirst());
     }
 
     @Test
     public void anagramsWithMultimapGSCollections1()
     {
-        MutableList<RichIterable<String>> results = this.getWords().groupBy(ALPHAGRAM_FUNCTION)
+        MutableList<RichIterable<String>> results = this.getWords().groupBy(Alphagram::new)
                 .multiValuesView()
-                .select(ITERABLE_SIZE_AT_THRESHOLD)
-                .toSortedList(DESCENDING_ITERABLE_SIZE);
-        results.collect(ITERABLE_TO_FORMATTED_STRING)
+                .select(iterable -> iterable.size() >= SIZE_THRESHOLD)
+                .toSortedListBy(iterable -> -iterable.size());
+        results.collect(iterable -> iterable.size() + ": " + iterable)
                 .forEach((Procedure<String>) LOGGER::info);
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
@@ -108,10 +83,10 @@ public class AnagramTest
     @Test
     public void anagramsWithMultimapGSCollections3()
     {
-        MutableList<RichIterable<String>> results = this.getWords().groupBy(ALPHAGRAM_FUNCTION)
+        MutableList<RichIterable<String>> results = this.getWords().groupBy(Alphagram::new)
                 .multiValuesView()
-                .toSortedList(DESCENDING_ITERABLE_SIZE);
-        results.collectIf(ITERABLE_SIZE_AT_THRESHOLD, ITERABLE_TO_FORMATTED_STRING)
+                .toSortedListBy(iterable -> -iterable.size());
+        results.collectIf(iterable -> iterable.size() >= SIZE_THRESHOLD, iterable -> iterable.size() + ": " + iterable)
                 .forEach((Procedure<String>) LOGGER::info);
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
@@ -119,32 +94,39 @@ public class AnagramTest
     @Test
     public void anagramsWithMultimapGSCollections4()
     {
-        MutableList<RichIterable<String>> results = this.getWords().groupBy(ALPHAGRAM_FUNCTION)
+        MutableList<RichIterable<String>> results = this.getWords().groupBy(Alphagram::new)
                 .multiValuesView()
-                .toSortedList(DESCENDING_ITERABLE_SIZE);
-        results.forEach(Procedures.ifTrue(ITERABLE_SIZE_AT_THRESHOLD, OUTPUT_FORMATTED_ITERABLE));
+                .toSortedListBy(iterable -> -iterable.size());
+        results.forEach(
+                Procedures.ifTrue(
+                        iterable -> iterable.size() >= SIZE_THRESHOLD,
+                        Functions.bind((Procedure<String>) LOGGER::info, iterable -> iterable.size() + ": " + iterable)));
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
 
     @Test
     public void anagramsWithMultimapLazyIterable1()
     {
-        MutableList<RichIterable<String>> results = this.getWords().groupBy(ALPHAGRAM_FUNCTION)
+        MutableList<RichIterable<String>> results = this.getWords().groupBy(Alphagram::new)
                 .multiValuesView()
-                .toSortedList(DESCENDING_ITERABLE_SIZE);
-        results.asLazy()
-                .collectIf(ITERABLE_SIZE_AT_THRESHOLD, ITERABLE_TO_FORMATTED_STRING)
+                .toSortedListBy(RichIterable::size);
+        results.asReversed()
+                .collectIf(iterable -> iterable.size() >= SIZE_THRESHOLD, iterable -> iterable.size() + ": " + iterable)
                 .forEach((Procedure<String>) LOGGER::info);
-        Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
+        Verify.assertIterableSize(SIZE_THRESHOLD, results.getFirst());
     }
 
     @Test
     public void anagramsWithMultimapForEachMultiValue()
     {
         MutableList<RichIterable<String>> results = Lists.mutable.of();
-        this.getWords().groupBy(ALPHAGRAM_FUNCTION)
-                .multiValuesView().forEach(Procedures.ifTrue(ITERABLE_SIZE_AT_THRESHOLD, CollectionAddProcedure.on(results)));
-        results.sortThis(DESCENDING_ITERABLE_SIZE).forEach(OUTPUT_FORMATTED_ITERABLE);
+        this.getWords().groupBy(Alphagram::new)
+                .multiValuesView().forEach(Procedures.ifTrue(iterable -> iterable.size() >= SIZE_THRESHOLD, results::add));
+        results.sortThisBy(iterable -> -iterable.size())
+                .forEach(
+                        Functions.bind(
+                                (Procedure<String>) LOGGER::info,
+                                iterable -> iterable.size() + ": " + iterable));
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
 
@@ -153,12 +135,14 @@ public class AnagramTest
     {
         MutableMap<Alphagram, MutableList<String>> map = UnifiedMap.newMap();
         this.getWords().forEach((Procedure<String>) word -> {
-            map.getIfAbsentPut(new Alphagram(word), Functions0.<String>newFastList()).add(word);
+            map.getIfAbsentPut(new Alphagram(word), FastList::new).add(word);
         });
         MutableList<MutableList<String>> results =
-                map.select(ITERABLE_SIZE_AT_THRESHOLD, Lists.mutable.<MutableList<String>>of())
-                        .sortThis(DESCENDING_ITERABLE_SIZE);
-        results.forEach(OUTPUT_FORMATTED_ITERABLE);
+                map.select(iterable -> iterable.size() >= SIZE_THRESHOLD, Lists.mutable.<MutableList<String>>of())
+                        .sortThisBy(iterable -> -iterable.size());
+        results.forEach(
+                Functions.bind((Procedure<String>) LOGGER::info,
+                        iterable -> iterable.size() + ": " + iterable));
         Assert.assertTrue(this.listContainsTestGroupAtElementsOneOrTwo(results));
         Verify.assertSize(SIZE_THRESHOLD, results.getLast());
     }
@@ -166,45 +150,6 @@ public class AnagramTest
     private MutableList<String> getTestAnagramGroup()
     {
         return FastList.newListWith("least", "setal", "slate", "stale", "steal", "stela", "taels", "tales", "teals", "tesla");
-    }
-
-    private static class ListToStringFunction<T> implements Function<RichIterable<T>, String>
-    {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public String valueOf(RichIterable<T> list)
-        {
-            return list.size() + ": " + list;
-        }
-    }
-
-    private static class ListSizeFunction<T> extends IntegerFunctionImpl<RichIterable<T>>
-    {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public int intValueOf(RichIterable<T> list)
-        {
-            return list.size();
-        }
-    }
-
-    private static class AlphagramFunction implements Function<String, Alphagram>
-    {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Alphagram valueOf(String string)
-        {
-            return new Alphagram(string);
-        }
-
-        @Override
-        public String toString()
-        {
-            return "alphagram";
-        }
     }
 
     private static final class Alphagram
