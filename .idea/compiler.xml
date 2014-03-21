@@ -33,7 +33,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="acceptance-tests" target="1.7" />
+      <module name="acceptance-tests" target="1.8" />
       <module name="collections-parent" target="1.5" />
       <module name="gs-collections" target="1.5" />
       <module name="gs-collections-api" target="1.5" />
@@ -42,10 +42,10 @@
       <module name="gs-collections-code-generator-maven-plugin" target="1.5" />
       <module name="gs-collections-forkjoin" target="1.7" />
       <module name="gs-collections-testutils" target="1.5" />
-      <module name="performance-tests" target="1.7" />
+      <module name="performance-tests" target="1.8" />
       <module name="scala-unit-tests" target="1.5" />
       <module name="serialization-tests" target="1.5" />
-      <module name="unit-tests" target="1.5" />
+      <module name="unit-tests" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
