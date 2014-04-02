@@ -16,8 +16,7 @@
 
 package com.gs.collections.impl.lazy;
 
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Lists;
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,11 +41,11 @@ public class ZipWithIndexIterableTest
     @Test
     public void forEach()
     {
-        this.iterableUnderTest.forEach((Procedure<Pair<Integer, Integer>>) argument1 -> {
+        this.iterableUnderTest.forEach(Procedures.cast(argument1 -> {
             this.buffer.append("(");
             this.buffer.append(argument1.toString());
             this.buffer.append(")");
-        });
+        }));
         this.assertBufferContains("(1:0)(2:1)(3:2)(4:3)");
     }
 

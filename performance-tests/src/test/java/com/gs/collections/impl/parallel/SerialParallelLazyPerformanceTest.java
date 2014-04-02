@@ -32,12 +32,12 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.ParallelTests;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.primitive.IntInterval;
@@ -105,7 +105,7 @@ public class SerialParallelLazyPerformanceTest
     @Category(ParallelTests.class)
     public void anySatisfyShortCircuitInBeginning()
     {
-        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The Beginning", (Procedure<Function0<FastList<Integer>>>) each -> this.anySatisfy(each.value(), PREDICATES.get(2), true), false);
+        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The Beginning", each -> this.anySatisfy(each.value(), PREDICATES.get(2), true), false);
     }
 
     @Test
@@ -197,7 +197,7 @@ public class SerialParallelLazyPerformanceTest
         this.printMachineAndTestConfiguration(algorithmName);
         for (int i = 0; i < 4; i++)
         {
-            this.getSizes().forEach((Procedure<Integer>) count -> this.getIntegerListGenerators(count, shuffle).forEach(algorithm));
+            this.getSizes().forEach(Procedures.cast(count -> this.getIntegerListGenerators(count, shuffle).forEach(algorithm)));
         }
     }
 
@@ -223,14 +223,14 @@ public class SerialParallelLazyPerformanceTest
         this.printMachineAndTestConfiguration(algorithmName);
         for (int i = 0; i < 4; i++)
         {
-            this.getSizes().forEach((Procedure<Integer>) count -> this.getRandomWordsGenerators(count).forEach(algorithm));
+            this.getSizes().forEach(Procedures.cast(count -> this.getRandomWordsGenerators(count).forEach(algorithm)));
         }
     }
 
     private void shuffleAndRun(MutableList<Runnable> runnables)
     {
         Collections.shuffle(runnables);
-        runnables.forEach((Procedure<Runnable>) Runnable::run);
+        runnables.forEach(Procedures.cast(Runnable::run));
     }
 
     private void toList(FastList<Integer> collection)

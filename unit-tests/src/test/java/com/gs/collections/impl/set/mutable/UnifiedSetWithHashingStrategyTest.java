@@ -560,7 +560,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
 
         Assert.assertEquals(UnifiedSetWithHashingStrategy.newSet(INTEGER_HASHING_STRATEGY), unifiedSet);
 
-        COLLISIONS.forEach((Procedure<Integer>) each -> {
+        COLLISIONS.forEach(Procedures.cast(each -> {
             Pool<Integer> unifiedSet2 = UnifiedSetWithHashingStrategy.newSet(
                     INTEGER_HASHING_STRATEGY, 8).withAll(COLLISIONS);
 
@@ -569,7 +569,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
             Assert.assertNull(unifiedSet2.removeFromPool(each));
             Assert.assertNull(unifiedSet2.removeFromPool(null));
             Assert.assertNull(unifiedSet2.removeFromPool(COLLISION_10));
-        });
+        }));
 
         // search a chain for a non-existent element
         Pool<Integer> chain = UnifiedSetWithHashingStrategy.newSetWith(

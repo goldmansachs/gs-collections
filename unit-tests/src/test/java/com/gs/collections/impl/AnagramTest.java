@@ -19,7 +19,6 @@ package com.gs.collections.impl;
 import java.util.Arrays;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.block.factory.Functions;
@@ -58,7 +57,7 @@ public class AnagramTest
                 .toSortedListBy(RichIterable::size);
         results.asReversed()
                 .collect(iterable -> iterable.size() + ": " + iterable)
-                .forEach((Procedure<String>) LOGGER::info);
+                .forEach(Procedures.cast(LOGGER::info));
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getFirst());
     }
 
@@ -70,7 +69,7 @@ public class AnagramTest
                 .select(iterable -> iterable.size() >= SIZE_THRESHOLD)
                 .toSortedListBy(iterable -> -iterable.size());
         results.collect(iterable -> iterable.size() + ": " + iterable)
-                .forEach((Procedure<String>) LOGGER::info);
+                .forEach(Procedures.cast(LOGGER::info));
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
 
@@ -87,7 +86,7 @@ public class AnagramTest
                 .multiValuesView()
                 .toSortedListBy(iterable -> -iterable.size());
         results.collectIf(iterable -> iterable.size() >= SIZE_THRESHOLD, iterable -> iterable.size() + ": " + iterable)
-                .forEach((Procedure<String>) LOGGER::info);
+                .forEach(Procedures.cast(LOGGER::info));
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
 
@@ -100,7 +99,7 @@ public class AnagramTest
         results.forEach(
                 Procedures.ifTrue(
                         iterable -> iterable.size() >= SIZE_THRESHOLD,
-                        Functions.bind((Procedure<String>) LOGGER::info, iterable -> iterable.size() + ": " + iterable)));
+                        Functions.bind(Procedures.cast(LOGGER::info), iterable -> iterable.size() + ": " + iterable)));
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
 
@@ -112,7 +111,7 @@ public class AnagramTest
                 .toSortedListBy(RichIterable::size);
         results.asReversed()
                 .collectIf(iterable -> iterable.size() >= SIZE_THRESHOLD, iterable -> iterable.size() + ": " + iterable)
-                .forEach((Procedure<String>) LOGGER::info);
+                .forEach(Procedures.cast(LOGGER::info));
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getFirst());
     }
 
@@ -123,10 +122,7 @@ public class AnagramTest
         this.getWords().groupBy(Alphagram::new)
                 .multiValuesView().forEach(Procedures.ifTrue(iterable -> iterable.size() >= SIZE_THRESHOLD, results::add));
         results.sortThisBy(iterable -> -iterable.size())
-                .forEach(
-                        Functions.bind(
-                                (Procedure<String>) LOGGER::info,
-                                iterable -> iterable.size() + ": " + iterable));
+                .forEach(Functions.bind(Procedures.cast(LOGGER::info), iterable -> iterable.size() + ": " + iterable));
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
 
@@ -134,15 +130,13 @@ public class AnagramTest
     public void anagramsUsingMapGetIfAbsentPutInsteadOfGroupBy()
     {
         MutableMap<Alphagram, MutableList<String>> map = UnifiedMap.newMap();
-        this.getWords().forEach((Procedure<String>) word -> {
+        this.getWords().forEach(Procedures.cast(word -> {
             map.getIfAbsentPut(new Alphagram(word), FastList::new).add(word);
-        });
+        }));
         MutableList<MutableList<String>> results =
                 map.select(iterable -> iterable.size() >= SIZE_THRESHOLD, Lists.mutable.<MutableList<String>>of())
                         .sortThisBy(iterable -> -iterable.size());
-        results.forEach(
-                Functions.bind((Procedure<String>) LOGGER::info,
-                        iterable -> iterable.size() + ": " + iterable));
+        results.forEach(Functions.bind(Procedures.cast(LOGGER::info), iterable -> iterable.size() + ": " + iterable));
         Assert.assertTrue(this.listContainsTestGroupAtElementsOneOrTwo(results));
         Verify.assertSize(SIZE_THRESHOLD, results.getLast());
     }

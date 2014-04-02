@@ -22,6 +22,7 @@ import java.util.Set;
 
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
@@ -410,9 +411,9 @@ public class UnifiedMapTest extends UnifiedMapTestCase
 
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
         UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
-        COLLISIONS.subList(0, 5).forEach((Procedure<Integer>) each -> {
+        COLLISIONS.subList(0, 5).forEach(Procedures.cast(each -> {
             map.getIfAbsentPut(each, new PassThruFunction0<Integer>(each));
-        });
+        }));
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(5), map);
 
@@ -437,12 +438,12 @@ public class UnifiedMapTest extends UnifiedMapTestCase
 
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
         UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
-        COLLISIONS.subList(0, 5).forEach((Procedure<Integer>) each -> {
+        COLLISIONS.subList(0, 5).forEach(Procedures.cast(each -> {
             Verify.assertThrows(RuntimeException.class, () -> {
                 map.getIfAbsentPut(each, () -> { throw new RuntimeException(); });
             });
             map.put(each, each);
-        });
+        }));
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(5), map);
     }
@@ -455,7 +456,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
 
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
         UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
-        COLLISIONS.subList(0, 5).forEach((Procedure<Integer>) each -> Assert.assertNull(map.put(each, each)));
+        COLLISIONS.subList(0, 5).forEach(Procedures.cast(each -> Assert.assertNull(map.put(each, each))));
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(5), map);
     }

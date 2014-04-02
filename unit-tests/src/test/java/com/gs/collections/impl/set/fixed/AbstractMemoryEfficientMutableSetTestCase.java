@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -41,6 +40,7 @@ import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.factory.Bags;
@@ -250,7 +250,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableSet<Integer> set = this.classUnderTest().collect(StringFunctions.toInteger());
 
         MutableMultimap<Integer, Integer> expected = UnifiedSetMultimap.newMultimap();
-        set.forEach((Procedure<Integer>) value -> { expected.putAll(-value, Interval.fromTo(value, set.size())); });
+        set.forEach(Procedures.cast(value -> { expected.putAll(-value, Interval.fromTo(value, set.size())); }));
 
         Multimap<Integer, Integer> actual =
                 set.groupByEach(new NegativeIntervalFunction());
@@ -555,11 +555,11 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableSet<String> set = this.classUnderTest();
         Assert.assertSame(set, set.without("11"));
         MutableList<String> list = set.toList();
-        list.forEach((Procedure<String>) each -> {
+        list.forEach(Procedures.cast(each -> {
             MutableSet<String> setWithout = set.without(each);
             Assert.assertFalse(setWithout.contains(each));
             assertSetType(set, setWithout);
-        });
+        }));
     }
 
     @Test

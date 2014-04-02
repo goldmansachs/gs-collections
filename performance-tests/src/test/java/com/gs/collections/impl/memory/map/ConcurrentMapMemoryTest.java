@@ -20,9 +20,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.MemoryTests;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import org.junit.Test;
@@ -67,7 +67,7 @@ public class ConcurrentMapMemoryTest
 
         protected <R extends Map<Integer, String>> R fill(R map)
         {
-            this.data.forEach((Procedure<Integer>) each -> { map.put(each, "dummy"); });
+            this.data.forEach(Procedures.cast(each -> { map.put(each, "dummy"); }));
             return map;
         }
     }

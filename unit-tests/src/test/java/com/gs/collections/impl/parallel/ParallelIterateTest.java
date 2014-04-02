@@ -48,6 +48,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
@@ -343,7 +344,7 @@ public class ParallelIterateTest
     @Test
     public void select()
     {
-        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicSelect);
+        this.iterables.forEach(Procedures.cast(this::basicSelect));
     }
 
     private void basicSelect(RichIterable<Integer> iterable)
@@ -373,7 +374,7 @@ public class ParallelIterateTest
     @Test
     public void count()
     {
-        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicCount);
+        this.iterables.forEach(Procedures.cast(this::basicCount));
     }
 
     private void basicCount(RichIterable<Integer> iterable)
@@ -387,7 +388,7 @@ public class ParallelIterateTest
     @Test
     public void reject()
     {
-        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicReject);
+        this.iterables.forEach(Procedures.cast(this::basicReject));
     }
 
     private void basicReject(RichIterable<Integer> iterable)
@@ -404,7 +405,7 @@ public class ParallelIterateTest
     @Test
     public void collect()
     {
-        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicCollect);
+        this.iterables.forEach(Procedures.cast(this::basicCollect));
     }
 
     private void basicCollect(RichIterable<Integer> iterable)
@@ -423,7 +424,7 @@ public class ParallelIterateTest
     @Test
     public void collectIf()
     {
-        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicCollectIf);
+        this.iterables.forEach(Procedures.cast(this::basicCollectIf));
     }
 
     private void basicCollectIf(RichIterable<Integer> collection)
@@ -566,7 +567,7 @@ public class ParallelIterateTest
     @Test
     public void flatCollect()
     {
-        this.iterables.forEach((Procedure<RichIterable<Integer>>) this::basicFlatCollect);
+        this.iterables.forEach(Procedures.cast(this::basicFlatCollect));
     }
 
     private void basicFlatCollect(RichIterable<Integer> iterable)

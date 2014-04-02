@@ -16,7 +16,7 @@
 
 package com.gs.collections.impl;
 
-import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -36,7 +36,7 @@ public class CounterTest
         Assert.assertEquals(2, counter.getCount());
         counter.add(16);
         Assert.assertEquals(18, counter.getCount());
-        Interval.oneTo(1000).forEach((Procedure<Integer>) each -> counter.increment());
+        Interval.oneTo(1000).forEach(Procedures.cast(each -> counter.increment()));
         Assert.assertEquals(1018, counter.getCount());
         Assert.assertEquals("1018", counter.toString());
 

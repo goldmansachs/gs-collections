@@ -20,9 +20,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.MemoryTests;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -71,7 +71,7 @@ public class SetMemoryTest
 
         protected <R extends Set<Integer>> R fill(R set)
         {
-            this.data.forEach((Procedure<Integer>) set::add);
+            this.data.forEach(Procedures.cast(set::add));
             return set;
         }
     }
@@ -137,7 +137,7 @@ public class SetMemoryTest
         public scala.collection.mutable.HashSet<Integer> value()
         {
             scala.collection.mutable.HashSet<Integer> set = new scala.collection.mutable.HashSet<Integer>();
-            this.data.forEach((Procedure<Integer>) each -> { set.add(each); });
+            this.data.forEach(Procedures.cast(set::add));
             return set;
         }
     }

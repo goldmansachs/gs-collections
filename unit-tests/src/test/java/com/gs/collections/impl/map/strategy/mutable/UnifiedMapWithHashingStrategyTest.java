@@ -29,6 +29,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.HashingStrategies;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -714,9 +715,9 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
         UnifiedMapWithHashingStrategy<Integer, Integer> map = UnifiedMapWithHashingStrategy.newMap(
                 INTEGER_HASHING_STRATEGY, 2, 0.75f);
-        MORE_COLLISIONS.forEach((Procedure<Integer>) each -> {
+        MORE_COLLISIONS.forEach(Procedures.cast(each -> {
             map.getIfAbsentPut(each, new PassThruFunction0<Integer>(each));
-        });
+        }));
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(9), map);
 
@@ -743,7 +744,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
         UnifiedMapWithHashingStrategy<Integer, Integer> map = UnifiedMapWithHashingStrategy.newMap(
                 INTEGER_HASHING_STRATEGY, 2, 0.75f);
-        MORE_COLLISIONS.forEach((Procedure<Integer>) each -> { map.getIfAbsentPut(each, each); });
+        MORE_COLLISIONS.forEach(Procedures.cast(each -> { map.getIfAbsentPut(each, each); }));
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(9), map);
 
@@ -763,9 +764,9 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
         UnifiedMapWithHashingStrategy<Integer, Integer> map = UnifiedMapWithHashingStrategy.newMap(
                 INTEGER_HASHING_STRATEGY, 2, 0.75f);
-        MORE_COLLISIONS.forEach((Procedure<Integer>) each -> {
+        MORE_COLLISIONS.forEach(Procedures.cast(each -> {
             map.getIfAbsentPutWith(each, Functions.getIntegerPassThru(), each);
-        });
+        }));
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(9), map);
 

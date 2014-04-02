@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,14 @@ public final class Procedures
     private Procedures()
     {
         throw new AssertionError("Suppress default constructor for noninstantiability");
+    }
+
+    /**
+     * Allows a Java 8 lambda and method to be used in a forEach method without requiring a cast.
+     */
+    public static <T> Procedure<T> cast(Procedure<T> procedure)
+    {
+        return procedure;
     }
 
     public static <T> Procedure<T> println(PrintStream stream)

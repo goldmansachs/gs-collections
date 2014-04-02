@@ -22,7 +22,6 @@ import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
@@ -30,6 +29,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Bags;
@@ -504,7 +504,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     {
         super.forEach();
         Object[] results = new Object[1];
-        this.newBag().forEach((Procedure<String>) each -> { results[0] = each; });
+        this.newBag().forEach(Procedures.cast(each -> { results[0] = each; }));
         Assert.assertEquals(VAL, results[0]);
     }
 

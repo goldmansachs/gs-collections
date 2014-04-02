@@ -16,8 +16,7 @@
 
 package com.gs.collections.impl.lazy;
 
-import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
 import org.junit.Before;
@@ -37,7 +36,7 @@ public class ChunkIterableTest
     @Test
     public void forEach()
     {
-        this.undertest.forEach((Procedure<RichIterable<Integer>>) this.buffer::append);
+        this.undertest.forEach(Procedures.cast(this.buffer::append));
         Assert.assertEquals("[1, 2][3, 4][5]", this.buffer.toString());
     }
 

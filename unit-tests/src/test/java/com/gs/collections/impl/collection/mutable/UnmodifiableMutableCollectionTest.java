@@ -23,7 +23,6 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableByteCollection;
@@ -44,6 +43,7 @@ import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.StringPredicates;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Lists;
@@ -323,7 +323,7 @@ public class UnmodifiableMutableCollectionTest
     public void forEach()
     {
         Counter counter = new Counter();
-        this.unmodifiableCollection.forEach((Procedure<String>) band -> counter.increment());
+        this.unmodifiableCollection.forEach(Procedures.cast(band -> counter.increment()));
         Assert.assertEquals(4, counter.getCount());
     }
 

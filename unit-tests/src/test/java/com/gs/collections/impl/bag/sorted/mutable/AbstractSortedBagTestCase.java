@@ -28,7 +28,6 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
@@ -46,6 +45,7 @@ import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.block.function.AddFunction;
@@ -713,7 +713,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 
         MutableSortedBag<Integer> bag = this.newWith(Collections.reverseOrder(), 1, 1, 2);
         MutableList<Integer> actual = FastList.newList();
-        bag.forEach((Procedure<Integer>) actual::add);
+        bag.forEach(Procedures.cast(actual::add));
         Assert.assertEquals(FastList.newListWith(2, 1, 1), actual);
     }
 

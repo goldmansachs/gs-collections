@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.CollidingInt;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.SerializeTestHelper;
@@ -224,7 +224,7 @@ public class UnifiedSetTest
             Assert.assertTrue(set.add(new CollidingInt(i, shift)));
         }
         MutableList<CollidingInt> keys = FastList.newList(size);
-        set.forEach((Procedure<CollidingInt>) keys::add);
+        set.forEach(Procedures.cast(keys::add));
         Verify.assertSize(size, keys);
         Collections.sort(keys);
 

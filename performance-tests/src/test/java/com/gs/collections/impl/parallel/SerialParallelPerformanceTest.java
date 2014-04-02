@@ -34,6 +34,7 @@ import com.gs.collections.impl.ParallelTests;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.forkjoin.FJIterate;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.CompositeFastList;
@@ -230,7 +231,7 @@ public class SerialParallelPerformanceTest
         this.printMachineAndTestConfiguration(algorithmName);
         for (int i = 0; i < 4; i++)
         {
-            this.getSizes().forEach((Procedure<Integer>) count -> this.getIntegerListGenerators(count).forEach(algorithm));
+            this.getSizes().forEach(Procedures.cast(count -> this.getIntegerListGenerators(count).forEach(algorithm)));
         }
     }
 
@@ -239,7 +240,7 @@ public class SerialParallelPerformanceTest
         this.printMachineAndTestConfiguration(algorithmName);
         for (int i = 0; i < 4; i++)
         {
-            this.getSizes().forEach((Procedure<Integer>) count -> this.getRandomWordsGenerators(count).forEach(algorithm));
+            this.getSizes().forEach(Procedures.cast(count -> this.getRandomWordsGenerators(count).forEach(algorithm)));
         }
     }
 
@@ -300,7 +301,7 @@ public class SerialParallelPerformanceTest
     private void shuffleAndRun(MutableList<Runnable> runnables)
     {
         Collections.shuffle(runnables);
-        runnables.forEach((Procedure<Runnable>) Runnable::run);
+        runnables.forEach(Procedures.cast(Runnable::run));
     }
 
     private void reject(Iterable<Integer> collection)

@@ -18,9 +18,9 @@ package com.gs.collections.impl.memory.multimap;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.MemoryTests;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -78,12 +78,12 @@ public class ListMultimapMemoryTest
         public ArrayListMultimap<Integer, String> value()
         {
             ArrayListMultimap<Integer, String> mm = ArrayListMultimap.create();
-            this.data.forEach((Procedure<Integer>) each -> {
+            this.data.forEach(Procedures.cast(each -> {
                 for (int j = 0; j < 10; j++)
                 {
                     mm.put(each, "dummy");
                 }
-            });
+            }));
             return mm;
         }
     }
@@ -101,12 +101,12 @@ public class ListMultimapMemoryTest
         public FastListMultimap<Integer, String> value()
         {
             FastListMultimap<Integer, String> mm = FastListMultimap.newMultimap();
-            this.data.forEach((Procedure<Integer>) each -> {
+            this.data.forEach(Procedures.cast(each -> {
                 for (int j = 0; j < 10; j++)
                 {
                     mm.put(each, "dummy");
                 }
-            });
+            }));
             return mm;
         }
     }

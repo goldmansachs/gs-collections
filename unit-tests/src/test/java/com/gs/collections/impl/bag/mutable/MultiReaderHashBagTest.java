@@ -23,12 +23,12 @@ import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -514,7 +514,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
             Assert.assertEquals(4, numbers.count(Predicates.equal(each)));
         }, 1);
 
-        interval.forEach((Procedure<Integer>) each -> Assert.assertEquals(4, numbers.occurrencesOf(each)));
+        interval.forEach(Procedures.cast(each -> Assert.assertEquals(4, numbers.occurrencesOf(each))));
     }
 
     @Test

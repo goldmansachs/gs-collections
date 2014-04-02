@@ -24,12 +24,12 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -258,7 +258,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
 
     protected <M extends MutableMap<Integer, Integer>> M populateMapWithCollisionsOfSize(int size, M map)
     {
-        MORE_COLLISIONS.subList(0, size).forEach((Procedure<Integer>) each -> { map.put(each, each); });
+        MORE_COLLISIONS.subList(0, size).forEach(Procedures.cast(each -> { map.put(each, each); }));
         return map;
     }
 

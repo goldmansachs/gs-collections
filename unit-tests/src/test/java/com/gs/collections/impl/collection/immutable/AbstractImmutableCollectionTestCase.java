@@ -25,7 +25,6 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
@@ -50,6 +49,7 @@ import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -147,7 +147,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         MutableCollection<String> strings = this.<String>newMutable();
-        integers.forEach((Procedure<Integer>) each -> { strings.add(each.toString()); });
+        integers.forEach(Procedures.cast(each -> { strings.add(each.toString()); }));
         MutableCollection<String> target = this.<String>newMutable();
         MutableCollection<String> actual = integers.collect(Functions.getToString(), target);
         Assert.assertEquals(strings, actual);

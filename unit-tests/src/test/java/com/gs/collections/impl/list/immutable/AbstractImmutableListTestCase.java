@@ -24,7 +24,6 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
@@ -43,6 +42,7 @@ import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollectionTestCase;
@@ -458,7 +458,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         ImmutableList<Integer> list = this.classUnderTest();
 
         MutableMultimap<Integer, Integer> expected = FastListMultimap.newMultimap();
-        list.forEach((Procedure<Integer>) value -> { expected.putAll(-value, Interval.fromTo(value, list.size())); });
+        list.forEach(Procedures.cast(value -> { expected.putAll(-value, Interval.fromTo(value, list.size())); }));
 
         Multimap<Integer, Integer> actual = list.groupByEach(new NegativeIntervalFunction());
         Assert.assertEquals(expected, actual);

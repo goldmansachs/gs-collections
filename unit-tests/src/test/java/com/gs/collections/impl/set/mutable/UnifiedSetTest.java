@@ -20,11 +20,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
 
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.Pool;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.Interval;
@@ -246,7 +246,7 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
 
         Assert.assertEquals(UnifiedSet.<Integer>newSet(), unifiedSet);
 
-        COLLISIONS.forEach((Procedure<Integer>) each -> {
+        COLLISIONS.forEach(Procedures.cast(each -> {
             Pool<Integer> unifiedSet2 = UnifiedSet.<Integer>newSet(8).withAll(COLLISIONS);
 
             Assert.assertNull(unifiedSet2.removeFromPool(null));
@@ -254,7 +254,7 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
             Assert.assertNull(unifiedSet2.removeFromPool(each));
             Assert.assertNull(unifiedSet2.removeFromPool(null));
             Assert.assertNull(unifiedSet2.removeFromPool(COLLISION_10));
-        });
+        }));
 
         // search a chain for a non-existent element
         Pool<Integer> chain = UnifiedSet.newSetWith(COLLISION_1, COLLISION_2, COLLISION_3, COLLISION_4);

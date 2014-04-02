@@ -21,9 +21,9 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.MemoryTests;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
@@ -80,7 +80,7 @@ public class MapMemoryTest
 
         protected <R extends Map<Integer, String>> R fill(R map)
         {
-            this.data.forEach((Procedure<Integer>) each -> { map.put(each, "dummy"); });
+            this.data.forEach(Procedures.cast(each -> { map.put(each, "dummy"); }));
             return map;
         }
     }
@@ -163,7 +163,7 @@ public class MapMemoryTest
         public scala.collection.mutable.HashMap<Integer, String> value()
         {
             scala.collection.mutable.HashMap<Integer, String> map = new scala.collection.mutable.HashMap<Integer, String>();
-            this.data.forEach((Procedure<Integer>) each -> { map.put(each, "dummy"); });
+            this.data.forEach(Procedures.cast(each -> { map.put(each, "dummy"); }));
             return map;
         }
     }

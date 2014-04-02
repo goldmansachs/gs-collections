@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
@@ -30,6 +29,7 @@ import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.IntegerWithCast;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
@@ -380,7 +380,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
 
         Assert.assertEquals(UnifiedSet.<IntegerWithCast>newSet(), set);
 
-        collisions.forEach((Procedure<IntegerWithCast>) each -> {
+        collisions.forEach(Procedures.cast(each -> {
             MutableSet<IntegerWithCast> set2 = this.newWith();
             set2.addAll(collisions);
 
@@ -389,7 +389,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
             Assert.assertFalse(set2.remove(each));
             Assert.assertFalse(set2.remove(null));
             Assert.assertFalse(set2.remove(new IntegerWithCast(COLLISION_10)));
-        });
+        }));
 
         // remove the second-to-last item in a fully populated single chain to cause the last item to move
         MutableSet<Integer> set3 = this.newWith(COLLISION_1, COLLISION_2, COLLISION_3, COLLISION_4);
@@ -481,7 +481,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         MutableSet<Integer> set = this.newWith(COLLISION_1, COLLISION_2);
         set.remove(COLLISION_2);
         Counter counter = new Counter();
-        set.forEach((Procedure<Integer>) each -> counter.increment());
+        set.forEach(Procedures.cast(each -> counter.increment()));
         Assert.assertEquals(1, counter.getCount());
     }
 

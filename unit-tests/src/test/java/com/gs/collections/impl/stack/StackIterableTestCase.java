@@ -824,7 +824,7 @@ public abstract class StackIterableTestCase
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
 
         MutableMultimap<Integer, Integer> expected = FastListMultimap.newMultimap();
-        stack.forEach((Procedure<Integer>) value -> { expected.putAll(-value, Interval.fromTo(value, stack.size())); });
+        stack.forEach(Procedures.cast(value -> { expected.putAll(-value, Interval.fromTo(value, stack.size())); }));
 
         Multimap<Integer, Integer> actual =
                 stack.groupByEach(new NegativeIntervalFunction());

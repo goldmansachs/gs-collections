@@ -21,12 +21,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -103,7 +103,7 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void testForEach()
     {
-        this.emptySet.forEach((Procedure<Object>) each -> Assert.fail());
+        this.emptySet.forEach(Procedures.cast(each -> Assert.fail()));
     }
 
     @Test

@@ -697,7 +697,7 @@ public class FastListTest extends AbstractListTestCase
                         FastList.newList());
 
         List<List<Object>> arrayList = new ArrayList<List<Object>>();
-        Interval.oneTo(8).forEach((Procedure<Integer>) object -> { arrayList.add(new ArrayList<Object>()); });
+        Interval.oneTo(8).forEach(Procedures.cast(object -> { arrayList.add(new ArrayList<Object>()); }));
         ByteArrayOutputStream stream2 = SerializeTestHelper.getByteArrayOutputStream(arrayList);
 //        LOGGER.info("ArrayList size: " + stream2.size());
 //        LOGGER.info(stream2.toString());

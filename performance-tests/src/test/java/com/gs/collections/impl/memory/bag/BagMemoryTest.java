@@ -18,10 +18,10 @@ package com.gs.collections.impl.memory.bag;
 
 import com.google.common.collect.HashMultiset;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import org.junit.Test;
@@ -65,7 +65,7 @@ public class BagMemoryTest
         public HashMultiset<Integer> value()
         {
             HashMultiset<Integer> hashMultiset = HashMultiset.create();
-            this.data.forEach((Procedure<Integer>) each -> { hashMultiset.add(each, 10); });
+            this.data.forEach(Procedures.cast(each -> { hashMultiset.add(each, 10); }));
             return hashMultiset;
         }
     }
@@ -83,7 +83,7 @@ public class BagMemoryTest
         public HashBag<Integer> value()
         {
             HashBag<Integer> hashBag = HashBag.newBag();
-            this.data.forEach((Procedure<Integer>) each -> hashBag.addOccurrences(each, 10));
+            this.data.forEach(Procedures.cast(each -> hashBag.addOccurrences(each, 10)));
             return hashBag;
         }
     }

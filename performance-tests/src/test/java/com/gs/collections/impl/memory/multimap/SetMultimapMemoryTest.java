@@ -18,9 +18,9 @@ package com.gs.collections.impl.memory.multimap;
 
 import com.google.common.collect.HashMultimap;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.MemoryTests;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
@@ -68,12 +68,12 @@ public class SetMultimapMemoryTest
         public HashMultimap<Integer, Integer> value()
         {
             HashMultimap<Integer, Integer> mm = HashMultimap.create();
-            this.data.forEach((Procedure<Integer>) each -> {
+            this.data.forEach(Procedures.cast(each -> {
                 for (int j = 0; j < 10; j++)
                 {
                     mm.put(each, Integer.valueOf(j));
                 }
-            });
+            }));
             return mm;
         }
     }
@@ -91,12 +91,12 @@ public class SetMultimapMemoryTest
         public UnifiedSetMultimap<Integer, Integer> value()
         {
             UnifiedSetMultimap<Integer, Integer> mm = UnifiedSetMultimap.newMultimap();
-            this.data.forEach((Procedure<Integer>) each -> {
+            this.data.forEach(Procedures.cast(each -> {
                 for (int j = 0; j < 10; j++)
                 {
                     mm.put(each, Integer.valueOf(j));
                 }
-            });
+            }));
             return mm;
         }
     }
