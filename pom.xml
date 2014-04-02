@@ -283,6 +283,7 @@
                         <link>http://junit.sourceforge.net/javadoc/</link>
                     </links>
                     <destDir>${project.version}</destDir>
+                    <additionalparam>-Xdoclint:none</additionalparam>
                 </configuration>
             </plugin>
 
@@ -347,6 +348,7 @@
                         <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
                         <link>http://junit.sourceforge.net/javadoc/</link>
                     </links>
+                    <additionalparam>-Xdoclint:none</additionalparam>
                 </configuration>
             </plugin>
 
