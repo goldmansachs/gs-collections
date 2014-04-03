@@ -16,10 +16,11 @@ class(primitive) ::= <<
 body(type, name) ::= <<
 <copyright()>
 
-package com.gs.collections.impl.map.mutable.primitive;
+package com.gs.collections.impl.map.immutable.primitive;
 
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.impl.lazy.primitive.AbstractLazy<name>IterableTestCase;
+import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMap;
 
 /**
  * JUnit test for {@link Immutable<name>ObjectHashMap#keysView}.
