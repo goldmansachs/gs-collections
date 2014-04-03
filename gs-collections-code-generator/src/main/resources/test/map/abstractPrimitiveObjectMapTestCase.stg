@@ -64,6 +64,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.factory.StringPredicates;
 import com.gs.collections.impl.block.factory.StringPredicates2;
@@ -1473,34 +1474,10 @@ public abstract class Abstract<name>ObjectMapTestCase
         <name>ObjectMap\<String> map4 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "five");
         final String[] concat = {"", "", "", ""};
 
-        map1.forEach(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                concat[0] += each;
-            }
-        });
-        map2.forEach(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                concat[1] += each;
-            }
-        });
-        map3.forEach(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                concat[2] += each;
-            }
-        });
-        map4.forEach(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                concat[3] += each;
-            }
-        });
+        map1.forEach(Procedures.cast(each -> concat[0] += each));
+        map2.forEach(Procedures.cast(each -> concat[1] += each));
+        map3.forEach(Procedures.cast(each -> concat[2] += each));
+        map4.forEach(Procedures.cast(each -> concat[3] += each));
 
         Assert.assertTrue(concat[0], "onefive".equals(concat[0]) || "fiveone".equals(concat[0]));
         Assert.assertTrue(concat[1], "onezero".equals(concat[1]) || "zeroone".equals(concat[1]));

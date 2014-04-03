@@ -33,7 +33,6 @@ import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
 import com.gs.collections.api.block.procedure.primitive.<name>ObjectProcedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
 import com.gs.collections.api.partition.PartitionIterable;
@@ -42,6 +41,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.factory.StringPredicates;
 import com.gs.collections.impl.block.factory.StringPredicates2;
@@ -196,15 +196,9 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void forEach()
     {
-        final String[] concat = {""};
+        String[] concat = {""};
 
-        this.classUnderTest().forEach(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                concat[0] += each;
-            }
-        });
+        this.classUnderTest().forEach(Procedures.cast(each -> concat[0] += each));
 
         Assert.assertEquals("zero", concat[0]);
     }
@@ -213,7 +207,7 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void forEachWithIndex()
     {
-        final String[] concat = {""};
+        String[] concat = {""};
 
         this.classUnderTest().forEachWithIndex((String each, int parameter) ->
             {

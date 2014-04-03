@@ -76,7 +76,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
@@ -146,13 +146,13 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     {
         MutableList\<<name>BooleanPair> result = Lists.mutable.of();
         RichIterable\<<name>BooleanPair> collection = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
-        collection.forEach(CollectionAddProcedure.on(result));
+        collection.forEach(Procedures.cast(result::add));
         Verify.assertSize(3, result);
         Verify.assertContainsAll(result, PrimitiveTuples.pair(<(literal.(type))("1")>, false), PrimitiveTuples.pair(<(literal.(type))("2")>, true), PrimitiveTuples.pair(<(literal.(type))("3")>, false));
 
         MutableList\<<name>BooleanPair> result2 = Lists.mutable.of();
         RichIterable\<<name>BooleanPair> collection2 = this.newWith(<(literal.(type))("0")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
-        collection2.forEach(CollectionAddProcedure.on(result2));
+        collection2.forEach(Procedures.cast(result2::add));
         Verify.assertSize(3, result2);
         Verify.assertContainsAll(result2, PrimitiveTuples.pair(<(literal.(type))("0")>, false), PrimitiveTuples.pair(<(literal.(type))("2")>, true), PrimitiveTuples.pair(<(literal.(type))("3")>, false));
     }

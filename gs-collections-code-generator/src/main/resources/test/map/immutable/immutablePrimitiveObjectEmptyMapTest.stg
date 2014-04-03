@@ -43,6 +43,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.factory.StringPredicates;
@@ -210,13 +211,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void forEach()
     {
-        this.classUnderTest().forEach(new Procedure\<String>()
-        {
-            public void value(String each)
-            {
-                Assert.fail();
-            }
-        });
+        this.classUnderTest().forEach(Procedures.cast(each -> Assert.fail()));
     }
 
     @Override
