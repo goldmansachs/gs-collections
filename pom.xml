@@ -471,6 +471,7 @@
                             <contextFilters>@deprecated</contextFilters>
                             <generateHistorical>true</generateHistorical>
                             <includesAllSourceRoots>true</includesAllSourceRoots>
+                            <instrumentLambda>block</instrumentLambda>
                             <historyDir>${user.home}/clover/${project.artifactId}</historyDir>
                             <excludes>
                                 <exclude>**/FileUtils.java</exclude>

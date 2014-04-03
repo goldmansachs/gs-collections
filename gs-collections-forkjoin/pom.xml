@@ -385,6 +385,8 @@
                             <contextFilters>@deprecated</contextFilters>
                             <generateHistorical>true</generateHistorical>
                             <historyDir>${user.home}/clover/${project.artifactId}</historyDir>
+                            <includesAllSourceRoots>true</includesAllSourceRoots>
+                            <instrumentLambda>block</instrumentLambda>
                         </configuration>
                     </plugin>
                 </plugins>
