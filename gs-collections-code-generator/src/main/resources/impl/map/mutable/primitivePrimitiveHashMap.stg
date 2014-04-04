@@ -108,6 +108,9 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     private static final int OCCUPIED_SENTINEL_RATIO = 4;
     private static final int DEFAULT_INITIAL_CAPACITY = 8;
 
+    private static final int HANDLE_ZERO = -2;
+    private static final int HANDLE_ONE  = -1;
+
     private <type1>[] keys;
     private <type2>[] values;
 
@@ -1318,9 +1321,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     private class Internal<name2>Iterator implements <name2>Iterator
     {
         private int count;
-        private int position;
-        private boolean handledZero;
-        private boolean handledOne;
+        private int position = HANDLE_ZERO;
 
         public boolean hasNext()
         {
@@ -1334,18 +1335,18 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 throw new NoSuchElementException("next() called, but the iterator is exhausted");
             }
             this.count++;
-
-            if (!this.handledZero)
+            
+            if (this.position == HANDLE_ZERO)
             {
-                this.handledZero = true;
+            	this.position++;
                 if (<name1><name2>HashMap.this.containsKey(EMPTY_KEY))
                 {
                     return <name1><name2>HashMap.this.get(EMPTY_KEY);
                 }
             }
-            if (!this.handledOne)
+            if (this.position == HANDLE_ONE)
             {
-                this.handledOne = true;
+            	this.position++;
                 if (<name1><name2>HashMap.this.containsKey(REMOVED_KEY))
                 {
                     return <name1><name2>HashMap.this.get(REMOVED_KEY);
@@ -1379,9 +1380,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     private class KeySetIterator implements <name1>Iterator
     {
         private int count;
-        private int position;
-        private boolean handledZero;
-        private boolean handledOne;
+        private int position = HANDLE_ZERO;
 
         public boolean hasNext()
         {
@@ -1396,17 +1395,17 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             }
             this.count++;
 
-            if (!this.handledZero)
-            {
-                this.handledZero = true;
+			if (this.position == HANDLE_ZERO)
+			{
+				this.position++;
                 if (<name1><name2>HashMap.this.containsKey(EMPTY_KEY))
                 {
                     return EMPTY_KEY;
                 }
             }
-            if (!this.handledOne)
+            if (this.position == HANDLE_ONE)
             {
-                this.handledOne = true;
+            	this.position++;
                 if (<name1><name2>HashMap.this.containsKey(REMOVED_KEY))
                 {
                     return REMOVED_KEY;
@@ -2498,9 +2497,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         public class InternalKeyValuesIterator implements Iterator\<<name1><name2>Pair>
         {
             private int count;
-            private int position;
-            private boolean handledZero;
-            private boolean handledOne;
+            private int position = HANDLE_ZERO;
 
             public <name1><name2>Pair next()
             {
@@ -2510,17 +2507,17 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 }
                 this.count++;
 
-                if (!this.handledZero)
-                {
-                    this.handledZero = true;
+				if (this.position == HANDLE_ZERO)
+				{
+					this.position++;
                     if (<name1><name2>HashMap.this.containsKey(EMPTY_KEY))
                     {
                         return PrimitiveTuples.pair(EMPTY_KEY, <name1><name2>HashMap.this.sentinelValues.zeroValue);
                     }
                 }
-                if (!this.handledOne)
+                if (this.position == HANDLE_ONE)
                 {
-                    this.handledOne = true;
+                	this.position++;
                     if (<name1><name2>HashMap.this.containsKey(REMOVED_KEY))
                     {
                         return PrimitiveTuples.pair(REMOVED_KEY, <name1><name2>HashMap.this.sentinelValues.oneValue);
