@@ -106,6 +106,10 @@ public class IterateTest
         this.iterables = Lists.mutable.of();
         this.iterables.add(Interval.oneTo(5).toList());
         this.iterables.add(Interval.oneTo(5).toSet());
+        this.iterables.add(Interval.oneTo(5).toBag());
+        this.iterables.add(Interval.oneTo(5).toSortedSet());
+        this.iterables.add(Interval.oneTo(5).toSortedMap(i -> i, i -> i));
+        this.iterables.add(Interval.oneTo(5).toMap(i -> i, i -> i));
         this.iterables.add(Interval.oneTo(5).addAllTo(new ArrayList<Integer>(5)));
         this.iterables.add(Collections.unmodifiableList(new ArrayList<Integer>(Interval.oneTo(5))));
         this.iterables.add(Collections.unmodifiableCollection(new ArrayList<Integer>(Interval.oneTo(5))));
