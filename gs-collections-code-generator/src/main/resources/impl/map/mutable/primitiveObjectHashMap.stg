@@ -3472,7 +3472,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             this.count++;
             if (this.position == HANDLE_ZERO)
             {
-            	position++;
+            	this.position++;
                 if (<name>ObjectHashMap.this.containsKey(EMPTY_KEY))
                 {
                     return <name>ObjectHashMap.EMPTY_KEY;
@@ -3480,7 +3480,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             }
             if (this.position == HANDLE_ONE)
             {
-            	position++;
+            	this.position++;
                 if (<name>ObjectHashMap.this.containsKey(REMOVED_KEY))
                 {
                     return <name>ObjectHashMap.REMOVED_KEY;
@@ -3718,9 +3718,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         public class InternalKeyValuesIterator implements Iterator\<<name>ObjectPair\<V>\>
         {
             private int count;
-            private int position;
-            private boolean handledZero;
-            private boolean handledOne;
+            private int position = HANDLE_ZERO;
 
             public <name>ObjectPair\<V> next()
             {
@@ -3730,17 +3728,17 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                 }
                 this.count++;
 
-                if (!this.handledZero)
-                {
-                    this.handledZero = true;
+				if (this.position == HANDLE_ZERO)
+				{
+					this.position++;
                     if (<name>ObjectHashMap.this.containsKey(EMPTY_KEY))
                     {
                         return PrimitiveTuples.pair(EMPTY_KEY, <name>ObjectHashMap.this.sentinelValues.zeroValue);
                     }
                 }
-                if (!this.handledOne)
+                if (this.position == HANDLE_ONE)
                 {
-                    this.handledOne = true;
+                	this.position++;
                     if (<name>ObjectHashMap.this.containsKey(REMOVED_KEY))
                     {
                         return PrimitiveTuples.pair(REMOVED_KEY, <name>ObjectHashMap.this.sentinelValues.oneValue);
