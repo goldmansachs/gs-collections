@@ -165,6 +165,9 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     private static final int OCCUPIED_DATA_RATIO = 2;
     private static final int OCCUPIED_SENTINEL_RATIO = 4;
 
+    private static final int HANDLE_ZERO = -2;
+    private static final int HANDLE_ONE  = -1;
+
     private <type>[] keys;
     private V[] values;
     private SentinelValues\<V> sentinelValues;
@@ -2573,11 +2576,9 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     private class InternalIterator implements Iterator\<V>
     {
         private int count;
-        private int position;
+        private int position = HANDLE_ZERO;
         private <type> currentKey;
         private boolean isCurrentKeySet;
-        private boolean handledZeroKey;
-        private boolean handledOneKey;
 
         public boolean hasNext()
         {
@@ -2591,9 +2592,9 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                 throw new NoSuchElementException();
             }
             this.count++;
-            if (!this.handledZeroKey)
+            if (this.position == HANDLE_ZERO)
             {
-                this.handledZeroKey = true;
+            	this.position++;
                 if (<name>ObjectHashMap.this.containsKey(EMPTY_KEY))
                 {
                     this.currentKey = <name>ObjectHashMap.EMPTY_KEY;
@@ -2601,9 +2602,9 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                     return <name>ObjectHashMap.this.sentinelValues.zeroValue;
                 }
             }
-            if (!this.handledOneKey)
+            if (this.position == HANDLE_ONE)
             {
-                this.handledOneKey = true;
+            	this.position++;
                 if (<name>ObjectHashMap.this.containsKey(REMOVED_KEY))
                 {
                     this.currentKey = <name>ObjectHashMap.REMOVED_KEY;
@@ -3455,9 +3456,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     private class KeysSetIterator implements <name>Iterator
     {
         private int count;
-        private int position;
-        private boolean handledZeroKey;
-        private boolean handledOneKey;
+        private int position = HANDLE_ZERO;
 
         public boolean hasNext()
         {
@@ -3471,17 +3470,17 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                 throw new NoSuchElementException();
             }
             this.count++;
-            if (!this.handledZeroKey)
+            if (this.position == HANDLE_ZERO)
             {
-                this.handledZeroKey = true;
+            	position++;
                 if (<name>ObjectHashMap.this.containsKey(EMPTY_KEY))
                 {
                     return <name>ObjectHashMap.EMPTY_KEY;
                 }
             }
-            if (!this.handledOneKey)
+            if (this.position == HANDLE_ONE)
             {
-                this.handledOneKey = true;
+            	position++;
                 if (<name>ObjectHashMap.this.containsKey(REMOVED_KEY))
                 {
                     return <name>ObjectHashMap.REMOVED_KEY;
