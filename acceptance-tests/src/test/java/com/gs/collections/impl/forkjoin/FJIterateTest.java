@@ -39,7 +39,6 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
@@ -188,19 +187,19 @@ public class FJIterateTest
     {
         //Test the default batch size calculations
         IntegerSum sum1 = new IntegerSum(0);
-        MutableMap<String, Integer> map1 = Interval.fromTo(1, 10000).toMap(Functions.getToString(), Functions.getIntegerPassThru());
+        MutableMap<String, Integer> map1 = Interval.fromTo(1, 10000).toMap(String::valueOf, Functions.getIntegerPassThru());
         FJIterate.forEach(map1, new SumProcedure(sum1), new SumCombiner(sum1));
         Assert.assertEquals(50005000, sum1.getSum());
 
         //Testing batch size 1
         IntegerSum sum2 = new IntegerSum(0);
-        UnifiedMap<String, Integer> map2 = (UnifiedMap<String, Integer>) Interval.fromTo(1, 100).toMap(Functions.getToString(), Functions.getIntegerPassThru());
+        UnifiedMap<String, Integer> map2 = (UnifiedMap<String, Integer>) Interval.fromTo(1, 100).toMap(String::valueOf, Functions.getIntegerPassThru());
         FJIterate.forEach(map2, new SumProcedure(sum2), new SumCombiner(sum2), 1, map2.getBatchCount(map2.size()));
         Assert.assertEquals(5050, sum2.getSum());
 
         //Testing an uneven batch size
         IntegerSum sum3 = new IntegerSum(0);
-        UnifiedMap<String, Integer> set3 = (UnifiedMap<String, Integer>) Interval.fromTo(1, 100).toMap(Functions.getToString(), Functions.getIntegerPassThru());
+        UnifiedMap<String, Integer> set3 = (UnifiedMap<String, Integer>) Interval.fromTo(1, 100).toMap(String::valueOf, Functions.getIntegerPassThru());
         FJIterate.forEach(set3, new SumProcedure(sum3), new SumCombiner(sum3), 1, set3.getBatchCount(13));
         Assert.assertEquals(5050, sum3.getSum());
     }
@@ -424,10 +423,10 @@ public class FJIterateTest
 
     private void basicCollect(RichIterable<Integer> iterable)
     {
-        Collection<String> actual1 = FJIterate.collect(iterable, Functions.getToString());
-        Collection<String> actual2 = FJIterate.collect(iterable, Functions.getToString(), HashBag.<String>newBag(), 3, this.executor, false);
-        Collection<String> actual3 = FJIterate.collect(iterable, Functions.getToString(), true);
-        RichIterable<String> expected = iterable.collect(Functions.getToString());
+        Collection<String> actual1 = FJIterate.collect(iterable, String::valueOf);
+        Collection<String> actual2 = FJIterate.collect(iterable, String::valueOf, HashBag.<String>newBag(), 3, this.executor, false);
+        Collection<String> actual3 = FJIterate.collect(iterable, String::valueOf, true);
+        RichIterable<String> expected = iterable.collect(String::valueOf);
         Verify.assertSize(20000, actual1);
         Verify.assertContains(String.valueOf(20000), actual1);
         Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual1.getClass().getSimpleName(), expected, actual1);
@@ -444,10 +443,10 @@ public class FJIterateTest
     private void basicCollectIf(RichIterable<Integer> collection)
     {
         Predicate<Integer> greaterThan = Predicates.greaterThan(10000);
-        Collection<String> actual1 = FJIterate.collectIf(collection, greaterThan, Functions.getToString());
-        Collection<String> actual2 = FJIterate.collectIf(collection, greaterThan, Functions.getToString(), HashBag.<String>newBag(), 3, this.executor, true);
-        Collection<String> actual3 = FJIterate.collectIf(collection, greaterThan, Functions.getToString(), HashBag.<String>newBag(), 3, this.executor, true);
-        Bag<String> expected = collection.collectIf(greaterThan, Functions.getToString()).toBag();
+        Collection<String> actual1 = FJIterate.collectIf(collection, greaterThan, String::valueOf);
+        Collection<String> actual2 = FJIterate.collectIf(collection, greaterThan, String::valueOf, HashBag.<String>newBag(), 3, this.executor, true);
+        Collection<String> actual3 = FJIterate.collectIf(collection, greaterThan, String::valueOf, HashBag.<String>newBag(), 3, this.executor, true);
+        Bag<String> expected = collection.collectIf(greaterThan, String::valueOf).toBag();
         Verify.assertSize(10000, actual1);
         Verify.assertNotContains(String.valueOf(9000), actual1);
         Verify.assertNotContains(String.valueOf(21000), actual1);
@@ -482,10 +481,10 @@ public class FJIterateTest
         Procedure2<AtomicInteger, Integer> countAggregator = (aggregate, value) -> { aggregate.incrementAndGet(); };
         List<Integer> list = Interval.oneTo(20000);
         MutableMap<String, AtomicInteger> aggregation =
-                FJIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, Functions0.zeroAtomicInteger(), countAggregator);
+                FJIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, AtomicInteger::new, countAggregator);
         Assert.assertEquals(10000, aggregation.get("Even").intValue());
         Assert.assertEquals(10000, aggregation.get("Odd").intValue());
-        FJIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, Functions0.zeroAtomicInteger(), countAggregator, aggregation);
+        FJIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, AtomicInteger::new, countAggregator, aggregation);
         Assert.assertEquals(20000, aggregation.get("Even").intValue());
         Assert.assertEquals(20000, aggregation.get("Odd").intValue());
     }
@@ -499,7 +498,7 @@ public class FJIterateTest
                 .toList();
         Collections.shuffle(list);
         MapIterable<String, AtomicInteger> aggregation =
-                FJIterate.aggregateInPlaceBy(list, Functions.getToString(), Functions0.zeroAtomicInteger(), AtomicInteger::addAndGet, 100);
+                FJIterate.aggregateInPlaceBy(list, String::valueOf, AtomicInteger::new, AtomicInteger::addAndGet, 100);
         Assert.assertEquals(1000, aggregation.get("1").intValue());
         Assert.assertEquals(4000, aggregation.get("2").intValue());
         Assert.assertEquals(9000, aggregation.get("3").intValue());

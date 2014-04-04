@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -92,13 +91,13 @@ public class EmptyListTest
     @Test(expected = NoSuchElementException.class)
     public void minBy()
     {
-        Lists.fixedSize.of().minBy(Functions.getToString());
+        Lists.fixedSize.of().minBy(String::valueOf);
     }
 
     @Test(expected = NoSuchElementException.class)
     public void maxBy()
     {
-        Lists.fixedSize.of().maxBy(Functions.getToString());
+        Lists.fixedSize.of().maxBy(String::valueOf);
     }
 
     @Test
@@ -138,7 +137,7 @@ public class EmptyListTest
     {
         MutableList<Object> expected = Lists.fixedSize.of();
         MutableList<Object> list = Lists.fixedSize.of();
-        MutableList<Object> sortedList = list.sortThisBy(Functions.getToString());
+        MutableList<Object> sortedList = list.sortThisBy(String::valueOf);
         Assert.assertEquals(expected, sortedList);
         Assert.assertSame(sortedList, list);
     }

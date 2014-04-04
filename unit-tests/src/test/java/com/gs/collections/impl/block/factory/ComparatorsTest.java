@@ -81,7 +81,7 @@ public class ComparatorsTest
         MutableList<String> list = FastList.newListWith("1", "4", "2", "3");
         Assert.assertEquals(
                 FastList.newListWith("4", "3", "2", "1"),
-                list.sortThis(Comparators.reverse(Comparators.naturalOrder())));
+                list.sortThis(Comparators.reverse(String::compareTo)));
         Verify.assertThrows(NullPointerException.class, () -> { Comparators.reverse(null); });
     }
 
@@ -171,7 +171,7 @@ public class ComparatorsTest
     @Test
     public void chainedComparator()
     {
-        Verify.assertThrows(IllegalArgumentException.class, (Runnable) () -> {Comparators.chain();});
+        Verify.assertThrows(IllegalArgumentException.class, (Runnable) Comparators::chain);
 
         Comparator<Person> byName = Comparators.byFunction(Person.TO_FIRST);
         Comparator<Person> byAge = Comparators.byFunction(Person.TO_AGE);
@@ -294,7 +294,7 @@ public class ComparatorsTest
     {
         MutableList<Pair<Integer, String>> list = FastList.newListWith(Tuples.pair(3, "B"), Tuples.pair(1, "C"), Tuples.pair(2, "A"));
         MutableList<Pair<Integer, String>> sorted = FastList.newListWith(Tuples.pair(1, "C"), Tuples.pair(2, "A"), Tuples.pair(3, "B"));
-        Verify.assertListsEqual(sorted, list.sortThis(Comparators.byFirstOfPair(Comparators.<Integer>naturalOrder())));
+        Verify.assertListsEqual(sorted, list.sortThis(Comparators.byFirstOfPair(Integer::compareTo)));
     }
 
     @Test
@@ -302,7 +302,7 @@ public class ComparatorsTest
     {
         MutableList<Pair<Integer, String>> list = FastList.newListWith(Tuples.pair(3, "B"), Tuples.pair(1, "C"), Tuples.pair(2, "A"));
         MutableList<Pair<Integer, String>> sorted = FastList.newListWith(Tuples.pair(2, "A"), Tuples.pair(3, "B"), Tuples.pair(1, "C"));
-        Verify.assertListsEqual(sorted, list.sortThis(Comparators.bySecondOfPair(Comparators.<String>naturalOrder())));
+        Verify.assertListsEqual(sorted, list.sortThis(Comparators.bySecondOfPair(String::compareTo)));
     }
 
     @Test

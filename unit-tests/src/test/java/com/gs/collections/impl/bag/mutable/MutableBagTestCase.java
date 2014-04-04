@@ -98,14 +98,14 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
 
         Iterator<Integer> iterator = bag.iterator();
         MutableBag<Integer> expected = this.newWith(1, 1, 2);
-        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> {iterator.remove();});
+        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator::remove);
 
         this.assertIteratorRemove(bag, iterator, expected);
         this.assertIteratorRemove(bag, iterator, expected);
         this.assertIteratorRemove(bag, iterator, expected);
         Verify.assertEmpty(bag);
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
     }
 
     private void assertIteratorRemove(MutableBag<Integer> bag, Iterator<Integer> iterator, MutableBag<Integer> expected)
@@ -115,7 +115,7 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         iterator.remove();
         expected.remove(first);
         Assert.assertEquals(expected, bag);
-        Verify.assertThrows(IllegalStateException.class, (Runnable) () -> {iterator.remove();});
+        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator::remove);
     }
 
     @Test

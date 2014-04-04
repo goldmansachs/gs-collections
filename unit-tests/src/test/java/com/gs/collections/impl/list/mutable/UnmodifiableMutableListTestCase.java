@@ -20,7 +20,6 @@ import java.util.ListIterator;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.list.fixed.UnmodifiableMemoryEfficientListTestCase;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -50,9 +49,9 @@ public abstract class UnmodifiableMutableListTestCase extends UnmodifiableMemory
     {
         super.subList();
         MutableList<Integer> subList = this.getCollection().subList(0, 1);
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {subList.clear();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) subList::clear);
         Verify.assertThrows(UnsupportedOperationException.class, () -> { subList.set(0, null); });
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {subList.add(0, null);});
+        Verify.assertThrows(UnsupportedOperationException.class, () -> subList.add(0, null));
         Verify.assertThrows(UnsupportedOperationException.class, () -> { subList.add(null); });
         Verify.assertThrows(UnsupportedOperationException.class, () -> { subList.remove(0); });
         Verify.assertThrows(UnsupportedOperationException.class, () -> { subList.remove(null); });
@@ -69,11 +68,11 @@ public abstract class UnmodifiableMutableListTestCase extends UnmodifiableMemory
         it.next();
         Assert.assertEquals(1, it.nextIndex());
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.set(null);});
+        Verify.assertThrows(UnsupportedOperationException.class, () -> it.set(null));
 
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {it.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) it::remove);
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.add(null);});
+        Verify.assertThrows(UnsupportedOperationException.class, () -> it.add(null));
     }
 
     @Test
@@ -86,9 +85,9 @@ public abstract class UnmodifiableMutableListTestCase extends UnmodifiableMemory
         it.next();
         Assert.assertEquals(1, it.nextIndex());
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.set(null);});
+        Verify.assertThrows(UnsupportedOperationException.class, () -> it.set(null));
 
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {it.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) it::remove);
 
         Verify.assertThrows(UnsupportedOperationException.class, () -> it.add(null));
     }
@@ -143,7 +142,7 @@ public abstract class UnmodifiableMutableListTestCase extends UnmodifiableMemory
     public void sortThisBy()
     {
         Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.getCollection().sortThisBy(Functions.getToString());
+            this.getCollection().sortThisBy(String::valueOf);
         });
     }
 

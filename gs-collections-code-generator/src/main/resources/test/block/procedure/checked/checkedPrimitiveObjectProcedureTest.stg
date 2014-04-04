@@ -49,39 +49,27 @@ public final class Checked<name>ObjectProcedureTest
     @Test
     public void runtimeException()
     {
-        Verify.assertThrows(RuntimeException.class, new Runnable()
+        Verify.assertThrows(RuntimeException.class, () -> new Checked<name>ObjectProcedure\<Object>()
         {
-            public void run()
+            @Override
+            public void safeValue(<type> item, Object object) throws Exception
             {
-                new Checked<name>ObjectProcedure\<Object>()
-                {
-                    @Override
-                    public void safeValue(<type> item, Object object) throws Exception
-                    {
-                        throw new RuntimeException();
-                    }
-                }.value(<(zero.(type))>, null);
+                throw new RuntimeException();
             }
-        });
+        }.value(<(zero.(type))>, null));
     }
 
     @Test
     public void checkedException()
     {
-        Verify.assertThrows(RuntimeException.class, new Runnable()
+        Verify.assertThrows(RuntimeException.class, () -> new Checked<name>ObjectProcedure\<Object>()
         {
-            public void run()
+            @Override
+            public void safeValue(<type> item, Object object) throws Exception
             {
-                new Checked<name>ObjectProcedure\<Object>()
-                {
-                    @Override
-                    public void safeValue(<type> item, Object object) throws Exception
-                    {
-                        throw new IOException();
-                    }
-                }.value(<(zero.(type))>, null);
+                throw new IOException();
             }
-        });
+        }.value(<(zero.(type))>, null));
     }
 }
 

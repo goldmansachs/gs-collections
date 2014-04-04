@@ -80,7 +80,7 @@ public class Unmodifiable<name1><name2>MapValuesTest extends AbstractMutable<nam
     {
         Mutable<name2>Collection bag = this.newWith(<["0", "1", "2", "3"]:(literal.(type2))(); separator=", ">);
         <name2>ArrayList list = <name2>ArrayList.newListWith(<["0", "1", "2", "3"]:(literal.(type2))(); separator=", ">);
-        final <name2>Iterator iterator = bag.<type2>Iterator();
+        <name2>Iterator iterator = bag.<type2>Iterator();
         for (int i = 0; i \< 4; i++)
         {
             Assert.assertTrue(iterator.hasNext());
@@ -89,7 +89,7 @@ public class Unmodifiable<name1><name2>MapValuesTest extends AbstractMutable<nam
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Override

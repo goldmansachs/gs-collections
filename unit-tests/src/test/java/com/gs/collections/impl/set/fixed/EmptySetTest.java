@@ -21,11 +21,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
@@ -124,16 +123,16 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
         Iterator<Object> it = this.emptySet.iterator();
         Assert.assertFalse(it.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {it.next();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) it::next);
 
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {it.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) it::remove);
     }
 
     @Test
     @Override
     public void groupBy()
     {
-        MutableSetMultimap<Class<?>, String> multimap = this.classUnderTest().groupBy(Functions.getToClass());
+        MutableSetMultimap<Class<?>, String> multimap = this.classUnderTest().groupBy(Object::getClass);
         Verify.assertSize(this.classUnderTest().size(), multimap);
         Assert.assertTrue(multimap.keysView().isEmpty());
         Assert.assertEquals(this.classUnderTest(), multimap.get(String.class));
@@ -143,14 +142,14 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Override
     public void min()
     {
-        this.classUnderTest().min(Comparators.naturalOrder());
+        this.classUnderTest().min(String::compareTo);
     }
 
     @Test(expected = NoSuchElementException.class)
     @Override
     public void max()
     {
-        this.classUnderTest().max(Comparators.naturalOrder());
+        this.classUnderTest().max(String::compareTo);
     }
 
     @Test
@@ -199,14 +198,14 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test(expected = NoSuchElementException.class)
     public void minBy()
     {
-        this.classUnderTest().minBy(Functions.getToString());
+        this.classUnderTest().minBy(String::valueOf);
     }
 
     @Override
     @Test(expected = NoSuchElementException.class)
     public void maxBy()
     {
-        this.classUnderTest().maxBy(Functions.getToString());
+        this.classUnderTest().maxBy(String::valueOf);
     }
 
     @Override
@@ -218,12 +217,12 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
         List<Object> nullsPlusOne = Collections.nCopies(set.size() + 1, null);
 
         MutableSet<Pair<String, Object>> pairs = set.zip(nulls);
-        Assert.assertEquals(set, pairs.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(nulls, pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(set, pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne));
+        Assert.assertEquals(nulls, pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         MutableSet<Pair<String, Object>> pairsPlusOne = set.zip(nullsPlusOne);
-        Assert.assertEquals(set, pairsPlusOne.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(set, pairsPlusOne.collect((Function<Pair<String, ?>, String>) Pair::getOne));
+        Assert.assertEquals(nulls, pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         Assert.assertEquals(
                 set.zip(nulls),
@@ -239,10 +238,10 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
 
         Assert.assertEquals(
                 set,
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne));
         Assert.assertEquals(
                 UnifiedSet.newSet(),
-                pairs.collect(Functions.<Integer>secondOfPair()));
+                pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo));
 
         Assert.assertEquals(
                 set.zipWithIndex(),

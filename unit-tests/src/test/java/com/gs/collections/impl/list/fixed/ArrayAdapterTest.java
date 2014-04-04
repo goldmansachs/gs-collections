@@ -23,10 +23,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.AddFunction;
@@ -187,37 +187,37 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testAllSatisfy()
     {
-        Assert.assertTrue(this.newWith(1, 2, 3).allSatisfy(Predicates.instanceOf(Integer.class)));
-        Assert.assertFalse(this.newWith(1, 2, 3).allSatisfy(Predicates.equal(1)));
+        Assert.assertTrue(this.newWith(1, 2, 3).allSatisfy(Integer.class::isInstance));
+        Assert.assertFalse(this.newWith(1, 2, 3).allSatisfy(Integer.valueOf(1)::equals));
     }
 
     @Test
     public void testAnySatisfy()
     {
-        Assert.assertFalse(this.newWith(1, 2, 3).anySatisfy(Predicates.instanceOf(String.class)));
-        Assert.assertTrue(this.newWith(1, 2, 3).anySatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertFalse(this.newWith(1, 2, 3).anySatisfy(String.class::isInstance));
+        Assert.assertTrue(this.newWith(1, 2, 3).anySatisfy(Integer.class::isInstance));
     }
 
     @Test
     public void testNoneSatisfy()
     {
-        Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfy(Predicates.instanceOf(String.class)));
-        Assert.assertFalse(this.newWith(1, 2, 3).noneSatisfy(Predicates.equal(1)));
+        Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfy(String.class::isInstance));
+        Assert.assertFalse(this.newWith(1, 2, 3).noneSatisfy(Integer.valueOf(1)::equals));
     }
 
     @Test
     public void testCount()
     {
-        Assert.assertEquals(3, this.newWith(1, 2, 3).count(Predicates.instanceOf(Integer.class)));
+        Assert.assertEquals(3, this.newWith(1, 2, 3).count(Integer.class::isInstance));
     }
 
     @Test
     public void testCollectIf()
     {
-        Verify.assertContainsAll(this.newWith(1, 2, 3).collectIf(Predicates.instanceOf(Integer.class),
-                Functions.getToString()), "1", "2", "3");
-        Verify.assertContainsAll(this.newWith(1, 2, 3).collectIf(Predicates.instanceOf(Integer.class),
-                Functions.getToString(),
+        Verify.assertContainsAll(this.newWith(1, 2, 3).collectIf(Integer.class::isInstance,
+                String::valueOf), "1", "2", "3");
+        Verify.assertContainsAll(this.newWith(1, 2, 3).collectIf(Integer.class::isInstance,
+                String::valueOf,
                 new ArrayList<String>()), "1", "2", "3");
     }
 
@@ -311,7 +311,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void testSelectAndRejectWith()
     {
         MutableList<Integer> objects = this.newWith(1, 2);
-        Twin<MutableList<Integer>> result = objects.selectAndRejectWith(Predicates2.equal(), 1);
+        Twin<MutableList<Integer>> result = objects.selectAndRejectWith(Object::equals, 1);
         Verify.assertSize(1, result.getOne());
         Verify.assertSize(1, result.getTwo());
     }
@@ -333,7 +333,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testRemoveIfWith()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> ArrayAdapter.newArrayWith(1, 2, 3, null).removeIfWith(Predicates2.isNull(), null));
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ArrayAdapter.newArrayWith(1, 2, 3, null).removeIfWith((each, ignored) -> each == null, null));
     }
 
     @Test
@@ -414,16 +414,16 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void detectWith()
     {
         Assert.assertEquals(Integer.valueOf(3),
-                ArrayAdapter.newArrayWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 3));
-        Assert.assertNull(ArrayAdapter.newArrayWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 6));
+                ArrayAdapter.newArrayWith(1, 2, 3, 4, 5).detectWith(Object::equals, 3));
+        Assert.assertNull(ArrayAdapter.newArrayWith(1, 2, 3, 4, 5).detectWith(Object::equals, 6));
     }
 
     @Test
     public void detectWithIfNone()
     {
         MutableList<Integer> list = ArrayAdapter.newArrayWith(1, 2, 3, 4, 5);
-        Assert.assertNull(list.detectWithIfNone(Predicates2.equal(), 6, new PassThruFunction0<Integer>(null)));
-        Assert.assertEquals(Integer.valueOf(10000), list.detectWithIfNone(Predicates2.equal(), 6, new PassThruFunction0<Integer>(Integer.valueOf(10000))));
+        Assert.assertNull(list.detectWithIfNone(Object::equals, 6, new PassThruFunction0<Integer>(null)));
+        Assert.assertEquals(Integer.valueOf(10000), list.detectWithIfNone(Object::equals, 6, new PassThruFunction0<Integer>(Integer.valueOf(10000))));
     }
 
     @Test
@@ -431,7 +431,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     {
         Assert.assertTrue(ArrayAdapter.newArrayWith(1, 2, 3).allSatisfyWith(Predicates2.instanceOf(),
                 Integer.class));
-        Assert.assertFalse(ArrayAdapter.newArrayWith(1, 2, 3).allSatisfyWith(Predicates2.equal(), 1));
+        Assert.assertFalse(ArrayAdapter.newArrayWith(1, 2, 3).allSatisfyWith(Object::equals, 1));
     }
 
     @Test
@@ -448,7 +448,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     {
         Assert.assertTrue(ArrayAdapter.newArrayWith(1, 2, 3).noneSatisfyWith(Predicates2.instanceOf(),
                 String.class));
-        Assert.assertFalse(ArrayAdapter.newArrayWith(1, 2, 3).noneSatisfyWith(Predicates2.equal(), 1));
+        Assert.assertFalse(ArrayAdapter.newArrayWith(1, 2, 3).noneSatisfyWith(Object::equals, 1));
     }
 
     @Test
@@ -609,14 +609,14 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void remove()
     {
-        this.newArray().removeIf(Predicates.alwaysFalse());
+        this.newArray().removeIf((Predicate<Integer>) ignored -> false);
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void removeIfWith()
     {
-        this.newArray().removeIfWith(Predicates2.alwaysFalse(), null);
+        this.newArray().removeIfWith((ignored1, ignored2) -> false, null);
     }
 
     @Override

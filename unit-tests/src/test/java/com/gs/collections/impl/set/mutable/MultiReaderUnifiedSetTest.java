@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.collection.MutableCollection;
@@ -28,9 +29,6 @@ import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
-import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -173,7 +171,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
         MutableSet<String> set = MultiReaderUnifiedSet.newSetWith("1", "2", "3", "4");
         MutableSet<String> union = set.union(UnifiedSet.newSetWith("a", "b", "c", "1"));
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(String::valueOf)));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.union(UnifiedSet.newSetWith("1")));
@@ -185,7 +183,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
         MutableSet<String> set = MultiReaderUnifiedSet.newSetWith("1", "2", "3", "4");
         MutableSet<String> union = set.unionInto(UnifiedSet.newSetWith("a", "b", "c", "1"), UnifiedSet.<String>newSet());
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(String::valueOf)));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.unionInto(UnifiedSet.newSetWith("1"), UnifiedSet.<String>newSet()));
@@ -237,7 +235,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
         MutableSet<String> set = MultiReaderUnifiedSet.newSetWith("1", "2", "3", "4");
         MutableSet<String> difference = set.symmetricDifference(UnifiedSet.newSetWith("2", "3", "4", "5", "not present"));
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(String::valueOf)));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -254,7 +252,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
                 UnifiedSet.newSetWith("2", "3", "4", "5", "not present"),
                 UnifiedSet.<String>newSet());
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(String::valueOf)));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -299,17 +297,17 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
         Assert.assertEquals(
                 set,
                 cartesianProduct
-                        .select(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
-                        .collect(Functions.<String>firstOfPair()).toSet());
+                        .select(Predicates.attributeEqual((Function<Pair<?, String>, String>) Pair::getTwo, "One"))
+                        .collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
     }
 
     @Override
     @Test
     public void aggregateByMutating()
     {
-        Function0<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
+        Function0<AtomicInteger> valueCreator = AtomicInteger::new;
         MutableCollection<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
-        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, AtomicInteger::addAndGet);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(String::valueOf, valueCreator, AtomicInteger::addAndGet);
         Assert.assertEquals(1, aggregation.get("1").intValue());
         Assert.assertEquals(2, aggregation.get("2").intValue());
         Assert.assertEquals(3, aggregation.get("3").intValue());
@@ -319,10 +317,10 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     @Test
     public void aggregateByNonMutating()
     {
-        Function0<Integer> valueCreator = Functions0.value(0);
-        Function2<Integer, Integer, Integer> sumAggregator = Functions2.integerAddition();
+        Function0<Integer> valueCreator = () -> (Integer) 0;
+        Function2<Integer, Integer, Integer> sumAggregator = (integer1, integer2) -> integer1 + integer2;
         MutableCollection<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
-        MapIterable<String, Integer> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, Integer> aggregation = collection.aggregateBy(String::valueOf, valueCreator, sumAggregator);
         Assert.assertEquals(1, aggregation.get("1").intValue());
         Assert.assertEquals(2, aggregation.get("2").intValue());
         Assert.assertEquals(3, aggregation.get("3").intValue());

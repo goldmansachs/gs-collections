@@ -37,7 +37,7 @@ public class SelectIterableTest extends AbstractLazyIterableTestCase
     @Override
     protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return LazyIterate.select(FastList.newListWith(elements), Predicates.alwaysTrue());
+        return LazyIterate.select(FastList.newListWith(elements), ignored -> true);
     }
 
     @Test

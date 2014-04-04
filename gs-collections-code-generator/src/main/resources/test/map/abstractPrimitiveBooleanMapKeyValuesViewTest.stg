@@ -37,20 +37,7 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.primitive.BooleanFunction;
-import com.gs.collections.api.block.function.primitive.ByteFunction;
-import com.gs.collections.api.block.function.primitive.CharFunction;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
-import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
@@ -72,7 +59,6 @@ import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -160,8 +146,8 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void forEachWith()
     {
-        final MutableBag\<<name>BooleanPair> result = Bags.mutable.of();
-        final MutableBag\<Integer> result2 = Bags.mutable.of();
+        MutableBag\<<name>BooleanPair> result = Bags.mutable.of();
+        MutableBag\<Integer> result2 = Bags.mutable.of();
         RichIterable\<<name>BooleanPair> collection = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
         collection.forEachWith((<name>BooleanPair argument1, Integer argument2) ->
             {
@@ -176,8 +162,8 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void forEachWithIndex()
     {
-        final MutableBag\<<name>BooleanPair> elements = Bags.mutable.of();
-        final MutableBag\<Integer> indexes = Bags.mutable.of();
+        MutableBag\<<name>BooleanPair> elements = Bags.mutable.of();
+        MutableBag\<Integer> indexes = Bags.mutable.of();
         RichIterable\<<name>BooleanPair> collection = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("0")>, true, <(literal.(type))("3")>, false);
         collection.forEachWithIndex((<name>BooleanPair object, int index) ->
             {
@@ -191,7 +177,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void select()
     {
-        MutableList\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).select(Predicates.equal(PrimitiveTuples.pair(<(literal.(type))("2")>, true))).toList();
+        MutableList\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).select(PrimitiveTuples.pair(<(literal.(type))("2")>, true)::equals).toList();
         Verify.assertContains(PrimitiveTuples.pair(<(literal.(type))("2")>, true), result);
         Verify.assertNotContains(PrimitiveTuples.pair(<(literal.(type))("1")>, false), result);
         Verify.assertNotContains(PrimitiveTuples.pair(<(literal.(type))("3")>, false), result);
@@ -200,7 +186,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void selectWith()
     {
-        MutableList\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).selectWith(Predicates2.equal(), PrimitiveTuples.pair(<(literal.(type))("2")>, true)).toList();
+        MutableList\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).selectWith(Object::equals, PrimitiveTuples.pair(<(literal.(type))("2")>, true)).toList();
         Verify.assertContains(PrimitiveTuples.pair(<(literal.(type))("2")>, true), result);
         Verify.assertNotContains(PrimitiveTuples.pair(<(literal.(type))("1")>, false), result);
         Verify.assertNotContains(PrimitiveTuples.pair(<(literal.(type))("3")>, false), result);
@@ -234,7 +220,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void rejectWith_target()
     {
-        HashBag\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).rejectWith(Predicates2.equal(), PrimitiveTuples.pair(<(literal.(type))("2")>, true), HashBag.\<<name>BooleanPair>newBag());
+        HashBag\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).rejectWith(Object::equals, PrimitiveTuples.pair(<(literal.(type))("2")>, true), HashBag.\<<name>BooleanPair>newBag());
         Assert.assertEquals(Bags.immutable.of(PrimitiveTuples.pair(<(literal.(type))("1")>, false), PrimitiveTuples.pair(<(literal.(type))("3")>, false)), result);
     }
 
@@ -253,7 +239,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
             this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).collect((<name>BooleanPair object) -> (int) object.getOne());
         Assert.assertEquals(Bags.immutable.of(1, 2, 3), result1.toBag());
         RichIterable\<Boolean> result2 =
-            this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).collect((<name>BooleanPair object) -> object.getTwo());
+            this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).collect(<name>BooleanPair::getTwo);
         Assert.assertEquals(Bags.immutable.of(false, true, false), result2.toBag());
     }
 
@@ -332,8 +318,8 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void detect()
     {
-        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detect(Predicates.equal(PrimitiveTuples.pair(<(literal.(type))("2")>, true))));
-        Assert.assertNull(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detect(Predicates.equal(PrimitiveTuples.pair(2, 4L))));
+        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detect(PrimitiveTuples.pair(<(literal.(type))("2")>, true)::equals));
+        Assert.assertNull(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detect(PrimitiveTuples.pair(2, 4L)::equals));
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -389,26 +375,26 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void detectWith()
     {
-        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWith(Predicates2.equal(), PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
-        Assert.assertNull(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWith(Predicates2.equal(), PrimitiveTuples.pair(<(literal.(type))("2")>, false)));
+        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWith(Object::equals, PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
+        Assert.assertNull(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWith(Object::equals, PrimitiveTuples.pair(<(literal.(type))("2")>, false)));
     }
 
     @Test
     public void detectIfNone()
     {
         Function0\<<name>BooleanPair> function = Functions0.value(PrimitiveTuples.pair(<(literal.(type))("5")>, true));
-        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectIfNone(Predicates.equal(PrimitiveTuples.pair(<(literal.(type))("2")>, true)), function));
-        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("5")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectIfNone(Predicates.equal(PrimitiveTuples.pair(<(literal.(type))("2")>, false)), function));
+        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectIfNone(PrimitiveTuples.pair(<(literal.(type))("2")>, true)::equals, function));
+        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("5")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectIfNone(PrimitiveTuples.pair(<(literal.(type))("2")>, false)::equals, function));
     }
 
     @Test
     public void detectWithIfNoneBlock()
     {
         Function0\<<name>BooleanPair> function = Functions0.value(PrimitiveTuples.pair(<(literal.(type))("5")>, true));
-        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWithIfNone(Predicates2.equal(),
+        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWithIfNone(Object::equals,
                 PrimitiveTuples.pair(<(literal.(type))("2")>, true),
                 function));
-        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("5")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWithIfNone(Predicates2.equal(),
+        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("5")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWithIfNone(Object::equals,
                 PrimitiveTuples.pair(<(literal.(type))("2")>, false),
                 function));
     }
@@ -416,51 +402,51 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).allSatisfy(Predicates.instanceOf(<name>BooleanPair.class)));
-        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).allSatisfy(Predicates.equal(PrimitiveTuples.pair(<(literal.(type))("2")>, true))));
+        Assert.assertTrue(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).allSatisfy(<name>BooleanPair.class::isInstance));
+        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).allSatisfy(PrimitiveTuples.pair(<(literal.(type))("2")>, true)::equals));
     }
 
     @Test
     public void allSatisfyWith()
     {
         Assert.assertTrue(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).allSatisfyWith(Predicates2.instanceOf(), <name>BooleanPair.class));
-        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).allSatisfyWith(Predicates2.equal(), PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
+        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).allSatisfyWith(Object::equals, PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
     }
 
     @Test
     public void noneSatisfy()
     {
-        Assert.assertTrue(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).noneSatisfy(Predicates.instanceOf(Boolean.class)));
-        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).noneSatisfy(Predicates.equal(PrimitiveTuples.pair(<(literal.(type))("2")>, true))));
+        Assert.assertTrue(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).noneSatisfy(Boolean.class::isInstance));
+        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).noneSatisfy(PrimitiveTuples.pair(<(literal.(type))("2")>, true)::equals));
     }
 
     @Test
     public void noneSatisfyWith()
     {
         Assert.assertTrue(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).noneSatisfyWith(Predicates2.instanceOf(), Boolean.class));
-        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).noneSatisfyWith(Predicates2.equal(), PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
+        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).noneSatisfyWith(Object::equals, PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
     }
 
     @Test
     public void anySatisfy()
     {
-        Assert.assertTrue(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).anySatisfy(Predicates.equal(PrimitiveTuples.pair(<(literal.(type))("2")>, true))));
-        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).anySatisfy(Predicates.equal(PrimitiveTuples.pair(2, 5L))));
+        Assert.assertTrue(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).anySatisfy(PrimitiveTuples.pair(<(literal.(type))("2")>, true)::equals));
+        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).anySatisfy(PrimitiveTuples.pair(2, 5L)::equals));
     }
 
     @Test
     public void anySatisfyWith()
     {
-        Assert.assertTrue(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).anySatisfyWith(Predicates2.equal(), PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
-        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).anySatisfyWith(Predicates2.equal(), PrimitiveTuples.pair(2, 5L)));
+        Assert.assertTrue(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).anySatisfyWith(Object::equals, PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
+        Assert.assertFalse(this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).anySatisfyWith(Object::equals, PrimitiveTuples.pair(2, 5L)));
     }
 
     @Test
     public void count()
     {
-        Assert.assertEquals(0, this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).count(Predicates.instanceOf(Boolean.class)));
-        Assert.assertEquals(3, this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).count(Predicates.instanceOf(<name>BooleanPair.class)));
-        Assert.assertEquals(1, this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).count(Predicates.equal(PrimitiveTuples.pair(<(literal.(type))("2")>, true))));
+        Assert.assertEquals(0, this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).count(Boolean.class::isInstance));
+        Assert.assertEquals(3, this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).count(<name>BooleanPair.class::isInstance));
+        Assert.assertEquals(1, this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).count(PrimitiveTuples.pair(<(literal.(type))("2")>, true)::equals));
     }
 
     @Test
@@ -468,7 +454,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     {
         Assert.assertEquals(0, this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).countWith(Predicates2.instanceOf(), Boolean.class));
         Assert.assertEquals(3, this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).countWith(Predicates2.instanceOf(), <name>BooleanPair.class));
-        Assert.assertEquals(1, this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).countWith(Predicates2.equal(), PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
+        Assert.assertEquals(1, this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).countWith(Object::equals, PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
     }
 
     @Test
@@ -476,13 +462,13 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     {
         Verify.assertContainsAll(
                 this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).collectIf(
-                        Predicates.instanceOf(<name>BooleanPair.class),
-                        Functions.getToString()),
+                        <name>BooleanPair.class::isInstance,
+                        String::valueOf),
                 "<(toStringLiteral.(type))("1")>:false", "<(toStringLiteral.(type))("2")>:true", "<(toStringLiteral.(type))("3")>:false");
         Verify.assertContainsAll(
                 this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).collectIf(
-                        Predicates.instanceOf(<name>BooleanPair.class),
-                        Functions.getToString(),
+                        <name>BooleanPair.class::isInstance,
+                        String::valueOf,
                         UnifiedSet.\<String>newSet()),
                 "<(toStringLiteral.(type))("1")>:false", "<(toStringLiteral.(type))("2")>:true", "<(toStringLiteral.(type))("3")>:false");
     }
@@ -657,7 +643,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void partition()
     {
-        PartitionIterable\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).partition(Predicates.equal(PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
+        PartitionIterable\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).partition(PrimitiveTuples.pair(<(literal.(type))("2")>, true)::equals);
         Verify.assertContains(PrimitiveTuples.pair(<(literal.(type))("2")>, true), result.getSelected().toList());
         Verify.assertIterableSize(1, result.getSelected());
         Verify.assertContains(PrimitiveTuples.pair(<(literal.(type))("1")>, false), result.getRejected().toList());
@@ -668,7 +654,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void partitionWith()
     {
-        PartitionIterable\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).partitionWith(Predicates2.equal(), PrimitiveTuples.pair(<(literal.(type))("2")>, true));
+        PartitionIterable\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).partitionWith(Object::equals, PrimitiveTuples.pair(<(literal.(type))("2")>, true));
         Verify.assertContains(PrimitiveTuples.pair(<(literal.(type))("2")>, true), result.getSelected().toList());
         Verify.assertIterableSize(1, result.getSelected());
         Verify.assertContains(PrimitiveTuples.pair(<(literal.(type))("1")>, false), result.getRejected().toList());
@@ -710,7 +696,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     public void toSortedListBy()
     {
         RichIterable\<<name>BooleanPair> pairs = this.newWith(<(literal.(type))("2")>, true, <(literal.(type))("1")>, false, <(literal.(type))("3")>, false);
-        MutableList\<<name>BooleanPair> list = pairs.toSortedListBy(Functions.getToString());
+        MutableList\<<name>BooleanPair> list = pairs.toSortedListBy(String::valueOf);
         Assert.assertEquals(Lists.mutable.of(PrimitiveTuples.pair(<(literal.(type))("1")>, false), PrimitiveTuples.pair(<(literal.(type))("2")>, true), PrimitiveTuples.pair(<(literal.(type))("3")>, false)), list);
     }
 
@@ -738,7 +724,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     public void toSortedSetBy()
     {
         RichIterable\<<name>BooleanPair> pairs = this.newWith(<(literal.(type))("2")>, true, <(literal.(type))("1")>, false, <(literal.(type))("3")>, false);
-        MutableSortedSet\<<name>BooleanPair> set = pairs.toSortedSetBy(Functions.getToString());
+        MutableSortedSet\<<name>BooleanPair> set = pairs.toSortedSetBy(String::valueOf);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(PrimitiveTuples.pair(<(literal.(type))("1")>, false), PrimitiveTuples.pair(<(literal.(type))("2")>, true), PrimitiveTuples.pair(<(literal.(type))("3")>, false)), set);
     }
 
@@ -755,7 +741,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     {
         RichIterable\<<name>BooleanPair> pairs = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
         MutableMap\<String, String> map =
-                pairs.toMap(Functions.getToString(), Functions.getToString());
+                pairs.toMap(String::valueOf, String::valueOf);
         Assert.assertEquals(UnifiedMap.newWithKeysValues("<(toStringLiteral.(type))("1")>:false", "<(toStringLiteral.(type))("1")>:false", "<(toStringLiteral.(type))("2")>:true", "<(toStringLiteral.(type))("2")>:true", "<(toStringLiteral.(type))("3")>:false", "<(toStringLiteral.(type))("3")>:false"), map);
     }
 
@@ -764,7 +750,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     {
         RichIterable\<<name>BooleanPair> pairs = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
         MutableSortedMap\<String, String> map =
-                pairs.toSortedMap(Functions.getToString(), Functions.getToString());
+                pairs.toSortedMap(String::valueOf, String::valueOf);
         Assert.assertEquals(TreeSortedMap.newMapWith("<(toStringLiteral.(type))("1")>:false", "<(toStringLiteral.(type))("1")>:false", "<(toStringLiteral.(type))("2")>:true", "<(toStringLiteral.(type))("2")>:true", "<(toStringLiteral.(type))("3")>:false", "<(toStringLiteral.(type))("3")>:false"), map);
     }
 
@@ -773,7 +759,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     {
         RichIterable\<<name>BooleanPair> pairs = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
         MutableSortedMap\<String, String> map =
-                pairs.toSortedMap(Comparators.reverseNaturalOrder(), Functions.getToString(), Functions.getToString());
+                pairs.toSortedMap(Comparators.reverseNaturalOrder(), String::valueOf, String::valueOf);
         Assert.assertEquals(TreeSortedMap.newMapWith(Comparators.reverseNaturalOrder(), "<(toStringLiteral.(type))("1")>:false", "<(toStringLiteral.(type))("1")>:false", "<(toStringLiteral.(type))("2")>:true", "<(toStringLiteral.(type))("2")>:true", "<(toStringLiteral.(type))("3")>:false", "<(toStringLiteral.(type))("3")>:false"), map);
     }
 
@@ -923,7 +909,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
         Function0\<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
         Procedure2\<AtomicInteger, <name>BooleanPair> sumAggregator = (AtomicInteger aggregate, <name>BooleanPair value) -> aggregate.addAndGet((int) value.getOne());
         RichIterable\<<name>BooleanPair> collection = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
-        MapIterable\<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable\<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(String::valueOf, valueCreator, sumAggregator);
         Assert.assertEquals(3, aggregation.get("<(toStringLiteral.(type))("3")>:false").intValue());
         Assert.assertEquals(2, aggregation.get("<(toStringLiteral.(type))("2")>:true").intValue());
         Assert.assertEquals(1, aggregation.get("<(toStringLiteral.(type))("1")>:false").intValue());
@@ -935,7 +921,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
         Function0\<Integer> valueCreator = Functions0.value(0);
         Function2\<Integer, <name>BooleanPair, Integer> sumAggregator = (Integer aggregate, <name>BooleanPair value) -> (int) (aggregate + value.getOne());
         RichIterable\<<name>BooleanPair> collection = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("1")>, false, <(literal.(type))("2")>, true);
-        MapIterable\<String, Integer> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable\<String, Integer> aggregation = collection.aggregateBy(String::valueOf, valueCreator, sumAggregator);
         Assert.assertEquals(2, aggregation.get("<(toStringLiteral.(type))("2")>:true").intValue());
         Assert.assertEquals(1, aggregation.get("<(toStringLiteral.(type))("1")>:false").intValue());
     }

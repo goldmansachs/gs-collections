@@ -30,7 +30,6 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -45,7 +44,6 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
@@ -81,10 +79,6 @@ public class ParallelIterateTest
     };
 
     private static final Function<Integer, Collection<String>> INT_TO_TWO_STRINGS = integer -> Lists.fixedSize.of(integer.toString(), integer.toString());
-
-    private static final Function0<AtomicInteger> ATOMIC_INTEGER_NEW = Functions0.zeroAtomicInteger();
-
-    private static final Function0<Integer> INTEGER_NEW = Functions0.value(0);
 
     private static final Function<Integer, String> EVEN_OR_ODD = value -> value % 2 == 0 ? "Even" : "Odd";
 
@@ -170,19 +164,19 @@ public class ParallelIterateTest
     {
         //Test the default batch size calculations
         IntegerSum sum1 = new IntegerSum(0);
-        MutableMap<String, Integer> map1 = Interval.fromTo(1, 100).toMap(Functions.getToString(), Functions.getIntegerPassThru());
+        MutableMap<String, Integer> map1 = Interval.fromTo(1, 100).toMap(String::valueOf, Functions.getIntegerPassThru());
         ParallelIterate.forEach(map1, new SumProcedure(sum1), new SumCombiner(sum1));
         Assert.assertEquals(5050, sum1.getSum());
 
         //Testing batch size 1
         IntegerSum sum2 = new IntegerSum(0);
-        UnifiedMap<String, Integer> map2 = (UnifiedMap<String, Integer>) Interval.fromTo(1, 100).toMap(Functions.getToString(), Functions.getIntegerPassThru());
+        UnifiedMap<String, Integer> map2 = (UnifiedMap<String, Integer>) Interval.fromTo(1, 100).toMap(String::valueOf, Functions.getIntegerPassThru());
         ParallelIterate.forEach(map2, new SumProcedure(sum2), new SumCombiner(sum2), 1, map2.getBatchCount(map2.size()));
         Assert.assertEquals(5050, sum2.getSum());
 
         //Testing an uneven batch size
         IntegerSum sum3 = new IntegerSum(0);
-        UnifiedMap<String, Integer> set3 = (UnifiedMap<String, Integer>) Interval.fromTo(1, 100).toMap(Functions.getToString(), Functions.getIntegerPassThru());
+        UnifiedMap<String, Integer> set3 = (UnifiedMap<String, Integer>) Interval.fromTo(1, 100).toMap(String::valueOf, Functions.getIntegerPassThru());
         ParallelIterate.forEach(set3, new SumProcedure(sum3), new SumCombiner(sum3), 1, set3.getBatchCount(13));
         Assert.assertEquals(5050, sum3.getSum());
     }
@@ -410,10 +404,10 @@ public class ParallelIterateTest
 
     private void basicCollect(RichIterable<Integer> iterable)
     {
-        Collection<String> actual1 = ParallelIterate.collect(iterable, Functions.getToString());
-        Collection<String> actual2 = ParallelIterate.collect(iterable, Functions.getToString(), HashBag.<String>newBag(), 3, this.executor, false);
-        Collection<String> actual3 = ParallelIterate.collect(iterable, Functions.getToString(), true);
-        RichIterable<String> expected = iterable.collect(Functions.getToString());
+        Collection<String> actual1 = ParallelIterate.collect(iterable, String::valueOf);
+        Collection<String> actual2 = ParallelIterate.collect(iterable, String::valueOf, HashBag.<String>newBag(), 3, this.executor, false);
+        Collection<String> actual3 = ParallelIterate.collect(iterable, String::valueOf, true);
+        RichIterable<String> expected = iterable.collect(String::valueOf);
         Verify.assertSize(200, actual1);
         Verify.assertContains(String.valueOf(200), actual1);
         Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual1.getClass().getSimpleName(), expected, actual1);
@@ -430,10 +424,10 @@ public class ParallelIterateTest
     private void basicCollectIf(RichIterable<Integer> collection)
     {
         Predicate<Integer> greaterThan = Predicates.greaterThan(100);
-        Collection<String> actual1 = ParallelIterate.collectIf(collection, greaterThan, Functions.getToString());
-        Collection<String> actual2 = ParallelIterate.collectIf(collection, greaterThan, Functions.getToString(), HashBag.<String>newBag(), 3, this.executor, true);
-        Collection<String> actual3 = ParallelIterate.collectIf(collection, greaterThan, Functions.getToString(), HashBag.<String>newBag(), 3, this.executor, true);
-        Bag<String> expected = collection.collectIf(greaterThan, Functions.getToString()).toBag();
+        Collection<String> actual1 = ParallelIterate.collectIf(collection, greaterThan, String::valueOf);
+        Collection<String> actual2 = ParallelIterate.collectIf(collection, greaterThan, String::valueOf, HashBag.<String>newBag(), 3, this.executor, true);
+        Collection<String> actual3 = ParallelIterate.collectIf(collection, greaterThan, String::valueOf, HashBag.<String>newBag(), 3, this.executor, true);
+        Bag<String> expected = collection.collectIf(greaterThan, String::valueOf).toBag();
         Verify.assertSize(100, actual1);
         Verify.assertNotContains(String.valueOf(90), actual1);
         Verify.assertNotContains(String.valueOf(210), actual1);
@@ -447,17 +441,17 @@ public class ParallelIterateTest
     public void groupByWithInterval()
     {
         LazyIterable<Integer> iterable = Interval.oneTo(1000).concatenate(Interval.oneTo(1000)).concatenate(Interval.oneTo(1000));
-        Multimap<String, Integer> expected = iterable.toBag().groupBy(Functions.getToString());
-        Multimap<String, Integer> expectedAsSet = iterable.toSet().groupBy(Functions.getToString());
-        Multimap<String, Integer> result1 = ParallelIterate.groupBy(iterable.toList(), Functions.getToString(), 100);
-        Multimap<String, Integer> result2 = ParallelIterate.groupBy(iterable.toList(), Functions.getToString());
-        Multimap<String, Integer> result3 = ParallelIterate.groupBy(iterable.toSet(), Functions.getToString(), SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap(), 100);
-        Multimap<String, Integer> result4 = ParallelIterate.groupBy(iterable.toSet(), Functions.getToString(), SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap());
-        Multimap<String, Integer> result5 = ParallelIterate.groupBy(iterable.toSortedSet(), Functions.getToString(), SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap(), 100);
-        Multimap<String, Integer> result6 = ParallelIterate.groupBy(iterable.toSortedSet(), Functions.getToString(), SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap());
-        Multimap<String, Integer> result7 = ParallelIterate.groupBy(iterable.toBag(), Functions.getToString(), SynchronizedPutHashBagMultimap.<String, Integer>newMultimap(), 100);
-        Multimap<String, Integer> result8 = ParallelIterate.groupBy(iterable.toBag(), Functions.getToString(), SynchronizedPutHashBagMultimap.<String, Integer>newMultimap());
-        Multimap<String, Integer> result9 = ParallelIterate.groupBy(iterable.toList().toImmutable(), Functions.getToString());
+        Multimap<String, Integer> expected = iterable.toBag().groupBy(String::valueOf);
+        Multimap<String, Integer> expectedAsSet = iterable.toSet().groupBy(String::valueOf);
+        Multimap<String, Integer> result1 = ParallelIterate.groupBy(iterable.toList(), String::valueOf, 100);
+        Multimap<String, Integer> result2 = ParallelIterate.groupBy(iterable.toList(), String::valueOf);
+        Multimap<String, Integer> result3 = ParallelIterate.groupBy(iterable.toSet(), String::valueOf, SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap(), 100);
+        Multimap<String, Integer> result4 = ParallelIterate.groupBy(iterable.toSet(), String::valueOf, SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap());
+        Multimap<String, Integer> result5 = ParallelIterate.groupBy(iterable.toSortedSet(), String::valueOf, SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap(), 100);
+        Multimap<String, Integer> result6 = ParallelIterate.groupBy(iterable.toSortedSet(), String::valueOf, SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap());
+        Multimap<String, Integer> result7 = ParallelIterate.groupBy(iterable.toBag(), String::valueOf, SynchronizedPutHashBagMultimap.<String, Integer>newMultimap(), 100);
+        Multimap<String, Integer> result8 = ParallelIterate.groupBy(iterable.toBag(), String::valueOf, SynchronizedPutHashBagMultimap.<String, Integer>newMultimap());
+        Multimap<String, Integer> result9 = ParallelIterate.groupBy(iterable.toList().toImmutable(), String::valueOf);
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result1));
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result2));
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result9));
@@ -506,10 +500,10 @@ public class ParallelIterateTest
         Procedure2<AtomicInteger, Integer> countAggregator = (aggregate, value) -> { aggregate.incrementAndGet(); };
         List<Integer> list = Interval.oneTo(2000);
         MutableMap<String, AtomicInteger> aggregation =
-                ParallelIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator);
+                ParallelIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, AtomicInteger::new, countAggregator);
         Assert.assertEquals(1000, aggregation.get("Even").intValue());
         Assert.assertEquals(1000, aggregation.get("Odd").intValue());
-        ParallelIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator, aggregation);
+        ParallelIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, AtomicInteger::new, countAggregator, aggregation);
         Assert.assertEquals(2000, aggregation.get("Even").intValue());
         Assert.assertEquals(2000, aggregation.get("Odd").intValue());
     }
@@ -523,7 +517,7 @@ public class ParallelIterateTest
                 .toList();
         Collections.shuffle(list);
         MapIterable<String, AtomicInteger> aggregation =
-                ParallelIterate.aggregateInPlaceBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, AtomicInteger::addAndGet, 50);
+                ParallelIterate.aggregateInPlaceBy(list, String::valueOf, AtomicInteger::new, AtomicInteger::addAndGet, 50);
         Assert.assertEquals(100, aggregation.get("1").intValue());
         Assert.assertEquals(400, aggregation.get("2").intValue());
         Assert.assertEquals(900, aggregation.get("3").intValue());
@@ -535,10 +529,10 @@ public class ParallelIterateTest
         Function2<Integer, Integer, Integer> countAggregator = (aggregate, value) -> aggregate + 1;
         List<Integer> list = Interval.oneTo(20000);
         MutableMap<String, Integer> aggregation =
-                ParallelIterate.aggregateBy(list, EVEN_OR_ODD, INTEGER_NEW, countAggregator);
+                ParallelIterate.aggregateBy(list, EVEN_OR_ODD, () -> 0, countAggregator);
         Assert.assertEquals(10000, aggregation.get("Even").intValue());
         Assert.assertEquals(10000, aggregation.get("Odd").intValue());
-        ParallelIterate.aggregateBy(list, EVEN_OR_ODD, INTEGER_NEW, countAggregator, aggregation);
+        ParallelIterate.aggregateBy(list, EVEN_OR_ODD, () -> 0, countAggregator, aggregation);
         Assert.assertEquals(20000, aggregation.get("Even").intValue());
         Assert.assertEquals(20000, aggregation.get("Odd").intValue());
     }
@@ -553,7 +547,7 @@ public class ParallelIterateTest
                 .toList();
         Collections.shuffle(list);
         MapIterable<String, Integer> aggregation =
-                ParallelIterate.aggregateBy(list, Functions.getToString(), INTEGER_NEW, sumAggregator, 100);
+                ParallelIterate.aggregateBy(list, String::valueOf, () -> 0, sumAggregator, 100);
         Assert.assertEquals(1000, aggregation.get("1").intValue());
         Assert.assertEquals(4000, aggregation.get("2").intValue());
         Assert.assertEquals(9000, aggregation.get("3").intValue());

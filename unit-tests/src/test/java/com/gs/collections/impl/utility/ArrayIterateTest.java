@@ -23,12 +23,6 @@ import java.util.List;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
-import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
-import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
-import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.map.MutableMap;
@@ -97,80 +91,28 @@ public class ArrayIterateTest
     @Test
     public void injectIntoPrimitives()
     {
-        double doubleActual = ArrayIterate.injectInto(1.0d, new Double[]{1.0d, 2.0d, 3.0d}, new DoubleObjectToDoubleFunction<Double>()
-        {
-            public double doubleValueOf(double doubleParameter, Double objectParameter)
-            {
-                return doubleParameter + objectParameter;
-            }
-        });
+        double doubleActual = ArrayIterate.injectInto(1.0d, new Double[]{1.0d, 2.0d, 3.0d}, (doubleParameter, objectParameter) -> doubleParameter + objectParameter);
         Assert.assertEquals(7.0, doubleActual, 0.000001);
-        long longActual = ArrayIterate.injectInto(1L, new Long[]{1L, 2L, 3L}, new LongObjectToLongFunction<Long>()
-        {
-            public long longValueOf(long longParameter, Long objectParameter)
-            {
-                return longParameter + objectParameter;
-            }
-        });
+        long longActual = ArrayIterate.injectInto(1L, new Long[]{1L, 2L, 3L}, (long longParameter, Long objectParameter) -> longParameter + objectParameter);
         Assert.assertEquals(7L, longActual);
-        int intActual = ArrayIterate.injectInto(1, new Integer[]{1, 2, 3}, new IntObjectToIntFunction<Integer>()
-        {
-            public int intValueOf(int intParameter, Integer objectParameter)
-            {
-                return intParameter + objectParameter;
-            }
-        });
+        int intActual = ArrayIterate.injectInto(1, new Integer[]{1, 2, 3}, (int intParameter, Integer objectParameter) -> intParameter + objectParameter);
         Assert.assertEquals(7, intActual);
     }
 
     @Test
     public void injectIntoThrowsOnNullArgument()
     {
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayIterate.injectInto(0, null, new IntObjectToIntFunction<Object>()
-                {
-                    public int intValueOf(int intParameter, Object objectParameter)
-                    {
-                        return 0;
-                    }
-                });
-            }
+        Verify.assertThrows(IllegalArgumentException.class, () -> {
+            ArrayIterate.injectInto(0, null, (int intParameter, Object objectParameter) -> 0);
         });
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayIterate.injectInto(0L, null, new LongObjectToLongFunction<Object>()
-                {
-                    public long longValueOf(long longParameter, Object objectParameter)
-                    {
-                        return 0;
-                    }
-                });
-            }
+        Verify.assertThrows(IllegalArgumentException.class, () -> {
+            ArrayIterate.injectInto(0L, null, (long longParameter, Object objectParameter) -> 0);
         });
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayIterate.injectInto((double) 0, null, new DoubleObjectToDoubleFunction<Object>()
-                {
-                    public double doubleValueOf(double doubleParameter, Object objectParameter)
-                    {
-                        return 0.0;
-                    }
-                });
-            }
+        Verify.assertThrows(IllegalArgumentException.class, () -> {
+            ArrayIterate.injectInto((double) 0, null, (doubleParameter, objectParameter) -> 0.0);
         });
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                ArrayIterate.injectInto(null, null, null);
-            }
+        Verify.assertThrows(IllegalArgumentException.class, () -> {
+            ArrayIterate.injectInto(null, null, null);
         });
     }
 
@@ -376,7 +318,7 @@ public class ArrayIterateTest
         Boolean[] objectArray = {true, false, null};
         Assert.assertEquals(
                 iList("true", "false", "null"),
-                ArrayIterate.collect(objectArray, Functions.getToString()));
+                ArrayIterate.collect(objectArray, String::valueOf));
     }
 
     @Test
@@ -569,7 +511,7 @@ public class ArrayIterateTest
         Boolean[] objectArray = {true, false, null};
         Assert.assertEquals(
                 iList("true", "false", "null"),
-                ArrayIterate.collectWith(objectArray, Functions2.fromFunction(Functions.getToString()), null));
+                ArrayIterate.collectWith(objectArray, Functions2.fromFunction(String::valueOf), null));
     }
 
     @Test
@@ -605,7 +547,7 @@ public class ArrayIterateTest
     {
         Assert.assertEquals(
                 FastList.newListWith(5, 4, 3, 2, 1),
-                ArrayIterate.select(INTEGER_ARRAY, Predicates.instanceOf(Integer.class)));
+                ArrayIterate.select(INTEGER_ARRAY, Integer.class::isInstance));
     }
 
     @Test
@@ -613,7 +555,7 @@ public class ArrayIterateTest
     {
         Assert.assertEquals(
                 FastList.newListWith(5, 4, 3, 2, 1),
-                ArrayIterate.reject(INTEGER_ARRAY, Predicates.instanceOf(String.class)));
+                ArrayIterate.reject(INTEGER_ARRAY, String.class::isInstance));
     }
 
     @Test
@@ -646,8 +588,8 @@ public class ArrayIterateTest
     @Test
     public void countOnNullOrEmptyArray()
     {
-        Assert.assertEquals(0, ArrayIterate.count(null, Predicates.alwaysTrue()));
-        Assert.assertEquals(0, ArrayIterate.count(new Object[]{}, Predicates.alwaysTrue()));
+        Assert.assertEquals(0, ArrayIterate.count(null, ignored1 -> true));
+        Assert.assertEquals(0, ArrayIterate.count(new Object[]{}, ignored -> true));
     }
 
     @Test
@@ -684,13 +626,13 @@ public class ArrayIterateTest
     {
         Assert.assertEquals(
                 FastList.newListWith(5, 4, 3, 2, 1),
-                ArrayIterate.select(INTEGER_ARRAY, Predicates.instanceOf(Integer.class), new ArrayList<Integer>()));
+                ArrayIterate.select(INTEGER_ARRAY, Integer.class::isInstance, new ArrayList<Integer>()));
     }
 
     @Test
     public void rejectDifferentTargetCollection()
     {
-        Verify.assertEmpty(ArrayIterate.reject(INTEGER_ARRAY, Predicates.instanceOf(Integer.class), new ArrayList<Integer>()));
+        Verify.assertEmpty(ArrayIterate.reject(INTEGER_ARRAY, Integer.class::isInstance, new ArrayList<Integer>()));
     }
 
     @Test
@@ -704,14 +646,14 @@ public class ArrayIterateTest
     public void collectIf()
     {
         Object[] integers = Lists.fixedSize.of(1, 2, 3).toArray();
-        Verify.assertContainsAll(ArrayIterate.collectIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString()), "1", "2", "3");
-        Verify.assertContainsAll(ArrayIterate.collectIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString(), FastList.<String>newList()), "1", "2", "3");
+        Verify.assertContainsAll(ArrayIterate.collectIf(integers, Integer.class::isInstance, String::valueOf), "1", "2", "3");
+        Verify.assertContainsAll(ArrayIterate.collectIf(integers, Integer.class::isInstance, String::valueOf, FastList.<String>newList()), "1", "2", "3");
     }
 
     @Test
     public void toMap()
     {
-        MutableMap<String, Integer> map = ArrayIterate.toMap(INTEGER_ARRAY, Functions.getToString());
+        MutableMap<String, Integer> map = ArrayIterate.toMap(INTEGER_ARRAY, String::valueOf);
         Verify.assertSize(5, map);
         Verify.assertContainsKeyValue("1", 1, map);
         Verify.assertContainsKeyValue("2", 2, map);
@@ -723,7 +665,7 @@ public class ArrayIterateTest
     @Test
     public void toMap2()
     {
-        MutableMap<String, Integer> map = ArrayIterate.toMap(INTEGER_ARRAY, Functions.getToString(), Functions.squaredInteger());
+        MutableMap<String, Integer> map = ArrayIterate.toMap(INTEGER_ARRAY, String::valueOf, Functions.squaredInteger());
         Verify.assertSize(5, map);
         Verify.assertContainsKeyValue("1", 1, map);
         Verify.assertContainsKeyValue("2", 4, map);
@@ -768,7 +710,7 @@ public class ArrayIterateTest
     @Test
     public void anySatisfy()
     {
-        Assert.assertTrue(ArrayIterate.anySatisfy(INTEGER_ARRAY, Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(ArrayIterate.anySatisfy(INTEGER_ARRAY, Integer.class::isInstance));
         Assert.assertFalse(ArrayIterate.anySatisfy(INTEGER_ARRAY, Predicates.isNull()));
     }
 
@@ -781,7 +723,7 @@ public class ArrayIterateTest
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(ArrayIterate.allSatisfy(INTEGER_ARRAY, Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(ArrayIterate.allSatisfy(INTEGER_ARRAY, Integer.class::isInstance));
         Assert.assertFalse(ArrayIterate.allSatisfy(INTEGER_ARRAY, Predicates.isNull()));
     }
 
@@ -794,7 +736,7 @@ public class ArrayIterateTest
     @Test
     public void noneSatisfy()
     {
-        Assert.assertTrue(ArrayIterate.noneSatisfy(INTEGER_ARRAY, Predicates.instanceOf(String.class)));
+        Assert.assertTrue(ArrayIterate.noneSatisfy(INTEGER_ARRAY, String.class::isInstance));
         Assert.assertFalse(ArrayIterate.noneSatisfy(INTEGER_ARRAY, Predicates.notNull()));
     }
 
@@ -895,8 +837,8 @@ public class ArrayIterateTest
     public void detectIfNone()
     {
         Integer[] array = this.createIntegerArray(1);
-        Assert.assertEquals(Integer.valueOf(7), ArrayIterate.detectIfNone(array, Predicates.equal(2), 7));
-        Assert.assertEquals(Integer.valueOf(1), ArrayIterate.detectIfNone(array, Predicates.equal(1), 7));
+        Assert.assertEquals(Integer.valueOf(7), ArrayIterate.detectIfNone(array, Integer.valueOf(2)::equals, 7));
+        Assert.assertEquals(Integer.valueOf(1), ArrayIterate.detectIfNone(array, Integer.valueOf(1)::equals, 7));
     }
 
     @Test
@@ -904,7 +846,7 @@ public class ArrayIterateTest
     {
         Integer[] array = this.createIntegerArray(1);
         Assert.assertEquals(Integer.valueOf(7),
-                ArrayIterate.detectWithIfNone(array, Predicates2.equal(), 2, 7));
+                ArrayIterate.detectWithIfNone(array, Object::equals, 2, 7));
     }
 
     @Test
@@ -922,7 +864,7 @@ public class ArrayIterateTest
     public void indexOfPredicates()
     {
         String[] array = {"1", "2", "3", null};
-        Assert.assertEquals(0, ArrayIterate.detectIndex(array, Predicates.instanceOf(String.class)));
+        Assert.assertEquals(0, ArrayIterate.detectIndex(array, String.class::isInstance));
         Assert.assertEquals(3, ArrayIterate.detectIndex(array, Predicates.isNull()));
         Assert.assertEquals(0, ArrayIterate.detectIndexWith(array, Predicates2.instanceOf(), String.class));
     }
@@ -994,20 +936,20 @@ public class ArrayIterateTest
         MutableList<Pair<String, Object>> pairs = ArrayIterate.zip(array, nulls);
         Assert.assertEquals(
                 FastList.newListWith(array),
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne));
         Assert.assertEquals(
                 FastList.newListWith(nulls),
-                pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         MutableList<Pair<String, Object>> pairsPlusOne = ArrayIterate.zip(array, nullsPlusOne);
         Assert.assertEquals(
                 FastList.newListWith(array),
-                pairsPlusOne.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(FastList.newListWith(nulls), pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairsPlusOne.collect((Function<Pair<String, ?>, String>) Pair::getOne));
+        Assert.assertEquals(FastList.newListWith(nulls), pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         MutableList<Pair<String, Object>> pairsMinusOne = ArrayIterate.zip(array, nullsMinusOne);
         Assert.assertEquals(array.length - 1, pairsMinusOne.size());
-        Assert.assertTrue(FastList.newListWith(array).containsAll(pairsMinusOne.collect(Functions.<String>firstOfPair())));
+        Assert.assertTrue(FastList.newListWith(array).containsAll(pairsMinusOne.collect((Function<Pair<String, ?>, String>) Pair::getOne)));
 
         Assert.assertEquals(
                 ArrayIterate.zip(array, nulls),
@@ -1022,10 +964,10 @@ public class ArrayIterateTest
 
         Assert.assertEquals(
                 FastList.newListWith(array),
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne));
         Assert.assertEquals(
                 Interval.zeroTo(array.length - 1).toList(),
-                pairs.collect(Functions.<Integer>secondOfPair(), FastList.<Integer>newList()));
+                pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo, FastList.<Integer>newList()));
 
         Assert.assertEquals(
                 ArrayIterate.zipWithIndex(array),

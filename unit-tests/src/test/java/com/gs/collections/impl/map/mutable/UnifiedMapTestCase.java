@@ -114,7 +114,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         String[] target = new String[3];
         target[2] = "yow!";
         String[] values = map.values().toArray(target);
-        ArrayIterate.sort(values, values.length, Comparators.safeNullsHigh(Comparators.<String>naturalOrder()));
+        ArrayIterate.sort(values, values.length, Comparators.safeNullsHigh(String::compareTo));
         Assert.assertArrayEquals(new String[]{"One", "Two", null}, values);
     }
 
@@ -156,7 +156,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         target[4] = 42;
         target[5] = 42;
         Integer[] result = map.keySet().toArray(target);
-        ArrayIterate.sort(result, result.length, Comparators.safeNullsHigh(Comparators.<Integer>naturalOrder()));
+        ArrayIterate.sort(result, result.length, Comparators.safeNullsHigh(Integer::compareTo));
         Assert.assertArrayEquals(new Integer[]{1, 2, 3, 4, 42, null}, result);
     }
 
@@ -206,7 +206,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         MutableMap<Integer, Integer> map3 = this.mapWithCollisionsOfSize(5);
         map3.put(null, 42);
         Integer[] array = map3.keySet().toArray(new Integer[map3.size()]);
-        ArrayIterate.sort(array, array.length, Comparators.safeNullsHigh(Comparators.<Integer>naturalOrder()));
+        ArrayIterate.sort(array, array.length, Comparators.safeNullsHigh(Integer::compareTo));
         Assert.assertArrayEquals(new Object[]{0, 17, 34, 51, 68, null}, array);
     }
 
@@ -369,10 +369,10 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
     public void getIfAbsentPutWithWithCollisions()
     {
         MutableMap<Integer, Object> map = this.newMapWithKeyValue(COLLISION_1, null);
-        Assert.assertNull(map.getIfAbsentPutWith(COLLISION_1, Functions.getToString(), 5));
+        Assert.assertNull(map.getIfAbsentPutWith(COLLISION_1, String::valueOf, 5));
         Assert.assertNull(map.getIfAbsentPutWith(COLLISION_3, Functions.getPassThru(), null));
-        Assert.assertNull(map.getIfAbsentPutWith(COLLISION_3, Functions.getToString(), 7));
-        Assert.assertEquals("9", map.getIfAbsentPutWith(COLLISION_2, Functions.getToString(), 9));
+        Assert.assertNull(map.getIfAbsentPutWith(COLLISION_3, String::valueOf, 7));
+        Assert.assertEquals("9", map.getIfAbsentPutWith(COLLISION_2, String::valueOf, 9));
         Assert.assertEquals(Integer.valueOf(10), map.getIfAbsentPutWith(COLLISION_4, Functions.getIntegerPassThru(), 10));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(COLLISION_1, null, COLLISION_2, "9", COLLISION_3, null, COLLISION_4, 10), map);
     }

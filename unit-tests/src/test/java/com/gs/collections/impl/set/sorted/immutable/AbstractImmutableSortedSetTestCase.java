@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
@@ -329,7 +330,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     public void flatCollect()
     {
         ImmutableList<String> actual = this.classUnderTest(Collections.<Integer>reverseOrder()).flatCollect(integer -> Lists.fixedSize.of(String.valueOf(integer)));
-        ImmutableList<String> expected = this.classUnderTest(Collections.<Integer>reverseOrder()).collect(Functions.getToString());
+        ImmutableList<String> expected = this.classUnderTest(Collections.<Integer>reverseOrder()).collect(String::valueOf);
         Assert.assertEquals(expected, actual);
         Verify.assertListsEqual(expected.toList(), actual.toList());
     }
@@ -339,7 +340,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         MutableSet<String> actual = this.classUnderTest().flatCollect(integer -> Lists.fixedSize.of(String.valueOf(integer)), UnifiedSet.<String>newSet());
 
-        ImmutableList<String> expected = this.classUnderTest().collect(Functions.getToString());
+        ImmutableList<String> expected = this.classUnderTest().collect(String::valueOf);
         Verify.assertSetsEqual(expected.toSet(), actual);
     }
 
@@ -391,19 +392,19 @@ public abstract class AbstractImmutableSortedSetTestCase
         List<Object> nullsMinusOne = Collections.nCopies(immutableSet.size() - 1, null);
 
         ImmutableList<Pair<Integer, Object>> pairs = immutableSet.zip(nulls);
-        Assert.assertEquals(immutableSet.toList(), pairs.collect(Functions.<Integer>firstOfPair()));
-        Verify.assertListsEqual(FastList.newList(Interval.fromTo(immutableSet.size(), 1)), pairs.collect(Functions.<Integer>firstOfPair()).toList());
-        Assert.assertEquals(FastList.newList(nulls), pairs.collect(Functions.secondOfPair()));
+        Assert.assertEquals(immutableSet.toList(), pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
+        Verify.assertListsEqual(FastList.newList(Interval.fromTo(immutableSet.size(), 1)), pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne).toList());
+        Assert.assertEquals(FastList.newList(nulls), pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo));
 
         ImmutableList<Pair<Integer, Object>> pairsPlusOne = immutableSet.zip(nullsPlusOne);
-        Assert.assertEquals(immutableSet.toList(), pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
+        Assert.assertEquals(immutableSet.toList(), pairsPlusOne.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
         Verify.assertListsEqual(FastList.newList(Interval.fromTo(immutableSet.size(), 1)),
-                pairsPlusOne.collect(Functions.<Integer>firstOfPair()).castToList());
-        Assert.assertEquals(FastList.newList(nulls), pairsPlusOne.collect(Functions.secondOfPair()));
+                pairsPlusOne.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne).castToList());
+        Assert.assertEquals(FastList.newList(nulls), pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo));
 
         ImmutableList<Pair<Integer, Object>> pairsMinusOne = immutableSet.zip(nullsMinusOne);
         Verify.assertListsEqual(FastList.newList(Interval.fromTo(immutableSet.size(), 2)),
-                pairsMinusOne.collect(Functions.<Integer>firstOfPair()).castToList());
+                pairsMinusOne.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne).castToList());
         Assert.assertEquals(immutableSet.zip(nulls), immutableSet.zip(nulls, FastList.<Pair<Integer, Object>>newList()));
 
         FastList<Holder> holders = FastList.newListWith(new Holder(1), new Holder(2), new Holder(3));
@@ -421,15 +422,15 @@ public abstract class AbstractImmutableSortedSetTestCase
         ImmutableSortedSet<Integer> immutableSet = this.classUnderTest(Collections.<Integer>reverseOrder());
         ImmutableSortedSet<Pair<Integer, Integer>> pairs = immutableSet.zipWithIndex();
 
-        Assert.assertEquals(immutableSet.toList(), pairs.collect(Functions.<Integer>firstOfPair()));
+        Assert.assertEquals(immutableSet.toList(), pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
         Assert.assertEquals(
                 Interval.zeroTo(immutableSet.size() - 1).toList(),
-                pairs.collect(Functions.<Integer>secondOfPair()));
+                pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo));
         Assert.assertEquals(
                 immutableSet.zipWithIndex(),
                 immutableSet.zipWithIndex(UnifiedSet.<Pair<Integer, Integer>>newSet()));
         Verify.assertListsEqual(TreeSortedSet.newSet(Collections.<Integer>reverseOrder(), Interval.oneTo(immutableSet.size())).toList(),
-                pairs.collect(Functions.<Integer>firstOfPair()).toList());
+                pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne).toList());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -457,8 +458,8 @@ public abstract class AbstractImmutableSortedSetTestCase
     public void detectWith()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(Integer.valueOf(1), integers.detectWith(Predicates2.equal(), Integer.valueOf(1)));
-        Assert.assertNull(integers.detectWith(Predicates2.equal(), Integer.valueOf(integers.size() + 1)));
+        Assert.assertEquals(Integer.valueOf(1), integers.detectWith(Object::equals, Integer.valueOf(1)));
+        Assert.assertNull(integers.detectWith(Object::equals, Integer.valueOf(integers.size() + 1)));
     }
 
     @Test
@@ -467,8 +468,8 @@ public abstract class AbstractImmutableSortedSetTestCase
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);
         Integer sum = Integer.valueOf(integers.size() + 1);
-        Assert.assertEquals(Integer.valueOf(1), integers.detectWithIfNone(Predicates2.equal(), Integer.valueOf(1), function));
-        Assert.assertEquals(Integer.valueOf(integers.size() + 1), integers.detectWithIfNone(Predicates2.equal(), sum, function));
+        Assert.assertEquals(Integer.valueOf(1), integers.detectWithIfNone(Object::equals, Integer.valueOf(1), function));
+        Assert.assertEquals(Integer.valueOf(integers.size() + 1), integers.detectWithIfNone(Object::equals, sum, function));
     }
 
     @Test
@@ -484,40 +485,38 @@ public abstract class AbstractImmutableSortedSetTestCase
     public void allSatisfy()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
-        Assert.assertTrue(integers.allSatisfy(Predicates.instanceOf(Integer.class)));
-        Assert.assertFalse(integers.allSatisfy(Predicates.equal(0)));
+        Assert.assertTrue(integers.allSatisfy(Integer.class::isInstance));
+        Assert.assertFalse(integers.allSatisfy(Integer.valueOf(0)::equals));
     }
 
     @Test
     public void anySatisfy()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
-        Assert.assertFalse(integers.anySatisfy(Predicates.instanceOf(String.class)));
-        Assert.assertTrue(integers.anySatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertFalse(integers.anySatisfy(String.class::isInstance));
+        Assert.assertTrue(integers.anySatisfy(Integer.class::isInstance));
     }
 
     @Test
     public void count()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers.size(), integers.count(Predicates.instanceOf(Integer.class)));
-        Assert.assertEquals(0, integers.count(Predicates.instanceOf(String.class)));
+        Assert.assertEquals(integers.size(), integers.count(Integer.class::isInstance));
+        Assert.assertEquals(0, integers.count(String.class::isInstance));
     }
 
     @Test
     public void collectIf()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
-        Verify.assertListsEqual(integers.toList(), integers.collectIf(Predicates.instanceOf(Integer.class),
-                Functions.getIntegerPassThru()).toList());
+        Verify.assertListsEqual(integers.toList(), integers.collectIf(Integer.class::isInstance, Functions.getIntegerPassThru()).toList());
     }
 
     @Test
     public void collectIfToTarget()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
-        Verify.assertSetsEqual(integers.toSet(), integers.collectIf(Predicates.instanceOf(Integer.class),
-                Functions.getIntegerPassThru(), UnifiedSet.<Integer>newSet()));
+        Verify.assertSetsEqual(integers.toSet(), integers.collectIf(Integer.class::isInstance, Functions.getIntegerPassThru(), UnifiedSet.<Integer>newSet()));
     }
 
     @Test
@@ -556,10 +555,10 @@ public abstract class AbstractImmutableSortedSetTestCase
             Integer integer = iterator.next();
             Assert.assertEquals(i + 1, integer.intValue());
         }
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
         Iterator<Integer> intItr = integers.iterator();
         intItr.next();
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {intItr.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) intItr::remove);
     }
 
     @Test
@@ -622,7 +621,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     public void toSortedListBy()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
-        MutableList<Integer> list = integers.toSortedListBy(Functions.getToString());
+        MutableList<Integer> list = integers.toSortedListBy(String::valueOf);
         Assert.assertEquals(integers.toList(), list);
     }
 
@@ -647,7 +646,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     public void toSortedSetBy()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
-        MutableSortedSet<Integer> set = integers.toSortedSetBy(Functions.getToString());
+        MutableSortedSet<Integer> set = integers.toSortedSetBy(String::valueOf);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSet(integers), set);
     }
 
@@ -655,8 +654,8 @@ public abstract class AbstractImmutableSortedSetTestCase
     public void toSortedMap()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
-        MutableSortedMap<Integer, String> map = integers.toSortedMap(Functions.getIntegerPassThru(), Functions.getToString());
-        Verify.assertMapsEqual(integers.toMap(Functions.getIntegerPassThru(), Functions.getToString()), map);
+        MutableSortedMap<Integer, String> map = integers.toSortedMap(Functions.getIntegerPassThru(), String::valueOf);
+        Verify.assertMapsEqual(integers.toMap(Functions.getIntegerPassThru(), String::valueOf), map);
         Verify.assertListsEqual(Interval.oneTo(integers.size()), map.keySet().toList());
     }
 
@@ -665,8 +664,8 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         MutableSortedMap<Integer, String> map = integers.toSortedMap(Comparators.<Integer>reverseNaturalOrder(),
-                Functions.getIntegerPassThru(), Functions.getToString());
-        Verify.assertMapsEqual(integers.toMap(Functions.getIntegerPassThru(), Functions.getToString()), map);
+                Functions.getIntegerPassThru(), String::valueOf);
+        Verify.assertMapsEqual(integers.toMap(Functions.getIntegerPassThru(), String::valueOf), map);
         Verify.assertListsEqual(Interval.fromTo(integers.size(), 1), map.keySet().toList());
     }
 
@@ -725,13 +724,13 @@ public abstract class AbstractImmutableSortedSetTestCase
     @Test
     public void min()
     {
-        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().min(Comparators.naturalOrder()));
+        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().min(Integer::compareTo));
     }
 
     @Test
     public void max()
     {
-        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().max(Comparators.reverse(Comparators.naturalOrder())));
+        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().max(Comparators.reverse(Integer::compareTo)));
     }
 
     @Test
@@ -749,13 +748,13 @@ public abstract class AbstractImmutableSortedSetTestCase
     @Test
     public void minBy()
     {
-        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().minBy(Functions.getToString()));
+        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().minBy(String::valueOf));
     }
 
     @Test
     public void maxBy()
     {
-        Assert.assertEquals(Integer.valueOf(this.classUnderTest().size()), this.classUnderTest().maxBy(Functions.getToString()));
+        Assert.assertEquals(Integer.valueOf(this.classUnderTest().size()), this.classUnderTest().maxBy(String::valueOf));
     }
 
     @Test
@@ -905,8 +904,8 @@ public abstract class AbstractImmutableSortedSetTestCase
         LazyIterable<Pair<Integer, Integer>> cartesianProduct = set.cartesianProduct(UnifiedSet.newSet(Interval.oneTo(set.size())));
         Assert.assertEquals((long) (set.size() * set.size()), (long) cartesianProduct.size());
         Assert.assertEquals(set, cartesianProduct
-                .select(Predicates.attributeEqual(Functions.<Integer>secondOfPair(), 1))
-                .collect(Functions.<Integer>firstOfPair()).toSet());
+                .select(Predicates.attributeEqual((Function<Pair<?, Integer>, Integer>) Pair::getTwo, 1))
+                .collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne).toSet());
     }
 
     @Test

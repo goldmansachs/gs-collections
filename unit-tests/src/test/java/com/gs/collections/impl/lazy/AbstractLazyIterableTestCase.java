@@ -190,7 +190,7 @@ public abstract class AbstractLazyIterableTestCase
     {
         Assert.assertEquals(
                 FastList.newListWith("1", "2", "3", "4", "5", "6", "7"),
-                this.lazyIterable.collect(Functions.getToString()).toList());
+                this.lazyIterable.collect(String::valueOf).toList());
     }
 
     @Test
@@ -340,7 +340,7 @@ public abstract class AbstractLazyIterableTestCase
     {
         Assert.assertEquals(
                 FastList.newListWith("1", "2", "3", "4", "5", "6", "7"),
-                this.lazyIterable.collect(Functions.getToString(), FastList.<String>newList()));
+                this.lazyIterable.collect(String::valueOf, FastList.<String>newList()));
     }
 
     @Test
@@ -370,71 +370,71 @@ public abstract class AbstractLazyIterableTestCase
     @Test
     public void detect()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detect(Predicates.equal(3)));
-        Assert.assertNull(this.lazyIterable.detect(Predicates.equal(8)));
+        Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detect(Integer.valueOf(3)::equals));
+        Assert.assertNull(this.lazyIterable.detect(Integer.valueOf(8)::equals));
     }
 
     @Test
     public void detectWith()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detectWith(Predicates2.equal(), Integer.valueOf(3)));
-        Assert.assertNull(this.lazyIterable.detectWith(Predicates2.equal(), Integer.valueOf(8)));
+        Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detectWith(Object::equals, Integer.valueOf(3)));
+        Assert.assertNull(this.lazyIterable.detectWith(Object::equals, Integer.valueOf(8)));
     }
 
     @Test
     public void detectWithIfNone()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(Integer.valueOf(1000));
-        Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detectWithIfNone(Predicates2.equal(), Integer.valueOf(3), function));
-        Assert.assertEquals(Integer.valueOf(1000), this.lazyIterable.detectWithIfNone(Predicates2.equal(), Integer.valueOf(8), function));
+        Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detectWithIfNone(Object::equals, Integer.valueOf(3), function));
+        Assert.assertEquals(Integer.valueOf(1000), this.lazyIterable.detectWithIfNone(Object::equals, Integer.valueOf(8), function));
     }
 
     @Test(expected = NoSuchElementException.class)
     public void min_empty_throws()
     {
-        this.newWith().min(Comparators.naturalOrder());
+        this.<Integer>newWith().min(Integer::compareTo);
     }
 
     @Test(expected = NoSuchElementException.class)
     public void max_empty_throws()
     {
-        this.newWith().max(Comparators.naturalOrder());
+        this.<Integer>newWith().max(Integer::compareTo);
     }
 
     @Test(expected = NullPointerException.class)
     public void min_null_throws()
     {
-        this.newWith(1, null, 2).min(Comparators.naturalOrder());
+        this.newWith(1, null, 2).min(Integer::compareTo);
     }
 
     @Test(expected = NullPointerException.class)
     public void max_null_throws()
     {
-        this.newWith(1, null, 2).max(Comparators.naturalOrder());
+        this.newWith(1, null, 2).max(Integer::compareTo);
     }
 
     @Test
     public void min()
     {
-        Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 3, 2).min(Comparators.naturalOrder()));
+        Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 3, 2).min(Integer::compareTo));
     }
 
     @Test
     public void max()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 3, 2).max(Comparators.naturalOrder()));
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 3, 2).max(Integer::compareTo));
     }
 
     @Test
     public void minBy()
     {
-        Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 3, 2).minBy(Functions.getToString()));
+        Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 3, 2).minBy(String::valueOf));
     }
 
     @Test
     public void maxBy()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 3, 2).maxBy(Functions.getToString()));
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 3, 2).maxBy(String::valueOf));
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -477,15 +477,15 @@ public abstract class AbstractLazyIterableTestCase
     public void detectIfNone()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(9);
-        Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detectIfNone(Predicates.equal(3), function));
-        Assert.assertEquals(Integer.valueOf(9), this.lazyIterable.detectIfNone(Predicates.equal(8), function));
+        Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detectIfNone(Integer.valueOf(3)::equals, function));
+        Assert.assertEquals(Integer.valueOf(9), this.lazyIterable.detectIfNone(Integer.valueOf(8)::equals, function));
     }
 
     @Test
     public void anySatisfy()
     {
-        Assert.assertFalse(this.lazyIterable.anySatisfy(Predicates.instanceOf(String.class)));
-        Assert.assertTrue(this.lazyIterable.anySatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertFalse(this.lazyIterable.anySatisfy(String.class::isInstance));
+        Assert.assertTrue(this.lazyIterable.anySatisfy(Integer.class::isInstance));
     }
 
     @Test
@@ -498,22 +498,22 @@ public abstract class AbstractLazyIterableTestCase
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(this.lazyIterable.allSatisfy(Predicates.instanceOf(Integer.class)));
-        Assert.assertFalse(this.lazyIterable.allSatisfy(Predicates.equal(1)));
+        Assert.assertTrue(this.lazyIterable.allSatisfy(Integer.class::isInstance));
+        Assert.assertFalse(this.lazyIterable.allSatisfy(Integer.valueOf(1)::equals));
     }
 
     @Test
     public void allSatisfyWith()
     {
         Assert.assertTrue(this.lazyIterable.allSatisfyWith(Predicates2.instanceOf(), Integer.class));
-        Assert.assertFalse(this.lazyIterable.allSatisfyWith(Predicates2.equal(), 1));
+        Assert.assertFalse(this.lazyIterable.allSatisfyWith(Object::equals, 1));
     }
 
     @Test
     public void noneSatisfy()
     {
-        Assert.assertFalse(this.lazyIterable.noneSatisfy(Predicates.instanceOf(Integer.class)));
-        Assert.assertTrue(this.lazyIterable.noneSatisfy(Predicates.instanceOf(String.class)));
+        Assert.assertFalse(this.lazyIterable.noneSatisfy(Integer.class::isInstance));
+        Assert.assertTrue(this.lazyIterable.noneSatisfy(String.class::isInstance));
     }
 
     @Test
@@ -526,7 +526,7 @@ public abstract class AbstractLazyIterableTestCase
     @Test
     public void count()
     {
-        Assert.assertEquals(7, this.lazyIterable.count(Predicates.instanceOf(Integer.class)));
+        Assert.assertEquals(7, this.lazyIterable.count(Integer.class::isInstance));
     }
 
     @Test
@@ -535,8 +535,8 @@ public abstract class AbstractLazyIterableTestCase
         Assert.assertEquals(
                 FastList.newListWith("1", "2", "3"),
                 this.newWith(1, 2, 3).collectIf(
-                        Predicates.instanceOf(Integer.class),
-                        Functions.getToString()).toList());
+                        Integer.class::isInstance,
+                        String::valueOf).toList());
     }
 
     @Test
@@ -545,8 +545,8 @@ public abstract class AbstractLazyIterableTestCase
         Assert.assertEquals(
                 FastList.newListWith("1", "2", "3"),
                 this.newWith(1, 2, 3).collectIf(
-                        Predicates.instanceOf(Integer.class),
-                        Functions.getToString(),
+                        Integer.class::isInstance,
+                        String::valueOf,
                         FastList.<String>newList()));
     }
 
@@ -606,7 +606,7 @@ public abstract class AbstractLazyIterableTestCase
     public void toSortedListBy()
     {
         LazyIterable<Integer> integers = this.newWith(2, 4, 1, 3);
-        MutableList<Integer> list = integers.toSortedListBy(Functions.getToString());
+        MutableList<Integer> list = integers.toSortedListBy(String::valueOf);
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), list);
     }
 
@@ -630,7 +630,7 @@ public abstract class AbstractLazyIterableTestCase
     public void toSortedSetBy()
     {
         LazyIterable<Integer> integers = this.newWith(2, 4, 1, 3);
-        MutableSortedSet<Integer> set = integers.toSortedSetBy(Functions.getToString());
+        MutableSortedSet<Integer> set = integers.toSortedSetBy(String::valueOf);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(1, 2, 3, 4), set);
     }
 
@@ -647,7 +647,7 @@ public abstract class AbstractLazyIterableTestCase
     {
         RichIterable<Integer> integers = this.newWith(1, 2, 3, 4);
         MutableMap<String, String> map =
-                integers.toMap(Functions.getToString(), Functions.getToString());
+                integers.toMap(String::valueOf, String::valueOf);
         Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
     }
 
@@ -655,7 +655,7 @@ public abstract class AbstractLazyIterableTestCase
     public void toSortedMap()
     {
         LazyIterable<Integer> integers = this.newWith(1, 2, 3);
-        MutableSortedMap<Integer, String> map = integers.toSortedMap(Functions.getIntegerPassThru(), Functions.getToString());
+        MutableSortedMap<Integer, String> map = integers.toSortedMap(Functions.getIntegerPassThru(), String::valueOf);
         Verify.assertMapsEqual(TreeSortedMap.newMapWith(1, "1", 2, "2", 3, "3"), map);
         Verify.assertListsEqual(FastList.newListWith(1, 2, 3), map.keySet().toList());
     }
@@ -665,7 +665,7 @@ public abstract class AbstractLazyIterableTestCase
     {
         LazyIterable<Integer> integers = this.newWith(1, 2, 3);
         MutableSortedMap<Integer, String> map = integers.toSortedMap(Comparators.<Integer>reverseNaturalOrder(),
-                Functions.getIntegerPassThru(), Functions.getToString());
+                Functions.getIntegerPassThru(), String::valueOf);
         Verify.assertMapsEqual(TreeSortedMap.newMapWith(Comparators.<Integer>reverseNaturalOrder(), 1, "1", 2, "2", 3, "3"), map);
         Verify.assertListsEqual(FastList.newListWith(3, 2, 1), map.keySet().toList());
     }
@@ -737,20 +737,20 @@ public abstract class AbstractLazyIterableTestCase
         LazyIterable<Pair<Integer, Object>> pairs = this.lazyIterable.zip(nulls);
         Assert.assertEquals(
                 this.lazyIterable.toSet(),
-                pairs.collect(Functions.<Integer>firstOfPair()).toSet());
+                pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne).toSet());
         Assert.assertEquals(
                 nulls,
-                pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         LazyIterable<Pair<Integer, Object>> pairsPlusOne = this.lazyIterable.zip(nullsPlusOne);
         Assert.assertEquals(
                 this.lazyIterable.toSet(),
-                pairsPlusOne.collect(Functions.<Integer>firstOfPair()).toSet());
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairsPlusOne.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne).toSet());
+        Assert.assertEquals(nulls, pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         LazyIterable<Pair<Integer, Object>> pairsMinusOne = this.lazyIterable.zip(nullsMinusOne);
         Assert.assertEquals(this.lazyIterable.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(this.lazyIterable.containsAllIterable(pairsMinusOne.collect(Functions.<Integer>firstOfPair())));
+        Assert.assertTrue(this.lazyIterable.containsAllIterable(pairsMinusOne.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne)));
 
         Assert.assertEquals(
                 this.lazyIterable.zip(nulls).toSet(),
@@ -764,10 +764,10 @@ public abstract class AbstractLazyIterableTestCase
 
         Assert.assertEquals(
                 this.lazyIterable.toSet(),
-                pairs.collect(Functions.<Integer>firstOfPair()).toSet());
+                pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne).toSet());
         Assert.assertEquals(
                 Interval.zeroTo(this.lazyIterable.size() - 1).toSet(),
-                pairs.collect(Functions.<Integer>secondOfPair(), UnifiedSet.<Integer>newSet()));
+                pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo, UnifiedSet.<Integer>newSet()));
 
         Assert.assertEquals(
                 this.lazyIterable.zipWithIndex().toSet(),

@@ -595,7 +595,7 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
     @Test
     public void getIfAbsentPutWithKey_every_slot()
     {
-        <name>Function\<<wrapperName>\> function = (<wrapperName> each) -> each.<type>Value();
+        <name>Function\<<wrapperName>\> function = <wrapperName>::<type>Value;
 
         MutableObject<name>Map\<<wrapperName>\> hashMap = this.getEmptyMap();
 

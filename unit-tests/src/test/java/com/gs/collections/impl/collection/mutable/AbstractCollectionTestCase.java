@@ -217,7 +217,7 @@ public abstract class AbstractCollectionTestCase extends AbstractRichIterableTes
     public void selectAndRejectWith()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2);
-        Twin<MutableList<Integer>> result = objects.selectAndRejectWith(Predicates2.equal(), 1);
+        Twin<MutableList<Integer>> result = objects.selectAndRejectWith(Object::equals, 1);
         Verify.assertSize(1, result.getOne());
         Verify.assertSize(1, result.getTwo());
     }

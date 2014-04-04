@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
-import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.SerializeTestHelper;
@@ -112,7 +111,7 @@ public class UnmodifiableSortedSetTest extends AbstractSortedSetTestCase
     public void min()
     {
         super.min();
-        Assert.assertEquals("1", this.newWith("1", "3", "2").min(Comparators.naturalOrder()));
+        Assert.assertEquals("1", this.newWith("1", "3", "2").min(String::compareTo));
     }
 
     @Override
@@ -120,7 +119,7 @@ public class UnmodifiableSortedSetTest extends AbstractSortedSetTestCase
     public void max()
     {
         super.max();
-        Assert.assertEquals("3", this.newWith("1", "3", "2").max(Comparators.naturalOrder()));
+        Assert.assertEquals("3", this.newWith("1", "3", "2").max(String::compareTo));
     }
 
     @Test(expected = NoSuchElementException.class)

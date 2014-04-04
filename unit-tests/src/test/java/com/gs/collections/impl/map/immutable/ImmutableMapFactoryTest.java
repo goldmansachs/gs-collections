@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.gs.collections.impl.map.immutable;
 
 import com.gs.collections.api.map.ImmutableMap;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.test.domain.Key;
@@ -107,6 +106,6 @@ public class ImmutableMapFactoryTest
         ImmutableMap<Key, Integer> map4 = new ImmutableMapFactoryImpl().of(key, 1, new Key("still not a dupe"), 2, new Key("me neither"), 3, duplicateKey, 4);
         Verify.assertSize(3, map4);
         Verify.assertContainsAllKeyValues(map4, key, 4, new Key("still not a dupe"), 2, new Key("me neither"), 3);
-        Assert.assertSame(key, map4.keysView().detect(Predicates.equal(key)));
+        Assert.assertSame(key, map4.keysView().detect(key::equals));
     }
 }

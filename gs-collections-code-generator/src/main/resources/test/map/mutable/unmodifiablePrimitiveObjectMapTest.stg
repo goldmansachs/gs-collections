@@ -203,16 +203,14 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     @Test
     public void getIfAbsentPutWith()
     {
-        Function\<String, String> toUpperCase = (String string) -> string.toUpperCase();
-
+        Function\<String, String> toUpperCase = String::toUpperCase;
         Assert.assertEquals("zero", this.map.getIfAbsentPutWith(<(literal.(type))("0")>, toUpperCase, "zeroValue"));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithThrowsException()
     {
-        Function\<String, String> toUpperCase = (String string) -> string.toUpperCase();
-
+        Function\<String, String> toUpperCase = String::toUpperCase;
         this.map.getIfAbsentPutWith(<(literal.(type))("1")>, toUpperCase, "zeroValue");
     }
 
@@ -220,16 +218,14 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     @Test
     public void getIfAbsentPutWithKey()
     {
-        <name>ToObjectFunction\<String> toString = (<type> <type>Parameter) -> String.valueOf(<type>Parameter);
-
+        <name>ToObjectFunction\<String> toString = String::valueOf;
         Assert.assertEquals("zero", this.map.getIfAbsentPutWithKey(<(literal.(type))("0")>, toString));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithKeyThrowsException()
     {
-        <name>ToObjectFunction\<String> toString = (<type> <type>Parameter) -> String.valueOf(<type>Parameter);
-
+        <name>ToObjectFunction\<String> toString = String::valueOf;
         this.map.getIfAbsentPutWithKey(<(literal.(type))("1")>, toString);
     }
 
@@ -328,13 +324,13 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
         Assert.assertFalse(iterator.hasNext());
 
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
 
         Unmodifiable<name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
         Iterator\<String> iterator1 = map1.iterator();
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {iterator1.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) iterator1::remove);
         iterator1.next();
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {iterator1.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) iterator1::remove);
     }
 }
 

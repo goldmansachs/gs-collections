@@ -62,11 +62,11 @@ public class SerialParallelLazyPerformanceTest
 
     private static final Function<Integer, Pair<Integer, Integer>> PAIR_FUNCTION = value -> Tuples.pair(value, value);
 
-    private static final Function<Integer, Long> LONG_FUNCTION = value -> value.longValue();
+    private static final Function<Integer, Long> LONG_FUNCTION = Integer::longValue;
 
-    private static final Function<Integer, Short> SHORT_FUNCTION = value -> value.shortValue();
+    private static final Function<Integer, Short> SHORT_FUNCTION = Integer::shortValue;
 
-    private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION = value -> new Alphagram(value);
+    private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION = Alphagram::new;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SerialParallelLazyPerformanceTest.class);
 
@@ -395,10 +395,10 @@ public class SerialParallelLazyPerformanceTest
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: 1", () -> {
-                    Verify.assertNotEmpty(iterable.select(predicateList.get(0)).toList());
-                    Verify.assertNotEmpty(iterable.select(predicateList.get(1)).toList());
-                    Verify.assertNotEmpty(iterable.select(predicateList.get(2)).toList());
-                }, count, WARM_UP_COUNT);
+            Verify.assertNotEmpty(iterable.select(predicateList.get(0)).toList());
+            Verify.assertNotEmpty(iterable.select(predicateList.get(1)).toList());
+            Verify.assertNotEmpty(iterable.select(predicateList.get(2)).toList());
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicSerialRejectPerformance(
@@ -410,10 +410,10 @@ public class SerialParallelLazyPerformanceTest
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: 1", () -> {
-                    Verify.assertNotEmpty(iterable.reject(predicateList.get(0)).toList());
-                    Verify.assertNotEmpty(iterable.reject(predicateList.get(1)).toList());
-                    Verify.assertNotEmpty(iterable.reject(predicateList.get(2)).toList());
-                }, count, WARM_UP_COUNT);
+            Verify.assertNotEmpty(iterable.reject(predicateList.get(0)).toList());
+            Verify.assertNotEmpty(iterable.reject(predicateList.get(1)).toList());
+            Verify.assertNotEmpty(iterable.reject(predicateList.get(2)).toList());
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicSerialAnySatisfyPerformance(
@@ -436,10 +436,10 @@ public class SerialParallelLazyPerformanceTest
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: 1", () -> {
-                    Verify.assertNotEmpty(iterable.collect(PAIR_FUNCTION).toList());
-                    Verify.assertNotEmpty(iterable.collect(SHORT_FUNCTION).toList());
-                    Verify.assertNotEmpty(iterable.collect(LONG_FUNCTION).toList());
-                }, count, 10);
+            Verify.assertNotEmpty(iterable.collect(PAIR_FUNCTION).toList());
+            Verify.assertNotEmpty(iterable.collect(SHORT_FUNCTION).toList());
+            Verify.assertNotEmpty(iterable.collect(LONG_FUNCTION).toList());
+        }, count, 10);
     }
 
     private double basicSerialGroupByPerformance(
@@ -482,10 +482,10 @@ public class SerialParallelLazyPerformanceTest
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: ?", () -> {
-                    iterable.parallelStream().filter(item -> item > 0 && (item & 1) != 0).collect(Collectors.toList());
-                    iterable.parallelStream().filter(item -> item > 0 && (item & 1) == 0).collect(Collectors.toList());
-                    iterable.parallelStream().filter(item -> item < 0 && (item & 1) != 0).collect(Collectors.toList());
-                }, count, WARM_UP_COUNT);
+            iterable.parallelStream().filter(item -> item > 0 && (item & 1) != 0).collect(Collectors.toList());
+            iterable.parallelStream().filter(item -> item > 0 && (item & 1) == 0).collect(Collectors.toList());
+            iterable.parallelStream().filter(item -> item < 0 && (item & 1) != 0).collect(Collectors.toList());
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelLazySelectPerformance(
@@ -500,10 +500,10 @@ public class SerialParallelLazyPerformanceTest
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: " + cores, () -> {
-                    iterable.asParallel(service, batchSize).select(predicateList.get(0)).toList();
-                    iterable.asParallel(service, batchSize).select(predicateList.get(1)).toList();
-                    iterable.asParallel(service, batchSize).select(predicateList.get(2)).toList();
-                }, count, WARM_UP_COUNT);
+            iterable.asParallel(service, batchSize).select(predicateList.get(0)).toList();
+            iterable.asParallel(service, batchSize).select(predicateList.get(1)).toList();
+            iterable.asParallel(service, batchSize).select(predicateList.get(2)).toList();
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelLazyRejectPerformance(
@@ -518,10 +518,10 @@ public class SerialParallelLazyPerformanceTest
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: " + cores, () -> {
-                    Verify.assertNotEmpty(iterable.asParallel(service, batchSize).reject(predicateList.get(0)).toList());
-                    Verify.assertNotEmpty(iterable.asParallel(service, batchSize).reject(predicateList.get(1)).toList());
-                    Verify.assertNotEmpty(iterable.asParallel(service, batchSize).reject(predicateList.get(2)).toList());
-                }, count, WARM_UP_COUNT);
+            Verify.assertNotEmpty(iterable.asParallel(service, batchSize).reject(predicateList.get(0)).toList());
+            Verify.assertNotEmpty(iterable.asParallel(service, batchSize).reject(predicateList.get(1)).toList());
+            Verify.assertNotEmpty(iterable.asParallel(service, batchSize).reject(predicateList.get(2)).toList());
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelLazyAnySatisfyPerformance(
@@ -551,10 +551,10 @@ public class SerialParallelLazyPerformanceTest
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: " + cores, () -> {
-                    Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(PAIR_FUNCTION).toList());
-                    Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(LONG_FUNCTION).toList());
-                    Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(SHORT_FUNCTION).toList());
-                }, count, 10);
+            Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(PAIR_FUNCTION).toList());
+            Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(LONG_FUNCTION).toList());
+            Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(SHORT_FUNCTION).toList());
+        }, count, 10);
     }
 
     private double basicParallelGroupByPerformance(UnifiedSet<String> iterable,

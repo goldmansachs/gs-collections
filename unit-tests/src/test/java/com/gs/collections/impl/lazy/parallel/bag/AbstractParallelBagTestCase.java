@@ -520,7 +520,7 @@ public abstract class AbstractParallelBagTestCase extends AbstractParallelIterab
         try
         {
             Thread.currentThread().interrupt();
-            this.classUnderTest().detect(Predicates.equal(3));
+            this.classUnderTest().detect(Integer.valueOf(3)::equals);
         }
         finally
         {

@@ -17,7 +17,6 @@
 package com.gs.collections.impl.utility.internal.primitive;
 
 import com.gs.collections.api.BooleanIterable;
-import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -45,12 +44,6 @@ public class BooleanIteratorIterateTest
     @Test
     public void collect_target()
     {
-        Verify.assertIterableSize(3, BooleanIteratorIterate.collect(this.iterable.booleanIterator(), new BooleanToObjectFunction<String>()
-        {
-            public String valueOf(boolean intParameter)
-            {
-                return String.valueOf(intParameter);
-            }
-        }, FastList.<String>newList()));
+        Verify.assertIterableSize(3, BooleanIteratorIterate.collect(this.iterable.booleanIterator(), String::valueOf, FastList.<String>newList()));
     }
 }

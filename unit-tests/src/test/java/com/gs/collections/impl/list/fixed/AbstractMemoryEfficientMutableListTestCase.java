@@ -19,7 +19,6 @@ package com.gs.collections.impl.list.fixed;
 import java.util.Collections;
 
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.FixedSizeList;
@@ -28,7 +27,6 @@ import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -55,7 +53,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
 
     private MutableList<String> getNStrings()
     {
-        return Interval.oneTo(this.getSize()).collect(Functions.getToString()).toList();
+        return Interval.oneTo(this.getSize()).collect(String::valueOf).toList();
     }
 
     protected abstract int getSize();
@@ -162,10 +160,9 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     public void aggregateByNonMutating()
     {
         Function<String, String> groupBy = Functions.getStringPassThru();
-        Function0<Integer> valueCreator = Functions0.value(0);
         Function2<Integer, String, Integer> sumAggregator = (aggregate, value) -> aggregate + Integer.parseInt(value);
-        MapIterable<String, Integer> actual = this.classUnderTest().aggregateBy(groupBy, valueCreator, sumAggregator);
-        MapIterable<String, Integer> expected = FastList.newList(this.classUnderTest()).aggregateBy(groupBy, valueCreator, sumAggregator);
+        MapIterable<String, Integer> actual = this.classUnderTest().aggregateBy(groupBy, () -> 0, sumAggregator);
+        MapIterable<String, Integer> expected = FastList.newList(this.classUnderTest()).aggregateBy(groupBy, () -> 0, sumAggregator);
         Assert.assertEquals(expected, actual);
     }
 }

@@ -38,6 +38,7 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.Multimap;
@@ -59,8 +60,6 @@ import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
-import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -126,8 +125,8 @@ public abstract class MapIterableTestCase
     public void ifPresentApply()
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2);
-        Assert.assertEquals("1", map.ifPresentApply("1", Functions.getToString()));
-        Assert.assertNull(map.ifPresentApply("3", Functions.getToString()));
+        Assert.assertEquals("1", map.ifPresentApply("1", String::valueOf));
+        Assert.assertNull(map.ifPresentApply("3", String::valueOf));
     }
 
     @Test
@@ -155,8 +154,8 @@ public abstract class MapIterableTestCase
     {
         MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsentWith(4, Functions.getToString(), 4));
-        Assert.assertEquals("3", map.getIfAbsentWith(3, Functions.getToString(), 3));
+        Assert.assertEquals("4", map.getIfAbsentWith(4, String::valueOf, 4));
+        Assert.assertEquals("3", map.getIfAbsentWith(3, String::valueOf, 3));
         Assert.assertNull(map.get(4));
     }
 
@@ -229,12 +228,8 @@ public abstract class MapIterableTestCase
         MapIterable<String, Integer> result = map.flipUniqueValues();
         Assert.assertEquals(UnifiedMap.newWithKeysValues("1", 1, "2", 2, "3", 3), result);
 
-        Verify.assertThrows(IllegalStateException.class, new Runnable()
-        {
-            public void run()
-            {
-                MapIterableTestCase.this.newMapWithKeysValues(1, "2", 2, "2").flipUniqueValues();
-            }
+        Verify.assertThrows(IllegalStateException.class, () -> {
+            MapIterableTestCase.this.newMapWithKeysValues(1, "2", 2, "2").flipUniqueValues();
         });
     }
 
@@ -250,7 +245,7 @@ public abstract class MapIterableTestCase
     public void collectBoolean()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "true", "Two", "nah", "Three", "TrUe");
-        BooleanIterable actual = map.collectBoolean(StringFunctions.toPrimitiveBoolean());
+        BooleanIterable actual = map.collectBoolean(Boolean::parseBoolean);
         Assert.assertEquals(BooleanHashBag.newBagWith(true, false, true), actual.toBag());
     }
 
@@ -259,7 +254,7 @@ public abstract class MapIterableTestCase
     {
         BooleanHashBag target = new BooleanHashBag();
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "true", "Two", "nah", "Three", "TrUe");
-        BooleanHashBag result = map.collectBoolean(StringFunctions.toPrimitiveBoolean(), target);
+        BooleanHashBag result = map.collectBoolean(Boolean::parseBoolean, target);
         Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(BooleanHashBag.newBagWith(true, false, true), result.toBag());
     }
@@ -268,7 +263,7 @@ public abstract class MapIterableTestCase
     public void collectByte()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        ByteIterable actual = map.collectByte(StringFunctions.toPrimitiveByte());
+        ByteIterable actual = map.collectByte(Byte::parseByte);
         Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2, (byte) 3), actual.toBag());
     }
 
@@ -277,7 +272,7 @@ public abstract class MapIterableTestCase
     {
         ByteHashBag target = new ByteHashBag();
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        ByteHashBag result = map.collectByte(StringFunctions.toPrimitiveByte(), target);
+        ByteHashBag result = map.collectByte(Byte::parseByte, target);
         Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2, (byte) 3), result.toBag());
     }
@@ -286,7 +281,7 @@ public abstract class MapIterableTestCase
     public void collectChar()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "A1", "Two", "B", "Three", "C#++");
-        CharIterable actual = map.collectChar(StringFunctions.toFirstChar());
+        CharIterable actual = map.collectChar((CharFunction<String>) string -> string.charAt(0));
         Assert.assertEquals(CharHashBag.newBagWith('A', 'B', 'C'), actual.toBag());
     }
 
@@ -295,7 +290,7 @@ public abstract class MapIterableTestCase
     {
         CharHashBag target = new CharHashBag();
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "A1", "Two", "B", "Three", "C#++");
-        CharHashBag result = map.collectChar(StringFunctions.toFirstChar(), target);
+        CharHashBag result = map.collectChar((CharFunction<String>) string -> string.charAt(0), target);
         Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(CharHashBag.newBagWith('A', 'B', 'C'), result.toBag());
     }
@@ -304,7 +299,7 @@ public abstract class MapIterableTestCase
     public void collectDouble()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        DoubleIterable actual = map.collectDouble(StringFunctions.toPrimitiveDouble());
+        DoubleIterable actual = map.collectDouble(Double::parseDouble);
         Assert.assertEquals(DoubleHashBag.newBagWith(1.0d, 2.0d, 3.0d), actual.toBag());
     }
 
@@ -313,7 +308,7 @@ public abstract class MapIterableTestCase
     {
         DoubleHashBag target = new DoubleHashBag();
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        DoubleHashBag result = map.collectDouble(StringFunctions.toPrimitiveDouble(), target);
+        DoubleHashBag result = map.collectDouble(Double::parseDouble, target);
         Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(DoubleHashBag.newBagWith(1.0d, 2.0d, 3.0d), result.toBag());
     }
@@ -322,7 +317,7 @@ public abstract class MapIterableTestCase
     public void collectFloat()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        FloatIterable actual = map.collectFloat(StringFunctions.toPrimitiveFloat());
+        FloatIterable actual = map.collectFloat(Float::parseFloat);
         Assert.assertEquals(FloatHashBag.newBagWith(1.0f, 2.0f, 3.0f), actual.toBag());
     }
 
@@ -331,7 +326,7 @@ public abstract class MapIterableTestCase
     {
         FloatHashBag target = new FloatHashBag();
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        FloatHashBag result = map.collectFloat(StringFunctions.toPrimitiveFloat(), target);
+        FloatHashBag result = map.collectFloat(Float::parseFloat, target);
         Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(FloatHashBag.newBagWith(1.0f, 2.0f, 3.0f), result.toBag());
     }
@@ -340,7 +335,7 @@ public abstract class MapIterableTestCase
     public void collectInt()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        IntIterable actual = map.collectInt(StringFunctions.toPrimitiveInt());
+        IntIterable actual = map.collectInt(Integer::parseInt);
         Assert.assertEquals(IntHashBag.newBagWith(1, 2, 3), actual.toBag());
     }
 
@@ -349,7 +344,7 @@ public abstract class MapIterableTestCase
     {
         IntHashBag target = new IntHashBag();
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        IntHashBag result = map.collectInt(StringFunctions.toPrimitiveInt(), target);
+        IntHashBag result = map.collectInt(Integer::parseInt, target);
         Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(IntHashBag.newBagWith(1, 2, 3), result.toBag());
     }
@@ -358,7 +353,7 @@ public abstract class MapIterableTestCase
     public void collectLong()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        LongIterable actual = map.collectLong(StringFunctions.toPrimitiveLong());
+        LongIterable actual = map.collectLong(Long::parseLong);
         Assert.assertEquals(LongHashBag.newBagWith(1L, 2L, 3L), actual.toBag());
     }
 
@@ -367,7 +362,7 @@ public abstract class MapIterableTestCase
     {
         LongHashBag target = new LongHashBag();
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        LongHashBag result = map.collectLong(StringFunctions.toPrimitiveLong(), target);
+        LongHashBag result = map.collectLong(Long::parseLong, target);
         Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(LongHashBag.newBagWith(1L, 2L, 3L), result.toBag());
     }
@@ -376,7 +371,7 @@ public abstract class MapIterableTestCase
     public void collectShort()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        ShortIterable actual = map.collectShort(StringFunctions.toPrimitiveShort());
+        ShortIterable actual = map.collectShort(Short::parseShort);
         Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2, (short) 3), actual.toBag());
     }
 
@@ -385,7 +380,7 @@ public abstract class MapIterableTestCase
     {
         ShortHashBag target = new ShortHashBag();
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
-        ShortHashBag result = map.collectShort(StringFunctions.toPrimitiveShort(), target);
+        ShortHashBag result = map.collectShort(Short::parseShort, target);
         Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2, (short) 3), result.toBag());
     }
@@ -402,7 +397,7 @@ public abstract class MapIterableTestCase
     public void select()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
-        RichIterable<String> actual = map.select(Predicates.equal("Two"));
+        RichIterable<String> actual = map.select("Two"::equals);
         Assert.assertEquals(HashBag.newBagWith("Two"), actual.toBag());
     }
 
@@ -410,7 +405,7 @@ public abstract class MapIterableTestCase
     public void selectWith()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
-        RichIterable<String> actual = map.selectWith(Predicates2.equal(), "Two");
+        RichIterable<String> actual = map.selectWith(Object::equals, "Two");
         Assert.assertEquals(HashBag.newBagWith("Two"), actual.toBag());
     }
 
@@ -418,7 +413,7 @@ public abstract class MapIterableTestCase
     public void reject()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
-        RichIterable<String> actual = map.reject(Predicates.equal("Two"));
+        RichIterable<String> actual = map.reject("Two"::equals);
         Assert.assertEquals(HashBag.newBagWith("One", "Three"), actual.toBag());
     }
 
@@ -426,7 +421,7 @@ public abstract class MapIterableTestCase
     public void rejectWith()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
-        RichIterable<String> actual = map.rejectWith(Predicates2.equal(), "Two");
+        RichIterable<String> actual = map.rejectWith(Object::equals, "Two");
         Assert.assertEquals(HashBag.newBagWith("One", "Three"), actual.toBag());
     }
 
@@ -486,7 +481,7 @@ public abstract class MapIterableTestCase
         Assert.assertEquals("2", two.getOne());
         Assert.assertEquals("Two", two.getTwo());
 
-        Assert.assertNull(map.detect(Predicates2.alwaysFalse()));
+        Assert.assertNull(map.detect((ignored1, ignored2) -> false));
     }
 
     @Test
@@ -494,8 +489,8 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
-        Verify.assertAnySatisfy((Map<String, String>) map, Predicates.instanceOf(String.class));
-        Assert.assertFalse(map.anySatisfy(Predicates.equal("Monkey")));
+        Verify.assertAnySatisfy((Map<String, String>) map, String.class::isInstance);
+        Assert.assertFalse(map.anySatisfy("Monkey"::equals));
     }
 
     @Test
@@ -504,7 +499,7 @@ public abstract class MapIterableTestCase
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
         Assert.assertTrue(map.anySatisfyWith(Predicates2.instanceOf(), String.class));
-        Assert.assertFalse(map.anySatisfyWith(Predicates2.equal(), "Monkey"));
+        Assert.assertFalse(map.anySatisfyWith(Object::equals, "Monkey"));
     }
 
     @Test
@@ -512,8 +507,8 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
-        Verify.assertAllSatisfy((Map<String, String>) map, Predicates.instanceOf(String.class));
-        Assert.assertFalse(map.allSatisfy(Predicates.equal("Monkey")));
+        Verify.assertAllSatisfy((Map<String, String>) map, String.class::isInstance);
+        Assert.assertFalse(map.allSatisfy("Monkey"::equals));
     }
 
     @Test
@@ -522,7 +517,7 @@ public abstract class MapIterableTestCase
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
         Assert.assertTrue(map.allSatisfyWith(Predicates2.instanceOf(), String.class));
-        Assert.assertFalse(map.allSatisfyWith(Predicates2.equal(), "Monkey"));
+        Assert.assertFalse(map.allSatisfyWith(Object::equals, "Monkey"));
     }
 
     @Test
@@ -530,9 +525,9 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
-        Verify.assertNoneSatisfy((Map<String, String>) map, Predicates.instanceOf(Integer.class));
-        Assert.assertTrue(map.noneSatisfy(Predicates.equal("Monkey")));
-        Assert.assertFalse(map.noneSatisfy(Predicates.equal("Two")));
+        Verify.assertNoneSatisfy((Map<String, String>) map, Integer.class::isInstance);
+        Assert.assertTrue(map.noneSatisfy("Monkey"::equals));
+        Assert.assertFalse(map.noneSatisfy("Two"::equals));
     }
 
     @Test
@@ -541,8 +536,8 @@ public abstract class MapIterableTestCase
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
         Assert.assertTrue(map.noneSatisfyWith(Predicates2.instanceOf(), Integer.class));
-        Assert.assertTrue(map.noneSatisfyWith(Predicates2.equal(), "Monkey"));
-        Assert.assertFalse(map.noneSatisfyWith(Predicates2.equal(), "Two"));
+        Assert.assertTrue(map.noneSatisfyWith(Object::equals, "Monkey"));
+        Assert.assertFalse(map.noneSatisfyWith(Object::equals, "Two"));
     }
 
     @Test
@@ -601,7 +596,7 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "3", "Three", "4", "Four");
 
-        MapIterable<Integer, String> actual = map.toMap(String::length, Functions.getToString());
+        MapIterable<Integer, String> actual = map.toMap(String::length, String::valueOf);
 
         Assert.assertEquals(UnifiedMap.newWithKeysValues(3, "One", 5, "Three", 4, "Four"), actual);
     }
@@ -632,7 +627,7 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
-        MutableList<Integer> list = map.toSortedListBy(Functions.getToString());
+        MutableList<Integer> list = map.toSortedListBy(String::valueOf);
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), list);
     }
 
@@ -653,7 +648,7 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
-        MutableSortedSet<Integer> sorted = map.toSortedSetBy(Functions.getToString());
+        MutableSortedSet<Integer> sorted = map.toSortedSetBy(String::valueOf);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(1, 2, 3, 4), sorted);
     }
 
@@ -662,9 +657,9 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "3", "Three", "4", "Four");
 
-        MapIterable<Integer, String> actual = map.toSortedMap(String::length, Functions.getToString());
+        MapIterable<Integer, String> actual = map.toSortedMap(String::length, String::valueOf);
 
-        MapIterable<Integer, String> actualWithComparator = map.toSortedMap(Comparators.reverseNaturalOrder(), String::length, Functions.getToString());
+        MapIterable<Integer, String> actualWithComparator = map.toSortedMap(Comparators.reverseNaturalOrder(), String::length, String::valueOf);
 
         Verify.assertIterablesEqual(TreeSortedMap.newMapWith(3, "One", 5, "Three", 4, "Four"), actual);
         TreeSortedMap<Object, Object> expectedIterable = TreeSortedMap.newMap(Comparators.reverseNaturalOrder());
@@ -695,7 +690,7 @@ public abstract class MapIterableTestCase
                 "1", "2", "3", "4");
         Verify.assertContainsAll(
                 map.collect(
-                        Functions.getToString(),
+                        String::valueOf,
                         UnifiedSet.<String>newSet()), "1", "2", "3", "4");
     }
 
@@ -707,7 +702,7 @@ public abstract class MapIterableTestCase
         Bag<String> odd = map.collectIf(IntegerPredicates.isOdd(), Functions.getToString()).toBag();
         Assert.assertEquals(Bags.mutable.of("1", "3"), odd);
 
-        Bag<String> even = map.collectIf(IntegerPredicates.isEven(), Functions.getToString(), HashBag.<String>newBag());
+        Bag<String> even = map.collectIf(IntegerPredicates.isEven(), String::valueOf, HashBag.<String>newBag());
         Assert.assertEquals(Bags.mutable.of("2", "4"), even);
     }
 
@@ -790,7 +785,7 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
-        int actual = map.count(Predicates.equal("One").or(Predicates.equal("Three")));
+        int actual = map.count(Predicates.or("One"::equals, "Three"::equals));
 
         Assert.assertEquals(2, actual);
     }
@@ -800,7 +795,7 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
-        int actual = map.countWith(Predicates2.equal(), "One");
+        int actual = map.countWith(Object::equals, "One");
 
         Assert.assertEquals(1, actual);
     }
@@ -810,10 +805,10 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
-        String resultFound = map.detect(Predicates.equal("One"));
+        String resultFound = map.detect("One"::equals);
         Assert.assertEquals("One", resultFound);
 
-        String resultNotFound = map.detect(Predicates.equal("Four"));
+        String resultNotFound = map.detect("Four"::equals);
         Assert.assertNull(resultNotFound);
     }
 
@@ -822,10 +817,10 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
-        String resultFound = map.detectWith(Predicates2.equal(), "One");
+        String resultFound = map.detectWith(Object::equals, "One");
         Assert.assertEquals("One", resultFound);
 
-        String resultNotFound = map.detectWith(Predicates2.equal(), "Four");
+        String resultNotFound = map.detectWith(Object::equals, "Four");
         Assert.assertNull(resultNotFound);
     }
 
@@ -834,10 +829,10 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
-        String resultNotFound = map.detectIfNone(Predicates.equal("Four"), () -> "Zero");
+        String resultNotFound = map.detectIfNone("Four"::equals, () -> "Zero");
         Assert.assertEquals("Zero", resultNotFound);
 
-        String resultFound = map.detectIfNone(Predicates.equal("One"), () -> "Zero");
+        String resultFound = map.detectIfNone("One"::equals, () -> "Zero");
         Assert.assertEquals("One", resultFound);
     }
 
@@ -846,10 +841,10 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
-        String resultNotFound = map.detectWithIfNone(Predicates2.equal(), "Four", () -> "Zero");
+        String resultNotFound = map.detectWithIfNone(Object::equals, "Four", () -> "Zero");
         Assert.assertEquals("Zero", resultNotFound);
 
-        String resultFound = map.detectWithIfNone(Predicates2.equal(), "One", () -> "Zero");
+        String resultFound = map.detectWithIfNone(Object::equals, "One", () -> "Zero");
         Assert.assertEquals("One", resultFound);
     }
 
@@ -1053,7 +1048,7 @@ public abstract class MapIterableTestCase
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
         Assert.assertEquals(Integer.valueOf(1), map.min());
-        Assert.assertEquals(Integer.valueOf(1), map.min(Comparators.<Integer>naturalOrder()));
+        Assert.assertEquals(Integer.valueOf(1), map.min(Integer::compareTo));
     }
 
     @Test
@@ -1062,7 +1057,7 @@ public abstract class MapIterableTestCase
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
         Assert.assertEquals(Integer.valueOf(4), map.max());
-        Assert.assertEquals(Integer.valueOf(4), map.max(Comparators.<Integer>naturalOrder()));
+        Assert.assertEquals(Integer.valueOf(4), map.max(Integer::compareTo));
     }
 
     @Test
@@ -1070,7 +1065,7 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
-        Assert.assertEquals(Integer.valueOf(1), map.minBy(Functions.getToString()));
+        Assert.assertEquals(Integer.valueOf(1), map.minBy(String::valueOf));
     }
 
     @Test
@@ -1078,7 +1073,7 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
-        Assert.assertEquals(Integer.valueOf(4), map.maxBy(Functions.getToString()));
+        Assert.assertEquals(Integer.valueOf(4), map.maxBy(String::valueOf));
     }
 
     @Test
@@ -1175,20 +1170,20 @@ public abstract class MapIterableTestCase
         RichIterable<Pair<String, Object>> pairs = map.zip(nulls);
         Assert.assertEquals(
                 map.toSet(),
-                pairs.collect(Functions.<String>firstOfPair()).toSet());
+                pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
         Assert.assertEquals(
                 nulls,
-                pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         RichIterable<Pair<String, Object>> pairsPlusOne = map.zip(nullsPlusOne);
         Assert.assertEquals(
                 map.toSet(),
-                pairsPlusOne.collect(Functions.<String>firstOfPair()).toSet());
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairsPlusOne.collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
+        Assert.assertEquals(nulls, pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         RichIterable<Pair<String, Object>> pairsMinusOne = map.zip(nullsMinusOne);
         Assert.assertEquals(map.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(map.valuesView().containsAllIterable(pairsMinusOne.collect(Functions.<String>firstOfPair()).toSet()));
+        Assert.assertTrue(map.valuesView().containsAllIterable(pairsMinusOne.collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet()));
 
         Assert.assertEquals(
                 map.zip(nulls).toSet(),
@@ -1204,10 +1199,10 @@ public abstract class MapIterableTestCase
 
         Assert.assertEquals(
                 map.toSet(),
-                pairs.collect(Functions.<String>firstOfPair()).toSet());
+                pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
         Assert.assertEquals(
                 Interval.zeroTo(map.size() - 1).toSet(),
-                pairs.collect(Functions.<Integer>secondOfPair(), UnifiedSet.<Integer>newSet()));
+                pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo, UnifiedSet.<Integer>newSet()));
 
         Assert.assertEquals(
                 map.zipWithIndex().toSet(),
@@ -1217,9 +1212,9 @@ public abstract class MapIterableTestCase
     @Test
     public void aggregateByMutating()
     {
-        Function0<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
+        Function0<AtomicInteger> valueCreator = AtomicInteger::new;
         RichIterable<Integer> collection = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);
-        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, AtomicInteger::addAndGet);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(String::valueOf, valueCreator, AtomicInteger::addAndGet);
         Assert.assertEquals(1, aggregation.get("1").intValue());
         Assert.assertEquals(2, aggregation.get("2").intValue());
         Assert.assertEquals(3, aggregation.get("3").intValue());
@@ -1228,10 +1223,10 @@ public abstract class MapIterableTestCase
     @Test
     public void aggregateByNonMutating()
     {
-        Function0<Integer> valueCreator = Functions0.value(0);
-        Function2<Integer, Integer, Integer> sumAggregator = Functions2.integerAddition();
+        Function0<Integer> valueCreator = () -> (Integer) 0;
+        Function2<Integer, Integer, Integer> sumAggregator = (integer1, integer2) -> integer1 + integer2;
         RichIterable<Integer> collection = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);
-        MapIterable<String, Integer> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, Integer> aggregation = collection.aggregateBy(String::valueOf, valueCreator, sumAggregator);
         Assert.assertEquals(1, aggregation.get("1").intValue());
         Assert.assertEquals(2, aggregation.get("2").intValue());
         Assert.assertEquals(3, aggregation.get("3").intValue());

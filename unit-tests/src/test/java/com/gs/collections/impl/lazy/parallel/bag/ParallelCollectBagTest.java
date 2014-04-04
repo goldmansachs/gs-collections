@@ -18,8 +18,6 @@ package com.gs.collections.impl.lazy.parallel.bag;
 
 import com.gs.collections.api.bag.ParallelBag;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.StringFunctions;
 
 public class ParallelCollectBagTest extends AbstractParallelBagTestCase
 {
@@ -28,7 +26,7 @@ public class ParallelCollectBagTest extends AbstractParallelBagTestCase
     {
         return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
                 .asParallel(this.executorService, 2)
-                .collect(Functions.getToString())
-                .collect(StringFunctions.toInteger());
+                .collect(String::valueOf)
+                .collect(Integer::valueOf);
     }
 }

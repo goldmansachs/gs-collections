@@ -17,8 +17,6 @@
 package com.gs.collections.impl.utility.internal.primitive;
 
 import com.gs.collections.api.BooleanIterable;
-import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -33,16 +31,10 @@ public class BooleanIterableIterateTest
     @Test
     public void forEach()
     {
-        final String[] sum = new String[2];
+        String[] sum = new String[2];
         sum[0] = "";
         sum[1] = "";
-        BooleanIterableIterate.forEach(this.iterable, new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[0] += each + " ";
-            }
-        });
+        BooleanIterableIterate.forEach(this.iterable, each -> { sum[0] += each + " "; });
         Assert.assertEquals("true false true ", sum[0]);
     }
 
@@ -63,13 +55,7 @@ public class BooleanIterableIterateTest
     @Test
     public void collect_target()
     {
-        Verify.assertIterableSize(3, BooleanIterableIterate.collect(this.iterable, new BooleanToObjectFunction<Object>()
-        {
-            public Object valueOf(boolean booleanParameter)
-            {
-                return !booleanParameter;
-            }
-        }, FastList.newList()));
+        Verify.assertIterableSize(3, BooleanIterableIterate.collect(this.iterable, booleanParameter -> !booleanParameter, FastList.newList()));
     }
 
     @Test

@@ -40,7 +40,6 @@ import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -349,7 +348,7 @@ public abstract class AbstractListTestCase
     public void sortThis_with_null()
     {
         MutableList<Integer> integers = this.newWith(2, null, 3, 4, 1);
-        Verify.assertStartsWith(integers.sortThis(Comparators.safeNullsLow(Comparators.<Integer>naturalOrder())), null, 1, 2, 3, 4);
+        Verify.assertStartsWith(integers.sortThis(Comparators.safeNullsLow(Integer::compareTo)), null, 1, 2, 3, 4);
     }
 
     @Test
@@ -417,7 +416,7 @@ public abstract class AbstractListTestCase
     {
         MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Collections.shuffle(actual);
-        MutableList<Integer> sorted = actual.sortThisBy(Functions.getToString());
+        MutableList<Integer> sorted = actual.sortThisBy(String::valueOf);
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith(1, 10, 2, 3, 4, 5, 6, 7, 8, 9), actual);
     }

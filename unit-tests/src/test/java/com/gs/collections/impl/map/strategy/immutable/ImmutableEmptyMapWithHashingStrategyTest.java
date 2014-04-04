@@ -22,8 +22,6 @@ import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.HashingStrategies;
-import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.map.immutable.ImmutableMemoryEfficientMapTestCase;
 import com.gs.collections.impl.test.Verify;
@@ -131,7 +129,7 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
 
         // Absent key behavior
         ImmutableMap<Integer, String> classUnderTest = this.classUnderTest();
-        Assert.assertEquals(absentValue, classUnderTest.getIfAbsentWith(absentKey, Functions.getToString(), absentValue));
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsentWith(absentKey, String::valueOf, absentValue));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);
@@ -160,8 +158,8 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        Assert.assertTrue(map.allSatisfy(Predicates.instanceOf(String.class)));
-        Assert.assertTrue(map.allSatisfy(Predicates.equal("Monkey")));
+        Assert.assertTrue(map.allSatisfy(String.class::isInstance));
+        Assert.assertTrue(map.allSatisfy("Monkey"::equals));
     }
 
     @Override
@@ -170,8 +168,8 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        Assert.assertTrue(map.noneSatisfy(Predicates.instanceOf(Integer.class)));
-        Assert.assertTrue(map.noneSatisfy(Predicates.equal("Monkey")));
+        Assert.assertTrue(map.noneSatisfy(Integer.class::isInstance));
+        Assert.assertTrue(map.noneSatisfy("Monkey"::equals));
     }
 
     @Override
@@ -180,8 +178,8 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        Assert.assertFalse(map.anySatisfy(Predicates.instanceOf(String.class)));
-        Assert.assertFalse(map.anySatisfy(Predicates.equal("Monkey")));
+        Assert.assertFalse(map.anySatisfy(String.class::isInstance));
+        Assert.assertFalse(map.anySatisfy("Monkey"::equals));
     }
 
     @Override
@@ -224,7 +222,7 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     public void select()
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
-        ImmutableMap<Integer, String> actual = map.select(Predicates2.alwaysTrue());
+        ImmutableMap<Integer, String> actual = map.select((ignored1, ignored2) -> true);
         Verify.assertInstanceOf(ImmutableEmptyMapWithHashingStrategy.class, actual);
     }
 
@@ -232,7 +230,7 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     public void reject()
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
-        ImmutableMap<Integer, String> actual = map.reject(Predicates2.alwaysFalse());
+        ImmutableMap<Integer, String> actual = map.reject((ignored1, ignored2) -> false);
         Verify.assertInstanceOf(ImmutableEmptyMapWithHashingStrategy.class, actual);
     }
 
@@ -240,7 +238,7 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     public void detect()
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
-        Assert.assertNull(map.detect(Predicates2.alwaysTrue()));
+        Assert.assertNull(map.detect((ignored1, ignored2) -> true));
     }
 
     @Override

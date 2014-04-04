@@ -96,7 +96,7 @@ public abstract class ImmutableMapTestCase
         MutableSet<Integer> expectedKeys = this.expectedKeys();
         Assert.assertEquals(expectedKeys, actualKeys);
 
-        MutableSet<String> expectedValues = expectedKeys.collect(Functions.getToString());
+        MutableSet<String> expectedValues = expectedKeys.collect(String::valueOf);
         Assert.assertEquals(expectedValues, actualValues);
     }
 
@@ -120,7 +120,7 @@ public abstract class ImmutableMapTestCase
     public void flipUniqueValues()
     {
         ImmutableMap<Integer, String> immutableMap = this.classUnderTest();
-        Assert.assertEquals(Interval.oneTo(this.size()).toMap(Functions.getToString(), Functions.getIntegerPassThru()),
+        Assert.assertEquals(Interval.oneTo(this.size()).toMap(String::valueOf, Functions.getIntegerPassThru()),
                 immutableMap.flipUniqueValues());
     }
 
@@ -212,10 +212,10 @@ public abstract class ImmutableMapTestCase
 
         // Absent key behavior
         ImmutableMap<Integer, String> classUnderTest = this.classUnderTest();
-        Assert.assertEquals(absentValue, classUnderTest.getIfAbsentWith(absentKey, Functions.getToString(), absentValue));
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsentWith(absentKey, String::valueOf, absentValue));
 
         // Present key behavior
-        Assert.assertEquals("1", classUnderTest.getIfAbsentWith(1, Functions.getToString(), absentValue));
+        Assert.assertEquals("1", classUnderTest.getIfAbsentWith(1, String::valueOf, absentValue));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);
@@ -250,7 +250,7 @@ public abstract class ImmutableMapTestCase
             actualParameters.add(parameter);
         }, actualParameter);
 
-        Assert.assertEquals(this.expectedKeys().collect(Functions.getToString()), actualValues);
+        Assert.assertEquals(this.expectedKeys().collect(String::valueOf), actualValues);
         Assert.assertEquals(Collections.nCopies(this.size(), actualParameter), actualParameters);
     }
 
@@ -265,7 +265,7 @@ public abstract class ImmutableMapTestCase
             actualIndices.add(index);
         });
 
-        Assert.assertEquals(this.expectedKeys().collect(Functions.getToString()), actualValues);
+        Assert.assertEquals(this.expectedKeys().collect(String::valueOf), actualValues);
         Assert.assertEquals(this.expectedIndices(), actualIndices);
     }
 
@@ -284,7 +284,7 @@ public abstract class ImmutableMapTestCase
         MutableSet<Integer> expectedKeys = this.expectedKeys();
         Assert.assertEquals(expectedKeys, actualKeys);
 
-        MutableSet<String> expectedValues = expectedKeys.collect(Functions.getToString());
+        MutableSet<String> expectedValues = expectedKeys.collect(String::valueOf);
         Assert.assertEquals(expectedValues, actualValues);
     }
 
@@ -409,7 +409,7 @@ public abstract class ImmutableMapTestCase
 
     private MutableSet<String> expectedValues()
     {
-        return this.expectedKeys().collect(Functions.getToString());
+        return this.expectedKeys().collect(String::valueOf);
     }
 
     private MutableSet<Integer> expectedKeys()

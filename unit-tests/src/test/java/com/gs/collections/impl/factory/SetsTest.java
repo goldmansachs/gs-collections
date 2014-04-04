@@ -33,7 +33,6 @@ import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -867,23 +866,23 @@ public class SetsTest
         ImmutableSet<Key> set3 = Sets.immutable.of(key, new Key("not a dupe"), duplicateKey3);
         Verify.assertSize(2, set3);
         Verify.assertContainsAll("immutable set", set3, key, new Key("not a dupe"));
-        Assert.assertSame(key, set3.detect(Predicates.equal(key)));
+        Assert.assertSame(key, set3.detect(key::equals));
 
         Key duplicateKey4 = new Key("key");
         ImmutableSet<Key> set4 = Sets.immutable.of(key, new Key("not a dupe"), duplicateKey3, duplicateKey4);
         Verify.assertSize(2, set4);
         Verify.assertContainsAll("immutable set", set4, key, new Key("not a dupe"));
-        Assert.assertSame(key, set4.detect(Predicates.equal(key)));
+        Assert.assertSame(key, set4.detect(key::equals));
 
         ImmutableSet<Key> set5 = Sets.immutable.of(key, new Key("not a dupe"), new Key("me neither"), duplicateKey4);
         Verify.assertSize(3, set5);
         Verify.assertContainsAll("immutable set", set5, key, new Key("not a dupe"), new Key("me neither"));
-        Assert.assertSame(key, set5.detect(Predicates.equal(key)));
+        Assert.assertSame(key, set5.detect(key::equals));
 
         ImmutableSet<Key> set6 = Sets.immutable.of(key, duplicateKey2, duplicateKey3, duplicateKey4);
         Verify.assertSize(1, set6);
         Verify.assertContains(key, set6);
-        Assert.assertSame(key, set6.detect(Predicates.equal(key)));
+        Assert.assertSame(key, set6.detect(key::equals));
     }
 
     @Test

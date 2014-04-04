@@ -19,7 +19,6 @@ package com.gs.collections.impl.bag.immutable;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -104,7 +103,7 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
         super.toMap();
         ImmutableBag<String> integers = this.newBag();
         MutableMap<String, String> map =
-                integers.toMap(Functions.getToString(), Functions.getToString());
+                integers.toMap(String::valueOf, String::valueOf);
         Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
     }
 
@@ -117,12 +116,8 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
             Verify.assertEqualsAndHashCode(HashBag.newBag(interval), Bags.immutable.ofAll(interval));
         }
 
-        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
-        {
-            public void run()
-            {
-                new ImmutableArrayBag<Integer>(new Integer[]{2, 3}, new int[]{2});
-            }
+        Verify.assertThrows(IllegalArgumentException.class, () -> {
+            new ImmutableArrayBag<Integer>(new Integer[]{2, 3}, new int[]{2});
         });
     }
 

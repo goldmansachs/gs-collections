@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -35,13 +36,9 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.Procedures;
-import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
@@ -152,7 +149,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     public void removeIfWith_throws()
     {
         MutableSet<String> set = this.classUnderTest();
-        set.removeIfWith(Predicates2.equal(), "1");
+        set.removeIfWith(Object::equals, "1");
     }
 
     @Test
@@ -168,7 +165,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
             Assert.assertEquals(size, Integer.parseInt(integerString) + i);
         }
 
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -181,13 +178,13 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     @Test(expected = NullPointerException.class)
     public void min_null_throws()
     {
-        this.classUnderTestWithNull().min(Comparators.naturalOrder());
+        this.classUnderTestWithNull().min(String::compareTo);
     }
 
     @Test(expected = NullPointerException.class)
     public void max_null_throws()
     {
-        this.classUnderTestWithNull().max(Comparators.naturalOrder());
+        this.classUnderTestWithNull().max(String::compareTo);
     }
 
     @Test(expected = NullPointerException.class)
@@ -240,14 +237,14 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableMap<Boolean, RichIterable<String>> actualMap = multimap.toMap();
         int halfSize = this.classUnderTest().size() / 2;
         boolean odd = this.classUnderTest().size() % 2 != 0;
-        Assert.assertEquals(halfSize, Iterate.sizeOf(actualMap.getIfAbsent(false, Functions0.<String>newFastList())));
+        Assert.assertEquals(halfSize, Iterate.sizeOf(actualMap.getIfAbsent(false, FastList::new)));
         Assert.assertEquals(halfSize + (odd ? 1 : 0), Iterate.sizeOf(actualMap.get(true)));
     }
 
     @Test
     public void groupByEach()
     {
-        MutableSet<Integer> set = this.classUnderTest().collect(StringFunctions.toInteger());
+        MutableSet<Integer> set = this.classUnderTest().collect(Integer::valueOf);
 
         MutableMultimap<Integer, Integer> expected = UnifiedSetMultimap.newMultimap();
         set.forEach(Procedures.cast(value -> { expected.putAll(-value, Interval.fromTo(value, set.size())); }));
@@ -270,16 +267,16 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         List<Object> nullsMinusOne = Collections.nCopies(set.size() - 1, null);
 
         MutableSet<Pair<String, Object>> pairs = set.zip(nulls);
-        Assert.assertEquals(set, pairs.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(nulls, pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(set, pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne));
+        Assert.assertEquals(nulls, pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         MutableSet<Pair<String, Object>> pairsPlusOne = set.zip(nullsPlusOne);
-        Assert.assertEquals(set, pairsPlusOne.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(set, pairsPlusOne.collect((Function<Pair<String, ?>, String>) Pair::getOne));
+        Assert.assertEquals(nulls, pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         MutableSet<Pair<String, Object>> pairsMinusOne = set.zip(nullsMinusOne);
         Assert.assertEquals(set.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(set.containsAll(pairsMinusOne.collect(Functions.<String>firstOfPair())));
+        Assert.assertTrue(set.containsAll(pairsMinusOne.collect((Function<Pair<String, ?>, String>) Pair::getOne)));
 
         Assert.assertEquals(
                 set.zip(nulls),
@@ -294,10 +291,10 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
 
         Assert.assertEquals(
                 set,
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne));
         Assert.assertEquals(
                 Interval.zeroTo(set.size() - 1).toSet(),
-                pairs.collect(Functions.<Integer>secondOfPair()));
+                pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo));
 
         Assert.assertEquals(
                 set.zipWithIndex(),
@@ -328,13 +325,13 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void min()
     {
-        Assert.assertEquals("1", this.classUnderTest().min(Comparators.naturalOrder()));
+        Assert.assertEquals("1", this.classUnderTest().min(String::compareTo));
     }
 
     @Test
     public void max()
     {
-        Assert.assertEquals("1", this.classUnderTest().max(Comparators.reverse(Comparators.naturalOrder())));
+        Assert.assertEquals("1", this.classUnderTest().max(Comparators.reverse(String::compareTo)));
     }
 
     @Test
@@ -352,13 +349,13 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void minBy()
     {
-        Assert.assertEquals("1", this.classUnderTest().minBy(Functions.getToString()));
+        Assert.assertEquals("1", this.classUnderTest().minBy(String::valueOf));
     }
 
     @Test
     public void maxBy()
     {
-        Assert.assertEquals(String.valueOf(this.classUnderTest().size()), this.classUnderTest().maxBy(Functions.getToString()));
+        Assert.assertEquals(String.valueOf(this.classUnderTest().size()), this.classUnderTest().maxBy(String::valueOf));
     }
 
     @Test
@@ -395,7 +392,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableSet<String> set = this.classUnderTest();
         MutableSet<String> union = set.union(UnifiedSet.newSetWith("a", "b", "c", "1"));
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(String::valueOf)));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.union(UnifiedSet.newSetWith("1")));
@@ -407,7 +404,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableSet<String> set = this.classUnderTest();
         MutableSet<String> union = set.unionInto(UnifiedSet.newSetWith("a", "b", "c", "1"), UnifiedSet.<String>newSet());
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(String::valueOf)));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.unionInto(UnifiedSet.newSetWith("1"), UnifiedSet.<String>newSet()));
@@ -459,7 +456,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableSet<String> set = this.classUnderTest();
         MutableSet<String> difference = set.symmetricDifference(UnifiedSet.newSetWith("2", "3", "4", "5", "not present"));
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(String::valueOf)));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -476,7 +473,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
                 UnifiedSet.newSetWith("2", "3", "4", "5", "not present"),
                 UnifiedSet.<String>newSet());
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(String::valueOf)));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -521,8 +518,8 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         Assert.assertEquals(
                 set,
                 cartesianProduct
-                        .select(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
-                        .collect(Functions.<String>firstOfPair()).toSet());
+                        .select(Predicates.attributeEqual((Function<Pair<?, String>, String>) Pair::getTwo, "One"))
+                        .collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
     }
 
     @Test

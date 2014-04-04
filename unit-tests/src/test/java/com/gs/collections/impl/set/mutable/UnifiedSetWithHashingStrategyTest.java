@@ -27,7 +27,6 @@ import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.Pool;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -123,7 +122,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
     {
         UnifiedSetWithHashingStrategy<Integer> integers =
                 UnifiedSetWithHashingStrategy.newSetWith(INTEGER_HASHING_STRATEGY, 1, 2, 3, 4, 5);
-        LazyIterable<String> select = integers.lazyCollect(Functions.getToString());
+        LazyIterable<String> select = integers.lazyCollect(String::valueOf);
         Procedure<String> builder = Procedures.append(new StringBuilder());
         select.forEach(builder);
         String result = builder.toString();
@@ -864,7 +863,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
                 INTEGER_HASHING_STRATEGY, COLLISION_1, COLLISION_2, COLLISION_3, COLLISION_4);
         Integer[] target = {Integer.valueOf(1), Integer.valueOf(1), Integer.valueOf(1), Integer.valueOf(1), Integer.valueOf(1), Integer.valueOf(1)};
         Integer[] actual = set.toArray(target);
-        ArrayIterate.sort(actual, actual.length, Comparators.safeNullsHigh(Comparators.<Integer>naturalOrder()));
+        ArrayIterate.sort(actual, actual.length, Comparators.safeNullsHigh(Integer::compareTo));
         Assert.assertArrayEquals(new Integer[]{COLLISION_1, 1, COLLISION_2, COLLISION_3, COLLISION_4, null}, actual);
     }
 
@@ -947,7 +946,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
                 HashingStrategies.<Key>defaultStrategy()).with(key, new Key("not a dupe"), duplicateKey3);
         Verify.assertSize(2, set3);
         Verify.assertContainsAll(set3, key, new Key("not a dupe"));
-        Assert.assertSame(key, set3.detect(Predicates.equal(key)));
+        Assert.assertSame(key, set3.detect(key::equals));
     }
 
     @Test

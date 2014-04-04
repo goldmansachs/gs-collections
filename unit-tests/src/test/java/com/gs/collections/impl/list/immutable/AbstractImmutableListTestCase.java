@@ -24,6 +24,7 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
@@ -37,7 +38,6 @@ import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -252,7 +252,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         MutableCollection<String> actual = this.classUnderTest().flatCollect(integer -> Lists.fixedSize.of(String.valueOf(integer)), FastList.<String>newList());
 
-        ImmutableCollection<String> expected = this.classUnderTest().collect(Functions.getToString());
+        ImmutableCollection<String> expected = this.classUnderTest().collect(String::valueOf);
 
         Assert.assertEquals(expected, actual);
     }
@@ -273,16 +273,16 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         List<Object> nullsMinusOne = Collections.nCopies(immutableCollection.size() - 1, null);
 
         ImmutableCollection<Pair<Integer, Object>> pairs = immutableCollection.zip(nulls);
-        Assert.assertEquals(immutableCollection, pairs.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(nulls, pairs.collect(Functions.secondOfPair()));
+        Assert.assertEquals(immutableCollection, pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
+        Assert.assertEquals(nulls, pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo));
 
         ImmutableCollection<Pair<Integer, Object>> pairsPlusOne = immutableCollection.zip(nullsPlusOne);
-        Assert.assertEquals(immutableCollection, pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair()));
+        Assert.assertEquals(immutableCollection, pairsPlusOne.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
+        Assert.assertEquals(nulls, pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo));
 
         ImmutableCollection<Pair<Integer, Object>> pairsMinusOne = immutableCollection.zip(nullsMinusOne);
         Assert.assertEquals(immutableCollection.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(immutableCollection.containsAllIterable(pairsMinusOne.collect(Functions.<Integer>firstOfPair())));
+        Assert.assertTrue(immutableCollection.containsAllIterable(pairsMinusOne.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne)));
 
         Assert.assertEquals(immutableCollection.zip(nulls), immutableCollection.zip(nulls, FastList.<Pair<Integer, Object>>newList()));
     }
@@ -293,8 +293,8 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         ImmutableCollection<Integer> immutableCollection = this.classUnderTest();
         ImmutableCollection<Pair<Integer, Integer>> pairs = immutableCollection.zipWithIndex();
 
-        Assert.assertEquals(immutableCollection, pairs.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(Interval.zeroTo(immutableCollection.size() - 1), pairs.collect(Functions.<Integer>secondOfPair()));
+        Assert.assertEquals(immutableCollection, pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
+        Assert.assertEquals(Interval.zeroTo(immutableCollection.size() - 1), pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo));
 
         Assert.assertEquals(immutableCollection.zipWithIndex(), immutableCollection.zipWithIndex(FastList.<Pair<Integer, Integer>>newList()));
     }
@@ -310,8 +310,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     public void collectIfWithTarget()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers, integers.collectIf(Predicates.instanceOf(Integer.class),
-                Functions.getIntegerPassThru(), FastList.<Integer>newList()));
+        Assert.assertEquals(integers, integers.collectIf(Integer.class::isInstance, Functions.getIntegerPassThru(), FastList.<Integer>newList()));
     }
 
     @Test
@@ -377,18 +376,18 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         ListIterator<Integer> it = this.classUnderTest().listIterator();
         Assert.assertFalse(it.hasPrevious());
 
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {it.previous();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) it::previous);
 
         Assert.assertEquals(-1, it.previousIndex());
         Assert.assertEquals(0, it.nextIndex());
         it.next();
         Assert.assertEquals(1, it.nextIndex());
 
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {it.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) it::remove);
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.add(null);});
+        Verify.assertThrows(UnsupportedOperationException.class, () -> it.add(null));
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.set(null);});
+        Verify.assertThrows(UnsupportedOperationException.class, () -> it.set(null));
     }
 
     @Test
@@ -448,8 +447,8 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         MutableMap<Boolean, RichIterable<Integer>> actualMap = multimap.toMap();
         int halfSize = this.classUnderTest().size() / 2;
         boolean odd = this.classUnderTest().size() % 2 != 0;
-        Assert.assertEquals(halfSize, Iterate.sizeOf(actualMap.getIfAbsent(false, Functions0.<Integer>newFastList())));
-        Assert.assertEquals(halfSize + (odd ? 1 : 0), Iterate.sizeOf(actualMap.getIfAbsent(true, Functions0.<Integer>newFastList())));
+        Assert.assertEquals(halfSize, Iterate.sizeOf(actualMap.getIfAbsent(false, FastList::new)));
+        Assert.assertEquals(halfSize + (odd ? 1 : 0), Iterate.sizeOf(actualMap.getIfAbsent(true, FastList::new)));
     }
 
     @Test

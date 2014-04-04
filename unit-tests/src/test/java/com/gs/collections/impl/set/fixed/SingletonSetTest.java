@@ -254,8 +254,8 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void collect()
     {
-        Verify.assertContainsAll(this.intSet.collect(Functions.getToString()), "1");
-        Verify.assertContainsAll(this.intSet.collect(Functions.getToString(), UnifiedSet.<String>newSet()),
+        Verify.assertContainsAll(this.intSet.collect(String::valueOf), "1");
+        Verify.assertContainsAll(this.intSet.collect(String::valueOf, UnifiedSet.<String>newSet()),
                 "1");
     }
 
@@ -273,52 +273,52 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void detect()
     {
-        Assert.assertEquals(Integer.valueOf(1), this.intSet.detect(Predicates.equal(1)));
-        Assert.assertNull(this.intSet.detect(Predicates.equal(6)));
+        Assert.assertEquals(Integer.valueOf(1), this.intSet.detect(Integer.valueOf(1)::equals));
+        Assert.assertNull(this.intSet.detect(Integer.valueOf(6)::equals));
     }
 
     @Test
     public void detectWith()
     {
-        Assert.assertEquals(Integer.valueOf(1), this.intSet.detectWith(Predicates2.equal(), 1));
-        Assert.assertNull(this.intSet.detectWith(Predicates2.equal(), 6));
+        Assert.assertEquals(Integer.valueOf(1), this.intSet.detectWith(Object::equals, 1));
+        Assert.assertNull(this.intSet.detectWith(Object::equals, 6));
     }
 
     @Test
     public void detectIfNone()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
-        Assert.assertEquals(Integer.valueOf(1), this.intSet.detectIfNone(Predicates.equal(1), function));
-        Assert.assertEquals(Integer.valueOf(6), this.intSet.detectIfNone(Predicates.equal(6), function));
+        Assert.assertEquals(Integer.valueOf(1), this.intSet.detectIfNone(Integer.valueOf(1)::equals, function));
+        Assert.assertEquals(Integer.valueOf(6), this.intSet.detectIfNone(Integer.valueOf(6)::equals, function));
     }
 
     @Test
     public void detectWithIfNone()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
-        Assert.assertEquals(Integer.valueOf(1), this.intSet.detectWithIfNone(Predicates2.equal(), Integer.valueOf(1), function));
-        Assert.assertEquals(Integer.valueOf(6), this.intSet.detectWithIfNone(Predicates2.equal(), Integer.valueOf(6), function));
+        Assert.assertEquals(Integer.valueOf(1), this.intSet.detectWithIfNone(Object::equals, Integer.valueOf(1), function));
+        Assert.assertEquals(Integer.valueOf(6), this.intSet.detectWithIfNone(Object::equals, Integer.valueOf(6), function));
     }
 
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(this.intSet.allSatisfy(Predicates.instanceOf(Integer.class)));
-        Assert.assertFalse(this.intSet.allSatisfy(Predicates.equal(2)));
+        Assert.assertTrue(this.intSet.allSatisfy(Integer.class::isInstance));
+        Assert.assertFalse(this.intSet.allSatisfy(Integer.valueOf(2)::equals));
     }
 
     @Test
     public void allSatisfyWith()
     {
         Assert.assertTrue(this.intSet.allSatisfyWith(Predicates2.instanceOf(), Integer.class));
-        Assert.assertFalse(this.intSet.allSatisfyWith(Predicates2.equal(), 2));
+        Assert.assertFalse(this.intSet.allSatisfyWith(Object::equals, 2));
     }
 
     @Test
     public void anySatisfy()
     {
-        Assert.assertFalse(this.intSet.anySatisfy(Predicates.instanceOf(String.class)));
-        Assert.assertTrue(this.intSet.anySatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertFalse(this.intSet.anySatisfy(String.class::isInstance));
+        Assert.assertTrue(this.intSet.anySatisfy(Integer.class::isInstance));
     }
 
     @Test
@@ -331,22 +331,22 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void noneSatisfy()
     {
-        Assert.assertFalse(this.intSet.noneSatisfy(Predicates.instanceOf(Integer.class)));
-        Assert.assertTrue(this.intSet.noneSatisfy(Predicates.equal(10)));
+        Assert.assertFalse(this.intSet.noneSatisfy(Integer.class::isInstance));
+        Assert.assertTrue(this.intSet.noneSatisfy(Integer.valueOf(10)::equals));
     }
 
     @Test
     public void noneSatisfyWith()
     {
         Assert.assertFalse(this.intSet.noneSatisfyWith(Predicates2.instanceOf(), Integer.class));
-        Assert.assertTrue(this.intSet.noneSatisfyWith(Predicates2.equal(), 10));
+        Assert.assertTrue(this.intSet.noneSatisfyWith(Object::equals, 10));
     }
 
     @Test
     public void count()
     {
-        Assert.assertEquals(1, this.intSet.count(Predicates.instanceOf(Integer.class)));
-        Assert.assertEquals(0, this.intSet.count(Predicates.instanceOf(String.class)));
+        Assert.assertEquals(1, this.intSet.count(Integer.class::isInstance));
+        Assert.assertEquals(0, this.intSet.count(String.class::isInstance));
     }
 
     @Test
@@ -360,11 +360,11 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     public void collectIf()
     {
         Verify.assertContainsAll(this.intSet.collectIf(
-                Predicates.instanceOf(Integer.class),
-                Functions.getToString()), "1");
+                Integer.class::isInstance,
+                String::valueOf), "1");
         Verify.assertContainsAll(this.intSet.collectIf(
-                Predicates.instanceOf(Integer.class),
-                Functions.getToString(),
+                Integer.class::isInstance,
+                String::valueOf,
                 FastList.<String>newList()), "1");
     }
 
@@ -463,7 +463,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     public void selectAndRejectWith()
     {
         Twin<MutableList<Integer>> result =
-                this.intSet.selectAndRejectWith(Predicates2.equal(), 1);
+                this.intSet.selectAndRejectWith(Object::equals, 1);
         Verify.assertSize(1, result.getOne());
         Verify.assertEmpty(result.getTwo());
     }

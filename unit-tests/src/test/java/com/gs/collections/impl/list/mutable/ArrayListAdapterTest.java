@@ -24,7 +24,6 @@ import java.util.List;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
@@ -281,7 +280,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     {
         MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Collections.shuffle(actual);
-        MutableList<Integer> sorted = actual.sortThisBy(Functions.getToString());
+        MutableList<Integer> sorted = actual.sortThisBy(String::valueOf);
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith(1, 10, 2, 3, 4, 5, 6, 7, 8, 9), actual);
     }

@@ -168,7 +168,7 @@ public class ImmutableObjectBooleanSingletonMapTest extends AbstractImmutableObj
         Assert.assertTrue(iterator.hasNext());
         Assert.assertTrue(iterator.next());
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
     }
 
     @Override

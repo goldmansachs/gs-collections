@@ -131,7 +131,7 @@ public class <name>BooleanHashMapKeysViewTest
     {
         Mutable<name>Set expected = <name>HashSet.newSetWith(<(literal.(type))("0")>, <(literal.(type))("1")>, <(literal.(type))("31")>, generateCollisions1().getFirst(), generateCollisions1().get(1));
         Mutable<name>Set actual = <name>HashSet.newSetWith();
-        final <name>Iterator iterator = this.iterable.<type>Iterator();
+        <name>Iterator iterator = this.iterable.<type>Iterator();
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -144,7 +144,7 @@ public class <name>BooleanHashMapKeysViewTest
         actual.add(iterator.next());
         Assert.assertFalse(iterator.hasNext());
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -162,15 +162,8 @@ public class <name>BooleanHashMapKeysViewTest
     @Test
     public void forEach()
     {
-        final <type>[] sum = new <type>[1];
-        this.iterable.forEach(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
-
+        <type>[] sum = new <type>[1];
+        this.iterable.forEach(each -> { sum[0] += each; });
         Assert.assertEquals(32L + generateCollisions1().getFirst() + generateCollisions1().get(1), sum[0]<delta.(type)>);
     }
 

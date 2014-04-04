@@ -93,7 +93,7 @@ public class Unmodifiable<name>ObjectMapValuesTest
     @Test
     public void isEmpty()
     {
-        Unmodifiable<name>ObjectMap\<Integer> map = this.newMapWithKeysValues(<(literal.(type))("1")>, 1, <(literal.(type))("2")>, 2, <(literal.(type))("3")>, 3, <(literal.(type))("1")>,null);
+        Unmodifiable<name>ObjectMap\<Integer> map = this.newMapWithKeysValues(<(literal.(type))("1")>, 1, <(literal.(type))("2")>, 2, <(literal.(type))("3")>, 3, <(literal.(type))("1")>, null);
         Collection\<Integer> values = map.values();
         Assert.assertFalse(values.isEmpty());
         <name>ObjectHashMap\<Integer> map1 = <name>ObjectHashMap.newMap();
@@ -106,7 +106,7 @@ public class Unmodifiable<name>ObjectMapValuesTest
     @Test
     public void size()
     {
-        Unmodifiable<name>ObjectMap\<Integer> map = this.newMapWithKeysValues(<(literal.(type))("1")>, 1, <(literal.(type))("2")>, 2, <(literal.(type))("3")>, 3, <(literal.(type))("4")>,null);
+        Unmodifiable<name>ObjectMap\<Integer> map = this.newMapWithKeysValues(<(literal.(type))("1")>, 1, <(literal.(type))("2")>, 2, <(literal.(type))("3")>, 3, <(literal.(type))("4")>, null);
         Collection\<Integer> values = map.values();
         Verify.assertSize(4, values);
     }
@@ -117,7 +117,7 @@ public class Unmodifiable<name>ObjectMapValuesTest
         MutableSet\<String> expected = UnifiedSet.newSetWith("zero", "thirtyOne", null);
         MutableSet\<String> actual = UnifiedSet.newSet();
 
-        final Iterator\<String> iterator = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, null).iterator();
+        Iterator\<String> iterator = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, null).iterator();
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -127,7 +127,7 @@ public class Unmodifiable<name>ObjectMapValuesTest
         Assert.assertFalse(iterator.hasNext());
 
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Test

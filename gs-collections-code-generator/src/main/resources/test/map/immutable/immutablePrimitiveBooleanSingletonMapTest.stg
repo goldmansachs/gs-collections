@@ -121,11 +121,11 @@ public class Immutable<name>BooleanSingletonMapTest extends AbstractImmutable<na
     @Test
     public void booleanIterator()
     {
-        final BooleanIterator iterator = this.classUnderTest().booleanIterator();
+        BooleanIterator iterator = this.classUnderTest().booleanIterator();
         Assert.assertTrue(iterator.hasNext());
         Assert.assertTrue(iterator.next());
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Override

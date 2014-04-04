@@ -506,7 +506,7 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
     @Test
     public void getIfAbsentPutWith_every_slot()
     {
-        Function\<String, String> toUpperCase = (String string) -> string.toUpperCase();
+        Function\<String, String> toUpperCase = String::toUpperCase;
 
         Mutable<name>ObjectMap\<String> hashMap = this.getEmptyMap();
         for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
@@ -519,33 +519,19 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
     @Test
     public void getIfAbsentPutWithKey_every_slot()
     {
-        <name>ToObjectFunction\<<wrapperName>\> toWrapper = new <name>ToObjectFunction\<<wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<type> each)
-            {
-                return <wrapperName>.valueOf(each);
-            }
-        };
-
         Mutable<name>ObjectMap\<<wrapperName>\> hashMap = this.getEmptyMap();
 
         for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
         {
             Assert.assertNull(hashMap.get(each));
-            Assert.assertEquals(<wrapperName>.valueOf(each), hashMap.getIfAbsentPutWithKey(each, toWrapper));
+            Assert.assertEquals(<wrapperName>.valueOf(each), hashMap.getIfAbsentPutWithKey(each, <wrapperName>::valueOf));
         }
     }
 
     @Test
     public void updateValue_every_slot()
     {
-        Function\<Integer, Integer> incrementFunction = new Function\<Integer, Integer>()
-        {
-            public Integer valueOf(Integer integer)
-            {
-                return integer + 1;
-            }
-        };
+        Function\<Integer, Integer> incrementFunction = integer -> integer + 1;
 
         Mutable<name>ObjectMap\<Integer> hashMap = this.getEmptyMap();
 

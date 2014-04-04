@@ -81,9 +81,9 @@ public class MapIterateTest
     public void occurrencesOfAttribute()
     {
         MutableMap<String, Integer> map = this.getIntegerMap();
-        Assert.assertEquals(0, MapIterate.occurrencesOfAttribute(map, Functions.getToString(), "-1"));
-        Assert.assertEquals(1, MapIterate.occurrencesOfAttribute(map, Functions.getToString(), "1"));
-        Assert.assertEquals(1, MapIterate.occurrencesOfAttribute(map, Functions.getToString(), "2"));
+        Assert.assertEquals(0, MapIterate.occurrencesOfAttribute(map, String::valueOf, "-1"));
+        Assert.assertEquals(1, MapIterate.occurrencesOfAttribute(map, String::valueOf, "1"));
+        Assert.assertEquals(1, MapIterate.occurrencesOfAttribute(map, String::valueOf, "2"));
     }
 
     @Test
@@ -180,7 +180,7 @@ public class MapIterateTest
     public void toSortedSetBy()
     {
         MutableMap<String, Integer> integers = this.getIntegerMap();
-        MutableSortedSet<Integer> set = integers.toSortedSetBy(Functions.getToString());
+        MutableSortedSet<Integer> set = integers.toSortedSetBy(String::valueOf);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSet(integers.values()), set);
     }
 
@@ -204,7 +204,7 @@ public class MapIterateTest
     public void selectWithDifferentTargetCollection()
     {
         MutableMap<String, Integer> map = this.getIntegerMap();
-        Collection<Integer> results = MapIterate.select(map, Predicates.instanceOf(Integer.class), FastList.<Integer>newList());
+        Collection<Integer> results = MapIterate.select(map, Integer.class::isInstance, FastList.<Integer>newList());
         Assert.assertEquals(Bags.mutable.of(1, 2, 3, 4, 5), HashBag.newBag(results));
     }
 
@@ -212,14 +212,14 @@ public class MapIterateTest
     public void count()
     {
         MutableMap<String, Integer> map = this.getIntegerMap();
-        Assert.assertEquals(5, MapIterate.count(map, Predicates.instanceOf(Integer.class)));
+        Assert.assertEquals(5, MapIterate.count(map, Integer.class::isInstance));
     }
 
     @Test
     public void rejectWithDifferentTargetCollection()
     {
         MutableMap<String, Integer> map = this.getIntegerMap();
-        MutableList<Integer> list = MapIterate.reject(map, Predicates.instanceOf(Integer.class), FastList.<Integer>newList());
+        MutableList<Integer> list = MapIterate.reject(map, Integer.class::isInstance, FastList.<Integer>newList());
         Verify.assertEmpty(list);
     }
 
@@ -417,7 +417,7 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        Assert.assertEquals(FastList.newListWith("1"), MapIterate.select(map, Predicates.equal("1")));
+        Assert.assertEquals(FastList.newListWith("1"), MapIterate.select(map, "1"::equals));
     }
 
     @Test
@@ -444,7 +444,7 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        MutableMap<String, String> resultMap = MapIterate.selectMapOnKey(map, Predicates.equal("1"));
+        MutableMap<String, String> resultMap = MapIterate.selectMapOnKey(map, "1"::equals);
         Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "2"), resultMap);
     }
 
@@ -455,7 +455,7 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        MutableMap<String, String> resultMap = MapIterate.selectMapOnValue(map, Predicates.equal("1"));
+        MutableMap<String, String> resultMap = MapIterate.selectMapOnValue(map, "1"::equals);
         Assert.assertEquals(UnifiedMap.newWithKeysValues("2", "1"), resultMap);
     }
 
@@ -466,9 +466,9 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        String resultFound = MapIterate.detect(map, Predicates.equal("1"));
+        String resultFound = MapIterate.detect(map, "1"::equals);
         Assert.assertEquals("1", resultFound);
-        String resultNotFound = MapIterate.detect(map, Predicates.equal("4"));
+        String resultNotFound = MapIterate.detect(map, "4"::equals);
         Assert.assertNull(resultNotFound);
     }
 
@@ -485,9 +485,9 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        String resultNotFound = MapIterate.detectIfNone(map, Predicates.equal("4"), "0");
+        String resultNotFound = MapIterate.detectIfNone(map, "4"::equals, "0");
         Assert.assertEquals("0", resultNotFound);
-        String resultFound = MapIterate.detectIfNone(map, Predicates.equal("1"), "0");
+        String resultFound = MapIterate.detectIfNone(map, "1"::equals, "0");
         Assert.assertEquals("1", resultFound);
     }
 
@@ -498,9 +498,9 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        Assert.assertTrue(MapIterate.anySatisfy(map, Predicates.equal("1")));
-        Assert.assertTrue(MapIterate.anySatisfy(map, Predicates.equal("3")));
-        Assert.assertFalse(MapIterate.anySatisfy(map, Predicates.equal("4")));
+        Assert.assertTrue(MapIterate.anySatisfy(map, "1"::equals));
+        Assert.assertTrue(MapIterate.anySatisfy(map, "3"::equals));
+        Assert.assertFalse(MapIterate.anySatisfy(map, "4"::equals));
     }
 
     @Test
@@ -522,9 +522,9 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        Assert.assertFalse(MapIterate.noneSatisfy(map, Predicates.equal("1")));
-        Assert.assertFalse(MapIterate.noneSatisfy(map, Predicates.equal("3")));
-        Assert.assertTrue(MapIterate.noneSatisfy(map, Predicates.equal("4")));
+        Assert.assertFalse(MapIterate.noneSatisfy(map, "1"::equals));
+        Assert.assertFalse(MapIterate.noneSatisfy(map, "3"::equals));
+        Assert.assertTrue(MapIterate.noneSatisfy(map, "4"::equals));
     }
 
     @Test
@@ -718,7 +718,7 @@ public class MapIterateTest
     public void collectIntoTarget()
     {
         MutableList<String> target = Lists.mutable.of();
-        MutableList<String> result = MapIterate.collect(newLittleMap(), Functions.getToString(), target);
+        MutableList<String> result = MapIterate.collect(newLittleMap(), String::valueOf, target);
         Assert.assertEquals(FastList.newListWith("1", "2").toBag(), result.toBag());
         Assert.assertSame(target, result);
     }

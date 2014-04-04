@@ -175,8 +175,8 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     {
         Iterator\<String> iterator = this.classUnderTest().iterator();
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {iterator.remove();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
     }
 
     @Override
@@ -430,14 +430,14 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void minBy()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().minBy(Functions.getToString());});
+        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().minBy(String::valueOf);});
     }
 
     @Override
     @Test
     public void maxBy()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().maxBy(Functions.getToString());});
+        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().maxBy(String::valueOf);});
     }
 
     @Override
@@ -544,7 +544,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void collectByte()
     {
-        Verify.assertEmpty(this.classUnderTest().collectByte(StringFunctions.toPrimitiveByte()));
+        Verify.assertEmpty(this.classUnderTest().collectByte(Byte::parseByte));
     }
 
     @Override
@@ -552,7 +552,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     public void collectByte_withTarget()
     {
         ByteArrayList target = new ByteArrayList();
-        Assert.assertSame(target, this.classUnderTest().collectByte(StringFunctions.toPrimitiveByte(), target));
+        Assert.assertSame(target, this.classUnderTest().collectByte(Byte::parseByte, target));
         Verify.assertEmpty(target);
     }
 
@@ -576,7 +576,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void collectDouble()
     {
-        Verify.assertEmpty(this.classUnderTest().collectDouble(StringFunctions.toPrimitiveDouble()));
+        Verify.assertEmpty(this.classUnderTest().collectDouble(Double::parseDouble));
     }
 
     @Override
@@ -584,7 +584,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     public void collectDouble_withTarget()
     {
         DoubleArrayList target = new DoubleArrayList();
-        Assert.assertSame(target, this.classUnderTest().collectDouble(StringFunctions.toPrimitiveDouble(), target));
+        Assert.assertSame(target, this.classUnderTest().collectDouble(Double::parseDouble, target));
         Verify.assertEmpty(target);
     }
 
@@ -592,7 +592,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void collectFloat()
     {
-        Verify.assertEmpty(this.classUnderTest().collectFloat(StringFunctions.toPrimitiveFloat()));
+        Verify.assertEmpty(this.classUnderTest().collectFloat(Float::parseFloat));
     }
 
     @Override
@@ -600,7 +600,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     public void collectFloat_withTarget()
     {
         FloatArrayList target = new FloatArrayList();
-        Assert.assertSame(target, this.classUnderTest().collectFloat(StringFunctions.toPrimitiveFloat(), target));
+        Assert.assertSame(target, this.classUnderTest().collectFloat(Float::parseFloat, target));
         Verify.assertEmpty(target);
     }
 
@@ -608,7 +608,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void collectInt()
     {
-        Verify.assertEmpty(this.classUnderTest().collectInt(StringFunctions.toPrimitiveInt()));
+        Verify.assertEmpty(this.classUnderTest().collectInt(Integer::parseInt));
     }
 
     @Override
@@ -616,7 +616,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     public void collectInt_withTarget()
     {
         IntArrayList target = new IntArrayList();
-        Assert.assertSame(target, this.classUnderTest().collectInt(StringFunctions.toPrimitiveInt(), target));
+        Assert.assertSame(target, this.classUnderTest().collectInt(Integer::parseInt, target));
         Verify.assertEmpty(target);
     }
 
@@ -624,7 +624,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void collectLong()
     {
-        Verify.assertEmpty(this.classUnderTest().collectLong(StringFunctions.toPrimitiveLong()));
+        Verify.assertEmpty(this.classUnderTest().collectLong(Long::parseLong));
     }
 
     @Override
@@ -632,7 +632,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     public void collectLong_withTarget()
     {
         LongArrayList target = new LongArrayList();
-        Assert.assertSame(target, this.classUnderTest().collectLong(StringFunctions.toPrimitiveLong(), target));
+        Assert.assertSame(target, this.classUnderTest().collectLong(Long::parseLong, target));
         Verify.assertEmpty(target);
     }
 
@@ -640,7 +640,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void collectShort()
     {
-        Verify.assertEmpty(this.classUnderTest().collectShort(StringFunctions.toPrimitiveShort()));
+        Verify.assertEmpty(this.classUnderTest().collectShort(Short::parseShort));
     }
 
     @Override
@@ -648,7 +648,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     public void collectShort_withTarget()
     {
         ShortArrayList target = new ShortArrayList();
-        Assert.assertSame(target, this.classUnderTest().collectShort(StringFunctions.toPrimitiveShort(), target));
+        Assert.assertSame(target, this.classUnderTest().collectShort(Short::parseShort, target));
         Verify.assertEmpty(target);
     }
 }

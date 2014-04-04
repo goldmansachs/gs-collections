@@ -21,15 +21,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -60,7 +57,7 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
     public void detect()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertNull(integers.detect(Predicates.equal(1)));
+        Assert.assertNull(integers.detect(Integer.valueOf(1)::equals));
     }
 
     @Override
@@ -68,7 +65,7 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
     public void detectWith()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertNull(integers.detectWith(Predicates2.equal(), Integer.valueOf(1)));
+        Assert.assertNull(integers.detectWith(Object::equals, Integer.valueOf(1)));
     }
 
     @Override
@@ -144,14 +141,14 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
     @Test(expected = NoSuchElementException.class)
     public void min()
     {
-        this.classUnderTest().min(Comparators.naturalOrder());
+        this.classUnderTest().min(Integer::compareTo);
     }
 
     @Override
     @Test(expected = NoSuchElementException.class)
     public void max()
     {
-        this.classUnderTest().max(Comparators.naturalOrder());
+        this.classUnderTest().max(Integer::compareTo);
     }
 
     @Test
@@ -204,14 +201,14 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
     @Test(expected = NoSuchElementException.class)
     public void minBy()
     {
-        this.classUnderTest().minBy(Functions.getToString());
+        this.classUnderTest().minBy(String::valueOf);
     }
 
     @Override
     @Test(expected = NoSuchElementException.class)
     public void maxBy()
     {
-        this.classUnderTest().maxBy(Functions.getToString());
+        this.classUnderTest().maxBy(String::valueOf);
     }
 
     @Override
@@ -223,12 +220,12 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
         List<Object> nullsPlusOne = Collections.nCopies(immutableSet.size() + 1, null);
 
         ImmutableSet<Pair<Integer, Object>> pairs = immutableSet.zip(nulls);
-        Assert.assertEquals(immutableSet, pairs.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(UnifiedSet.newSet(nulls), pairs.collect(Functions.secondOfPair()));
+        Assert.assertEquals(immutableSet, pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
+        Assert.assertEquals(UnifiedSet.newSet(nulls), pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo));
 
         ImmutableSet<Pair<Integer, Object>> pairsPlusOne = immutableSet.zip(nullsPlusOne);
-        Assert.assertEquals(immutableSet, pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(UnifiedSet.newSet(nulls), pairsPlusOne.collect(Functions.secondOfPair()));
+        Assert.assertEquals(immutableSet, pairsPlusOne.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
+        Assert.assertEquals(UnifiedSet.newSet(nulls), pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo));
 
         Assert.assertEquals(immutableSet.zip(nulls), immutableSet.zip(nulls, UnifiedSet.<Pair<Integer, Object>>newSet()));
     }
@@ -240,10 +237,10 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
         ImmutableSet<Integer> immutableSet = this.classUnderTest();
         ImmutableSet<Pair<Integer, Integer>> pairs = immutableSet.zipWithIndex();
 
-        Assert.assertEquals(immutableSet, pairs.collect(Functions.<Integer>firstOfPair()));
+        Assert.assertEquals(immutableSet, pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
         Assert.assertEquals(
                 UnifiedSet.<Integer>newSet(),
-                pairs.collect(Functions.<Integer>secondOfPair()));
+                pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo));
 
         Assert.assertEquals(
                 immutableSet.zipWithIndex(),

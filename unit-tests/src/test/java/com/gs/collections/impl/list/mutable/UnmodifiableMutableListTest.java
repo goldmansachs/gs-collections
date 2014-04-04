@@ -89,11 +89,11 @@ public class UnmodifiableMutableListTest
         Assert.assertTrue(it.hasNext());
         Assert.assertEquals(1, it.nextIndex());
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.set("Rick Astley");});
+        Verify.assertThrows(UnsupportedOperationException.class, () -> it.set("Rick Astley"));
 
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {it.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) it::remove);
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {it.add("Gloria Gaynor");});
+        Verify.assertThrows(UnsupportedOperationException.class, () -> it.add("Gloria Gaynor"));
 
         Assert.assertEquals(METALLICA, it.previous());
     }
@@ -108,7 +108,7 @@ public class UnmodifiableMutableListTest
     public void sortThisWithComparator()
     {
         Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.unmodifiableList.sortThis(Comparators.naturalOrder());
+            this.unmodifiableList.sortThis(String::compareTo);
         });
     }
 
@@ -159,7 +159,7 @@ public class UnmodifiableMutableListTest
     {
         MutableList<String> subList = this.unmodifiableList.subList(1, 3);
         Assert.assertEquals(Lists.immutable.of("Bon Jovi", "Europe"), subList);
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {subList.clear();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) subList::clear);
     }
 
     @Test

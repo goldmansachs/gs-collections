@@ -111,9 +111,7 @@ public class CompositeFastListTest extends AbstractListTestCase
     @Test
     public void addAllAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {
-            CompositeFastListTest.super.addAllAtIndex();
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) CompositeFastListTest.super::addAllAtIndex);
     }
 
     @Override

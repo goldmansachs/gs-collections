@@ -167,8 +167,8 @@ public abstract class AbstractImmutable<name>StackTestCase extends Abstract<name
     @Test
     public void toList()
     {
-        final <name>ArrayList expected = <name>ArrayList.newListWith();
-        this.classUnderTest().forEach((<type> each) -> expected.add(each));
+        <name>ArrayList expected = <name>ArrayList.newListWith();
+        this.classUnderTest().forEach(expected::add);
         Assert.assertEquals(expected, this.classUnderTest().toList());
     }
 

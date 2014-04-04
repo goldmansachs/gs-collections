@@ -372,12 +372,12 @@ public abstract class Abstract<name1><name2>MapTestCase
         Assert.assertEquals(<(wideLiteral.(type1))("7")>, sum[0]<wideDelta.(type1)>);
 
         <name1><name2>Map map2 = this.getEmptyMap();
-        final <type1>[] sum2 = new <type1>[1];
+        <type1>[] sum2 = new <type1>[1];
         map2.forEachKey(each -> sum2[0] += each);
         Assert.assertEquals(<(wideLiteral.(type1))("0")>, sum2[0]<wideDelta.(type1)>);
 
         <name1><name2>Map map3 = this.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>);
-        final <type1>[] sum3 = new <type1>[1];
+        <type1>[] sum3 = new <type1>[1];
         map3.forEachKey(each -> sum3[0] += each);
         Assert.assertEquals(<(wideLiteral.(type1))("1")>, sum3[0]<wideDelta.(type1)>);
     }
@@ -831,7 +831,7 @@ public abstract class Abstract<name1><name2>MapTestCase
         Assert.assertFalse(iterator.hasNext());
 
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
         Verify.assertThrows(NoSuchElementException.class, () -> {this.getEmptyMap().<type2>Iterator().next();});
     }
 

@@ -35,8 +35,6 @@ import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions2;
-import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -144,35 +142,35 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     @Test
     public void select()
     {
-        Assert.assertEquals(this.getCollection(), this.getCollection().select(Predicates.alwaysTrue()));
-        Assert.assertNotEquals(this.getCollection(), this.getCollection().select(Predicates.alwaysFalse()));
+        Assert.assertEquals(this.getCollection(), this.getCollection().select(ignored -> true));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().select(ignored -> false));
     }
 
     @Test
     public void selectWith()
     {
-        Assert.assertEquals(this.getCollection(), this.getCollection().selectWith(Predicates2.alwaysTrue(), null));
-        Assert.assertNotEquals(this.getCollection(), this.getCollection().selectWith(Predicates2.alwaysFalse(), null));
+        Assert.assertEquals(this.getCollection(), this.getCollection().selectWith((ignored1, ignored2) -> true, null));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().selectWith((ignored1, ignored2) -> false, null));
     }
 
     @Test
     public void reject()
     {
-        Assert.assertEquals(this.getCollection(), this.getCollection().reject(Predicates.alwaysFalse()));
-        Assert.assertNotEquals(this.getCollection(), this.getCollection().reject(Predicates.alwaysTrue()));
+        Assert.assertEquals(this.getCollection(), this.getCollection().reject(ignored1 -> false));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().reject(ignored -> true));
     }
 
     @Test
     public void rejectWith()
     {
-        Assert.assertEquals(this.getCollection(), this.getCollection().rejectWith(Predicates2.alwaysFalse(), null));
-        Assert.assertNotEquals(this.getCollection(), this.getCollection().rejectWith(Predicates2.alwaysTrue(), null));
+        Assert.assertEquals(this.getCollection(), this.getCollection().rejectWith((ignored11, ignored21) -> false, null));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().rejectWith((ignored1, ignored2) -> true, null));
     }
 
     @Test
     public void partition()
     {
-        PartitionMutableCollection<?> partition = this.getCollection().partition(Predicates.alwaysTrue());
+        PartitionMutableCollection<?> partition = this.getCollection().partition(ignored -> true);
         Assert.assertEquals(this.getCollection(), partition.getSelected());
         Assert.assertNotEquals(this.getCollection(), partition.getRejected());
     }
@@ -180,7 +178,7 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     @Test
     public void partitionWith()
     {
-        PartitionMutableCollection<?> partition = this.getCollection().partitionWith(Predicates2.alwaysTrue(), null);
+        PartitionMutableCollection<?> partition = this.getCollection().partitionWith((ignored1, ignored2) -> true, null);
         Assert.assertEquals(this.getCollection(), partition.getSelected());
         Assert.assertNotEquals(this.getCollection(), partition.getRejected());
     }
@@ -189,7 +187,7 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     public void collect()
     {
         Assert.assertEquals(this.getCollection(), this.getCollection().collect(Functions.getPassThru()));
-        Assert.assertNotEquals(this.getCollection(), this.getCollection().collect(Functions.getToClass()));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().collect(Object::getClass));
     }
 
     @Test
@@ -252,14 +250,14 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     public void collectWith()
     {
         Assert.assertEquals(this.getCollection(), this.getCollection().collectWith(Functions2.fromFunction(Functions.getPassThru()), null));
-        Assert.assertNotEquals(this.getCollection(), this.getCollection().collectWith(Functions2.fromFunction(Functions.getToClass()), null));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().collectWith(Functions2.fromFunction(Object::getClass), null));
     }
 
     @Test
     public void collectIf()
     {
-        Assert.assertEquals(this.getCollection(), this.getCollection().collectIf(Predicates.alwaysTrue(), Functions.getPassThru()));
-        Assert.assertNotEquals(this.getCollection(), this.getCollection().collectIf(Predicates.alwaysFalse(), Functions.getToClass()));
+        Assert.assertEquals(this.getCollection(), this.getCollection().collectIf(ignored -> true, Functions.getPassThru()));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().collectIf(ignored -> false, Object::getClass));
     }
 
     @Test
@@ -288,20 +286,20 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
         MutableCollection<Pair<Object, Object>> pairs = collection.zip(nulls);
         Assert.assertEquals(
                 collection.toSet(),
-                pairs.collect(Functions.firstOfPair()).toSet());
+                pairs.collect((Function<Pair<Object, ?>, Object>) Pair::getOne).toSet());
         Assert.assertEquals(
                 nulls,
-                pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         MutableCollection<Pair<Object, Object>> pairsPlusOne = collection.zip(nullsPlusOne);
         Assert.assertEquals(
                 collection.toSet(),
-                pairsPlusOne.collect(Functions.firstOfPair()).toSet());
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairsPlusOne.collect((Function<Pair<Object, ?>, Object>) Pair::getOne).toSet());
+        Assert.assertEquals(nulls, pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         MutableCollection<Pair<Object, Object>> pairsMinusOne = collection.zip(nullsMinusOne);
         Assert.assertEquals(collection.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(collection.containsAll(pairsMinusOne.collect(Functions.firstOfPair())));
+        Assert.assertTrue(collection.containsAll(pairsMinusOne.collect((Function<Pair<Object, ?>, Object>) Pair::getOne)));
 
         Assert.assertEquals(
                 collection.zip(nulls).toSet(),
@@ -316,10 +314,10 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
 
         Assert.assertEquals(
                 collection.toSet(),
-                pairs.collect(Functions.firstOfPair()).toSet());
+                pairs.collect((Function<Pair<Object, ?>, Object>) Pair::getOne).toSet());
         Assert.assertEquals(
                 Interval.zeroTo(collection.size() - 1).toSet(),
-                pairs.collect(Functions.<Integer>secondOfPair(), UnifiedSet.<Integer>newSet()));
+                pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo, UnifiedSet.<Integer>newSet()));
 
         Assert.assertEquals(
                 collection.zipWithIndex().toSet(),

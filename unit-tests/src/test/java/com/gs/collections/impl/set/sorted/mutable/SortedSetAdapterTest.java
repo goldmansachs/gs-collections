@@ -27,7 +27,6 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -97,8 +96,8 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         super.select();
         SortedSetAdapter<Integer> integers = this.newWith(1, 2, 3, 4, 5);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(1, 2), integers.select(Predicates.lessThan(3)));
-        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>newWith().select(Predicates.alwaysTrue()));
-        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.newWith().select(Predicates.alwaysTrue()));
+        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>newWith().select(ignored1 -> true));
+        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.newWith().select(ignored -> true));
     }
 
     @Override
@@ -108,8 +107,8 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         super.reject();
         SortedSetAdapter<Integer> integers = this.newWith(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 1, 2), integers.reject(Predicates.greaterThan(2)));
-        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>newWith().select(Predicates.alwaysTrue()));
-        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.newWith().reject(Predicates.alwaysTrue()));
+        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>newWith().select(ignored1 -> true));
+        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.newWith().reject(ignored -> true));
     }
 
     @Override
@@ -118,10 +117,10 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     {
         super.collect();
         Verify.assertListsEqual(FastList.newListWith("1", "2", "3", "4"),
-                this.newWith(1, 2, 3, 4).collect(Functions.getToString()));
-        Verify.assertListsEqual(FastList.newListWith("1", "2", "3", "4"), this.newWith(1, 2, 3, 4).collect(Functions.getToString(),
+                this.newWith(1, 2, 3, 4).collect(String::valueOf));
+        Verify.assertListsEqual(FastList.newListWith("1", "2", "3", "4"), this.newWith(1, 2, 3, 4).collect(String::valueOf,
                 FastList.<String>newList()));
-        Verify.assertInstanceOf(FastList.class, this.newWith().collect(Functions.getToString()));
+        Verify.assertInstanceOf(FastList.class, this.newWith().collect(String::valueOf));
     }
 
     @Override
@@ -221,7 +220,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         //Type TreeSet is important here because it's not a MutableSet
         SortedSet<Integer> set = new TreeSet<Integer>();
         MutableSortedSet<Integer> integerSetAdapter = SortedSetAdapter.adapt(set);
-        Verify.assertInstanceOf(MutableSortedSet.class, integerSetAdapter.select(Predicates.alwaysTrue()));
+        Verify.assertInstanceOf(MutableSortedSet.class, integerSetAdapter.select(ignored -> true));
     }
 
     @Test

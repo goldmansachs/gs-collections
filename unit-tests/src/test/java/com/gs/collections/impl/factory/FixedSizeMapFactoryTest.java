@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.gs.collections.impl.factory;
 
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.test.domain.Key;
 import org.junit.Assert;
@@ -120,6 +119,6 @@ public class FixedSizeMapFactoryTest
         MutableMap<Key, Integer> map3 = Maps.fixedSize.of(key, 1, new Key("not a dupe"), 2, duplicateKey3, 3);
         Verify.assertSize(2, map3);
         Verify.assertContainsAllKeyValues(map3, key, 3, new Key("not a dupe"), 2);
-        Assert.assertSame(key, map3.keysView().detect(Predicates.equal(key)));
+        Assert.assertSame(key, map3.keysView().detect(key::equals));
     }
 }

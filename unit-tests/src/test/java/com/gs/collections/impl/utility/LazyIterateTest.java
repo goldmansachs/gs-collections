@@ -20,7 +20,6 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.AddFunction;
@@ -119,7 +118,7 @@ public class LazyIterateTest
     @Test
     public void collectForEach()
     {
-        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), Functions.getToString());
+        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), String::valueOf);
         Appendable builder = new StringBuilder();
         Procedure<String> appendProcedure = Procedures.append(builder);
         select.forEach(appendProcedure);
@@ -129,7 +128,7 @@ public class LazyIterateTest
     @Test
     public void collectForEachWithIndex()
     {
-        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), Functions.getToString());
+        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), String::valueOf);
         StringBuilder builder = new StringBuilder("");
         select.forEachWithIndex((object, index) -> {
             builder.append(object);
@@ -141,7 +140,7 @@ public class LazyIterateTest
     @Test
     public void collectIterator()
     {
-        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), Functions.getToString());
+        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), String::valueOf);
         StringBuilder builder = new StringBuilder("");
         for (String each : select)
         {
@@ -153,7 +152,7 @@ public class LazyIterateTest
     @Test
     public void collectForEachWith()
     {
-        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), Functions.getToString());
+        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), String::valueOf);
         StringBuilder builder = new StringBuilder("");
         select.forEachWith((each, aBuilder) -> { aBuilder.append(each); }, builder);
         Assert.assertEquals("12345", builder.toString());
@@ -168,7 +167,7 @@ public class LazyIterateTest
         MutableList<Integer> actual2 = FastList.newList(Interval.oneTo(5)).asLazy().toList();
         MutableList<Integer> actual3 = actual2.asUnmodifiable().asLazy().toList();
         MutableList<Integer> actual4 = actual2.asSynchronized().asLazy().toList();
-        MutableList<Integer> actual5 = actual2.asLazy().select(Predicates.alwaysTrue()).toList();
+        MutableList<Integer> actual5 = actual2.asLazy().select(ignored -> true).toList();
         MutableList<Integer> actual6 = actual2.toImmutable().asLazy().toList();
         ImmutableList<Integer> actual7 = actual2.asLazy().toList().toImmutable();
         Assert.assertEquals(expected, actual0);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.gs.collections.impl.block.procedure;
 
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.utility.Iterate;
@@ -35,7 +34,7 @@ public class CaseProcedureTest
         Procedure<String> ifOneProcedure = CollectionAddProcedure.on(ifOneList);
         Procedure<String> defaultProcedure = CollectionAddProcedure.on(defaultList);
         MutableList<String> list = FastList.newListWith("1", "2");
-        Iterate.forEach(list, new CaseProcedure<String>(defaultProcedure).addCase(Predicates.equal("1"), ifOneProcedure));
+        Iterate.forEach(list, new CaseProcedure<String>(defaultProcedure).addCase("1"::equals, ifOneProcedure));
         Assert.assertEquals(FastList.newListWith("1"), ifOneList);
         Assert.assertEquals(FastList.newListWith("2"), defaultList);
     }

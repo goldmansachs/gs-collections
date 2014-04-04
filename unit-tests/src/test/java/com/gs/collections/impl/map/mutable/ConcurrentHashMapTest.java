@@ -31,7 +31,6 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.factory.Maps;
@@ -57,7 +56,7 @@ public class ConcurrentHashMapTest extends ConcurrentHashMapTestCase
         {
             return each % 10;
         }
-    }).toMap(Functions0.<Integer>newHashBag());
+    }).toMap(HashBag::new);
 
     @Override
     public <K, V> ConcurrentMutableMap<K, V> newMap()

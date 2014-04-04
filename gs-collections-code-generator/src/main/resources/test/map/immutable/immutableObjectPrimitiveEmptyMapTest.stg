@@ -180,7 +180,7 @@ public class ImmutableObject<name>EmptyMapTest extends AbstractImmutableObject<n
     {
         <name>Iterator iterator = this.classUnderTest().<type>Iterator();
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Override

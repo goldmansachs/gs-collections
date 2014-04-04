@@ -24,7 +24,6 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.partition.PartitionMutableCollection;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -153,7 +152,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     public void collect()
     {
         MutableBag<Boolean> bag = MultiReaderHashBag.newBagWith(Boolean.TRUE, Boolean.FALSE, null);
-        MutableBag<String> newCollection = bag.collect(Functions.getToString());
+        MutableBag<String> newCollection = bag.collect(String::valueOf);
         Assert.assertEquals(HashBag.newBagWith("true", "false", "null"), newCollection);
     }
 
@@ -176,13 +175,13 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
         Assert.assertEquals(
                 HashBag.newBagWith("1", "1", "2", "3"),
                 MultiReaderHashBag.newBagWith(1, 1, 2, 3).collectIf(
-                        Predicates.instanceOf(Integer.class),
-                        Functions.getToString()));
+                        Integer.class::isInstance,
+                        String::valueOf));
         Assert.assertEquals(
                 HashBag.newBagWith("1", "1"),
                 MultiReaderHashBag.newBagWith(1, 1, 2, 3).collectIf(
                         Predicates.lessThan(2),
-                        Functions.getToString()));
+                        String::valueOf));
     }
 
     @Override
@@ -222,7 +221,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     public void select()
     {
         MutableBag<Integer> bag = MultiReaderHashBag.newBagWith(1, 2, 2, 3, 4, 5, 5, 1);
-        MutableBag<Integer> results = bag.select(Predicates.equal(1));
+        MutableBag<Integer> results = bag.select(Integer.valueOf(1)::equals);
         MutableBagTestCase.assertBagsEqual(results, MultiReaderHashBag.newBagWith(1, 1));
     }
 
@@ -461,7 +460,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     public void iterator()
     {
         MultiReaderHashBag<Integer> integers = MultiReaderHashBag.newBagWith(1, 1, 2, 3, 4);
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {integers.iterator();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) integers::iterator);
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -499,9 +498,9 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
         Interval interval = Interval.oneTo(100);
         ParallelIterate.forEach(interval, each -> {
             numbers.add(each);
-            Verify.assertSize(1, numbers.select(Predicates.equal(each)));
+            Verify.assertSize(1, numbers.select(each::equals));
             numbers.add(each);
-            Assert.assertEquals(2, numbers.count(Predicates.equal(each)));
+            Assert.assertEquals(2, numbers.count(each::equals));
             numbers.add(each);
             Integer[] removed = new Integer[1];
             numbers.withWriteLockAndDelegate(bag -> {
@@ -511,7 +510,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
                 bag.add(removed[0]);
             });
             numbers.add(each);
-            Assert.assertEquals(4, numbers.count(Predicates.equal(each)));
+            Assert.assertEquals(4, numbers.count(each::equals));
         }, 1);
 
         interval.forEach(Procedures.cast(each -> Assert.assertEquals(4, numbers.occurrencesOf(each))));
@@ -522,7 +521,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     {
         MultiReaderHashBag<String> numbers = this.newWith();
         Interval interval = Interval.oneTo(50000);
-        ParallelIterate.collect(interval, Functions.getToString(), numbers, true);
-        Assert.assertEquals(numbers, interval.collect(Functions.getToString()).toBag());
+        ParallelIterate.collect(interval, String::valueOf, numbers, true);
+        Assert.assertEquals(numbers, interval.collect(String::valueOf).toBag());
     }
 }

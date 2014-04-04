@@ -151,7 +151,7 @@ public class ImmutableObjectBooleanEmptyMapTest extends AbstractImmutableObjectB
     {
         BooleanIterator iterator = this.classUnderTest().booleanIterator();
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
     }
 
     @Override

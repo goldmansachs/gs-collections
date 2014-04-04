@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package com.gs.collections.impl.set.fixed;
 
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollectionTestCase;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.test.Verify;
@@ -35,55 +35,55 @@ public class QuadrupletonSetAsUnmodifiableTest extends UnmodifiableMutableCollec
     @Test
     public void collectBoolean()
     {
-        Verify.assertSize(1, this.getCollection().collectBoolean(StringFunctions.toPrimitiveBoolean()));
+        Verify.assertSize(1, this.getCollection().collectBoolean(Boolean::parseBoolean));
     }
 
     @Override
     @Test
     public void collectByte()
     {
-        Verify.assertSize(this.getCollection().size(), this.getCollection().collectByte(StringFunctions.toPrimitiveByte()));
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectByte(Byte::parseByte));
     }
 
     @Override
     @Test
     public void collectChar()
     {
-        Verify.assertSize(this.getCollection().size(), this.getCollection().collectChar(StringFunctions.toFirstChar()));
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectChar((CharFunction<String>) string -> string.charAt(0)));
     }
 
     @Override
     @Test
     public void collectDouble()
     {
-        Verify.assertSize(this.getCollection().size(), this.getCollection().collectDouble(StringFunctions.toPrimitiveDouble()));
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectDouble(Double::parseDouble));
     }
 
     @Override
     @Test
     public void collectFloat()
     {
-        Verify.assertSize(this.getCollection().size(), this.getCollection().collectFloat(StringFunctions.toPrimitiveFloat()));
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectFloat(Float::parseFloat));
     }
 
     @Override
     @Test
     public void collectInt()
     {
-        Verify.assertSize(this.getCollection().size(), this.getCollection().collectInt(StringFunctions.toPrimitiveInt()));
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectInt(Integer::parseInt));
     }
 
     @Override
     @Test
     public void collectLong()
     {
-        Verify.assertSize(this.getCollection().size(), this.getCollection().collectLong(StringFunctions.toPrimitiveLong()));
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectLong(Long::parseLong));
     }
 
     @Override
     @Test
     public void collectShort()
     {
-        Verify.assertSize(this.getCollection().size(), this.getCollection().collectShort(StringFunctions.toPrimitiveShort()));
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectShort(Short::parseShort));
     }
 }

@@ -95,7 +95,7 @@ public abstract class AbstractImmutable<name>HashSetTestCase extends AbstractImm
         MutableSet\<<wrapperName>\> expected = UnifiedSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, AbstractImmutable<name>HashSetTestCase.generateCollisions().getFirst(), AbstractImmutable<name>HashSetTestCase.generateCollisions().get(1));
         MutableSet\<<wrapperName>\> actual = UnifiedSet.newSet();
         Immutable<name>Set set = this.newWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, AbstractImmutable<name>HashSetTestCase.generateCollisions().getFirst(), AbstractImmutable<name>HashSetTestCase.generateCollisions().get(1));
-        final <name>Iterator iterator = set.<type>Iterator();
+        <name>Iterator iterator = set.<type>Iterator();
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -108,7 +108,7 @@ public abstract class AbstractImmutable<name>HashSetTestCase extends AbstractImm
         actual.add(iterator.next());
         Assert.assertFalse(iterator.hasNext());
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Override

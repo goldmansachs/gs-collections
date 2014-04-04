@@ -64,8 +64,6 @@ import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
-import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -253,8 +251,8 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void collect()
     {
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(Functions.getToString()), "1", "2", "3", "4");
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(Functions.getToString(), UnifiedSet.<String>newSet()), "1", "2", "3", "4");
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(String::valueOf), "1", "2", "3", "4");
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(String::valueOf, UnifiedSet.<String>newSet()), "1", "2", "3", "4");
     }
 
     @Test
@@ -475,44 +473,44 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void detect()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).detect(Predicates.equal(3)));
-        Assert.assertNull(this.newWith(1, 2, 3, 4, 5).detect(Predicates.equal(6)));
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).detect(Integer.valueOf(3)::equals));
+        Assert.assertNull(this.newWith(1, 2, 3, 4, 5).detect(Integer.valueOf(6)::equals));
     }
 
     @Test(expected = NoSuchElementException.class)
     public void min_empty_throws()
     {
-        this.newWith().min(Comparators.naturalOrder());
+        this.<Integer>newWith().min(Integer::compareTo);
     }
 
     @Test(expected = NoSuchElementException.class)
     public void max_empty_throws()
     {
-        this.newWith().max(Comparators.naturalOrder());
+        this.<Integer>newWith().max(Integer::compareTo);
     }
 
     @Test(expected = NullPointerException.class)
     public void min_null_throws()
     {
-        this.newWith(1, null, 2).min(Comparators.naturalOrder());
+        this.newWith(1, null, 2).min(Integer::compareTo);
     }
 
     @Test(expected = NullPointerException.class)
     public void max_null_throws()
     {
-        this.newWith(1, null, 2).max(Comparators.naturalOrder());
+        this.newWith(1, null, 2).max(Integer::compareTo);
     }
 
     @Test
     public void min()
     {
-        Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 3, 2).min(Comparators.naturalOrder()));
+        Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 3, 2).min(Integer::compareTo));
     }
 
     @Test
     public void max()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 3, 2).max(Comparators.naturalOrder()));
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 3, 2).max(Integer::compareTo));
     }
 
     @Test(expected = NullPointerException.class)
@@ -542,28 +540,27 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void minBy()
     {
-        Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 3, 2).minBy(Functions.getToString()));
+        Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 3, 2).minBy(String::valueOf));
     }
 
     @Test
     public void maxBy()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 3, 2).maxBy(Functions.getToString()));
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 3, 2).maxBy(String::valueOf));
     }
 
     @Test
     public void detectWith()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 3));
-        Assert.assertNull(this.newWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 6));
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).detectWith(Object::equals, 3));
+        Assert.assertNull(this.newWith(1, 2, 3, 4, 5).detectWith(Object::equals, 6));
     }
 
     @Test
     public void detectIfNone()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(6);
-        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(3), function));
-        Assert.assertEquals(Integer.valueOf(6), this.newWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(6), function));
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).detectIfNone(Integer.valueOf(3)::equals, () -> 6));
+        Assert.assertEquals(Integer.valueOf(6), this.newWith(1, 2, 3, 4, 5).detectIfNone(Integer.valueOf(6)::equals, () -> 6));
     }
 
     @Test
@@ -587,37 +584,37 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(this.newWith(1, 2, 3).allSatisfy(Predicates.instanceOf(Integer.class)));
-        Assert.assertFalse(this.newWith(1, 2, 3).allSatisfy(Predicates.equal(1)));
+        Assert.assertTrue(this.newWith(1, 2, 3).allSatisfy(Integer.class::isInstance));
+        Assert.assertFalse(this.newWith(1, 2, 3).allSatisfy(Integer.valueOf(1)::equals));
     }
 
     @Test
     public void allSatisfyWith()
     {
         Assert.assertTrue(this.newWith(1, 2, 3).allSatisfyWith(Predicates2.instanceOf(), Integer.class));
-        Assert.assertFalse(this.newWith(1, 2, 3).allSatisfyWith(Predicates2.equal(), 1));
+        Assert.assertFalse(this.newWith(1, 2, 3).allSatisfyWith(Object::equals, 1));
     }
 
     @Test
     public void noneSatisfy()
     {
-        Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfy(Predicates.instanceOf(Boolean.class)));
-        Assert.assertFalse(this.newWith(1, 1, 3).noneSatisfy(Predicates.equal(1)));
-        Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfy(Predicates.equal(4)));
+        Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfy(Boolean.class::isInstance));
+        Assert.assertFalse(this.newWith(1, 1, 3).noneSatisfy(Integer.valueOf(1)::equals));
+        Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfy(Integer.valueOf(4)::equals));
     }
 
     @Test
     public void noneSatisfyWith()
     {
         Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfyWith(Predicates2.instanceOf(), Boolean.class));
-        Assert.assertFalse(this.newWith(1, 2, 3).noneSatisfyWith(Predicates2.equal(), 1));
+        Assert.assertFalse(this.newWith(1, 2, 3).noneSatisfyWith(Object::equals, 1));
     }
 
     @Test
     public void anySatisfy()
     {
-        Assert.assertFalse(this.newWith(1, 2, 3).anySatisfy(Predicates.instanceOf(String.class)));
-        Assert.assertTrue(this.newWith(1, 2, 3).anySatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertFalse(this.newWith(1, 2, 3).anySatisfy(String.class::isInstance));
+        Assert.assertTrue(this.newWith(1, 2, 3).anySatisfy(Integer.class::isInstance));
     }
 
     @Test
@@ -630,7 +627,7 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void count()
     {
-        Assert.assertEquals(3, this.newWith(1, 2, 3).count(Predicates.instanceOf(Integer.class)));
+        Assert.assertEquals(3, this.newWith(1, 2, 3).count(Integer.class::isInstance));
     }
 
     @Test
@@ -644,13 +641,13 @@ public abstract class AbstractRichIterableTestCase
     {
         Verify.assertContainsAll(
                 this.newWith(1, 2, 3).collectIf(
-                        Predicates.instanceOf(Integer.class),
-                        Functions.getToString()),
+                        Integer.class::isInstance,
+                        Object::toString),
                 "1", "2", "3");
         Verify.assertContainsAll(
                 this.newWith(1, 2, 3).collectIf(
-                        Predicates.instanceOf(Integer.class),
-                        Functions.getToString(),
+                        Integer.class::isInstance,
+                        Object::toString,
                         UnifiedSet.<String>newSet()),
                 "1", "2", "3");
     }
@@ -875,7 +872,7 @@ public abstract class AbstractRichIterableTestCase
     public void toSortedListBy()
     {
         RichIterable<Integer> integers = this.newWith(2, 4, 1, 3);
-        MutableList<Integer> list = integers.toSortedListBy(Functions.getToString());
+        MutableList<Integer> list = integers.toSortedListBy(String::valueOf);
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), list);
     }
 
@@ -899,7 +896,7 @@ public abstract class AbstractRichIterableTestCase
     public void toSortedSetBy()
     {
         RichIterable<Integer> integers = this.newWith(2, 4, 1, 3);
-        MutableSortedSet<Integer> set = integers.toSortedSetBy(Functions.getToString());
+        MutableSortedSet<Integer> set = integers.toSortedSetBy(String::valueOf);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(1, 2, 3, 4), set);
     }
 
@@ -922,7 +919,7 @@ public abstract class AbstractRichIterableTestCase
     {
         RichIterable<Integer> integers = this.newWith(1, 2, 3, 4);
         MutableMap<String, String> map =
-                integers.toMap(Functions.getToString(), Functions.getToString());
+                integers.toMap(Object::toString, Object::toString);
         Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
     }
 
@@ -930,7 +927,7 @@ public abstract class AbstractRichIterableTestCase
     public void toSortedMap()
     {
         RichIterable<Integer> integers = this.newWith(1, 2, 3);
-        MutableSortedMap<Integer, String> map = integers.toSortedMap(Functions.getIntegerPassThru(), Functions.getToString());
+        MutableSortedMap<Integer, String> map = integers.toSortedMap(Functions.getIntegerPassThru(), Object::toString);
         Verify.assertMapsEqual(TreeSortedMap.newMapWith(1, "1", 2, "2", 3, "3"), map);
         Verify.assertListsEqual(FastList.newListWith(1, 2, 3), map.keySet().toList());
     }
@@ -940,7 +937,7 @@ public abstract class AbstractRichIterableTestCase
     {
         RichIterable<Integer> integers = this.newWith(1, 2, 3);
         MutableSortedMap<Integer, String> map = integers.toSortedMap(Comparators.<Integer>reverseNaturalOrder(),
-                Functions.getIntegerPassThru(), Functions.getToString());
+                Functions.getIntegerPassThru(), Object::toString);
         Verify.assertMapsEqual(TreeSortedMap.newMapWith(Comparators.<Integer>reverseNaturalOrder(), 1, "1", 2, "2", 3, "3"), map);
         Verify.assertListsEqual(FastList.newListWith(3, 2, 1), map.keySet().toList());
     }
@@ -1053,20 +1050,20 @@ public abstract class AbstractRichIterableTestCase
         RichIterable<Pair<String, Object>> pairs = collection.zip(nulls);
         Assert.assertEquals(
                 collection.toSet(),
-                pairs.collect(Functions.<String>firstOfPair()).toSet());
+                pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
         Assert.assertEquals(
                 nulls,
-                pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         RichIterable<Pair<String, Object>> pairsPlusOne = collection.zip(nullsPlusOne);
         Assert.assertEquals(
                 collection.toSet(),
-                pairsPlusOne.collect(Functions.<String>firstOfPair()).toSet());
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairsPlusOne.collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
+        Assert.assertEquals(nulls, pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
 
         RichIterable<Pair<String, Object>> pairsMinusOne = collection.zip(nullsMinusOne);
         Assert.assertEquals(collection.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(collection.containsAllIterable(pairsMinusOne.collect(Functions.<String>firstOfPair())));
+        Assert.assertTrue(collection.containsAllIterable(pairsMinusOne.collect((Function<Pair<String, ?>, String>) Pair::getOne)));
 
         Assert.assertEquals(
                 collection.zip(nulls).toSet(),
@@ -1081,10 +1078,10 @@ public abstract class AbstractRichIterableTestCase
 
         Assert.assertEquals(
                 collection.toSet(),
-                pairs.collect(Functions.<String>firstOfPair()).toSet());
+                pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
         Assert.assertEquals(
                 Interval.zeroTo(collection.size() - 1).toSet(),
-                pairs.collect(Functions.<Integer>secondOfPair(), UnifiedSet.<Integer>newSet()));
+                pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo, UnifiedSet.<Integer>newSet()));
 
         Assert.assertEquals(
                 collection.zipWithIndex().toSet(),
@@ -1132,9 +1129,8 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void aggregateByMutating()
     {
-        Function0<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
         RichIterable<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
-        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, AtomicInteger::addAndGet);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(String::valueOf, AtomicInteger::new, AtomicInteger::addAndGet);
         if (collection instanceof Set)
         {
             Assert.assertEquals(1, aggregation.get("1").intValue());
@@ -1154,9 +1150,9 @@ public abstract class AbstractRichIterableTestCase
     {
         MapIterable<String, Integer> aggregation =
                 this.newWith(1, 1, 1, 2, 2, 3).aggregateBy(
-                        Functions.getToString(),
-                        Functions0.value(0),
-                        Functions2.integerAddition());
+                        Object::toString,
+                        () -> 0,
+                        (integer1, integer2) -> integer1 + integer2);
 
         if (this.newWith(1, 1, 1, 2, 2, 3) instanceof Set)
         {

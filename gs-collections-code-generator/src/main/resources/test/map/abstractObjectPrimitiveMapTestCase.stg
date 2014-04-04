@@ -243,7 +243,7 @@ public abstract class AbstractObject<name>MapTestCase
         Assert.assertFalse(iterator.hasNext());
 
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
         Verify.assertThrows(NoSuchElementException.class, () -> {this.getEmptyMap().<type>Iterator().next();});
     }
 
@@ -251,36 +251,18 @@ public abstract class AbstractObject<name>MapTestCase
     public void forEach()
     {
         Object<name>Map\<Integer> map01 = this.newWithKeysValues(0, <(literal.(type))("1")>, 1, <(literal.(type))("2")>);
-        final <type>[] sum01 = new <type>[1];
-        map01.forEach(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum01[0] += each;
-            }
-        });
+        <type>[] sum01 = new <type>[1];
+        map01.forEach(each -> { sum01[0] += each; });
         Assert.assertEquals(<(literal.(type))("3")>, sum01[0]<delta.(type)>);
 
         Object<name>Map\<Integer> map = this.newWithKeysValues(3, <(literal.(type))("4")>, 4, <(literal.(type))("5")>);
-        final <type>[] sum = new <type>[1];
-        map.forEach(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
+        <type>[] sum = new <type>[1];
+        map.forEach(each -> { sum[0] += each; });
         Assert.assertEquals(<(literal.(type))("9")>, sum[0]<delta.(type)>);
 
         Object<name>Map\<Integer> map1 = this.newWithKeysValues(3, <(literal.(type))("4")>, null, <(literal.(type))("5")>);
-        final <type>[] sum1 = new <type>[1];
-        map1.forEach(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum1[0] += each;
-            }
-        });
+        <type>[] sum1 = new <type>[1];
+        map1.forEach(each -> { sum1[0] += each; });
         Assert.assertEquals(<(literal.(type))("9")>, sum1[0]<delta.(type)>);
     }
 

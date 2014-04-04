@@ -89,7 +89,7 @@ public class Synchronized<name1><name2>MapValuesTest extends AbstractMutable<nam
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Override

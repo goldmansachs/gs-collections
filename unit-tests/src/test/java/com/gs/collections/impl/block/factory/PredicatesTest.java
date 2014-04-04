@@ -204,13 +204,13 @@ public class PredicatesTest
     @Test
     public void equal()
     {
-        assertAccepts(Predicates.equal(1), 1);
-        assertRejects(Predicates.equal(1), 2);
+        assertAccepts(Integer.valueOf(1)::equals, 1);
+        assertRejects(Integer.valueOf(1)::equals, 2);
 
-        assertAccepts(Predicates.equal("test"), "test");
-        assertRejects(Predicates.equal("test"), "production");
+        assertAccepts("test"::equals, "test");
+        assertRejects("test"::equals, "production");
 
-        assertToString(Predicates.equal(1));
+        assertToString(Integer.valueOf(1)::equals);
     }
 
     @Test
@@ -386,7 +386,7 @@ public class PredicatesTest
     @Test
     public void attributeEqual()
     {
-        Predicate<String> predicate = Predicates.attributeEqual(Functions.getToString(), "1");
+        Predicate<String> predicate = Predicates.attributeEqual(String::valueOf, "1");
         assertAccepts(predicate, "1");
         assertRejects(predicate, "0");
         assertToString(predicate);
@@ -395,7 +395,7 @@ public class PredicatesTest
     @Test
     public void attributeNotEqual()
     {
-        Predicate<String> predicate = Predicates.attributeNotEqual(Functions.getToString(), "1");
+        Predicate<String> predicate = Predicates.attributeNotEqual(String::valueOf, "1");
         assertAccepts(predicate, "0");
         assertRejects(predicate, "1");
         assertToString(predicate);
@@ -404,7 +404,7 @@ public class PredicatesTest
     @Test
     public void attributeLessThan()
     {
-        Predicate<String> predicate = Predicates.attributeLessThan(Functions.getToString(), "1");
+        Predicate<String> predicate = Predicates.attributeLessThan(String::valueOf, "1");
         assertRejects(predicate, "1");
         assertAccepts(predicate, "0");
         assertToString(predicate);
@@ -413,7 +413,7 @@ public class PredicatesTest
     @Test
     public void attributeGreaterThan()
     {
-        Predicate<String> predicate = Predicates.attributeGreaterThan(Functions.getToString(), "0");
+        Predicate<String> predicate = Predicates.attributeGreaterThan(String::valueOf, "0");
         assertAccepts(predicate, "1");
         assertRejects(predicate, "0");
         assertToString(predicate);
@@ -422,7 +422,7 @@ public class PredicatesTest
     @Test
     public void attributeGreaterThanOrEqualTo()
     {
-        Predicate<String> predicate = Predicates.attributeGreaterThanOrEqualTo(Functions.getToString(), "1");
+        Predicate<String> predicate = Predicates.attributeGreaterThanOrEqualTo(String::valueOf, "1");
         assertAccepts(predicate, "1", "2");
         assertRejects(predicate, "0");
         assertToString(predicate);
@@ -431,7 +431,7 @@ public class PredicatesTest
     @Test
     public void attributeLessThanOrEqualTo()
     {
-        Predicate<String> predicate = Predicates.attributeLessThanOrEqualTo(Functions.getToString(), "1");
+        Predicate<String> predicate = Predicates.attributeLessThanOrEqualTo(String::valueOf, "1");
         assertAccepts(predicate, "1", "0");
         assertRejects(predicate, "2");
         assertToString(predicate);
@@ -685,7 +685,7 @@ public class PredicatesTest
     public void betweenInclusiveString()
     {
         assertStringBetweenInclusive(Predicates.betweenInclusive("1", "3"));
-        assertStringBetweenInclusive(Predicates.<String, String>attributeBetweenInclusive(Functions.getToString(), "1", "3"));
+        assertStringBetweenInclusive(Predicates.<String, String>attributeBetweenInclusive(String::valueOf, "1", "3"));
     }
 
     private static void assertStringBetweenInclusive(Predicate<String> oneToThree)
@@ -713,7 +713,7 @@ public class PredicatesTest
     public void betweenInclusiveFromString()
     {
         assertStringBetweenInclusiveFrom(Predicates.betweenInclusiveFrom("1", "3"));
-        assertStringBetweenInclusiveFrom(Predicates.<String, String>attributeBetweenInclusiveFrom(Functions.getToString(), "1", "3"));
+        assertStringBetweenInclusiveFrom(Predicates.<String, String>attributeBetweenInclusiveFrom(String::valueOf, "1", "3"));
     }
 
     private static void assertStringBetweenInclusiveFrom(Predicate<String> oneToThree)
@@ -741,7 +741,7 @@ public class PredicatesTest
     public void betweenInclusiveToString()
     {
         assertStringBetweenInclusiveTo(Predicates.betweenInclusiveTo("1", "3"));
-        assertStringBetweenInclusiveTo(Predicates.<String, String>attributeBetweenInclusiveTo(Functions.getToString(), "1", "3"));
+        assertStringBetweenInclusiveTo(Predicates.<String, String>attributeBetweenInclusiveTo(String::valueOf, "1", "3"));
     }
 
     private static void assertStringBetweenInclusiveTo(Predicate<String> oneToThree)
@@ -769,7 +769,7 @@ public class PredicatesTest
     public void betweenExclusiveString()
     {
         assertStringBetweenExclusive(Predicates.betweenExclusive("1", "3"));
-        assertStringBetweenExclusive(Predicates.<String, String>attributeBetweenExclusive(Functions.getToString(), "1", "3"));
+        assertStringBetweenExclusive(Predicates.<String, String>attributeBetweenExclusive(String::valueOf, "1", "3"));
     }
 
     private static void assertStringBetweenExclusive(Predicate<String> oneToThree)
@@ -815,13 +815,7 @@ public class PredicatesTest
                 return employee.addresses;
             }
         };
-        public static final Function<Employee, MutableList<Dependent>> TO_DEPENEDENTS = new Function<Employee, MutableList<Dependent>>()
-        {
-            public MutableList<Dependent> valueOf(Employee employee)
-            {
-                return employee.dependents;
-            }
-        };
+        public static final Function<Employee, MutableList<Dependent>> TO_DEPENEDENTS = employee -> employee.dependents;
         private final MutableList<Address> addresses;
         private final MutableList<Dependent> dependents = Lists.mutable.of();
 
@@ -872,13 +866,7 @@ public class PredicatesTest
 
     public static final class Dependent
     {
-        public static final Predicate<Dependent> IS_IMMEDIATE = new Predicate<Dependent>()
-        {
-            public boolean accept(Dependent dependent)
-            {
-                return dependent.isImmediate();
-            }
-        };
+        public static final Predicate<Dependent> IS_IMMEDIATE = Dependent::isImmediate;
 
         private final DependentType type;
 

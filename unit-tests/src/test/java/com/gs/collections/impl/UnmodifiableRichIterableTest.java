@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import java.util.Collections;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.test.Verify;
@@ -116,8 +114,8 @@ public class UnmodifiableRichIterableTest extends AbstractRichIterableTestCase
     @Override
     public void partition()
     {
-        PartitionIterable<String> partition = this.mutableCollection.partition(Predicates.alwaysTrue());
-        PartitionIterable<String> unmodifiablePartition = this.unmodifiableCollection.partition(Predicates.alwaysTrue());
+        PartitionIterable<String> partition = this.mutableCollection.partition(ignored -> true);
+        PartitionIterable<String> unmodifiablePartition = this.unmodifiableCollection.partition(ignored -> true);
         Assert.assertEquals(partition.getSelected(), unmodifiablePartition.getSelected());
         Assert.assertEquals(partition.getRejected(), unmodifiablePartition.getRejected());
     }
@@ -126,12 +124,11 @@ public class UnmodifiableRichIterableTest extends AbstractRichIterableTestCase
     @Override
     public void partitionWith()
     {
-        PartitionIterable<String> partition = this.mutableCollection.partitionWith(Predicates2.alwaysTrue(), null);
-        PartitionIterable<String> unmodifiablePartition = this.unmodifiableCollection.partitionWith(Predicates2.alwaysTrue(), null);
+        PartitionIterable<String> partition = this.mutableCollection.partitionWith((ignored1, ignored2) -> true, null);
+        PartitionIterable<String> unmodifiablePartition = this.unmodifiableCollection.partitionWith((ignored1, ignored2) -> true, null);
         Assert.assertEquals(partition.getSelected(), unmodifiablePartition.getSelected());
         Assert.assertEquals(partition.getRejected(), unmodifiablePartition.getRejected());
     }
-
 
     @Test
     @Override

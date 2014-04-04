@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.gs.collections.impl.block.procedure;
 
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
@@ -39,7 +38,7 @@ public class IfProcedureTest
         MutableList<String> list2 = Lists.mutable.of();
         Procedure<String> procedure1 = CollectionAddProcedure.on(list1);
         Procedure<String> procedure2 = CollectionAddProcedure.on(list2);
-        Procedure<String> ifProcedure = new IfProcedure<String>(Predicates.equal("1"), procedure1, procedure2);
+        Procedure<String> ifProcedure = new IfProcedure<String>("1"::equals, procedure1, procedure2);
         LOGGER.info("{}", ifProcedure);
         MutableList<String> list = FastList.newListWith("1", "2");
         Iterate.forEach(list, ifProcedure);

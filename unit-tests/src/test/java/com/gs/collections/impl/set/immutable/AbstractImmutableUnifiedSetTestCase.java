@@ -162,58 +162,58 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void collect()
     {
         Assert.assertTrue(
-                this.newSetWith(1, 2, 3, 4).collect(Functions.getToString()).containsAllArguments("1", "2", "3", "4"));
+                this.newSetWith(1, 2, 3, 4).collect(String::valueOf).containsAllArguments("1", "2", "3", "4"));
     }
 
     @Test
     public void detect()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3, 4, 5).detect(Predicates.equal(3)));
-        Assert.assertNull(this.newSetWith(1, 2, 3, 4, 5).detect(Predicates.equal(6)));
+        Assert.assertEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3, 4, 5).detect(Integer.valueOf(3)::equals));
+        Assert.assertNull(this.newSetWith(1, 2, 3, 4, 5).detect(Integer.valueOf(6)::equals));
     }
 
     @Test
     public void detectIfNone()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
-        Assert.assertEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(3), function));
-        Assert.assertEquals(Integer.valueOf(6), this.newSetWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(6), function));
+        Assert.assertEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3, 4, 5).detectIfNone(Integer.valueOf(3)::equals, function));
+        Assert.assertEquals(Integer.valueOf(6), this.newSetWith(1, 2, 3, 4, 5).detectIfNone(Integer.valueOf(6)::equals, function));
     }
 
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(this.newSetWith(1, 2, 3).allSatisfy(Predicates.instanceOf(Integer.class)));
-        Assert.assertFalse(this.newSetWith(1, 2, 3).allSatisfy(Predicates.equal(1)));
+        Assert.assertTrue(this.newSetWith(1, 2, 3).allSatisfy(Integer.class::isInstance));
+        Assert.assertFalse(this.newSetWith(1, 2, 3).allSatisfy(Integer.valueOf(1)::equals));
     }
 
     @Test
     public void anySatisfy()
     {
-        Assert.assertFalse(this.newSetWith(1, 2, 3).anySatisfy(Predicates.instanceOf(String.class)));
-        Assert.assertTrue(this.newSetWith(1, 2, 3).anySatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertFalse(this.newSetWith(1, 2, 3).anySatisfy(String.class::isInstance));
+        Assert.assertTrue(this.newSetWith(1, 2, 3).anySatisfy(Integer.class::isInstance));
     }
 
     @Test
     public void noneSatisfy()
     {
-        Assert.assertTrue(this.newSetWith(1, 2, 3).noneSatisfy(Predicates.instanceOf(String.class)));
-        Assert.assertTrue(this.newSetWith(1, 2, 3).noneSatisfy(Predicates.equal(100)));
-        Assert.assertFalse(this.newSetWith(1, 2, 3).noneSatisfy(Predicates.equal(1)));
+        Assert.assertTrue(this.newSetWith(1, 2, 3).noneSatisfy(String.class::isInstance));
+        Assert.assertTrue(this.newSetWith(1, 2, 3).noneSatisfy(Integer.valueOf(100)::equals));
+        Assert.assertFalse(this.newSetWith(1, 2, 3).noneSatisfy(Integer.valueOf(1)::equals));
     }
 
     @Test
     public void count()
     {
-        Assert.assertEquals(3, this.newSetWith(1, 2, 3).count(Predicates.instanceOf(Integer.class)));
+        Assert.assertEquals(3, this.newSetWith(1, 2, 3).count(Integer.class::isInstance));
     }
 
     @Test
     public void collectIf()
     {
         Assert.assertTrue(this.newSetWith(1, 2, 3).collectIf(
-                Predicates.instanceOf(Integer.class),
-                Functions.getToString()).containsAllArguments("1", "2", "3"));
+                Integer.class::isInstance,
+                String::valueOf).containsAllArguments("1", "2", "3"));
     }
 
     @Test
@@ -376,7 +376,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void toSortedListBy()
     {
         ImmutableSet<Integer> integers = this.newSetWith(2, 4, 1, 3);
-        MutableList<Integer> list = integers.toSortedListBy(Functions.getToString());
+        MutableList<Integer> list = integers.toSortedListBy(String::valueOf);
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), list);
     }
 
@@ -400,7 +400,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void toSortedSetBy()
     {
         ImmutableSet<Integer> integers = this.newSetWith(4, 1, 3, 2);
-        MutableSortedSet<Integer> set = integers.toSortedSetBy(Functions.getToString());
+        MutableSortedSet<Integer> set = integers.toSortedSetBy(String::valueOf);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(1, 2, 3, 4), set);
     }
 
@@ -417,7 +417,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     {
         ImmutableSet<Integer> integers = this.newSetWith(1, 2, 3, 4);
         MutableMap<String, String> map =
-                integers.toMap(Functions.getToString(), Functions.getToString());
+                integers.toMap(String::valueOf, String::valueOf);
         Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
     }
 

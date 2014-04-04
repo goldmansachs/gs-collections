@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package com.gs.collections.impl.block.procedure;
 
-import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Predicates;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,8 +26,8 @@ public class CollectIfProcedureTest
     @Test
     public void constructorWithSize()
     {
-        CollectIfProcedure<Integer, String> underTestTrue = new CollectIfProcedure<Integer, String>(10, Functions.getToString(), Predicates.alwaysTrue());
-        CollectIfProcedure<Integer, String> underTestFalse = new CollectIfProcedure<Integer, String>(10, Functions.getToString(), Predicates.alwaysFalse());
+        CollectIfProcedure<Integer, String> underTestTrue = new CollectIfProcedure<Integer, String>(10, String::valueOf, ignored -> true);
+        CollectIfProcedure<Integer, String> underTestFalse = new CollectIfProcedure<Integer, String>(10, String::valueOf, ignored -> false);
         underTestTrue.value(THE_ANSWER);
         underTestFalse.value(THE_ANSWER);
         Assert.assertTrue(underTestTrue.getCollection().contains("42"));

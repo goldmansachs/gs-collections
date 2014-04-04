@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
@@ -29,8 +28,6 @@ import org.junit.Test;
 
 public class SelectIteratorTest
 {
-    private static final Predicates<Object> PREDICATE = Predicates.equal(Boolean.TRUE);
-
     @Test
     public void iterator()
     {
@@ -45,8 +42,8 @@ public class SelectIteratorTest
                 Boolean.FALSE,
                 Boolean.TRUE,
                 null);
-        this.assertElements(new SelectIterator<Boolean>(list.iterator(), PREDICATE));
-        this.assertElements(new SelectIterator<Boolean>(list, PREDICATE));
+        this.assertElements(new SelectIterator<Boolean>(list.iterator(), Boolean.TRUE::equals));
+        this.assertElements(new SelectIterator<Boolean>(list, Boolean.TRUE::equals));
     }
 
     private void assertElements(Iterator<Boolean> newIterator)
@@ -63,13 +60,13 @@ public class SelectIteratorTest
     public void noSuchElementException()
     {
         Verify.assertThrows(NoSuchElementException.class, () -> {
-            new SelectIterator<Object>(Lists.fixedSize.of(), Predicates.alwaysTrue()).next();
+            new SelectIterator<Object>(Lists.fixedSize.of(), ignored -> true).next();
         });
     }
 
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> new SelectIterator<Object>(Lists.fixedSize.of(), Predicates.alwaysTrue()).remove());
+        Verify.assertThrows(UnsupportedOperationException.class, () -> new SelectIterator<Object>(Lists.fixedSize.of(), ignored -> true).remove());
     }
 }

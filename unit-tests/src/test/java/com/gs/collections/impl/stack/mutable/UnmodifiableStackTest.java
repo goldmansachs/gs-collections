@@ -18,9 +18,7 @@ package com.gs.collections.impl.stack.mutable;
 
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.stack.StackIterable;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.StringPredicates;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.stack.StackIterableTestCase;
@@ -119,7 +117,7 @@ public class UnmodifiableStackTest extends StackIterableTestCase
     public void testSelect()
     {
         Assert.assertEquals(ArrayStack.newStackFromTopToBottom(2, 3), this.unmodifiableStack.select(Predicates.greaterThan(1)));
-        Verify.assertSize(3, this.unmodifiableStackString.select(Predicates.alwaysTrue(), FastList.<String>newList()));
+        Verify.assertSize(3, this.unmodifiableStackString.select(ignored -> true, FastList.<String>newList()));
     }
 
     @Test
@@ -127,7 +125,7 @@ public class UnmodifiableStackTest extends StackIterableTestCase
     {
         Verify.assertSize(
                 1,
-                this.unmodifiableStackString.selectWith(Predicates2.equal(),
+                this.unmodifiableStackString.selectWith(Object::equals,
                         "2",
                         FastList.<String>newList()));
     }
@@ -145,7 +143,7 @@ public class UnmodifiableStackTest extends StackIterableTestCase
     {
         Verify.assertSize(
                 3,
-                this.unmodifiableStackString.rejectWith(Predicates2.equal(),
+                this.unmodifiableStackString.rejectWith(Object::equals,
                         3,
                         FastList.<String>newList()));
     }
@@ -153,7 +151,7 @@ public class UnmodifiableStackTest extends StackIterableTestCase
     @Test
     public void testCollect()
     {
-        Assert.assertEquals(this.mutableStack, this.unmodifiableStackString.collect(Functions.getStringToInteger()));
+        Assert.assertEquals(this.mutableStack, this.unmodifiableStackString.collect(Integer::valueOf));
     }
 
     @Test
@@ -177,8 +175,8 @@ public class UnmodifiableStackTest extends StackIterableTestCase
     @Test
     public void testCount()
     {
-        Assert.assertEquals(this.mutableStack.count(Predicates.alwaysTrue()),
-                this.unmodifiableStack.count(Predicates.alwaysTrue()));
+        Assert.assertEquals(this.mutableStack.count(ignored1 -> true),
+                this.unmodifiableStack.count(ignored -> true));
     }
 
     @Test

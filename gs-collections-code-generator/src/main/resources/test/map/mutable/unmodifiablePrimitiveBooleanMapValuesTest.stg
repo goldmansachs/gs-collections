@@ -87,7 +87,7 @@ public class Unmodifiable<name>BooleanMapValuesTest extends AbstractMutableBoole
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Override

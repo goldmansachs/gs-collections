@@ -16,9 +16,9 @@
 
 package com.gs.collections.impl.map.mutable;
 
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
@@ -200,9 +200,9 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
     @Test
     public void getIfAbsentPut()
     {
-        Assert.assertEquals("3", this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(3, Functions0.value("")));
+        Assert.assertEquals("3", this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(3, (Function0<String>) () -> ""));
         Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(4, Functions0.value(""));
+            this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(4, (Function0<String>) () -> "");
         });
     }
 
@@ -227,7 +227,7 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWith()
     {
-        this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPutWith(4, Functions.getToString(), 4);
+        this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPutWith(4, String::valueOf, 4);
     }
 
     @Override

@@ -374,7 +374,7 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
         occupiedWithSentinels.setAccessible(true);
         <name1><name2>HashMap hashMap = <name1><name2>HashMap.newWithKeysValues(<["2", "3", "4"]:keyValue(); separator=", ">);
 
-        <name2>Function\<<wrapperName2>\> function = (<wrapperName2> object) -> object.<type2>Value();
+        <name2>Function\<<wrapperName2>\> function = <wrapperName2>::<type2>Value;
 
         hashMap.getIfAbsentPutWith(<(literal.(type1))("2")>, function, <wrapperName2>.valueOf(<(literal.(type2))("5")>));
         Assert.assertEquals(3, occupiedWithData.get(hashMap));

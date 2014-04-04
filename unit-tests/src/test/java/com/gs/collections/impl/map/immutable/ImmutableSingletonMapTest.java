@@ -21,7 +21,6 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
@@ -143,8 +142,8 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
         super.getIfAbsentWith();
         ImmutableMap<Integer, String> map = this.classUnderTest();
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsentWith(4, Functions.getToString(), 4));
-        Assert.assertEquals("1", map.getIfAbsentWith(1, Functions.getToString(), 1));
+        Assert.assertEquals("4", map.getIfAbsentWith(4, String::valueOf, 4));
+        Assert.assertEquals("1", map.getIfAbsentWith(1, String::valueOf, 1));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1"), map);
     }
 
@@ -260,10 +259,10 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        ImmutableMap<Integer, String> empty = map.select(Predicates2.alwaysFalse());
+        ImmutableMap<Integer, String> empty = map.select((ignored1, ignored2) -> false);
         Verify.assertInstanceOf(ImmutableEmptyMap.class, empty);
 
-        ImmutableMap<Integer, String> full = map.select(Predicates2.alwaysTrue());
+        ImmutableMap<Integer, String> full = map.select((ignored1, ignored2) -> true);
         Verify.assertInstanceOf(ImmutableSingletonMap.class, full);
         Assert.assertEquals(map, full);
     }
@@ -273,11 +272,11 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        ImmutableMap<Integer, String> empty = map.reject(Predicates2.alwaysTrue());
+        ImmutableMap<Integer, String> empty = map.reject((ignored1, ignored2) -> true);
         Verify.assertInstanceOf(ImmutableEmptyMap.class, empty);
         Assert.assertEquals(new ImmutableEmptyMap<Integer, String>(), empty);
 
-        ImmutableMap<Integer, String> full = map.reject(Predicates2.alwaysFalse());
+        ImmutableMap<Integer, String> full = map.reject((ignored1, ignored2) -> false);
         Verify.assertInstanceOf(ImmutableSingletonMap.class, full);
         Assert.assertEquals(map, full);
     }
@@ -287,10 +286,10 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        Pair<Integer, String> actual = map.detect(Predicates2.alwaysTrue());
+        Pair<Integer, String> actual = map.detect((ignored1, ignored2) -> true);
         Assert.assertEquals(Tuples.pair(1, "1"), actual);
 
-        Assert.assertNull(map.detect(Predicates2.alwaysFalse()));
+        Assert.assertNull(map.detect((ignored1, ignored2) -> false));
     }
 
     @Override

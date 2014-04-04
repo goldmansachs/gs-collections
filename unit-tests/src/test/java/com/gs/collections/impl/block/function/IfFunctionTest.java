@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.gs.collections.impl.block.function;
 
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -39,8 +38,8 @@ public class IfFunctionTest
 
         IfFunction<Integer, Integer> function = new IfFunction<Integer, Integer>(
                 IntegerPredicates.isEven(),
-                Functions.getFixedValue(1),
-                Functions.getFixedValue(0));
+                (Integer ignored) -> 1,
+                (Integer ignored) -> 0);
         MutableList<Integer> result = map.valuesView().collect(function).toList();
 
         Assert.assertEquals(FastList.newListWith(0, 1, 0, 1, 0), result);
@@ -51,7 +50,7 @@ public class IfFunctionTest
     {
         IfFunction<Integer, Boolean> function = new IfFunction<Integer, Boolean>(
                 Predicates.greaterThan(5),
-                Functions.getFixedValue(true));
+                (Integer ignored) -> true);
 
         Assert.assertTrue(function.valueOf(10));
     }
@@ -61,8 +60,8 @@ public class IfFunctionTest
     {
         IfFunction<Integer, Boolean> function = new IfFunction<Integer, Boolean>(
                 Predicates.greaterThan(5),
-                Functions.getFixedValue(true),
-                Functions.getFixedValue(false));
+                (Integer ignored) -> true,
+                (Integer ignored) -> false);
 
         Assert.assertFalse(function.valueOf(1));
     }

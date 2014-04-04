@@ -78,7 +78,7 @@ public class Synchronized<name>BooleanMapValuesTest extends AbstractMutableBoole
     {
         MutableBooleanCollection collection = this.newWith(true, false, false, true, true, true);
         BooleanArrayList list = BooleanArrayList.newListWith(true, false, false, true, true, true);
-        final BooleanIterator iterator = collection.booleanIterator();
+        BooleanIterator iterator = collection.booleanIterator();
         for (int i = 0; i \< 6; i++)
         {
             Assert.assertTrue(iterator.hasNext());
@@ -87,7 +87,7 @@ public class Synchronized<name>BooleanMapValuesTest extends AbstractMutableBoole
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Override

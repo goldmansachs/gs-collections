@@ -30,7 +30,6 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.Counter;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -79,10 +78,10 @@ public class ListIterateTest
     public void detectIndexWith()
     {
         List<Integer> list = new LinkedList<Integer>(Interval.fromTo(5, 1));
-        Assert.assertEquals(4, Iterate.detectIndexWith(list, Predicates2.equal(), 1));
-        Assert.assertEquals(0, Iterate.detectIndexWith(list, Predicates2.equal(), 5));
-        Assert.assertEquals(-1, Iterate.detectIndexWith(iList(), Predicates2.equal(), 5));
-        Assert.assertEquals(-1, Iterate.detectIndexWith(iSet(), Predicates2.equal(), 5));
+        Assert.assertEquals(4, Iterate.detectIndexWith(list, Object::equals, 1));
+        Assert.assertEquals(0, Iterate.detectIndexWith(list, Object::equals, 5));
+        Assert.assertEquals(-1, Iterate.detectIndexWith(iList(), Object::equals, 5));
+        Assert.assertEquals(-1, Iterate.detectIndexWith(iSet(), Object::equals, 5));
     }
 
     @Test
@@ -169,10 +168,10 @@ public class ListIterateTest
 
     private void assertCollect(List<Boolean> list)
     {
-        MutableList<String> newCollection = ListIterate.collect(list, Functions.getToString());
+        MutableList<String> newCollection = ListIterate.collect(list, String::valueOf);
         Verify.assertListsEqual(newCollection, FastList.newListWith("true", "false", "null"));
 
-        List<String> newCollection2 = ListIterate.collect(list, Functions.getToString(), new ArrayList<String>());
+        List<String> newCollection2 = ListIterate.collect(list, String::valueOf, new ArrayList<String>());
         Verify.assertListsEqual(newCollection2, FastList.newListWith("true", "false", "null"));
     }
 
@@ -391,27 +390,27 @@ public class ListIterateTest
 
     private void assertDetectWith(List<Integer> list)
     {
-        Assert.assertEquals(Integer.valueOf(1), ListIterate.detectWith(list, Predicates2.equal(), 1));
+        Assert.assertEquals(Integer.valueOf(1), ListIterate.detectWith(list, Object::equals, 1));
         MutableList<Integer> list2 = Lists.fixedSize.of(1, 2, 2);
-        Assert.assertSame(list2.get(1), ListIterate.detectWith(list2, Predicates2.equal(), 2));
+        Assert.assertSame(list2.get(1), ListIterate.detectWith(list2, Object::equals, 2));
     }
 
     @Test
     public void detectIfNone()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Assert.assertNull(ListIterate.detectIfNone(list, Predicates.equal(6), null));
-        Assert.assertEquals(Integer.valueOf(5), ListIterate.detectIfNone(list, Predicates.equal(5), 0));
-        Assert.assertNull(ListIterate.detectIfNone(new LinkedList<Integer>(list), Predicates.equal(6), null));
+        Assert.assertNull(ListIterate.detectIfNone(list, Integer.valueOf(6)::equals, null));
+        Assert.assertEquals(Integer.valueOf(5), ListIterate.detectIfNone(list, Integer.valueOf(5)::equals, 0));
+        Assert.assertNull(ListIterate.detectIfNone(new LinkedList<Integer>(list), Integer.valueOf(6)::equals, null));
     }
 
     @Test
     public void detectWithIfNone()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Assert.assertNull(ListIterate.detectWithIfNone(list, Predicates2.equal(), 6, null));
-        Assert.assertEquals(Integer.valueOf(5), ListIterate.detectWithIfNone(list, Predicates2.equal(), 5, 0));
-        Assert.assertNull(ListIterate.detectWithIfNone(new LinkedList<Integer>(list), Predicates2.equal(), 6, null));
+        Assert.assertNull(ListIterate.detectWithIfNone(list, Object::equals, 6, null));
+        Assert.assertEquals(Integer.valueOf(5), ListIterate.detectWithIfNone(list, Object::equals, 5, 0));
+        Assert.assertNull(ListIterate.detectWithIfNone(new LinkedList<Integer>(list), Object::equals, 6, null));
     }
 
     @Test
@@ -510,8 +509,8 @@ public class ListIterateTest
 
     private void assertCollectIf(List<Integer> integers)
     {
-        Verify.assertContainsAll(ListIterate.collectIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString()), "1", "2", "3");
-        Verify.assertContainsAll(ListIterate.collectIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString(), new ArrayList<String>()), "1", "2", "3");
+        Verify.assertContainsAll(ListIterate.collectIf(integers, Integer.class::isInstance, String::valueOf), "1", "2", "3");
+        Verify.assertContainsAll(ListIterate.collectIf(integers, Integer.class::isInstance, String::valueOf, new ArrayList<String>()), "1", "2", "3");
     }
 
     @Test

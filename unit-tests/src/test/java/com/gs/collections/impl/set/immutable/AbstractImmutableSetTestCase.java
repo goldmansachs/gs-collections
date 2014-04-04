@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
@@ -172,7 +173,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     {
         MutableCollection<String> actual = this.classUnderTest().flatCollect(integer -> Lists.fixedSize.of(String.valueOf(integer)), UnifiedSet.<String>newSet());
 
-        ImmutableCollection<String> expected = this.classUnderTest().collect(Functions.getToString());
+        ImmutableCollection<String> expected = this.classUnderTest().collect(String::valueOf);
 
         Assert.assertEquals(expected, actual);
     }
@@ -186,16 +187,16 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
         List<Object> nullsMinusOne = Collections.nCopies(immutableCollection.size() - 1, null);
 
         ImmutableCollection<Pair<Integer, Object>> pairs = immutableCollection.zip(nulls);
-        Assert.assertEquals(immutableCollection, pairs.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(UnifiedSet.newSet(nulls), pairs.collect(Functions.secondOfPair()));
+        Assert.assertEquals(immutableCollection, pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
+        Assert.assertEquals(UnifiedSet.newSet(nulls), pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo));
 
         ImmutableCollection<Pair<Integer, Object>> pairsPlusOne = immutableCollection.zip(nullsPlusOne);
-        Assert.assertEquals(immutableCollection, pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(UnifiedSet.newSet(nulls), pairsPlusOne.collect(Functions.secondOfPair()));
+        Assert.assertEquals(immutableCollection, pairsPlusOne.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
+        Assert.assertEquals(UnifiedSet.newSet(nulls), pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo));
 
         ImmutableCollection<Pair<Integer, Object>> pairsMinusOne = immutableCollection.zip(nullsMinusOne);
         Assert.assertEquals(immutableCollection.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(immutableCollection.containsAllIterable(pairsMinusOne.collect(Functions.<Integer>firstOfPair())));
+        Assert.assertTrue(immutableCollection.containsAllIterable(pairsMinusOne.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne)));
 
         Assert.assertEquals(immutableCollection.zip(nulls), immutableCollection.zip(nulls, UnifiedSet.<Pair<Integer, Object>>newSet()));
     }
@@ -206,10 +207,10 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
         ImmutableCollection<Integer> immutableCollection = this.classUnderTest();
         ImmutableCollection<Pair<Integer, Integer>> pairs = immutableCollection.zipWithIndex();
 
-        Assert.assertEquals(immutableCollection, pairs.collect(Functions.<Integer>firstOfPair()));
+        Assert.assertEquals(immutableCollection, pairs.collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
         Assert.assertEquals(
                 Interval.zeroTo(immutableCollection.size() - 1).toSet(),
-                pairs.collect(Functions.<Integer>secondOfPair()));
+                pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo));
 
         Assert.assertEquals(
                 immutableCollection.zipWithIndex(),
@@ -227,8 +228,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     public void collectIfWithTarget()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers, integers.collectIf(Predicates.instanceOf(Integer.class),
-                Functions.getIntegerPassThru(), UnifiedSet.<Integer>newSet()));
+        Assert.assertEquals(integers, integers.collectIf(Integer.class::isInstance, Functions.getIntegerPassThru(), UnifiedSet.<Integer>newSet()));
     }
 
     @Test
@@ -243,7 +243,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     public void toSortedListBy()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
-        MutableList<Integer> list = integers.toSortedListBy(Functions.getToString());
+        MutableList<Integer> list = integers.toSortedListBy(String::valueOf);
         Assert.assertEquals(this.classUnderTest().toList(), list);
     }
 
@@ -288,10 +288,10 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void union()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         ImmutableSet<String> union = set.union(UnifiedSet.newSetWith("a", "b", "c", "1"));
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(String::valueOf)));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.union(UnifiedSet.newSetWith("1")));
@@ -300,10 +300,10 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void unionInto()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         MutableSet<String> union = set.unionInto(UnifiedSet.newSetWith("a", "b", "c", "1"), UnifiedSet.<String>newSet());
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(String::valueOf)));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.unionInto(UnifiedSet.newSetWith("1"), UnifiedSet.<String>newSet()));
@@ -312,7 +312,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void intersect()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         ImmutableSet<String> intersect = set.intersect(UnifiedSet.newSetWith("a", "b", "c", "1"));
         Verify.assertSize(1, intersect);
         Assert.assertEquals(UnifiedSet.newSetWith("1"), intersect);
@@ -323,7 +323,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void intersectInto()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         MutableSet<String> intersect = set.intersectInto(UnifiedSet.newSetWith("a", "b", "c", "1"), UnifiedSet.<String>newSet());
         Verify.assertSize(1, intersect);
         Assert.assertEquals(UnifiedSet.newSetWith("1"), intersect);
@@ -334,7 +334,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void difference()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         ImmutableSet<String> difference = set.difference(UnifiedSet.newSetWith("2", "3", "4", "not present"));
         Assert.assertEquals(UnifiedSet.newSetWith("1"), difference);
         Assert.assertEquals(set, set.difference(UnifiedSet.newSetWith("not present")));
@@ -343,7 +343,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void differenceInto()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         MutableSet<String> difference = set.differenceInto(UnifiedSet.newSetWith("2", "3", "4", "not present"), UnifiedSet.<String>newSet());
         Assert.assertEquals(UnifiedSet.newSetWith("1"), difference);
         Assert.assertEquals(set, set.differenceInto(UnifiedSet.newSetWith("not present"), UnifiedSet.<String>newSet()));
@@ -352,10 +352,10 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void symmetricDifference()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         ImmutableSet<String> difference = set.symmetricDifference(UnifiedSet.newSetWith("2", "3", "4", "5", "not present"));
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(String::valueOf)));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -367,12 +367,12 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void symmetricDifferenceInto()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         MutableSet<String> difference = set.symmetricDifferenceInto(
                 UnifiedSet.newSetWith("2", "3", "4", "5", "not present"),
                 UnifiedSet.<String>newSet());
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(String::valueOf)));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -386,14 +386,14 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void isSubsetOf()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         Assert.assertTrue(set.isSubsetOf(UnifiedSet.newSetWith("1", "2", "3", "4", "5")));
     }
 
     @Test
     public void isProperSubsetOf()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         Assert.assertTrue(set.isProperSubsetOf(UnifiedSet.newSetWith("1", "2", "3", "4", "5")));
         Assert.assertFalse(set.isProperSubsetOf(set));
     }
@@ -401,7 +401,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void powerSet()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         ImmutableSet<UnsortedSetIterable<String>> powerSet = set.powerSet();
         Verify.assertSize((int) StrictMath.pow(2, set.size()), powerSet);
         Verify.assertContains(UnifiedSet.<String>newSet(), powerSet);
@@ -413,14 +413,14 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     @Test
     public void cartesianProduct()
     {
-        ImmutableSet<String> set = this.classUnderTest().collect(Functions.getToString());
+        ImmutableSet<String> set = this.classUnderTest().collect(String::valueOf);
         LazyIterable<Pair<String, String>> cartesianProduct = set.cartesianProduct(UnifiedSet.newSetWith("One", "Two"));
         Verify.assertIterableSize(set.size() * 2, cartesianProduct);
         Assert.assertEquals(
                 set,
                 cartesianProduct
-                        .select(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
-                        .collect(Functions.<String>firstOfPair()).toSet());
+                        .select(Predicates.attributeEqual((Function<Pair<?, String>, String>) Pair::getTwo, "One"))
+                        .collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
     }
 
     @Test

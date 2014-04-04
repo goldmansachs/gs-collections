@@ -29,7 +29,6 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -51,7 +50,7 @@ public class ConcurrentHashMapTest
         {
             return each % 100;
         }
-    }).toMap(Functions0.<Integer>newHashBag());
+    }).toMap(HashBag::new);
 
     private ExecutorService executor;
 
@@ -78,7 +77,7 @@ public class ConcurrentHashMapTest
                 },
                 10,
                 this.executor);
-        Verify.assertEqualsAndHashCode(Interval.oneTo(1000000).groupBy(each -> each % 100000).toMap(Functions0.<Integer>newHashBag()), actual);
+        Verify.assertEqualsAndHashCode(Interval.oneTo(1000000).groupBy(each -> each % 100000).toMap(HashBag::new), actual);
     }
 
     @Test

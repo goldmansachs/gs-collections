@@ -49,38 +49,30 @@ public final class Checked<name>ProcedureTest
     @Test
     public void runtimeException()
     {
-        Verify.assertThrows(RuntimeException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrows(RuntimeException.class, () -> {
+            new Checked<name>Procedure()
             {
-                new Checked<name>Procedure()
+                @Override
+                public void safeValue(<type> item) throws Exception
                 {
-                    @Override
-                    public void safeValue(<type> item) throws Exception
-                    {
-                        throw new RuntimeException();
-                    }
-                }.value(<(zero.(type))>);
-            }
+                    throw new RuntimeException();
+                }
+            }.value(<(zero.(type))>);
         });
     }
 
     @Test
     public void checkedException()
     {
-        Verify.assertThrows(RuntimeException.class, new Runnable()
-        {
-            public void run()
+        Verify.assertThrows(RuntimeException.class, () -> {
+            new Checked<name>Procedure()
             {
-                new Checked<name>Procedure()
+                @Override
+                public void safeValue(<type> item) throws Exception
                 {
-                    @Override
-                    public void safeValue(<type> item) throws Exception
-                    {
-                        throw new IOException();
-                    }
-                }.value(<(zero.(type))>);
-            }
+                    throw new IOException();
+                }
+            }.value(<(zero.(type))>);
         });
     }
 }

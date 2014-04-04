@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -162,7 +163,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     @Test
     public void detect()
     {
-        Assert.assertNull(this.newBag().detect(Predicates.equal("1")));
+        Assert.assertNull(this.newBag().detect("1"::equals));
     }
 
     @Override
@@ -176,7 +177,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     @Test
     public void detectWithIfNone()
     {
-        Assert.assertEquals("Not Found", this.newBag().detectWithIfNone(Predicates2.equal(), "1", new PassThruFunction0<String>("Not Found")));
+        Assert.assertEquals("Not Found", this.newBag().detectWithIfNone(Object::equals, "1", new PassThruFunction0<String>("Not Found")));
     }
 
     @Override
@@ -184,7 +185,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     {
         super.detectIfNone();
 
-        Assert.assertEquals("Not Found", this.newBag().detectIfNone(Predicates.equal("2"), new PassThruFunction0<String>("Not Found")));
+        Assert.assertEquals("Not Found", this.newBag().detectIfNone("2"::equals, new PassThruFunction0<String>("Not Found")));
     }
 
     @Override
@@ -259,14 +260,14 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     @Test(expected = NoSuchElementException.class)
     public void min()
     {
-        this.newBag().min(Comparators.naturalOrder());
+        this.newBag().min(String::compareTo);
     }
 
     @Override
     @Test(expected = NoSuchElementException.class)
     public void max()
     {
-        this.newBag().max(Comparators.naturalOrder());
+        this.newBag().max(String::compareTo);
     }
 
     @Test
@@ -317,14 +318,14 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     @Test(expected = NoSuchElementException.class)
     public void minBy()
     {
-        this.newBag().minBy(Functions.getToString());
+        this.newBag().minBy(String::valueOf);
     }
 
     @Override
     @Test(expected = NoSuchElementException.class)
     public void maxBy()
     {
-        this.newBag().maxBy(Functions.getToString());
+        this.newBag().maxBy(String::valueOf);
     }
 
     @Override
@@ -338,18 +339,18 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         ImmutableBag<Pair<String, Object>> pairs = immutableBag.zip(nulls);
         Assert.assertEquals(
                 immutableBag,
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne));
         Assert.assertEquals(
                 HashBag.newBag(nulls),
-                pairs.collect(Functions.secondOfPair()));
+                pairs.collect((Function<Pair<?, Object>, Object>) Pair::getTwo));
 
         ImmutableBag<Pair<String, Object>> pairsPlusOne = immutableBag.zip(nullsPlusOne);
         Assert.assertEquals(
                 immutableBag,
-                pairsPlusOne.collect(Functions.<String>firstOfPair()));
+                pairsPlusOne.collect((Function<Pair<String, ?>, String>) Pair::getOne));
         Assert.assertEquals(
                 HashBag.newBag(nulls),
-                pairsPlusOne.collect(Functions.secondOfPair()));
+                pairsPlusOne.collect((Function<Pair<?, Object>, Object>) Pair::getTwo));
 
         Assert.assertEquals(immutableBag.zip(nulls), immutableBag.zip(nulls, HashBag.<Pair<String, Object>>newBag()));
     }
@@ -361,8 +362,8 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         ImmutableBag<String> immutableBag = this.newBag();
         ImmutableSet<Pair<String, Integer>> pairs = immutableBag.zipWithIndex();
 
-        Assert.assertEquals(UnifiedSet.<String>newSet(), pairs.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(UnifiedSet.<Integer>newSet(), pairs.collect(Functions.<Integer>secondOfPair()));
+        Assert.assertEquals(UnifiedSet.<String>newSet(), pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne));
+        Assert.assertEquals(UnifiedSet.<Integer>newSet(), pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo));
 
         Assert.assertEquals(immutableBag.zipWithIndex(), immutableBag.zipWithIndex(UnifiedSet.<Pair<String, Integer>>newSet()));
     }

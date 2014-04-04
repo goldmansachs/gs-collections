@@ -17,8 +17,6 @@
 package com.gs.collections.impl.lazy.parallel.list;
 
 import com.gs.collections.api.list.ParallelListIterable;
-import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.list.mutable.FastList;
 
 public class ParallelCollectListIterableTest extends AbstractParallelListIterableTestCase
@@ -28,7 +26,7 @@ public class ParallelCollectListIterableTest extends AbstractParallelListIterabl
     {
         return FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
                 .asParallel(this.executorService, 2)
-                .collect(Functions.getToString())
-                .collect(StringFunctions.toInteger());
+                .collect(String::valueOf)
+                .collect(Integer::valueOf);
     }
 }

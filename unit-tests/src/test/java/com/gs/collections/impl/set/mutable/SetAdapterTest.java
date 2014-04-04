@@ -25,7 +25,6 @@ import java.util.Set;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
@@ -106,12 +105,12 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void collect()
     {
         super.collect();
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(Functions.getToString()),
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(String::valueOf),
                 "1",
                 "2",
                 "3",
                 "4");
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(Functions.getToString(),
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(String::valueOf,
                 FastList.<String>newList()), "1", "2", "3", "4");
     }
 
@@ -207,7 +206,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
         //Type HashSet is important here because it's not a MutableSet
         Set<Integer> set = new HashSet<Integer>();
         MutableSet<Integer> integerSetAdapter = SetAdapter.adapt(set);
-        Verify.assertInstanceOf(MutableSet.class, integerSetAdapter.select(Predicates.alwaysTrue()));
+        Verify.assertInstanceOf(MutableSet.class, integerSetAdapter.select(ignored -> true));
     }
 
     @Test

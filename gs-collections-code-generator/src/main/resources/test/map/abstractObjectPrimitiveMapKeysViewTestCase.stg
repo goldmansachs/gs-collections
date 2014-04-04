@@ -46,10 +46,10 @@ public abstract class AbstractObject<name>MapKeysViewTestCase extends AbstractLa
         MutableSet\<String> expected = UnifiedSet.newSetWith("zero", "thirtyOne", "thirtyTwo");
         MutableSet\<String> actual = UnifiedSet.newSet();
 
-        final Iterator\<String> iterator = this.newWithKeysValues("zero", <(literal.(type))("0")>, "thirtyOne", <(literal.(type))("31")>, "thirtyTwo", <(literal.(type))("32")>).keysView().iterator();
+        Iterator\<String> iterator = this.newWithKeysValues("zero", <(literal.(type))("0")>, "thirtyOne", <(literal.(type))("31")>, "thirtyTwo", <(literal.(type))("32")>).keysView().iterator();
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {iterator.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -57,7 +57,7 @@ public abstract class AbstractObject<name>MapKeysViewTestCase extends AbstractLa
         Assert.assertFalse(iterator.hasNext());
 
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 }
 

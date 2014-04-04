@@ -80,7 +80,7 @@ public abstract class AbstractMutable<name1><name2>MapTestCase extends Abstract<
     public void getOrThrow()
     {
         super.getOrThrow();
-        final Mutable<name1><name2>Map map1 = this.classUnderTest();
+        Mutable<name1><name2>Map map1 = this.classUnderTest();
         map1.removeKey(<(literal.(type1))("0")>);
         Verify.assertThrows(IllegalStateException.class, () -> {map1.getOrThrow(<(literal.(type1))("0")>);});
         map1.put(<(literal.(type1))("0")>, <(literal.(type2))("1")>);

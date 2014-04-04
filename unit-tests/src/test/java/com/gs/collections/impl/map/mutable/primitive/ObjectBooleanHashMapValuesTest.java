@@ -82,7 +82,7 @@ public class ObjectBooleanHashMapValuesTest extends AbstractMutableBooleanCollec
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
-import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
@@ -65,13 +64,13 @@ public class MultimapsTest
     @Test
     public void immutableSortedSet()
     {
-        ImmutableSortedSetMultimap<Integer, Integer> empty = Multimaps.immutable.sortedSet.with(Comparators.<Integer>naturalOrder());
+        ImmutableSortedSetMultimap<Integer, Integer> empty = Multimaps.immutable.sortedSet.with(Integer::compareTo);
         Assert.assertEquals(0, empty.size());
-        ImmutableSortedSetMultimap<Integer, Integer> one = Multimaps.immutable.sortedSet.with(Comparators.<Integer>naturalOrder(), 1, 1);
+        ImmutableSortedSetMultimap<Integer, Integer> one = Multimaps.immutable.sortedSet.with(Integer::compareTo, 1, 1);
         Assert.assertEquals(TreeSortedSetMultimap.newMultimap(Tuples.pair(1, 1)), one);
-        ImmutableSortedSetMultimap<Integer, Integer> two = Multimaps.immutable.sortedSet.with(Comparators.<Integer>naturalOrder(), 1, 1, 2, 2);
+        ImmutableSortedSetMultimap<Integer, Integer> two = Multimaps.immutable.sortedSet.with(Integer::compareTo, 1, 1, 2, 2);
         Assert.assertEquals(TreeSortedSetMultimap.newMultimap(Tuples.pair(1, 1), Tuples.pair(2, 2)), two);
-        ImmutableSortedSetMultimap<Integer, Integer> three = Multimaps.immutable.sortedSet.with(Comparators.<Integer>naturalOrder(), 1, 1, 2, 2, 3, 3);
+        ImmutableSortedSetMultimap<Integer, Integer> three = Multimaps.immutable.sortedSet.with(Integer::compareTo, 1, 1, 2, 2, 3, 3);
         Assert.assertEquals(TreeSortedSetMultimap.newMultimap(Tuples.pair(1, 1), Tuples.pair(2, 2), Tuples.pair(3, 3)), three);
     }
 
@@ -117,13 +116,13 @@ public class MultimapsTest
     @Test
     public void mutableSortedSet()
     {
-        MutableSortedSetMultimap<Integer, Integer> empty = Multimaps.mutable.sortedSet.with(Comparators.<Integer>naturalOrder());
+        MutableSortedSetMultimap<Integer, Integer> empty = Multimaps.mutable.sortedSet.with(Integer::compareTo);
         Assert.assertEquals(0, empty.size());
-        MutableSortedSetMultimap<Integer, Integer> one = Multimaps.mutable.sortedSet.with(Comparators.<Integer>naturalOrder(), 1, 1);
+        MutableSortedSetMultimap<Integer, Integer> one = Multimaps.mutable.sortedSet.with(Integer::compareTo, 1, 1);
         Assert.assertEquals(TreeSortedSetMultimap.newMultimap(Tuples.pair(1, 1)), one);
-        MutableSortedSetMultimap<Integer, Integer> two = Multimaps.mutable.sortedSet.with(Comparators.<Integer>naturalOrder(), 1, 1, 2, 2);
+        MutableSortedSetMultimap<Integer, Integer> two = Multimaps.mutable.sortedSet.with(Integer::compareTo, 1, 1, 2, 2);
         Assert.assertEquals(TreeSortedSetMultimap.newMultimap(Tuples.pair(1, 1), Tuples.pair(2, 2)), two);
-        MutableSortedSetMultimap<Integer, Integer> three = Multimaps.mutable.sortedSet.with(Comparators.<Integer>naturalOrder(), 1, 1, 2, 2, 3, 3);
+        MutableSortedSetMultimap<Integer, Integer> three = Multimaps.mutable.sortedSet.with(Integer::compareTo, 1, 1, 2, 2, 3, 3);
         Assert.assertEquals(TreeSortedSetMultimap.newMultimap(Tuples.pair(1, 1), Tuples.pair(2, 2), Tuples.pair(3, 3)), three);
     }
 

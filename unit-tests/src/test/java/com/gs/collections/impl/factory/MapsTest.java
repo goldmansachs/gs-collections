@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import com.gs.collections.api.factory.map.ImmutableMapFactory;
 import com.gs.collections.api.factory.map.sorted.MutableSortedMapFactory;
 import com.gs.collections.api.map.FixedSizeMap;
 import com.gs.collections.api.map.ImmutableMap;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.test.domain.Key;
@@ -168,7 +167,7 @@ public class MapsTest
         ImmutableMap<Key, Integer> map3 = Maps.immutable.of(key, 1, new Key("not a dupe"), 2, duplicateKey3, 3);
         Verify.assertSize(2, map3);
         Verify.assertContainsAllKeyValues(map3, key, 3, new Key("not a dupe"), 2);
-        Assert.assertSame(key, map3.keysView().detect(Predicates.equal(key)));
+        Assert.assertSame(key, map3.keysView().detect(key::equals));
     }
 
     @Test

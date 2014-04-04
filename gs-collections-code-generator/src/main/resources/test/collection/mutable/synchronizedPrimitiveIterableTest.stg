@@ -25,7 +25,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.primitive.Synchronized<name>Iterable;
@@ -75,7 +74,7 @@ public class Synchronized<name>IterableTest extends Abstract<name>IterableTestCa
     {
         <name>Iterable iterable = this.newWith(<["0", "1", "2", "3"]:(literal.(type))(); separator=", ">);
         <name>ArrayList list = <name>ArrayList.newListWith(<["0", "1", "2", "3"]:(literal.(type))(); separator=", ">);
-        final <name>Iterator iterator = iterable.<type>Iterator();
+        <name>Iterator iterator = iterable.<type>Iterator();
         for (int i = 0; i \< 4; i++)
         {
             Assert.assertTrue(iterator.hasNext());
@@ -84,7 +83,7 @@ public class Synchronized<name>IterableTest extends Abstract<name>IterableTestCa
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Override

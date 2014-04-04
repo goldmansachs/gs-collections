@@ -18,7 +18,6 @@ package com.gs.collections.impl.lazy;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.Interval;
@@ -32,13 +31,7 @@ public class FlatCollectIterableTest extends AbstractLazyIterableTestCase
     @Override
     protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return LazyIterate.flatCollect(FastList.newListWith(elements), new Function<T, Iterable<T>>()
-        {
-            public Iterable<T> valueOf(T object)
-            {
-                return FastList.newListWith(object);
-            }
-        });
+        return LazyIterate.flatCollect(FastList.newListWith(elements), object -> FastList.newListWith(object));
     }
 
     @Test

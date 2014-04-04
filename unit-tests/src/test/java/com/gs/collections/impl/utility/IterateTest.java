@@ -56,7 +56,6 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -260,7 +259,7 @@ public class IterateTest
         Assert.assertEquals(
                 iList("One", "Two", "Two-and-a-half", "Three", "Four", "Five"),
                 Iterate.flatCollect(new ArrayList<ListContainer<String>>(list), ListContainer.getListFunction()));
-        Verify.assertThrows(IllegalArgumentException.class, () -> {Iterate.flatCollect(null, null);});
+        Verify.assertThrows(IllegalArgumentException.class, () -> { Iterate.flatCollect(null, null); });
     }
 
     @Test
@@ -573,7 +572,7 @@ public class IterateTest
     public void selectDifferentTargetCollection()
     {
         MutableSet<Integer> set = this.getIntegerSet();
-        List<Integer> list = Iterate.select(set, Predicates.instanceOf(Integer.class), new ArrayList<Integer>());
+        List<Integer> list = Iterate.select(set, Integer.class::isInstance, new ArrayList<Integer>());
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4, 5), list);
     }
 
@@ -581,20 +580,20 @@ public class IterateTest
     public void rejectWithDifferentTargetCollection()
     {
         MutableSet<Integer> set = this.getIntegerSet();
-        Collection<Integer> result = Iterate.reject(set, Predicates.instanceOf(Integer.class), FastList.newList());
+        Collection<Integer> result = Iterate.reject(set, Integer.class::isInstance, FastList.newList());
         Verify.assertEmpty(result);
     }
 
     @Test
     public void count_empty()
     {
-        Assert.assertEquals(0, Iterate.count(iList(), a -> true));
+        Assert.assertEquals(0, Iterate.count(iList(), ignored -> true));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void count_null_throws()
     {
-        Iterate.count(null, a -> true);
+        Iterate.count(null, ignored -> true);
     }
 
     @Test
@@ -685,36 +684,36 @@ public class IterateTest
     public void detectIndex()
     {
         MutableList<Integer> list = Interval.toReverseList(1, 5);
-        Assert.assertEquals(4, Iterate.detectIndex(list, Predicates.equal(1)));
-        Assert.assertEquals(0, Iterate.detectIndex(list, Predicates.equal(5)));
-        Assert.assertEquals(-1, Iterate.detectIndex(Lists.immutable.of(), Predicates.equal(1)));
-        Assert.assertEquals(-1, Iterate.detectIndex(Sets.immutable.of(), Predicates.equal(1)));
+        Assert.assertEquals(4, Iterate.detectIndex(list, Integer.valueOf(1)::equals));
+        Assert.assertEquals(0, Iterate.detectIndex(list, Integer.valueOf(5)::equals));
+        Assert.assertEquals(-1, Iterate.detectIndex(Lists.immutable.of(), Integer.valueOf(1)::equals));
+        Assert.assertEquals(-1, Iterate.detectIndex(Sets.immutable.of(), Integer.valueOf(1)::equals));
     }
 
     @Test
     public void detectIndexWithTreeSet()
     {
         Set<Integer> treeSet = new TreeSet<Integer>(Interval.toReverseList(1, 5));
-        Assert.assertEquals(0, Iterate.detectIndex(treeSet, Predicates.equal(1)));
-        Assert.assertEquals(4, Iterate.detectIndex(treeSet, Predicates.equal(5)));
+        Assert.assertEquals(0, Iterate.detectIndex(treeSet, Integer.valueOf(1)::equals));
+        Assert.assertEquals(4, Iterate.detectIndex(treeSet, Integer.valueOf(5)::equals));
     }
 
     @Test
     public void detectIndexWith()
     {
         MutableList<Integer> list = Interval.toReverseList(1, 5);
-        Assert.assertEquals(4, Iterate.detectIndexWith(list, Predicates2.equal(), 1));
-        Assert.assertEquals(0, Iterate.detectIndexWith(list, Predicates2.equal(), 5));
-        Assert.assertEquals(-1, Iterate.detectIndexWith(iList(), Predicates2.equal(), 5));
-        Assert.assertEquals(-1, Iterate.detectIndexWith(iSet(), Predicates2.equal(), 5));
+        Assert.assertEquals(4, Iterate.detectIndexWith(list, Object::equals, 1));
+        Assert.assertEquals(0, Iterate.detectIndexWith(list, Object::equals, 5));
+        Assert.assertEquals(-1, Iterate.detectIndexWith(iList(), Object::equals, 5));
+        Assert.assertEquals(-1, Iterate.detectIndexWith(iSet(), Object::equals, 5));
     }
 
     @Test
     public void detectIndexWithWithTreeSet()
     {
         Set<Integer> treeSet = new TreeSet<Integer>(Interval.toReverseList(1, 5));
-        Assert.assertEquals(0, Iterate.detectIndexWith(treeSet, Predicates2.equal(), 1));
-        Assert.assertEquals(4, Iterate.detectIndexWith(treeSet, Predicates2.equal(), 5));
+        Assert.assertEquals(0, Iterate.detectIndexWith(treeSet, Object::equals, 1));
+        Assert.assertEquals(4, Iterate.detectIndexWith(treeSet, Object::equals, 5));
     }
 
     @Test
@@ -790,7 +789,7 @@ public class IterateTest
     public void rejectTargetCollection()
     {
         MutableList<Integer> list = Interval.toReverseList(1, 5);
-        MutableList<Integer> results = Iterate.reject(list, Predicates.instanceOf(Integer.class), FastList.newList());
+        MutableList<Integer> results = Iterate.reject(list, Integer.class::isInstance, FastList.newList());
         Verify.assertEmpty(results);
     }
 
@@ -798,8 +797,7 @@ public class IterateTest
     public void rejectOnRandomAccessTargetCollection()
     {
         List<Integer> list = Collections.synchronizedList(Interval.toReverseList(1, 5));
-        MutableList<Integer> results =
-                Iterate.reject(list, Predicates.instanceOf(Integer.class), FastList.<Integer>newList());
+        MutableList<Integer> results = Iterate.reject(list, Integer.class::isInstance, FastList.<Integer>newList());
         Verify.assertEmpty(results);
     }
 
@@ -822,7 +820,7 @@ public class IterateTest
     @Test
     public void anySatisfy()
     {
-        this.iterables.forEach(Procedures.cast(each -> Assert.assertTrue(Iterate.anySatisfy(each, Predicates.instanceOf(Integer.class)))));
+        this.iterables.forEach(Procedures.cast(each -> Assert.assertTrue(Iterate.anySatisfy(each, Integer.class::isInstance))));
     }
 
     @Test
@@ -834,7 +832,7 @@ public class IterateTest
     @Test
     public void allSatisfy()
     {
-        this.iterables.forEach(Procedures.cast(each -> Assert.assertTrue(Iterate.allSatisfy(each, Predicates.instanceOf(Integer.class)))));
+        this.iterables.forEach(Procedures.cast(each -> Assert.assertTrue(Iterate.allSatisfy(each, Integer.class::isInstance))));
     }
 
     @Test
@@ -846,7 +844,7 @@ public class IterateTest
     @Test
     public void noneSatisfy()
     {
-        this.iterables.forEach(Procedures.cast(each -> Assert.assertTrue(Iterate.noneSatisfy(each, Predicates.instanceOf(String.class)))));
+        this.iterables.forEach(Procedures.cast(each -> Assert.assertTrue(Iterate.noneSatisfy(each, String.class::isInstance))));
     }
 
     @Test
@@ -858,47 +856,47 @@ public class IterateTest
     @Test
     public void selectWithSet()
     {
-        Verify.assertSize(1, Iterate.selectWith(this.getIntegerSet(), Predicates2.equal(), 1));
-        Verify.assertSize(1, Iterate.selectWith(this.getIntegerSet(), Predicates2.equal(), 1, FastList.<Integer>newList()));
+        Verify.assertSize(1, Iterate.selectWith(this.getIntegerSet(), Object::equals, 1));
+        Verify.assertSize(1, Iterate.selectWith(this.getIntegerSet(), Object::equals, 1, FastList.<Integer>newList()));
     }
 
     @Test
     public void rejectWithSet()
     {
-        Verify.assertSize(4, Iterate.rejectWith(this.getIntegerSet(), Predicates2.equal(), 1));
-        Verify.assertSize(4, Iterate.rejectWith(this.getIntegerSet(), Predicates2.equal(), 1, FastList.<Integer>newList()));
+        Verify.assertSize(4, Iterate.rejectWith(this.getIntegerSet(), Object::equals, 1));
+        Verify.assertSize(4, Iterate.rejectWith(this.getIntegerSet(), Object::equals, 1, FastList.<Integer>newList()));
     }
 
     @Test
     public void detectWithSet()
     {
-        Assert.assertEquals(Integer.valueOf(1), Iterate.detectWith(this.getIntegerSet(), Predicates2.equal(), 1));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.detectWith(this.getIntegerSet(), Object::equals, 1));
     }
 
     @Test
     public void detectWithRandomAccess()
     {
         List<Integer> list = Collections.synchronizedList(Interval.oneTo(5));
-        Assert.assertEquals(Integer.valueOf(1), Iterate.detectWith(list, Predicates2.equal(), 1));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.detectWith(list, Object::equals, 1));
     }
 
     @Test
     public void anySatisfyWithSet()
     {
-        Assert.assertTrue(Iterate.anySatisfyWith(this.getIntegerSet(), Predicates2.equal(), 1));
+        Assert.assertTrue(Iterate.anySatisfyWith(this.getIntegerSet(), Object::equals, 1));
     }
 
     @Test
     public void allSatisfyWithSet()
     {
-        Assert.assertFalse(Iterate.allSatisfyWith(this.getIntegerSet(), Predicates2.equal(), 1));
+        Assert.assertFalse(Iterate.allSatisfyWith(this.getIntegerSet(), Object::equals, 1));
         Assert.assertTrue(Iterate.allSatisfyWith(this.getIntegerSet(), Predicates2.instanceOf(), Integer.class));
     }
 
     @Test
     public void noneSatisfyWithSet()
     {
-        Assert.assertTrue(Iterate.noneSatisfyWith(this.getIntegerSet(), Predicates2.equal(), 100));
+        Assert.assertTrue(Iterate.noneSatisfyWith(this.getIntegerSet(), Object::equals, 100));
         Assert.assertFalse(Iterate.noneSatisfyWith(this.getIntegerSet(), Predicates2.instanceOf(), Integer.class));
     }
 
@@ -1310,7 +1308,7 @@ public class IterateTest
     public void removeIfAll()
     {
         MutableList<Integer> integers = Interval.oneTo(5).toList();
-        Collection<Integer> result = Iterate.removeIf(integers, a -> true);
+        Collection<Integer> result = Iterate.removeIf(integers, ignored -> true);
         Assert.assertSame(integers, result);
         Verify.assertSize(0, integers);
     }
@@ -1319,7 +1317,7 @@ public class IterateTest
     public void removeIfNone()
     {
         MutableList<Integer> integers = Interval.oneTo(5).toList();
-        Collection<Integer> result = Iterate.removeIf(integers, a -> false);
+        Collection<Integer> result = Iterate.removeIf(integers, ignored -> false);
         Assert.assertSame(integers, result);
         Verify.assertSize(5, integers);
     }
@@ -1554,11 +1552,11 @@ public class IterateTest
     public void removeIfWith()
     {
         MutableList<Integer> objects = FastList.newList(Lists.fixedSize.of(1, 2, 3, null));
-        Iterate.removeIfWith(objects, Predicates2.isNull(), null);
+        Iterate.removeIfWith(objects, (each1, ignored1) -> each1 == null, null);
         Verify.assertSize(3, objects);
         Verify.assertContainsAll(objects, 1, 2, 3);
         MutableList<Integer> objects1 = FastList.newList(Lists.fixedSize.of(null, 1, 2, 3));
-        Iterate.removeIfWith(objects1, Predicates2.isNull(), null);
+        Iterate.removeIfWith(objects1, (each, ignored) -> each == null, null);
         Verify.assertSize(3, objects1);
         Verify.assertContainsAll(objects1, 1, 2, 3);
         Verify.assertThrows(IllegalArgumentException.class, () -> {Iterate.removeIfWith(null, null, null);});
@@ -1568,11 +1566,11 @@ public class IterateTest
     public void removeIfWithFastList()
     {
         MutableList<Integer> objects = FastList.newListWith(1, 2, 3, null);
-        Iterate.removeIfWith(objects, Predicates2.isNull(), null);
+        Iterate.removeIfWith(objects, (each1, ignored1) -> each1 == null, null);
         Verify.assertSize(3, objects);
         Verify.assertContainsAll(objects, 1, 2, 3);
         MutableList<Integer> objects1 = FastList.newListWith(null, 1, 2, 3);
-        Iterate.removeIfWith(objects1, Predicates2.isNull(), null);
+        Iterate.removeIfWith(objects1, (each, ignored) -> each == null, null);
         Verify.assertSize(3, objects1);
         Verify.assertContainsAll(objects1, 1, 2, 3);
     }
@@ -1581,12 +1579,12 @@ public class IterateTest
     public void removeIfWithRandomAccess()
     {
         List<Integer> objects = Collections.synchronizedList(new ArrayList<Integer>(Lists.fixedSize.of(1, 2, 3, null)));
-        Iterate.removeIfWith(objects, Predicates2.isNull(), null);
+        Iterate.removeIfWith(objects, (each1, ignored1) -> each1 == null, null);
         Verify.assertSize(3, objects);
         Verify.assertContainsAll(objects, 1, 2, 3);
         List<Integer> objects1 =
                 Collections.synchronizedList(new ArrayList<Integer>(Lists.fixedSize.of(null, 1, 2, 3)));
-        Iterate.removeIfWith(objects1, Predicates2.isNull(), null);
+        Iterate.removeIfWith(objects1, (each, ignored) -> each == null, null);
         Verify.assertSize(3, objects1);
         Verify.assertContainsAll(objects1, 1, 2, 3);
     }
@@ -1595,11 +1593,11 @@ public class IterateTest
     public void removeIfWithLinkedList()
     {
         List<Integer> objects = new LinkedList<Integer>(Lists.fixedSize.of(1, 2, 3, null));
-        Iterate.removeIfWith(objects, Predicates2.isNull(), null);
+        Iterate.removeIfWith(objects, (each1, ignored1) -> each1 == null, null);
         Verify.assertSize(3, objects);
         Verify.assertContainsAll(objects, 1, 2, 3);
         List<Integer> objects1 = new LinkedList<Integer>(Lists.fixedSize.of(null, 1, 2, 3));
-        Iterate.removeIfWith(objects1, Predicates2.isNull(), null);
+        Iterate.removeIfWith(objects1, (each, ignored) -> each == null, null);
         Verify.assertSize(3, objects1);
         Verify.assertContainsAll(objects1, 1, 2, 3);
     }
@@ -1770,10 +1768,10 @@ public class IterateTest
         Collection<Pair<String, Object>> pairs = Iterate.zip(iterable, nulls);
         Assert.assertEquals(
                 UnifiedSet.newSet(iterable),
-                Iterate.collect(pairs, Functions.<String>firstOfPair(), UnifiedSet.<String>newSet()));
+                Iterate.collect(pairs, (Function<Pair<String, ?>, String>) Pair::getOne, UnifiedSet.<String>newSet()));
         Assert.assertEquals(
                 nulls,
-                Iterate.collect(pairs, Functions.secondOfPair(), Lists.mutable.of()));
+                Iterate.collect(pairs, (Function<Pair<?, Object>, Object>) Pair::getTwo, Lists.mutable.of()));
     }
 
     @Test
@@ -1794,10 +1792,10 @@ public class IterateTest
         Collection<Pair<String, Integer>> pairs = Iterate.zipWithIndex(iterable);
         Assert.assertEquals(
                 UnifiedSet.newSet(iterable),
-                Iterate.collect(pairs, Functions.<String>firstOfPair(), UnifiedSet.<String>newSet()));
+                Iterate.collect(pairs, (Function<Pair<String, ?>, String>) Pair::getOne, UnifiedSet.<String>newSet()));
         Assert.assertEquals(
                 Interval.zeroTo(Iterate.sizeOf(iterable) - 1).toSet(),
-                Iterate.collect(pairs, Functions.<Integer>secondOfPair(), UnifiedSet.<Integer>newSet()));
+                Iterate.collect(pairs, (Function<Pair<?, Integer>, Integer>) Pair::getTwo, UnifiedSet.<Integer>newSet()));
     }
 
     @Test
@@ -1867,12 +1865,12 @@ public class IterateTest
         this.aggregateByMutableResult(new LinkedList<Integer>(FastList.newListWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByMutableResult(new ArrayList<Integer>(FastList.newListWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByMutableResult(Arrays.asList(1, 1, 1, 2, 2, 3));
-        Verify.assertThrows(IllegalArgumentException.class, () -> {IterateTest.this.aggregateByMutableResult(null);});
+        Verify.assertThrows(IllegalArgumentException.class, () -> IterateTest.this.aggregateByMutableResult(null));
     }
 
     private void aggregateByMutableResult(Iterable<Integer> iterable)
     {
-        Function0<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
+        Function0<AtomicInteger> valueCreator = AtomicInteger::new;
         Procedure2<AtomicInteger, Integer> sumAggregator = AtomicInteger::addAndGet;
         MapIterable<String, AtomicInteger> aggregation = Iterate.aggregateInPlaceBy(iterable, String::valueOf, valueCreator, sumAggregator);
         if (iterable instanceof Set)
@@ -1899,12 +1897,12 @@ public class IterateTest
         this.aggregateByImmutableResult(new LinkedList<Integer>(FastList.newListWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByImmutableResult(new ArrayList<Integer>(FastList.newListWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByImmutableResult(Arrays.asList(1, 1, 1, 2, 2, 3));
-        Verify.assertThrows(IllegalArgumentException.class, () -> {this.aggregateByImmutableResult(null);});
+        Verify.assertThrows(IllegalArgumentException.class, () -> this.aggregateByImmutableResult(null));
     }
 
     private void aggregateByImmutableResult(Iterable<Integer> iterable)
     {
-        Function0<Integer> valueCreator = Functions0.value(0);
+        Function0<Integer> valueCreator = () -> (Integer) 0;
         Function2<Integer, Integer, Integer> sumAggregator = (aggregate, value) -> aggregate + value;
         MapIterable<String, Integer> aggregation = Iterate.aggregateBy(iterable, String::valueOf, valueCreator, sumAggregator);
         if (iterable instanceof Set)

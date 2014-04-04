@@ -59,8 +59,8 @@ public class <name>BooleanPairImplTest
     public void testToString()
     {
         Assert.assertEquals("<(toStringLiteral.(type))("1")>:true", PrimitiveTuples.pair(<(literal.(type))("1")>, true).toString());
-        Assert.assertEquals("<(toStringLiteral.(type))("2")>:false", PrimitiveTuples.pair(<(literal.(type))("2")>,false).toString());
-        Assert.assertNotEquals("<(toStringLiteral.(type))("2")>, false", PrimitiveTuples.pair(<(literal.(type))("2")>,false).toString());
+        Assert.assertEquals("<(toStringLiteral.(type))("2")>:false", PrimitiveTuples.pair(<(literal.(type))("2")>, false).toString());
+        Assert.assertNotEquals("<(toStringLiteral.(type))("2")>, false", PrimitiveTuples.pair(<(literal.(type))("2")>, false).toString());
     }
 
     @Test

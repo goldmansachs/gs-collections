@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class CaseFunctionTest
     public void basicCase()
     {
         CaseFunction<Integer, Integer> function = new CaseFunction<Integer, Integer>();
-        function.addCase(Predicates.alwaysTrue(), Functions.getIntegerPassThru());
+        function.addCase(ignored -> true, Functions.getIntegerPassThru());
         Integer fortyTwo = 42;
         Assert.assertEquals(fortyTwo, function.valueOf(fortyTwo));
     }

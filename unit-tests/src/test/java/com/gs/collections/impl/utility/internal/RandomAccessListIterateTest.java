@@ -28,7 +28,6 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -148,7 +147,7 @@ public class RandomAccessListIterateTest
     {
         Assert.assertEquals(
                 iList("true", "false", "null"),
-                RandomAccessListIterate.collect(mList(true, false, null), Functions.getToString()));
+                RandomAccessListIterate.collect(mList(true, false, null), String::valueOf));
     }
 
     @Test
@@ -156,11 +155,11 @@ public class RandomAccessListIterateTest
     {
         Assert.assertEquals(
                 iList("true", "false", "null"),
-                RandomAccessListIterate.collect(mList(true, false, null), Functions.getToString()));
+                RandomAccessListIterate.collect(mList(true, false, null), String::valueOf));
 
         Assert.assertEquals(
                 iList("true", "false", "null"),
-                RandomAccessListIterate.collect(mList(true, false, null), Functions.getToString(), new ArrayList<String>()));
+                RandomAccessListIterate.collect(mList(true, false, null), String::valueOf, new ArrayList<String>()));
     }
 
     @Test
@@ -289,9 +288,9 @@ public class RandomAccessListIterateTest
     public void detectWith()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Assert.assertEquals(Integer.valueOf(1), RandomAccessListIterate.detectWith(list, Predicates2.equal(), 1));
+        Assert.assertEquals(Integer.valueOf(1), RandomAccessListIterate.detectWith(list, Object::equals, 1));
         MutableList<Integer> list2 = Lists.fixedSize.of(1, 2, 2);
-        Assert.assertSame(list2.get(1), RandomAccessListIterate.detectWith(list2, Predicates2.equal(), 2));
+        Assert.assertSame(list2.get(1), RandomAccessListIterate.detectWith(list2, Object::equals, 2));
     }
 
     @Test
@@ -354,8 +353,8 @@ public class RandomAccessListIterateTest
     public void collectIf()
     {
         MutableList<Integer> integers = Lists.fixedSize.of(1, 2, 3);
-        Verify.assertContainsAll(RandomAccessListIterate.collectIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString()), "1", "2", "3");
-        Verify.assertContainsAll(RandomAccessListIterate.collectIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString(), new ArrayList<String>()), "1", "2", "3");
+        Verify.assertContainsAll(RandomAccessListIterate.collectIf(integers, Integer.class::isInstance, String::valueOf), "1", "2", "3");
+        Verify.assertContainsAll(RandomAccessListIterate.collectIf(integers, Integer.class::isInstance, String::valueOf, new ArrayList<String>()), "1", "2", "3");
     }
 
     @Test

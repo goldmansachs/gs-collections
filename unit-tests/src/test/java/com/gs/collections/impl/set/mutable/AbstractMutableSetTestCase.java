@@ -21,13 +21,13 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.IntegerWithCast;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -110,7 +110,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         MutableSet<String> set = this.newWith("1", "2", "3", "4");
         MutableSet<String> union = set.union(UnifiedSet.newSetWith("a", "b", "c", "1"));
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(String::valueOf)));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.union(UnifiedSet.newSetWith("1")));
@@ -122,7 +122,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         MutableSet<String> set = this.newWith("1", "2", "3", "4");
         MutableSet<String> union = set.unionInto(UnifiedSet.newSetWith("a", "b", "c", "1"), UnifiedSet.<String>newSet());
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(String::valueOf)));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.unionInto(UnifiedSet.newSetWith("1"), UnifiedSet.<String>newSet()));
@@ -174,7 +174,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         MutableSet<String> set = this.newWith("1", "2", "3", "4");
         MutableSet<String> difference = set.symmetricDifference(UnifiedSet.newSetWith("2", "3", "4", "5", "not present"));
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(String::valueOf)));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -191,7 +191,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
                 UnifiedSet.newSetWith("2", "3", "4", "5", "not present"),
                 UnifiedSet.<String>newSet());
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(String::valueOf)));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -236,8 +236,8 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         Assert.assertEquals(
                 set,
                 cartesianProduct
-                        .select(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
-                        .collect(Functions.<String>firstOfPair()).toSet());
+                        .select(Predicates.attributeEqual((Function<Pair<?, String>, String>) Pair::getTwo, "One"))
+                        .collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
     }
 
     @Override
@@ -554,15 +554,15 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         {
             MutableSet<Integer> set = this.newWith();
             set.addAll(MORE_COLLISIONS.subList(0, i));
-            Assert.assertTrue(set.anySatisfy(Predicates.equal(MORE_COLLISIONS.subList(0, i).getLast())));
+            Assert.assertTrue(set.anySatisfy(MORE_COLLISIONS.subList(0, i).getLast()::equals));
             Assert.assertFalse(set.anySatisfy(Predicates.greaterThan(MORE_COLLISIONS.subList(0, i).getLast())));
         }
 
         // test anySatisfy on a bucket with only one element
         MutableSet<Integer> set = this.newWith(COLLISION_1, COLLISION_2);
         set.remove(COLLISION_2);
-        Assert.assertTrue(set.anySatisfy(Predicates.equal(COLLISION_1)));
-        Assert.assertFalse(set.anySatisfy(Predicates.equal(COLLISION_2)));
+        Assert.assertTrue(set.anySatisfy(COLLISION_1::equals));
+        Assert.assertFalse(set.anySatisfy(COLLISION_2::equals));
 
         // Rehashing Case A: a bucket with only one entry and a low capacity forcing a rehash, where the triggering element goes in the bucket
         // set up a chained bucket
@@ -575,7 +575,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
 
         // add the colliding value back and force the rehash
         caseA.add(COLLISION_2);
-        Assert.assertTrue(caseA.anySatisfy(Predicates.equal(COLLISION_2)));
+        Assert.assertTrue(caseA.anySatisfy(COLLISION_2::equals));
     }
 
     @Override
@@ -596,8 +596,8 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         // test allSatisfy on a bucket with only one element
         MutableSet<Integer> set = this.newWith(COLLISION_1, COLLISION_2);
         set.remove(COLLISION_2);
-        Assert.assertTrue(set.allSatisfy(Predicates.equal(COLLISION_1)));
-        Assert.assertFalse(set.allSatisfy(Predicates.equal(COLLISION_2)));
+        Assert.assertTrue(set.allSatisfy(COLLISION_1::equals));
+        Assert.assertFalse(set.allSatisfy(COLLISION_2::equals));
 
         // Rehashing Case A: a bucket with only one entry and a low capacity forcing a rehash, where the triggering element goes in the bucket
         // set up a chained bucket
@@ -624,14 +624,14 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         {
             MutableSet<Integer> set = this.newWith();
             set.addAll(MORE_COLLISIONS.subList(0, i));
-            Verify.assertItemAtIndex(set.detect(Predicates.equal(MORE_COLLISIONS.get(i - 1))), i - 1, MORE_COLLISIONS);
+            Verify.assertItemAtIndex(set.detect(MORE_COLLISIONS.get(i - 1)::equals), i - 1, MORE_COLLISIONS);
         }
 
         // test detect on a bucket with only one element
         MutableSet<Integer> set = this.newWith(COLLISION_1, COLLISION_2);
         set.remove(COLLISION_2);
-        Assert.assertEquals(COLLISION_1, set.detect(Predicates.equal(COLLISION_1)));
-        Assert.assertNull(set.detect(Predicates.equal(COLLISION_2)));
+        Assert.assertEquals(COLLISION_1, set.detect(COLLISION_1::equals));
+        Assert.assertNull(set.detect(COLLISION_2::equals));
 
         for (int i = 0; i < COLLISIONS.size(); i++)
         {
@@ -648,7 +648,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
 
             rehashingSet.add(last);
             Assert.assertEquals(last, rehashingSet.detect(Predicates.equal(last)));
-            Assert.assertNull(rehashingSet.detect(Predicates.equal(Integer.valueOf(5))));
+            Assert.assertNull(rehashingSet.detect(Integer.valueOf(5)::equals));
         }
     }
 

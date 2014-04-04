@@ -29,11 +29,9 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.function.AddFunction;
-import com.gs.collections.impl.block.function.MaxFunction;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -219,7 +217,7 @@ public class IntervalTest
     @Test
     public void maxInterval()
     {
-        Integer value = Interval.oneTo(5).injectInto(0, MaxFunction.INTEGER);
+        Integer value = Interval.oneTo(5).injectInto(0, Integer::max);
         Assert.assertEquals(5, value.intValue());
     }
 
@@ -235,7 +233,7 @@ public class IntervalTest
     public void collectOnFromToByInterval()
     {
         Interval interval = Interval.oneToBy(5, 2);
-        LazyIterable<String> result = interval.collect(Functions.getToString());
+        LazyIterable<String> result = interval.collect(String::valueOf);
         Verify.assertIterableSize(3, result);
         Verify.assertContainsAll(result, "1", "5");
         Verify.assertNotContains("2", result);
@@ -245,7 +243,7 @@ public class IntervalTest
     public void collectOnFromToInterval()
     {
         Interval interval = Interval.oneTo(5);
-        LazyIterable<String> result = interval.collect(Functions.getToString());
+        LazyIterable<String> result = interval.collect(String::valueOf);
         Verify.assertIterableSize(5, result);
         Verify.assertContainsAll(result, "1", "5");
     }
@@ -525,7 +523,7 @@ public class IntervalTest
             Assert.assertTrue(oneToFiveIterator.hasNext());
             Assert.assertEquals(Integer.valueOf(i), oneToFiveIterator.next());
         }
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {oneToFiveIterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) oneToFiveIterator::next);
         Interval threeToNegativeThree = Interval.fromTo(3, -3);
         Iterator<Integer> threeToNegativeThreeIterator = threeToNegativeThree.iterator();
         for (int i = 3; i > -4; i--)
@@ -533,7 +531,7 @@ public class IntervalTest
             Assert.assertTrue(threeToNegativeThreeIterator.hasNext());
             Assert.assertEquals(Integer.valueOf(i), threeToNegativeThreeIterator.next());
         }
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {threeToNegativeThreeIterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) threeToNegativeThreeIterator::next);
         Verify.assertThrows(UnsupportedOperationException.class, () -> Interval.zeroTo(10).iterator().remove());
     }
 
@@ -599,8 +597,8 @@ public class IntervalTest
         Interval interval = Interval.fromTo(10, -10).by(-5);
 
         MutableList<String> expected = FastList.newListWith("10", "5", "0", "-5", "-10");
-        Assert.assertEquals(expected, interval.collect(Functions.getToString()).toList());
-        Assert.assertEquals(expected, interval.collect(Functions.getToString(), FastList.<String>newList()));
+        Assert.assertEquals(expected, interval.collect(String::valueOf).toList());
+        Assert.assertEquals(expected, interval.collect(String::valueOf, FastList.<String>newList()));
     }
 
     @Test

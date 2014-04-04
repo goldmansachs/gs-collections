@@ -33,7 +33,7 @@ public class RejectIterableTest extends AbstractLazyIterableTestCase
     @Override
     protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return LazyIterate.reject(FastList.newListWith(elements), Predicates.alwaysFalse());
+        return LazyIterate.reject(FastList.newListWith(elements), ignored -> false);
     }
 
     @Test

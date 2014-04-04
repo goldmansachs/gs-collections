@@ -20,6 +20,7 @@ import java.util.Collections;
 
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -31,9 +32,9 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -57,7 +58,7 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
         {
             return each % 10;
         }
-    }).toMap(Functions0.<Integer>newHashBag());
+    }).toMap((Function0<MutableBag<Integer>>) () -> Bags.mutable.of());
 
     @Override
     public <K, V> ConcurrentMutableMap<K, V> newMap()

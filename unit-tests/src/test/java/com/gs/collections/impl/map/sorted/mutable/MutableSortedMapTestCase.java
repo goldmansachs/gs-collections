@@ -281,11 +281,11 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
 
         Verify.assertListsEqual(
                 map.toList(),
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.collect((Function<Pair<String, ?>, String>) Pair::getOne));
 
         Verify.assertListsEqual(
                 Interval.zeroTo(map.size() - 1),
-                pairs.collect(Functions.<Integer>secondOfPair()));
+                pairs.collect((Function<Pair<?, Integer>, Integer>) Pair::getTwo));
 
         Assert.assertEquals(
                 map.zipWithIndex().toSet(),
@@ -445,7 +445,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         super.collectIf();
         MutableSortedMap<String, Integer> map = this.newMapWithKeysValues(Comparators.<String>reverseNaturalOrder(),
                 "1", 4, "2", 3, "3", 2, "4", 1);
-        MutableList<String> collect = map.collectIf(Predicates.greaterThan(1), Functions.getToString());
+        MutableList<String> collect = map.collectIf(Predicates.greaterThan(1), String::valueOf);
         Verify.assertListsEqual(FastList.newListWith("2", "3", "4"), collect);
     }
 
@@ -681,11 +681,11 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
         MutableList<Integer> toAdd = FastList.newListWith(2, 3);
-        map.collectKeysAndValues(toAdd, Functions.getIntegerPassThru(), Functions.getToString());
+        map.collectKeysAndValues(toAdd, Functions.getIntegerPassThru(), String::valueOf);
         Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3"), map);
 
         MutableSortedMap<Integer, String> revMap = this.newMapWithKeysValues(REV_INT_ORDER, 1, "1", 2, "Two");
-        revMap.collectKeysAndValues(toAdd, Functions.getIntegerPassThru(), Functions.getToString());
+        revMap.collectKeysAndValues(toAdd, Functions.getIntegerPassThru(), String::valueOf);
         Assert.assertEquals(TreeSortedMap.<Integer, String>newMap(REV_INT_ORDER).with(1, "1", 2, "2", 3, "3"), revMap);
     }
 
@@ -730,8 +730,8 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsentPutWith(4, Functions.getToString(), 4));
-        Assert.assertEquals("3", map.getIfAbsentPutWith(3, Functions.getToString(), 3));
+        Assert.assertEquals("4", map.getIfAbsentPutWith(4, String::valueOf, 4));
+        Assert.assertEquals("3", map.getIfAbsentPutWith(3, String::valueOf, 3));
         Verify.assertContainsKeyValue(4, "4", map);
     }
 
@@ -878,13 +878,13 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         MutableSortedMap<Key, Integer> map3 = this.newMapWithKeysValues(key, 1, new Key("not a dupe"), 2, duplicateKey3, 3);
         Verify.assertSize(2, map3);
         Verify.assertContainsAllKeyValues(map3, key, 3, new Key("not a dupe"), 2);
-        Assert.assertSame(key, map3.keysView().detect(Predicates.equal(key)));
+        Assert.assertSame(key, map3.keysView().detect(key::equals));
 
         Key duplicateKey4 = new Key("key");
         MutableSortedMap<Key, Integer> map4 = this.newMapWithKeysValues(key, 1, new Key("still not a dupe"), 2, new Key("me neither"), 3, duplicateKey4, 4);
         Verify.assertSize(3, map4);
         Verify.assertContainsAllKeyValues(map4, key, 4, new Key("still not a dupe"), 2, new Key("me neither"), 3);
-        Assert.assertSame(key, map4.keysView().detect(Predicates.equal(key)));
+        Assert.assertSame(key, map4.keysView().detect(key::equals));
 
         MutableSortedMap<Key, Integer> map5 = this.newMapWithKeysValues(key, 1, duplicateKey1, 2, duplicateKey3, 3, duplicateKey4, 4);
         Verify.assertSize(1, map5);

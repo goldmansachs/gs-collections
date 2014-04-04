@@ -35,7 +35,6 @@ import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -272,9 +271,9 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
     {
         super.collect();
         MutableSortedSet<Integer> integers = this.newWith(4, 3, 1, 6, 5, 2);
-        Verify.assertListsEqual(FastList.newListWith("1", "2", "3", "4", "5", "6"), integers.collect(Functions.getToString()));
+        Verify.assertListsEqual(FastList.newListWith("1", "2", "3", "4", "5", "6"), integers.collect(String::valueOf));
         MutableSortedSet<Integer> revInt = this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 4, 3, 5);
-        Verify.assertListsEqual(FastList.newListWith("5", "4", "3", "2", "1"), revInt.collect(Functions.getToString()));
+        Verify.assertListsEqual(FastList.newListWith("5", "4", "3", "2", "1"), revInt.collect(String::valueOf));
     }
 
     @Override
@@ -564,8 +563,8 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         Assert.assertEquals(
                 set,
                 cartesianProduct
-                        .select(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
-                        .collect(Functions.<String>firstOfPair()).toSet());
+                        .select(Predicates.attributeEqual((Function<Pair<?, String>, String>) Pair::getTwo, "One"))
+                        .collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
     }
 
     @Test

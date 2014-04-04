@@ -24,7 +24,6 @@ import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
@@ -224,7 +223,7 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
         MutableMap<String, RichIterable<Integer>> expected = UnifiedMap.newMap();
         expected.put("One", UnifiedSet.newSetWith(1));
         expected.put("Two", UnifiedSet.newSetWith(2, 2));
-        MutableMap<String, MutableSet<Integer>> map = multimap.toMap(Functions0.<Integer>newUnifiedSet());
+        MutableMap<String, MutableSet<Integer>> map = multimap.toMap(UnifiedSet::new);
         Assert.assertEquals(expected, map);
     }
 

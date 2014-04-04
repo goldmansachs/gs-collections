@@ -20,7 +20,6 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
@@ -200,10 +199,10 @@ public class ImmutableQuadrupletonMapTest extends ImmutableMemoryEfficientMapTes
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        ImmutableMap<Integer, String> empty = map.select(Predicates2.alwaysFalse());
+        ImmutableMap<Integer, String> empty = map.select((ignored1, ignored2) -> false);
         Verify.assertInstanceOf(ImmutableEmptyMap.class, empty);
 
-        ImmutableMap<Integer, String> full = map.select(Predicates2.alwaysTrue());
+        ImmutableMap<Integer, String> full = map.select((ignored1, ignored2) -> true);
         Verify.assertInstanceOf(ImmutableQuadrupletonMap.class, full);
         Assert.assertEquals(map, full);
 
@@ -269,10 +268,10 @@ public class ImmutableQuadrupletonMapTest extends ImmutableMemoryEfficientMapTes
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        ImmutableMap<Integer, String> empty = map.reject(Predicates2.alwaysTrue());
+        ImmutableMap<Integer, String> empty = map.reject((ignored1, ignored2) -> true);
         Verify.assertInstanceOf(ImmutableEmptyMap.class, empty);
 
-        ImmutableMap<Integer, String> full = map.reject(Predicates2.alwaysFalse());
+        ImmutableMap<Integer, String> full = map.reject((ignored1, ignored2) -> false);
         Verify.assertInstanceOf(ImmutableQuadrupletonMap.class, full);
         Assert.assertEquals(map, full);
 
@@ -338,7 +337,7 @@ public class ImmutableQuadrupletonMapTest extends ImmutableMemoryEfficientMapTes
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        Pair<Integer, String> one = map.detect(Predicates2.alwaysTrue());
+        Pair<Integer, String> one = map.detect((ignored1, ignored2) -> true);
         Assert.assertEquals(Tuples.pair(1, "1"), one);
 
         Pair<Integer, String> two = map.detect((argument1, argument2) -> "2".equals(argument2));
@@ -350,7 +349,7 @@ public class ImmutableQuadrupletonMapTest extends ImmutableMemoryEfficientMapTes
         Pair<Integer, String> four = map.detect((argument1, argument2) -> "4".equals(argument2));
         Assert.assertEquals(Tuples.pair(4, "4"), four);
 
-        Assert.assertNull(map.detect(Predicates2.alwaysFalse()));
+        Assert.assertNull(map.detect((ignored1, ignored2) -> false));
     }
 
     @Override

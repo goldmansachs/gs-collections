@@ -430,7 +430,7 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
     @Test
     public void getIfAbsentPutWithKey()
     {
-        <name>ToObjectFunction\<String> toString = (<type> <type>Parameter) -> String.valueOf(<type>Parameter);
+        <name>ToObjectFunction\<String> toString = String::valueOf;
 
         Assert.assertEquals("zero", this.map.getIfAbsentPutWithKey(<(literal.(type))("0")>, toString));
         <name>ObjectHashMap\<String> expected = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, "thirtyTwo");
@@ -688,8 +688,8 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
         super.iterator();
 
         Mutable<name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
-        final Iterator\<String> iterator1 = map1.iterator();
-        Verify.assertThrows(IllegalStateException.class, () -> {iterator1.remove();});
+        Iterator\<String> iterator1 = map1.iterator();
+        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator1::remove);
         iterator1.next();
         iterator1.remove();
         Assert.assertTrue(map1.toString(), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero").equals(map1)
@@ -697,11 +697,11 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
         iterator1.next();
         iterator1.remove();
         Assert.assertEquals(<name>ObjectHashMap.newMap(), map1);
-        Verify.assertThrows(IllegalStateException.class, () -> {iterator1.remove();});
+        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator1::remove);
 
         Mutable<name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("9")>, "nine");
-        final Iterator\<String> iterator2 = map2.iterator();
-        Verify.assertThrows(IllegalStateException.class, () -> {iterator2.remove();});
+        Iterator\<String> iterator2 = map2.iterator();
+        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator2::remove);
         iterator2.next();
         iterator2.remove();
         Assert.assertTrue(map2.toString(), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero").equals(map2)
@@ -711,8 +711,8 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
         Assert.assertEquals(<name>ObjectHashMap.newMap(), map2);
 
         Mutable<name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("8")>, "eight", <(literal.(type))("9")>, "nine");
-        final Iterator\<String> iterator3 = map3.iterator();
-        Verify.assertThrows(IllegalStateException.class, () -> {iterator3.remove();});
+        Iterator\<String> iterator3 = map3.iterator();
+        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator3::remove);
         iterator3.next();
         iterator3.remove();
         Assert.assertTrue(map3.toString(), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("8")>, "eight").equals(map3)

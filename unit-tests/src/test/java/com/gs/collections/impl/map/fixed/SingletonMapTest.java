@@ -24,7 +24,6 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
@@ -195,9 +194,9 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
         Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            map.getIfAbsentPutWith(4, Functions.getToString(), 4);
+            map.getIfAbsentPutWith(4, String::valueOf, 4);
         });
-        Assert.assertEquals("1", map.getIfAbsentPutWith(1, Functions.getToString(), 1));
+        Assert.assertEquals("1", map.getIfAbsentPutWith(1, String::valueOf, 1));
     }
 
     @Override
@@ -228,8 +227,8 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsentWith(4, Functions.getToString(), 4));
-        Assert.assertEquals("1", map.getIfAbsentWith(1, Functions.getToString(), 1));
+        Assert.assertEquals("4", map.getIfAbsentWith(4, String::valueOf, 4));
+        Assert.assertEquals("1", map.getIfAbsentWith(1, String::valueOf, 1));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1"), map);
     }
 
@@ -351,10 +350,10 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<String, String> map = this.classUnderTest();
 
-        MutableMap<String, String> empty = map.select(Predicates2.alwaysFalse());
+        MutableMap<String, String> empty = map.select((ignored1, ignored2) -> false);
         Verify.assertInstanceOf(EmptyMap.class, empty);
 
-        MutableMap<String, String> full = map.select(Predicates2.alwaysTrue());
+        MutableMap<String, String> full = map.select((ignored1, ignored2) -> true);
         Verify.assertInstanceOf(SingletonMap.class, full);
         Assert.assertEquals(map, full);
     }
@@ -365,10 +364,10 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<String, String> map = this.classUnderTest();
 
-        MutableMap<String, String> empty = map.reject(Predicates2.alwaysTrue());
+        MutableMap<String, String> empty = map.reject((ignored1, ignored2) -> true);
         Verify.assertInstanceOf(EmptyMap.class, empty);
 
-        MutableMap<String, String> full = map.reject(Predicates2.alwaysFalse());
+        MutableMap<String, String> full = map.reject((ignored1, ignored2) -> false);
         Verify.assertInstanceOf(SingletonMap.class, full);
         Assert.assertEquals(map, full);
     }
@@ -379,10 +378,10 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<String, String> map = this.classUnderTest();
 
-        Pair<String, String> actual = map.detect(Predicates2.alwaysTrue());
+        Pair<String, String> actual = map.detect((ignored1, ignored2) -> true);
         Assert.assertEquals(Tuples.pair("1", "One"), actual);
 
-        Assert.assertNull(map.detect(Predicates2.alwaysFalse()));
+        Assert.assertNull(map.detect((ignored1, ignored2) -> false));
     }
 
     @Test

@@ -159,7 +159,7 @@ public class Unmodifiable<name>BagTest extends AbstractMutable<name>BagTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void withoutAll()
     {
-        this.newWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">).withoutAll(this.newMutableCollectionWith(<["8", "9",]:(literal.(type))(); separator=", ">));
+        this.newWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">).withoutAll(this.newMutableCollectionWith(<["8", "9"]:(literal.(type))(); separator=", ">));
     }
 
     @Override

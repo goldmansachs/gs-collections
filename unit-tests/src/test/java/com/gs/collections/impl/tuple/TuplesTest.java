@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ package com.gs.collections.impl.tuple;
 
 import java.util.Map;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -90,7 +90,7 @@ public class TuplesTest
     {
         Integer two = 2;
         Pair<String, Integer> pair = Tuples.pair("One", two);
-        Assert.assertEquals("One", Functions.<String>firstOfPair().valueOf(pair));
-        Assert.assertSame(two, Functions.<Integer>secondOfPair().valueOf(pair));
+        Assert.assertEquals("One", ((Function<Pair<String, ?>, String>) Pair::getOne).valueOf(pair));
+        Assert.assertSame(two, ((Function<Pair<?, Integer>, Integer>) Pair::getTwo).valueOf(pair));
     }
 }

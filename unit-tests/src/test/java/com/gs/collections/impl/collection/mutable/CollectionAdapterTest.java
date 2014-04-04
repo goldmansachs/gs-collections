@@ -32,7 +32,6 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -146,11 +145,11 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
 
         Assert.assertEquals(
                 UnifiedSet.newSetWith("1", "2", "3", "4"),
-                this.newSet().with(1, 2, 3, 4).collect(Functions.getToString()));
+                this.newSet().with(1, 2, 3, 4).collect(String::valueOf));
         Assert.assertEquals(
                 UnifiedSet.newSetWith("1", "2", "3", "4"),
                 this.newSet().with(1, 2, 3, 4).collect(
-                        Functions.getToString(),
+                        String::valueOf,
                         UnifiedSet.<String>newSet()));
     }
 

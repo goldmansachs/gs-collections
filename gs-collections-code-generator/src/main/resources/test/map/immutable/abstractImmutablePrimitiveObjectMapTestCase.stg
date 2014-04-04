@@ -76,9 +76,9 @@ public abstract class AbstractImmutable<name>ObjectMapTestCase extends Abstract<
     public void iterator()
     {
         super.iterator();
-        final Iterator\<String> iterator = this.classUnderTest().iterator();
+        Iterator\<String> iterator = this.classUnderTest().iterator();
         iterator.next();
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {iterator.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
     }
 
     @Override

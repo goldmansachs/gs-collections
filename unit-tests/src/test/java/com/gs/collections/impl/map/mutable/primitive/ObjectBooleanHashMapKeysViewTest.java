@@ -54,7 +54,7 @@ public class ObjectBooleanHashMapKeysViewTest extends AbstractLazyIterableTestCa
         Iterator<String> iterator = ObjectBooleanHashMap.newWithKeysValues("zero", true, "thirtyOne", false, "thirtyTwo", true).keysView().iterator();
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {iterator.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) iterator::remove);
         Assert.assertTrue(iterator.hasNext());
         actual.add(iterator.next());
         Assert.assertTrue(iterator.hasNext());
@@ -62,6 +62,6 @@ public class ObjectBooleanHashMapKeysViewTest extends AbstractLazyIterableTestCa
         Assert.assertFalse(iterator.hasNext());
 
         Assert.assertEquals(expected, actual);
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
     }
 }

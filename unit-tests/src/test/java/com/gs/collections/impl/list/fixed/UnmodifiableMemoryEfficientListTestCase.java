@@ -44,7 +44,7 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
         it.next();
         Assert.assertEquals(1, it.nextIndex());
 
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {it.remove();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) it::remove);
 
         Verify.assertThrows(UnsupportedOperationException.class, () -> it.add(null));
 
@@ -76,7 +76,7 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
     public void subList()
     {
         MutableList<T> subList = this.getCollection().subList(0, 1);
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {subList.clear();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) subList::clear);
     }
 
     @Override

@@ -149,7 +149,7 @@ public class ImmutableArrayListTest extends AbstractImmutableListTestCase
     {
         ImmutableArrayList<Integer> integers = ImmutableArrayList.newListWith(1, 2, 3, 4);
         MutableMap<String, String> map =
-                integers.toMap(Functions.getToString(), Functions.getToString());
+                integers.toMap(String::valueOf, String::valueOf);
         Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
     }
 
@@ -181,20 +181,12 @@ public class ImmutableArrayListTest extends AbstractImmutableListTestCase
     @Override
     public void get()
     {
-        final ImmutableList<Integer> list = this.classUnderTest();
-        Verify.assertThrows(ArrayIndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.get(list.size() + 1);
-            }
+        ImmutableList<Integer> list = this.classUnderTest();
+        Verify.assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            list.get(list.size() + 1);
         });
-        Verify.assertThrows(ArrayIndexOutOfBoundsException.class, new Runnable()
-        {
-            public void run()
-            {
-                list.get(-1);
-            }
+        Verify.assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+            list.get(-1);
         });
     }
 

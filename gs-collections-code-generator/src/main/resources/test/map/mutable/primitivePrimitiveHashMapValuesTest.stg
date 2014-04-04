@@ -89,7 +89,7 @@ public class <name1><name2>HashMapValuesTest extends AbstractMutable<name2>Colle
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Override

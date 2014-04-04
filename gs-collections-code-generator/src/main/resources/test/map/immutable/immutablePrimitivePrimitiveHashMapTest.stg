@@ -83,7 +83,7 @@ public class Immutable<name1><name2>HashMapTest extends AbstractImmutable<name1>
     public void injectInto()
     {
         Immutable<name1><name2>HashMap iterable = new Immutable<name1><name2>HashMap(<name1><name2>HashMap.newWithKeysValues(<["1", "2", "3"]:keyValue(); separator=", ">));
-        Mutable<primitive2.wrapperName> result = iterable.injectInto(new Mutable<primitive2.wrapperName>(<(literal.(type2))("0")>), (Mutable<primitive2.wrapperName> object, <type2> value) -> object.add(value));
+        Mutable<primitive2.wrapperName> result = iterable.injectInto(new Mutable<primitive2.wrapperName>(<(literal.(type2))("0")>), Mutable<primitive2.wrapperName>::add);
         Assert.assertEquals(new Mutable<primitive2.wrapperName>(<(literal.(type2))("6")>), result);
     }
 }

@@ -33,9 +33,7 @@ import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.impl.IntegerWithCast;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Bags;
@@ -411,7 +409,7 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
         MutableList<Integer> toAdd = FastList.newListWith(2, 3);
-        map.collectKeysAndValues(toAdd, Functions.getIntegerPassThru(), Functions.getToString());
+        map.collectKeysAndValues(toAdd, Functions.getIntegerPassThru(), String::valueOf);
         Verify.assertSize(3, map);
         Verify.assertContainsAllKeyValues(map, 1, "1", 2, "2", 3, "3");
     }
@@ -470,8 +468,8 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsentPutWith(4, Functions.getToString(), 4));
-        Assert.assertEquals("3", map.getIfAbsentPutWith(3, Functions.getToString(), 3));
+        Assert.assertEquals("4", map.getIfAbsentPutWith(4, String::valueOf, 4));
+        Assert.assertEquals("3", map.getIfAbsentPutWith(3, String::valueOf, 3));
         Verify.assertContainsKeyValue(4, "4", map);
     }
 
@@ -645,13 +643,13 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
         MutableMap<Key, Integer> map3 = this.newMapWithKeysValues(key, 1, new Key("not a dupe"), 2, duplicateKey3, 3);
         Verify.assertSize(2, map3);
         Verify.assertContainsAllKeyValues(map3, key, 3, new Key("not a dupe"), 2);
-        Assert.assertSame(key, map3.keysView().detect(Predicates.equal(key)));
+        Assert.assertSame(key, map3.keysView().detect(key::equals));
 
         Key duplicateKey4 = new Key("key");
         MutableMap<Key, Integer> map4 = this.newMapWithKeysValues(key, 1, new Key("still not a dupe"), 2, new Key("me neither"), 3, duplicateKey4, 4);
         Verify.assertSize(3, map4);
         Verify.assertContainsAllKeyValues(map4, key, 4, new Key("still not a dupe"), 2, new Key("me neither"), 3);
-        Assert.assertSame(key, map4.keysView().detect(Predicates.equal(key)));
+        Assert.assertSame(key, map4.keysView().detect(key::equals));
 
         MutableMap<Key, Integer> map5 = this.newMapWithKeysValues(key, 1, duplicateKey1, 2, duplicateKey3, 3, duplicateKey4, 4);
         Verify.assertSize(1, map5);
@@ -789,7 +787,7 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     {
         MutableMap<Integer, Integer> map = this.newMap();
         Iterate.forEach(Interval.oneTo(1000), each -> {
-            map.updateValue(each % 10, Functions0.value(0), integer -> integer + 1);
+            map.updateValue(each % 10, () -> (Integer) 0, integer -> integer + 1);
         });
         Assert.assertEquals(Interval.zeroTo(9).toSet(), map.keySet());
         Assert.assertEquals(FastList.newList(Collections.nCopies(10, 100)), FastList.newList(map.values()));
@@ -801,7 +799,9 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
         MutableMap<Integer, Integer> map = this.newMap();
         MutableList<Integer> list = Interval.oneTo(2000).toList();
         Collections.shuffle(list);
-        Iterate.forEach(list, each -> { map.updateValue(each % 1000, Functions0.value(0), integer -> integer + 1); });
+        Iterate.forEach(list, each -> {
+            map.updateValue(each % 1000, () -> (Integer) 0, integer -> integer + 1);
+        });
         Assert.assertEquals(Interval.zeroTo(999).toSet(), map.keySet());
         Assert.assertEquals(
                 HashBag.newBag(map.values()).toStringOfItemToCount(),
@@ -814,7 +814,7 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     {
         MutableMap<Integer, Integer> map = this.newMap();
         Iterate.forEach(Interval.oneTo(1000), each -> {
-            map.updateValueWith(each % 10, Functions0.value(0), (integer, parameter) -> {
+            map.updateValueWith(each % 10, () -> (Integer) 0, (integer, parameter) -> {
                 Assert.assertEquals("test", parameter);
                 return integer + 1;
             }, "test");
@@ -830,7 +830,7 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
         MutableList<Integer> list = Interval.oneTo(2000).toList();
         Collections.shuffle(list);
         Iterate.forEach(list, each -> {
-            map.updateValueWith(each % 1000, Functions0.value(0), (integer, parameter) -> {
+            map.updateValueWith(each % 1000, () -> (Integer) 0, (integer, parameter) -> {
                 Assert.assertEquals("test", parameter);
                 return integer + 1;
             }, "test");

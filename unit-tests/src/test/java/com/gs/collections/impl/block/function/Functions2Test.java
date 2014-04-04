@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.gs.collections.impl.block.function;
 
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -28,7 +27,7 @@ public class Functions2Test
     @Test
     public void asFunction2Function()
     {
-        Function2<Integer, Object, String> block = Functions2.fromFunction(Functions.getToString());
+        Function2<Integer, Object, String> block = Functions2.fromFunction(String::valueOf);
         Assert.assertEquals("1", block.value(1, null));
     }
 

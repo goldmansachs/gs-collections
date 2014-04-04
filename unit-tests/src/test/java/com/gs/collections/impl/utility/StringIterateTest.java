@@ -248,7 +248,7 @@ public class StringIterateTest
     {
         String tokens = "1:Ted|2:Mary";
         Function<String, String> stringPassThruFunction = Functions.getPassThru();
-        MutableMap<Integer, String> results = StringIterate.tokensToMap(tokens, "|", ":", Functions.getStringToInteger(), stringPassThruFunction);
+        MutableMap<Integer, String> results = StringIterate.tokensToMap(tokens, "|", ":", Integer::valueOf, stringPassThruFunction);
         Verify.assertSize(2, results);
         Verify.assertContainsKeyValue(1, "Ted", results);
         Verify.assertContainsKeyValue(2, "Mary", results);

@@ -42,7 +42,7 @@ public class EmptyIteratorTest
     @Test
     public void previous()
     {
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {this.emptyIterator.previous();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) this.emptyIterator::previous);
     }
 
     @Test

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 package com.gs.collections.impl.set.mutable;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollectionTestCase;
 import com.gs.collections.impl.list.Interval;
@@ -43,7 +43,7 @@ public class MultiReaderUnifiedSetAsReadUntouchableTest extends UnmodifiableMuta
         MutableSet<String> set = MultiReaderUnifiedSet.newSetWith("1", "2", "3", "4").asReadUntouchable();
         MutableSet<String> union = set.union(UnifiedSet.newSetWith("a", "b", "c", "1"));
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(String::valueOf)));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.union(UnifiedSet.newSetWith("1")));
@@ -55,7 +55,7 @@ public class MultiReaderUnifiedSetAsReadUntouchableTest extends UnmodifiableMuta
         MutableSet<String> set = MultiReaderUnifiedSet.newSetWith("1", "2", "3", "4").asReadUntouchable();
         MutableSet<String> union = set.unionInto(UnifiedSet.newSetWith("a", "b", "c", "1"), UnifiedSet.<String>newSet());
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(String::valueOf)));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.unionInto(UnifiedSet.newSetWith("1"), UnifiedSet.<String>newSet()));
@@ -107,7 +107,7 @@ public class MultiReaderUnifiedSetAsReadUntouchableTest extends UnmodifiableMuta
         MutableSet<String> set = MultiReaderUnifiedSet.newSetWith("1", "2", "3", "4").asReadUntouchable();
         MutableSet<String> difference = set.symmetricDifference(UnifiedSet.newSetWith("2", "3", "4", "5", "not present"));
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(String::valueOf)));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -124,7 +124,7 @@ public class MultiReaderUnifiedSetAsReadUntouchableTest extends UnmodifiableMuta
                 UnifiedSet.newSetWith("2", "3", "4", "5", "not present"),
                 UnifiedSet.<String>newSet());
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(String::valueOf)));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -169,7 +169,7 @@ public class MultiReaderUnifiedSetAsReadUntouchableTest extends UnmodifiableMuta
         Assert.assertEquals(
                 set,
                 cartesianProduct
-                        .select(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
-                        .collect(Functions.<String>firstOfPair()).toSet());
+                        .select(Predicates.attributeEqual((Function<Pair<?, String>, String>) Pair::getTwo, "One"))
+                        .collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
     }
 }

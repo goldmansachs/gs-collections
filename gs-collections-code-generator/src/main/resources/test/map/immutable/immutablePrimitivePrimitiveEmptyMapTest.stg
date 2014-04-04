@@ -115,9 +115,9 @@ public class Immutable<name1><name2>EmptyMapTest extends AbstractImmutable<name1
     @Test
     public void <type2>Iterator()
     {
-        final <name2>Iterator iterator = this.map.<type2>Iterator();
+        <name2>Iterator iterator = this.map.<type2>Iterator();
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Override
@@ -237,7 +237,7 @@ public class Immutable<name1><name2>EmptyMapTest extends AbstractImmutable<name1
     public void injectInto()
     {
         Immutable<name1><name2>EmptyMap iterable = new Immutable<name1><name2>EmptyMap();
-        Mutable<wrapperName2> result = iterable.injectInto(new Mutable<wrapperName2>(<(literal.(type2))("0")>), (Mutable<wrapperName2> object, <type2> value) -> object.add(value));
+        Mutable<wrapperName2> result = iterable.injectInto(new Mutable<wrapperName2>(<(literal.(type2))("0")>), Mutable<wrapperName2>::add);
         Assert.assertEquals(new Mutable<wrapperName2>(<(literal.(type2))("0")>), result);
     }
 }

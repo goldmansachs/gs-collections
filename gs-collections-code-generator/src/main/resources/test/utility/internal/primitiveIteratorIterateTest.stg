@@ -56,7 +56,7 @@ public class <name>IteratorIterateTest
     @Test
     public void collect_target()
     {
-        Verify.assertIterableSize(3, <name>IteratorIterate.collect(this.iterable.<type>Iterator(), (<type> <type>Parameter) -> String.valueOf(<type>Parameter), FastList.\<String>newList()));
+        Verify.assertIterableSize(3, <name>IteratorIterate.collect(this.iterable.<type>Iterator(), String::valueOf, FastList.\<String>newList()));
     }
 }
 >>

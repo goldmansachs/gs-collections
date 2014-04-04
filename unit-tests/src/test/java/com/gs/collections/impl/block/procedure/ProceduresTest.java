@@ -28,7 +28,6 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
@@ -100,10 +99,10 @@ public class ProceduresTest
         Procedure<Integer> ifBlock = each -> { pathCalled.put("result", 1); };
         Procedure<Integer> elseBlock = each -> { pathCalled.put("result", -1); };
 
-        Procedures.ifElse(Predicates.alwaysTrue(), ifBlock, elseBlock).value(1);
+        Procedures.ifElse(ignored -> true, ifBlock, elseBlock).value(1);
         Verify.assertContainsKeyValue("result", 1, pathCalled);
 
-        Procedures.ifElse(Predicates.alwaysFalse(), ifBlock, elseBlock).value(1);
+        Procedures.ifElse(ignored -> false, ifBlock, elseBlock).value(1);
         Verify.assertContainsKeyValue("result", -1, pathCalled);
     }
 
@@ -119,7 +118,7 @@ public class ProceduresTest
     public void caseDefaultWithACase()
     {
         Procedure<Object> caseBlock = each -> { throw new BlockCalledException(); };
-        CaseProcedure<Object> undertest = Procedures.caseDefault(DoNothingProcedure.DO_NOTHING, Predicates.alwaysTrue(), caseBlock);
+        CaseProcedure<Object> undertest = Procedures.caseDefault(DoNothingProcedure.DO_NOTHING, ignored -> true, caseBlock);
         Verify.assertThrows(BlockCalledException.class, () -> undertest.value(1));
     }
 

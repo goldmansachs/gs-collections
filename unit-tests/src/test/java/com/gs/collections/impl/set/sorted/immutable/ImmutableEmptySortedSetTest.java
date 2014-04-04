@@ -115,28 +115,28 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     @Test
     public void detect()
     {
-        Assert.assertNull(this.classUnderTest().detect(Predicates.equal(1)));
+        Assert.assertNull(this.classUnderTest().detect(Integer.valueOf(1)::equals));
     }
 
     @Override
     @Test
     public void detectWith()
     {
-        Assert.assertNull(this.classUnderTest().detectWith(Predicates2.equal(), Integer.valueOf(1)));
+        Assert.assertNull(this.classUnderTest().detectWith(Object::equals, Integer.valueOf(1)));
     }
 
     @Override
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(this.classUnderTest().allSatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(this.classUnderTest().allSatisfy(Integer.class::isInstance));
     }
 
     @Override
     @Test
     public void anySatisfy()
     {
-        Assert.assertFalse(this.classUnderTest().anySatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertFalse(this.classUnderTest().anySatisfy(Integer.class::isInstance));
     }
 
     @Override
@@ -165,14 +165,14 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     @Test(expected = NoSuchElementException.class)
     public void min()
     {
-        this.classUnderTest().min(Comparators.naturalOrder());
+        this.classUnderTest().min(Integer::compareTo);
     }
 
     @Override
     @Test(expected = NoSuchElementException.class)
     public void max()
     {
-        this.classUnderTest().max(Comparators.naturalOrder());
+        this.classUnderTest().max(Integer::compareTo);
     }
 
     @Override
@@ -193,14 +193,14 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     @Test(expected = NoSuchElementException.class)
     public void minBy()
     {
-        this.classUnderTest().minBy(Functions.getToString());
+        this.classUnderTest().minBy(String::valueOf);
     }
 
     @Override
     @Test(expected = NoSuchElementException.class)
     public void maxBy()
     {
-        this.classUnderTest().maxBy(Functions.getToString());
+        this.classUnderTest().maxBy(String::valueOf);
     }
 
     @Override
@@ -383,7 +383,7 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     {
         Iterator<Integer> iterator = this.classUnderTest().iterator();
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
     }
 
     @Override

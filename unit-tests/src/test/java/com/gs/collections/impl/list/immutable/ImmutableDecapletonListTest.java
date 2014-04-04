@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.gs.collections.impl.list.immutable;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -38,8 +37,8 @@ public class ImmutableDecapletonListTest extends AbstractImmutableListTestCase
     @Test
     public void toSortedSetBy()
     {
-        MutableList<Integer> expected = TreeSortedSet.newSetWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").collect(Functions.getStringToInteger());
-        MutableList<Integer> sortedList = this.classUnderTest().toSortedSetBy(Functions.getToString()).toList();
+        MutableList<Integer> expected = TreeSortedSet.newSetWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").collect(Integer::valueOf);
+        MutableList<Integer> sortedList = this.classUnderTest().toSortedSetBy(String::valueOf).toList();
         Verify.assertListsEqual(expected, sortedList);
     }
 

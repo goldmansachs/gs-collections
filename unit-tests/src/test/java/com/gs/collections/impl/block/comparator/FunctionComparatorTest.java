@@ -40,7 +40,7 @@ public class FunctionComparatorTest
     {
         FunctionComparator<Band, String> comparator = new FunctionComparator<Band, String>(
                 Band.TO_NAME,
-                Comparators.<String>naturalOrder());
+                String::compareTo);
 
         Assert.assertEquals(comparator.compare(ACDC, ZZTOP), ACDC.getName().compareTo(ZZTOP.getName()));
         Assert.assertEquals(comparator.compare(ZZTOP, ACDC), ZZTOP.getName().compareTo(ACDC.getName()));
@@ -62,7 +62,7 @@ public class FunctionComparatorTest
     @Test
     public void functionComparatorBuiltTheEasyWay()
     {
-        Comparator<Band> byName = Comparators.byFunction(Band.TO_NAME, Comparators.naturalOrder());
+        Comparator<Band> byName = Comparators.byFunction(Band.TO_NAME, String::compareTo);
         MutableList<Band> sortedList = this.createTestList().sortThis(byName);
         Assert.assertEquals(FastList.newListWith(BON_JOVI, METALLICA, SCORPIONS, VAN_HALEN), sortedList);
     }

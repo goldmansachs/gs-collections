@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.lazy.iterator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.factory.Lists;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,7 +30,7 @@ public class CollectIteratorTest
     @Test
     public void iterator()
     {
-        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE), Functions.getToString());
+        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE), String::valueOf);
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals("true", iterator.next());
         Assert.assertFalse(iterator.hasNext());
@@ -40,7 +39,7 @@ public class CollectIteratorTest
     @Test
     public void iteratorWithFunctionName()
     {
-        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE), Functions.getToString());
+        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE), String::valueOf);
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals("true", iterator.next());
         Assert.assertFalse(iterator.hasNext());
@@ -49,7 +48,7 @@ public class CollectIteratorTest
     @Test
     public void iteratorWithFunctionNameAndIterator()
     {
-        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE).iterator(), Functions.getToString());
+        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE).iterator(), String::valueOf);
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals("true", iterator.next());
         Assert.assertFalse(iterator.hasNext());
@@ -58,12 +57,12 @@ public class CollectIteratorTest
     @Test(expected = NoSuchElementException.class)
     public void noSuchElementException()
     {
-        new CollectIterator<Boolean, String>(Lists.mutable.<Boolean>of(), Functions.getToString()).next();
+        new CollectIterator<Boolean, String>(Lists.mutable.<Boolean>of(), String::valueOf).next();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void remove()
     {
-        new CollectIterator<Boolean, String>(Lists.mutable.<Boolean>of(), Functions.getToString()).remove();
+        new CollectIterator<Boolean, String>(Lists.mutable.<Boolean>of(), String::valueOf).remove();
     }
 }

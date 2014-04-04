@@ -193,11 +193,11 @@ public class ImmutableObject<name>SingletonMapTest extends AbstractImmutableObje
     @Test
     public void <type>Iterator()
     {
-        final <name>Iterator iterator = this.classUnderTest().<type>Iterator();
+        <name>Iterator iterator = this.classUnderTest().<type>Iterator();
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals(<(wideLiteral.(type))("1")>, iterator.next()<wideDelta.(type)>);
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, () -> {iterator.next();});
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
     @Override

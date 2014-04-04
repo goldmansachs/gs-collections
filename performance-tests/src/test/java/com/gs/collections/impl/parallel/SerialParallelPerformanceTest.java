@@ -31,7 +31,6 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.ParallelTests;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
@@ -73,14 +72,6 @@ public class SerialParallelPerformanceTest
     private static final int LARGE_COUNT = 10000 * SCALE_FACTOR;
 
     private static final Function<Integer, Pair<Integer, Integer>> PAIR_FUNCTION = value -> Tuples.pair(value, value);
-
-    private static final Function<Integer, Long> LONG_FUNCTION = Integer::longValue;
-
-    private static final Function<Integer, Short> SHORT_FUNCTION = Integer::shortValue;
-
-    private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION = Alphagram::new;
-
-    private static final Function0<Integer> INTEGER_NEW = Functions0.value(0);
 
     private static final Function2<Integer, String, Integer> COUNT_AGGREGATOR = (aggregate, word) -> aggregate + 1;
 
@@ -533,13 +524,13 @@ public class SerialParallelPerformanceTest
             Verify.assertNotEmpty(ParallelIterate.collectIf(
                     iterable,
                     predicates.get(1),
-                    LONG_FUNCTION,
+                    Integer::longValue,
                     new CompositeFastList<Long>(),
                     true));
             Verify.assertNotEmpty(ParallelIterate.collectIf(
                     iterable,
                     predicates.get(0),
-                    SHORT_FUNCTION,
+                    Integer::shortValue,
                     new CompositeFastList<Short>(),
                     true));
         }, count, WARM_UP_COUNT);
@@ -563,13 +554,13 @@ public class SerialParallelPerformanceTest
             Verify.assertNotEmpty(FJIterate.collectIf(
                     iterable,
                     predicates.get(1),
-                    LONG_FUNCTION,
+                    Integer::longValue,
                     new CompositeFastList<Long>(),
                     true));
             Verify.assertNotEmpty(FJIterate.collectIf(
                     iterable,
                     predicates.get(0),
-                    SHORT_FUNCTION,
+                    Integer::shortValue,
                     new CompositeFastList<Short>(),
                     true));
         }, count, WARM_UP_COUNT);
@@ -592,12 +583,12 @@ public class SerialParallelPerformanceTest
             Verify.assertNotEmpty(Iterate.collectIf(
                     iterable,
                     predicates.get(1),
-                    LONG_FUNCTION,
+                    Integer::longValue,
                     FastList.<Long>newList()));
             Verify.assertNotEmpty(Iterate.collectIf(
                     iterable,
                     predicates.get(2),
-                    SHORT_FUNCTION,
+                    Integer::shortValue,
                     FastList.<Short>newList()));
         }, count, WARM_UP_COUNT);
     }
@@ -617,11 +608,11 @@ public class SerialParallelPerformanceTest
                     FastList.<Pair<Integer, Integer>>newList(initialCapacity)));
             Verify.assertNotEmpty(Iterate.collect(
                     iterable,
-                    LONG_FUNCTION,
+                    Integer::longValue,
                     FastList.<Long>newList(initialCapacity)));
             Verify.assertNotEmpty(Iterate.collect(
                     iterable,
-                    SHORT_FUNCTION,
+                    Integer::shortValue,
                     FastList.<Short>newList(initialCapacity)));
         }, count, 10);
     }
@@ -630,14 +621,14 @@ public class SerialParallelPerformanceTest
             Iterable<String> iterable,
             int count)
     {
-        Assert.assertEquals(HashBagMultimap.newMultimap(ParallelIterate.groupBy(iterable, ALPHAGRAM_FUNCTION)),
-                HashBagMultimap.newMultimap(Iterate.groupBy(iterable, ALPHAGRAM_FUNCTION)));
+        Assert.assertEquals(HashBagMultimap.newMultimap(ParallelIterate.groupBy(iterable, Alphagram::new)),
+                HashBagMultimap.newMultimap(Iterate.groupBy(iterable, Alphagram::new)));
         return TimeKeeper.logAverageMillisecondsToRun("Serial** GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(Iterate.groupBy(
                 iterable,
-                ALPHAGRAM_FUNCTION)), count, 10);
+                Alphagram::new)), count, 10);
     }
 
     private double basicSerialAggregateInPlaceByPerformance(
@@ -645,10 +636,10 @@ public class SerialParallelPerformanceTest
             int count)
     {
         Assert.assertEquals(
-                ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                ParallelIterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
                     value.incrementAndGet();
                 }),
-                Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                Iterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
                     value.incrementAndGet();
                 }));
         return TimeKeeper.logAverageMillisecondsToRun("Serial** AggregateInPlaceBy: "
@@ -657,7 +648,7 @@ public class SerialParallelPerformanceTest
                 + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
                 Iterate.aggregateInPlaceBy(
                         iterable,
-                        ALPHAGRAM_FUNCTION,
+                        Alphagram::new,
                         (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0),
                         (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
                             value.incrementAndGet();
@@ -669,16 +660,16 @@ public class SerialParallelPerformanceTest
             int count)
     {
         Assert.assertEquals(
-                ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
-                Iterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
+                ParallelIterate.aggregateBy(iterable, Alphagram::new, () -> 0, COUNT_AGGREGATOR),
+                Iterate.aggregateBy(iterable, Alphagram::new, () -> 0, COUNT_AGGREGATOR));
         return TimeKeeper.logAverageMillisecondsToRun("Serial** AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
                 Iterate.aggregateBy(
                         iterable,
-                        ALPHAGRAM_FUNCTION,
-                        INTEGER_NEW,
+                        Alphagram::new,
+                        () -> 0,
                         COUNT_AGGREGATOR)), count, 10);
     }
 
@@ -695,12 +686,12 @@ public class SerialParallelPerformanceTest
                     true));
             Verify.assertNotEmpty(ParallelIterate.collect(
                     iterable,
-                    LONG_FUNCTION,
+                    Integer::longValue,
                     new CompositeFastList<Long>(),
                     true));
             Verify.assertNotEmpty(ParallelIterate.collect(
                     iterable,
-                    SHORT_FUNCTION,
+                    Integer::shortValue,
                     new CompositeFastList<Short>(),
                     true));
         }, count, WARM_UP_COUNT);
@@ -719,12 +710,12 @@ public class SerialParallelPerformanceTest
                     true));
             Verify.assertNotEmpty(FJIterate.collect(
                     iterable,
-                    LONG_FUNCTION,
+                    Integer::longValue,
                     new CompositeFastList<Long>(),
                     true));
             Verify.assertNotEmpty(FJIterate.collect(
                     iterable,
-                    SHORT_FUNCTION,
+                    Integer::shortValue,
                     new CompositeFastList<Short>(),
                     true));
         }, count, WARM_UP_COUNT);
@@ -732,35 +723,35 @@ public class SerialParallelPerformanceTest
 
     private double basicParallelGroupByPerformance(Iterable<String> iterable, int count)
     {
-        Assert.assertEquals(HashBagMultimap.newMultimap(ParallelIterate.groupBy(iterable, ALPHAGRAM_FUNCTION)),
-                HashBagMultimap.newMultimap(Iterate.groupBy(iterable, ALPHAGRAM_FUNCTION)));
+        Assert.assertEquals(HashBagMultimap.newMultimap(ParallelIterate.groupBy(iterable, Alphagram::new)),
+                HashBagMultimap.newMultimap(Iterate.groupBy(iterable, Alphagram::new)));
         return TimeKeeper.logAverageMillisecondsToRun("Parallel GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(ParallelIterate.groupBy(
                 iterable,
-                ALPHAGRAM_FUNCTION)), count, WARM_UP_COUNT);
+                Alphagram::new)), count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinGroupByPerformance(Iterable<String> iterable, int count)
     {
-        Assert.assertEquals(HashBagMultimap.newMultimap(FJIterate.groupBy(iterable, ALPHAGRAM_FUNCTION)),
-                HashBagMultimap.newMultimap(Iterate.groupBy(iterable, ALPHAGRAM_FUNCTION)));
+        Assert.assertEquals(HashBagMultimap.newMultimap(FJIterate.groupBy(iterable, Alphagram::new)),
+                HashBagMultimap.newMultimap(Iterate.groupBy(iterable, Alphagram::new)));
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(FJIterate.groupBy(
                 iterable,
-                ALPHAGRAM_FUNCTION)), count, WARM_UP_COUNT);
+                Alphagram::new)), count, WARM_UP_COUNT);
     }
 
     private double basicParallelAggregateInPlaceByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
-                ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                ParallelIterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
                     value.incrementAndGet();
                 }),
-                Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                Iterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
                     value.incrementAndGet();
                 }));
         return TimeKeeper.logAverageMillisecondsToRun("Parallel AggregateInPlaceBy: "
@@ -769,7 +760,7 @@ public class SerialParallelPerformanceTest
                 + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
                 ParallelIterate.aggregateInPlaceBy(
                         iterable,
-                        ALPHAGRAM_FUNCTION,
+                        Alphagram::new,
                         (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0),
                         (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
                             value.incrementAndGet();
@@ -779,10 +770,10 @@ public class SerialParallelPerformanceTest
     private double basicForkJoinAggregateInPlaceByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
-                FJIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                FJIterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
                     value.incrementAndGet();
                 }),
-                Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
+                Iterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
                     value.incrementAndGet();
                 }));
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin AggregateInPlaceBy: "
@@ -791,7 +782,7 @@ public class SerialParallelPerformanceTest
                 + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
                 FJIterate.aggregateInPlaceBy(
                         iterable,
-                        ALPHAGRAM_FUNCTION,
+                        Alphagram::new,
                         (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0),
                         (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
                             value.incrementAndGet();
@@ -801,25 +792,25 @@ public class SerialParallelPerformanceTest
     private double basicParallelAggregateByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
-                ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
-                Iterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
+                ParallelIterate.aggregateBy(iterable, Alphagram::new, () -> 0, COUNT_AGGREGATOR),
+                Iterate.aggregateBy(iterable, Alphagram::new, () -> 0, COUNT_AGGREGATOR));
         return TimeKeeper.logAverageMillisecondsToRun("Parallel AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
-                ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR)), count, WARM_UP_COUNT);
+                ParallelIterate.aggregateBy(iterable, Alphagram::new, () -> 0, COUNT_AGGREGATOR)), count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinAggregateByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
-                FJIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
-                Iterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
+                FJIterate.aggregateBy(iterable, Alphagram::new, () -> 0, COUNT_AGGREGATOR),
+                Iterate.aggregateBy(iterable, Alphagram::new, () -> 0, COUNT_AGGREGATOR));
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), () -> Verify.assertNotEmpty(
-                FJIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR)), count, WARM_UP_COUNT);
+                FJIterate.aggregateBy(iterable, Alphagram::new, () -> 0, COUNT_AGGREGATOR)), count, WARM_UP_COUNT);
     }
 
     static final class TimeKeeper

@@ -98,15 +98,13 @@ public class UnmodifiableMapTest
     @Test
     public void testPutAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.unmodifiableMap.putAll(Maps.mutable.<String, List<String>>of());
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableMap.putAll(Maps.mutable.<String, List<String>>of()));
     }
 
     @Test
     public void testClear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> {this.unmodifiableMap.clear();});
+        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) this.unmodifiableMap::clear);
     }
 
     @Test
