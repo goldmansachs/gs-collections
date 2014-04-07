@@ -214,9 +214,11 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testCollectIf()
     {
-        Verify.assertContainsAll(this.newWith(1, 2, 3).collectIf(Integer.class::isInstance,
+        Verify.assertContainsAll(this.newWith(1, 2, 3).collectIf(
+                Integer.class::isInstance,
                 String::valueOf), "1", "2", "3");
-        Verify.assertContainsAll(this.newWith(1, 2, 3).collectIf(Integer.class::isInstance,
+        Verify.assertContainsAll(this.newWith(1, 2, 3).collectIf(
+                Integer.class::isInstance,
                 String::valueOf,
                 new ArrayList<String>()), "1", "2", "3");
     }

@@ -302,10 +302,12 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void detectWithIfNoneBlock()
     {
         Function0<ObjectBooleanPair<Integer>> function = () -> PrimitiveTuples.pair(Integer.valueOf(5), true);
-        Assert.assertEquals(PrimitiveTuples.pair(Integer.valueOf(2), false), this.newWith(1, true, 2, false, 3, true).detectWithIfNone(Object::equals,
+        Assert.assertEquals(PrimitiveTuples.pair(Integer.valueOf(2), false), this.newWith(1, true, 2, false, 3, true).detectWithIfNone(
+                Object::equals,
                 PrimitiveTuples.pair(Integer.valueOf(2), false),
                 function));
-        Assert.assertEquals(PrimitiveTuples.pair(Integer.valueOf(5), true), this.newWith(1, true, 2, false, 3, true).detectWithIfNone(Object::equals,
+        Assert.assertEquals(PrimitiveTuples.pair(Integer.valueOf(5), true), this.newWith(1, true, 2, false, 3, true).detectWithIfNone(
+                Object::equals,
                 PrimitiveTuples.pair(true, Integer.valueOf(4)),
                 function));
     }

@@ -435,10 +435,12 @@ public abstract class Abstract<name>ObjectMapKeyValuesViewTestCase
     public void detectWithIfNoneBlock()
     {
         Function0\<<name>ObjectPair\<Integer>\> function = Functions0.value(PrimitiveTuples.pair(<(literal.(type))("5")>, Integer.valueOf(6)));
-        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, Integer.valueOf(3)), this.newWith(<(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>, 4).detectWithIfNone(Object::equals,
+        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, Integer.valueOf(3)), this.newWith(<(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>, 4).detectWithIfNone(
+                Object::equals,
                 PrimitiveTuples.pair(<(literal.(type))("2")>, Integer.valueOf(3)),
                 function));
-        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("5")>, Integer.valueOf(6)), this.newWith(<(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>, 4).detectWithIfNone(Object::equals,
+        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("5")>, Integer.valueOf(6)), this.newWith(<(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>, 4).detectWithIfNone(
+                Object::equals,
                 PrimitiveTuples.pair(<(literal.(type))("2")>, Integer.valueOf(4)),
                 function));
     }

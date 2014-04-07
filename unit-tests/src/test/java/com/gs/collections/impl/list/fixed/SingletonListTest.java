@@ -195,7 +195,8 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void collect()
     {
         Verify.assertContainsAll(newWith(1).collect(String::valueOf), "1");
-        Verify.assertContainsAll(newWith(1).collect(String::valueOf,
+        Verify.assertContainsAll(newWith(1).collect(
+                String::valueOf,
                 UnifiedSet.<String>newSet()),
                 "1");
     }
@@ -299,9 +300,11 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void collectIf()
     {
-        Verify.assertContainsAll(newWith(1).collectIf(Integer.class::isInstance,
+        Verify.assertContainsAll(newWith(1).collectIf(
+                Integer.class::isInstance,
                 String::valueOf), "1");
-        Verify.assertContainsAll(newWith(1).collectIf(Integer.class::isInstance,
+        Verify.assertContainsAll(newWith(1).collectIf(
+                Integer.class::isInstance,
                 String::valueOf,
                 FastList.<String>newList()), "1");
     }

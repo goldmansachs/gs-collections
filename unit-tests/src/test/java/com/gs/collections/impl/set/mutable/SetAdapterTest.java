@@ -110,7 +110,8 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
                 "2",
                 "3",
                 "4");
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(String::valueOf,
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(
+                String::valueOf,
                 FastList.<String>newList()), "1", "2", "3", "4");
     }
 

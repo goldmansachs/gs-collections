@@ -391,10 +391,12 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     public void detectWithIfNoneBlock()
     {
         Function0\<<name>BooleanPair> function = Functions0.value(PrimitiveTuples.pair(<(literal.(type))("5")>, true));
-        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWithIfNone(Object::equals,
+        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("2")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWithIfNone(
+                Object::equals,
                 PrimitiveTuples.pair(<(literal.(type))("2")>, true),
                 function));
-        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("5")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWithIfNone(Object::equals,
+        Assert.assertEquals(PrimitiveTuples.pair(<(literal.(type))("5")>, true), this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).detectWithIfNone(
+                Object::equals,
                 PrimitiveTuples.pair(<(literal.(type))("2")>, false),
                 function));
     }

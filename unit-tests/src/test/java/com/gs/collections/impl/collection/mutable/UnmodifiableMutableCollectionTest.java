@@ -98,7 +98,8 @@ public class UnmodifiableMutableCollectionTest
         Verify.assertSize(1, this.unmodifiableCollection.selectWith(Object::equals, METALLICA));
         Verify.assertSize(
                 1,
-                this.unmodifiableCollection.selectWith(Object::equals,
+                this.unmodifiableCollection.selectWith(
+                        Object::equals,
                         METALLICA,
                         FastList.<String>newList()));
         Verify.assertSize(2, this.unmodifiableCollection.reject(StringPredicates.contains("p")));
@@ -108,7 +109,8 @@ public class UnmodifiableMutableCollectionTest
         Verify.assertSize(3, this.unmodifiableCollection.rejectWith(Object::equals, METALLICA));
         Verify.assertSize(
                 3,
-                this.unmodifiableCollection.rejectWith(Object::equals,
+                this.unmodifiableCollection.rejectWith(
+                        Object::equals,
                         METALLICA,
                         FastList.<String>newList()));
         Verify.assertSize(4, this.unmodifiableCollection.collect(Functions.getStringPassThru()));

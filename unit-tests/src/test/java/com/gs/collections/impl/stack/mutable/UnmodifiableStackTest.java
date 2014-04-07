@@ -125,7 +125,8 @@ public class UnmodifiableStackTest extends StackIterableTestCase
     {
         Verify.assertSize(
                 1,
-                this.unmodifiableStackString.selectWith(Object::equals,
+                this.unmodifiableStackString.selectWith(
+                        Object::equals,
                         "2",
                         FastList.<String>newList()));
     }
@@ -143,7 +144,8 @@ public class UnmodifiableStackTest extends StackIterableTestCase
     {
         Verify.assertSize(
                 3,
-                this.unmodifiableStackString.rejectWith(Object::equals,
+                this.unmodifiableStackString.rejectWith(
+                        Object::equals,
                         3,
                         FastList.<String>newList()));
     }
