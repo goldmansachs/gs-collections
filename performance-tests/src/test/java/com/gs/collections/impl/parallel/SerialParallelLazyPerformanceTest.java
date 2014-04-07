@@ -21,11 +21,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.gs.collections.api.block.function.Function;
@@ -34,20 +37,22 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.ParallelTests;
+import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.primitive.IntInterval;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
-import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
@@ -55,18 +60,142 @@ import org.slf4j.LoggerFactory;
 
 public class SerialParallelLazyPerformanceTest
 {
-    public static final Predicate<Integer> PREDICATE_1 = item -> item > 0 && (item & 1) != 0;
-    public static final Predicate<Integer> PREDICATE_2 = item -> item > 0 && (item & 1) == 0;
-    public static final Predicate<Integer> PREDICATE_3 = item -> item < 0 && (item & 1) != 0;
-    public static final MutableList<Predicate<Integer>> PREDICATES = FastList.newListWith(PREDICATE_1, PREDICATE_2, PREDICATE_3);
+    public static final MutableList<Predicate<Integer>> PREDICATES_LAMBDA = FastList.newListWith(
+            item -> item > 0 && (item & 1) != 0,
+            item -> item > 0 && (item & 1) == 0,
+            item -> item < 0 && (item & 1) != 0,
+            item -> item > 1000000);
 
-    private static final Function<Integer, Pair<Integer, Integer>> PAIR_FUNCTION = value -> Tuples.pair(value, value);
+    public static final MutableList<Predicate<Integer>> PREDICATES_METHOD_REF = FastList.newListWith(
+            SerialParallelLazyPerformanceTest::isPositiveAndEven,
+            SerialParallelLazyPerformanceTest::isPositiveAndEven,
+            SerialParallelLazyPerformanceTest::isNegativeAndOdd,
+            SerialParallelLazyPerformanceTest::isGreaterThanMillion);
 
-    private static final Function<Integer, Long> LONG_FUNCTION = Integer::longValue;
+    public static final MutableList<java.util.function.Predicate<Integer>> JAVA_PREDICATES_LAMBDA = FastList.newListWith(
+            item -> item > 0 && (item & 1) != 0,
+            item -> item > 0 && (item & 1) == 0,
+            item -> item < 0 && (item & 1) != 0,
+            item -> item > 1000000);
 
-    private static final Function<Integer, Short> SHORT_FUNCTION = Integer::shortValue;
+    public static final MutableList<java.util.function.Predicate<Integer>> JAVA_PREDICATES_METHOD_REF = FastList.newListWith(
+            SerialParallelLazyPerformanceTest::isPositiveAndEven,
+            SerialParallelLazyPerformanceTest::isPositiveAndEven,
+            SerialParallelLazyPerformanceTest::isNegativeAndOdd,
+            SerialParallelLazyPerformanceTest::isGreaterThanMillion);
 
-    private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION = Alphagram::new;
+    public static final Predicate<Integer> PREDICATE_1 = IntegerPredicates.isPositive().and(IntegerPredicates.isOdd());
+    public static final Predicate<Integer> PREDICATE_2 = IntegerPredicates.isPositive().and(IntegerPredicates.isEven());
+    public static final Predicate<Integer> PREDICATE_3 = IntegerPredicates.isNegative().and(IntegerPredicates.isOdd());
+    public static final Predicate<Integer> PREDICATE_4 = Predicates.greaterThan(1000000);
+    public static final MutableList<Predicate<Integer>> PREDICATES = FastList.newListWith(PREDICATE_1, PREDICATE_2, PREDICATE_3, PREDICATE_4);
+
+    public static final java.util.function.Predicate<Integer> JAVA_PREDICATE_1 = new java.util.function.Predicate<Integer>()
+    {
+        @Override
+        public boolean test(Integer item)
+        {
+            return item > 0 && (item & 1) != 0;
+        }
+    };
+    public static final java.util.function.Predicate<Integer> JAVA_PREDICATE_2 = new java.util.function.Predicate<Integer>()
+    {
+        @Override
+        public boolean test(Integer item)
+        {
+            return item > 0 && (item & 1) == 0;
+        }
+    };
+    public static final java.util.function.Predicate<Integer> JAVA_PREDICATE_3 = new java.util.function.Predicate<Integer>()
+    {
+        @Override
+        public boolean test(Integer item)
+        {
+            return item < 0 && (item & 1) != 0;
+        }
+    };
+    public static final java.util.function.Predicate<Integer> JAVA_PREDICATE_4 = new java.util.function.Predicate<Integer>()
+    {
+        @Override
+        public boolean test(Integer item)
+        {
+            return item > 1000000;
+        }
+    };
+    public static final MutableList<java.util.function.Predicate<Integer>> JAVA_PREDICATES = FastList.newListWith(JAVA_PREDICATE_1, JAVA_PREDICATE_2, JAVA_PREDICATE_3, JAVA_PREDICATE_4);
+
+    public static final Function<Integer, ?> LONG_FUNCTION = new Function<Integer, Long>()
+    {
+        @Override
+        public Long valueOf(Integer value)
+        {
+            return value.longValue();
+        }
+    };
+
+    public static final Function<Integer, ?> SHORT_FUNCTION = new Function<Integer, Short>()
+    {
+        @Override
+        public Short valueOf(Integer value)
+        {
+            return value.shortValue();
+        }
+    };
+
+    public static final java.util.function.Function<Integer, ?> JAVA_LONG_FUNCTION = new java.util.function.Function<Integer, Long>()
+    {
+        @Override
+        public Long apply(Integer value)
+        {
+            return value.longValue();
+        }
+    };
+
+    public static final java.util.function.Function<Integer, ?> JAVA_SHORT_FUNCTION = new java.util.function.Function<Integer, Short>()
+    {
+        @Override
+        public Short apply(Integer value)
+        {
+            return value.shortValue();
+        }
+    };
+
+    public static final MutableList<Function<Integer, ?>> FUNCTIONS = FastList.newListWith(LONG_FUNCTION, SHORT_FUNCTION);
+    public static final MutableList<java.util.function.Function<Integer, ?>> JAVA_FUNCTIONS = FastList.newListWith(JAVA_LONG_FUNCTION, JAVA_SHORT_FUNCTION);
+
+    public static final MutableList<Function<Integer, ?>> FUNCTIONS_LAMBDA = FastList.newListWith(
+            value -> value.longValue(),
+            value -> value.shortValue());
+    public static final MutableList<java.util.function.Function<Integer, ?>> JAVA_FUNCTIONS_LAMBDA = FastList.newListWith(
+            value -> value.longValue(),
+            value -> value.shortValue());
+    public static final MutableList<Function<Integer, ?>> FUNCTIONS_METHOD_REF = FastList.newListWith(
+            Integer::longValue,
+            Integer::shortValue);
+    public static final MutableList<java.util.function.Function<Integer, ?>> JAVA_FUNCTIONS_METHOD_REF = FastList.newListWith(
+            Integer::longValue,
+            Integer::shortValue);
+
+    private static final Function<String, Alphagram> ALPHAGRAM_LAMBDA = value -> new Alphagram(value);
+    private static final java.util.function.Function<String, Alphagram> JAVA_ALPHAGRAM_LAMBDA = value -> new Alphagram(value);
+    private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION = new Function<String, Alphagram>()
+    {
+        @Override
+        public Alphagram valueOf(String each)
+        {
+            return new Alphagram(each);
+        }
+    };
+    private static final java.util.function.Function<String, Alphagram> JAVA_ALPHAGRAM_FUNCTION = new java.util.function.Function<String, Alphagram>()
+    {
+        @Override
+        public Alphagram apply(String each)
+        {
+            return new Alphagram(each);
+        }
+    };
+    private static final Function<String, Alphagram> ALPHAGRAM_METHOD_REF = Alphagram::new;
+    private static final java.util.function.Function<String, Alphagram> JAVA_ALPHAGRAM_METHOD_REF = Alphagram::new;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SerialParallelLazyPerformanceTest.class);
 
@@ -79,6 +208,48 @@ public class SerialParallelLazyPerformanceTest
     private static final int SMALL_COUNT = 100 * SCALE_FACTOR;
     private static final int MEDIUM_COUNT = 1000 * SCALE_FACTOR;
     private static final int LARGE_COUNT = 10000 * SCALE_FACTOR;
+
+    private static boolean isPositiveAndEven(Integer item)
+    {
+        return item > 0 && (item & 1) == 0;
+    }
+
+    private static boolean isNegativeAndOdd(Integer item)
+    {
+        return item < 0 && (item & 1) != 0;
+    }
+
+    private static boolean isGreaterThanMillion(Integer item)
+    {
+        return item > 1000000;
+    }
+
+    @Before
+    public void setup()
+    {
+        Procedure<java.util.function.Function<Integer, ?>> applyConsumer = each -> each.apply(0);
+
+        JAVA_FUNCTIONS.forEach(applyConsumer);
+        JAVA_FUNCTIONS_LAMBDA.forEach(applyConsumer);
+        JAVA_FUNCTIONS_METHOD_REF.forEach(applyConsumer);
+
+        JAVA_ALPHAGRAM_FUNCTION.apply("test");
+        JAVA_ALPHAGRAM_LAMBDA.apply("test");
+        JAVA_ALPHAGRAM_METHOD_REF.apply("test");
+
+        Procedure<java.util.function.Predicate<Integer>> applyPredicate = each -> each.test(0);
+
+        JAVA_PREDICATES.forEach(applyPredicate);
+        JAVA_PREDICATES_LAMBDA.forEach(applyPredicate);
+        JAVA_PREDICATES_METHOD_REF.forEach(applyPredicate);
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void forEach()
+    {
+        this.measureAlgorithmForIntegerIterable("forEach", each -> this.forEach(each.value()), true);
+    }
 
     @Test
     @Category(ParallelTests.class)
@@ -105,21 +276,54 @@ public class SerialParallelLazyPerformanceTest
     @Category(ParallelTests.class)
     public void anySatisfyShortCircuitInBeginning()
     {
-        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The Beginning", each -> this.anySatisfy(each.value(), PREDICATES.get(2), true), false);
+        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The Beginning", each -> this.anySatisfy(each.value(), 2, true), false);
     }
 
     @Test
     @Category(ParallelTests.class)
     public void anySatisfyShortCircuitInMiddle()
     {
-        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The Middle", each -> this.anySatisfy(each.value(), PREDICATES.get(0), true), false);
+        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The Middle", each -> this.anySatisfy(
+                each.value(),
+                0,
+                true),
+                false);
     }
 
     @Test
     @Category(ParallelTests.class)
     public void anySatisfyShortCircuitInEnd()
     {
-        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The End", each -> this.anySatisfy(each.value(), Predicates.greaterThan(1000000), false), false);
+        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The End", each -> this.anySatisfy(
+                each.value(),
+                3,
+                false),
+                false);
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void detectShortCircuitInBeginning()
+    {
+        this.measureAlgorithmForIntegerIterable("Detect Short Circuit In The Beginning", each -> this.detect(
+                each.value(),
+                2,
+                true),
+                false);
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void detectShortCircuitInMiddle()
+    {
+        this.measureAlgorithmForIntegerIterable("Detect Short Circuit In The Middle", each -> this.detect(each.value(), 0, true), false);
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void detectShortCircuitInEnd()
+    {
+        this.measureAlgorithmForIntegerIterable("Detect Short Circuit In The End", each -> this.detect(each.value(), 3, false), false);
     }
 
     @Test
@@ -146,12 +350,10 @@ public class SerialParallelLazyPerformanceTest
     {
         IntInterval.oneTo(20).forEach((IntProcedure) each -> {
             System.gc();
-            try
-            {
+            try {
                 Thread.sleep(100);
             }
-            catch (InterruptedException e)
-            {
+            catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -182,8 +384,7 @@ public class SerialParallelLazyPerformanceTest
         MutableList<Function0<FastList<Integer>>> generators = FastList.newList();
         generators.add(() -> {
             FastList<Integer> integers = FastList.newList(interval);
-            if (shuffle)
-            {
+            if (shuffle) {
                 Collections.shuffle(integers);
             }
             return integers;
@@ -195,8 +396,7 @@ public class SerialParallelLazyPerformanceTest
     private void measureAlgorithmForIntegerIterable(String algorithmName, Procedure<Function0<FastList<Integer>>> algorithm, boolean shuffle)
     {
         this.printMachineAndTestConfiguration(algorithmName);
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             this.getSizes().forEach(Procedures.cast(count -> this.getIntegerListGenerators(count, shuffle).forEach(algorithm)));
         }
     }
@@ -211,8 +411,7 @@ public class SerialParallelLazyPerformanceTest
     public UnifiedSet<String> generateWordsList(int count)
     {
         UnifiedSet<String> words = UnifiedSet.newSet();
-        while (words.size() < count)
-        {
+        while (words.size() < count) {
             words.add(RandomStringUtils.randomAlphabetic(5));
         }
         return words;
@@ -221,8 +420,7 @@ public class SerialParallelLazyPerformanceTest
     private void measureAlgorithmForRandomStringIterable(String algorithmName, Procedure<Function0<UnifiedSet<String>>> algorithm)
     {
         this.printMachineAndTestConfiguration(algorithmName);
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             this.getSizes().forEach(Procedures.cast(count -> this.getRandomWordsGenerators(count).forEach(algorithm)));
         }
     }
@@ -231,6 +429,59 @@ public class SerialParallelLazyPerformanceTest
     {
         Collections.shuffle(runnables);
         runnables.forEach(Procedures.cast(Runnable::run));
+    }
+
+    private void forEach(FastList<Integer> collection)
+    {
+        MutableList<Runnable> runnables = FastList.newList();
+        runnables.add(() -> {
+            this.basicSerialForEachPerformance(collection, SERIAL_RUN_COUNT);
+        });
+        int cores = Runtime.getRuntime().availableProcessors();
+        ExecutorService service = Executors.newFixedThreadPool(cores);
+        runnables.add(() -> {
+            MutableMap<Integer, Boolean> map = new ConcurrentHashMap<>();
+            this.basicParallelLazyForEachPerformance(collection, "Lambda", item -> map.put(item, Boolean.TRUE), PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            MutableMap<Integer, Boolean> map = new ConcurrentHashMap<>();
+            this.basicParallelLazyForEachPerformance(collection, "Procedure", new Procedure<Integer>()
+            {
+                @Override
+                public void value(Integer each)
+                {
+                    map.put(each, Boolean.TRUE);
+                }
+            }, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            MutableMap<Integer, Boolean> map = new ConcurrentHashMap<>();
+            this.basicJava8ParallelLazyForEachPerformance(collection, "Lambda", item -> map.put(item, Boolean.TRUE), PARALLEL_RUN_COUNT);
+        });
+        List<Integer> arrayList = new ArrayList<>(collection);
+        runnables.add(() -> {
+            MutableMap<Integer, Boolean> map = new ConcurrentHashMap<>();
+            this.basicJava8ParallelLazyForEachPerformance(arrayList, "Lambda", item -> map.put(item, Boolean.TRUE), PARALLEL_RUN_COUNT);
+        });
+        runnables.add(() -> {
+            MutableMap<Integer, Boolean> map = new ConcurrentHashMap<>();
+            this.basicJava8ParallelLazyForEachPerformance(arrayList, "Consumer", new Consumer<Integer>()
+            {
+                @Override
+                public void accept(Integer each)
+                {
+                    map.put(each, Boolean.TRUE);
+                }
+            }, PARALLEL_RUN_COUNT);
+        });
+        this.shuffleAndRun(runnables);
+        service.shutdown();
+        try {
+            service.awaitTermination(1, TimeUnit.MINUTES);
+        }
+        catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void toList(FastList<Integer> collection)
@@ -244,14 +495,19 @@ public class SerialParallelLazyPerformanceTest
         runnables.add(() -> {
             this.basicParallelLazyToListPerformance(collection, PARALLEL_RUN_COUNT, cores, service);
         });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyToListPerformance(collection, PARALLEL_RUN_COUNT);
+        });
+        List<Integer> arrayList = new ArrayList<>(collection);
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyToListPerformance(arrayList, PARALLEL_RUN_COUNT);
+        });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try
-        {
+        try {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e)
-        {
+        catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -260,26 +516,38 @@ public class SerialParallelLazyPerformanceTest
     {
         MutableList<Runnable> runnables = FastList.newList();
         runnables.add(() -> {
-            this.basicSerialSelectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT);
+            this.basicSerialSelectPerformance(collection, PREDICATES_LAMBDA, SERIAL_RUN_COUNT);
         });
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
         runnables.add(() -> {
-            this.basicParallelLazySelectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT, cores, service);
+            this.basicParallelLazySelectPerformance(collection, "Lambda", PREDICATES_LAMBDA, PARALLEL_RUN_COUNT, cores, service);
         });
-
+        runnables.add(() -> {
+            this.basicParallelLazySelectPerformance(collection, "Predicate", PREDICATES, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazySelectPerformance(collection, "MethodRef", PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazySelectPerformance(collection, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT);
+        });
         List<Integer> arrayList = new ArrayList<Integer>(collection);
         runnables.add(() -> {
-            this.basicJava8ParallelLazySelectPerformance(arrayList, PARALLEL_RUN_COUNT);
+            this.basicJava8ParallelLazySelectPerformance(arrayList, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazySelectPerformance(arrayList, "Predicate", JAVA_PREDICATES, PARALLEL_RUN_COUNT);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazySelectPerformance(arrayList, "MethodRef", JAVA_PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT);
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try
-        {
+        try {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e)
-        {
+        catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -288,44 +556,105 @@ public class SerialParallelLazyPerformanceTest
     {
         MutableList<Runnable> runnables = FastList.newList();
         runnables.add(() -> {
-            this.basicSerialRejectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT);
+            this.basicSerialRejectPerformance(collection, PREDICATES_LAMBDA, SERIAL_RUN_COUNT);
         });
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
         runnables.add(() -> {
-            this.basicParallelLazyRejectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT, cores, service);
+            this.basicParallelLazyRejectPerformance(collection, "Lambda", PREDICATES_LAMBDA, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyRejectPerformance(collection, "Predicate", PREDICATES, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyRejectPerformance(collection, "MethodRef", PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyRejectPerformance(collection, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT);
+        });
+        List<Integer> arrayList = new ArrayList<>(collection);
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyRejectPerformance(arrayList, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyRejectPerformance(arrayList, "Predicate", JAVA_PREDICATES, PARALLEL_RUN_COUNT);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyRejectPerformance(arrayList, "MethodRef", JAVA_PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT);
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try
-        {
+        try {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e)
-        {
+        catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void anySatisfy(FastList<Integer> collection, Predicate<? super Integer> predicate, boolean expectedResult)
+    private void anySatisfy(FastList<Integer> collection, int index, boolean expectedResult)
     {
         MutableList<Runnable> runnables = FastList.newList();
         runnables.add(() -> {
-            this.basicSerialAnySatisfyPerformance(collection, predicate, expectedResult, SERIAL_RUN_COUNT);
+            this.basicSerialAnySatisfyPerformance(collection, PREDICATES_LAMBDA.get(index), expectedResult, SERIAL_RUN_COUNT);
         });
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
         runnables.add(() -> {
-            this.basicParallelLazyAnySatisfyPerformance(collection, predicate, expectedResult, PARALLEL_RUN_COUNT, cores, service);
+            this.basicParallelLazyAnySatisfyPerformance(collection, PREDICATES_LAMBDA.get(index), "Lambda", expectedResult, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyAnySatisfyPerformance(collection, PREDICATES.get(index), "Predicate", expectedResult, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyAnySatisfyPerformance(collection, PREDICATES_METHOD_REF.get(index), "MethodRef", expectedResult, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyAnySatisfyPerformance(collection, "Lambda", JAVA_PREDICATES_LAMBDA.get(index), expectedResult, PARALLEL_RUN_COUNT);
+        });
+        List<Integer> arrayList = new ArrayList<>(collection);
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyAnySatisfyPerformance(arrayList, "Lambda", JAVA_PREDICATES_LAMBDA.get(index), expectedResult, PARALLEL_RUN_COUNT);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyAnySatisfyPerformance(arrayList, "Predicate", JAVA_PREDICATES.get(index), expectedResult, PARALLEL_RUN_COUNT);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyAnySatisfyPerformance(arrayList, "MethodRef", JAVA_PREDICATES_METHOD_REF.get(index), expectedResult, PARALLEL_RUN_COUNT);
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try
-        {
+        try {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e)
-        {
+        catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void detect(FastList<Integer> collection, int index, boolean expectedResult)
+    {
+        MutableList<Runnable> runnables = FastList.newList();
+        runnables.add(() -> {
+            this.basicSerialDetectPerformance(collection, PREDICATES_LAMBDA.get(index), expectedResult, SERIAL_RUN_COUNT);
+        });
+        int cores = Runtime.getRuntime().availableProcessors();
+        ExecutorService service = Executors.newFixedThreadPool(cores);
+        runnables.add(() -> {
+            this.basicParallelLazyDetectPerformance(collection, PREDICATES_LAMBDA.get(index), "Lambda", expectedResult, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyDetectPerformance(collection, PREDICATES.get(index), "Predicate", expectedResult, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyDetectPerformance(collection, PREDICATES_METHOD_REF.get(index), "MethodRef", expectedResult, PARALLEL_RUN_COUNT, cores, service);
+        });
+        this.shuffleAndRun(runnables);
+        service.shutdown();
+        try {
+            service.awaitTermination(1, TimeUnit.MINUTES);
+        }
+        catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -339,16 +668,33 @@ public class SerialParallelLazyPerformanceTest
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
         runnables.add(() -> {
-            this.basicParallelLazyCollectPerformance(collection, PARALLEL_RUN_COUNT, cores, service);
+            this.basicParallelLazyCollectPerformance(collection, "Lambda", FUNCTIONS_LAMBDA, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyCollectPerformance(collection, "Function", FUNCTIONS, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyCollectPerformance(collection, "MethodRef", FUNCTIONS_METHOD_REF, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyCollectPerformance(collection, "Lambda", JAVA_FUNCTIONS_LAMBDA, PARALLEL_RUN_COUNT);
+        });
+        List<Integer> arrayList = new ArrayList<>(collection);
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyCollectPerformance(arrayList, "Lambda", JAVA_FUNCTIONS_LAMBDA, PARALLEL_RUN_COUNT);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyCollectPerformance(arrayList, "Function", JAVA_FUNCTIONS, PARALLEL_RUN_COUNT);
+        });
+        runnables.add(() -> {
+            this.basicJava8ParallelLazyCollectPerformance(arrayList, "MethodRef", JAVA_FUNCTIONS_METHOD_REF, PARALLEL_RUN_COUNT);
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try
-        {
+        try {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e)
-        {
+        catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -362,16 +708,33 @@ public class SerialParallelLazyPerformanceTest
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
         runnables.add(() -> {
-            this.basicParallelGroupByPerformance(words, PARALLEL_RUN_COUNT, cores, service);
+            this.basicParallelLazyGroupByPerformance(words, "Lambda", ALPHAGRAM_LAMBDA, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyGroupByPerformance(words, "Function", ALPHAGRAM_FUNCTION, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyGroupByPerformance(words, "MethodRef", ALPHAGRAM_METHOD_REF, PARALLEL_RUN_COUNT, cores, service);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyJava8GroupByPerformance(words, "Lambda", JAVA_ALPHAGRAM_LAMBDA, PARALLEL_RUN_COUNT);
+        });
+        Set<String> hashSet = new HashSet<>(words);
+        runnables.add(() -> {
+            this.basicParallelLazyJava8GroupByPerformance(hashSet, "Lambda", JAVA_ALPHAGRAM_LAMBDA, PARALLEL_RUN_COUNT);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyJava8GroupByPerformance(hashSet, "Function", JAVA_ALPHAGRAM_FUNCTION, PARALLEL_RUN_COUNT);
+        });
+        runnables.add(() -> {
+            this.basicParallelLazyJava8GroupByPerformance(hashSet, "MethodRef", JAVA_ALPHAGRAM_METHOD_REF, PARALLEL_RUN_COUNT);
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try
-        {
+        try {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e)
-        {
+        catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
@@ -386,12 +749,23 @@ public class SerialParallelLazyPerformanceTest
                 + this.formatSizeOf(iterable) + " cores: 1", () -> Verify.assertNotEmpty(iterable.toList()), count, WARM_UP_COUNT);
     }
 
+    private double basicSerialForEachPerformance(
+            FastList<Integer> iterable,
+            int count)
+    {
+        MutableMap<Integer, Boolean> map = new ConcurrentHashMap<>();
+        return TimeKeeper.logAverageMillisecondsToRun("Serial******* ForEach using: Lambda"
+                + this.getSimpleName(iterable)
+                + " size: "
+                + this.formatSizeOf(iterable) + " cores: 1", () -> iterable.forEach((Procedure<Integer>) item -> map.put(item, Boolean.TRUE)), count, WARM_UP_COUNT);
+    }
+
     private double basicSerialSelectPerformance(
             FastList<Integer> iterable,
             MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRun("Serial******* Select: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial******* Select using: Lambda "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: 1", () -> {
@@ -406,7 +780,7 @@ public class SerialParallelLazyPerformanceTest
             MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRun("Serial******* Reject: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial******* Reject using: Lambda "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: 1", () -> {
@@ -422,23 +796,34 @@ public class SerialParallelLazyPerformanceTest
             boolean expectedResult,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRun("Serial******* AnySatisfy: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial******* AnySatisfy using: Lambda "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: 1", () -> Assert.assertEquals(expectedResult, iterable.anySatisfy(predicate)), count, WARM_UP_COUNT);
+    }
+
+    private double basicSerialDetectPerformance(
+            FastList<Integer> iterable,
+            Predicate<? super Integer> predicate,
+            boolean expectedResult,
+            int count)
+    {
+        return TimeKeeper.logAverageMillisecondsToRun("Serial******* Detect using: Lambda "
+                + this.getSimpleName(iterable)
+                + " size: "
+                + this.formatSizeOf(iterable) + " cores: 1", () -> Assert.assertEquals(expectedResult, iterable.detect(predicate) != null), count, WARM_UP_COUNT);
     }
 
     private double basicSerialCollectPerformance(
             FastList<Integer> iterable,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRun("Serial******* Collect: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial******* Collect using: Lambda "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: 1", () -> {
-            Verify.assertNotEmpty(iterable.collect(PAIR_FUNCTION).toList());
-            Verify.assertNotEmpty(iterable.collect(SHORT_FUNCTION).toList());
-            Verify.assertNotEmpty(iterable.collect(LONG_FUNCTION).toList());
+            Verify.assertNotEmpty(iterable.collect(value -> value.shortValue()).toList());
+            Verify.assertNotEmpty(iterable.collect(value -> value.longValue()).toList());
         }, count, 10);
     }
 
@@ -446,10 +831,10 @@ public class SerialParallelLazyPerformanceTest
             UnifiedSet<String> iterable,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRun("Serial******* GroupBy: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial******* GroupBy using: Lambda "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable) + " cores: 1", () -> Verify.assertNotEmpty(iterable.groupBy(ALPHAGRAM_FUNCTION)), count, 10);
+                + this.formatSizeOf(iterable) + " cores: 1", () -> Verify.assertNotEmpty(iterable.groupBy(ALPHAGRAM_LAMBDA)), count, 10);
     }
 
     private String formatSizeOf(Iterable<?> iterable)
@@ -460,6 +845,34 @@ public class SerialParallelLazyPerformanceTest
     private static int getBatchSizeFor(Collection<?> iterable)
     {
         return iterable.size() == 1000000 ? 10000 : 1000;
+    }
+
+    private double basicParallelLazyForEachPerformance(
+            FastList<Integer> iterable,
+            String parameterType,
+            Procedure<Integer> procedure,
+            int count,
+            int cores,
+            ExecutorService service)
+    {
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy ForEach using: "
+                + parameterType + ' '
+                + this.getSimpleName(iterable)
+                + " size: "
+                + this.formatSizeOf(iterable) + " cores: " + cores, () -> iterable.asParallel(service, iterable.size() / (cores * 3)).forEach(procedure), count, WARM_UP_COUNT);
+    }
+
+    private double basicJava8ParallelLazyForEachPerformance(
+            List<Integer> iterable,
+            String parameterType,
+            Consumer<Integer> consumer,
+            int count)
+    {
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Java8 ForEach using: "
+                + parameterType + ' '
+                + this.getSimpleName(iterable)
+                + " size: "
+                + this.formatSizeOf(iterable) + " cores: ?", () -> iterable.parallelStream().forEach(consumer), count, WARM_UP_COUNT);
     }
 
     private double basicParallelLazyToListPerformance(
@@ -474,29 +887,46 @@ public class SerialParallelLazyPerformanceTest
                 + this.formatSizeOf(iterable) + " cores: " + cores, () -> Verify.assertSize(iterable.size(), iterable.asParallel(service, iterable.size() / (cores * 3)).toList()), count, WARM_UP_COUNT);
     }
 
-    private double basicJava8ParallelLazySelectPerformance(
+    private double basicJava8ParallelLazyToListPerformance(
             List<Integer> iterable,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRun("Parallel Java8 Select: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Java8 toList: "
+                + this.getSimpleName(iterable)
+                + " size: "
+                + this.formatSizeOf(iterable) + " cores: ?", () -> Verify.assertSize(iterable.size(), iterable.parallelStream().collect(Collectors.toList())), count, WARM_UP_COUNT);
+    }
+
+    private double basicJava8ParallelLazySelectPerformance(
+            List<Integer> iterable,
+            String parameterType,
+            MutableList<java.util.function.Predicate<Integer>> predicatesList,
+            int count)
+    {
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Java8 Select using: "
+                + parameterType
+                + ' '
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: ?", () -> {
-            iterable.parallelStream().filter(item -> item > 0 && (item & 1) != 0).collect(Collectors.toList());
-            iterable.parallelStream().filter(item -> item > 0 && (item & 1) == 0).collect(Collectors.toList());
-            iterable.parallelStream().filter(item -> item < 0 && (item & 1) != 0).collect(Collectors.toList());
+            iterable.parallelStream().filter(predicatesList.get(0)).collect(Collectors.toList());
+            iterable.parallelStream().filter(predicatesList.get(1)).collect(Collectors.toList());
+            iterable.parallelStream().filter(predicatesList.get(2)).collect(Collectors.toList());
         }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelLazySelectPerformance(
             FastList<Integer> iterable,
+            String parameterType,
             MutableList<Predicate<Integer>> predicateList,
             int count,
             int cores,
             ExecutorService service)
     {
         int batchSize = SerialParallelLazyPerformanceTest.getBatchSizeFor(iterable);
-        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy Select: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy Select using: "
+                + parameterType
+                + ' '
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: " + cores, () -> {
@@ -508,13 +938,16 @@ public class SerialParallelLazyPerformanceTest
 
     private double basicParallelLazyRejectPerformance(
             FastList<Integer> iterable,
+            String parameterType,
             MutableList<Predicate<Integer>> predicateList,
             int count,
             int cores,
             ExecutorService service)
     {
         int batchSize = SerialParallelLazyPerformanceTest.getBatchSizeFor(iterable);
-        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy Reject: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy Reject using: "
+                + parameterType
+                + ' '
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: " + cores, () -> {
@@ -524,49 +957,140 @@ public class SerialParallelLazyPerformanceTest
         }, count, WARM_UP_COUNT);
     }
 
+    private double basicJava8ParallelLazyRejectPerformance(
+            List<Integer> iterable,
+            String parameterType,
+            MutableList<java.util.function.Predicate<Integer>> predicateList,
+            int count)
+    {
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Java8 Reject using: "
+                + parameterType
+                + ' '
+                + this.getSimpleName(iterable)
+                + " size: "
+                + this.formatSizeOf(iterable) + " cores: ?", () -> {
+            Verify.assertNotEmpty(iterable.parallelStream().filter(predicateList.get(0).negate()).collect(Collectors.toList()));
+            Verify.assertNotEmpty(iterable.parallelStream().filter(predicateList.get(1).negate()).collect(Collectors.toList()));
+            Verify.assertNotEmpty(iterable.parallelStream().filter(predicateList.get(2).negate()).collect(Collectors.toList()));
+        }, count, WARM_UP_COUNT);
+    }
+
     private double basicParallelLazyAnySatisfyPerformance(
             FastList<Integer> iterable,
             Predicate<? super Integer> predicate,
+            String parameterType,
             boolean expectedResult,
             int count,
             int cores,
             ExecutorService service)
     {
         int batchSize = SerialParallelLazyPerformanceTest.getBatchSizeFor(iterable);
-        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy AnySatisfy: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy AnySatisfy using: "
+                + parameterType
+                + ' '
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: " + cores, () -> Assert.assertEquals(expectedResult, iterable.asParallel(service, batchSize).anySatisfy(predicate)), count, WARM_UP_COUNT);
     }
 
+    private double basicJava8ParallelLazyAnySatisfyPerformance(
+            List<Integer> iterable,
+            String parameterType,
+            java.util.function.Predicate<? super Integer> predicate,
+            boolean expectedResult,
+            int count)
+    {
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Java8 AnySatisfy using: "
+                + parameterType
+                + ' '
+                + this.getSimpleName(iterable)
+                + " size: "
+                + this.formatSizeOf(iterable) + " cores: ?", () -> Assert.assertEquals(expectedResult, iterable.parallelStream().anyMatch(predicate)), count, WARM_UP_COUNT);
+    }
+
+    private double basicParallelLazyDetectPerformance(
+            FastList<Integer> iterable,
+            Predicate<? super Integer> predicate,
+            String parameterType,
+            boolean expectedResult,
+            int count,
+            int cores,
+            ExecutorService service)
+    {
+        int batchSize = SerialParallelLazyPerformanceTest.getBatchSizeFor(iterable);
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy Detect using: "
+                + parameterType
+                + ' '
+                + this.getSimpleName(iterable)
+                + " size: "
+                + this.formatSizeOf(iterable) + " cores: " + cores, () -> Assert.assertEquals(expectedResult, iterable.asParallel(service, batchSize).detect(predicate) != null), count, WARM_UP_COUNT);
+    }
+
     private double basicParallelLazyCollectPerformance(
             FastList<Integer> iterable,
+            String parameterType,
+            MutableList<Function<Integer, ?>> functionsList,
             int count,
             int cores,
             ExecutorService service)
     {
         int batchSize = SerialParallelLazyPerformanceTest.getBatchSizeFor(iterable);
 
-        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy Collect: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy Collect using: "
+                + parameterType
+                + ' '
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable) + " cores: " + cores, () -> {
-            Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(PAIR_FUNCTION).toList());
-            Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(LONG_FUNCTION).toList());
-            Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(SHORT_FUNCTION).toList());
+            Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(functionsList.get(0)).toList());
+            Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(functionsList.get(1)).toList());
         }, count, 10);
     }
 
-    private double basicParallelGroupByPerformance(UnifiedSet<String> iterable,
+    private double basicJava8ParallelLazyCollectPerformance(
+            List<Integer> iterable,
+            String parameterType,
+            MutableList<java.util.function.Function<Integer, ?>> functionsList,
+            int count)
+    {
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Java8 Collect using: "
+                + parameterType
+                + ' '
+                + this.getSimpleName(iterable)
+                + " size: "
+                + this.formatSizeOf(iterable) + " cores: ?", () -> {
+            Verify.assertNotEmpty(iterable.parallelStream().map(functionsList.get(0)).collect(Collectors.toList()));
+            Verify.assertNotEmpty(iterable.parallelStream().map(functionsList.get(1)).collect(Collectors.toList()));
+        }, count, 10);
+    }
+
+    private double basicParallelLazyGroupByPerformance(UnifiedSet<String> iterable,
+            String parameterType,
+            Function<String, Alphagram> function,
             int count,
             int cores,
             ExecutorService service)
     {
         int batchSize = SerialParallelLazyPerformanceTest.getBatchSizeFor(iterable);
-        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy GroupBy: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy GroupBy using: "
+                + parameterType
+                + ' '
                 + this.getSimpleName(iterable)
                 + " size: "
-                + this.formatSizeOf(iterable) + " cores: " + cores, () -> Verify.assertNotEmpty(iterable.asParallel(service, batchSize).groupBy(ALPHAGRAM_FUNCTION)), count, WARM_UP_COUNT);
+                + this.formatSizeOf(iterable) + " cores: " + cores, () -> Verify.assertNotEmpty(iterable.asParallel(service, batchSize).groupBy(function)), count, WARM_UP_COUNT);
+    }
+
+    private double basicParallelLazyJava8GroupByPerformance(Set<String> iterable,
+            String parameterType,
+            java.util.function.Function<String, Alphagram> function,
+            int count)
+    {
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Java8 GroupBy using: "
+                + parameterType
+                + ' '
+                + this.getSimpleName(iterable)
+                + " size: "
+                + this.formatSizeOf(iterable) + " cores: ?", () -> Verify.assertNotEmpty(iterable.parallelStream().collect(Collectors.groupingBy(function))), count, WARM_UP_COUNT);
     }
 
     private String getSimpleName(Object collection)
@@ -632,8 +1156,7 @@ public class SerialParallelLazyPerformanceTest
                 int count)
         {
             long start = TimeKeeper.getCurrentTimeAsNanos();
-            for (int i = 0; i < count; i++)
-            {
+            for (int i = 0; i < count; i++) {
                 runnable.run();
             }
             long totalNanos = TimeKeeper.getCurrentTimeAsNanos() - start;
@@ -671,11 +1194,9 @@ public class SerialParallelLazyPerformanceTest
         private static void warmUp(int warmUpCount, Runnable runnable)
         {
             long start = TimeKeeper.currentTimeMilliseconds();
-            for (int i = 0; i < warmUpCount; i++)
-            {
+            for (int i = 0; i < warmUpCount; i++) {
                 TimeKeeper.millisecondsToRun(runnable);
-                if (TimeKeeper.currentTimeMilliseconds() - start > PAIN_THRESHOLD)
-                {
+                if (TimeKeeper.currentTimeMilliseconds() - start > PAIN_THRESHOLD) {
                     break;
                 }
             }
