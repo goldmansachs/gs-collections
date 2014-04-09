@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class MapAdapterSerializationTest
     {
         Verify.assertSerializedForm(
                 1L,
-                UnifiedMapTest.UNIFIED_MAP_KEY_SET,
+                UnifiedMapSerializationTest.UNIFIED_MAP_KEY_SET,
                 new MapAdapter<Object, Object>(UnifiedMap.newMap()).keySet());
     }
 
@@ -46,7 +46,7 @@ public class MapAdapterSerializationTest
     {
         Verify.assertSerializedForm(
                 1L,
-                UnifiedMapTest.UNIFIED_MAP_ENTRY_SET,
+                UnifiedMapSerializationTest.UNIFIED_MAP_ENTRY_SET,
                 new MapAdapter<Object, Object>(UnifiedMap.newMap()).entrySet());
     }
 
@@ -55,7 +55,7 @@ public class MapAdapterSerializationTest
     {
         Verify.assertSerializedForm(
                 1L,
-                UnifiedMapTest.UNIFIED_MAP_VALUES,
+                UnifiedMapSerializationTest.UNIFIED_MAP_VALUES,
                 new MapAdapter<Object, Object>(UnifiedMap.newMap()).values());
     }
 }

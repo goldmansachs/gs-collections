@@ -59,7 +59,7 @@
 
     <suppress checks="MethodName" files="GsCollectionsCodeGenerator.java" />
 
-    <suppress checks="EqualsAvoidNull" files="StringPredicatesTest.java" />
+    <suppress checks="EqualsAvoidNull" files="StringPredicatesSerializationTest.java" />
 
     <suppress checks="IllegalImport" files="ConcurrentHashMapUnsafe.java" />
 
