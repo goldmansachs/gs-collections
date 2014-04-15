@@ -81,6 +81,10 @@ public final class ArrayListAdapter<T>
 
     private ArrayListAdapter(ArrayList<T> newDelegate)
     {
+        if (newDelegate == null)
+        {
+            throw new NullPointerException("ArrayListAdapter may not wrap null");
+        }
         this.delegate = newDelegate;
     }
 

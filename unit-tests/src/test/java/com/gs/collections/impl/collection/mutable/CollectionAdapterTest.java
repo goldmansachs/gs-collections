@@ -36,7 +36,7 @@ import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
-import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.list.mutable.ArrayListAdapter;
@@ -74,13 +74,20 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
         return new CollectionAdapter<T>(FastList.<T>newList());
     }
 
+    @Test(expected = NullPointerException.class)
+    public void null_throws()
+    {
+        new CollectionAdapter<Object>(null);
+    }
+
     @Override
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(AbstractSynchronizedMutableCollection.class, CollectionAdapter.adapt(Lists.fixedSize.of("1")).asSynchronized());
-
-        Verify.assertInstanceOf(SynchronizedMutableCollection.class, new CollectionAdapter<Object>(null).asSynchronized());
+        MutableCollection<String> collection = CollectionAdapter.adapt(Maps.mutable.of("1", "1").values());
+        MutableCollection<String> asSynchronized = collection.asSynchronized();
+        Verify.assertInstanceOf(AbstractSynchronizedMutableCollection.class, asSynchronized);
+        Verify.assertInstanceOf(SynchronizedMutableCollection.class, asSynchronized);
     }
 
     @Override
@@ -265,19 +272,17 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     @Test
     public void testEquals()
     {
-        Assert.assertEquals(new CollectionAdapter<Object>(null), new CollectionAdapter<Object>(null));
-        FastList<Integer> match = FastList.newListWith(1);
-        Assert.assertNotEquals(new CollectionAdapter<Object>(null), new CollectionAdapter<Integer>(match));
-        Assert.assertEquals(new CollectionAdapter<Integer>(match), new CollectionAdapter<Integer>(match));
-        FastList<Integer> notMatch = FastList.newListWith(2);
-        Assert.assertNotEquals(new CollectionAdapter<Integer>(match), new CollectionAdapter<Integer>(notMatch));
+        Assert.assertEquals(new CollectionAdapter<Object>(FastList.newList()), new CollectionAdapter<Object>(FastList.newList()));
+        Assert.assertNotEquals(new CollectionAdapter<Object>(FastList.newList()), new CollectionAdapter<Integer>(FastList.newListWith(1)));
+        Assert.assertEquals(new CollectionAdapter<Integer>(FastList.newListWith(1)), new CollectionAdapter<Integer>(FastList.newListWith(1)));
+        Assert.assertNotEquals(new CollectionAdapter<Integer>(FastList.newListWith(1)), new CollectionAdapter<Integer>(FastList.newListWith(2)));
     }
 
     @Test
     public void testNewEmpty()
     {
         Verify.assertInstanceOf(UnifiedSet.class, new CollectionAdapter<Object>(new HashSet<Object>()).newEmpty());
-        Verify.assertInstanceOf(FastList.class, new CollectionAdapter<Object>(null).newEmpty());
+        Verify.assertInstanceOf(FastList.class, new CollectionAdapter<Object>(new ArrayList<Object>()).newEmpty());
     }
 
     @Override

@@ -59,6 +59,10 @@ public final class CollectionAdapter<T>
 
     public CollectionAdapter(Collection<T> newDelegate)
     {
+        if (newDelegate == null)
+        {
+            throw new NullPointerException("CollectionAdapter may not wrap null");
+        }
         this.delegate = newDelegate;
     }
 
