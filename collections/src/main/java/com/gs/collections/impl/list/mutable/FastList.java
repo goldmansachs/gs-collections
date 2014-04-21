@@ -71,6 +71,7 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
@@ -101,6 +102,7 @@ import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
+import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -118,11 +120,11 @@ import net.jcip.annotations.NotThreadSafe;
  * in that the data elements are protected, not private.  It is this issue that caused this class
  * to be created in the first place.  The intent was to provide optimized internal iterators which use direct access
  * against the array of items, which is currently not possible by subclassing ArrayList.
- * <p/>
+ * <p>
  * An empty FastList created by calling the default constructor starts with a shared reference to a static
  * empty array (DEFAULT_SIZED_EMPTY_ARRAY).  This makes empty FastLists very memory efficient.  The
  * first call to add will lazily create an array of size 10.
- * <p/>
+ * <p>
  * An empty FastList created by calling the pre-size constructor with a value of 0 (new FastList(0)) starts
  * with a shared reference to a static  empty array (ZERO_SIZED_ARRAY).  This makes FastLists presized to 0 very
  * memory efficient as well.  The first call to add will lazily create an array of size 1.
@@ -190,7 +192,7 @@ public class FastList<T>
 
     /**
      * Creates a new list using the passed {@code elements} argument as the backing store.
-     * <p/>
+     * <p>
      * !!! WARNING: This method uses the passed in array, so can be very unsafe if the original
      * array is held onto anywhere else. !!!
      */
@@ -594,6 +596,23 @@ public class FastList<T>
     public T getLast()
     {
         return this.isEmpty() ? null : this.items[this.size() - 1];
+    }
+
+    @Override
+    public <V> FastListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
+    {
+        return this.groupBy(function, FastListMultimap.<V, T>newMultimap());
+    }
+
+    @Override
+    public <V, R extends MutableMultimap<V, T>> R groupBy(Function<? super T, ? extends V> function, R target)
+    {
+        for (int i = 0; i < this.size; i++)
+        {
+            T item = this.items[i];
+            target.put(function.valueOf(item), item);
+        }
+        return target;
     }
 
     @Override
