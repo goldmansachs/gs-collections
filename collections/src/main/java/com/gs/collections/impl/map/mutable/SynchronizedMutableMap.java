@@ -95,6 +95,21 @@ public class SynchronizedMutableMap<K, V>
         return new SynchronizedMutableMap<K, V>(MapAdapter.adapt(map));
     }
 
+    /**
+     * This method will take a MutableMap and wrap it directly in a SynchronizedMutableMap.  It will
+     * take any other non-GS-map and first adapt it will a MapAdapter, and then return a
+     * SynchronizedMutableMap that wraps the adapter. Additionally, a developer specifies which lock to use
+     * with the collection.
+     */
+    public static <K, V, M extends Map<K, V>> SynchronizedMutableMap<K, V> of(M map, Object lock)
+    {
+        if (map == null)
+        {
+            throw new IllegalArgumentException("cannot create a SynchronizedMutableMap for null");
+        }
+        return new SynchronizedMutableMap<K, V>(MapAdapter.adapt(map), lock);
+    }
+
     public MutableSetMultimap<V, K> flip()
     {
         synchronized (this.lock)
