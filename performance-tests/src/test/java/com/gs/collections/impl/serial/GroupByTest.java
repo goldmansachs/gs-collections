@@ -32,6 +32,11 @@ import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.options.Options;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
+import org.openjdk.jmh.runner.options.VerboseMode;
+import org.openjdk.jmh.runner.parameters.TimeValue;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
@@ -47,6 +52,7 @@ public class GroupByTest
     {
         Map<Boolean, List<Integer>> groupBy1 = this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 2 == 0));
         Map<Integer, List<Integer>> groupBy2 = this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 100));
+        Map<Integer, List<Integer>> groupBy3 = this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 10000));
     }
 
     @GenerateMicroBenchmark
@@ -54,6 +60,7 @@ public class GroupByTest
     {
         com.google.common.collect.Multimap<Boolean, Integer> groupBy1 = Multimaps.index(this.integersJDK, each -> each % 2 == 0);
         com.google.common.collect.Multimap<Integer, Integer> groupBy2 = Multimaps.index(this.integersJDK, each -> each % 100);
+        com.google.common.collect.Multimap<Integer, Integer> groupBy3 = Multimaps.index(this.integersJDK, each -> each % 10000);
     }
 
     @GenerateMicroBenchmark
@@ -61,6 +68,7 @@ public class GroupByTest
     {
         Multimap<Boolean, Integer> groupBy1 = this.integersGSC.groupBy(each -> each % 2 == 0);
         Multimap<Integer, Integer> groupBy2 = this.integersGSC.groupBy(each -> each % 100);
+        Multimap<Integer, Integer> groupBy3 = this.integersGSC.groupBy(each -> each % 10000);
     }
 
     @GenerateMicroBenchmark
@@ -68,5 +76,22 @@ public class GroupByTest
     {
         Multimap<Boolean, Integer> groupBy1 = this.integersGSC.groupBy(each -> each % 2 == 0);
         Multimap<Integer, Integer> groupBy2 = this.integersGSC.groupBy(each -> each % 100);
+        Multimap<Integer, Integer> groupBy3 = this.integersGSC.groupBy(each -> each % 10000);
+    }
+
+    public static void main(String[] args) throws Exception
+    {
+        int runCount = 25;
+        Options opts = new OptionsBuilder()
+                .include(".*com.gs.collections.impl.serial.GroupByTest.*")
+                .warmupTime(TimeValue.seconds(2))
+                .warmupIterations(runCount)
+                .measurementTime(TimeValue.seconds(2))
+                .measurementIterations(runCount)
+                .verbosity(VerboseMode.NORMAL)
+                .forks(1)
+                .build();
+
+        new Runner(opts).run();
     }
 }
