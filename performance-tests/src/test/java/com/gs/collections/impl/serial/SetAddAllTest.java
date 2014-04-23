@@ -35,7 +35,7 @@ import org.openjdk.jmh.annotations.State;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class SetAddAllTest
 {
-    private static final int SIZE = 100000;
+    private static final int SIZE = 1000;
     private final Set<Integer> integersJDK = new HashSet<>(Interval.oneTo(SIZE));
     private final MutableSet<Integer> integersGSC = Interval.oneTo(SIZE).toSet();
 
@@ -43,25 +43,19 @@ public class SetAddAllTest
     public void jdk8AddAll()
     {
         Set<Integer> result = new HashSet<>();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 1000; i++)
         {
-            result.addAll(this.integersGSC);
+            result.addAll(this.integersJDK);
         }
-        result.addAll(this.integersJDK);
-        result.addAll(this.integersJDK);
-        result.addAll(this.integersJDK);
-        result.addAll(this.integersJDK);
-        result.addAll(this.integersJDK);
     }
 
     @GenerateMicroBenchmark
     public void gscAddAll()
     {
         MutableSet<Integer> result = UnifiedSet.newSet();
-        result.addAll(this.integersGSC);
-        result.addAll(this.integersGSC);
-        result.addAll(this.integersGSC);
-        result.addAll(this.integersGSC);
-        result.addAll(this.integersGSC);
+        for (int i = 0; i < 1000; i++)
+        {
+            result.addAll(this.integersGSC);
+        }
     }
 }

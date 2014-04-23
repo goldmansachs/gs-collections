@@ -41,11 +41,6 @@ import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
-import org.openjdk.jmh.runner.options.VerboseMode;
-import org.openjdk.jmh.runner.parameters.TimeValue;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
@@ -131,22 +126,6 @@ public class AnagramSetTest
                 .sorted(Comparator.<Set<String>>comparingInt(Set::size).reversed())
                 .map(list -> list.size() + ": " + list)
                 .forEach(e -> {e.length();});
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-        int runCount = 25;
-        Options opts = new OptionsBuilder()
-                .include(".*com.gs.collections.impl.serial.AnagramSetTest.*")
-                .warmupTime(TimeValue.seconds(2))
-                .warmupIterations(runCount)
-                .measurementTime(TimeValue.seconds(2))
-                .measurementIterations(runCount)
-                .verbosity(VerboseMode.NORMAL)
-                .forks(1)
-                .build();
-
-        new Runner(opts).run();
     }
 
     private static final class Alphagram

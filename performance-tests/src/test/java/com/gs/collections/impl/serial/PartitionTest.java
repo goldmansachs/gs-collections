@@ -43,9 +43,9 @@ public class PartitionTest
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
     @GenerateMicroBenchmark
-    public void jdk8SerialPartitionUsingGroupBy()
+    public void jdk8SerialPartition()
     {
-        Map<Boolean, List<Integer>> evensAndOdds = this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 2 == 0));
+        Map<Boolean, List<Integer>> evensAndOdds = this.integersJDK.stream().collect(Collectors.partitioningBy(each -> each % 2 == 0));
     }
 
     @GenerateMicroBenchmark

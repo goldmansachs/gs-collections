@@ -16,16 +16,13 @@
 
 package com.gs.collections.impl.serial;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.Interval;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Mode;
@@ -38,25 +35,25 @@ import org.openjdk.jmh.annotations.State;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class BagAddAllTest
 {
-    private static final int SIZE = 100000;
-    private final Multiset<Integer> integersJDK = HashMultiset.create(Interval.oneTo(SIZE));
+    private static final int SIZE = 1000;
+    private final Multiset<Integer> integersGuava = HashMultiset.create(Interval.oneTo(SIZE));
     private final MutableBag<Integer> integersGSC = Interval.oneTo(SIZE).toBag();
 
     @GenerateMicroBenchmark
     public void guavaAddAll()
     {
-        Set<Integer> result = new HashSet<>();
-        for (int i = 0; i < 10; i++)
+        Multiset<Integer> result = HashMultiset.create();
+        for (int i = 0; i < 1000; i++)
         {
-            result.addAll(this.integersJDK);
+            result.addAll(this.integersGuava);
         }
     }
 
     @GenerateMicroBenchmark
     public void gscAddAll()
     {
-        MutableSet<Integer> result = UnifiedSet.newSet();
-        for (int i = 0; i < 10; i++)
+        MutableBag<Integer> result = HashBag.newBag();
+        for (int i = 0; i < 1000; i++)
         {
             result.addAll(this.integersGSC);
         }

@@ -35,7 +35,7 @@ import org.openjdk.jmh.annotations.State;
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 public class ListAddAllTest
 {
-    private static final int SIZE = 100000;
+    private static final int SIZE = 1000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
@@ -43,7 +43,7 @@ public class ListAddAllTest
     public void jdk8AddAll()
     {
         List<Integer> result = new ArrayList<>();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 1000; i++)
         {
             result.addAll(this.integersJDK);
         }
@@ -53,7 +53,7 @@ public class ListAddAllTest
     public void gscAddAll()
     {
         MutableList<Integer> result = FastList.newList();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 1000; i++)
         {
             result.addAll(this.integersGSC);
         }

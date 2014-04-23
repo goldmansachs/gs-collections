@@ -25,7 +25,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.VerboseMode;
 import org.openjdk.jmh.runner.parameters.TimeValue;
 
-public class JMHSerialTestRunner
+public class JMHSerialBenchmarkTest
 {
     @Test
     @Category(JMHTests.class)
@@ -38,15 +38,10 @@ public class JMHSerialTestRunner
                 .warmupIterations(runCount)
                 .measurementTime(TimeValue.seconds(2))
                 .measurementIterations(runCount)
-                .verbosity(VerboseMode.NORMAL)
+                .verbosity(VerboseMode.EXTRA)
                 .forks(1)
                 .build();
 
         new Runner(opts).run();
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-        new JMHSerialTestRunner().runTests();
     }
 }
