@@ -49,7 +49,7 @@ import org.openjdk.jmh.runner.parameters.TimeValue;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class AnagramBenchmarkTest
+public class AnagramListTest
 {
     private static final int SIZE_THRESHOLD = 10;
     private static final FastList<String> GSC_WORDS = FastList.newWithNValues(1000000, () -> RandomStringUtils.randomAlphabetic(5).toUpperCase());
@@ -136,7 +136,7 @@ public class AnagramBenchmarkTest
     {
         int runCount = 25;
         Options opts = new OptionsBuilder()
-                .include(".*com.gs.collections.impl.serial.AnagramBenchmarkTest.*")
+                .include(".*com.gs.collections.impl.serial.AnagramListTest.*")
                 .warmupTime(TimeValue.seconds(2))
                 .warmupIterations(runCount)
                 .measurementTime(TimeValue.seconds(2))

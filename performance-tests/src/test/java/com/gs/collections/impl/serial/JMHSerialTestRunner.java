@@ -16,15 +16,20 @@
 
 package com.gs.collections.impl.serial;
 
+import com.gs.collections.impl.JMHTests;
+import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.VerboseMode;
 import org.openjdk.jmh.runner.parameters.TimeValue;
 
-public class JMHSerialPerfTest
+public class JMHSerialTestRunner
 {
-    public static void main(String[] args) throws Exception
+    @Test
+    @Category(JMHTests.class)
+    public void runTests() throws Exception
     {
         int runCount = 25;
         Options opts = new OptionsBuilder()
@@ -38,5 +43,10 @@ public class JMHSerialPerfTest
                 .build();
 
         new Runner(opts).run();
+    }
+
+    public static void main(String[] args) throws Exception
+    {
+        new JMHSerialTestRunner().runTests();
     }
 }
