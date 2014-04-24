@@ -33,6 +33,7 @@ import com.gs.collections.impl.forkjoin.FJIterate;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import org.apache.commons.lang.RandomStringUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
@@ -47,7 +48,7 @@ import org.openjdk.jmh.annotations.State;
 public class AnagramListTest
 {
     private static final int SIZE_THRESHOLD = 10;
-    private static final FastList<String> GSC_WORDS = FastList.newWithNValues(1000000, () -> RandomStringUtils.randomAlphabetic(5).toUpperCase());
+    private static final FastList<String> GSC_WORDS = FastList.newWithNValues(1_000_000, () -> RandomStringUtils.randomAlphabetic(5).toUpperCase());
     private static final ArrayList<String> JDK_WORDS = new ArrayList<>(GSC_WORDS);
 
     private FastList<String> getGSCWords()
@@ -70,7 +71,7 @@ public class AnagramListTest
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
                 .asReversed()
                 .collect(iterable -> iterable.size() + ": " + iterable)
-                .forEach(Procedures.cast(e -> {e.length();}));
+                .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
     @Test
@@ -83,7 +84,7 @@ public class AnagramListTest
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
                 .asReversed()
                 .collect(iterable -> iterable.size() + ": " + iterable)
-                .forEach(Procedures.cast(e -> {e.length();}));
+                .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
     @Test
@@ -96,7 +97,7 @@ public class AnagramListTest
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
                 .asReversed()
                 .collect(iterable -> iterable.size() + ": " + iterable)
-                .forEach(Procedures.cast(e -> {e.length();}));
+                .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
     @Test
@@ -110,7 +111,7 @@ public class AnagramListTest
                 .filter(list -> list.size() >= SIZE_THRESHOLD)
                 .sorted(Comparator.<List<String>>comparingInt(List::size).reversed())
                 .map(list -> list.size() + ": " + list)
-                .forEach(e -> {e.length();});
+                .forEach(e -> Assert.assertFalse(e.isEmpty()));
     }
 
     @Test
@@ -124,7 +125,7 @@ public class AnagramListTest
                 .filter(list -> list.size() >= SIZE_THRESHOLD)
                 .sorted(Comparator.<List<String>>comparingInt(List::size).reversed())
                 .map(list -> list.size() + ": " + list)
-                .forEach(e -> {e.length();});
+                .forEach(e -> Assert.assertFalse(e.isEmpty()));
     }
 
     private static final class Alphagram

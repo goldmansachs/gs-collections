@@ -21,19 +21,23 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
-import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.multimap.set.UnsortedSetMultimap;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.forkjoin.FJIterate;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.apache.commons.lang.RandomStringUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
@@ -48,10 +52,13 @@ import org.openjdk.jmh.annotations.State;
 public class AnagramSetTest
 {
     private static final int SIZE_THRESHOLD = 10;
-    private static final MutableSet<String> GSC_WORDS = FastList.newWithNValues(1000000, () -> RandomStringUtils.randomAlphabetic(5).toUpperCase()).toSet();
+    private static final int SIZE = 1_000_000;
+    private static final int CORES = Runtime.getRuntime().availableProcessors();
+    private final ExecutorService service = ParallelIterate.newPooledExecutor(CollectTest.class.getSimpleName(), true);
+    private static final UnifiedSet<String> GSC_WORDS = UnifiedSet.newSet(FastList.newWithNValues(SIZE, () -> RandomStringUtils.randomAlphabetic(5).toUpperCase()));
     private static final Set<String> JDK_WORDS = new HashSet<>(GSC_WORDS);
 
-    private MutableSet<String> getGSCWords()
+    private UnifiedSet<String> getGSCWords()
     {
         return GSC_WORDS;
     }
@@ -71,7 +78,7 @@ public class AnagramSetTest
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
                 .asReversed()
                 .collect(iterable -> iterable.size() + ": " + iterable)
-                .forEach(Procedures.cast(e -> {e.length();}));
+                .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
     @Test
@@ -84,7 +91,21 @@ public class AnagramSetTest
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
                 .asReversed()
                 .collect(iterable -> iterable.size() + ": " + iterable)
-                .forEach(Procedures.cast(e -> {e.length();}));
+                .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
+    }
+
+    @Test
+    @GenerateMicroBenchmark
+    public void gscParallelLazyAnagrams()
+    {
+        ParallelUnsortedSetIterable<String> parallelUnsortedSetIterable = this.getGSCWords().asParallel(this.service, SIZE / CORES);
+        UnsortedSetMultimap<Alphagram, String> groupBy = parallelUnsortedSetIterable.groupBy(Alphagram::new);
+        groupBy.multiValuesView()
+                .select(iterable -> iterable.size() >= SIZE_THRESHOLD)
+                .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
+                .asReversed()
+                .collect(iterable -> iterable.size() + ": " + iterable)
+                .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
     @Test
@@ -97,7 +118,7 @@ public class AnagramSetTest
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
                 .asReversed()
                 .collect(iterable -> iterable.size() + ": " + iterable)
-                .forEach(Procedures.cast(e -> {e.length();}));
+                .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
     @Test
@@ -111,7 +132,7 @@ public class AnagramSetTest
                 .filter(list -> list.size() >= SIZE_THRESHOLD)
                 .sorted(Comparator.<Set<String>>comparingInt(Set::size).reversed())
                 .map(list -> list.size() + ": " + list)
-                .forEach(e -> {e.length();});
+                .forEach(e -> Assert.assertFalse(e.isEmpty()));
     }
 
     @Test
@@ -125,7 +146,7 @@ public class AnagramSetTest
                 .filter(list -> list.size() >= SIZE_THRESHOLD)
                 .sorted(Comparator.<Set<String>>comparingInt(Set::size).reversed())
                 .map(list -> list.size() + ": " + list)
-                .forEach(e -> {e.length();});
+                .forEach(e -> Assert.assertFalse(e.isEmpty()));
     }
 
     private static final class Alphagram

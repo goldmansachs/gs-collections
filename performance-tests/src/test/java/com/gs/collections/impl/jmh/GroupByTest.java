@@ -32,18 +32,13 @@ import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
-import org.openjdk.jmh.runner.options.VerboseMode;
-import org.openjdk.jmh.runner.parameters.TimeValue;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 public class GroupByTest
 {
-    private static final int SIZE = 1000000;
+    private static final int SIZE = 1_000_000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
@@ -77,21 +72,5 @@ public class GroupByTest
         Multimap<Boolean, Integer> groupBy1 = this.integersGSC.groupBy(each -> each % 2 == 0);
         Multimap<Integer, Integer> groupBy2 = this.integersGSC.groupBy(each -> each % 100);
         Multimap<Integer, Integer> groupBy3 = this.integersGSC.groupBy(each -> each % 10000);
-    }
-
-    public static void main(String[] args) throws Exception
-    {
-        int runCount = 25;
-        Options opts = new OptionsBuilder()
-                .include(".*com.gs.collections.impl.jmh.GroupByTest.*")
-                .warmupTime(TimeValue.seconds(2))
-                .warmupIterations(runCount)
-                .measurementTime(TimeValue.seconds(2))
-                .measurementIterations(runCount)
-                .verbosity(VerboseMode.NORMAL)
-                .forks(1)
-                .build();
-
-        new Runner(opts).run();
     }
 }

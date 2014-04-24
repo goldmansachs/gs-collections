@@ -31,11 +31,12 @@ public class JMHTestRunner
     @Category(JMHTests.class)
     public void runTests() throws Exception
     {
+        int warmupCount = 50;
         int runCount = 25;
         Options opts = new OptionsBuilder()
-                .include(".*com.gs.collections.impl.jmh.")
+                .include(".*com.gs.collections.impl.jmh.*")
                 .warmupTime(TimeValue.seconds(2))
-                .warmupIterations(runCount)
+                .warmupIterations(warmupCount)
                 .measurementTime(TimeValue.seconds(2))
                 .measurementIterations(runCount)
                 .verbosity(VerboseMode.NORMAL)

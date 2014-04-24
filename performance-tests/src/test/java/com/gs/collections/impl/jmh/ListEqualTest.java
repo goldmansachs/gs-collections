@@ -34,7 +34,7 @@ import org.openjdk.jmh.annotations.State;
 @OutputTimeUnit(TimeUnit.SECONDS)
 public class ListEqualTest
 {
-    private static final int SIZE = 1000000;
+    private static final int SIZE = 1_000_000;
     private final List<Integer> integersJDK1 = new ArrayList<>(Interval.oneTo(SIZE));
     private final List<Integer> integersJDK2 = new ArrayList<>(Interval.oneTo(SIZE));
     private final List<Integer> integersJDK3 = new ArrayList<>(Interval.oneTo(SIZE / 2));

@@ -40,9 +40,9 @@ import org.openjdk.jmh.annotations.State;
 @OutputTimeUnit(TimeUnit.SECONDS)
 public class SelectTest
 {
-    private static final int SIZE = 1000000;
+    private static final int SIZE = 1_000_000;
     private static final int CORES = Runtime.getRuntime().availableProcessors();
-    private static final ExecutorService SERVICE = ParallelIterate.newPooledExecutor(SelectTest.class.getSimpleName(), true);
+    private final ExecutorService service = ParallelIterate.newPooledExecutor(SelectTest.class.getSimpleName(), true);
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final FastList<Integer> integersGSC = FastList.newList(Interval.oneTo(SIZE));
 
@@ -84,7 +84,7 @@ public class SelectTest
     @GenerateMicroBenchmark
     public void gscLazyParallelSelect()
     {
-        ParallelListIterable<Integer> parallelListIterable = this.integersGSC.asParallel(SERVICE, SIZE / CORES);
+        ParallelListIterable<Integer> parallelListIterable = this.integersGSC.asParallel(this.service, SIZE / CORES);
         MutableList<Integer> odds = parallelListIterable.select(each -> each % 2 == 1).toList();
         MutableList<Integer> evens = parallelListIterable.select(each -> each % 2 == 0).toList();
     }

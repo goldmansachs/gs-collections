@@ -35,7 +35,7 @@ import org.openjdk.jmh.annotations.State;
 @OutputTimeUnit(TimeUnit.SECONDS)
 public class MaxTest
 {
-    private static final int SIZE = 1000000;
+    private static final int SIZE = 1_000_000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 

@@ -20,15 +20,18 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.ParallelUnsortedBag;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.bag.UnsortedBagMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.forkjoin.FJIterate;
@@ -36,6 +39,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import org.apache.commons.lang.RandomStringUtils;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
@@ -50,10 +54,13 @@ import org.openjdk.jmh.annotations.State;
 public class AnagramBagTest
 {
     private static final int SIZE_THRESHOLD = 10;
-    private static final MutableBag<String> GSC_WORDS = FastList.newWithNValues(1000000, () -> RandomStringUtils.randomAlphabetic(5).toUpperCase()).toBag();
+    private static final int CORES = Runtime.getRuntime().availableProcessors();
+    private final ExecutorService service = ParallelIterate.newPooledExecutor(CollectTest.class.getSimpleName(), true);
+    public static final int SIZE = 1_000_000;
+    private static final HashBag<String> GSC_WORDS = HashBag.newBag(FastList.newWithNValues(SIZE, () -> RandomStringUtils.randomAlphabetic(5).toUpperCase()));
     private static final Multiset<String> GUAVA_WORDS = HashMultiset.create(GSC_WORDS);
 
-    private MutableBag<String> getGSCWords()
+    private HashBag<String> getGSCWords()
     {
         return GSC_WORDS;
     }
@@ -73,7 +80,7 @@ public class AnagramBagTest
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
                 .asReversed()
                 .collect(iterable -> iterable.size() + ": " + iterable)
-                .forEach(Procedures.cast(e -> {e.length();}));
+                .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
     @Test
@@ -86,7 +93,21 @@ public class AnagramBagTest
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
                 .asReversed()
                 .collect(iterable -> iterable.size() + ": " + iterable)
-                .forEach(Procedures.cast(e -> {e.length();}));
+                .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
+    }
+
+    @Test
+    @GenerateMicroBenchmark
+    public void gscParallelLazyAnagrams()
+    {
+        ParallelUnsortedBag<String> parallelUnsortedBag = this.getGSCWords().asParallel(this.service, SIZE / CORES);
+        UnsortedBagMultimap<Alphagram, String> groupBy = parallelUnsortedBag.groupBy(Alphagram::new);
+        groupBy.multiValuesView()
+                .select(iterable -> iterable.size() >= SIZE_THRESHOLD)
+                .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
+                .asReversed()
+                .collect(iterable -> iterable.size() + ": " + iterable)
+                .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
     @Test
@@ -99,7 +120,7 @@ public class AnagramBagTest
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
                 .asReversed()
                 .collect(iterable -> iterable.size() + ": " + iterable)
-                .forEach(Procedures.cast(e -> {e.length();}));
+                .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
     @Test
@@ -113,7 +134,7 @@ public class AnagramBagTest
                 .filter(list -> list.size() >= SIZE_THRESHOLD)
                 .sorted(Comparator.<List<String>>comparingInt(List::size).reversed())
                 .map(list -> list.size() + ": " + list)
-                .forEach(e -> {e.length();});
+                .forEach(e -> Assert.assertFalse(e.isEmpty()));
     }
 
     @Test
@@ -127,7 +148,7 @@ public class AnagramBagTest
                 .filter(list -> list.size() >= SIZE_THRESHOLD)
                 .sorted(Comparator.<List<String>>comparingInt(List::size).reversed())
                 .map(list -> list.size() + ": " + list)
-                .forEach(e -> {e.length();});
+                .forEach(e -> Assert.assertFalse(e.isEmpty()));
     }
 
     private static final class Alphagram
