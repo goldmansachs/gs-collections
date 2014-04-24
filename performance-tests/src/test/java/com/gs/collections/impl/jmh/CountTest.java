@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
-import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.list.Interval;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
@@ -31,31 +30,32 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class BagAddAllTest
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+public class CountTest
 {
-    private static final int SIZE = 1000;
-    private final Multiset<Integer> integersGuava = HashMultiset.create(Interval.oneTo(SIZE));
-    private final MutableBag<Integer> integersGSC = Interval.oneTo(SIZE).toBag();
+    private static final int SIZE = 1000000;
+    private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
+    private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
     @GenerateMicroBenchmark
-    public void guavaAddAll()
+    public void jdk8SerialCount()
     {
-        Multiset<Integer> result = HashMultiset.create();
-        for (int i = 0; i < 1000; i++)
-        {
-            result.addAll(this.integersGuava);
-        }
+        long odds = this.integersJDK.stream().filter(each -> each % 2 == 1).count();
+        long evens = this.integersJDK.stream().filter(each -> each % 2 == 0).count();
     }
 
     @GenerateMicroBenchmark
-    public void gscAddAll()
+    public void gscEagerSerialCount()
     {
-        MutableBag<Integer> result = HashBag.newBag();
-        for (int i = 0; i < 1000; i++)
-        {
-            result.addAll(this.integersGSC);
-        }
+        int odds = this.integersGSC.count(each -> each % 2 == 1);
+        int evens = this.integersGSC.count(each -> each % 2 == 0);
+    }
+
+    @GenerateMicroBenchmark
+    public void gscLazySerialCount()
+    {
+        int odds = this.integersGSC.asLazy().count(each -> each % 2 == 1);
+        int evens = this.integersGSC.asLazy().count(each -> each % 2 == 0);
     }
 }

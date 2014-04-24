@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.FastList;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Mode;
@@ -30,41 +31,31 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class SumOfIntTest
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+public class ListAddAllTest
 {
-    private static final int SIZE = 1000000;
+    private static final int SIZE = 1000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
     @GenerateMicroBenchmark
-    public void jdk8SerialMapToIntSum()
+    public void jdk8AddAll()
     {
-        int result = this.integersJDK.stream().mapToInt(each -> each).sum();
+        List<Integer> result = new ArrayList<>();
+        for (int i = 0; i < 1000; i++)
+        {
+            result.addAll(this.integersJDK);
+        }
     }
 
     @GenerateMicroBenchmark
-    public void jdk8SerialMapToLongSum()
+    public void gscAddAll()
     {
-        long result = this.integersJDK.stream().mapToLong(each -> each).sum();
-    }
-
-    @GenerateMicroBenchmark
-    public void gscSerialDirectSumOfInt()
-    {
-        long result = this.integersGSC.sumOfInt(each -> each);
-    }
-
-    @GenerateMicroBenchmark
-    public void gscEagerSerialCollectIntSum()
-    {
-        long result = this.integersGSC.collectInt(each -> each).sum();
-    }
-
-    @GenerateMicroBenchmark
-    public void gscLazySerialCollectIntSum()
-    {
-        long result = this.integersGSC.asLazy().collectInt(each -> each).sum();
+        MutableList<Integer> result = FastList.newList();
+        for (int i = 0; i < 1000; i++)
+        {
+            result.addAll(this.integersGSC);
+        }
     }
 }

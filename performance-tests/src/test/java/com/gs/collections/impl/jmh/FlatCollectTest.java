@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.FastList;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Mode;
@@ -31,29 +32,30 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class CollectTest
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+public class FlatCollectTest
 {
-    private static final int SIZE = 1000000;
-    private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
-    private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
+    private static final int COUNT = 10000;
+    private static final int LIST_SIZE = 100;
+    private final List<List<Integer>> integersJDK = new ArrayList<>(FastList.<List<Integer>>newWithNValues(COUNT, () -> new ArrayList<Integer>(Interval.oneTo(LIST_SIZE))));
+    private final MutableList<MutableList<Integer>> integersGSC = FastList.newWithNValues(COUNT, () -> Interval.oneTo(LIST_SIZE).toList());
 
     @GenerateMicroBenchmark
-    public void jdk8SerialMap()
+    public void jdk8SerialFlatMap()
     {
-        List<String> strings = this.integersJDK.stream().map(Object::toString).collect(Collectors.toList());
+        List<Integer> flatMap = this.integersJDK.stream().flatMap(e -> e.stream()).collect(Collectors.toList());
     }
 
     @GenerateMicroBenchmark
-    public void gscEagerSerialCollect()
+    public void gscEagerSerialFlatCollect()
     {
-        MutableList<String> string = this.integersGSC.collect(Object::toString);
+        MutableList<Integer> flatCollect = this.integersGSC.flatCollect(e -> e);
     }
 
     @GenerateMicroBenchmark
-    public void gscLazySerialCollect()
+    public void gscLazySerialFlatCollect()
     {
-        MutableList<String> string = this.integersGSC.asLazy().collect(Object::toString).toList();
+        MutableList<Integer> flatCollect = this.integersGSC.asLazy().flatCollect(e -> e).toList();
     }
 }

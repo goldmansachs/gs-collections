@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,32 +30,41 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class CountTest
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+public class SumOfIntTest
 {
     private static final int SIZE = 1000000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
     @GenerateMicroBenchmark
-    public void jdk8SerialCount()
+    public void jdk8SerialMapToIntSum()
     {
-        long odds = this.integersJDK.stream().filter(each -> each % 2 == 1).count();
-        long evens = this.integersJDK.stream().filter(each -> each % 2 == 0).count();
+        int result = this.integersJDK.stream().mapToInt(each -> each).sum();
     }
 
     @GenerateMicroBenchmark
-    public void gscEagerSerialCount()
+    public void jdk8SerialMapToLongSum()
     {
-        int odds = this.integersGSC.count(each -> each % 2 == 1);
-        int evens = this.integersGSC.count(each -> each % 2 == 0);
+        long result = this.integersJDK.stream().mapToLong(each -> each).sum();
     }
 
     @GenerateMicroBenchmark
-    public void gscLazySerialCount()
+    public void gscSerialDirectSumOfInt()
     {
-        int odds = this.integersGSC.asLazy().count(each -> each % 2 == 1);
-        int evens = this.integersGSC.asLazy().count(each -> each % 2 == 0);
+        long result = this.integersGSC.sumOfInt(each -> each);
+    }
+
+    @GenerateMicroBenchmark
+    public void gscEagerSerialCollectIntSum()
+    {
+        long result = this.integersGSC.collectInt(each -> each).sum();
+    }
+
+    @GenerateMicroBenchmark
+    public void gscLazySerialCollectIntSum()
+    {
+        long result = this.integersGSC.asLazy().collectInt(each -> each).sum();
     }
 }

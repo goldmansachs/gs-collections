@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import com.gs.collections.api.set.MutableSet;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
+import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.Interval;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Mode;
@@ -31,28 +31,28 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class SetAddAllTest
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+public class BagAddAllTest
 {
     private static final int SIZE = 1000;
-    private final Set<Integer> integersJDK = new HashSet<>(Interval.oneTo(SIZE));
-    private final MutableSet<Integer> integersGSC = Interval.oneTo(SIZE).toSet();
+    private final Multiset<Integer> integersGuava = HashMultiset.create(Interval.oneTo(SIZE));
+    private final MutableBag<Integer> integersGSC = Interval.oneTo(SIZE).toBag();
 
     @GenerateMicroBenchmark
-    public void jdk8AddAll()
+    public void guavaAddAll()
     {
-        Set<Integer> result = new HashSet<>();
+        Multiset<Integer> result = HashMultiset.create();
         for (int i = 0; i < 1000; i++)
         {
-            result.addAll(this.integersJDK);
+            result.addAll(this.integersGuava);
         }
     }
 
     @GenerateMicroBenchmark
     public void gscAddAll()
     {
-        MutableSet<Integer> result = UnifiedSet.newSet();
+        MutableBag<Integer> result = HashBag.newBag();
         for (int i = 0; i < 1000; i++)
         {
             result.addAll(this.integersGSC);

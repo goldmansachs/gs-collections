@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.multimap.MutableMultimap;
-import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.forkjoin.FJIterate;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
@@ -45,29 +43,29 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class AnagramBagTest
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+public class AnagramSetTest
 {
     private static final int SIZE_THRESHOLD = 10;
-    private static final MutableBag<String> GSC_WORDS = FastList.newWithNValues(1000000, () -> RandomStringUtils.randomAlphabetic(5).toUpperCase()).toBag();
-    private static final Multiset<String> GUAVA_WORDS = HashMultiset.create(GSC_WORDS);
+    private static final MutableSet<String> GSC_WORDS = FastList.newWithNValues(1000000, () -> RandomStringUtils.randomAlphabetic(5).toUpperCase()).toSet();
+    private static final Set<String> JDK_WORDS = new HashSet<>(GSC_WORDS);
 
-    private MutableBag<String> getGSCWords()
+    private MutableSet<String> getGSCWords()
     {
         return GSC_WORDS;
     }
 
-    private Multiset<String> getGuavaWords()
+    private Set<String> getJdk8Words()
     {
-        return GUAVA_WORDS;
+        return JDK_WORDS;
     }
 
     @Test
     @GenerateMicroBenchmark
     public void gscSerialAnagrams()
     {
-        MutableListMultimap<Alphagram, String> groupBy = this.getGSCWords().groupBy(Alphagram::new, FastListMultimap.newMultimap());
+        MutableSetMultimap<Alphagram, String> groupBy = this.getGSCWords().groupBy(Alphagram::new);
         groupBy.multiValuesView()
                 .select(iterable -> iterable.size() >= SIZE_THRESHOLD)
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
@@ -106,12 +104,12 @@ public class AnagramBagTest
     @GenerateMicroBenchmark
     public void jdk8SerialLazyAnagrams()
     {
-        Map<Alphagram, List<String>> groupBy = this.getGuavaWords().stream().collect(Collectors.groupingBy(Alphagram::new));
+        Map<Alphagram, Set<String>> groupBy = this.getJdk8Words().stream().collect(Collectors.groupingBy(Alphagram::new, Collectors.<String>toSet()));
         groupBy.entrySet()
                 .stream()
                 .map(entry -> entry.getValue())
                 .filter(list -> list.size() >= SIZE_THRESHOLD)
-                .sorted(Comparator.<List<String>>comparingInt(List::size).reversed())
+                .sorted(Comparator.<Set<String>>comparingInt(Set::size).reversed())
                 .map(list -> list.size() + ": " + list)
                 .forEach(e -> {e.length();});
     }
@@ -120,12 +118,12 @@ public class AnagramBagTest
     @GenerateMicroBenchmark
     public void jdk8ParallelLazyAnagrams()
     {
-        Map<Alphagram, List<String>> groupBy = this.getGuavaWords().parallelStream().collect(Collectors.groupingBy(Alphagram::new));
+        Map<Alphagram, Set<String>> groupBy = this.getJdk8Words().parallelStream().collect(Collectors.groupingBy(Alphagram::new, Collectors.<String>toSet()));
         groupBy.entrySet()
                 .parallelStream()
                 .map(entry -> entry.getValue())
                 .filter(list -> list.size() >= SIZE_THRESHOLD)
-                .sorted(Comparator.<List<String>>comparingInt(List::size).reversed())
+                .sorted(Comparator.<Set<String>>comparingInt(Set::size).reversed())
                 .map(list -> list.size() + ": " + list)
                 .forEach(e -> {e.length();});
     }

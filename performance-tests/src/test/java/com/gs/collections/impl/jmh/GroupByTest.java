@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +39,8 @@ import org.openjdk.jmh.runner.options.VerboseMode;
 import org.openjdk.jmh.runner.parameters.TimeValue;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
 public class GroupByTest
 {
     private static final int SIZE = 1000000;
@@ -83,7 +83,7 @@ public class GroupByTest
     {
         int runCount = 25;
         Options opts = new OptionsBuilder()
-                .include(".*com.gs.collections.impl.serial.GroupByTest.*")
+                .include(".*com.gs.collections.impl.jmh.GroupByTest.*")
                 .warmupTime(TimeValue.seconds(2))
                 .warmupIterations(runCount)
                 .measurementTime(TimeValue.seconds(2))

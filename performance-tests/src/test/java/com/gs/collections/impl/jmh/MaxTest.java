@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.list.Interval;
-import com.gs.collections.impl.list.mutable.FastList;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Mode;
@@ -31,31 +31,32 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class ListAddAllTest
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+public class MaxTest
 {
-    private static final int SIZE = 1000;
+    private static final int SIZE = 1000000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
     @GenerateMicroBenchmark
-    public void jdk8AddAll()
+    public void jdk8SerialMax()
     {
-        List<Integer> result = new ArrayList<>();
-        for (int i = 0; i < 1000; i++)
-        {
-            result.addAll(this.integersJDK);
-        }
+        int max = this.integersJDK.stream().max(Comparator.<Integer>naturalOrder()).get();
+        int maxReverse = this.integersJDK.stream().max(Comparator.<Integer>reverseOrder()).get();
     }
 
     @GenerateMicroBenchmark
-    public void gscAddAll()
+    public void gscEagerSerialMax()
     {
-        MutableList<Integer> result = FastList.newList();
-        for (int i = 0; i < 1000; i++)
-        {
-            result.addAll(this.integersGSC);
-        }
+        int max = this.integersGSC.max(Comparator.<Integer>naturalOrder());
+        int maxReverse = this.integersGSC.max(Comparator.<Integer>reverseOrder());
+    }
+
+    @GenerateMicroBenchmark
+    public void gscLazySerialMax()
+    {
+        int max = this.integersGSC.asLazy().max(Comparator.<Integer>naturalOrder());
+        int maxReverse = this.integersGSC.asLazy().max(Comparator.<Integer>reverseOrder());
     }
 }

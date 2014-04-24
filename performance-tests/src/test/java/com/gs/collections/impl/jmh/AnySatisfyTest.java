@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -31,32 +30,38 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class MinTest
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+public class AnySatisfyTest
 {
     private static final int SIZE = 1000000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
     @GenerateMicroBenchmark
-    public void jdk8SerialMin()
+    public void jdk8SerialAnyMatch()
     {
-        int max = this.integersJDK.stream().min(Comparator.<Integer>naturalOrder()).get();
-        int maxReverse = this.integersJDK.stream().min(Comparator.<Integer>reverseOrder()).get();
+        boolean result1 = this.integersJDK.stream().anyMatch(each -> each % 2 == 1);
+        boolean result2 = this.integersJDK.stream().anyMatch(each -> each % 2 == 0);
+        boolean result3 = this.integersJDK.stream().anyMatch(each -> each > SIZE - 1);
+        boolean result4 = this.integersJDK.stream().anyMatch(each -> each > SIZE / 2);
     }
 
     @GenerateMicroBenchmark
-    public void gscEagerSerialMin()
+    public void gscEagerSerialAnySatisfy()
     {
-        int max = this.integersGSC.min(Comparator.<Integer>naturalOrder());
-        int maxReverse = this.integersGSC.min(Comparator.<Integer>reverseOrder());
+        boolean result1 = this.integersGSC.anySatisfy(each -> each % 2 == 1);
+        boolean result2 = this.integersGSC.anySatisfy(each -> each % 2 == 0);
+        boolean result3 = this.integersGSC.anySatisfy(each -> each > SIZE - 1);
+        boolean result4 = this.integersGSC.anySatisfy(each -> each > SIZE / 2);
     }
 
     @GenerateMicroBenchmark
-    public void gscLazySerialMin()
+    public void gscLazySerialAnySatisfy()
     {
-        int max = this.integersGSC.asLazy().min(Comparator.<Integer>naturalOrder());
-        int maxReverse = this.integersGSC.asLazy().min(Comparator.<Integer>reverseOrder());
+        boolean result1 = this.integersGSC.asLazy().anySatisfy(each -> each % 2 == 1);
+        boolean result2 = this.integersGSC.asLazy().anySatisfy(each -> each % 2 == 0);
+        boolean result3 = this.integersGSC.asLazy().anySatisfy(each -> each > SIZE - 1);
+        boolean result4 = this.integersGSC.asLazy().anySatisfy(each -> each > SIZE / 2);
     }
 }

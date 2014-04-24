@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.partition.PartitionIterable;
+import com.gs.collections.api.partition.list.PartitionList;
 import com.gs.collections.impl.list.Interval;
-import com.gs.collections.impl.list.mutable.FastList;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Mode;
@@ -32,30 +34,29 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
-public class FlatCollectTest
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+public class PartitionTest
 {
-    private static final int COUNT = 10000;
-    private static final int LIST_SIZE = 100;
-    private final List<List<Integer>> integersJDK = new ArrayList<>(FastList.<List<Integer>>newWithNValues(COUNT, () -> new ArrayList<Integer>(Interval.oneTo(LIST_SIZE))));
-    private final MutableList<MutableList<Integer>> integersGSC = FastList.newWithNValues(COUNT, () -> Interval.oneTo(LIST_SIZE).toList());
+    private static final int SIZE = 1000000;
+    private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
+    private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
     @GenerateMicroBenchmark
-    public void jdk8SerialFlatMap()
+    public void jdk8SerialPartition()
     {
-        List<Integer> flatMap = this.integersJDK.stream().flatMap(e -> e.stream()).collect(Collectors.toList());
+        Map<Boolean, List<Integer>> evensAndOdds = this.integersJDK.stream().collect(Collectors.partitioningBy(each -> each % 2 == 0));
     }
 
     @GenerateMicroBenchmark
-    public void gscEagerSerialFlatCollect()
+    public void gscEagerSerialPartition()
     {
-        MutableList<Integer> flatCollect = this.integersGSC.flatCollect(e -> e);
+        PartitionList<Integer> evensAndOdds = this.integersGSC.partition(each -> each % 2 == 0);
     }
 
     @GenerateMicroBenchmark
-    public void gscLazySerialFlatCollect()
+    public void gscLazySerialPartition()
     {
-        MutableList<Integer> flatCollect = this.integersGSC.asLazy().flatCollect(e -> e).toList();
+        PartitionIterable<Integer> evensAndOdds = this.integersGSC.asLazy().partition(each -> each % 2 == 0);
     }
 }

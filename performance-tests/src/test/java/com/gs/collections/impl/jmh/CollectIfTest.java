@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.parallel.ParallelIterate;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Mode;
@@ -31,19 +36,28 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
 public class CollectIfTest
 {
     private static final int SIZE = 1000000;
+    private static final int CORES = Runtime.getRuntime().availableProcessors();
+    private static final ExecutorService SERVICE = ParallelIterate.newPooledExecutor(CollectTest.class.getSimpleName(), true);
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
-    private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
+    private final FastList<Integer> integersGSC = FastList.newList(Interval.oneTo(SIZE));
 
     @GenerateMicroBenchmark
     public void jdk8SerialFilterMap()
     {
         List<String> evenStrings = this.integersJDK.stream().filter(e -> e % 2 == 0).map(Object::toString).collect(Collectors.toList());
         List<String> oddStrings = this.integersJDK.stream().filter(e -> e % 2 == 1).map(Object::toString).collect(Collectors.toList());
+    }
+
+    @GenerateMicroBenchmark
+    public void jdk8ParallelFilterMap()
+    {
+        List<String> evenStrings = this.integersJDK.parallelStream().filter(e -> e % 2 == 0).map(Object::toString).collect(Collectors.toList());
+        List<String> oddStrings = this.integersJDK.parallelStream().filter(e -> e % 2 == 1).map(Object::toString).collect(Collectors.toList());
     }
 
     @GenerateMicroBenchmark
@@ -54,10 +68,10 @@ public class CollectIfTest
     }
 
     @GenerateMicroBenchmark
-    public void gscLazySerialCollectIf()
+    public void gscEagerParallelCollectIf()
     {
-        MutableList<String> evenStrings = this.integersGSC.asLazy().collectIf(e -> e % 2 == 0, Object::toString).toList();
-        MutableList<String> oddStrings = this.integersGSC.asLazy().collectIf(e -> e % 2 == 1, Object::toString).toList();
+        Collection<String> evenStrings = ParallelIterate.collectIf(this.integersGSC, e -> e % 2 == 0, Object::toString);
+        Collection<String> oddStrings = ParallelIterate.collectIf(this.integersGSC, e -> e % 2 == 1, Object::toString);
     }
 
     @GenerateMicroBenchmark
@@ -65,5 +79,13 @@ public class CollectIfTest
     {
         MutableList<String> evenStrings = this.integersGSC.asLazy().select(e -> e % 2 == 0).collect(Object::toString).toList();
         MutableList<String> oddStrings = this.integersGSC.asLazy().select(e -> e % 2 == 1).collect(Object::toString).toList();
+    }
+
+    @GenerateMicroBenchmark
+    public void gscLazyParallelSelectCollect()
+    {
+        ParallelListIterable<Integer> parallelListIterable = this.integersGSC.asParallel(SERVICE, SIZE / CORES);
+        MutableList<String> evenStrings = parallelListIterable.select(e -> e % 2 == 0).collect(Object::toString).toList();
+        MutableList<String> oddStrings = parallelListIterable.select(e -> e % 2 == 1).collect(Object::toString).toList();
     }
 }

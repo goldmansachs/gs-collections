@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.serial;
+package com.gs.collections.impl.jmh;
 
 import com.gs.collections.impl.JMHTests;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.VerboseMode;
 import org.openjdk.jmh.runner.parameters.TimeValue;
 
-public class JMHSerialBenchmarkTest
+public class JMHTestRunner
 {
     @Test
     @Category(JMHTests.class)
@@ -33,12 +33,12 @@ public class JMHSerialBenchmarkTest
     {
         int runCount = 25;
         Options opts = new OptionsBuilder()
-                .include(".*com.gs.collections.impl.serial.*")
+                .include(".*com.gs.collections.impl.jmh.")
                 .warmupTime(TimeValue.seconds(2))
                 .warmupIterations(runCount)
                 .measurementTime(TimeValue.seconds(2))
                 .measurementIterations(runCount)
-                .verbosity(VerboseMode.EXTRA)
+                .verbosity(VerboseMode.NORMAL)
                 .forks(1)
                 .build();
 
