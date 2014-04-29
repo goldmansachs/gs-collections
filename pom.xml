@@ -81,6 +81,8 @@
         <module>unit-tests</module>
         <module>scala-unit-tests</module>
         <module>serialization-tests</module>
+        <module>jmh-scala-tests</module>
+        <module>jmh-tests</module>
     </modules>
 
     <properties>
@@ -89,6 +91,7 @@
         <slf4j.version>1.7.6</slf4j.version>
         <clover.version>3.2.2</clover.version>
         <checkstyle.version>2.10</checkstyle.version>
+        <scala.version>2.11.0</scala.version>
         <!--Sonar settings-->
         <sonar.language>java</sonar.language>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -126,6 +129,12 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-nop</artifactId>
                 <version>${slf4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.scala-lang</groupId>
+                <artifactId>scala-library</artifactId>
+                <version>${scala.version}</version>
             </dependency>
 
             <dependency>
@@ -205,7 +214,16 @@
                 <plugin>
                     <artifactId>maven-source-plugin</artifactId>
                     <version>2.2.1</version>
+                    <executions>
+                        <execution>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
+
 
                 <plugin>
                     <artifactId>maven-enforcer-plugin</artifactId>
@@ -239,6 +257,14 @@
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.16</version>
+                    <configuration>
+                        <includes>
+                            <include>**/*Test.java</include>
+                        </includes>
+                        <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
+                        <runOrder>random</runOrder>
+                        <forkMode>never</forkMode>
+                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -250,6 +276,35 @@
                     <groupId>com.fortify.ps.maven.plugin</groupId>
                     <artifactId>maven-sca-plugin</artifactId>
                     <version>2.6</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${checkstyle.version}</version>
+                    <configuration>
+                        <configLocation>checkstyle-configuration.xml</configLocation>
+                        <logViolationsToConsole>true</logViolationsToConsole>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>2.5.3</version>
+                    <configuration>
+                        <effort>Max</effort>
+                        <threshold>Default</threshold>
+                        <xmlOutput>true</xmlOutput>
+                        <findbugsXmlOutput>true</findbugsXmlOutput>
+                        <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
+                    </configuration>
                 </plugin>
 
             </plugins>
@@ -441,6 +496,8 @@
                 <module>serialization-tests</module>
                 <module>acceptance-tests</module>
                 <module>performance-tests</module>
+                <module>jmh-scala-tests</module>
+                <module>jmh-tests</module>
             </modules>
         </profile>
 

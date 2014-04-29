@@ -489,12 +489,12 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
 
     public MutableList<T> toSortedList()
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toSortedList() not implemented yet");
+        return this.toList().toSortedList();
     }
 
     public MutableList<T> toSortedList(Comparator<? super T> comparator)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toSortedList() not implemented yet");
+        return this.toList().toSortedList(comparator);
     }
 
     public <V extends Comparable<? super V>> MutableList<T> toSortedListBy(Function<? super T, ? extends V> function)

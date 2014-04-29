@@ -468,7 +468,7 @@ public abstract class AbstractParallelIterableTestCase
         }
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void toSortedList()
     {
         Assert.assertEquals(
@@ -476,7 +476,7 @@ public abstract class AbstractParallelIterableTestCase
                 this.classUnderTest().toSortedList());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void toSortedList_comparator()
     {
         Assert.assertEquals(
@@ -484,7 +484,7 @@ public abstract class AbstractParallelIterableTestCase
                 this.classUnderTest().toSortedList(Comparators.reverseNaturalOrder()));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void toSortedListBy()
     {
         Assert.assertEquals(

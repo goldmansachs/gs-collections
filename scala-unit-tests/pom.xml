@@ -20,27 +20,19 @@
     xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+    <parent>
+        <artifactId>gs-collections-parent</artifactId>
+        <groupId>com.goldmansachs</groupId>
+        <version>5.1.0-SNAPSHOT</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.goldmansachs</groupId>
     <artifactId>scala-unit-tests</artifactId>
-    <version>5.1.0-SNAPSHOT</version>
 
     <name>Goldman Sachs Collections Scala Unit Test Suite</name>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <slf4j.version>1.7.6</slf4j.version>
-        <clover.version>3.2.2</clover.version>
-        <checkstyle.version>2.10</checkstyle.version>
-        <sonar.surefire.reportsPath>${project.basedir}/target/clover/surefire-reports</sonar.surefire.reportsPath>
-
-        <!-- this setting is needed for TeamCity -->
         <maven.deploy.skip>true</maven.deploy.skip>
-
-        <scala.version>2.10.2</scala.version>
     </properties>
 
     <prerequisites>
@@ -52,28 +44,27 @@
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections-api</artifactId>
-            <version>5.1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections</artifactId>
-            <version>5.1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections-testutils</artifactId>
-            <version>5.1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
             <scope>test</scope>
         </dependency>
 
@@ -87,218 +78,47 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-nop</artifactId>
-            <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>net.jcip</groupId>
             <artifactId>jcip-annotations</artifactId>
-            <version>1.0</version>
             <optional>true</optional>
         </dependency>
 
     </dependencies>
 
     <build>
-        <pluginManagement>
-            <plugins>
-
-                <plugin>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>1.7</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <version>2.4</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>2.5</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.5.1</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>2.8</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>2.8.1</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>2.5.1</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.4</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.9.1</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>2.4.2</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.6</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>3.3</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>2.2.1</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>1.3.1</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>versions-maven-plugin</artifactId>
-                    <version>2.1</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>clirr-maven-plugin</artifactId>
-                    <version>2.6.1</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <version>2.4.0</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.scala-tools</groupId>
-                    <artifactId>maven-scala-plugin</artifactId>
-                    <version>2.15.2</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.16</version>
-                </plugin>
-
-                <plugin>
-                    <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>2.7</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>com.fortify.ps.maven.plugin</groupId>
-                    <artifactId>maven-sca-plugin</artifactId>
-                    <version>2.6</version>
-                </plugin>
-
-            </plugins>
-        </pluginManagement>
 
         <plugins>
 
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
-                    <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
-                    <runOrder>random</runOrder>
-                </configuration>
             </plugin>
 
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.2</version>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>2.2</version>
             </plugin>
 
             <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${checkstyle.version}</version>
-                <configuration>
-                    <configLocation>checkstyle-configuration.xml</configLocation>
-                    <logViolationsToConsole>true</logViolationsToConsole>
-                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                </configuration>
             </plugin>
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>2.5.3</version>
-                <configuration>
-                    <effort>Max</effort>
-                    <threshold>Default</threshold>
-                    <xmlOutput>true</xmlOutput>
-                    <findbugsXmlOutput>true</findbugsXmlOutput>
-                    <excludeFilterFile>findbugs-exclude.xml</excludeFilterFile>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <doctitle>Goldman Sachs Collections - ${project.version}</doctitle>
-                    <windowtitle>Goldman Sachs Collections - ${project.version}</windowtitle>
-                    <show>public</show>
-                    <links>
-                        <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
-                    </links>
-                    <destDir>${project.version}</destDir>
-                    <additionalparam>-Xdoclint:none</additionalparam>
-                </configuration>
             </plugin>
 
             <plugin>
@@ -338,9 +158,6 @@
                 </executions>
                 <configuration>
                     <scalaVersion>${scala.version}</scalaVersion>
-                    <args>
-                        <arg>-target:jvm-1.5</arg>
-                    </args>
                 </configuration>
             </plugin>
 

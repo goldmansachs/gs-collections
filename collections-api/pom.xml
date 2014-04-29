@@ -249,6 +249,7 @@
                     </includes>
                     <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
                     <runOrder>random</runOrder>
+                    <forkMode>never</forkMode>
                 </configuration>
             </plugin>
 
@@ -386,7 +387,6 @@
                             <generateHistorical>true</generateHistorical>
                             <includesAllSourceRoots>true</includesAllSourceRoots>
                             <instrumentLambda>block</instrumentLambda>
-                            <debug>true</debug>
                             <historyDir>${user.home}/clover/${project.artifactId}</historyDir>
                         </configuration>
                         <executions>

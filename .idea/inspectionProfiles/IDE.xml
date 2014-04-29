@@ -12,6 +12,7 @@
     </inspection_tool>
     <inspection_tool class="AbstractMethodOverridesConcreteMethod" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AbstractMethodWithMissingImplementations" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AbstractValueInTrait" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AccessStaticViaInstance" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="AccessToNonThreadSafeStaticFieldFromInstance" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="nonThreadSafeClasses">
@@ -20,7 +21,6 @@
       <option name="nonThreadSafeTypes" value="java.text.DateFormat,java.util.Calendar" />
     </inspection_tool>
     <inspection_tool class="AccessToStaticFieldLockedOnInstance" enabled="true" level="INSPECTION" enabled_by_default="true" />
-    <inspection_tool class="AccessorLikeMethodIsUnit" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="Add Shebang line" enabled="false" level="INFO" enabled_by_default="false" />
     <inspection_tool class="AndroidDomInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="Annotator" enabled="false" level="INSPECTION" enabled_by_default="false" />
@@ -29,8 +29,6 @@
     <inspection_tool class="AntDuplicateTargetsInspection" enabled="false" level="INSPECTION" enabled_by_default="false" />
     <inspection_tool class="AntMissingPropertiesFileInspection" enabled="false" level="INSPECTION" enabled_by_default="false" />
     <inspection_tool class="AntResolveInspection" enabled="false" level="INSPECTION" enabled_by_default="false" />
-    <inspection_tool class="ApparentRefinementOfResultType" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="AppliedTypeLambdaCanBeSimplified" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ArchaicSystemPropertyAccess" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="ArgNamesErrorsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ArgNamesWarningsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -199,7 +197,7 @@
     <inspection_tool class="CssUnusedSymbolInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="CustomClassloader" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CustomSecurityManager" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="DangerousCatchAll" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="DeclarationHasNoExplicitType" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DeclareCollectionAsInterface" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreLocalVariables" value="false" />
       <option name="ignorePrivateMethodsAndFields" value="false" />
@@ -503,6 +501,7 @@
     <inspection_tool class="JpaQueryApiInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="KeySetIterationMayUseEntrySet" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="LabeledStatement" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="LegacyStringFormatting" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="LengthOneStringInIndexOf" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="LengthOneStringsInConcatenation" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="LimitedScopeInnerClass" enabled="true" level="INFO" enabled_by_default="true" />
@@ -514,8 +513,6 @@
     <inspection_tool class="LocalCanBeFinal" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="REPORT_VARIABLES" value="false" />
       <option name="REPORT_PARAMETERS" value="true" />
-      <option name="REPORT_CATCH_PARAMETERS" value="true" />
-      <option name="REPORT_FOREACH_PARAMETERS" value="true" />
     </inspection_tool>
     <inspection_tool class="LocalVariableHidingMemberVariable" enabled="true" level="INFO" enabled_by_default="true">
       <option name="m_ignoreInvisibleFields" value="true" />
@@ -611,6 +608,7 @@
     <inspection_tool class="NoButtonGroup" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="NoLabelFor" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="NoScrollPane" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="NoTailRecursionAnnotation" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="NonBooleanMethodNameMayNotStartWithQuestion" enabled="true" level="INFO" enabled_by_default="true">
       <option name="questionString" value="is,can,has,could,will,shall,check,contains,equals,startsWith,endsWith" />
       <option name="ignoreBooleanMethods" value="false" />
@@ -742,6 +740,7 @@
     <inspection_tool class="RedundantTypeArguments" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="ReferencesToClassesFromDefaultPackagesInJSPFile" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ReflectionForUnavailableAnnotation" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="RelativeImport" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ReplaceAllDot" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="ReplaceAssignmentWithOperatorAssignment" enabled="true" level="INSPECTION" enabled_by_default="true">
       <option name="ignoreLazyOperators" value="true" />
@@ -1397,6 +1396,7 @@
     <inspection_tool class="Suspicious Inferred Type" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="Suspicious New Line in Method Call" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="SuspiciousIndentAfterControlStatement" enabled="true" level="INSPECTION" enabled_by_default="true" />
+    <inspection_tool class="SuspiciousInferredType" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SuspiciousMethodCalls" enabled="true" level="INSPECTION" enabled_by_default="true">
       <option name="REPORT_CONVERTIBLE_METHOD_CALLS" value="false" />
     </inspection_tool>
@@ -1505,6 +1505,7 @@
     <inspection_tool class="UnaryPlus" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UnconditionalWait" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UnconstructableTestCase" enabled="true" level="INSPECTION" enabled_by_default="true" />
+    <inspection_tool class="UnitMethodDefinedLikeProcedure" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnknownGuard" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryAnnotationParentheses" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryBlockStatement" enabled="true" level="INSPECTION" enabled_by_default="true">
