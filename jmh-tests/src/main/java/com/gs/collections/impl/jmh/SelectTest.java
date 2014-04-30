@@ -30,10 +30,12 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -42,11 +44,12 @@ public class SelectTest
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;
-    private static final int CORES = Runtime.getRuntime().availableProcessors();
     private final ExecutorService service = ParallelIterate.newPooledExecutor(SelectTest.class.getSimpleName(), true);
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final FastList<Integer> integersGSC = FastList.newList(Interval.oneTo(SIZE));
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_lazy_jdk()
     {
@@ -54,6 +57,8 @@ public class SelectTest
         List<Integer> evens = this.integersJDK.stream().filter(each -> each % 2 == 0).collect(Collectors.toList());
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void parallel_lazy_jdk()
     {
@@ -61,6 +66,8 @@ public class SelectTest
         List<Integer> evens = this.integersJDK.parallelStream().filter(each -> each % 2 == 0).collect(Collectors.toList());
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_eager_gsc()
     {
@@ -68,6 +75,8 @@ public class SelectTest
         MutableList<Integer> evens = this.integersGSC.select(each -> each % 2 == 0);
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void parallel_eager_gsc()
     {
@@ -75,6 +84,8 @@ public class SelectTest
         Collection<Integer> evens = ParallelIterate.select(this.integersGSC, each -> each % 2 == 0);
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_lazy_gsc()
     {
@@ -82,6 +93,8 @@ public class SelectTest
         MutableList<Integer> evens = this.integersGSC.asLazy().select(each -> each % 2 == 0).toList();
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void parallel_lazy_gsc()
     {

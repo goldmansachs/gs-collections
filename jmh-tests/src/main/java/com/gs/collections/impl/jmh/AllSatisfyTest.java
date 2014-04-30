@@ -28,12 +28,14 @@ import org.junit.Assert;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -72,12 +74,16 @@ public class AllSatisfyTest
         Assert.assertTrue(this.integersJDK.stream().allMatch(each -> each > 0));
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void short_circuit_middle_serial_eager_gsc()
     {
         Assert.assertFalse(this.integersGSC.allSatisfy(each -> each < SIZE / 2));
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void process_all_serial_eager_gsc()
     {

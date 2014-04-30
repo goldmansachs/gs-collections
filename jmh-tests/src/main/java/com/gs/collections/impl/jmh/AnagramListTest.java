@@ -39,12 +39,14 @@ import org.junit.Assert;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -72,6 +74,8 @@ public class AnagramListTest
         this.executorService.awaitTermination(1L, TimeUnit.SECONDS);
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_eager_gsc()
     {

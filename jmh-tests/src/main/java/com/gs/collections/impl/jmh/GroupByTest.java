@@ -28,10 +28,12 @@ import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.impl.list.Interval;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -42,6 +44,8 @@ public class GroupByTest
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_lazy_jdk()
     {
@@ -50,6 +54,8 @@ public class GroupByTest
         Map<Integer, List<Integer>> groupBy3 = this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 10000));
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_eager_guava()
     {
@@ -58,6 +64,8 @@ public class GroupByTest
         com.google.common.collect.Multimap<Integer, Integer> groupBy3 = Multimaps.index(this.integersJDK, each -> each % 10000);
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_eager_gsc()
     {
@@ -66,6 +74,8 @@ public class GroupByTest
         Multimap<Integer, Integer> groupBy3 = this.integersGSC.groupBy(each -> each % 10000);
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_lazy_gsc()
     {

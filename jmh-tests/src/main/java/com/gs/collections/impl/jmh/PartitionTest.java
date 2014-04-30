@@ -28,10 +28,12 @@ import com.gs.collections.api.partition.list.PartitionList;
 import com.gs.collections.impl.list.Interval;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -42,20 +44,26 @@ public class PartitionTest
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
-    public void jdk8SerialPartition()
+    public void serial_lazy_jdk()
     {
         Map<Boolean, List<Integer>> evensAndOdds = this.integersJDK.stream().collect(Collectors.partitioningBy(each -> each % 2 == 0));
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
-    public void serial_eager_Partition_gsc()
+    public void serial_eager_gsc()
     {
         PartitionList<Integer> evensAndOdds = this.integersGSC.partition(each -> each % 2 == 0);
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
-    public void serial_lazy_Partition_gsc()
+    public void serial_lazy_gsc()
     {
         PartitionIterable<Integer> evensAndOdds = this.integersGSC.asLazy().partition(each -> each % 2 == 0);
     }
