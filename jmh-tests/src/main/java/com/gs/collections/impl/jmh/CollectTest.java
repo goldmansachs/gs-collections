@@ -83,6 +83,24 @@ public class CollectTest
         Verify.assertSize(SIZE, strings);
     }
 
+    @GenerateMicroBenchmark
+    public void serial_eager_scala()
+    {
+        CollectScalaTest.serial_eager_scala();
+    }
+
+    @GenerateMicroBenchmark
+    public void serial_lazy_scala()
+    {
+        CollectScalaTest.serial_lazy_scala();
+    }
+
+    @GenerateMicroBenchmark
+    public void parallel_lazy_scala()
+    {
+        CollectScalaTest.parallel_lazy_scala();
+    }
+
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
     @GenerateMicroBenchmark
