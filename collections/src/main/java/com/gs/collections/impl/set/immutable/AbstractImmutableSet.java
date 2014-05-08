@@ -141,10 +141,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return result.toImmutable();
     }
 
-    public abstract T getFirst();
-
-    public abstract T getLast();
-
     public ImmutableSet<T> select(Predicate<? super T> predicate)
     {
         FastList<T> intermediateResult = FastList.newList();

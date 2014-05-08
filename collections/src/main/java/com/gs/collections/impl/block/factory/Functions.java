@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -318,7 +318,7 @@ public final class Functions
     /**
      * Bind the parameter passed to a Function2 into a new Function.
      *
-     * @param function The Function2 to delegate the invocation to.
+     * @param function  The Function2 to delegate the invocation to.
      * @param parameter The parameter the use in the invocation of the delegate function.
      * @return A new Function
      */
@@ -416,7 +416,8 @@ public final class Functions
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return Functions.<T, V>caseDefault(defaultFunction).addCase(predicate, function);
+        CaseFunction<T, V> caseFunction = Functions.caseDefault(defaultFunction);
+        return caseFunction.addCase(predicate, function);
     }
 
     public static <T, V> Function<T, V> synchronizedEach(Function<T, V> function)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,12 +115,8 @@ public final class Person implements Comparable<Person>, Serializable
     @Override
     public String toString()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Person");
-        sb.append("{first='").append(this.firstName).append('\'');
-        sb.append(", last='").append(this.lastName).append('\'');
-        sb.append(", age=").append(this.age);
-        sb.append('}');
-        return sb.toString();
+        return "Person{first='" + this.firstName
+                + "', last='" + this.lastName
+                + "', age=" + this.age + '}';
     }
 }

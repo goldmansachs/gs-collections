@@ -429,7 +429,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
 
         // simple map, collection to retain contains non-entry element
         MutableMap<Integer, String> map4 = this.newMapWithKeysValues(1, "One", 2, "Two");
-        FastList<Object> toRetain = FastList.<Object>newListWith(ImmutableEntry.of(1, "One"), "explosion!", ImmutableEntry.of(2, "Two"));
+        FastList<Object> toRetain = FastList.newListWith(ImmutableEntry.of(1, "One"), "explosion!", ImmutableEntry.of(2, "Two"));
         Assert.assertFalse(map4.entrySet().retainAll(toRetain));
     }
 

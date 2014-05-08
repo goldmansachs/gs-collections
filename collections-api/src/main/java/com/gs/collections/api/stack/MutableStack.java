@@ -79,8 +79,6 @@ public interface MutableStack<T> extends StackIterable<T>
 
     MutableStack<T> asSynchronized();
 
-    ImmutableStack<T> toImmutable();
-
     MutableStack<T> select(Predicate<? super T> predicate);
 
     <P> MutableStack<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);

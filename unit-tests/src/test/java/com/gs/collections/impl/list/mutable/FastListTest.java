@@ -204,6 +204,8 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void forEachWithIndex()
     {
+        super.forEachWithIndex();
+
         MutableList<Integer> list = FastList.newList(Interval.oneTo(5));
         list.forEachWithIndex((object, index) -> Assert.assertEquals(index, object - 1));
     }
@@ -952,7 +954,7 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void toStringRecursion()
     {
-        MutableList<Object> list = FastList.<Object>newListWith(1, 2, 3);
+        MutableList<Object> list = FastList.newListWith(1, 2, 3);
         list.add(list);
         Assert.assertEquals("[1, 2, 3, (this FastList)]", list.toString());
     }
@@ -960,7 +962,7 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void makeStringRecursion()
     {
-        MutableList<Object> list = FastList.<Object>newListWith(1, 2, 3);
+        MutableList<Object> list = FastList.newListWith(1, 2, 3);
         list.add(list);
         Assert.assertEquals("1, 2, 3, (this FastList)", list.makeString());
     }

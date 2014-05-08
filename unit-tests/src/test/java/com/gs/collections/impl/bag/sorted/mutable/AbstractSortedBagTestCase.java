@@ -96,19 +96,20 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     @Test(expected = ClassCastException.class)
     public void testToString_with_collection_containing_self()
     {
-        MutableCollection<Object> collection = this.<Object>newWith(1);
+        MutableCollection<Object> collection = this.newWith(1);
         collection.add(collection);
         String simpleName = collection.getClass().getSimpleName();
         String string = collection.toString();
         Assert.assertTrue(
                 ("[1, (this " + simpleName + ")]").equals(string)
-                        || ("[(this " + simpleName + "), 1]").equals(string));
+                        || ("[(this " + simpleName + "), 1]").equals(string)
+        );
     }
 
     @Test(expected = ClassCastException.class)
     public void makeString_with_collection_containing_self()
     {
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        MutableCollection<Object> collection = this.newWith(1, 2, 3);
         collection.add(collection);
         Assert.assertEquals(collection.toString(), '[' + collection.makeString() + ']');
     }
@@ -116,7 +117,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     @Test(expected = ClassCastException.class)
     public void appendString_with_collection_containing_self()
     {
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        MutableCollection<Object> collection = this.newWith(1, 2, 3);
         collection.add(collection);
         Appendable builder = new StringBuilder();
         collection.appendString(builder);
@@ -316,7 +317,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
                         .selectWith(
                                 Predicates2.<Integer>lessThan(),
                                 4,
-                                TreeBag.newBag(Comparators.<Integer>reverseNaturalOrder())));
+                                TreeBag.newBag(Comparators.<Integer>reverseNaturalOrder()))
+        );
     }
 
     @Override
@@ -339,7 +341,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertSortedBagsEqual(
                 TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3),
                 this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3, 5, 4, 5)
-                        .rejectWith(Predicates2.<Integer>greaterThan(), 3));
+                        .rejectWith(Predicates2.<Integer>greaterThan(), 3)
+        );
     }
 
     @Override
@@ -350,7 +353,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertSortedBagsEqual(
                 TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3),
                 this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3, 5, 4, 5)
-                        .rejectWith(Predicates2.<Integer>greaterThan(), 3, TreeBag.newBag(Comparators.<Integer>reverseNaturalOrder())));
+                        .rejectWith(Predicates2.<Integer>greaterThan(), 3, TreeBag.newBag(Comparators.<Integer>reverseNaturalOrder()))
+        );
     }
 
     @Override
@@ -460,7 +464,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
                 this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 1, 2, 3, 4, 5, 5).collectIf(
                         Predicates.lessThan(4),
                         Holder::new),
-                FastList.newListWith(new Holder(3), new Holder(2), new Holder(1), new Holder(1), new Holder(1)));
+                FastList.newListWith(new Holder(3), new Holder(2), new Holder(1), new Holder(1), new Holder(1))
+        );
     }
 
     @Override
@@ -540,7 +545,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Assert.assertEquals(
                 FastList.newListWith(
                         Tuples.pair(1, 5), Tuples.pair(2, 4), Tuples.pair(2, 3), Tuples.pair(3, 2), Tuples.pair(4, 2), Tuples.pair(5, 1)),
-                zip);
+                zip
+        );
 
         MutableList<Pair<Integer, Integer>> revZip = revInt.zip(integers);
         Verify.assertSize(6, revZip);
@@ -548,7 +554,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Assert.assertEquals(
                 FastList.newListWith(
                         Tuples.pair(5, 1), Tuples.pair(4, 2), Tuples.pair(3, 2), Tuples.pair(2, 3), Tuples.pair(2, 4), Tuples.pair(1, 5)),
-                revZip);
+                revZip
+        );
 
         Person john = new Person("John", "Smith");
         Person johnDoe = new Person("John", "Doe");
@@ -569,14 +576,15 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.zipWithIndex();
         MutableSortedBag<Integer> integers = this.newWith(Collections.<Integer>reverseOrder(), 1, 3, 5, 5, 5, 2, 4);
         Assert.assertEquals(UnifiedSet.newSetWith(
-                Tuples.pair(5, 0),
-                Tuples.pair(5, 1),
-                Tuples.pair(5, 2),
-                Tuples.pair(4, 3),
-                Tuples.pair(3, 4),
-                Tuples.pair(2, 5),
-                Tuples.pair(1, 6)),
-                integers.zipWithIndex());
+                        Tuples.pair(5, 0),
+                        Tuples.pair(5, 1),
+                        Tuples.pair(5, 2),
+                        Tuples.pair(4, 3),
+                        Tuples.pair(3, 4),
+                        Tuples.pair(2, 5),
+                        Tuples.pair(1, 6)),
+                integers.zipWithIndex()
+        );
     }
 
     @Override
@@ -971,7 +979,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
                 this.newWith(3, 2, 1, 1).toSortedMap(
                         Comparators.<Integer>reverseNaturalOrder(),
                         Functions.getIntegerPassThru(),
-                        String::valueOf));
+                        String::valueOf)
+        );
     }
 
     @Override
@@ -1263,13 +1272,15 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
                 this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 1, 2, 3, 4, 5).detectWithIfNone(
                         Predicates2.<Integer>greaterThan(),
                         4,
-                        function));
+                        function)
+        );
         Assert.assertEquals(
                 Integer.valueOf(-42),
                 this.newWith(Comparators.reverseNaturalOrder(), 1, 2, 2, 2, 3, 4, 5).detectWithIfNone(
                         Predicates2.<Integer>lessThan(),
                         0,
-                        function));
+                        function)
+        );
     }
 
     @Override
@@ -1549,7 +1560,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
                         TreeBag.newBagWith(Comparators.reverseNaturalOrder(), "4", "3"),
                         TreeBag.newBagWith(Comparators.reverseNaturalOrder(), "2", "1"),
                         TreeBag.newBagWith(Comparators.reverseNaturalOrder(), "1")),
-                groups);
+                groups
+        );
     }
 
     @Override

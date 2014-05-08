@@ -182,7 +182,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void getLast()
     {
         super.getLast();
-        Assert.assertNotNull(this.<Object>newWith(1, 2, 3).getLast());
+        Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(1), this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 3).getLast());
         Verify.assertThrows(NoSuchElementException.class, () -> {

@@ -156,6 +156,8 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     @Test
     public void forEachWithIndex()
     {
+        super.forEachWithIndex();
+
         MutableList<Integer> list = MultiReaderFastList.newList(Interval.oneTo(5));
         list.forEachWithIndex((object, index) -> Assert.assertEquals(index, object - 1));
     }
@@ -378,13 +380,15 @@ public class MultiReaderFastListTest extends AbstractListTestCase
                 FastList.newListWith("1", "2", "3"),
                 MultiReaderFastList.newListWith(1, 2, 3).collectIf(
                         Integer.class::isInstance,
-                        String::valueOf));
+                        String::valueOf)
+        );
         Assert.assertEquals(
                 FastList.newListWith("1", "2", "3"),
                 MultiReaderFastList.newListWith(1, 2, 3).collectIf(
                         Integer.class::isInstance,
                         String::valueOf,
-                        FastList.<String>newList()));
+                        FastList.<String>newList())
+        );
     }
 
     @Override
@@ -397,7 +401,8 @@ public class MultiReaderFastListTest extends AbstractListTestCase
                 MultiReaderFastList.newListWith(1, 2, 3).collectWith(
                         addZeroFunction,
                         0,
-                        FastList.<Integer>newList()), 1, 2, 3);
+                        FastList.<Integer>newList()), 1, 2, 3
+        );
     }
 
     @Override
@@ -1050,14 +1055,14 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     @Test
     public void testToString()
     {
-        Assert.assertEquals("[1, 2, 3]", this.<Object>newWith(1, 2, 3).toString());
+        Assert.assertEquals("[1, 2, 3]", this.newWith(1, 2, 3).toString());
     }
 
     @Override
     @Test
     public void makeString()
     {
-        Assert.assertEquals("1, 2, 3", this.<Object>newWith(1, 2, 3).makeString());
+        Assert.assertEquals("1, 2, 3", this.newWith(1, 2, 3).makeString());
     }
 
     @Override
@@ -1065,7 +1070,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void appendString()
     {
         Appendable builder = new StringBuilder();
-        this.<Object>newWith(1, 2, 3).appendString(builder);
+        this.newWith(1, 2, 3).appendString(builder);
         Assert.assertEquals("1, 2, 3", builder.toString());
     }
 

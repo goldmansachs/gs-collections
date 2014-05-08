@@ -272,7 +272,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     @Test
     public void minBy()
     {
-        Function<ObjectBooleanPair<Integer>, Integer> function = ObjectBooleanPair<Integer>::getOne;
+        Function<ObjectBooleanPair<Integer>, Integer> function = ObjectBooleanPair::getOne;
         Assert.assertEquals(PrimitiveTuples.pair(Integer.valueOf(2), true), this.newWith(2, true, 3, false, 4, true).minBy(function));
     }
 
@@ -377,13 +377,15 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
                 this.newWith(1, true, 2, false, 3, true).collectIf(
                         ObjectBooleanPair.class::isInstance,
                         String::valueOf),
-                "1:true", "2:false", "3:true");
+                "1:true", "2:false", "3:true"
+        );
         Verify.assertContainsAll(
                 this.newWith(1, true, 2, false, 3, true).collectIf(
                         ObjectBooleanPair.class::isInstance,
                         String::valueOf,
                         UnifiedSet.<String>newSet()),
-                "1:true", "2:false", "3:true");
+                "1:true", "2:false", "3:true"
+        );
     }
 
     @Test
@@ -606,10 +608,11 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
         RichIterable<ObjectBooleanPair<Integer>> pairs = this.newWith(5, false, 1, true, 2, true);
         MutableSortedSet<ObjectBooleanPair<Integer>> set = pairs.toSortedSet(Comparators.reverseNaturalOrder());
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(),
-                PrimitiveTuples.pair(Integer.valueOf(5), false),
-                PrimitiveTuples.pair(Integer.valueOf(2), true),
-                PrimitiveTuples.pair(Integer.valueOf(1), true)),
-                set);
+                        PrimitiveTuples.pair(Integer.valueOf(5), false),
+                        PrimitiveTuples.pair(Integer.valueOf(2), true),
+                        PrimitiveTuples.pair(Integer.valueOf(1), true)),
+                set
+        );
     }
 
     @Test
@@ -761,9 +764,10 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     {
         RichIterable<ObjectBooleanPair<Integer>> collection = this.newWith(1, true, 2, false, 3, true);
         Assert.assertEquals(Bags.immutable.of(FastList.newListWith(PrimitiveTuples.pair(Integer.valueOf(1), true)),
-                FastList.newListWith(PrimitiveTuples.pair(Integer.valueOf(2), false)),
-                FastList.newListWith(PrimitiveTuples.pair(Integer.valueOf(3), true))),
-                collection.chunk(1).toBag());
+                        FastList.newListWith(PrimitiveTuples.pair(Integer.valueOf(2), false)),
+                        FastList.newListWith(PrimitiveTuples.pair(Integer.valueOf(3), true))),
+                collection.chunk(1).toBag()
+        );
     }
 
     @Test(expected = IllegalArgumentException.class)

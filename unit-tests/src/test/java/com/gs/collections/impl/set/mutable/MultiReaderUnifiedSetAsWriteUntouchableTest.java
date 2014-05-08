@@ -41,7 +41,7 @@ public class MultiReaderUnifiedSetAsWriteUntouchableTest extends AbstractCollect
     @Test
     public void makeString()
     {
-        Assert.assertEquals("1, 2, 3", this.<Object>newWith(1, 2, 3).makeString());
+        Assert.assertEquals("1, 2, 3", this.newWith(1, 2, 3).makeString());
     }
 
     @Override
@@ -49,7 +49,7 @@ public class MultiReaderUnifiedSetAsWriteUntouchableTest extends AbstractCollect
     public void appendString()
     {
         Appendable builder = new StringBuilder();
-        this.<Object>newWith(1, 2, 3).appendString(builder);
+        this.newWith(1, 2, 3).appendString(builder);
         Assert.assertEquals("1, 2, 3", builder.toString());
     }
 
@@ -57,7 +57,7 @@ public class MultiReaderUnifiedSetAsWriteUntouchableTest extends AbstractCollect
     @Test
     public void testToString()
     {
-        Assert.assertEquals("[1, 2, 3]", this.<Object>newWith(1, 2, 3).toString());
+        Assert.assertEquals("[1, 2, 3]", this.newWith(1, 2, 3).toString());
     }
 
     @Override

@@ -201,7 +201,8 @@ public abstract class AbstractRichIterableTestCase
                 this.newWith(1, 2, 3, 4, 5).selectWith(
                         Predicates2.<Integer>lessThan(),
                         3),
-                1, 2);
+                1, 2
+        );
     }
 
     @Test
@@ -572,13 +573,15 @@ public abstract class AbstractRichIterableTestCase
                 this.newWith(1, 2, 3, 4, 5).detectWithIfNone(
                         Predicates2.<Integer>greaterThan(),
                         4,
-                        function));
+                        function)
+        );
         Assert.assertEquals(
                 Integer.valueOf(-42),
                 this.newWith(1, 2, 3, 4, 5).detectWithIfNone(
                         Predicates2.<Integer>lessThan(),
                         0,
-                        function));
+                        function)
+        );
     }
 
     @Test
@@ -643,13 +646,15 @@ public abstract class AbstractRichIterableTestCase
                 this.newWith(1, 2, 3).collectIf(
                         Integer.class::isInstance,
                         Object::toString),
-                "1", "2", "3");
+                "1", "2", "3"
+        );
         Verify.assertContainsAll(
                 this.newWith(1, 2, 3).collectIf(
                         Integer.class::isInstance,
                         Object::toString,
                         UnifiedSet.<String>newSet()),
-                "1", "2", "3");
+                "1", "2", "3"
+        );
     }
 
     @Test
@@ -945,35 +950,35 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void testToString()
     {
-        RichIterable<Object> collection = this.<Object>newWith(1, 2, 3);
+        RichIterable<Object> collection = this.newWith(1, 2, 3);
         Assert.assertEquals("[1, 2, 3]", collection.toString());
     }
 
     @Test
     public void makeString()
     {
-        RichIterable<Object> collection = this.<Object>newWith(1, 2, 3);
+        RichIterable<Object> collection = this.newWith(1, 2, 3);
         Assert.assertEquals(collection.toString(), '[' + collection.makeString() + ']');
     }
 
     @Test
     public void makeStringWithSeparator()
     {
-        RichIterable<Object> collection = this.<Object>newWith(1, 2, 3);
+        RichIterable<Object> collection = this.newWith(1, 2, 3);
         Assert.assertEquals(collection.toString(), '[' + collection.makeString(", ") + ']');
     }
 
     @Test
     public void makeStringWithSeparatorAndStartAndEnd()
     {
-        RichIterable<Object> collection = this.<Object>newWith(1, 2, 3);
+        RichIterable<Object> collection = this.newWith(1, 2, 3);
         Assert.assertEquals(collection.toString(), collection.makeString("[", ", ", "]"));
     }
 
     @Test
     public void appendString()
     {
-        RichIterable<Object> collection = this.<Object>newWith(1, 2, 3);
+        RichIterable<Object> collection = this.newWith(1, 2, 3);
         Appendable builder = new StringBuilder();
         collection.appendString(builder);
         Assert.assertEquals(collection.toString(), '[' + builder.toString() + ']');
@@ -982,7 +987,7 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void appendStringWithSeparator()
     {
-        RichIterable<Object> collection = this.<Object>newWith(1, 2, 3);
+        RichIterable<Object> collection = this.newWith(1, 2, 3);
         Appendable builder = new StringBuilder();
         collection.appendString(builder, ", ");
         Assert.assertEquals(collection.toString(), '[' + builder.toString() + ']');
@@ -991,7 +996,7 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void appendStringWithSeparatorAndStartAndEnd()
     {
-        RichIterable<Object> collection = this.<Object>newWith(1, 2, 3);
+        RichIterable<Object> collection = this.newWith(1, 2, 3);
         Appendable builder = new StringBuilder();
         collection.appendString(builder, "[", ", ", "]");
         Assert.assertEquals(collection.toString(), builder.toString());

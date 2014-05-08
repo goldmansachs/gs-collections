@@ -58,7 +58,7 @@ public class MultiReaderFastListAsWriteUntouchableTest extends AbstractListTestC
     @Test
     public void testToString()
     {
-        Assert.assertEquals("[1, 2, 3]", this.<Object>newWith(1, 2, 3).toString());
+        Assert.assertEquals("[1, 2, 3]", this.newWith(1, 2, 3).toString());
     }
 
     @Override
@@ -91,7 +91,7 @@ public class MultiReaderFastListAsWriteUntouchableTest extends AbstractListTestC
     @Test
     public void makeString()
     {
-        Assert.assertEquals("1, 2, 3", this.<Object>newWith(1, 2, 3).makeString());
+        Assert.assertEquals("1, 2, 3", this.newWith(1, 2, 3).makeString());
     }
 
     @Override
@@ -99,7 +99,7 @@ public class MultiReaderFastListAsWriteUntouchableTest extends AbstractListTestC
     public void appendString()
     {
         Appendable builder = new StringBuilder();
-        this.<Object>newWith(1, 2, 3).appendString(builder);
+        this.newWith(1, 2, 3).appendString(builder);
         Assert.assertEquals("1, 2, 3", builder.toString());
     }
 }

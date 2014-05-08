@@ -134,17 +134,18 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     @Test
     public void testToString()
     {
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2);
+        MutableCollection<Object> collection = this.newWith(1, 2);
         Assert.assertTrue(
                 "[1, 2]".equals(collection.toString())
-                        || "[2, 1]".equals(collection.toString()));
+                        || "[2, 1]".equals(collection.toString())
+        );
     }
 
     @Override
     @Test
     public void makeString()
     {
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        MutableCollection<Object> collection = this.newWith(1, 2, 3);
         Assert.assertEquals(collection.toString(), '[' + collection.makeString() + ']');
     }
 
@@ -152,7 +153,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     @Test
     public void appendString()
     {
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        MutableCollection<Object> collection = this.newWith(1, 2, 3);
         Appendable builder = new StringBuilder();
         collection.appendString(builder);
         Assert.assertEquals(collection.toString(), '[' + builder.toString() + ']');
@@ -298,7 +299,8 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
                 set,
                 cartesianProduct
                         .select(Predicates.attributeEqual((Function<Pair<?, String>, String>) Pair::getTwo, "One"))
-                        .collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
+                        .collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet()
+        );
     }
 
     @Override

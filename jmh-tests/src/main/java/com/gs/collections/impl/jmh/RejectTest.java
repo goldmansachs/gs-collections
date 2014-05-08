@@ -48,8 +48,8 @@ public class RejectTest
     @GenerateMicroBenchmark
     public void serial_lazy_jdk_lambda_not()
     {
-        List<Integer> evens = this.integersJDK.stream().filter(each -> !(each % 2 == 1)).collect(Collectors.toList());
-        List<Integer> odds = this.integersJDK.stream().filter(each -> !(each % 2 == 0)).collect(Collectors.toList());
+        List<Integer> evens = this.integersJDK.stream().filter(each -> each % 2 != 1).collect(Collectors.toList());
+        List<Integer> odds = this.integersJDK.stream().filter(each -> each % 2 != 0).collect(Collectors.toList());
     }
 
     @Warmup(iterations = 20)

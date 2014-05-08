@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,4 @@ public interface MutableListMultimap<K, V>
     MutableListMultimap<K, V> newEmpty();
 
     MutableList<V> get(K key);
-
-    MutableListMultimap<K, V> toMutable();
-
-    ImmutableListMultimap<K, V> toImmutable();
 }

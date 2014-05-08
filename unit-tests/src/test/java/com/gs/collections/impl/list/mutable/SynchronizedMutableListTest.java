@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ public class SynchronizedMutableListTest extends AbstractListTestCase
     @Test
     public void testToString()
     {
-        MutableList<Object> list = this.<Object>newWith(1, 2, 3);
+        MutableList<Object> list = this.newWith(1, 2, 3);
         Assert.assertEquals("[1, 2, 3]", list.toString());
     }
 }

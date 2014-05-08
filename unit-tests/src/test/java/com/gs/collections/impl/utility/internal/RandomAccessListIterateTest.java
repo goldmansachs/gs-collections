@@ -74,7 +74,7 @@ public class RandomAccessListIterateTest
     @Test(expected = IllegalArgumentException.class)
     public void forEachInBothThrowsOnMisMatchedLists()
     {
-        RandomAccessListIterate.forEachInBoth(FastList.<Object>newListWith("1", 2), FastList.<Object>newListWith(1, 2, 3),
+        RandomAccessListIterate.forEachInBoth(FastList.newListWith("1", 2), FastList.newListWith(1, 2, 3),
                 Procedures2.fromProcedure(DoNothingProcedure.DO_NOTHING));
     }
 

@@ -276,6 +276,7 @@ public class CompositeFastListTest extends AbstractListTestCase
     public void forEachWithIndex()
     {
         super.forEachWithIndex();
+
         MutableList<Integer> list = FastList.newList();
         CompositeFastList<Integer> iterables = new CompositeFastList<Integer>();
         iterables.addComposited(Interval.fromTo(6, 10).toList());

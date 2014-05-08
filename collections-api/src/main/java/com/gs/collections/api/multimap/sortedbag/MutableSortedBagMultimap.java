@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,4 @@ public interface MutableSortedBagMultimap<K, V>
     MutableSortedBagMultimap<K, V> newEmpty();
 
     MutableSortedBag<V> get(K key);
-
-    MutableSortedBagMultimap<K, V> toMutable();
-
-    ImmutableSortedBagMultimap<K, V> toImmutable();
 }

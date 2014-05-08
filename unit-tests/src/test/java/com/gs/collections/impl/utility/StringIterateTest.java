@@ -326,25 +326,25 @@ public class StringIterateTest
     @Test
     public void forEach()
     {
-        StringBuffer buffer = new StringBuffer();
-        StringIterate.forEach("1a2b3c", (CharProcedure) buffer::append);
-        Assert.assertEquals("1a2b3c", buffer.toString());
+        StringBuilder builder = new StringBuilder();
+        StringIterate.forEach("1a2b3c", (CharProcedure) builder::append);
+        Assert.assertEquals("1a2b3c", builder.toString());
     }
 
     @Test
     public void forEachCodePoint()
     {
-        StringBuffer buffer = new StringBuffer();
-        StringIterate.forEach("1a2b3c", (CodePointProcedure) buffer::appendCodePoint);
-        Assert.assertEquals("1a2b3c", buffer.toString());
+        StringBuilder builder = new StringBuilder();
+        StringIterate.forEach("1a2b3c", (CodePointProcedure) builder::appendCodePoint);
+        Assert.assertEquals("1a2b3c", builder.toString());
     }
 
     @Test
     public void reverseForEach()
     {
-        StringBuffer buffer = new StringBuffer();
-        StringIterate.reverseForEach("1a2b3c", (CharProcedure) buffer::append);
-        Assert.assertEquals("c3b2a1", buffer.toString());
+        StringBuilder builder = new StringBuilder();
+        StringIterate.reverseForEach("1a2b3c", (CharProcedure) builder::append);
+        Assert.assertEquals("c3b2a1", builder.toString());
 
         StringIterate.reverseForEach("", (char character) -> Assert.fail());
     }
@@ -352,9 +352,9 @@ public class StringIterateTest
     @Test
     public void reverseForEachCodePoint()
     {
-        StringBuffer buffer = new StringBuffer();
-        StringIterate.reverseForEach("1a2b3c", (CodePointProcedure) buffer::appendCodePoint);
-        Assert.assertEquals("c3b2a1", buffer.toString());
+        StringBuilder builder = new StringBuilder();
+        StringIterate.reverseForEach("1a2b3c", (CodePointProcedure) builder::appendCodePoint);
+        Assert.assertEquals("c3b2a1", builder.toString());
 
         StringIterate.reverseForEach("", (int codePoint) -> Assert.fail());
     }

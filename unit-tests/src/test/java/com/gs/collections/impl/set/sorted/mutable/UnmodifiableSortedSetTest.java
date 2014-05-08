@@ -257,7 +257,7 @@ public class UnmodifiableSortedSetTest extends AbstractSortedSetTestCase
     public void testToString()
     {
         super.testToString();
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2);
+        MutableCollection<Object> collection = this.newWith(1, 2);
         String toString = collection.toString();
         Assert.assertTrue("[1, 2]".equals(toString) || "[2, 1]".equals(toString));
     }
@@ -267,7 +267,7 @@ public class UnmodifiableSortedSetTest extends AbstractSortedSetTestCase
     public void makeString()
     {
         super.makeString();
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        MutableCollection<Object> collection = this.newWith(1, 2, 3);
         Assert.assertEquals(collection.toString(), '[' + collection.makeString() + ']');
     }
 
@@ -276,7 +276,7 @@ public class UnmodifiableSortedSetTest extends AbstractSortedSetTestCase
     public void appendString()
     {
         super.appendString();
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        MutableCollection<Object> collection = this.newWith(1, 2, 3);
         Appendable builder = new StringBuilder();
         collection.appendString(builder);
         Assert.assertEquals(collection.toString(), '[' + builder.toString() + ']');

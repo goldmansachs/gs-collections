@@ -60,13 +60,14 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
     {
         super.testToString_with_collection_containing_self();
 
-        MutableCollection<Object> collection = this.<Object>newWith(1);
+        MutableCollection<Object> collection = this.newWith(1);
         collection.add(collection);
         String simpleName = collection.getClass().getSimpleName();
         String string = collection.toString();
         Assert.assertTrue(
                 ("[1, (this " + simpleName + ")]").equals(string)
-                        || ("[(this " + simpleName + "), 1]").equals(string));
+                        || ("[(this " + simpleName + "), 1]").equals(string)
+        );
     }
 
     @Override
@@ -75,7 +76,7 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
     {
         super.makeString_with_collection_containing_self();
 
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        MutableCollection<Object> collection = this.newWith(1, 2, 3);
         collection.add(collection);
         Assert.assertEquals(collection.toString(), '[' + collection.makeString() + ']');
     }
@@ -86,7 +87,7 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
     {
         super.appendString_with_collection_containing_self();
 
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        MutableCollection<Object> collection = this.newWith(1, 2, 3);
         collection.add(collection);
         Appendable builder = new StringBuilder();
         collection.appendString(builder);

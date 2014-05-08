@@ -72,7 +72,7 @@ public class ReverseIterable<T>
         return new ReverseIterator<T>(listIterator);
     }
 
-    private final class ReverseIterator<T> implements Iterator<T>
+    private static final class ReverseIterator<T> implements Iterator<T>
     {
         private final ListIterator<T> listIterator;
 

@@ -33,9 +33,6 @@ abstract class AbstractMemoryEfficientMutableMap<K, V>
         extends AbstractMutableMap<K, V>
         implements FixedSizeMap<K, V>
 {
-    @Override
-    public abstract MutableMap<K, V> clone();
-
     public V put(K key, V value)
     {
         throw new UnsupportedOperationException("Cannot call put() on " + this.getClass().getSimpleName());

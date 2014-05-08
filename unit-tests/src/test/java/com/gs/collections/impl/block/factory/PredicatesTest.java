@@ -471,8 +471,8 @@ public class PredicatesTest
     public void allSatisfy()
     {
         Predicate<Iterable<Object>> allIntegers = Predicates.allSatisfy(Predicates.instanceOf(Integer.class));
-        assertAccepts(allIntegers, FastList.<Object>newListWith(1, 2, 3));
-        assertRejects(allIntegers, FastList.<Object>newListWith(Boolean.TRUE, Boolean.FALSE));
+        assertAccepts(allIntegers, FastList.newListWith(1, 2, 3));
+        assertRejects(allIntegers, FastList.newListWith(Boolean.TRUE, Boolean.FALSE));
 
         assertToString(allIntegers);
     }
@@ -481,8 +481,8 @@ public class PredicatesTest
     public void anySatisfy()
     {
         Predicates<Iterable<Object>> anyIntegers = Predicates.anySatisfy(Predicates.instanceOf(Integer.class));
-        assertAccepts(anyIntegers, FastList.<Object>newListWith(1, 2, 3));
-        assertRejects(anyIntegers, FastList.<Object>newListWith(Boolean.TRUE, Boolean.FALSE));
+        assertAccepts(anyIntegers, FastList.newListWith(1, 2, 3));
+        assertRejects(anyIntegers, FastList.newListWith(Boolean.TRUE, Boolean.FALSE));
         assertToString(anyIntegers);
     }
 
@@ -490,8 +490,8 @@ public class PredicatesTest
     public void noneSatisfy()
     {
         Predicates<Iterable<Object>> anyIntegers = Predicates.noneSatisfy(Predicates.instanceOf(Integer.class));
-        assertRejects(anyIntegers, FastList.<Object>newListWith(1, 2, 3));
-        assertAccepts(anyIntegers, FastList.<Object>newListWith(Boolean.TRUE, Boolean.FALSE));
+        assertRejects(anyIntegers, FastList.newListWith(1, 2, 3));
+        assertAccepts(anyIntegers, FastList.newListWith(Boolean.TRUE, Boolean.FALSE));
         assertToString(anyIntegers);
     }
 

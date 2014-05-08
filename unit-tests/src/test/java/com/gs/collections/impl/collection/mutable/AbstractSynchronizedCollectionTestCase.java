@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ public abstract class AbstractSynchronizedCollectionTestCase extends AbstractCol
     @Test
     public void testToString()
     {
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2);
+        MutableCollection<Object> collection = this.newWith(1, 2);
         String string = collection.toString();
         Assert.assertTrue("[1, 2]".equals(string) || "[2, 1]".equals(string));
     }
@@ -35,7 +35,7 @@ public abstract class AbstractSynchronizedCollectionTestCase extends AbstractCol
     @Test
     public void makeString()
     {
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        MutableCollection<Object> collection = this.newWith(1, 2, 3);
         Assert.assertEquals(collection.toString(), '[' + collection.makeString() + ']');
     }
 
@@ -43,7 +43,7 @@ public abstract class AbstractSynchronizedCollectionTestCase extends AbstractCol
     @Test
     public void appendString()
     {
-        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        MutableCollection<Object> collection = this.newWith(1, 2, 3);
         Appendable builder = new StringBuilder();
         collection.appendString(builder);
         Assert.assertEquals(collection.toString(), '[' + builder.toString() + ']');

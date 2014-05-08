@@ -1865,7 +1865,7 @@ public class IterateTest
         this.aggregateByMutableResult(new LinkedList<Integer>(FastList.newListWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByMutableResult(new ArrayList<Integer>(FastList.newListWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByMutableResult(Arrays.asList(1, 1, 1, 2, 2, 3));
-        Verify.assertThrows(IllegalArgumentException.class, () -> IterateTest.this.aggregateByMutableResult(null));
+        Verify.assertThrows(IllegalArgumentException.class, () -> this.aggregateByMutableResult(null));
     }
 
     private void aggregateByMutableResult(Iterable<Integer> iterable)

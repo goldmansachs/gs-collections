@@ -229,7 +229,7 @@ public abstract class MapIterableTestCase
         Assert.assertEquals(UnifiedMap.newWithKeysValues("1", 1, "2", 2, "3", 3), result);
 
         Verify.assertThrows(IllegalStateException.class, () -> {
-            MapIterableTestCase.this.newMapWithKeysValues(1, "2", 2, "2").flipUniqueValues();
+            this.newMapWithKeysValues(1, "2", 2, "2").flipUniqueValues();
         });
     }
 
@@ -691,7 +691,8 @@ public abstract class MapIterableTestCase
         Verify.assertContainsAll(
                 map.collect(
                         String::valueOf,
-                        UnifiedSet.<String>newSet()), "1", "2", "3", "4");
+                        UnifiedSet.<String>newSet()), "1", "2", "3", "4"
+        );
     }
 
     @Test
@@ -1255,7 +1256,8 @@ public abstract class MapIterableTestCase
                 this.newMapWithKeysValues(
                         new IntegerWithCast(0), "Test 3",
                         null, "Test 1"),
-                mutableMap);
+                mutableMap
+        );
         Assert.assertEquals("Test 3", mutableMap.get(new IntegerWithCast(0)));
         Assert.assertEquals("Test 1", mutableMap.get(null));
     }

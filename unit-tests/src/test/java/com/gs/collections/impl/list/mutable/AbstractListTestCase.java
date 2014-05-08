@@ -432,7 +432,7 @@ public abstract class AbstractListTestCase
     @Test
     public void testToString()
     {
-        MutableList<Object> list = this.<Object>newWith(1, 2, 3);
+        MutableList<Object> list = this.newWith(1, 2, 3);
         list.add(list);
         Assert.assertEquals("[1, 2, 3, (this " + list.getClass().getSimpleName() + ")]", list.toString());
     }
@@ -441,7 +441,7 @@ public abstract class AbstractListTestCase
     @Test
     public void makeString()
     {
-        MutableList<Object> list = this.<Object>newWith(1, 2, 3);
+        MutableList<Object> list = this.newWith(1, 2, 3);
         list.add(list);
         Assert.assertEquals("1, 2, 3, (this " + list.getClass().getSimpleName() + ')', list.makeString());
     }
@@ -450,7 +450,7 @@ public abstract class AbstractListTestCase
     @Test
     public void makeStringWithSeparator()
     {
-        MutableList<Object> list = this.<Object>newWith(1, 2, 3);
+        MutableList<Object> list = this.newWith(1, 2, 3);
         Assert.assertEquals("1/2/3", list.makeString("/"));
     }
 
@@ -458,7 +458,7 @@ public abstract class AbstractListTestCase
     @Test
     public void makeStringWithSeparatorAndStartAndEnd()
     {
-        MutableList<Object> list = this.<Object>newWith(1, 2, 3);
+        MutableList<Object> list = this.newWith(1, 2, 3);
         Assert.assertEquals("[1/2/3]", list.makeString("[", "/", "]"));
     }
 
@@ -466,7 +466,7 @@ public abstract class AbstractListTestCase
     @Test
     public void appendString()
     {
-        MutableList<Object> list = this.<Object>newWith(1, 2, 3);
+        MutableList<Object> list = this.newWith(1, 2, 3);
         list.add(list);
 
         Appendable builder = new StringBuilder();
@@ -478,7 +478,7 @@ public abstract class AbstractListTestCase
     @Test
     public void appendStringWithSeparator()
     {
-        MutableList<Object> list = this.<Object>newWith(1, 2, 3);
+        MutableList<Object> list = this.newWith(1, 2, 3);
 
         Appendable builder = new StringBuilder();
         list.appendString(builder, "/");
@@ -489,7 +489,7 @@ public abstract class AbstractListTestCase
     @Test
     public void appendStringWithSeparatorAndStartAndEnd()
     {
-        MutableList<Object> list = this.<Object>newWith(1, 2, 3);
+        MutableList<Object> list = this.newWith(1, 2, 3);
 
         Appendable builder = new StringBuilder();
         list.appendString(builder, "[", "/", "]");
@@ -712,7 +712,8 @@ public abstract class AbstractListTestCase
                         FastList.newListWith("3", "4"),
                         FastList.newListWith("5", "6"),
                         FastList.newListWith("7")),
-                groups);
+                groups
+        );
     }
 
     @Test
@@ -802,5 +803,21 @@ public abstract class AbstractListTestCase
                     Collections.binarySearch(sortedList, integer, Comparators.reverseNaturalOrder()),
                     sortedList.binarySearch(integer, Comparators.reverseNaturalOrder()));
         }
+    }
+
+    @Override
+    public void forEachWithIndex()
+    {
+        super.forEachWithIndex();
+
+        MutableList<Integer> elements = FastList.newList();
+        IntArrayList indexes = new IntArrayList();
+        MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
+        collection.forEachWithIndex((Integer object, int index) -> {
+            elements.add(object);
+            indexes.add(index);
+        });
+        Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), elements);
+        Assert.assertEquals(IntArrayList.newListWith(0, 1, 2, 3), indexes);
     }
 }
