@@ -22,12 +22,11 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.impl.MemoryTests;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.collection.immutable.HashMap$;
@@ -37,7 +36,6 @@ public class ImmutableMap0To100MemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableMap0To100MemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledImmutableMaps()
     {
         LOGGER.info("Comparing Items: Scala {}, JDK {}, GSC {}, Guava {}",
@@ -45,7 +43,14 @@ public class ImmutableMap0To100MemoryTest
                 Map.class.getSimpleName(),
                 com.gs.collections.api.map.ImmutableMap.class.getSimpleName(),
                 ImmutableMap.class.getSimpleName());
-        IntInterval.fromToBy(0, 100, 10).forEach(this::memoryForScaledMaps);
+        IntProcedure procedure = new IntProcedure()
+        {
+            public void value(int size)
+            {
+                ImmutableMap0To100MemoryTest.this.memoryForScaledMaps(size);
+            }
+        };
+        IntInterval.fromToBy(0, 100, 10).forEach(procedure);
         LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 

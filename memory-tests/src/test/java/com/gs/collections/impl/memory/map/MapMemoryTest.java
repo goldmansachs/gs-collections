@@ -21,15 +21,13 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.impl.MemoryTests;
-import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import gnu.trove.map.hash.THashMap;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +36,6 @@ public class MapMemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(MapMemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledMaps()
     {
         LOGGER.info("Comparing Items: Scala {}, JDK {}, Trove {}, GSC {}, JDK {}",
@@ -78,9 +75,15 @@ public class MapMemoryTest
             this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
-        protected <R extends Map<Integer, String>> R fill(R map)
+        protected <R extends Map<Integer, String>> R fill(final R map)
         {
-            this.data.forEach(Procedures.cast(each -> { map.put(each, "dummy"); }));
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
+                {
+                    map.put(each, "dummy");
+                }
+            });
             return map;
         }
     }
@@ -162,8 +165,14 @@ public class MapMemoryTest
         @Override
         public scala.collection.mutable.HashMap<Integer, String> value()
         {
-            scala.collection.mutable.HashMap<Integer, String> map = new scala.collection.mutable.HashMap<Integer, String>();
-            this.data.forEach(Procedures.cast(each -> { map.put(each, "dummy"); }));
+            final scala.collection.mutable.HashMap<Integer, String> map = new scala.collection.mutable.HashMap<Integer, String>();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
+                {
+                    map.put(each, "dummy");
+                }
+            });
             return map;
         }
     }

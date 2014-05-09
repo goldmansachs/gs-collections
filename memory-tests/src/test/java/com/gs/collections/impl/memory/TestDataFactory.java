@@ -29,6 +29,14 @@ import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 
 public final class TestDataFactory
 {
+    public static final IntToObjectFunction<Integer> INTEGER_VALUE_OF = new IntToObjectFunction<Integer>()
+    {
+        public Integer valueOf(int each)
+        {
+            return Integer.valueOf(each);
+        }
+    };
+
     private TestDataFactory()
     {
     }
@@ -60,7 +68,7 @@ public final class TestDataFactory
     public static ImmutableList<Integer> createImmutableList(int size)
     {
         return TestDataFactory.create(size)
-                .collect((IntToObjectFunction<Integer>) Integer::valueOf)
+                .collect(INTEGER_VALUE_OF)
                 .toList()
                 .toImmutable();
     }
@@ -68,7 +76,7 @@ public final class TestDataFactory
     public static ImmutableList<Integer> createRandomImmutableList(int size)
     {
         return TestDataFactory.createRandomSet(size)
-                .collect((IntToObjectFunction<Integer>) Integer::valueOf)
+                .collect(INTEGER_VALUE_OF)
                 .toList()
                 .toImmutable();
     }

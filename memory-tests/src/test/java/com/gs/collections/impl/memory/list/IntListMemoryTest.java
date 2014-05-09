@@ -19,14 +19,13 @@ package com.gs.collections.impl.memory.list;
 import java.util.ArrayList;
 
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.primitive.IntList;
-import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import gnu.trove.list.array.TIntArrayList;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +34,6 @@ public class IntListMemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(IntListMemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledLists()
     {
         LOGGER.info("Comparing Items: Trove {}, GSC {}, JDK {}",
@@ -72,8 +70,14 @@ public class IntListMemoryTest
         @Override
         public IntArrayList value()
         {
-            IntArrayList list = new IntArrayList();
-            this.data.forEach(list::add);
+            final IntArrayList list = new IntArrayList();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    list.add(each);
+                }
+            });
             return list;
         }
     }
@@ -90,8 +94,14 @@ public class IntListMemoryTest
         @Override
         public TIntArrayList value()
         {
-            TIntArrayList list = new TIntArrayList();
-            this.data.forEach(list::add);
+            final TIntArrayList list = new TIntArrayList();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    list.add(each);
+                }
+            });
             return list;
         }
     }
@@ -108,8 +118,14 @@ public class IntListMemoryTest
         @Override
         public ArrayList<Integer> value()
         {
-            ArrayList<Integer> list = new ArrayList<Integer>();
-            this.data.forEach(list::add);
+            final ArrayList<Integer> list = new ArrayList<Integer>();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    list.add(each);
+                }
+            });
             return list;
         }
     }

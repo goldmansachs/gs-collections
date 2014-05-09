@@ -19,32 +19,37 @@ package com.gs.collections.impl.memory.bag;
 import com.google.common.collect.ImmutableMultiset;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.impl.MemoryTests;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ImmutableBag0To100MemoryTest
+public class ImmutableBag0To10MemoryTest
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableBag0To100MemoryTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableBag0To10MemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledImmutableBags()
     {
         LOGGER.info("Comparing Items: GSC {}, Guava {}", ImmutableBag.class.getSimpleName(), ImmutableMultiset.class.getSimpleName());
-        IntInterval.fromToBy(0, 100, 10).forEach(this::memoryForScaledBags);
+        IntProcedure procedure = new IntProcedure()
+        {
+            public void value(int size)
+            {
+                ImmutableBag0To10MemoryTest.this.memoryForScaledBags(size);
+            }
+        };
+        IntInterval.zeroTo(10).forEach(procedure);
         LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledBags(int size)
     {
-        MemoryTestBench.on(ImmutableBag.class).printContainerMemoryUsage("ImmutableBag_0to100", size, new SizedImmutableGscBagFactory(size));
-        MemoryTestBench.on(ImmutableMultiset.class).printContainerMemoryUsage("ImmutableBag_0to100", size, new SizedImmutableGuavaMultisetFactory(size));
+        MemoryTestBench.on(ImmutableBag.class).printContainerMemoryUsage("ImmutableBag_0to10", size, new SizedImmutableGscBagFactory(size));
+        MemoryTestBench.on(ImmutableMultiset.class).printContainerMemoryUsage("ImmutableBag_0to10", size, new SizedImmutableGuavaMultisetFactory(size));
     }
 
     public static class SizedImmutableGscBagFactory implements Function0<ImmutableBag<Integer>>

@@ -19,14 +19,13 @@ package com.gs.collections.impl.memory.set;
 import java.util.HashSet;
 
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.set.primitive.IntSet;
-import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import gnu.trove.set.hash.TIntHashSet;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +34,6 @@ public class IntSetMemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(IntSetMemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledSets()
     {
         LOGGER.info("Comparing Items: Trove {}, GSC {}, JDK {}",
@@ -72,8 +70,14 @@ public class IntSetMemoryTest
         @Override
         public IntHashSet value()
         {
-            IntHashSet set = new IntHashSet();
-            this.data.forEach(set::add);
+            final IntHashSet set = new IntHashSet();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    set.add(each);
+                }
+            });
             return set;
         }
     }
@@ -90,8 +94,14 @@ public class IntSetMemoryTest
         @Override
         public TIntHashSet value()
         {
-            TIntHashSet set = new TIntHashSet();
-            this.data.forEach(set::add);
+            final TIntHashSet set = new TIntHashSet();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    set.add(each);
+                }
+            });
             return set;
         }
     }
@@ -108,8 +118,14 @@ public class IntSetMemoryTest
         @Override
         public HashSet<Integer> value()
         {
-            HashSet<Integer> set = new HashSet<Integer>();
-            this.data.forEach(set::add);
+            final HashSet<Integer> set = new HashSet<Integer>();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    set.add(each);
+                }
+            });
             return set;
         }
     }

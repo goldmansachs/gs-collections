@@ -18,14 +18,12 @@ package com.gs.collections.impl.memory.bag;
 
 import com.google.common.collect.HashMultiset;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +32,6 @@ public class BagMemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(BagMemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledBags()
     {
         LOGGER.info("Comparing Items: Guava {}, GSC {}", HashMultiset.class.getSimpleName(), HashBag.class.getSimpleName());
@@ -64,8 +61,14 @@ public class BagMemoryTest
         @Override
         public HashMultiset<Integer> value()
         {
-            HashMultiset<Integer> hashMultiset = HashMultiset.create();
-            this.data.forEach(Procedures.cast(each -> { hashMultiset.add(each, 10); }));
+            final HashMultiset<Integer> hashMultiset = HashMultiset.create();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
+                {
+                    hashMultiset.add(each, 10);
+                }
+            });
             return hashMultiset;
         }
     }
@@ -82,8 +85,14 @@ public class BagMemoryTest
         @Override
         public HashBag<Integer> value()
         {
-            HashBag<Integer> hashBag = HashBag.newBag();
-            this.data.forEach(Procedures.cast(each -> hashBag.addOccurrences(each, 10)));
+            final HashBag<Integer> hashBag = HashBag.newBag();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
+                {
+                    hashBag.addOccurrences(each, 10);
+                }
+            });
             return hashBag;
         }
     }

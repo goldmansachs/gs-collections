@@ -22,21 +22,19 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.impl.MemoryTests;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ImmutableSet0To100MemoryTest
+public class ImmutableSet0To10MemoryTest
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableSet0To100MemoryTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableSet0To10MemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledImmutableSets()
     {
         LOGGER.info("Comparing Items: Scala {}, JDK {}, GSC {}, Guava {}",
@@ -45,20 +43,27 @@ public class ImmutableSet0To100MemoryTest
                 com.gs.collections.api.set.ImmutableSet.class.getSimpleName(),
                 ImmutableSet.class.getSimpleName());
 
-        IntInterval.fromToBy(0, 100, 10).forEach(this::memoryForScaledSets);
+        IntProcedure procedure = new IntProcedure()
+        {
+            public void value(int size)
+            {
+                ImmutableSet0To10MemoryTest.this.memoryForScaledSets(size);
+            }
+        };
+        IntInterval.zeroTo(10).forEach(procedure);
         LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledSets(int size)
     {
         MemoryTestBench.on(scala.collection.immutable.Set.class)
-                .printContainerMemoryUsage("ImmutableSet_0to100", size, new SizedImmutableScalaSetFactory(size));
+                .printContainerMemoryUsage("ImmutableSet_0to10", size, new SizedImmutableScalaSetFactory(size));
         MemoryTestBench.on(Set.class)
-                .printContainerMemoryUsage("ImmutableSet_0to100", size, new SizedUnmodifiableHashSetFactory(size));
+                .printContainerMemoryUsage("ImmutableSet_0to10", size, new SizedUnmodifiableHashSetFactory(size));
         MemoryTestBench.on(com.gs.collections.api.set.ImmutableSet.class)
-                .printContainerMemoryUsage("ImmutableSet_0to100", size, new SizedImmutableGscSetFactory(size));
+                .printContainerMemoryUsage("ImmutableSet_0to10", size, new SizedImmutableGscSetFactory(size));
         MemoryTestBench.on(ImmutableSet.class)
-                .printContainerMemoryUsage("ImmutableSet_0to100", size, new SizedImmutableGuavaSetFactory(size));
+                .printContainerMemoryUsage("ImmutableSet_0to10", size, new SizedImmutableGuavaSetFactory(size));
     }
 
     private static final class SizedImmutableGscSetFactory implements Function0<com.gs.collections.api.set.ImmutableSet<Integer>>

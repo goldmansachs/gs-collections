@@ -18,14 +18,12 @@ package com.gs.collections.impl.memory.multimap;
 
 import com.google.common.collect.HashMultimap;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.impl.MemoryTests;
-import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +32,6 @@ public class SetMultimapMemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(SetMultimapMemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledMultimaps()
     {
         LOGGER.info("Comparing Items: Guava {}, GSC {}",
@@ -67,13 +64,17 @@ public class SetMultimapMemoryTest
         @Override
         public HashMultimap<Integer, Integer> value()
         {
-            HashMultimap<Integer, Integer> mm = HashMultimap.create();
-            this.data.forEach(Procedures.cast(each -> {
-                for (int j = 0; j < 10; j++)
+            final HashMultimap<Integer, Integer> mm = HashMultimap.create();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
                 {
-                    mm.put(each, Integer.valueOf(j));
+                    for (int j = 0; j < 10; j++)
+                    {
+                        mm.put(each, Integer.valueOf(j));
+                    }
                 }
-            }));
+            });
             return mm;
         }
     }
@@ -90,13 +91,17 @@ public class SetMultimapMemoryTest
         @Override
         public UnifiedSetMultimap<Integer, Integer> value()
         {
-            UnifiedSetMultimap<Integer, Integer> mm = UnifiedSetMultimap.newMultimap();
-            this.data.forEach(Procedures.cast(each -> {
-                for (int j = 0; j < 10; j++)
+            final UnifiedSetMultimap<Integer, Integer> mm = UnifiedSetMultimap.newMultimap();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
                 {
-                    mm.put(each, Integer.valueOf(j));
+                    for (int j = 0; j < 10; j++)
+                    {
+                        mm.put(each, Integer.valueOf(j));
+                    }
                 }
-            }));
+            });
             return mm;
         }
     }

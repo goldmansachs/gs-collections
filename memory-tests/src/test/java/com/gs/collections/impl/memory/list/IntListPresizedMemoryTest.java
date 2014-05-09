@@ -18,13 +18,11 @@ package com.gs.collections.impl.memory.list;
 
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
-import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import gnu.trove.list.array.TIntArrayList;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +31,6 @@ public class IntListPresizedMemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(IntListPresizedMemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledLists()
     {
         LOGGER.info("Comparing Items: Trove {}, GSC {}",
@@ -66,10 +63,16 @@ public class IntListPresizedMemoryTest
         @Override
         public IntArrayList value()
         {
-            IntArrayList list = new IntArrayList(this.size);
+            final IntArrayList list = new IntArrayList(this.size);
             if (this.size > 0)
             {
-                Interval.oneTo(this.size).forEach((IntProcedure) list::add);
+                Interval.oneTo(this.size).forEach(new IntProcedure()
+                {
+                    public void value(int each)
+                    {
+                        list.add(each);
+                    }
+                });
             }
             return list;
         }
@@ -87,10 +90,16 @@ public class IntListPresizedMemoryTest
         @Override
         public TIntArrayList value()
         {
-            TIntArrayList list = new TIntArrayList(this.size);
+            final TIntArrayList list = new TIntArrayList(this.size);
             if (this.size > 0)
             {
-                Interval.oneTo(this.size).forEach((IntProcedure) list::add);
+                Interval.oneTo(this.size).forEach(new IntProcedure()
+                {
+                    public void value(int each)
+                    {
+                        list.add(each);
+                    }
+                });
             }
             return list;
         }

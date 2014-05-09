@@ -18,14 +18,12 @@ package com.gs.collections.impl.memory.multimap;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.impl.MemoryTests;
-import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +32,6 @@ public class ListMultimapMemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(ListMultimapMemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledMultimaps()
     {
         LOGGER.info("Comparing Items: Guava {}, GSC {}",
@@ -77,13 +74,17 @@ public class ListMultimapMemoryTest
         @Override
         public ArrayListMultimap<Integer, String> value()
         {
-            ArrayListMultimap<Integer, String> mm = ArrayListMultimap.create();
-            this.data.forEach(Procedures.cast(each -> {
-                for (int j = 0; j < 10; j++)
+            final ArrayListMultimap<Integer, String> mm = ArrayListMultimap.create();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
                 {
-                    mm.put(each, "dummy");
+                    for (int j = 0; j < 10; j++)
+                    {
+                        mm.put(each, "dummy");
+                    }
                 }
-            }));
+            });
             return mm;
         }
     }
@@ -100,13 +101,17 @@ public class ListMultimapMemoryTest
         @Override
         public FastListMultimap<Integer, String> value()
         {
-            FastListMultimap<Integer, String> mm = FastListMultimap.newMultimap();
-            this.data.forEach(Procedures.cast(each -> {
-                for (int j = 0; j < 10; j++)
+            final FastListMultimap<Integer, String> mm = FastListMultimap.newMultimap();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
                 {
-                    mm.put(each, "dummy");
+                    for (int j = 0; j < 10; j++)
+                    {
+                        mm.put(each, "dummy");
+                    }
                 }
-            }));
+            });
             return mm;
         }
     }

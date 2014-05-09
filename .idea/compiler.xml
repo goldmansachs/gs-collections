@@ -28,6 +28,7 @@
         <module name="gs-collections-testutils" />
         <module name="jmh-scala-tests" />
         <module name="jmh-tests" />
+        <module name="memory-tests" />
         <module name="performance-tests" />
         <module name="scala-unit-tests" />
         <module name="serialization-tests" />
@@ -45,6 +46,7 @@
       <module name="gs-collections-forkjoin" target="1.7" />
       <module name="gs-collections-testutils" target="1.5" />
       <module name="jmh-tests" target="1.8" />
+      <module name="memory-tests" target="1.7" />
       <module name="performance-tests" target="1.8" />
       <module name="scala-unit-tests" target="1.5" />
       <module name="serialization-tests" target="1.5" />

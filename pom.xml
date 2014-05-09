@@ -496,6 +496,7 @@
                 <module>serialization-tests</module>
                 <module>acceptance-tests</module>
                 <module>performance-tests</module>
+                <module>memory-tests</module>
                 <module>jmh-scala-tests</module>
                 <module>jmh-tests</module>
             </modules>

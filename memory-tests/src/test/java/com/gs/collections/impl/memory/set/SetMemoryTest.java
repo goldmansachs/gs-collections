@@ -20,15 +20,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.impl.MemoryTests;
-import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import gnu.trove.set.hash.THashSet;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +35,6 @@ public class SetMemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(SetMemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledSets()
     {
         LOGGER.info("Comparing Items: Scala {}, Trove {}, GSC {}, JDK {}",
@@ -69,9 +66,15 @@ public class SetMemoryTest
             this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
-        protected <R extends Set<Integer>> R fill(R set)
+        protected <R extends Set<Integer>> R fill(final R set)
         {
-            this.data.forEach(Procedures.cast(set::add));
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
+                {
+                    set.add(each);
+                }
+            });
             return set;
         }
     }
@@ -136,8 +139,14 @@ public class SetMemoryTest
         @Override
         public scala.collection.mutable.HashSet<Integer> value()
         {
-            scala.collection.mutable.HashSet<Integer> set = new scala.collection.mutable.HashSet<Integer>();
-            this.data.forEach(Procedures.cast(set::add));
+            final scala.collection.mutable.HashSet<Integer> set = new scala.collection.mutable.HashSet<Integer>();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
+                {
+                    set.add(each);
+                }
+            });
             return set;
         }
     }

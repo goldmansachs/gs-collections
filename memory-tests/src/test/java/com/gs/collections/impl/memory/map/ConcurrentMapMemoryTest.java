@@ -20,13 +20,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.impl.MemoryTests;
-import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +33,6 @@ public class ConcurrentMapMemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(ConcurrentMapMemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledConcurrentMaps()
     {
         LOGGER.info("Comparing Items: JDK {}, GSC {}",
@@ -65,9 +62,15 @@ public class ConcurrentMapMemoryTest
             this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
-        protected <R extends Map<Integer, String>> R fill(R map)
+        protected <R extends Map<Integer, String>> R fill(final R map)
         {
-            this.data.forEach(Procedures.cast(each -> { map.put(each, "dummy"); }));
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
+                {
+                    map.put(each, "dummy");
+                }
+            });
             return map;
         }
     }

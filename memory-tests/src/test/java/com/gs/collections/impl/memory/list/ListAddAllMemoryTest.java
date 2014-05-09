@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.collection.mutable.ArrayBuffer;
@@ -37,7 +35,6 @@ public class ListAddAllMemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(ListAddAllMemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledLists()
     {
         LOGGER.info("Comparing Items: Scala {}, JDK {}, GSC {}, Scala {}, JDK {}",

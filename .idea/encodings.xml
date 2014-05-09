@@ -12,6 +12,7 @@
     <file url="file://$PROJECT_DIR$/gs-collections-forkjoin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jmh-scala-tests" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jmh-tests" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/memory-tests" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/performance-tests" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/scala-unit-tests" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/serialization-tests" charset="UTF-8" />

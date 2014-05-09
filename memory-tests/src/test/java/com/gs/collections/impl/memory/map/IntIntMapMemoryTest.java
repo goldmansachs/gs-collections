@@ -19,15 +19,14 @@ package com.gs.collections.impl.memory.map;
 import java.util.HashMap;
 
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.set.primitive.IntSet;
-import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.map.mutable.primitive.IntIntHashMap;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import gnu.trove.map.hash.TIntIntHashMap;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,6 @@ public class IntIntMapMemoryTest
     private static final Logger LOGGER = LoggerFactory.getLogger(IntIntMapMemoryTest.class);
 
     @Test
-    @Category(MemoryTests.class)
     public void memoryForScaledMaps()
     {
         LOGGER.info("Comparing Items: Trove {}, GSC {}, JDK {}",
@@ -72,8 +70,14 @@ public class IntIntMapMemoryTest
         @Override
         public IntIntHashMap value()
         {
-            IntIntHashMap map = new IntIntHashMap();
-            this.data.forEach(each -> map.put(each, each));
+            final IntIntHashMap map = new IntIntHashMap();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    map.put(each, each);
+                }
+            });
             return map;
         }
     }
@@ -90,8 +94,14 @@ public class IntIntMapMemoryTest
         @Override
         public TIntIntHashMap value()
         {
-            TIntIntHashMap map = new TIntIntHashMap();
-            this.data.forEach(each -> { map.put(each, each); });
+            final TIntIntHashMap map = new TIntIntHashMap();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    map.put(each, each);
+                }
+            });
             return map;
         }
     }
@@ -108,8 +118,14 @@ public class IntIntMapMemoryTest
         @Override
         public HashMap<Integer, Integer> value()
         {
-            HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-            this.data.forEach(each -> { map.put(each, each); });
+            final HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    map.put(each, each);
+                }
+            });
             return map;
         }
     }
