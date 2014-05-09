@@ -38,7 +38,6 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
-import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -61,13 +60,13 @@ public class AnagramListTest
 
     private ExecutorService executorService;
 
-    @Setup(Level.Iteration)
+    @Setup
     public void setUp()
     {
         this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
-    @TearDown(Level.Iteration)
+    @TearDown
     public void tearDown() throws InterruptedException
     {
         this.executorService.shutdownNow();

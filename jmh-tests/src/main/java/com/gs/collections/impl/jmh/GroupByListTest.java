@@ -38,7 +38,7 @@ import org.openjdk.jmh.annotations.Warmup;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class GroupByTest
+public class GroupByListTest
 {
     private static final int SIZE = 1_000_000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));

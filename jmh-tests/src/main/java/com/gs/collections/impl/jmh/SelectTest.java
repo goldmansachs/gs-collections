@@ -28,6 +28,7 @@ import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
+import org.junit.Assert;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
@@ -53,8 +54,8 @@ public class SelectTest
     @GenerateMicroBenchmark
     public void serial_lazy_jdk()
     {
-        List<Integer> odds = this.integersJDK.stream().filter(each -> each % 2 == 1).collect(Collectors.toList());
         List<Integer> evens = this.integersJDK.stream().filter(each -> each % 2 == 0).collect(Collectors.toList());
+        Assert.assertEquals(SIZE / 2, evens.size());
     }
 
     @Warmup(iterations = 20)
@@ -62,8 +63,8 @@ public class SelectTest
     @GenerateMicroBenchmark
     public void parallel_lazy_jdk()
     {
-        List<Integer> odds = this.integersJDK.parallelStream().filter(each -> each % 2 == 1).collect(Collectors.toList());
         List<Integer> evens = this.integersJDK.parallelStream().filter(each -> each % 2 == 0).collect(Collectors.toList());
+        Assert.assertEquals(SIZE / 2, evens.size());
     }
 
     @Warmup(iterations = 20)
@@ -71,8 +72,8 @@ public class SelectTest
     @GenerateMicroBenchmark
     public void serial_eager_gsc()
     {
-        MutableList<Integer> odds = this.integersGSC.select(each -> each % 2 == 1);
         MutableList<Integer> evens = this.integersGSC.select(each -> each % 2 == 0);
+        Assert.assertEquals(SIZE / 2, evens.size());
     }
 
     @Warmup(iterations = 20)
@@ -80,8 +81,8 @@ public class SelectTest
     @GenerateMicroBenchmark
     public void parallel_eager_gsc()
     {
-        Collection<Integer> odds = ParallelIterate.select(this.integersGSC, each -> each % 2 == 1);
         Collection<Integer> evens = ParallelIterate.select(this.integersGSC, each -> each % 2 == 0);
+        Assert.assertEquals(SIZE / 2, evens.size());
     }
 
     @Warmup(iterations = 20)
@@ -89,8 +90,8 @@ public class SelectTest
     @GenerateMicroBenchmark
     public void serial_lazy_gsc()
     {
-        MutableList<Integer> odds = this.integersGSC.asLazy().select(each -> each % 2 == 1).toList();
         MutableList<Integer> evens = this.integersGSC.asLazy().select(each -> each % 2 == 0).toList();
+        Assert.assertEquals(SIZE / 2, evens.size());
     }
 
     @Warmup(iterations = 20)
@@ -99,7 +100,7 @@ public class SelectTest
     public void parallel_lazy_gsc()
     {
         ParallelListIterable<Integer> parallelListIterable = this.integersGSC.asParallel(this.service, BATCH_SIZE);
-        MutableList<Integer> odds = parallelListIterable.select(each -> each % 2 == 1).toList();
         MutableList<Integer> evens = parallelListIterable.select(each -> each % 2 == 0).toList();
+        Assert.assertEquals(SIZE / 2, evens.size());
     }
 }

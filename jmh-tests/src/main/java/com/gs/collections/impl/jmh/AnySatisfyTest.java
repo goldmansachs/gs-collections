@@ -27,7 +27,6 @@ import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
-import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -49,18 +48,19 @@ public class AnySatisfyTest
 
     private ExecutorService executorService;
 
-    @Setup(Level.Iteration)
+    @Setup
     public void setUp()
     {
         this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
-    @TearDown(Level.Iteration)
+    @TearDown
     public void tearDown() throws InterruptedException
     {
         this.executorService.shutdownNow();
         this.executorService.awaitTermination(1L, TimeUnit.SECONDS);
     }
+
     @GenerateMicroBenchmark
     public void short_circuit_middle_serial_lazy_jdk()
     {
@@ -102,6 +102,30 @@ public class AnySatisfyTest
     }
 
     @GenerateMicroBenchmark
+    public void short_circuit_middle_serial_eager_scala()
+    {
+        AnySatisfyScalaTest.short_circuit_middle_serial_eager_scala();
+    }
+
+    @GenerateMicroBenchmark
+    public void process_all_serial_eager_scala()
+    {
+        AnySatisfyScalaTest.process_all_serial_eager_scala();
+    }
+
+    @GenerateMicroBenchmark
+    public void short_circuit_middle_serial_lazy_scala()
+    {
+        AnySatisfyScalaTest.short_circuit_middle_serial_lazy_scala();
+    }
+
+    @GenerateMicroBenchmark
+    public void process_all_serial_lazy_scala()
+    {
+        AnySatisfyScalaTest.process_all_serial_lazy_scala();
+    }
+
+    @GenerateMicroBenchmark
     public void short_circuit_middle_parallel_lazy_jdk()
     {
         Assert.assertTrue(this.integersJDK.parallelStream().anyMatch(each -> each == SIZE / 2 - 1));
@@ -123,5 +147,17 @@ public class AnySatisfyTest
     public void process_all_parallel_lazy_gsc()
     {
         Assert.assertFalse(this.integersGSC.asParallel(this.executorService, BATCH_SIZE).anySatisfy(each -> each < 0));
+    }
+
+    @GenerateMicroBenchmark
+    public void short_circuit_middle_parallel_lazy_scala()
+    {
+        AnySatisfyScalaTest.short_circuit_middle_parallel_lazy_scala();
+    }
+
+    @GenerateMicroBenchmark
+    public void process_all_parallel_lazy_scala()
+    {
+        AnySatisfyScalaTest.process_all_parallel_lazy_scala();
     }
 }
