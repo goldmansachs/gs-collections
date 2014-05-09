@@ -120,11 +120,11 @@ import net.jcip.annotations.NotThreadSafe;
  * in that the data elements are protected, not private.  It is this issue that caused this class
  * to be created in the first place.  The intent was to provide optimized internal iterators which use direct access
  * against the array of items, which is currently not possible by subclassing ArrayList.
- * <p>
+ * <p/>
  * An empty FastList created by calling the default constructor starts with a shared reference to a static
  * empty array (DEFAULT_SIZED_EMPTY_ARRAY).  This makes empty FastLists very memory efficient.  The
  * first call to add will lazily create an array of size 10.
- * <p>
+ * <p/>
  * An empty FastList created by calling the pre-size constructor with a value of 0 (new FastList(0)) starts
  * with a shared reference to a static  empty array (ZERO_SIZED_ARRAY).  This makes FastLists presized to 0 very
  * memory efficient as well.  The first call to add will lazily create an array of size 1.
@@ -192,7 +192,7 @@ public class FastList<T>
 
     /**
      * Creates a new list using the passed {@code elements} argument as the backing store.
-     * <p>
+     * <p/>
      * !!! WARNING: This method uses the passed in array, so can be very unsafe if the original
      * array is held onto anywhere else. !!!
      */
@@ -1702,6 +1702,20 @@ public class FastList<T>
             {
                 procedure.value(FastList.this.items[i]);
             }
+        }
+
+        @Override
+        public int count(Predicate<? super T> predicate)
+        {
+            int count = 0;
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                if (predicate.accept(FastList.this.items[i]))
+                {
+                    count++;
+                }
+            }
+            return count;
         }
 
         public boolean anySatisfy(Predicate<? super T> predicate)

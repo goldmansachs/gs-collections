@@ -46,11 +46,11 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
-import com.gs.collections.impl.block.procedure.AtomicCountProcedure;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
@@ -582,11 +582,27 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
         return map;
     }
 
-    public int count(Predicate<? super T> predicate)
+    public int count(final Predicate<? super T> predicate)
     {
-        AtomicCountProcedure<T> procedure = new AtomicCountProcedure<T>(predicate);
-        this.forEach(procedure);
-        return procedure.getCount();
+        Function<Batch<T>, Integer> map = new Function<Batch<T>, Integer>()
+        {
+            public Integer valueOf(Batch<T> batch)
+            {
+                return batch.count(predicate);
+            }
+        };
+
+        Procedure2<Counter, Integer> combineProcedure = new Procedure2<Counter, Integer>()
+        {
+            public void value(Counter counter, Integer eachCount)
+            {
+                counter.add(eachCount);
+            }
+        };
+
+        Counter state = new Counter();
+        this.collectCombineUnordered(map, combineProcedure, state);
+        return state.getCount();
     }
 
     public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)

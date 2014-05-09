@@ -30,6 +30,8 @@ public interface Batch<T>
 
     <V> Batch<V> collect(Function<? super T, ? extends V> function);
 
+    int count(Predicate<? super T> predicate);
+
     String makeString(String separator);
 }
 

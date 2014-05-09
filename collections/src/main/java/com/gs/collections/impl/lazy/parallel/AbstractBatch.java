@@ -16,10 +16,19 @@
 
 package com.gs.collections.impl.lazy.parallel;
 
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.impl.block.procedure.CountProcedure;
 
 public abstract class AbstractBatch<T> implements Batch<T>
 {
+    public int count(Predicate<? super T> predicate)
+    {
+        CountProcedure<T> procedure = new CountProcedure<T>(predicate);
+        this.forEach(procedure);
+        return procedure.getCount();
+    }
+
     public String makeString(final String separator)
     {
         final StringBuilder stringBuilder = new StringBuilder();
