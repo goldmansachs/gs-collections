@@ -18,23 +18,26 @@ package com.gs.collections.impl.jmh;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 
+import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
@@ -53,6 +56,9 @@ public class CountTest
 
     private ExecutorService executorService;
 
+    @Param({"0", "1", "2", "3", "4", "5"})
+    public int megamorphicWarmupLevel;
+
     @Before
     @Setup
     public void setUp()
@@ -62,113 +68,179 @@ public class CountTest
 
     @Before
     @Setup(Level.Trial)
-    public void megamorphic()
+    public void setUp_megamorphic()
     {
-        Predicate<Integer> jdkEven = new Predicate<Integer>()
+        this.setUp();
+
+        if (this.megamorphicWarmupLevel > 0)
         {
-            @Override
-            public boolean test(Integer each)
+            // serial, lazy, JDK
             {
-                return each % 2 == 0;
+                long evens = this.integersJDK.stream().filter(each -> each % 2 == 0).count();
+                Assert.assertEquals(SIZE / 2, evens);
+                long odds = this.integersJDK.stream().filter(each -> each % 2 == 1).count();
+                Assert.assertEquals(SIZE / 2, odds);
+                long evens2 = this.integersJDK.stream().filter(each -> (each & 1) == 0).count();
+                Assert.assertEquals(SIZE / 2, evens2);
             }
-        };
-        Predicate<Integer> jdkOdd = new Predicate<Integer>()
-        {
-            @Override
-            public boolean test(Integer each)
+
+            // parallel, lazy, JDK
             {
-                return each % 2 == 1;
+                long evens = this.integersJDK.parallelStream().filter(each -> each % 2 == 0).count();
+                Assert.assertEquals(SIZE / 2, evens);
+                long odds = this.integersJDK.parallelStream().filter(each -> each % 2 == 1).count();
+                Assert.assertEquals(SIZE / 2, odds);
+                long evens2 = this.integersJDK.parallelStream().filter(each -> (each & 1) == 0).count();
+                Assert.assertEquals(SIZE / 2, evens2);
             }
-        };
 
-        // serial, lazy, JDK
-        {
-            long evens = this.integersJDK.stream().filter(each -> each % 2 == 0).count();
-            Assert.assertEquals(SIZE / 2, evens);
-            long odds = this.integersJDK.stream().filter(each -> each % 2 == 1).count();
-            Assert.assertEquals(SIZE / 2, odds);
-            long evens2 = this.integersJDK.stream().filter(jdkEven).count();
-            Assert.assertEquals(SIZE / 2, evens2);
-            long odds2 = this.integersJDK.stream().filter(jdkOdd).count();
-            Assert.assertEquals(SIZE / 2, odds2);
-        }
-
-        // parallel, lazy, JDK
-        {
-            long evens = this.integersJDK.parallelStream().filter(each -> each % 2 == 0).count();
-            Assert.assertEquals(SIZE / 2, evens);
-            long odds = this.integersJDK.parallelStream().filter(each -> each % 2 == 1).count();
-            Assert.assertEquals(SIZE / 2, odds);
-            long evens2 = this.integersJDK.parallelStream().filter(jdkEven).count();
-            Assert.assertEquals(SIZE / 2, evens2);
-            long odds2 = this.integersJDK.parallelStream().filter(jdkOdd).count();
-            Assert.assertEquals(SIZE / 2, odds2);
-        }
-
-        com.gs.collections.api.block.predicate.Predicate<Integer> gscEven = new com.gs.collections.api.block.predicate.Predicate<Integer>()
-        {
-            @Override
-            public boolean accept(Integer each)
+            // serial, lazy, GSC
             {
-                return each % 2 == 0;
+                long evens = this.integersGSC.asLazy().count(each -> each % 2 == 0);
+                Assert.assertEquals(SIZE / 2, evens);
+                long odds = this.integersGSC.asLazy().count(each -> each % 2 == 1);
+                Assert.assertEquals(SIZE / 2, odds);
+                long evens2 = this.integersGSC.asLazy().count(each -> (each & 1) == 0);
+                Assert.assertEquals(SIZE / 2, evens2);
             }
-        };
-        com.gs.collections.api.block.predicate.Predicate<Integer> gscOdd = new com.gs.collections.api.block.predicate.Predicate<Integer>()
-        {
-            @Override
-            public boolean accept(Integer each)
+
+            // parallel, lazy, GSC
             {
-                return each % 2 == 1;
+                long evens = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).count(each -> each % 2 == 0);
+                Assert.assertEquals(SIZE / 2, evens);
+                long odds = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).count(each -> each % 2 == 1);
+                Assert.assertEquals(SIZE / 2, odds);
+                long evens2 = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).count(each -> (each & 1) == 0);
+                Assert.assertEquals(SIZE / 2, evens2);
             }
-        };
 
-        // serial, lazy, GSC
-        {
-            long evens = this.integersGSC.asLazy().count(each -> each % 2 == 0);
-            Assert.assertEquals(SIZE / 2, evens);
-            long odds = this.integersGSC.asLazy().count(each -> each % 2 == 1);
-            Assert.assertEquals(SIZE / 2, odds);
-            long evens2 = this.integersGSC.asLazy().count(gscEven);
-            Assert.assertEquals(SIZE / 2, evens2);
-            long odds2 = this.integersGSC.asLazy().count(gscOdd);
-            Assert.assertEquals(SIZE / 2, odds2);
-        }
+            // serial, eager, GSC
+            {
+                long evens = this.integersGSC.count(each -> each % 2 == 0);
+                Assert.assertEquals(SIZE / 2, evens);
+                long odds = this.integersGSC.count(each -> each % 2 == 1);
+                Assert.assertEquals(SIZE / 2, odds);
+                long evens2 = this.integersGSC.count(each -> (each & 1) == 0);
+                Assert.assertEquals(SIZE / 2, evens2);
+            }
 
-        // parallel, lazy, GSC
-        {
-            long evens = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).count(each -> each % 2 == 0);
-            Assert.assertEquals(SIZE / 2, evens);
-            long odds = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).count(each -> each % 2 == 1);
-            Assert.assertEquals(SIZE / 2, odds);
-            long evens2 = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).count(gscEven);
-            Assert.assertEquals(SIZE / 2, evens2);
-            long odds2 = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).count(gscOdd);
-            Assert.assertEquals(SIZE / 2, odds2);
-        }
-
-        // serial, eager, GSC
-        {
-            long evens = this.integersGSC.count(each -> each % 2 == 0);
-            Assert.assertEquals(SIZE / 2, evens);
-            long odds = this.integersGSC.count(each -> each % 2 == 1);
-            Assert.assertEquals(SIZE / 2, odds);
-            long evens2 = this.integersGSC.count(gscEven);
-            Assert.assertEquals(SIZE / 2, evens2);
-            long odds2 = this.integersGSC.count(gscOdd);
-            Assert.assertEquals(SIZE / 2, odds2);
-        }
-
-        // parallel, eager, GSC
-        {
+            // parallel, eager, GSC
             long evens = ParallelIterate.count(this.integersGSC, each -> each % 2 == 0);
             Assert.assertEquals(SIZE / 2, evens);
             long odds = ParallelIterate.count(this.integersGSC, each -> each % 2 == 1);
             Assert.assertEquals(SIZE / 2, odds);
-            long evens2 = ParallelIterate.count(this.integersGSC, gscEven);
+            long evens2 = ParallelIterate.count(this.integersGSC, each -> (each & 1) == 0);
             Assert.assertEquals(SIZE / 2, evens2);
-            long odds2 = ParallelIterate.count(this.integersGSC, gscOdd);
-            Assert.assertEquals(SIZE / 2, odds2);
         }
+
+        if (this.megamorphicWarmupLevel > 1)
+        {
+            // stream().mapToLong().reduce()
+            Assert.assertEquals(
+                    500001500000L,
+                    this.integersJDK.stream().mapToLong(each -> each + 1).reduce(0, (accum, each) -> accum + each));
+
+            Assert.assertEquals(
+                    500002500000L,
+                    this.integersJDK.stream().mapToLong(each -> each + 2).reduce(0, (accum, each) -> {
+                        Assert.assertTrue(each >= 0);
+                        return accum + each;
+                    })
+            );
+
+            Assert.assertEquals(
+                    500003500000L,
+                    this.integersJDK.stream().mapToLong(each -> each + 3).reduce(0, (accum, each) -> {
+                        long result = accum + each;
+                        Assert.assertTrue(each >= 0);
+                        return result;
+                    })
+            );
+
+            // parallelStream().mapToLong().reduce()
+            Assert.assertEquals(
+                    500001500000L,
+                    this.integersJDK.parallelStream().mapToLong(each -> each + 1).reduce(0, (accum, each) -> accum + each));
+
+            Assert.assertEquals(
+                    500002500000L,
+                    this.integersJDK.parallelStream().mapToLong(each -> each + 2).reduce(0, (accum, each) -> {
+                        Assert.assertTrue(each >= 0);
+                        return accum + each;
+                    })
+            );
+
+            Assert.assertEquals(
+                    500003500000L,
+                    this.integersJDK.parallelStream().mapToLong(each -> each + 3).reduce(0, (accum, each) -> {
+                        long result = accum + each;
+                        Assert.assertTrue(each >= 0);
+                        return result;
+                    })
+            );
+        }
+
+        if (this.megamorphicWarmupLevel > 2)
+        {
+            // java.util.stream.ReduceOps.makeLong(long, java.util.function.LongBinaryOperator)
+            Assert.assertEquals(
+                    Optional.of(1),
+                    this.integersJDK.stream().min(Comparators.naturalOrder()));
+
+            Assert.assertEquals(
+                    Optional.of(SIZE),
+                    this.integersJDK.stream().max(Comparators.naturalOrder()));
+
+            Assert.assertEquals(
+                    Optional.of(1),
+                    this.integersJDK.parallelStream().min(Comparators.naturalOrder()));
+
+            Assert.assertEquals(
+                    Optional.of(SIZE),
+                    this.integersJDK.parallelStream().max(Comparators.naturalOrder()));
+        }
+
+        if (this.megamorphicWarmupLevel > 3)
+        {
+            // java.util.stream.ReduceOps.makeLong(long, java.util.function.LongBinaryOperator)
+            Assert.assertEquals(
+                    Optional.of(1),
+                    this.integersJDK.stream().min(Comparators.naturalOrder()));
+
+            Assert.assertEquals(
+                    Optional.of(1),
+                    this.integersJDK.stream().max(Comparators.reverseNaturalOrder()));
+
+            Assert.assertEquals(
+                    Optional.of(1),
+                    this.integersJDK.parallelStream().min(Comparators.naturalOrder()));
+
+            Assert.assertEquals(
+                    Optional.of(1),
+                    this.integersJDK.parallelStream().max(Comparators.reverseNaturalOrder()));
+        }
+
+        if (this.megamorphicWarmupLevel > 4)
+        {
+            // java.util.stream.ReduceOps.makeLong(long, java.util.function.LongBinaryOperator)
+            Assert.assertEquals(
+                    Optional.of(SIZE),
+                    this.integersJDK.stream().reduce(Integer::max));
+
+            Assert.assertEquals(
+                    Optional.of(1),
+                    this.integersJDK.stream().reduce(Integer::min));
+
+            Assert.assertEquals(
+                    Optional.of(SIZE),
+                    this.integersJDK.parallelStream().reduce(Integer::max));
+
+            Assert.assertEquals(
+                    Optional.of(1),
+                    this.integersJDK.parallelStream().reduce(Integer::min));
+        }
+
+        CountScalaTest.megamorphic(this.megamorphicWarmupLevel);
     }
 
     @After
@@ -179,6 +251,7 @@ public class CountTest
         this.executorService.awaitTermination(1L, TimeUnit.SECONDS);
     }
 
+    @Test
     @GenerateMicroBenchmark
     public void serial_lazy_jdk()
     {
@@ -202,6 +275,7 @@ public class CountTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
+    // TODO: deoptimize CountProcedure
     @GenerateMicroBenchmark
     public void serial_lazy_gsc()
     {
@@ -209,6 +283,7 @@ public class CountTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
+    // TODO: deoptimize CountProcedure
     @GenerateMicroBenchmark
     public void parallel_eager_gsc()
     {
@@ -223,18 +298,21 @@ public class CountTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
+    // TODO: deoptimize traversible.forEach()
     @GenerateMicroBenchmark
     public void serial_eager_scala()
     {
         CountScalaTest.serial_eager_scala();
     }
 
+    // TODO: deoptimize traversible.forEach(), and step through
     @GenerateMicroBenchmark
     public void serial_lazy_scala()
     {
         CountScalaTest.serial_lazy_scala();
     }
 
+    // TODO: deoptimize iterator
     @GenerateMicroBenchmark
     public void parallel_lazy_scala()
     {

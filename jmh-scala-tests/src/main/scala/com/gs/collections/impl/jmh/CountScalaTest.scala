@@ -24,6 +24,42 @@ object CountScalaTest
     private val SIZE = 1000000
     private val integers = new ArrayBuffer[Int](SIZE) ++ (1 to SIZE)
 
+    def megamorphic(megamorphicWarmupLevel: Int): Unit =
+    {
+        if (megamorphicWarmupLevel > 0)
+        {
+            // serial, lazy
+            {
+                val evens = this.integers.view.count(_ % 2 == 0)
+                Assert.assertEquals(SIZE / 2, evens)
+                val odds = this.integers.view.count(_ % 2 == 1)
+                Assert.assertEquals(SIZE / 2, odds)
+                val evens2 = this.integers.view.count(each => (each & 1) == 0)
+                Assert.assertEquals(SIZE / 2, evens2)
+            }
+
+            // parallel, lazy
+            {
+                val evens = this.integers.par.count(_ % 2 == 0)
+                Assert.assertEquals(SIZE / 2, evens)
+                val odds = this.integers.par.count(_ % 2 == 1)
+                Assert.assertEquals(SIZE / 2, odds)
+                val evens2 = this.integers.par.count(each => (each & 1) == 0)
+                Assert.assertEquals(SIZE / 2, evens2)
+            }
+
+            // serial, eager
+            {
+                val evens = this.integers.count(_ % 2 == 0)
+                Assert.assertEquals(SIZE / 2, evens)
+                val odds = this.integers.count(_ % 2 == 1)
+                Assert.assertEquals(SIZE / 2, odds)
+                val evens2 = this.integers.count(each => (each & 1) == 0)
+                Assert.assertEquals(SIZE / 2, evens2)
+            }
+        }
+    }
+
     def serial_eager_scala(): Unit =
     {
         val evens = this.integers.count(_ % 2 == 0)
