@@ -200,7 +200,8 @@ public class AggregateByTest
     public void aggregateByProduct_parallel_eager_gsc()
     {
         MutableMap<Product, MarketValueStatistics> productDoubleMap =
-                ParallelIterate.aggregateBy(this.gscPositions,
+                ParallelIterate.aggregateBy(
+                        this.gscPositions,
                         Position::getProduct,
                         MarketValueStatistics::new,
                         MarketValueStatistics::acceptThis);
@@ -213,7 +214,8 @@ public class AggregateByTest
     public void aggregateByAccount_parallel_eager_gsc()
     {
         MutableMap<Account, MarketValueStatistics> productDoubleMap =
-                ParallelIterate.aggregateBy(this.gscPositions,
+                ParallelIterate.aggregateBy(
+                        this.gscPositions,
                         Position::getAccount,
                         MarketValueStatistics::new,
                         MarketValueStatistics::acceptThis);
@@ -226,7 +228,8 @@ public class AggregateByTest
     public void aggregateByCategory_parallel_eager_gsc()
     {
         MutableMap<String, MarketValueStatistics> productDoubleMap =
-                ParallelIterate.aggregateBy(this.gscPositions,
+                ParallelIterate.aggregateBy(
+                        this.gscPositions,
                         Position::getCategory,
                         MarketValueStatistics::new,
                         MarketValueStatistics::acceptThis);
@@ -359,7 +362,8 @@ public class AggregateByTest
     public void aggregateInPlaceByProduct_parallel_eager_gsc()
     {
         MutableMap<Product, MarketValueStatistics> productDoubleMap =
-                ParallelIterate.aggregateInPlaceBy(this.gscPositions,
+                ParallelIterate.aggregateInPlaceBy(
+                        this.gscPositions,
                         Position::getProduct,
                         MarketValueStatistics::new,
                         MarketValueStatistics::syncAccept);
@@ -372,7 +376,8 @@ public class AggregateByTest
     public void aggregateInPlaceByAccount_parallel_eager_gsc()
     {
         MutableMap<Account, MarketValueStatistics> productDoubleMap =
-                ParallelIterate.aggregateInPlaceBy(this.gscPositions,
+                ParallelIterate.aggregateInPlaceBy(
+                        this.gscPositions,
                         Position::getAccount,
                         MarketValueStatistics::new,
                         MarketValueStatistics::syncAccept);
@@ -385,7 +390,8 @@ public class AggregateByTest
     public void aggregateInPlaceByCategory_parallel_eager_gsc()
     {
         MutableMap<String, MarketValueStatistics> productDoubleMap =
-                ParallelIterate.aggregateInPlaceBy(this.gscPositions,
+                ParallelIterate.aggregateInPlaceBy(
+                        this.gscPositions,
                         Position::getCategory,
                         MarketValueStatistics::new,
                         MarketValueStatistics::syncAccept);
@@ -485,7 +491,7 @@ public class AggregateByTest
         }
     }
 
-    private final class Account
+    private static final class Account
     {
         private final String name = RandomStringUtils.randomNumeric(5);
 

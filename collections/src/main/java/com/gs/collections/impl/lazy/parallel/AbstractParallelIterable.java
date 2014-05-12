@@ -58,6 +58,7 @@ import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.list.mutable.CompositeFastList;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMapUnsafe;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -567,7 +568,7 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
             Function0<? extends V> zeroValueFactory,
             Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
     {
-        MutableMap<K, V> map = UnifiedMap.<K, V>newMap().asSynchronized();
+        MutableMap<K, V> map = ConcurrentHashMapUnsafe.newMap();
         this.forEach(new NonMutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map;
     }
@@ -577,7 +578,7 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator)
     {
-        MutableMap<K, V> map = UnifiedMap.<K, V>newMap().asSynchronized();
+        MutableMap<K, V> map = ConcurrentHashMapUnsafe.newMap();
         this.forEach(new MutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, mutatingAggregator));
         return map;
     }
