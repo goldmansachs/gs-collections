@@ -58,6 +58,27 @@ object CountScalaTest
                 Assert.assertEquals(SIZE / 2, evens2)
             }
         }
+
+        // deoptimize scala.collection.mutable.ResizableArray.foreach()
+        // deoptimize scala.collection.IndexedSeqOptimized.foreach()
+        if (megamorphicWarmupLevel > 1)
+        {
+            this.integers.view.foreach(Assert.assertNotNull)
+            this.integers.view.foreach(each => Assert.assertEquals(each, each))
+            this.integers.view.foreach(each => Assert.assertNotEquals(null, each))
+            this.integers.par.foreach(Assert.assertNotNull)
+            this.integers.par.foreach(each => Assert.assertEquals(each, each))
+            this.integers.par.foreach(each => Assert.assertNotEquals(null, each))
+        }
+
+        // deoptimize scala.collection.mutable.ResizableArray.foreach()
+        // deoptimize scala.collection.IndexedSeqOptimized.foreach()
+        if (megamorphicWarmupLevel > 2)
+        {
+            this.integers.foreach(Assert.assertNotNull)
+            this.integers.foreach(each => Assert.assertEquals(each, each))
+            this.integers.foreach(each => Assert.assertNotEquals(null, each))
+        }
     }
 
     def serial_eager_scala(): Unit =

@@ -18,19 +18,16 @@ package com.gs.collections.impl.jmh;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Procedures;
+import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Level;
@@ -56,22 +53,25 @@ public class CountTest
 
     private ExecutorService executorService;
 
-    @Param({"0", "1", "2", "3", "4", "5"})
+    @Param({"0", "1", "2", "3"})
     public int megamorphicWarmupLevel;
 
-    @Before
     @Setup
     public void setUp()
     {
         this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
-    @Before
+    @TearDown
+    public void tearDown() throws InterruptedException
+    {
+        this.executorService.shutdownNow();
+        this.executorService.awaitTermination(1L, TimeUnit.SECONDS);
+    }
+
     @Setup(Level.Trial)
     public void setUp_megamorphic()
     {
-        this.setUp();
-
         if (this.megamorphicWarmupLevel > 0)
         {
             // serial, lazy, JDK
@@ -182,76 +182,26 @@ public class CountTest
 
         if (this.megamorphicWarmupLevel > 2)
         {
-            // java.util.stream.ReduceOps.makeLong(long, java.util.function.LongBinaryOperator)
-            Assert.assertEquals(
-                    Optional.of(1),
-                    this.integersJDK.stream().min(Comparators.naturalOrder()));
+            this.integersGSC.asLazy().forEach(Procedures.cast(Assert::assertNotNull));
+            this.integersGSC.asLazy().forEach(Procedures.cast(each -> Assert.assertEquals(each, each)));
+            this.integersGSC.asLazy().forEach(new CountProcedure<>());
 
-            Assert.assertEquals(
-                    Optional.of(SIZE),
-                    this.integersJDK.stream().max(Comparators.naturalOrder()));
+            this.integersGSC.asParallel(this.executorService, BATCH_SIZE).forEach(Assert::assertNotNull);
+            this.integersGSC.asParallel(this.executorService, BATCH_SIZE).forEach(each -> Assert.assertEquals(each, each));
+            this.integersGSC.asParallel(this.executorService, BATCH_SIZE).forEach(new CountProcedure<>());
 
-            Assert.assertEquals(
-                    Optional.of(1),
-                    this.integersJDK.parallelStream().min(Comparators.naturalOrder()));
+            this.integersJDK.stream().forEach(Assert::assertNotNull);
+            this.integersJDK.stream().forEach(each -> Assert.assertEquals(each, each));
 
-            Assert.assertEquals(
-                    Optional.of(SIZE),
-                    this.integersJDK.parallelStream().max(Comparators.naturalOrder()));
-        }
-
-        if (this.megamorphicWarmupLevel > 3)
-        {
-            // java.util.stream.ReduceOps.makeLong(long, java.util.function.LongBinaryOperator)
-            Assert.assertEquals(
-                    Optional.of(1),
-                    this.integersJDK.stream().min(Comparators.naturalOrder()));
-
-            Assert.assertEquals(
-                    Optional.of(1),
-                    this.integersJDK.stream().max(Comparators.reverseNaturalOrder()));
-
-            Assert.assertEquals(
-                    Optional.of(1),
-                    this.integersJDK.parallelStream().min(Comparators.naturalOrder()));
-
-            Assert.assertEquals(
-                    Optional.of(1),
-                    this.integersJDK.parallelStream().max(Comparators.reverseNaturalOrder()));
-        }
-
-        if (this.megamorphicWarmupLevel > 4)
-        {
-            // java.util.stream.ReduceOps.makeLong(long, java.util.function.LongBinaryOperator)
-            Assert.assertEquals(
-                    Optional.of(SIZE),
-                    this.integersJDK.stream().reduce(Integer::max));
-
-            Assert.assertEquals(
-                    Optional.of(1),
-                    this.integersJDK.stream().reduce(Integer::min));
-
-            Assert.assertEquals(
-                    Optional.of(SIZE),
-                    this.integersJDK.parallelStream().reduce(Integer::max));
-
-            Assert.assertEquals(
-                    Optional.of(1),
-                    this.integersJDK.parallelStream().reduce(Integer::min));
+            this.integersJDK.parallelStream().forEach(Assert::assertNotNull);
+            this.integersJDK.parallelStream().forEach(each -> Assert.assertEquals(each, each));
         }
 
         CountScalaTest.megamorphic(this.megamorphicWarmupLevel);
     }
 
-    @After
-    @TearDown
-    public void tearDown() throws InterruptedException
-    {
-        this.executorService.shutdownNow();
-        this.executorService.awaitTermination(1L, TimeUnit.SECONDS);
-    }
-
-    @Test
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_lazy_jdk()
     {
@@ -275,7 +225,8 @@ public class CountTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
-    // TODO: deoptimize CountProcedure
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_lazy_gsc()
     {
@@ -283,7 +234,6 @@ public class CountTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
-    // TODO: deoptimize CountProcedure
     @GenerateMicroBenchmark
     public void parallel_eager_gsc()
     {
@@ -298,21 +248,22 @@ public class CountTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
-    // TODO: deoptimize traversible.forEach()
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_eager_scala()
     {
         CountScalaTest.serial_eager_scala();
     }
 
-    // TODO: deoptimize traversible.forEach(), and step through
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_lazy_scala()
     {
         CountScalaTest.serial_lazy_scala();
     }
 
-    // TODO: deoptimize iterator
     @GenerateMicroBenchmark
     public void parallel_lazy_scala()
     {

@@ -215,59 +215,53 @@ public class FunctionalInterfaceTest
             }
 
             // serial, eager, GSC
-            {
-                MutableSet<Integer> set = this.integersGSC
-                        .select(predicate1)
-                        .collect(function1)
-                        .collect(function2)
-                        .select(predicate2)
-                        .toSet();
-                Verify.assertSize(999_800, set);
+            MutableSet<Integer> set = this.integersGSC
+                    .select(predicate1)
+                    .collect(function1)
+                    .collect(function2)
+                    .select(predicate2)
+                    .toSet();
+            Verify.assertSize(999_800, set);
 
-                MutableBag<Integer> bag = this.integersGSC
-                        .select(predicate3)
-                        .collect(function3)
-                        .collect(function4)
-                        .select(predicate4)
-                        .toBag();
-                Verify.assertIterableSize(999_800, bag);
-            }
+            MutableBag<Integer> bag = this.integersGSC
+                    .select(predicate3)
+                    .collect(function3)
+                    .collect(function4)
+                    .select(predicate4)
+                    .toBag();
+            Verify.assertIterableSize(999_800, bag);
         }
 
         if (this.megamorphicWarmupLevel > 1)
         {
             // parallel, eager, GSC
-            {
-                Collection<Integer> select1 = ParallelIterate.select(this.integersGSC, predicate1, new UnifiedSet<>(), true);
-                Collection<String> collect1 = ParallelIterate.collect(select1, function1, new UnifiedSet<>(), true);
-                Collection<Integer> collect2 = ParallelIterate.collect(collect1, function2, new UnifiedSet<>(), true);
-                UnifiedSet<Integer> set = ParallelIterate.select(collect2, predicate2, new UnifiedSet<>(), true);
-                Verify.assertSize(999_800, set);
+            Collection<Integer> select1 = ParallelIterate.select(this.integersGSC, predicate1, new UnifiedSet<>(), true);
+            Collection<String> collect1 = ParallelIterate.collect(select1, function1, new UnifiedSet<>(), true);
+            Collection<Integer> collect2 = ParallelIterate.collect(collect1, function2, new UnifiedSet<>(), true);
+            UnifiedSet<Integer> set = ParallelIterate.select(collect2, predicate2, new UnifiedSet<>(), true);
+            Verify.assertSize(999_800, set);
 
-                Collection<Integer> select3 = ParallelIterate.select(this.integersGSC, predicate3, new HashBag<>(), true);
-                Collection<String> collect3 = ParallelIterate.collect(select3, function3, new HashBag<>(), true);
-                Collection<Integer> collect4 = ParallelIterate.collect(collect3, function4, new HashBag<>(), true);
-                HashBag<Integer> bag = ParallelIterate.select(collect4, predicate4, new HashBag<>(), true);
-                Verify.assertSize(999_800, bag);
-            }
+            Collection<Integer> select3 = ParallelIterate.select(this.integersGSC, predicate3, new HashBag<>(), true);
+            Collection<String> collect3 = ParallelIterate.collect(select3, function3, new HashBag<>(), true);
+            Collection<Integer> collect4 = ParallelIterate.collect(collect3, function4, new HashBag<>(), true);
+            HashBag<Integer> bag = ParallelIterate.select(collect4, predicate4, new HashBag<>(), true);
+            Verify.assertSize(999_800, bag);
         }
 
         if (this.megamorphicWarmupLevel > 2)
         {
             // parallel, eager, GSC, executorService
-            {
-                UnifiedSet<Integer> select1 = ParallelIterate.select(this.integersGSC, predicate1, new UnifiedSet<Integer>(), BATCH_SIZE, this.executorService, true);
-                UnifiedSet<String> collect1 = ParallelIterate.collect(select1, function1, new UnifiedSet<>(), BATCH_SIZE, this.executorService, true);
-                UnifiedSet<Integer> collect2 = ParallelIterate.collect(collect1, function2, new UnifiedSet<Integer>(), BATCH_SIZE, this.executorService, true);
-                UnifiedSet<Integer> set = ParallelIterate.select(collect2, predicate2, new UnifiedSet<>(), BATCH_SIZE, this.executorService, true);
-                Verify.assertSize(999_800, set);
+            UnifiedSet<Integer> select1 = ParallelIterate.select(this.integersGSC, predicate1, new UnifiedSet<Integer>(), BATCH_SIZE, this.executorService, true);
+            UnifiedSet<String> collect1 = ParallelIterate.collect(select1, function1, new UnifiedSet<>(), BATCH_SIZE, this.executorService, true);
+            UnifiedSet<Integer> collect2 = ParallelIterate.collect(collect1, function2, new UnifiedSet<Integer>(), BATCH_SIZE, this.executorService, true);
+            UnifiedSet<Integer> set = ParallelIterate.select(collect2, predicate2, new UnifiedSet<>(), BATCH_SIZE, this.executorService, true);
+            Verify.assertSize(999_800, set);
 
-                HashBag<Integer> select3 = ParallelIterate.select(this.integersGSC, predicate3, new HashBag<Integer>(), BATCH_SIZE, this.executorService, true);
-                HashBag<String> collect3 = ParallelIterate.collect(select3, function3, new HashBag<>(), BATCH_SIZE, this.executorService, true);
-                HashBag<Integer> collect4 = ParallelIterate.collect(collect3, function4, new HashBag<Integer>(), BATCH_SIZE, this.executorService, true);
-                HashBag<Integer> bag = ParallelIterate.select(collect4, predicate4, new HashBag<Integer>(), BATCH_SIZE, this.executorService, true);
-                Verify.assertSize(999_800, bag);
-            }
+            HashBag<Integer> select3 = ParallelIterate.select(this.integersGSC, predicate3, new HashBag<Integer>(), BATCH_SIZE, this.executorService, true);
+            HashBag<String> collect3 = ParallelIterate.collect(select3, function3, new HashBag<>(), BATCH_SIZE, this.executorService, true);
+            HashBag<Integer> collect4 = ParallelIterate.collect(collect3, function4, new HashBag<Integer>(), BATCH_SIZE, this.executorService, true);
+            HashBag<Integer> bag = ParallelIterate.select(collect4, predicate4, new HashBag<Integer>(), BATCH_SIZE, this.executorService, true);
+            Verify.assertSize(999_800, bag);
         }
 
         FunctionalInterfaceScalaTest.megamorphic(this.megamorphicWarmupLevel);
@@ -328,12 +322,10 @@ public class FunctionalInterfaceTest
     @GenerateMicroBenchmark
     public MutableList<Integer> serial_eager_gsc()
     {
-        MutableList<Integer> list = this.integersGSC
-                .select(each -> each % 10_000 != 0)
-                .collect(String::valueOf)
-                .collect(Integer::valueOf)
-                .select(each -> (each + 1) % 10_000 != 0)
-                .toList();
+        FastList<Integer> select1 = this.integersGSC.select(each -> each % 10_000 != 0);
+        FastList<String> collect1 = select1.collect(String::valueOf);
+        FastList<Integer> collect2 = collect1.collect(Integer::valueOf);
+        FastList<Integer> list = collect2.select(each -> (each + 1) % 10_000 != 0);
         Verify.assertSize(999_800, list);
         return list;
     }
@@ -346,6 +338,32 @@ public class FunctionalInterfaceTest
                 this.serial_eager_gsc());
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
+    @GenerateMicroBenchmark
+    public MutableList<Integer> serial_eager_gsc_hand_coded()
+    {
+        FastList<Integer> list = new FastList<>();
+        int size = this.integersGSC.size();
+        for (int i = 0; i < size; i++)
+        {
+            Integer integer = this.integersGSC.get(i);
+            if (integer % 10_000 != 0 && (Integer.valueOf(String.valueOf(integer)) + 1) % 10_000 != 0)
+            {
+                list.add(integer);
+            }
+        }
+        Verify.assertSize(999_800, list);
+        return list;
+    }
+
+    @Test
+    public void test_serial_eager_gsc_hand_coded()
+    {
+        Verify.assertListsEqual(
+                Interval.oneToBy(1_000_000, 10_000).flatCollect(each -> Interval.fromTo(each, each + 9_997)).toList(),
+                this.serial_eager_gsc_hand_coded());
+    }
     @GenerateMicroBenchmark
     public MutableList<Integer> serial_lazy_gsc()
     {
