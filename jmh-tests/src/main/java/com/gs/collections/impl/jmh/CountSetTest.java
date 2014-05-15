@@ -16,8 +16,8 @@
 
 package com.gs.collections.impl.jmh;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.list.Interval;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Assert;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
@@ -44,12 +44,12 @@ import org.openjdk.jmh.annotations.Warmup;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class CountTest
+public class CountSetTest
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;
-    private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
-    private final FastList<Integer> integersGSC = new FastList<>(Interval.oneTo(SIZE));
+    private final Set<Integer> integersJDK = new HashSet<>(Interval.oneTo(SIZE));
+    private final UnifiedSet<Integer> integersGSC = new UnifiedSet<>(Interval.oneTo(SIZE));
 
     private ExecutorService executorService;
 
@@ -197,7 +197,7 @@ public class CountTest
             this.integersJDK.parallelStream().forEach(each -> Assert.assertEquals(each, each));
         }
 
-        CountScalaTest.megamorphic(this.megamorphicWarmupLevel);
+        CountSetScalaTest.megamorphic(this.megamorphicWarmupLevel);
     }
 
     @Warmup(iterations = 20)

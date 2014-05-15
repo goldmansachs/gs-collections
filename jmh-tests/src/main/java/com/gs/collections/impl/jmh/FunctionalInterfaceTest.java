@@ -275,6 +275,8 @@ public class FunctionalInterfaceTest
         this.executorService.awaitTermination(1L, TimeUnit.SECONDS);
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public List<Integer> serial_lazy_jdk()
     {
@@ -296,6 +298,8 @@ public class FunctionalInterfaceTest
                 this.serial_lazy_jdk());
     }
 
+    @Warmup(iterations = 50)
+    @Measurement(iterations = 25)
     @GenerateMicroBenchmark
     public List<Integer> parallel_lazy_jdk()
     {
@@ -309,6 +313,8 @@ public class FunctionalInterfaceTest
         return list;
     }
 
+    @Warmup(iterations = 50)
+    @Measurement(iterations = 25)
     @Test
     public void test_parallel_lazy_jdk()
     {
@@ -364,6 +370,9 @@ public class FunctionalInterfaceTest
                 Interval.oneToBy(1_000_000, 10_000).flatCollect(each -> Interval.fromTo(each, each + 9_997)).toList(),
                 this.serial_eager_gsc_hand_coded());
     }
+
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public MutableList<Integer> serial_lazy_gsc()
     {
@@ -386,46 +395,10 @@ public class FunctionalInterfaceTest
                 this.serial_lazy_gsc());
     }
 
+    @Warmup(iterations = 50)
+    @Measurement(iterations = 25)
     @GenerateMicroBenchmark
-    public Collection<Integer> parallel_eager_gsc()
-    {
-        Collection<Integer> select1 = ParallelIterate.select(this.integersGSC, each -> each % 10_000 != 0);
-        Collection<String> collect1 = ParallelIterate.collect(select1, String::valueOf);
-        Collection<Integer> collect2 = ParallelIterate.collect(collect1, Integer::valueOf);
-        Collection<Integer> list = ParallelIterate.select(collect2, each -> (each + 1) % 10_000 != 0);
-        Verify.assertSize(999_800, list);
-        return list;
-    }
-
-    @Test
-    public void test_parallel_eager_gsc()
-    {
-        Verify.assertListsEqual(
-                Interval.oneToBy(1_000_000, 10_000).flatCollect(each -> Interval.fromTo(each, each + 9_997)).toList(),
-                (List<?>) this.parallel_eager_gsc());
-    }
-
-    @GenerateMicroBenchmark
-    public MutableList<Integer> parallel_eager_gsc_pool_configured_fastlist()
-    {
-        MutableList<Integer> select1 = ParallelIterate.select(this.integersGSC, each -> each % 10_000 != 0, new FastList<>(), BATCH_SIZE, this.executorService, false);
-        MutableList<String> collect1 = ParallelIterate.collect(select1, String::valueOf, new FastList<>(), BATCH_SIZE, this.executorService, false);
-        MutableList<Integer> collect2 = ParallelIterate.collect(collect1, Integer::valueOf, new FastList<>(), BATCH_SIZE, this.executorService, false);
-        MutableList<Integer> list = ParallelIterate.select(collect2, each -> (each + 1) % 10_000 != 0, new FastList<>(), BATCH_SIZE, this.executorService, false);
-        Verify.assertSize(999_800, list);
-        return list;
-    }
-
-    @Test
-    public void test_parallel_eager_gsc_pool_configured_fastlist()
-    {
-        Verify.assertListsEqual(
-                Interval.oneToBy(1_000_000, 10_000).flatCollect(each -> Interval.fromTo(each, each + 9_997)).toList(),
-                this.parallel_eager_gsc_pool_configured_fastlist());
-    }
-
-    @GenerateMicroBenchmark
-    public MutableList<Integer> parallel_eager_gsc_pool_configured_compositefastlist()
+    public MutableList<Integer> parallel_eager_gsc()
     {
         MutableList<Integer> select1 = ParallelIterate.select(this.integersGSC, each -> each % 10_000 != 0, new CompositeFastList<>(), BATCH_SIZE, this.executorService, false);
         MutableList<String> collect1 = ParallelIterate.collect(select1, String::valueOf, new CompositeFastList<>(), BATCH_SIZE, this.executorService, false);
@@ -436,13 +409,15 @@ public class FunctionalInterfaceTest
     }
 
     @Test
-    public void test_parallel_eager_gsc_pool_configured_compositefastlist()
+    public void test_parallel_eager_gsc()
     {
         Verify.assertListsEqual(
                 Interval.oneToBy(1_000_000, 10_000).flatCollect(each -> Interval.fromTo(each, each + 9_997)).toList(),
-                this.parallel_eager_gsc_pool_configured_compositefastlist());
+                this.parallel_eager_gsc());
     }
 
+    @Warmup(iterations = 50)
+    @Measurement(iterations = 25)
     @GenerateMicroBenchmark
     public MutableList<Integer> parallel_lazy_gsc()
     {
@@ -465,6 +440,8 @@ public class FunctionalInterfaceTest
                 this.parallel_lazy_gsc());
     }
 
+    @Warmup(iterations = 50)
+    @Measurement(iterations = 25)
     @GenerateMicroBenchmark
     public CompositeFastList<Integer> parallel_eager_gsc_hand_coded()
     {
@@ -487,6 +464,8 @@ public class FunctionalInterfaceTest
                 this.parallel_eager_gsc_hand_coded());
     }
 
+    @Warmup(iterations = 50)
+    @Measurement(iterations = 25)
     @GenerateMicroBenchmark
     public MutableList<Integer> parallel_lazy_gsc_hand_coded()
     {
@@ -497,6 +476,8 @@ public class FunctionalInterfaceTest
         return list;
     }
 
+    @Warmup(iterations = 50)
+    @Measurement(iterations = 25)
     @Test
     public void test_parallel_lazy_gsc_hand_coded()
     {
@@ -505,6 +486,8 @@ public class FunctionalInterfaceTest
                 this.parallel_lazy_gsc_hand_coded());
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_eager_scala()
     {
@@ -517,6 +500,8 @@ public class FunctionalInterfaceTest
         FunctionalInterfaceScalaTest.test_serial_eager_scala();
     }
 
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
     @GenerateMicroBenchmark
     public void serial_lazy_scala()
     {
@@ -529,6 +514,8 @@ public class FunctionalInterfaceTest
         FunctionalInterfaceScalaTest.test_serial_lazy_scala();
     }
 
+    @Warmup(iterations = 50)
+    @Measurement(iterations = 25)
     @GenerateMicroBenchmark
     public void parallel_lazy_scala()
     {
@@ -541,6 +528,8 @@ public class FunctionalInterfaceTest
         FunctionalInterfaceScalaTest.test_parallel_lazy_scala();
     }
 
+    @Warmup(iterations = 50)
+    @Measurement(iterations = 25)
     @GenerateMicroBenchmark
     public void parallel_lazy_scala_hand_coded()
     {

@@ -54,8 +54,9 @@ public class AggregateByTest
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;
-    private static final PrimitiveIterator.OfInt INTS = new Random(System.currentTimeMillis()).ints(1, 10).iterator();
-    private static final PrimitiveIterator.OfDouble DOUBLES = new Random(System.currentTimeMillis()).doubles(1.0d, 100.0d).iterator();
+    private static final Random RANDOM = new Random(System.currentTimeMillis());
+    private static final PrimitiveIterator.OfInt INTS = RANDOM.ints(1, 10).iterator();
+    private static final PrimitiveIterator.OfDouble DOUBLES = RANDOM.doubles(1.0d, 100.0d).iterator();
     private final Pool<Account> accountPool = UnifiedSet.newSet();
     private final Pool<Product> productPool = UnifiedSet.newSet();
     private final Pool<String> categoryPool = UnifiedSet.newSet();
@@ -121,7 +122,7 @@ public class AggregateByTest
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
     @GenerateMicroBenchmark
-    public void aggregateByProduct_Parallel_lazy_jdk()
+    public void aggregateByProduct_parallel_lazy_jdk()
     {
         Map<Product, DoubleSummaryStatistics> productDoubleMap =
                 this.jdkPositions.parallelStream().collect(
@@ -134,7 +135,7 @@ public class AggregateByTest
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
     @GenerateMicroBenchmark
-    public void aggregateByAccount_Parallel_lazy_jdk()
+    public void aggregateByAccount_parallel_lazy_jdk()
     {
         Map<Account, DoubleSummaryStatistics> productDoubleMap =
                 this.jdkPositions.parallelStream().collect(
@@ -147,7 +148,7 @@ public class AggregateByTest
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
     @GenerateMicroBenchmark
-    public void aggregateByCategory_Parallel_lazy_jdk()
+    public void aggregateByCategory_parallel_lazy_jdk()
     {
         Map<String, DoubleSummaryStatistics> productDoubleMap =
                 this.jdkPositions.parallelStream().collect(
@@ -281,7 +282,7 @@ public class AggregateByTest
     public void aggregateByProduct_parallel_lazy_gsc()
     {
         MapIterable<Product, MarketValueStatistics> productDoubleMap =
-                this.gscPositions.asParallel(this.executorService, 10_000)
+                this.gscPositions.asParallel(this.executorService, BATCH_SIZE)
                         .aggregateBy(
                                 Position::getProduct,
                                 MarketValueStatistics::new,
@@ -295,7 +296,7 @@ public class AggregateByTest
     public void aggregateByAccount_parallel_lazy_gsc()
     {
         MapIterable<Account, MarketValueStatistics> productDoubleMap =
-                this.gscPositions.asParallel(this.executorService, 10_000)
+                this.gscPositions.asParallel(this.executorService, BATCH_SIZE)
                         .aggregateBy(
                                 Position::getAccount,
                                 MarketValueStatistics::new,
@@ -309,7 +310,7 @@ public class AggregateByTest
     public void aggregateByCategory_parallel_lazy_gsc()
     {
         MapIterable<String, MarketValueStatistics> productDoubleMap =
-                this.gscPositions.asParallel(this.executorService, 10_000)
+                this.gscPositions.asParallel(this.executorService, BATCH_SIZE)
                         .aggregateBy(
                                 Position::getCategory,
                                 MarketValueStatistics::new,
@@ -404,7 +405,7 @@ public class AggregateByTest
     public void aggregateInPlaceByProduct_parallel_lazy_gsc()
     {
         MapIterable<Product, MarketValueStatistics> productDoubleMap =
-                this.gscPositions.asParallel(this.executorService, 10_000)
+                this.gscPositions.asParallel(this.executorService, BATCH_SIZE)
                         .aggregateInPlaceBy(
                                 Position::getProduct,
                                 MarketValueStatistics::new,
@@ -418,7 +419,7 @@ public class AggregateByTest
     public void aggregateInPlaceByAccount_parallel_lazy_gsc()
     {
         MapIterable<Account, MarketValueStatistics> productDoubleMap =
-                this.gscPositions.asParallel(this.executorService, 10_000)
+                this.gscPositions.asParallel(this.executorService, BATCH_SIZE)
                         .aggregateInPlaceBy(
                                 Position::getAccount,
                                 MarketValueStatistics::new,
@@ -432,7 +433,7 @@ public class AggregateByTest
     public void aggregateInPlaceByCategory_parallel_lazy_gsc()
     {
         MapIterable<String, MarketValueStatistics> productDoubleMap =
-                this.gscPositions.asParallel(this.executorService, 10_000)
+                this.gscPositions.asParallel(this.executorService, BATCH_SIZE)
                         .aggregateInPlaceBy(
                                 Position::getCategory,
                                 MarketValueStatistics::new,
