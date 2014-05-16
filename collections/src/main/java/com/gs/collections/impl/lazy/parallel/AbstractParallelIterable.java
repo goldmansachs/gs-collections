@@ -17,7 +17,9 @@
 package com.gs.collections.impl.lazy.parallel;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
@@ -61,6 +63,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMapUnsafe;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
+import com.gs.collections.impl.set.mutable.SetAdapter;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 
@@ -505,9 +508,10 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
 
     public MutableSet<T> toSet()
     {
-        MutableSet<T> result = UnifiedSet.<T>newSet().asSynchronized();
+        ConcurrentHashMapUnsafe<T, Boolean> map = ConcurrentHashMapUnsafe.newMap();
+        Set<T> result = Collections.newSetFromMap(map);
         this.forEach(CollectionAddProcedure.on(result));
-        return result;
+        return SetAdapter.adapt(map.keySet());
     }
 
     public MutableSortedSet<T> toSortedSet()
