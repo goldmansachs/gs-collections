@@ -104,41 +104,55 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     private static final <type> EMPTY_KEY = <zero.(type)>;
     private static final <type> REMOVED_KEY = <(literal.(type))("1")>;
 
+    /**
+     * @deprecated in 5.1.0.
+     */
+    @Deprecated
     private static final float DEFAULT_LOAD_FACTOR = 0.5f;
+    private static final int OCCUPIED_DATA_RATIO = 2;
+    private static final int OCCUPIED_SENTINEL_RATIO = 4;
     private static final int DEFAULT_INITIAL_CAPACITY = 8;
-    private int occupied;
-    private int maxSize;
 
     private <type>[] keys;
     private BitSet values;
-    private float loadFactor = DEFAULT_LOAD_FACTOR;
+
+    private int occupiedWithData;
+    private int occupiedWithSentinels;
     private SentinelValues sentinelValues;
 
     public <name>BooleanHashMap()
     {
-        this.allocate(DEFAULT_INITIAL_CAPACITY \<\< 1);
+        this.allocateTable(DEFAULT_INITIAL_CAPACITY \<\< 1);
     }
 
     public <name>BooleanHashMap(int initialCapacity)
-    {
-        this(initialCapacity, DEFAULT_LOAD_FACTOR);
-    }
-
-    public <name>BooleanHashMap(<name>BooleanMap map)
-    {
-        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
-
-        this.putAll(map);
-    }
-
-    public <name>BooleanHashMap(int initialCapacity, float loadFactor)
     {
         if (initialCapacity \< 0)
         {
             throw new IllegalArgumentException("initial capacity cannot be less than 0");
         }
-        this.loadFactor = loadFactor;
-        this.init(this.fastCeil(initialCapacity / loadFactor));
+        int capacity = this.smallestPowerOfTwoGreaterThan(this.fastCeil(initialCapacity * OCCUPIED_DATA_RATIO));
+        this.allocateTable(capacity);
+    }
+
+    private int smallestPowerOfTwoGreaterThan(int n)
+    {
+        return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
+    }
+
+    public <name>BooleanHashMap(<name>BooleanMap map)
+    {
+        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY));
+        this.putAll(map);
+    }
+
+    /**
+     * @deprecated in 5.1.0.
+     */
+    @Deprecated
+    public <name>BooleanHashMap(int initialCapacity, float loadFactor)
+    {
+        this(initialCapacity);
     }
 
     public Mutable<name>BooleanMap asUnmodifiable()
@@ -224,16 +238,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         return this;
     }
 
-    private int init(int initialCapacity)
-    {
-        int capacity = 1;
-        while (capacity \< initialCapacity)
-        {
-            capacity \<\<= 1;
-        }
-        return this.allocate(capacity);
-    }
-
     private int fastCeil(float v)
     {
         int possibleResult = (int) v;
@@ -259,41 +263,41 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         return !isEmptyKey(key) && !isRemovedKey(key);
     }
 
-    private int allocate(int capacity)
-    {
-        this.allocateTable(capacity);
-        this.computeMaxSize(capacity);
-        return capacity;
-    }
-
     private void allocateTable(int sizeToAllocate)
     {
         this.keys = new <type>[sizeToAllocate];
         this.values = new BitSet(sizeToAllocate);
     }
 
-    private void computeMaxSize(int capacity)
-    {
-        // need at least one free slot for open addressing
-        this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
-    }
-
     public int size()
     {
-        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size());
+        return this.occupiedWithData + (this.sentinelValues == null ? 0 : this.sentinelValues.size());
     }
 
     public boolean isEmpty()
     {
-        return this.occupied == 0 && (this.sentinelValues == null || this.sentinelValues.size() == 0);
+        return this.occupiedWithData == 0 && (this.sentinelValues == null || this.sentinelValues.size() == 0);
     }
 
     public boolean notEmpty()
     {
-        return this.occupied != 0 || (this.sentinelValues != null && this.sentinelValues.size() != 0);
+        return this.occupiedWithData != 0 || (this.sentinelValues != null && this.sentinelValues.size() != 0);
+    }
+
+    /**
+     * Rehashes every element in the set into a new backing table of the smallest possible size and eliminating removed sentinels.
+     */
+    public void compact()
+    {
+        this.rehash(this.smallestPowerOfTwoGreaterThan(this.size()));
     }
 
     private void rehash()
+    {
+        this.rehash(this.keys.length);
+    }
+
+    private void rehashAndGrow()
     {
         this.rehash(this.keys.length \<\< 1);
     }
@@ -303,8 +307,9 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         int oldLength = this.keys.length;
         <type>[] old = this.keys;
         BitSet oldValues = this.values;
-        this.allocate(newCapacity);
-        this.occupied = 0;
+        this.allocateTable(newCapacity);
+        this.occupiedWithData = 0;
+        this.occupiedWithSentinels = 0;
 
         for (int i = 0; i \< oldLength; i++)
         {
@@ -362,7 +367,8 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     public void clear()
     {
         this.sentinelValues = null;
-        this.occupied = 0;
+        this.occupiedWithData = 0;
+        this.occupiedWithSentinels = 0;
         Arrays.fill(this.keys, EMPTY_KEY);
         this.values.clear();
     }
@@ -400,13 +406,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             return;
         }
 
-        this.keys[index] = key;
-        this.values.set(index, value);
-        ++this.occupied;
-        if (this.occupied > this.maxSize)
-        {
-            this.rehash();
-        }
+        this.addKeyValueAtIndex(key, value, index);
     }
 
     public void putAll(<name>BooleanMap map)
@@ -575,9 +575,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         {
             return this.values.get(index);
         }
-        this.keys[index] = key;
-        this.occupied++;
-        this.values.set(index, value);
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -626,10 +624,8 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         {
             return this.values.get(index);
         }
-        this.keys[index] = key;
-        this.occupied++;
         boolean value = function.value();
-        this.values.set(index, value);
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -678,10 +674,8 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         {
             return this.values.get(index);
         }
-        this.keys[index] = key;
-        this.occupied++;
         boolean value = function.booleanValueOf(parameter);
-        this.values.set(index, value);
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -730,10 +724,8 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         {
             return this.values.get(index);
         }
-        this.keys[index] = key;
-        this.occupied++;
         boolean value = function.valueOf(key);
-        this.values.set(index, value);
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -781,14 +773,26 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         if (<(equals.(type))("this.keys[index]", "key")>)
         {
             this.values.set(index, function.valueOf(this.values.get(index)));
+            return this.values.get(index);
         }
-        else
+        boolean value = function.valueOf(initialValueIfAbsent);
+        this.addKeyValueAtIndex(key, value, index);
+        return value;
+    }
+
+    private void addKeyValueAtIndex(<type> key, boolean value, int index)
+    {
+        if (this.keys[index] == REMOVED_KEY)
         {
-            this.keys[index] = key;
-            this.occupied++;
-            this.values.set(index, function.valueOf(initialValueIfAbsent));
+            this.occupiedWithSentinels--;
         }
-        return this.values.get(index);
+        this.keys[index] = key;
+        this.values.set(index, value);
+        this.occupiedWithData++;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
+        }
     }
 
     public void removeKey(<type> key)
@@ -831,8 +835,13 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         if (<(equals.(type))("this.keys[index]", "key")>)
         {
             this.keys[index] = REMOVED_KEY;
-            this.occupied--;
             this.values.set(index, EMPTY_VALUE);
+            this.occupiedWithData--;
+            this.occupiedWithSentinels++;
+            if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
+            {
+                this.rehash();
+            }
         }
     }
 
@@ -883,9 +892,15 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         if (<(equals.(type))("this.keys[index]", "key")>)
         {
             this.keys[index] = REMOVED_KEY;
-            this.occupied--;
             boolean oldValue = this.values.get(index);
             this.values.set(index, EMPTY_VALUE);
+            this.occupiedWithData--;
+            this.occupiedWithSentinels++;
+            if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
+            {
+                this.rehash();
+            }
+
             return oldValue;
         }
         return value;
@@ -1475,7 +1490,10 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     public void writeExternal(ObjectOutput out) throws IOException
     {
         out.writeInt(this.size());
-        out.writeFloat(this.loadFactor);
+        /**
+         * @deprecated in 5.1.0.
+         */
+        out.writeFloat(DEFAULT_LOAD_FACTOR);
         if (this.sentinelValues != null)
         {
             if (this.sentinelValues.containsZeroKey)
@@ -1502,13 +1520,26 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
     {
         int size = in.readInt();
-        this.loadFactor = in.readFloat();
-        this.init(Math.max((int) (size / this.loadFactor) + 1,
-                DEFAULT_INITIAL_CAPACITY));
+        /**
+         * @deprecated in 5.1.0.
+         */
+        in.readFloat();
         for (int i = 0; i \< size; i++)
         {
             this.put(in.read<name>(), in.readBoolean());
         }
+    }
+
+    private int maxOccupiedWithData()
+    {
+        int capacity = this.keys.length;
+        // need at least one free slot for open addressing
+        return Math.min(capacity - 1, capacity / OCCUPIED_DATA_RATIO);
+    }
+
+    private int maxOccupiedWithSentinels()
+    {
+        return this.keys.length / OCCUPIED_SENTINEL_RATIO;
     }
 
     private static final class SentinelValues
@@ -2173,8 +2204,8 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             {
                 <name>BooleanHashMap.this.keys = retained.keys;
                 <name>BooleanHashMap.this.values = retained.values;
-                <name>BooleanHashMap.this.maxSize = retained.maxSize;
-                <name>BooleanHashMap.this.occupied = retained.occupied;
+                <name>BooleanHashMap.this.occupiedWithData = retained.occupiedWithData;
+                <name>BooleanHashMap.this.occupiedWithSentinels = retained.occupiedWithSentinels;
                 <name>BooleanHashMap.this.sentinelValues = retained.sentinelValues;
                 return true;
             }
@@ -3001,8 +3032,8 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             {
                 <name>BooleanHashMap.this.keys = retained.keys;
                 <name>BooleanHashMap.this.values = retained.values;
-                <name>BooleanHashMap.this.maxSize = retained.maxSize;
-                <name>BooleanHashMap.this.occupied = retained.occupied;
+                <name>BooleanHashMap.this.occupiedWithData = retained.occupiedWithData;
+                <name>BooleanHashMap.this.occupiedWithSentinels = retained.occupiedWithSentinels;
                 <name>BooleanHashMap.this.sentinelValues = retained.sentinelValues;
                 return true;
             }

@@ -230,7 +230,7 @@ public abstract class AbstractMutableObjectBooleanMapTestCase extends AbstractOb
         ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<String>();
         for (int each = 3; collisions.size() <= 10; each++)
         {
-            if (hashMap.index(String.valueOf(each)) == hashMap.index(String.valueOf(3)))
+            if (hashMap.spread(String.valueOf(each)) == hashMap.spread(String.valueOf(3)))
             {
                 collisions.add(String.valueOf(each));
             }

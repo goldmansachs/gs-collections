@@ -284,10 +284,11 @@ public class SerialParallelLazyPerformanceTest
     public void anySatisfyShortCircuitInMiddle()
     {
         this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The Middle", each -> this.anySatisfy(
-                each.value(),
-                0,
-                true),
-                false);
+                        each.value(),
+                        0,
+                        true),
+                false
+        );
     }
 
     @Test
@@ -295,10 +296,11 @@ public class SerialParallelLazyPerformanceTest
     public void anySatisfyShortCircuitInEnd()
     {
         this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The End", each -> this.anySatisfy(
-                each.value(),
-                3,
-                false),
-                false);
+                        each.value(),
+                        3,
+                        false),
+                false
+        );
     }
 
     @Test
@@ -306,10 +308,11 @@ public class SerialParallelLazyPerformanceTest
     public void detectShortCircuitInBeginning()
     {
         this.measureAlgorithmForIntegerIterable("Detect Short Circuit In The Beginning", each -> this.detect(
-                each.value(),
-                2,
-                true),
-                false);
+                        each.value(),
+                        2,
+                        true),
+                false
+        );
     }
 
     @Test
@@ -350,10 +353,12 @@ public class SerialParallelLazyPerformanceTest
     {
         IntInterval.oneTo(20).forEach((IntProcedure) each -> {
             System.gc();
-            try {
+            try
+            {
                 Thread.sleep(100);
             }
-            catch (InterruptedException e) {
+            catch (InterruptedException e)
+            {
                 throw new RuntimeException(e);
             }
         });
@@ -384,7 +389,8 @@ public class SerialParallelLazyPerformanceTest
         MutableList<Function0<FastList<Integer>>> generators = FastList.newList();
         generators.add(() -> {
             FastList<Integer> integers = FastList.newList(interval);
-            if (shuffle) {
+            if (shuffle)
+            {
                 Collections.shuffle(integers);
             }
             return integers;
@@ -396,7 +402,8 @@ public class SerialParallelLazyPerformanceTest
     private void measureAlgorithmForIntegerIterable(String algorithmName, Procedure<Function0<FastList<Integer>>> algorithm, boolean shuffle)
     {
         this.printMachineAndTestConfiguration(algorithmName);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++)
+        {
             this.getSizes().forEach(Procedures.cast(count -> this.getIntegerListGenerators(count, shuffle).forEach(algorithm)));
         }
     }
@@ -411,7 +418,8 @@ public class SerialParallelLazyPerformanceTest
     public UnifiedSet<String> generateWordsList(int count)
     {
         UnifiedSet<String> words = UnifiedSet.newSet();
-        while (words.size() < count) {
+        while (words.size() < count)
+        {
             words.add(RandomStringUtils.randomAlphabetic(5));
         }
         return words;
@@ -420,7 +428,8 @@ public class SerialParallelLazyPerformanceTest
     private void measureAlgorithmForRandomStringIterable(String algorithmName, Procedure<Function0<UnifiedSet<String>>> algorithm)
     {
         this.printMachineAndTestConfiguration(algorithmName);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++)
+        {
             this.getSizes().forEach(Procedures.cast(count -> this.getRandomWordsGenerators(count).forEach(algorithm)));
         }
     }
@@ -476,10 +485,12 @@ public class SerialParallelLazyPerformanceTest
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try {
+        try
+        {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException e)
+        {
             throw new RuntimeException(e);
         }
     }
@@ -504,10 +515,12 @@ public class SerialParallelLazyPerformanceTest
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try {
+        try
+        {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException e)
+        {
             throw new RuntimeException(e);
         }
     }
@@ -544,10 +557,12 @@ public class SerialParallelLazyPerformanceTest
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try {
+        try
+        {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException e)
+        {
             throw new RuntimeException(e);
         }
     }
@@ -584,10 +599,12 @@ public class SerialParallelLazyPerformanceTest
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try {
+        try
+        {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException e)
+        {
             throw new RuntimeException(e);
         }
     }
@@ -624,10 +641,12 @@ public class SerialParallelLazyPerformanceTest
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try {
+        try
+        {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException e)
+        {
             throw new RuntimeException(e);
         }
     }
@@ -651,10 +670,12 @@ public class SerialParallelLazyPerformanceTest
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try {
+        try
+        {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException e)
+        {
             throw new RuntimeException(e);
         }
     }
@@ -691,10 +712,12 @@ public class SerialParallelLazyPerformanceTest
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try {
+        try
+        {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException e)
+        {
             throw new RuntimeException(e);
         }
     }
@@ -731,10 +754,12 @@ public class SerialParallelLazyPerformanceTest
         });
         this.shuffleAndRun(runnables);
         service.shutdown();
-        try {
+        try
+        {
             service.awaitTermination(1, TimeUnit.MINUTES);
         }
-        catch (InterruptedException e) {
+        catch (InterruptedException e)
+        {
             throw new RuntimeException(e);
         }
     }
@@ -1156,7 +1181,8 @@ public class SerialParallelLazyPerformanceTest
                 int count)
         {
             long start = TimeKeeper.getCurrentTimeAsNanos();
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++)
+            {
                 runnable.run();
             }
             long totalNanos = TimeKeeper.getCurrentTimeAsNanos() - start;
@@ -1194,9 +1220,11 @@ public class SerialParallelLazyPerformanceTest
         private static void warmUp(int warmUpCount, Runnable runnable)
         {
             long start = TimeKeeper.currentTimeMilliseconds();
-            for (int i = 0; i < warmUpCount; i++) {
+            for (int i = 0; i < warmUpCount; i++)
+            {
                 TimeKeeper.millisecondsToRun(runnable);
-                if (TimeKeeper.currentTimeMilliseconds() - start > PAIN_THRESHOLD) {
+                if (TimeKeeper.currentTimeMilliseconds() - start > PAIN_THRESHOLD)
+                {
                     break;
                 }
             }

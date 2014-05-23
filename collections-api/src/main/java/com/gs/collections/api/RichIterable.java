@@ -775,8 +775,10 @@ public interface
      * <p/>
      * Consider the following example where we have a {@code Person} class, and each {@code Person} has a list of {@code Address} objects.  Take the following {@link Function}:
      * <pre>
-     * Function&lt;Person, List&lt;Address&gt;&gt; addressFunction = new Function&lt;Person, List&lt;Address&gt;&gt;() {
-     *     public List&lt;Address&gt; valueOf(Person person) {
+     * Function&lt;Person, List&lt;Address&gt;&gt; addressFunction = new Function&lt;Person, List&lt;Address&gt;&gt;()
+     * {
+     *     public List&lt;Address&gt; valueOf(Person person)
+     *     {
      *         return person.getAddresses();
      *     }
      * };

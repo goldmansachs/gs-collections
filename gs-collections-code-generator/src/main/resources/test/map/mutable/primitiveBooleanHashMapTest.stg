@@ -23,7 +23,10 @@ package com.gs.collections.impl.map.mutable.primitive;
 import java.lang.reflect.Field;
 import java.util.BitSet;
 
-import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.BooleanFunction0;
+import com.gs.collections.api.block.function.primitive.BooleanToBooleanFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToBooleanFunction;
 import com.gs.collections.api.map.primitive.Mutable<name>BooleanMap;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -205,9 +208,95 @@ public class <name>BooleanHashMapTest extends AbstractMutable<name>BooleanMapTes
     {
         <name>BooleanHashMap hashMap0 = new <name>BooleanHashMap().withKeysValues(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false, <(literal.(type))("4")>, false);
 
-        <wrapperName> total = hashMap0.injectInto( <wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, boolean value) -> value ? result : <wrapperName>.valueOf((<type>) (result + (<type>) 2)));
+        <wrapperName> total = hashMap0.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, boolean value) -> value ? result : <wrapperName>.valueOf((<type>) (result + (<type>) 2)));
 
         Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("6")>), total);
+    }
+
+    @Test
+    public void put_every_slot()
+    {
+        <name>BooleanHashMap hashMap = new <name>BooleanHashMap();
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertFalse(hashMap.get(each));
+            hashMap.put(each, each % 2 == 0);
+            Assert.assertEquals(each % 2 == 0, hashMap.get(each));
+            hashMap.remove(each);
+            Assert.assertFalse(hashMap.get(each));
+        }
+    }
+
+    @Test
+    public void getIfAbsentPut_every_slot()
+    {
+        <name>BooleanHashMap hashMap = new <name>BooleanHashMap();
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertFalse(hashMap.get(each));
+            hashMap.getIfAbsentPut(each, each % 2 == 0);
+            Assert.assertEquals(each % 2 == 0, hashMap.get(each));
+        }
+    }
+
+    @Test
+    public void getIfAbsentPutWith_every_slot()
+    {
+        BooleanFunction\<String> functionLength = (String string) -> string.isEmpty();
+
+        Mutable<name>BooleanMap hashMap = this.getEmptyMap();
+
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertFalse(hashMap.get(each));
+            Assert.assertTrue(hashMap.getIfAbsentPutWith(each, functionLength, ""));
+            Assert.assertTrue(hashMap.get(each));
+        }
+    }
+
+    @Test
+    public void getIfAbsentPutWithKey_every_slot()
+    {
+        <name>ToBooleanFunction function = (<type> each) -> each % 2 == 0;
+
+        Mutable<name>BooleanMap hashMap = this.getEmptyMap();
+
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertFalse(hashMap.get(each));
+            Assert.assertEquals(each % 2 == 0, hashMap.getIfAbsentPutWithKey(each, function));
+            Assert.assertEquals(each % 2 == 0, hashMap.get(each));
+        }
+    }
+
+    @Test
+    public void getIfAbsentPut_Function_every_slot()
+    {
+        BooleanFunction0 factory = () -> true;
+
+        Mutable<name>BooleanMap hashMap = this.getEmptyMap();
+
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertFalse(hashMap.get(each));
+            Assert.assertTrue(hashMap.getIfAbsentPut(each, factory));
+            Assert.assertTrue(hashMap.get(each));
+        }
+    }
+
+    @Test
+    public void updateValue_every_slot()
+    {
+        BooleanToBooleanFunction function = (boolean value) -> !value;
+
+        <name>BooleanHashMap hashMap = new <name>BooleanHashMap();
+
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertFalse(hashMap.get(each));
+            Assert.assertEquals(each % 2 != 0, hashMap.updateValue(each, each % 2 == 0, function));
+            Assert.assertEquals(each % 2 != 0, hashMap.get(each));
+        }
     }
 }
 

@@ -18,8 +18,12 @@ package com.gs.collections.impl.map.mutable.primitive;
 
 import java.lang.reflect.Field;
 import java.util.BitSet;
+import java.util.Iterator;
 
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.BooleanFunction0;
 import com.gs.collections.api.block.function.primitive.BooleanToBooleanFunction;
+import com.gs.collections.api.map.primitive.MutableObjectBooleanMap;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -276,5 +280,107 @@ public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTes
         });
 
         Assert.assertEquals(Integer.valueOf(4), total);
+    }
+
+    @Test
+    public void put_every_slot()
+    {
+        ObjectBooleanHashMap<String> hashMap = ObjectBooleanHashMap.newMap();
+        for (int each = 2; each < 100; each++)
+        {
+            Assert.assertFalse(hashMap.get(String.valueOf(each)));
+            hashMap.put(String.valueOf(each), each % 2 == 0);
+            Assert.assertEquals(each % 2 == 0, hashMap.get(String.valueOf(each)));
+            hashMap.remove(String.valueOf(each));
+            Assert.assertFalse(hashMap.get(String.valueOf(each)));
+        }
+    }
+
+    @Test
+    public void remove_iterator_every_slot()
+    {
+        ObjectBooleanHashMap<String> hashMap = ObjectBooleanHashMap.newMap();
+        for (int each = 2; each < 100; each++)
+        {
+            Assert.assertFalse(hashMap.get(String.valueOf(each)));
+            hashMap.put(String.valueOf(each), false);
+            Iterator<String> iterator = hashMap.keySet().iterator();
+            Assert.assertTrue(iterator.hasNext());
+            Assert.assertEquals(String.valueOf(each), iterator.next());
+            iterator.remove();
+            Assert.assertFalse(hashMap.get(String.valueOf(each)));
+        }
+    }
+
+    @Test
+    public void getIfAbsentPut_every_slot()
+    {
+        ObjectBooleanHashMap<String> hashMap = ObjectBooleanHashMap.newMap();
+        for (int each = 2; each < 100; each++)
+        {
+            Assert.assertFalse(hashMap.get(String.valueOf(each)));
+            hashMap.getIfAbsentPut(String.valueOf(each), each % 2 == 0);
+            Assert.assertEquals(each % 2 == 0, hashMap.get(String.valueOf(each)));
+        }
+    }
+
+    @Test
+    public void getIfAbsentPutWith_every_slot()
+    {
+        BooleanFunction<String> functionLength = (String string) -> string.isEmpty();
+
+        MutableObjectBooleanMap<String> hashMap = this.getEmptyMap();
+
+        for (int each = 2; each < 100; each++)
+        {
+            Assert.assertFalse(hashMap.get(String.valueOf(each)));
+            Assert.assertTrue(hashMap.getIfAbsentPutWith(String.valueOf(each), functionLength, ""));
+            Assert.assertTrue(hashMap.get(String.valueOf(each)));
+        }
+    }
+
+    @Test
+    public void getIfAbsentPutWithKey_every_slot()
+    {
+        BooleanFunction<Integer> function = (Integer each) -> each % 2 == 0;
+
+        MutableObjectBooleanMap<Integer> hashMap = this.getEmptyMap();
+
+        for (int each = 2; each < 100; each++)
+        {
+            Assert.assertFalse(hashMap.get(each));
+            Assert.assertEquals(each % 2 == 0, hashMap.getIfAbsentPutWithKey(each, function));
+            Assert.assertEquals(each % 2 == 0, hashMap.get(each));
+        }
+    }
+
+    @Test
+    public void getIfAbsentPut_Function_every_slot()
+    {
+        BooleanFunction0 factory = () -> true;
+
+        MutableObjectBooleanMap<String> hashMap = this.getEmptyMap();
+
+        for (int each = 2; each < 100; each++)
+        {
+            Assert.assertFalse(hashMap.get(String.valueOf(each)));
+            Assert.assertTrue(hashMap.getIfAbsentPut(String.valueOf(each), factory));
+            Assert.assertTrue(hashMap.get(String.valueOf(each)));
+        }
+    }
+
+    @Test
+    public void updateValue_every_slot()
+    {
+        BooleanToBooleanFunction function = (boolean value) -> !value;
+
+        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<String>();
+
+        for (int each = 2; each < 100; each++)
+        {
+            Assert.assertFalse(hashMap.get(String.valueOf(each)));
+            Assert.assertEquals(each % 2 != 0, hashMap.updateValue(String.valueOf(each), each % 2 == 0, function));
+            Assert.assertEquals(each % 2 != 0, hashMap.get(String.valueOf(each)));
+        }
     }
 }

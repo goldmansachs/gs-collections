@@ -108,24 +108,30 @@ public final class Verify extends Assert
      * of the problem in the test case quickly. The regular use case for this would be something
      * along the lines of:</p>
      * <pre>
-     * 1  public class TestFoo extends junit.framework.TestCase {
-     * 2     public void testFoo() throws Exception {
-     * 3        Foo foo = new Foo();
-     * 4        ...
-     * 5        assertFoo(foo);
-     * 6     }
-     * 7
-     * 8     // Custom assert
-     * 9     private static void assertFoo(Foo foo) {
-     * 10       try {
-     * 11           assertEquals(...);
-     * 12           ....
-     * 13           assertSame(...);
-     * 14       } catch (AssertionFailedException e) {
-     * 15           AssertUtils.throwMangledException(e, 2);
-     * 16       }
-     * 17    }
-     * 18 }
+     * public class TestFoo extends junit.framework.TestCase
+     * {
+     *   public void testFoo() throws Exception
+     *   {
+     *     Foo foo = new Foo();
+     *     ...
+     *     assertFoo(foo);
+     *   }
+     *
+     *   // Custom assert
+     *   private static void assertFoo(Foo foo)
+     *   {
+     *     try
+     *     {
+     *       assertEquals(...);
+     *       ...
+     *       assertSame(...);
+     *     }
+     *     catch (AssertionFailedException e)
+     *     {
+     *       AssertUtils.throwMangledException(e, 2);
+     *     }
+     *   }
+     * }
      * </pre>
      * <p/>
      * <p>Without the {@code try ... catch} block around lines 11-13 the stack trace following a test failure
@@ -2362,7 +2368,8 @@ public final class Verify extends Assert
                                 + ">, "
                                 + "but had actualValue:<"
                                 + actualValue
-                                + '>');
+                                + '>'
+                );
             }
         }
         catch (AssertionError e)
@@ -2415,7 +2422,8 @@ public final class Verify extends Assert
                                 + ">, "
                                 + "but had actualValue:<"
                                 + actualValue
-                                + '>');
+                                + '>'
+                );
             }
         }
         catch (AssertionError e)
@@ -3111,7 +3119,8 @@ public final class Verify extends Assert
                                 + expectedErrorClass.getName()
                                 + '>',
                         expectedErrorClass,
-                        ex.getClass());
+                        ex.getClass()
+                );
                 return;
             }
             catch (AssertionError e)
@@ -3174,7 +3183,8 @@ public final class Verify extends Assert
                                 + "Exception Message: " + ex.getMessage()
                                 + '\n',
                         expectedExceptionClass,
-                        ex.getClass());
+                        ex.getClass()
+                );
                 return;
             }
             catch (AssertionError e)
@@ -3238,7 +3248,8 @@ public final class Verify extends Assert
                                 + "Exception Message: " + ex.getMessage()
                                 + '\n',
                         expectedExceptionClass,
-                        ex.getClass());
+                        ex.getClass()
+                );
                 return;
             }
             catch (AssertionError e)
@@ -3307,13 +3318,15 @@ public final class Verify extends Assert
                                 + expectedExceptionClass.getName()
                                 + '>',
                         expectedExceptionClass,
-                        ex.getClass());
+                        ex.getClass()
+                );
                 Throwable actualCauseClass = ex.getCause();
                 Assert.assertNotNull(
                         "Caught exception with null cause, expected cause of type <"
                                 + expectedCauseClass.getName()
                                 + '>',
-                        actualCauseClass);
+                        actualCauseClass
+                );
                 Assert.assertSame(
                         "Caught exception with cause of type<"
                                 + actualCauseClass.getClass().getName()
@@ -3321,7 +3334,8 @@ public final class Verify extends Assert
                                 + expectedCauseClass.getName()
                                 + '>',
                         expectedCauseClass,
-                        actualCauseClass.getClass());
+                        actualCauseClass.getClass()
+                );
                 return;
             }
             catch (AssertionError e)
@@ -3389,13 +3403,15 @@ public final class Verify extends Assert
                                 + expectedExceptionClass.getName()
                                 + '>',
                         expectedExceptionClass,
-                        ex.getClass());
+                        ex.getClass()
+                );
                 Throwable actualCauseClass = ex.getCause();
                 Assert.assertNotNull(
                         "Caught exception with null cause, expected cause of type <"
                                 + expectedCauseClass.getName()
                                 + '>',
-                        actualCauseClass);
+                        actualCauseClass
+                );
                 Assert.assertSame(
                         "Caught exception with cause of type<"
                                 + actualCauseClass.getClass().getName()
@@ -3403,7 +3419,8 @@ public final class Verify extends Assert
                                 + expectedCauseClass.getName()
                                 + '>',
                         expectedCauseClass,
-                        actualCauseClass.getClass());
+                        actualCauseClass.getClass()
+                );
                 return;
             }
             catch (AssertionError e)
