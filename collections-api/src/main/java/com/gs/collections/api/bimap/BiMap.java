@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import com.gs.collections.api.tuple.Pair;
 public interface BiMap<K, V> extends MapIterable<K, V>
 {
     /**
-     * Returns an inversed view of this BiMap, where the associations are in the direction of this bimap’s values to keys.
+     * Returns an inversed view of this BiMap, where the associations are in the direction of this bimap's values to keys.
      */
     BiMap<V, K> inverse();
 
