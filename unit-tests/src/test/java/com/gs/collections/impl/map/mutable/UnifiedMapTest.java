@@ -22,12 +22,15 @@ import java.util.Set;
 
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.PassThruFunction0;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.math.SumProcedure;
 import com.gs.collections.impl.parallel.BatchIterable;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
@@ -81,6 +84,22 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         Assert.assertEquals(
                 UnifiedMap.newWithKeysValues(1, "one", 2, "two", 3, "three"),
                 UnifiedMap.newMapWith(Tuples.pair(1, "one"), Tuples.pair(2, "two"), Tuples.pair(3, "three")));
+    }
+
+    @Test
+    public void constructorOfIterableOfPairs()
+    {
+        Pair<Integer, String> pair1 = Tuples.pair(1, "One");
+        Pair<Integer, String> pair2 = Tuples.pair(2, "Two");
+        Pair<Integer, String> pair3 = Tuples.pair(3, "Three");
+        Pair<Integer, String> pair4 = Tuples.pair(4, "Four");
+        Assert.assertEquals(
+                UnifiedMap.newMapWith(pair1, pair2, pair3, pair4),
+                UnifiedMap.newMapWith(FastList.newListWith(pair1, pair2, pair3, pair4)));
+
+        Assert.assertEquals(
+                UnifiedMap.newMapWith(pair1, pair2, pair3, pair4),
+                UnifiedMap.newMapWith(UnifiedSet.<Pair<Integer, String>>newSetWith(pair1, pair2, pair3, pair4)));
     }
 
     @Test

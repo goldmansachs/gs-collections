@@ -187,6 +187,16 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         return new UnifiedMap<K, V>(pairs);
     }
 
+    public static <K, V> UnifiedMap<K, V> newMapWith(Iterable<Pair<K, V>> inputIterable)
+    {
+        UnifiedMap<K, V> outputMap = newMap();
+        for (Pair<K, V> single : inputIterable)
+        {
+            outputMap.add(single);
+        }
+        return outputMap;
+    }
+
     public static <K, V> UnifiedMap<K, V> newWithKeysValues(K key, V value)
     {
         return new UnifiedMap<K, V>(1).withKeysValues(key, value);

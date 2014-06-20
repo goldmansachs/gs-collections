@@ -204,6 +204,17 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         return new UnifiedMapWithHashingStrategy<K, V>(hashingStrategy, map);
     }
 
+    public static <K, V> UnifiedMapWithHashingStrategy<K, V> newMapWith(HashingStrategy<? super K> hashingStrategy, Iterable<Pair<K, V>> inputIterable)
+    {
+        UnifiedMapWithHashingStrategy<K, V> outputMap = newMap(hashingStrategy);
+
+        for (Pair<K, V> single : inputIterable)
+        {
+            outputMap.add(single);
+        }
+        return outputMap;
+    }
+
     public static <K, V> UnifiedMapWithHashingStrategy<K, V> newMap(UnifiedMapWithHashingStrategy<K, V> map)
     {
         return new UnifiedMapWithHashingStrategy<K, V>(map.hashingStrategy, map);
