@@ -69,6 +69,7 @@ public final class Functions
     private static final FirstOfPairFunction<?> FIRST_OF_PAIR_FUNCTION = new FirstOfPairFunction<Object>();
     private static final SecondOfPairFunction<?> SECOND_OF_PAIR_FUNCTION = new SecondOfPairFunction<Object>();
     private static final CheckedFunction<String, Class<?>> CLASS_FOR_NAME = new ClassForNameFunction();
+    private static final SwappedPairFunction<?, ?> SWAPPED_PAIR_FUNCTION = new SwappedPairFunction<Object, Object>();
 
     private Functions()
     {
@@ -307,12 +308,22 @@ public final class Functions
 
     public static <V1> Function<Pair<V1, ?>, V1> firstOfPair()
     {
-        return (Function<Pair<V1, ?>, V1>) FIRST_OF_PAIR_FUNCTION;
+        return (Function<Pair<V1, ?>, V1>) (Function<?, ?>) FIRST_OF_PAIR_FUNCTION;
     }
 
     public static <V2> Function<Pair<?, V2>, V2> secondOfPair()
     {
-        return (Function<Pair<?, V2>, V2>) SECOND_OF_PAIR_FUNCTION;
+        return (Function<Pair<?, V2>, V2>) (Function<?, ?>) SECOND_OF_PAIR_FUNCTION;
+    }
+
+    /**
+     * Swap the input pair and return the swapped pair.
+     *
+     * @return A function that gets the swapped pair {@code Iterable}
+     */
+    public static <S, T> Function<Pair<S, T>, Pair<T, S>> swappedPair()
+    {
+        return (Function<Pair<S, T>, Pair<T, S>>) (Function<?, ?>) SWAPPED_PAIR_FUNCTION;
     }
 
     /**
@@ -1048,6 +1059,16 @@ public final class Functions
         public T3 valueOf(T1 object)
         {
             return this.delegate.value(object, this.parameter);
+        }
+    }
+
+    private static class SwappedPairFunction<S, T> implements Function<Pair<S, T>, Pair<T, S>>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public Pair<T, S> valueOf(Pair<S, T> pair)
+        {
+            return Tuples.pair(pair.getTwo(), pair.getOne());
         }
     }
 }

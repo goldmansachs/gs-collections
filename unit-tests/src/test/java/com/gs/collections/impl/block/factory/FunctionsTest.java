@@ -28,6 +28,7 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.function.primitive.IntegerFunctionImpl;
 import com.gs.collections.impl.block.function.primitive.LongFunctionImpl;
 import com.gs.collections.impl.factory.Lists;
@@ -38,6 +39,7 @@ import com.gs.collections.impl.set.mutable.SetAdapter;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.test.domain.Person;
+import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -516,6 +518,22 @@ public class FunctionsTest
     {
         MutableCollection<Integer> multiplied = FastList.newListWith(1, 2, 3, 4, 5).collect(Functions.bind((value, parameter) -> value * parameter, 2));
         Verify.assertContainsAll(multiplied, 2, 4, 6, 8, 10);
+    }
+
+    @Test
+    public void swappedPair()
+    {
+        Pair<Integer, String> pair1 = Tuples.pair(1, "One");
+        Pair<Integer, String> pair2 = Tuples.pair(2, "Two");
+        Pair<Integer, String> pair3 = Tuples.pair(3, "Three");
+        Pair<Integer, String> pair4 = Tuples.pair(4, "Four");
+
+        MutableList<Pair<Integer, String>> testList = FastList.<Pair<Integer, String>>newListWith(pair1, pair2, pair3, pair4);
+        MutableList<Pair<String, Integer>> actual = testList.collect(Functions.swappedPair());
+
+        MutableList<Pair<String, Integer>> expected = FastList.<Pair<String, Integer>>newListWith(Tuples.pair("One", 1), Tuples.pair("Two", 2), Tuples.pair("Three", 3), Tuples.pair("Four", 4));
+
+        Assert.assertEquals(expected, actual);
     }
 
     private static class ThrowsFunction implements Function<Object, Object>
