@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,13 +63,19 @@ public final class FastListMultimap<K, V>
                 multimap.keysView().size(),
                 multimap instanceof FastListMultimap
                         ? ((FastListMultimap<?, ?>) multimap).initialListCapacity
-                        : DEFAULT_CAPACITY);
+                        : DEFAULT_CAPACITY
+        );
         this.putAll(multimap);
     }
 
     public FastListMultimap(Pair<K, V>... pairs)
     {
         super(pairs);
+    }
+
+    public FastListMultimap(Iterable<Pair<K, V>> inputIterable)
+    {
+        super(inputIterable);
     }
 
     public static <K, V> FastListMultimap<K, V> newMultimap()
@@ -85,6 +91,11 @@ public final class FastListMultimap<K, V>
     public static <K, V> FastListMultimap<K, V> newMultimap(Pair<K, V>... pairs)
     {
         return new FastListMultimap<K, V>(pairs);
+    }
+
+    public static <K, V> FastListMultimap<K, V> newMultimap(Iterable<Pair<K, V>> inputIterable)
+    {
+        return new FastListMultimap<K, V>(inputIterable);
     }
 
     @Override

@@ -76,6 +76,12 @@ public class TreeBagMultimapTest extends AbstractMutableMultimapTestCase
     }
 
     @Override
+    protected <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return TreeBagMultimap.newMultimap(inputIterable);
+    }
+
+    @Override
     public <K, V> TreeBagMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,

@@ -63,6 +63,12 @@ public final class TreeBagMultimap<K, V>
         this.comparator = null;
     }
 
+    public TreeBagMultimap(Iterable<Pair<K, V>> inputIterable)
+    {
+        super(inputIterable);
+        this.comparator = null;
+    }
+
     public static <K, V> TreeBagMultimap<K, V> newMultimap()
     {
         return new TreeBagMultimap<K, V>();
@@ -81,6 +87,11 @@ public final class TreeBagMultimap<K, V>
     public static <K, V> TreeBagMultimap<K, V> newMultimap(Pair<K, V>... pairs)
     {
         return new TreeBagMultimap<K, V>(pairs);
+    }
+
+    public static <K, V> TreeBagMultimap<K, V> newMultimap(Iterable<Pair<K, V>> inputIterable)
+    {
+        return new TreeBagMultimap<K, V>(inputIterable);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public final class UnifiedSetWithHashingStrategyMultimap<K, V>
 
     /**
      * @deprecated Empty default constructor used for serialization. Instantiating an UnifiedSetWithHashingStrategyMultimap with
-     *             this constructor will have a null hashingStrategy and throw NullPointerException when used.
+     * this constructor will have a null hashingStrategy and throw NullPointerException when used.
      */
     @SuppressWarnings("UnusedDeclaration")
     @Deprecated
@@ -76,6 +76,15 @@ public final class UnifiedSetWithHashingStrategyMultimap<K, V>
         this.putAllPairs(pairs);
     }
 
+    public UnifiedSetWithHashingStrategyMultimap(HashingStrategy<? super V> hashingStrategy, Iterable<Pair<K, V>> inputIterable)
+    {
+        this.hashingStrategy = hashingStrategy;
+        for (Pair<K, V> single : inputIterable)
+        {
+            this.put(single.getOne(), single.getTwo());
+        }
+    }
+
     public static <K, V> UnifiedSetWithHashingStrategyMultimap<K, V> newMultimap(UnifiedSetWithHashingStrategyMultimap<K, V> multimap)
     {
         return new UnifiedSetWithHashingStrategyMultimap<K, V>(multimap);
@@ -95,6 +104,11 @@ public final class UnifiedSetWithHashingStrategyMultimap<K, V>
     public static <K, V> UnifiedSetWithHashingStrategyMultimap<K, V> newMultimap(HashingStrategy<? super V> hashingStrategy, Pair<K, V>... pairs)
     {
         return new UnifiedSetWithHashingStrategyMultimap<K, V>(hashingStrategy, pairs);
+    }
+
+    public static <K, V> UnifiedSetWithHashingStrategyMultimap<K, V> newMultimap(HashingStrategy<? super V> hashingStrategy, Iterable<Pair<K, V>> inputIterable)
+    {
+        return new UnifiedSetWithHashingStrategyMultimap<K, V>(hashingStrategy, inputIterable);
     }
 
     @Override

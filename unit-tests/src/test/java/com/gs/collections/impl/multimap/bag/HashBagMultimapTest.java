@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,12 @@ public class HashBagMultimapTest extends AbstractMutableMultimapTestCase
     public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
     {
         return HashBagMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    protected <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return HashBagMultimap.newMultimap(inputIterable);
     }
 
     @Override

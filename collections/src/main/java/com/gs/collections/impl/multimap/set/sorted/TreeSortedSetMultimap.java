@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,12 @@ public final class TreeSortedSetMultimap<K, V>
         this.comparator = null;
     }
 
+    public TreeSortedSetMultimap(Iterable<Pair<K, V>> inputIterable)
+    {
+        super(inputIterable);
+        this.comparator = null;
+    }
+
     public static <K, V> TreeSortedSetMultimap<K, V> newMultimap()
     {
         return new TreeSortedSetMultimap<K, V>();
@@ -83,6 +89,11 @@ public final class TreeSortedSetMultimap<K, V>
     public static <K, V> TreeSortedSetMultimap<K, V> newMultimap(Pair<K, V>... pairs)
     {
         return new TreeSortedSetMultimap<K, V>(pairs);
+    }
+
+    public static <K, V> TreeSortedSetMultimap<K, V> newMultimap(Iterable<Pair<K, V>> inputIterable)
+    {
+        return new TreeSortedSetMultimap<K, V>(inputIterable);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,16 +51,9 @@ public final class UnifiedSetMultimap<K, V>
         super(pairs);
     }
 
-    @Override
-    protected MutableMap<K, MutableSet<V>> createMap()
+    public UnifiedSetMultimap(Iterable<Pair<K, V>> inputIterable)
     {
-        return UnifiedMap.newMap();
-    }
-
-    @Override
-    protected MutableMap<K, MutableSet<V>> createMapWithKeyCount(int keyCount)
-    {
-        return UnifiedMap.newMap(keyCount);
+        super(inputIterable);
     }
 
     public static <K, V> UnifiedSetMultimap<K, V> newMultimap(Multimap<? extends K, ? extends V> multimap)
@@ -76,6 +69,23 @@ public final class UnifiedSetMultimap<K, V>
     public static <K, V> UnifiedSetMultimap<K, V> newMultimap(Pair<K, V>... pairs)
     {
         return new UnifiedSetMultimap<K, V>(pairs);
+    }
+
+    public static <K, V> UnifiedSetMultimap<K, V> newMultimap(Iterable<Pair<K, V>> inputIterable)
+    {
+        return new UnifiedSetMultimap<K, V>(inputIterable);
+    }
+
+    @Override
+    protected MutableMap<K, MutableSet<V>> createMap()
+    {
+        return UnifiedMap.newMap();
+    }
+
+    @Override
+    protected MutableMap<K, MutableSet<V>> createMapWithKeyCount(int keyCount)
+    {
+        return UnifiedMap.newMap(keyCount);
     }
 
     @Override

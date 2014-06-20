@@ -18,7 +18,7 @@ package com.gs.collections.impl.multimap;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.tuple.Pair;
@@ -60,6 +60,8 @@ public abstract class AbstractMultimapTestCase
             K key4, V value4);
 
     protected abstract <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs);
+
+    protected abstract <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable);
 
     @Test
     public void testNewMultimap()
@@ -105,6 +107,21 @@ public abstract class AbstractMultimapTestCase
         Verify.assertNotEmpty(multimap);
         Verify.assertSize(4, multimap);
         Verify.assertContainsAllEntries(multimap, 1, "One", 2, "Two", 3, "Three", 4, "Four");
+    }
+
+    @Test
+    public void testNewMultimapWith()
+    {
+        Pair<Integer, String> pair1 = Tuples.pair(1, "One");
+        Pair<Integer, String> pair2 = Tuples.pair(2, "Two");
+        Pair<Integer, String> pair3 = Tuples.pair(3, "Three");
+        Pair<Integer, String> pair4 = Tuples.pair(4, "Four");
+        ListIterable<Pair<Integer, String>> pairs = FastList.newListWith(pair1, pair2, pair3, pair4);
+
+        Multimap<Integer, String> expected = this.newMultimap(pair1, pair2, pair3, pair4);
+
+        Multimap<Integer, String> actual = this.newMultimapFromPairs(pairs);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test

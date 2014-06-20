@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractSynchronizedPutMultimap;
 import com.gs.collections.impl.utility.ArrayIterate;
+import com.gs.collections.impl.utility.Iterate;
 
 /**
  * A Multimap that is optimized for parallel writes, but is not protected for concurrent reads.
@@ -66,10 +67,15 @@ public final class SynchronizedPutHashBagMultimap<K, V>
         });
     }
 
-    @Override
-    protected MutableBag<V> createCollection()
+    public SynchronizedPutHashBagMultimap(Iterable<Pair<K, V>> inputIterable)
     {
-        return HashBag.newBag(1);
+        Iterate.forEach(inputIterable, new Procedure<Pair<K, V>>()
+        {
+            public void value(Pair<K, V> pair)
+            {
+                SynchronizedPutHashBagMultimap.this.put(pair.getOne(), pair.getTwo());
+            }
+        });
     }
 
     public static <K, V> SynchronizedPutHashBagMultimap<K, V> newMultimap()
@@ -90,6 +96,17 @@ public final class SynchronizedPutHashBagMultimap<K, V>
     public static <K, V> SynchronizedPutHashBagMultimap<K, V> newMultimap(Pair<K, V>... pairs)
     {
         return new SynchronizedPutHashBagMultimap<K, V>(pairs);
+    }
+
+    public static <K, V> SynchronizedPutHashBagMultimap<K, V> newMultimap(Iterable<Pair<K, V>> inputIterable)
+    {
+        return new SynchronizedPutHashBagMultimap<K, V>(inputIterable);
+    }
+
+    @Override
+    protected MutableBag<V> createCollection()
+    {
+        return HashBag.newBag(1);
     }
 
     public SynchronizedPutHashBagMultimap<K, V> newEmpty()

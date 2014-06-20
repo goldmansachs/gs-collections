@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +63,20 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
     {
         this(pairs.length);
         this.putAllPairs(pairs);
+    }
+
+    /**
+     * Constructs a {@link Multimap} containing  {@link Iterable}.
+     *
+     * @param inputIterable the mappings to initialize the multimap.
+     */
+    protected AbstractMutableMultimap(Iterable<Pair<K, V>> inputIterable)
+    {
+        this();
+        for (Pair<K, V> single : inputIterable)
+        {
+            this.put(single.getOne(), single.getTwo());
+        }
     }
 
     protected abstract MutableMap<K, C> createMap();
