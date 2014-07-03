@@ -1971,6 +1971,17 @@ public final class Verify extends Assert
 
             Assert.assertNotNull(mapName + " should not be null", actualMap);
 
+            Set<? extends Map.Entry<?, ?>> expectedEntries = expectedMap.entrySet();
+            for (Map.Entry<?, ?> expectedEntry : expectedEntries)
+            {
+                Object expectedKey = expectedEntry.getKey();
+                Object expectedValue = expectedEntry.getValue();
+                Object actualValue = actualMap.get(expectedKey);
+                if (!Comparators.nullSafeEquals(actualValue, expectedValue))
+                {
+                    Assert.fail("Values differ at key " + expectedKey + " expected " + expectedValue + " but was " + actualValue);
+                }
+            }
             Verify.assertSetsEqual(mapName + " keys", expectedMap.keySet(), actualMap.keySet());
             Verify.assertSetsEqual(mapName + " entries", expectedMap.entrySet(), actualMap.entrySet());
         }
@@ -3142,12 +3153,12 @@ public final class Verify extends Assert
     /**
      * Runs the {@link Callable} {@code code} and asserts that it throws an {@code Exception} of the type
      * {@code expectedExceptionClass}.
-     * <p/>
+     * <p>
      * {@code Callable} is most appropriate when a checked exception will be thrown.
      * If a subclass of {@link RuntimeException} will be thrown, the form
      * {@link #assertThrows(Class, Runnable)} may be more convenient.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * e.g.
      * <pre>
      * Verify.<b>assertThrows</b>(StringIndexOutOfBoundsException.class, new Callable&lt;String&gt;()
@@ -3206,12 +3217,12 @@ public final class Verify extends Assert
     /**
      * Runs the {@link Runnable} {@code code} and asserts that it throws an {@code Exception} of the type
      * {@code expectedExceptionClass}.
-     * <p/>
+     * <p>
      * {@code Runnable} is most appropriate when a subclass of {@link RuntimeException} will be thrown.
      * If a checked exception will be thrown, the form {@link #assertThrows(Class, Callable)} may be more
      * convenient.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * e.g.
      * <pre>
      * Verify.<b>assertThrows</b>(NullPointerException.class, new Runnable()
@@ -3271,12 +3282,12 @@ public final class Verify extends Assert
     /**
      * Runs the {@link Callable} {@code code} and asserts that it throws an {@code Exception} of the type
      * {@code expectedExceptionClass}, which contains a cause of type expectedCauseClass.
-     * <p/>
+     * <p>
      * {@code Callable} is most appropriate when a checked exception will be thrown.
      * If a subclass of {@link RuntimeException} will be thrown, the form
      * {@link #assertThrowsWithCause(Class, Class, Runnable)} may be more convenient.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * e.g.
      * <pre>
      * Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, new Callable<Void>()
@@ -3357,12 +3368,12 @@ public final class Verify extends Assert
     /**
      * Runs the {@link Runnable} {@code code} and asserts that it throws an {@code Exception} of the type
      * {@code expectedExceptionClass}, which contains a cause of type expectedCauseClass.
-     * <p/>
+     * <p>
      * {@code Runnable} is most appropriate when a subclass of {@link RuntimeException} will be thrown.
      * If a checked exception will be thrown, the form {@link #assertThrowsWithCause(Class, Class, Callable)}
      * may be more convenient.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * e.g.
      * <pre>
      * Verify.assertThrowsWithCause(RuntimeException.class, StringIndexOutOfBoundsException.class, new Runnable()

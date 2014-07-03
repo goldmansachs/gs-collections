@@ -33,11 +33,12 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.AbstractRichIterable;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 
 public abstract class AbstractMutableCollection<T>
@@ -72,7 +73,7 @@ public abstract class AbstractMutableCollection<T>
     public boolean addAllIterable(Iterable<? extends T> iterable)
     {
         int oldSize = this.size();
-        IterableIterate.forEach(iterable, CollectionAddProcedure.on(this));
+        Iterate.forEachWith(iterable, Procedures2.<T>addToCollection(), this);
         return oldSize != this.size();
     }
 

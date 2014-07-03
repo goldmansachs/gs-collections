@@ -39,6 +39,7 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
@@ -52,6 +53,10 @@ import com.gs.collections.impl.list.mutable.CompositeFastList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.ListAdapter;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
+import com.gs.collections.impl.multimap.bag.SynchronizedPutHashBagMultimap;
+import com.gs.collections.impl.multimap.list.MultiReaderFastListMultimap;
+import com.gs.collections.impl.multimap.set.SynchronizedPutUnifiedSetMultimap;
 import com.gs.collections.impl.set.mutable.MultiReaderUnifiedSet;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
@@ -472,6 +477,55 @@ public class ParallelIterateAcceptanceTest
         Assert.assertEquals(expected1.getClass().getSimpleName() + '/' + actual1.getClass().getSimpleName(), expected1, actual1);
         Assert.assertEquals(expected2.getClass().getSimpleName() + '/' + actual2.getClass().getSimpleName(), expected2, actual2);
         Assert.assertEquals(expected1.getClass().getSimpleName() + '/' + actual3.getClass().getSimpleName(), expected1.toBag(), HashBag.newBag(actual3));
+    }
+
+    @Test
+    public void groupBy()
+    {
+        FastList<Integer> iterable = FastList.newWithNValues(10000000, new Function0<Integer>()
+        {
+            private int current = 0;
+
+            public Integer value()
+            {
+                if (this.current < 4)
+                {
+                    return Integer.valueOf(this.current++);
+                }
+                this.current = 0;
+                return Integer.valueOf(4);
+            }
+        });
+        Collections.shuffle(iterable);
+        Multimap<String, Integer> expected = iterable.toBag().groupBy(String::valueOf);
+        Multimap<String, Integer> expectedAsSet = iterable.toSet().groupBy(String::valueOf);
+        Multimap<String, Integer> result1 = ParallelIterate.groupBy(iterable.toList(), String::valueOf, 100);
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result1));
+        Multimap<String, Integer> result2 = ParallelIterate.groupBy(iterable.toList(), String::valueOf);
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result2));
+        Multimap<String, Integer> result3 = ParallelIterate.groupBy(iterable.toSet(), String::valueOf, SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap(), 100);
+        Assert.assertEquals(expectedAsSet, result3);
+        Multimap<String, Integer> result4 = ParallelIterate.groupBy(iterable.toSet(), String::valueOf, SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap());
+        Assert.assertEquals(expectedAsSet, result4);
+        Multimap<String, Integer> result5 = ParallelIterate.groupBy(iterable.toSortedSet(), String::valueOf, SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap(), 100);
+        Assert.assertEquals(expectedAsSet, result5);
+        Multimap<String, Integer> result6 = ParallelIterate.groupBy(iterable.toSortedSet(), String::valueOf, SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap());
+        Assert.assertEquals(expectedAsSet, result6);
+        Multimap<String, Integer> result7 = ParallelIterate.groupBy(iterable.toBag(), String::valueOf, SynchronizedPutHashBagMultimap.<String, Integer>newMultimap(), 100);
+        Assert.assertEquals(expected, result7);
+        Multimap<String, Integer> result8 = ParallelIterate.groupBy(iterable.toBag(), String::valueOf, SynchronizedPutHashBagMultimap.<String, Integer>newMultimap());
+        Assert.assertEquals(expected, result8);
+        Multimap<String, Integer> result9 = ParallelIterate.groupBy(iterable.toList().toImmutable(), String::valueOf);
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result9));
+        Multimap<String, Integer> result10 = ParallelIterate.groupBy(iterable.toSortedList(), String::valueOf, 100);
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result10));
+        Multimap<String, Integer> result11 = ParallelIterate.groupBy(iterable.toSortedList(), String::valueOf);
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result11));
+
+        Multimap<String, Integer> result12 = ParallelIterate.groupBy(iterable.toList(), String::valueOf, MultiReaderFastListMultimap.newMultimap(), 100);
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result12));
+        Multimap<String, Integer> result13 = ParallelIterate.groupBy(iterable.toList(), String::valueOf, MultiReaderFastListMultimap.newMultimap());
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result13));
     }
 
     @Test

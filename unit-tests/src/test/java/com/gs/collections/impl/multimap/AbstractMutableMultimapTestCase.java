@@ -79,7 +79,8 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
     public void testClear()
     {
         MutableMultimap<Integer, Object> multimap =
-                this.<Integer, Object>newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three", null, null);
+                this.<Integer, Object>newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three");
+        Verify.assertNotEmpty(multimap);
         multimap.clear();
         Verify.assertEmpty(multimap);
     }
@@ -242,6 +243,8 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
     {
         MutableMultimap<String, Integer> multimap =
                 this.newMultimapWithKeysValues("One", 1, "Two", 2);
-        Assert.assertEquals("{One=[1], Two=[2]}", multimap.toString());
+        Assert.assertTrue(
+                "{One=[1], Two=[2]}".equals(multimap.toString())
+                        || "{Two=[2], One=[1]}".equals(multimap.toString()));
     }
 }
