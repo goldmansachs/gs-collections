@@ -510,6 +510,46 @@ public class StringIterateTest
     }
 
     @Test
+    public void chunk()
+    {
+        Assert.assertEquals(
+                Lists.immutable.with("ab", "cd", "ef"),
+                StringIterate.chunk("abcdef", 2));
+
+        Assert.assertEquals(
+                Lists.immutable.with("abc", "def"),
+                StringIterate.chunk("abcdef", 3));
+
+        Assert.assertEquals(
+                Lists.immutable.with("abc", "def", "g"),
+                StringIterate.chunk("abcdefg", 3));
+
+        Assert.assertEquals(
+                Lists.immutable.with("abcdef"),
+                StringIterate.chunk("abcdef", 6));
+
+        Assert.assertEquals(
+                Lists.immutable.with("abcdef"),
+                StringIterate.chunk("abcdef", 7));
+
+        Assert.assertEquals(
+                Lists.immutable.with(),
+                StringIterate.chunk("", 2));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void chunkWithZeroSize()
+    {
+        StringIterate.chunk("abcdef", 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void chunkWithNegativeSize()
+    {
+        StringIterate.chunk("abcdef", -42);
+    }
+
+    @Test
     public void toLowercaseSet()
     {
         MutableSet<Character> set = StringIterate.toLowercaseSet("America");

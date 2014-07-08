@@ -859,6 +859,40 @@ public final class StringIterate
     }
 
     /**
+     * Partitions String in fixed size chunks.
+     *
+     * @param size the number of characters per chunk
+     * @return A {@code MutableList} containing {@code String}s of size {@code size}, except the last will be
+     * truncated (i.e. shorter) if the characters don't divide evenly.
+     * @since 5.2
+     */
+    public static MutableList<String> chunk(String string, int size)
+    {
+        if (size <= 0)
+        {
+            throw new IllegalArgumentException("Size for groups must be positive but was: " + size);
+        }
+
+        int length = string.length();
+
+        if (length == 0)
+        {
+            return FastList.newList();
+        }
+
+        MutableList<String> result = FastList.newList((length + size - 1) / size);
+
+        int startOffset = 0;
+        while (startOffset < length)
+        {
+            result.add(string.substring(startOffset, Math.min(startOffset + size, length)));
+            startOffset += size;
+        }
+
+        return result;
+    }
+
+    /**
      * @deprecated in 3.0. Inlineable.
      */
     @Deprecated
