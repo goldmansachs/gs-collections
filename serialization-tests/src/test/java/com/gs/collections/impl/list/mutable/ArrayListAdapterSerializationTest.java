@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,24 +24,11 @@ public class ArrayListAdapterSerializationTest
     @Test
     public void serializedForm()
     {
-        String javaVersion = System.getProperty("java.version");
-        if (javaVersion.startsWith("1.8.") || "1.7.0_45".equals(javaVersion))
-        {
-            Verify.assertSerializedForm(
-                    1L,
-                    "rO0ABXNyADVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuQXJyYXlMaXN0QWRh\n"
-                            + "cHRlcgAAAAAAAAABAgABTAAIZGVsZWdhdGV0ABVMamF2YS91dGlsL0FycmF5TGlzdDt4cHNyABNq\n"
-                            + "YXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAAAdwQAAAAAeA==",
-                    ArrayListAdapter.newList());
-        }
-        else
-        {
-            Verify.assertSerializedForm(
-                    1L,
-                    "rO0ABXNyADVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuQXJyYXlMaXN0QWRh\n"
-                            + "cHRlcgAAAAAAAAABAgABTAAIZGVsZWdhdGV0ABVMamF2YS91dGlsL0FycmF5TGlzdDt4cHNyABNq\n"
-                            + "YXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAAAdwQAAAAKeA==",
-                    ArrayListAdapter.newList());
-        }
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyADVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuQXJyYXlMaXN0QWRh\n"
+                        + "cHRlcgAAAAAAAAABAgABTAAIZGVsZWdhdGV0ABVMamF2YS91dGlsL0FycmF5TGlzdDt4cHNyABNq\n"
+                        + "YXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAAAdwQAAAAAeA==",
+                ArrayListAdapter.newList(0));
     }
 }
