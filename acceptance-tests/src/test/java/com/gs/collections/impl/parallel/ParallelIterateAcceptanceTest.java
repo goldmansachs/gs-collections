@@ -54,8 +54,10 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.ListAdapter;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
+import com.gs.collections.impl.multimap.bag.MultiReaderHashBagMultimap;
 import com.gs.collections.impl.multimap.bag.SynchronizedPutHashBagMultimap;
 import com.gs.collections.impl.multimap.list.MultiReaderFastListMultimap;
+import com.gs.collections.impl.multimap.set.MultiReaderUnifiedSetMultimap;
 import com.gs.collections.impl.multimap.set.SynchronizedPutUnifiedSetMultimap;
 import com.gs.collections.impl.set.mutable.MultiReaderUnifiedSet;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -522,10 +524,20 @@ public class ParallelIterateAcceptanceTest
         Multimap<String, Integer> result11 = ParallelIterate.groupBy(iterable.toSortedList(), String::valueOf);
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result11));
 
-        Multimap<String, Integer> result12 = ParallelIterate.groupBy(iterable.toList(), String::valueOf, MultiReaderFastListMultimap.newMultimap(), 100);
+        Multimap<String, Integer> result12 = ParallelIterate.groupBy(iterable, String::valueOf, MultiReaderFastListMultimap.<String, Integer>newMultimap(), 100);
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result12));
-        Multimap<String, Integer> result13 = ParallelIterate.groupBy(iterable.toList(), String::valueOf, MultiReaderFastListMultimap.newMultimap());
+        Multimap<String, Integer> result13 = ParallelIterate.groupBy(iterable, String::valueOf, MultiReaderFastListMultimap.<String, Integer>newMultimap());
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result13));
+
+        Multimap<String, Integer> result14 = ParallelIterate.groupBy(iterable, String::valueOf, MultiReaderHashBagMultimap.<String, Integer>newMultimap(), 100);
+        Assert.assertEquals(expected, result14);
+        Multimap<String, Integer> result15 = ParallelIterate.groupBy(iterable, String::valueOf, MultiReaderHashBagMultimap.<String, Integer>newMultimap());
+        Assert.assertEquals(expected, result15);
+
+        Multimap<String, Integer> result16 = ParallelIterate.groupBy(iterable, String::valueOf, MultiReaderUnifiedSetMultimap.<String, Integer>newMultimap(), 100);
+        Assert.assertEquals(expectedAsSet, result16);
+        Multimap<String, Integer> result17 = ParallelIterate.groupBy(iterable, String::valueOf, MultiReaderUnifiedSetMultimap.<String, Integer>newMultimap());
+        Assert.assertEquals(expectedAsSet, result17);
     }
 
     @Test
