@@ -20,6 +20,7 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
@@ -214,6 +215,16 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
         expected.put("One", this.createCollection(1));
         expected.put("Two", this.createCollection(2, 2));
         Assert.assertEquals(expected, multimap.toMap());
+    }
+
+    @Test
+    public void toImmutable()
+    {
+        MutableMultimap<String, Integer> multimap =
+                this.newMultimapWithKeysValues("One", 1, "Two", 2, "Two", 2);
+        ImmutableMultimap<String, Integer> actual = multimap.toImmutable();
+        Assert.assertNotNull(actual);
+        Assert.assertEquals(multimap, actual);
     }
 
     @Test

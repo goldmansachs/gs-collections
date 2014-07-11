@@ -196,4 +196,11 @@ public class TreeBagMultimapTest extends AbstractMutableMultimapTestCase
         multimap.clear();
         Verify.assertEmpty(multimap);
     }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void toImmutable()
+    {
+        super.toImmutable();
+    }
 }
