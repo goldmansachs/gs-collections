@@ -259,7 +259,7 @@ public class CountSetTest
     @GenerateMicroBenchmark
     public void serial_eager_scala()
     {
-        CountScalaTest.serial_eager_scala();
+        CountSetScalaTest.serial_eager_scala();
     }
 
     @Warmup(iterations = 20)
@@ -267,7 +267,7 @@ public class CountSetTest
     @GenerateMicroBenchmark
     public void serial_lazy_scala()
     {
-        CountScalaTest.serial_lazy_scala();
+        CountSetScalaTest.serial_lazy_scala();
     }
 
     @Warmup(iterations = 50)
@@ -275,6 +275,6 @@ public class CountSetTest
     @GenerateMicroBenchmark
     public void parallel_lazy_scala()
     {
-        CountScalaTest.parallel_lazy_scala();
+        CountSetScalaTest.parallel_lazy_scala();
     }
 }
