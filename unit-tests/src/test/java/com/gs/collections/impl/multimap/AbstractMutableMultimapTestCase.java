@@ -18,7 +18,6 @@ package com.gs.collections.impl.multimap;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.multimap.Multimap;
@@ -63,8 +62,6 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
             K key2, V value2,
             K key3, V value3,
             K key4, V value4);
-
-    protected abstract <V> MutableCollection<V> createCollection(V... args);
 
     @Test
     public void testPutAndGrowMultimap()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -232,6 +232,11 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
                 collection.forEachWith(innerProcedure, key);
             }
         });
+    }
+
+    public void forEachKeyMultiValue(Procedure2<K, ? super Iterable<V>> procedure)
+    {
+        this.getMap().forEachKeyValue(procedure);
     }
 
     public <R extends Collection<V>> MutableMap<K, R> toMap(final Function0<R> collectionFactory)

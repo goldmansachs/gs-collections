@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ import com.gs.collections.api.tuple.Pair;
  * implementing set semantics would not.
  * <p/>
  * <p>Internal iteration methods for keys and values (singly - {@link #forEachKey(Procedure)}, {@link
- * #forEachValue(Procedure)}, and together - {@link #forEachKeyValue(Procedure2)}) are provided to allow flexible
+ * #forEachValue(Procedure)}, and together - {@link #forEachKeyValue(Procedure2)}), {@link #forEachKeyMultiValue(Procedure2)}) are provided to allow flexible
  * browsing of the collection's contents.  Similarly, views also are provided for keys ({@link #keysView()}), values
  * ({@link #valuesView()}) and the combination thereof ({@link #keyValuePairsView()}, {@link
  * #keyMultiValuePairsView()}).
@@ -105,6 +105,21 @@ public interface Multimap<K, V>
      * {@code [ ["key1", "val1"], ["key1", "val2"], ["key1", "val2"], ["key2", "val3"] ]}
      */
     void forEachKeyValue(Procedure2<K, V> procedure);
+
+    /**
+     * Calls the {@code procedure} with each <em>key-Iterable[value]</em>.
+     * <p/>
+     * Given a Multimap with the contents:
+     * <p/>
+     * {@code { "key1" : ["val1", "val2", "val2"], "key2" : ["val3"] }}
+     * <p/>
+     * The given procedure would be invoked with the parameters:
+     * <p/>
+     * {@code [ ["key1", {@link RichIterable["val1", "val2", "val2"]}], ["key2", {@link RichIterable["val3"]}] ]}
+     *
+     * @since 6.0
+     */
+    void forEachKeyMultiValue(Procedure2<K, ? super Iterable<V>> procedure);
 
     /**
      * Returns the number of key-value entry pairs.

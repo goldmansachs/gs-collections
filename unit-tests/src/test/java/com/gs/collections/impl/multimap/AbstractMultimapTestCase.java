@@ -18,9 +18,11 @@ package com.gs.collections.impl.multimap;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
@@ -28,6 +30,7 @@ import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -62,6 +65,8 @@ public abstract class AbstractMultimapTestCase
     protected abstract <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs);
 
     protected abstract <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable);
+
+    protected abstract <V> MutableCollection<V> createCollection(V... args);
 
     @Test
     public void testNewMultimap()
@@ -150,6 +155,16 @@ public abstract class AbstractMultimapTestCase
                 this.newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three");
         multimap.forEachKeyValue((key, value) -> { collection.add(key + value); });
         Assert.assertEquals(HashBag.newBagWith("1One", "2Two", "3Three"), collection);
+    }
+
+    @Test
+    public void forEachKeyMultiValue()
+    {
+        MutableSet<Pair<Integer, Iterable<String>>> collection = UnifiedSet.newSet();
+        Multimap<Integer, String> multimap =
+                this.newMultimapWithKeysValues(2, "2", 2, "1", 3, "3", 3, "3");
+        multimap.forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
+        Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair(2, this.createCollection("2", "1")), Tuples.pair(3, this.createCollection("3", "3"))), collection);
     }
 
     @Test

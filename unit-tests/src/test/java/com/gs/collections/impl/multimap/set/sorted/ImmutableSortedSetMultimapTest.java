@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,18 @@ import java.util.Collections;
 
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
+import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimapTestCase;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -83,5 +87,18 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
     public void allowDuplicates()
     {
         // Sets do not allow duplicates
+    }
+
+    @Test
+    public void forEachKeyMultiValue()
+    {
+        MutableSet<Pair<String, Iterable<Integer>>> collection = UnifiedSet.newSet();
+        TreeSortedSetMultimap<String, Integer> multimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        multimap.put("Two", 2);
+        multimap.put("Two", 1);
+        multimap.put("Three", 3);
+        multimap.put("Three", 3);
+        multimap.forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
+        Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 2, 1)), Tuples.pair("Three", TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 3, 3))), collection);
     }
 }

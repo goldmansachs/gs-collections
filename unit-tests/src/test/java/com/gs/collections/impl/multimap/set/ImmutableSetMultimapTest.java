@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,13 @@ package com.gs.collections.impl.multimap.set;
 
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
+import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimapTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.tuple.Tuples;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class ImmutableSetMultimapTest extends AbstractImmutableMultimapTestCase
 {
@@ -39,5 +44,19 @@ public class ImmutableSetMultimapTest extends AbstractImmutableMultimapTestCase
     public void allowDuplicates()
     {
         // Sets do not allow duplicates
+    }
+
+    @Test
+    public void forEachKeyMultiValue()
+    {
+        MutableSet<Pair<String, Iterable<Integer>>> collection = UnifiedSet.newSet();
+        UnifiedSetMultimap<String, Integer> multimap = UnifiedSetMultimap.newMultimap();
+        multimap.put("Two", 2);
+        multimap.put("Two", 1);
+        multimap.put("Three", 3);
+        multimap.put("Three", 3);
+        ImmutableSetMultimap<String, Integer> immutableMultimap = multimap.toImmutable();
+        immutableMultimap.forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
+        Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", UnifiedSet.newSetWith(2, 1)), Tuples.pair("Three", UnifiedSet.newSetWith(3, 3))), collection);
     }
 }
