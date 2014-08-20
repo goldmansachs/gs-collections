@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,4 +33,16 @@ public interface Pair<T1, T2>
     void put(Map<T1, T2> map);
 
     Map.Entry<T1, T2> toEntry();
+
+    /**
+     * Method used to swap the elements of pair.
+     * <p>
+     * <pre>e.g.
+     * Pair&lt;String, Integer&gt; pair = Tuples.pair("One", 1);
+     * Pair&lt;Integer, String&gt; swappedPair = pair.swap();
+     * </pre>
+     *
+     * @since 6.0
+     */
+    Pair<T2, T1> swap();
 }

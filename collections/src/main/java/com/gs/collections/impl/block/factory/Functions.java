@@ -1068,7 +1068,7 @@ public final class Functions
 
         public Pair<T, S> valueOf(Pair<S, T> pair)
         {
-            return Tuples.pair(pair.getTwo(), pair.getOne());
+            return pair.swap();
         }
     }
 }

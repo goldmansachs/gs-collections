@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,5 +29,11 @@ final class TwinImpl<T>
     TwinImpl(T newOne, T newTwo)
     {
         super(newOne, newTwo);
+    }
+
+    @Override
+    public TwinImpl<T> swap()
+    {
+        return new TwinImpl<T>(this.getTwo(), this.getOne());
     }
 }

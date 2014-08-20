@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,4 +19,5 @@ package com.gs.collections.api.tuple;
 public interface Twin<T>
         extends Pair<T, T>
 {
+    Twin<T> swap();
 }

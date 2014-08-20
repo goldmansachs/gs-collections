@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,11 @@ class PairImpl<T1, T2>
     public void put(Map<T1, T2> map)
     {
         map.put(this.one, this.two);
+    }
+
+    public PairImpl<T2, T1> swap()
+    {
+        return new PairImpl<T2, T1>(this.two, this.one);
     }
 
     @Override

@@ -93,4 +93,22 @@ public class TuplesTest
         Assert.assertEquals("One", ((Function<Pair<String, ?>, String>) Pair::getOne).valueOf(pair));
         Assert.assertSame(two, ((Function<Pair<?, Integer>, Integer>) Pair::getTwo).valueOf(pair));
     }
+
+    @Test
+    public void swap()
+    {
+        Pair<String, Integer> pair = Tuples.pair("One", 1);
+        Pair<Integer, String> swappedPair = pair.swap();
+        Pair<Integer, String> expectedPair = Tuples.pair(1, "One");
+        Assert.assertEquals(Integer.valueOf(1), swappedPair.getOne());
+        Assert.assertEquals("One", swappedPair.getTwo());
+        Assert.assertEquals(expectedPair, swappedPair);
+
+        Twin<String> twin = Tuples.twin("One", "1");
+        Twin<String> swappedTwin = twin.swap();
+        Twin<String> expectedTwin = Tuples.twin("1", "One");
+        Assert.assertEquals("1", swappedTwin.getOne());
+        Assert.assertEquals("One", swappedTwin.getTwo());
+        Assert.assertEquals(expectedTwin, swappedTwin);
+    }
 }
