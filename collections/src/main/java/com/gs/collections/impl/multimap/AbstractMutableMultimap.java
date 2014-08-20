@@ -168,6 +168,11 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
         return false;
     }
 
+    public boolean add(Pair<K, V> keyValuePair)
+    {
+        return this.put(keyValuePair.getOne(), keyValuePair.getTwo());
+    }
+
     public boolean remove(Object key, Object value)
     {
         C collection = this.map.get(key);

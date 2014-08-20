@@ -81,7 +81,7 @@ public final class UnifiedSetWithHashingStrategyMultimap<K, V>
         this.hashingStrategy = hashingStrategy;
         for (Pair<K, V> single : inputIterable)
         {
-            this.put(single.getOne(), single.getTwo());
+            this.add(single);
         }
     }
 

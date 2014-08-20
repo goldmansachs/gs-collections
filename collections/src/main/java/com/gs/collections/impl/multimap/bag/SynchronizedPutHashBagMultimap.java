@@ -73,7 +73,7 @@ public final class SynchronizedPutHashBagMultimap<K, V>
         {
             public void value(Pair<K, V> pair)
             {
-                SynchronizedPutHashBagMultimap.this.put(pair.getOne(), pair.getTwo());
+                SynchronizedPutHashBagMultimap.this.add(pair);
             }
         });
     }

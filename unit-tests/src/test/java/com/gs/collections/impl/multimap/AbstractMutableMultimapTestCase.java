@@ -23,6 +23,7 @@ import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Bags;
@@ -30,6 +31,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -71,6 +73,25 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
         multimap.put(2, 2);
         Verify.assertContainsEntry(1, 1, multimap);
         Verify.assertContainsEntry(2, 2, multimap);
+    }
+
+    @Test
+    public void testAddAndGrowMultimap()
+    {
+        MutableMultimap<Integer, String> multimap = this.newMultimap();
+        Pair<Integer, String> pair1 = Tuples.pair(1, "One");
+        Pair<Integer, String> pair2 = Tuples.pair(2, "Two");
+        Pair<Integer, String> pair3 = Tuples.pair(3, "Three");
+        Pair<Integer, String> pair4 = Tuples.pair(4, "Four");
+        Assert.assertTrue(multimap.add(pair1));
+        Verify.assertContainsEntry(1, "One", multimap);
+        Assert.assertTrue(multimap.add(pair2));
+        Verify.assertContainsEntry(2, "Two", multimap);
+        Assert.assertTrue(multimap.add(pair3));
+        Verify.assertContainsEntry(3, "Three", multimap);
+        Assert.assertTrue(multimap.add(pair4));
+        Verify.assertContainsEntry(4, "Four", multimap);
+        Verify.assertSetsEqual(UnifiedSet.newSetWith(pair1, pair2, pair3, pair4), multimap.keyValuePairsView().toSet());
     }
 
     @Test

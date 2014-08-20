@@ -75,7 +75,7 @@ public final class SynchronizedPutUnifiedSetMultimap<K, V>
         {
             public void value(Pair<K, V> pair)
             {
-                SynchronizedPutUnifiedSetMultimap.this.put(pair.getOne(), pair.getTwo());
+                SynchronizedPutUnifiedSetMultimap.this.add(pair);
             }
         });
     }

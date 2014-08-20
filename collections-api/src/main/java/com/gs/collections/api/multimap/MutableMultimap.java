@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,15 @@ public interface MutableMultimap<K, V>
     // Modification Operations
 
     boolean put(K key, V value);
+
+    /**
+     * Modification operation similar to put, however, takes the key-value pair as the input.
+     *
+     * @param keyValuePair key value pair to add in the multimap
+     * @see #put(Object, Object)
+     * @since 6.0
+     */
+    boolean add(Pair<K, V> keyValuePair);
 
     boolean remove(Object key, Object value);
 
