@@ -295,6 +295,11 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
         Mutable<name>List sameList = this.newWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">);
         Assert.assertSame(sameList, sameList.sortThis());
         Assert.assertEquals(<name>ArrayList.newListWith(<["1", "3", "7", "8", "9"]:(literal.(type))(); separator=", ">), this.newWith(<["8", "1", "7", "3", "9"]:(literal.(type))(); separator=", ">).sortThis());
+        Mutable<name>List list = this.newWith();
+        list.add(<(literal.(type))("2")>);
+        list.add(<(literal.(type))("1")>);
+        list.sortThis();
+        Assert.assertEquals(<(literal.(type))("1")>, list.get(0)<(wideDelta.(type))>);
     }
 
     @Test
