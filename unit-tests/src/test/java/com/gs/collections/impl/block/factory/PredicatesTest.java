@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.block.factory;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function;
@@ -25,6 +27,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.tuple.Tuples;
@@ -515,6 +518,54 @@ public class PredicatesTest
     {
         assertRejects(Predicates.attributeNotNull(Functions.getPassThru()), (Object) null);
         assertAccepts(Predicates.attributeNotNull(Functions.getPassThru()), new Object());
+    }
+
+    @Test
+    public void in_SetIterable()
+    {
+        Predicate<Object> predicate = Predicates.in(Sets.immutable.with(1, 2, 3));
+        assertAccepts(predicate, 1, 2, 3);
+        assertRejects(predicate, 0, 4, null);
+    }
+
+    @Test
+    public void notIn_SetIterable()
+    {
+        Predicate<Object> predicate = Predicates.notIn(Sets.immutable.with(1, 2, 3));
+        assertAccepts(predicate, 0, 4, null);
+        assertRejects(predicate, 1, 2, 3);
+    }
+
+    @Test
+    public void in_Set()
+    {
+        Predicate<Object> predicate = Predicates.in(new HashSet<Integer>(Arrays.asList(1, 2, 3)));
+        assertAccepts(predicate, 1, 2, 3);
+        assertRejects(predicate, 0, 4, null);
+    }
+
+    @Test
+    public void notIn_Set()
+    {
+        Predicate<Object> predicate = Predicates.notIn(new HashSet<Integer>(Arrays.asList(1, 2, 3)));
+        assertAccepts(predicate, 0, 4, null);
+        assertRejects(predicate, 1, 2, 3);
+    }
+
+    @Test
+    public void in_Collection()
+    {
+        Predicate<Object> predicate = Predicates.in(Lists.mutable.with(1, 2, 3));
+        assertAccepts(predicate, 1, 2, 3);
+        assertRejects(predicate, 0, 4, null);
+    }
+
+    @Test
+    public void notIn_Collection()
+    {
+        Predicate<Object> predicate = Predicates.notIn(Lists.mutable.with(1, 2, 3));
+        assertAccepts(predicate, 0, 4, null);
+        assertRejects(predicate, 1, 2, 3);
     }
 
     @Test

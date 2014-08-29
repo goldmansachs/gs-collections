@@ -16,6 +16,10 @@
 
 package com.gs.collections.impl.block.factory;
 
+import java.util.Collections;
+
+import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
@@ -395,33 +399,91 @@ public class PredicatesSerializationTest
     }
 
     @Test
-    public void in()
+    public void in_SetIterable()
     {
-        Object[] array = {};
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADxjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMk\n"
-                        + "SW5QcmVkaWNhdGUAAAAAAAAAAQIAAUwACGl0ZXJhYmxldAAUTGphdmEvbGFuZy9JdGVyYWJsZTt4\n"
-                        + "cgAwY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5QcmVkaWNhdGVzAAAAAAAA\n"
-                        + "AAECAAB4cHNyABpqYXZhLnV0aWwuQXJyYXlzJEFycmF5TGlzdNmkPL7NiAbSAgABWwABYXQAE1tM\n"
-                        + "amF2YS9sYW5nL09iamVjdDt4cHVyABNbTGphdmEubGFuZy5PYmplY3Q7kM5YnxBzKWwCAAB4cAAA\n"
-                        + "AAA=",
-                Predicates.in(array));
+                "rO0ABXNyAEdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMk\n"
+                        + "SW5TZXRJdGVyYWJsZVByZWRpY2F0ZQAAAAAAAAABAgABTAALc2V0SXRlcmFibGV0AChMY29tL2dz\n"
+                        + "L2NvbGxlY3Rpb25zL2FwaS9zZXQvU2V0SXRlcmFibGU7eHIAMGNvbS5ncy5jb2xsZWN0aW9ucy5p\n"
+                        + "bXBsLmJsb2NrLmZhY3RvcnkuUHJlZGljYXRlcwAAAAAAAAABAgAAeHBzcgBEY29tLmdzLmNvbGxl\n"
+                        + "Y3Rpb25zLmltcGwuc2V0LmltbXV0YWJsZS5JbW11dGFibGVTZXRTZXJpYWxpemF0aW9uUHJveHkA\n"
+                        + "AAAAAAAAAQwAAHhwdwQAAAAAeA==",
+                Predicates.in(Sets.immutable.with()));
     }
 
     @Test
-    public void notIn()
+    public void notIn_SetIterable()
     {
-        Object[] array = {};
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMk\n"
+                        + "Tm90SW5TZXRJdGVyYWJsZVByZWRpY2F0ZQAAAAAAAAABAgABTAALc2V0SXRlcmFibGV0AChMY29t\n"
+                        + "L2dzL2NvbGxlY3Rpb25zL2FwaS9zZXQvU2V0SXRlcmFibGU7eHIAMGNvbS5ncy5jb2xsZWN0aW9u\n"
+                        + "cy5pbXBsLmJsb2NrLmZhY3RvcnkuUHJlZGljYXRlcwAAAAAAAAABAgAAeHBzcgBEY29tLmdzLmNv\n"
+                        + "bGxlY3Rpb25zLmltcGwuc2V0LmltbXV0YWJsZS5JbW11dGFibGVTZXRTZXJpYWxpemF0aW9uUHJv\n"
+                        + "eHkAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
+                Predicates.notIn(Sets.immutable.with()));
+    }
+
+    @Test
+    public void in_Set()
+    {
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMk\n"
-                        + "Tm90SW5QcmVkaWNhdGUAAAAAAAAAAQIAAUwACGl0ZXJhYmxldAAUTGphdmEvbGFuZy9JdGVyYWJs\n"
-                        + "ZTt4cgAwY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5QcmVkaWNhdGVzAAAA\n"
-                        + "AAAAAAECAAB4cHNyABpqYXZhLnV0aWwuQXJyYXlzJEFycmF5TGlzdNmkPL7NiAbSAgABWwABYXQA\n"
-                        + "E1tMamF2YS9sYW5nL09iamVjdDt4cHVyABNbTGphdmEubGFuZy5PYmplY3Q7kM5YnxBzKWwCAAB4\n"
-                        + "cAAAAAA=",
-                Predicates.notIn(array));
+                        + "SW5TZXRQcmVkaWNhdGUAAAAAAAAAAQIAAUwAA3NldHQAD0xqYXZhL3V0aWwvU2V0O3hyADBjb20u\n"
+                        + "Z3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMAAAAAAAAAAQIAAHhw\n"
+                        + "c3IAIGphdmEudXRpbC5Db2xsZWN0aW9ucyRDaGVja2VkU2V0QSSbonrZ/6sCAAB4cgAnamF2YS51\n"
+                        + "dGlsLkNvbGxlY3Rpb25zJENoZWNrZWRDb2xsZWN0aW9uFelt/RjmzG8CAANMAAFjdAAWTGphdmEv\n"
+                        + "dXRpbC9Db2xsZWN0aW9uO0wABHR5cGV0ABFMamF2YS9sYW5nL0NsYXNzO1sAFnplcm9MZW5ndGhF\n"
+                        + "bGVtZW50QXJyYXl0ABNbTGphdmEvbGFuZy9PYmplY3Q7eHBzcgAuY29tLmdzLmNvbGxlY3Rpb25z\n"
+                        + "LmltcGwuc2V0Lm11dGFibGUuVW5pZmllZFNldAAAAAAAAAABDAAAeHB3CAAAAAA/QAAAeHZyABBq\n"
+                        + "YXZhLmxhbmcuT2JqZWN0AAAAAAAAAAAAAAB4cHA=",
+                Predicates.in(Collections.checkedSet(Sets.mutable.with(), Object.class)));
+    }
+
+    @Test
+    public void notIn_Set()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMk\n"
+                        + "Tm90SW5TZXRQcmVkaWNhdGUAAAAAAAAAAQIAAUwAA3NldHQAD0xqYXZhL3V0aWwvU2V0O3hyADBj\n"
+                        + "b20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMAAAAAAAAAAQIA\n"
+                        + "AHhwc3IAIGphdmEudXRpbC5Db2xsZWN0aW9ucyRDaGVja2VkU2V0QSSbonrZ/6sCAAB4cgAnamF2\n"
+                        + "YS51dGlsLkNvbGxlY3Rpb25zJENoZWNrZWRDb2xsZWN0aW9uFelt/RjmzG8CAANMAAFjdAAWTGph\n"
+                        + "dmEvdXRpbC9Db2xsZWN0aW9uO0wABHR5cGV0ABFMamF2YS9sYW5nL0NsYXNzO1sAFnplcm9MZW5n\n"
+                        + "dGhFbGVtZW50QXJyYXl0ABNbTGphdmEvbGFuZy9PYmplY3Q7eHBzcgAuY29tLmdzLmNvbGxlY3Rp\n"
+                        + "b25zLmltcGwuc2V0Lm11dGFibGUuVW5pZmllZFNldAAAAAAAAAABDAAAeHB3CAAAAAA/QAAAeHZy\n"
+                        + "ABBqYXZhLmxhbmcuT2JqZWN0AAAAAAAAAAAAAAB4cHA=",
+                Predicates.notIn(Collections.checkedSet(Sets.mutable.with(), Object.class)));
+    }
+
+    @Test
+    public void in_small_Collection()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMk\n"
+                        + "SW5Db2xsZWN0aW9uUHJlZGljYXRlAAAAAAAAAAECAAFMAApjb2xsZWN0aW9udAAWTGphdmEvdXRp\n"
+                        + "bC9Db2xsZWN0aW9uO3hyADBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlBy\n"
+                        + "ZWRpY2F0ZXMAAAAAAAAAAQIAAHhwc3IALWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmxpc3QubXV0\n"
+                        + "YWJsZS5GYXN0TGlzdAAAAAAAAAABDAAAeHB3BAAAAAB4",
+                Predicates.in(Lists.mutable.with()));
+    }
+
+    @Test
+    public void notIn_small_Collection()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMk\n"
+                        + "Tm90SW5Db2xsZWN0aW9uUHJlZGljYXRlAAAAAAAAAAECAAFMAApjb2xsZWN0aW9udAAWTGphdmEv\n"
+                        + "dXRpbC9Db2xsZWN0aW9uO3hyADBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5\n"
+                        + "LlByZWRpY2F0ZXMAAAAAAAAAAQIAAHhwc3IALWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmxpc3Qu\n"
+                        + "bXV0YWJsZS5GYXN0TGlzdAAAAAAAAAABDAAAeHB3BAAAAAB4",
+                Predicates.notIn(Lists.mutable.with()));
     }
 
     @Test

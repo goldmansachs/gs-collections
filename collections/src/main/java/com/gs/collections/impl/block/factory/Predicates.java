@@ -17,10 +17,14 @@
 package com.gs.collections.impl.block.factory;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.set.SetIterable;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.Iterate;
 
 /**
@@ -37,6 +41,7 @@ public abstract class Predicates<T>
     private static final Predicates<Object> ALWAYS_FALSE = new AlwaysFalse();
     private static final Predicates<Object> IS_NULL = new IsNull();
     private static final Predicates<Object> NOT_NULL = new NotNull();
+    private static final int SMALL_COLLECTION_THRESHOLD = 6;
 
     public static <T> Predicates<T> adapt(Predicate<T> predicate)
     {
@@ -173,21 +178,36 @@ public abstract class Predicates<T>
 
     /**
      * Creates a predicate which returns true if an object passed to accept method is contained in the iterable.
-     * This will clearly work faster if the specified iterable is a Set.
      */
     public static Predicates<Object> in(Iterable<?> iterable)
     {
-        return new InPredicate(iterable);
+        if (iterable instanceof SetIterable<?>)
+        {
+            return new InSetIterablePredicate((SetIterable<?>) iterable);
+        }
+        if (iterable instanceof Set<?>)
+        {
+            return new InSetPredicate((Set<?>) iterable);
+        }
+        if (iterable instanceof Collection<?> && ((Collection<?>) iterable).size() <= SMALL_COLLECTION_THRESHOLD)
+        {
+            return new InCollectionPredicate((Collection<?>) iterable);
+        }
+        return new InSetIterablePredicate(UnifiedSet.newSet(iterable));
     }
 
     public static Predicates<Object> in(Object... array)
     {
-        return new InPredicate(Arrays.asList(array));
+        if (array.length <= SMALL_COLLECTION_THRESHOLD)
+        {
+            return new InCollectionPredicate(Arrays.asList(array));
+        }
+        return new InSetIterablePredicate(UnifiedSet.newSetWith(array));
     }
 
     /**
      * Creates a predicate which returns true if an attribute selected from an object passed to accept method
-     * is contained in the iterable.  This will clearly work faster if the specified iterable is a Set.
+     * is contained in the iterable.
      */
     public static <T> Predicates<T> attributeIn(
             Function<? super T, ?> function,
@@ -230,21 +250,37 @@ public abstract class Predicates<T>
 
     /**
      * Creates a predicate which returns true if an object passed to accept method is not contained in
-     * the iterable.  This will clearly work faster if the specified iterable is a Set.
+     * the iterable.
      */
     public static Predicates<Object> notIn(Iterable<?> iterable)
     {
-        return new NotInPredicate(iterable);
+        if (iterable instanceof SetIterable<?>)
+        {
+            return new NotInSetIterablePredicate((SetIterable<?>) iterable);
+        }
+        if (iterable instanceof Set<?>)
+        {
+            return new NotInSetPredicate((Set<?>) iterable);
+        }
+        if (iterable instanceof Collection<?> && ((Collection<?>) iterable).size() <= SMALL_COLLECTION_THRESHOLD)
+        {
+            return new NotInCollectionPredicate((Collection<?>) iterable);
+        }
+        return new NotInSetIterablePredicate(UnifiedSet.newSet(iterable));
     }
 
     public static Predicates<Object> notIn(Object... array)
     {
-        return new NotInPredicate(Arrays.asList(array));
+        if (array.length <= SMALL_COLLECTION_THRESHOLD)
+        {
+            return new NotInCollectionPredicate(Arrays.asList(array));
+        }
+        return new NotInSetIterablePredicate(UnifiedSet.newSetWith(array));
     }
 
     /**
      * Creates a predicate which returns true if an attribute selected from an object passed to accept method
-     * is not contained in the iterable.  This will clearly work faster if the specified iterable is a Set.
+     * is not contained in the iterable.
      */
     public static <T> Predicates<T> attributeNotIn(
             Function<? super T, ?> function,
@@ -1012,49 +1048,141 @@ public abstract class Predicates<T>
         }
     }
 
-    private static final class InPredicate
+    private static final class InCollectionPredicate
             extends Predicates<Object>
     {
         private static final long serialVersionUID = 1L;
-        private final Iterable<?> iterable;
+        private final Collection<?> collection;
 
-        private InPredicate(Iterable<?> iterable)
+        private InCollectionPredicate(Collection<?> collection)
         {
-            this.iterable = iterable;
+            this.collection = collection;
         }
 
         public boolean accept(Object anObject)
         {
-            return Iterate.contains(this.iterable, anObject);
+            return this.collection.contains(anObject);
         }
 
         @Override
         public String toString()
         {
-            return "Predicates.in(" + this.iterable + ')';
+            return "Predicates.in(" + this.collection + ')';
         }
     }
 
-    private static final class NotInPredicate
+    private static final class NotInCollectionPredicate
             extends Predicates<Object>
     {
         private static final long serialVersionUID = 1L;
-        private final Iterable<?> iterable;
+        private final Collection<?> collection;
 
-        private NotInPredicate(Iterable<?> iterable)
+        private NotInCollectionPredicate(Collection<?> collection)
         {
-            this.iterable = iterable;
+            this.collection = collection;
         }
 
         public boolean accept(Object anObject)
         {
-            return !Iterate.contains(this.iterable, anObject);
+            return !this.collection.contains(anObject);
         }
 
         @Override
         public String toString()
         {
-            return "Predicates.notIn(" + this.iterable + ')';
+            return "Predicates.notIn(" + this.collection + ')';
+        }
+    }
+
+    private static final class InSetIterablePredicate
+            extends Predicates<Object>
+    {
+        private static final long serialVersionUID = 1L;
+        private final SetIterable<?> setIterable;
+
+        private InSetIterablePredicate(SetIterable<?> setIterable)
+        {
+            this.setIterable = setIterable;
+        }
+
+        public boolean accept(Object anObject)
+        {
+            return this.setIterable.contains(anObject);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Predicates.in(" + this.setIterable + ')';
+        }
+    }
+
+    private static final class NotInSetIterablePredicate
+            extends Predicates<Object>
+    {
+        private static final long serialVersionUID = 1L;
+        private final SetIterable<?> setIterable;
+
+        private NotInSetIterablePredicate(SetIterable<?> setIterable)
+        {
+            this.setIterable = setIterable;
+        }
+
+        public boolean accept(Object anObject)
+        {
+            return !this.setIterable.contains(anObject);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Predicates.notIn(" + this.setIterable + ')';
+        }
+    }
+
+    private static final class InSetPredicate
+            extends Predicates<Object>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Set<?> set;
+
+        private InSetPredicate(Set<?> set)
+        {
+            this.set = set;
+        }
+
+        public boolean accept(Object anObject)
+        {
+            return this.set.contains(anObject);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Predicates.in(" + this.set + ')';
+        }
+    }
+
+    private static final class NotInSetPredicate
+            extends Predicates<Object>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Set<?> set;
+
+        private NotInSetPredicate(Set<?> set)
+        {
+            this.set = set;
+        }
+
+        public boolean accept(Object anObject)
+        {
+            return !this.set.contains(anObject);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Predicates.notIn(" + this.set + ')';
         }
     }
 
