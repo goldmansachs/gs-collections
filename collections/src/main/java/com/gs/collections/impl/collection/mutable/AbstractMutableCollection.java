@@ -154,16 +154,7 @@ public abstract class AbstractMutableCollection<T>
 
     public boolean removeAll(Collection<?> source)
     {
-        int oldSize = this.size();
-        Iterator<?> iterator = this.iterator();
-        while (iterator.hasNext())
-        {
-            if (source.contains(iterator.next()))
-            {
-                iterator.remove();
-            }
-        }
-        return this.size() != oldSize;
+        return this.removeAllIterable(source);
     }
 
     public boolean retainAll(Collection<?> source)

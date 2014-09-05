@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 public final class Procedures2
 {
     public static final Procedure2<?, ?> ADD_TO_COLLECTION = new AddToCollection<Object>();
+    public static final Procedure2<?, ?> REMOVE_FROM_COLLECTION = new RemoveFromCollection<Object>();
 
     private Procedures2()
     {
@@ -41,6 +42,11 @@ public final class Procedures2
     public static <T> Procedure2<T, Collection<T>> addToCollection()
     {
         return (Procedure2<T, Collection<T>>) ADD_TO_COLLECTION;
+    }
+
+    public static <T> Procedure2<T, Collection<T>> removeFromCollection()
+    {
+        return (Procedure2<T, Collection<T>>) REMOVE_FROM_COLLECTION;
     }
 
     private static final class ProcedureAdapter<T, P> implements Procedure2<T, P>
@@ -66,6 +72,16 @@ public final class Procedures2
         public void value(T each, Collection<T> target)
         {
             target.add(each);
+        }
+    }
+
+    private static class RemoveFromCollection<T> implements Procedure2<T, Collection<T>>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public void value(T each, Collection<T> target)
+        {
+            target.remove(each);
         }
     }
 }

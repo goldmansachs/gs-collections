@@ -124,6 +124,97 @@ public class IterateTest
     }
 
     @Test
+    public void removeAllFrom()
+    {
+        MutableList<Integer> sourceFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        MutableList<Integer> removeFastList = FastList.newListWith(1, 3, 5);
+        Iterate.removeAllFrom(removeFastList, sourceFastList);
+        Assert.assertEquals(Lists.immutable.with(2, 4, 6), sourceFastList);
+    }
+
+    @Test
+    public void removeAllFromEmptyTest()
+    {
+        MutableList<Integer> sourceFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        MutableList<Integer> removeFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        Iterate.removeAllFrom(removeFastList, sourceFastList);
+        Verify.assertEmpty(sourceFastList);
+    }
+
+    @Test
+    public void removeAllFromEmptyListTest()
+    {
+        MutableList<Integer> sourceFastList = FastList.newList();
+        MutableList<Integer> removeFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        Iterate.removeAllFrom(removeFastList, sourceFastList);
+        Verify.assertEmpty(sourceFastList);
+    }
+
+    @Test
+    public void removeAllFromNoElementRemovedTest()
+    {
+        MutableList<Integer> sourceFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        MutableList<Integer> removeFastList = FastList.newListWith(7, 8, 9);
+        Iterate.removeAllFrom(removeFastList, sourceFastList);
+        Assert.assertEquals(Lists.immutable.with(1, 2, 3, 4, 5, 6), sourceFastList);
+    }
+
+    @Test
+    public void removeAllFromEmptyTargetListTest()
+    {
+        MutableList<Integer> sourceFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        MutableList<Integer> removeFastList = FastList.newList();
+        Iterate.removeAllFrom(removeFastList, sourceFastList);
+        Assert.assertEquals(Lists.immutable.with(1, 2, 3, 4, 5, 6), sourceFastList);
+    }
+
+    @Test
+    public void removeAllIterableFrom()
+    {
+        MutableList<Integer> sourceFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        MutableList<Integer> removeFastList = FastList.newListWith(1, 3, 5);
+        Assert.assertTrue(Iterate.removeAllIterable(removeFastList, sourceFastList));
+        Assert.assertEquals(Lists.immutable.with(2, 4, 6), sourceFastList);
+    }
+
+    @Test
+    public void removeAllIterableFromEmptyTest()
+    {
+        MutableList<Integer> sourceFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        MutableList<Integer> removeFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        Assert.assertTrue(Iterate.removeAllIterable(removeFastList, sourceFastList));
+        Verify.assertEmpty(sourceFastList);
+    }
+
+    @Test
+    public void removeAllIterableFromEmptyListTest()
+    {
+        MutableList<Integer> sourceFastList = FastList.newList();
+        MutableList<Integer> removeFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        Assert.assertFalse(Iterate.removeAllIterable(removeFastList, sourceFastList));
+        Verify.assertEmpty(sourceFastList);
+    }
+
+    @Test
+    public void removeAllIterableFromNoElementRemovedTest()
+    {
+        MutableList<Integer> sourceFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        MutableList<Integer> removeFastList = FastList.newListWith(7, 8, 9);
+        Assert.assertFalse(Iterate.removeAllIterable(removeFastList, sourceFastList));
+        Assert.assertEquals(Lists.immutable.with(1, 2, 3, 4, 5, 6), sourceFastList);
+    }
+
+    @Test
+    public void removeAllIterableFromEmptyTargetListTest()
+    {
+        MutableList<Integer> sourceFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        MutableList<Integer> removeFastList = FastList.newList();
+        Assert.assertFalse(Iterate.removeAllIterable(removeFastList, sourceFastList));
+        Assert.assertEquals(Lists.immutable.with(1, 2, 3, 4, 5, 6), sourceFastList);
+    }
+
+
+    @Test
     public void sizeOf()
     {
         Assert.assertEquals(5, Iterate.sizeOf(Interval.oneTo(5)));

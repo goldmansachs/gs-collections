@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -982,6 +982,27 @@ public final class Iterate
         }
         int oldSize = targetCollection.size();
         Iterate.forEachWith(iterable, Procedures2.<T>addToCollection(), targetCollection);
+        return targetCollection.size() != oldSize;
+    }
+
+    public static <T, R extends Collection<T>> R removeAllFrom(Iterable<? extends T> iterable, R targetCollection)
+    {
+        Iterate.removeAllIterable(iterable, targetCollection);
+        return targetCollection;
+    }
+
+    public static <T> boolean removeAllIterable(Iterable<? extends T> iterable, Collection<T> targetCollection)
+    {
+        if (iterable == null)
+        {
+            throw new NullPointerException();
+        }
+        if (iterable instanceof Collection<?>)
+        {
+            return targetCollection.removeAll((Collection<T>) iterable);
+        }
+        int oldSize = targetCollection.size();
+        Iterate.forEachWith(iterable, Procedures2.<T>removeFromCollection(), targetCollection);
         return targetCollection.size() != oldSize;
     }
 
