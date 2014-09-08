@@ -2833,7 +2833,17 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
         {
             T result = injectedValue;
-
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    result = function.valueOf(result, EMPTY_KEY);
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
+                {
+                    result = function.valueOf(result, REMOVED_KEY);
+                }
+            }
             for (<type> key : <name>ObjectHashMap.this.keys)
             {
                 if (isNonSentinel(key))

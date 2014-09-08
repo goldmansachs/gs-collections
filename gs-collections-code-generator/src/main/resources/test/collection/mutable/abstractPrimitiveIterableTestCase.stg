@@ -765,9 +765,17 @@ public abstract class Abstract<name>IterableTestCase
     @Test
     public void injectInto()
     {
-        <name>Iterable iterable = this.newWith(<["0", "2", "31"]:(literal.(type))(); separator=", ">);
-        <wrapperName> sum = iterable.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, <type> value) -> <wrapperName>.valueOf((<type>)(result + value)));
-        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("33")>), sum);
+        <name>Iterable iterable1 = this.newWith(<["0", "2", "31"]:(literal.(type))(); separator=", ">);
+        <wrapperName> sum1 = iterable1.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, <type> value) -> <wrapperName>.valueOf((<type>) (result + value + 1)));
+        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("36")>), sum1);
+
+        <name>Iterable iterable2 = this.newWith(<[ "1", "2", "31"]:(literal.(type))(); separator=", ">);
+        <wrapperName> sum2 = iterable2.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, <type> value) -> <wrapperName>.valueOf((<type>) (result + value + 1)));
+        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("37")>), sum2);
+
+        <name>Iterable iterable3 = this.newWith(<["0", "1", "2", "31"]:(literal.(type))(); separator=", ">);
+        <wrapperName> sum3 = iterable3.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, <type> value) -> <wrapperName>.valueOf((<type>) (result + value + 1)));
+        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("38")>), sum3);
     }
 }
 
