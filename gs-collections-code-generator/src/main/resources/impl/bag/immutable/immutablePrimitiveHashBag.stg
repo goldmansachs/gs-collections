@@ -36,6 +36,7 @@ import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.procedure.checked.primitive.Checked<name>IntProcedure;
+import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 
 /**
  * Immutable<name>HashBag is the non-modifiable equivalent of {@link <name>HashBag}.
@@ -270,7 +271,7 @@ final class Immutable<name>HashBag implements Immutable<name>Bag, Serializable
 
     public <name>Iterator <type>Iterator()
     {
-        return this.delegate.<type>Iterator();
+        return new Unmodifiable<name>Iterator(this.delegate.<type>Iterator());
     }
 
     private Object writeReplace()

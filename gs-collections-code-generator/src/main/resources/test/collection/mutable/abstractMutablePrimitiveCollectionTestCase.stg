@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.test.Verify;
@@ -357,6 +358,40 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
             iterator.next();
         }
         iterator.next();
+    }
+
+    @Test
+    public void <type>Iterator_with_remove()
+    {
+        Mutable<name>Collection <type>Iterable = this.classUnderTest();
+        Mutable<name>Iterator iterator = <type>Iterable.<type>Iterator();
+        while (iterator.hasNext())
+        {
+            iterator.next();
+            iterator.remove();
+        }
+        Verify.assertEmpty(<type>Iterable);
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
+    }
+
+    @Test
+    public void <type>Iterator_throws_for_remove_before_next()
+    {
+        Mutable<name>Collection <type>Iterable = this.classUnderTest();
+        Mutable<name>Iterator iterator = <type>Iterable.<type>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        Verify.assertThrows(IllegalStateException.class, iterator::remove);
+    }
+
+    @Test
+    public void <type>Iterator_throws_for_consecutive_remove()
+    {
+        Mutable<name>Collection <type>Iterable = this.classUnderTest();
+        Mutable<name>Iterator iterator = <type>Iterable.<type>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        iterator.next();
+        iterator.remove();
+        Verify.assertThrows(IllegalStateException.class, iterator::remove);
     }
 }
 

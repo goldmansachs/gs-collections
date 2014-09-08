@@ -47,6 +47,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
 import com.gs.collections.impl.factory.primitive.Object<name>Maps;
+import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.map.mutable.primitive.Object<name>HashMap;
@@ -74,7 +75,7 @@ final class ImmutableObject<name>SingletonMap\<K> extends AbstractImmutableObjec
 
     public <name>Iterator <type>Iterator()
     {
-        return Object<name>HashMap.newWithKeysValues(this.key1, this.value1).<type>Iterator();
+        return new Unmodifiable<name>Iterator(Object<name>HashMap.newWithKeysValues(this.key1, this.value1).<type>Iterator());
     }
 
     public void forEach(<name>Procedure procedure)

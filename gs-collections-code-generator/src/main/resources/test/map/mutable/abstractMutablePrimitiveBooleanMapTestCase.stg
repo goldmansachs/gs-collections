@@ -20,10 +20,13 @@ body(type, name) ::= <<
 
 package com.gs.collections.impl.map.mutable.primitive;
 
+import java.util.NoSuchElementException;
+
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.BooleanFunction0;
 import com.gs.collections.api.block.function.primitive.BooleanToBooleanFunction;
 import com.gs.collections.api.block.function.primitive.<name>ToBooleanFunction;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.api.map.primitive.Mutable<name>BooleanMap;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
@@ -613,6 +616,39 @@ public abstract class AbstractMutable<name>BooleanMapTestCase extends Abstract<n
     {
         Verify.assertInstanceOf(Unmodifiable<name>BooleanMap.class, this.map.asUnmodifiable());
         Assert.assertEquals(new Unmodifiable<name>BooleanMap(this.map), this.map.asUnmodifiable());
+    }
+
+    @Test
+    public void booleanIterator_with_remove()
+    {
+        Mutable<name>BooleanMap map = this.classUnderTest();
+        MutableBooleanIterator iterator = map.booleanIterator();
+        while(iterator.hasNext())
+        {
+            iterator.next();
+            iterator.remove();
+        }
+        Assert.assertFalse(iterator.hasNext());
+        Verify.assertEmpty(map);
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
+    }
+
+    @Test
+    public void iterator_throws_on_invocation_of_remove_before_next()
+    {
+        MutableBooleanIterator iterator = this.classUnderTest().booleanIterator();
+        Assert.assertTrue(iterator.hasNext());
+        Verify.assertThrows(IllegalStateException.class, iterator::remove);
+    }
+
+    @Test
+    public void iterator_throws_on_consecutive_invocation_of_remove()
+    {
+        MutableBooleanIterator iterator = this.classUnderTest().booleanIterator();
+        Verify.assertTrue(iterator.hasNext());
+        iterator.next();
+        iterator.remove();
+        Verify.assertThrows(IllegalStateException.class, iterator::remove);
     }
 }
 

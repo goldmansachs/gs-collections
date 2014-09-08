@@ -223,7 +223,6 @@ public abstract class Abstract<name>IterableTestCase
         {
             iterator.next();
         }
-
         iterator.next();
     }
 

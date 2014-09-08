@@ -20,6 +20,8 @@ package com.gs.collections.impl.list.mutable.primitive;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -270,6 +272,34 @@ public class Unmodifiable<name>ListTest extends Abstract<name>ListTestCase
         super.asUnmodifiable();
         Assert.assertSame(this.list, this.list.asUnmodifiable());
         Assert.assertEquals(this.list, this.list.asUnmodifiable());
+    }
+
+    @Override
+    @Test
+    public void <type>Iterator_with_remove()
+    {
+        Unmodifiable<name>List unmodifiable<name>List = this.classUnderTest();
+        Mutable<name>Iterator iterator = unmodifiable<name>List.<type>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        iterator.next();
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
+    }
+
+    @Override
+    @Test
+    public void <type>Iterator_throws_for_remove_before_next()
+    {
+        Unmodifiable<name>List unmodifiable<name>List = this.classUnderTest();
+        Mutable<name>Iterator iterator = unmodifiable<name>List.<type>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
+    }
+
+    @Override
+    @Test
+    public void <type>Iterator_throws_for_consecutive_remove()
+    {
+        // Not applicable for Unmodifiable*
     }
 }
 

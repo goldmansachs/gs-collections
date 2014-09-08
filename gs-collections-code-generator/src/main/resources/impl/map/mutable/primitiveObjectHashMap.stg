@@ -84,6 +84,7 @@ import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.MutableMap;
@@ -124,6 +125,7 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.primitive.<name>Sets;
+import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.primitive.AbstractLazy<name>Iterable;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
@@ -2771,7 +2773,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     }
     private class KeySet implements Mutable<name>Set
     {
-        public <name>Iterator <type>Iterator()
+        public Mutable<name>Iterator <type>Iterator()
         {
             return new KeysSetIterator();
         }
@@ -3452,12 +3454,14 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         }
     }
 
-    private class KeysSetIterator implements <name>Iterator
+    private class KeysSetIterator implements Mutable<name>Iterator
     {
         private int count;
         private int position;
+        private <type> lastKey;
         private boolean handledZeroKey;
         private boolean handledOneKey;
+        private boolean canRemove;
 
         public boolean hasNext()
         {
@@ -3471,12 +3475,15 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                 throw new NoSuchElementException();
             }
             this.count++;
+            this.canRemove = true;
+
             if (!this.handledZeroKey)
             {
                 this.handledZeroKey = true;
                 if (<name>ObjectHashMap.this.containsKey(EMPTY_KEY))
                 {
-                    return <name>ObjectHashMap.EMPTY_KEY;
+                    this.lastKey = EMPTY_KEY;
+                    return this.lastKey;
                 }
             }
             if (!this.handledOneKey)
@@ -3484,7 +3491,8 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                 this.handledOneKey = true;
                 if (<name>ObjectHashMap.this.containsKey(REMOVED_KEY))
                 {
-                    return <name>ObjectHashMap.REMOVED_KEY;
+                    this.lastKey = REMOVED_KEY;
+                    return this.lastKey;
                 }
             }
             <type>[] keys = <name>ObjectHashMap.this.keys;
@@ -3492,9 +3500,20 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             {
                 this.position++;
             }
-            <type> result = <name>ObjectHashMap.this.keys[this.position];
+            this.lastKey = keys[this.position];
             this.position++;
-            return result;
+            return this.lastKey;
+        }
+
+        public void remove()
+        {
+            if (!this.canRemove)
+            {
+                throw new IllegalStateException();
+            }
+            <name>ObjectHashMap.this.removeKey(this.lastKey);
+            this.count--;
+            this.canRemove = false;
         }
     }
 
@@ -3630,7 +3649,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     {
         public <name>Iterator <type>Iterator()
         {
-            return new KeysSetIterator();
+            return new Unmodifiable<name>Iterator (new KeysSetIterator());
         }
 
         public void forEach(<name>Procedure procedure)

@@ -101,7 +101,7 @@ public abstract class AbstractObjectBooleanMapTestCase
     @Test
     public void size()
     {
-        Verify.assertSize(0, this.getEmptyMap());
+        Verify.assertEmpty( this.getEmptyMap());
         Verify.assertSize(1, this.newWithKeysValues(0, false));
         Verify.assertSize(1, this.newWithKeysValues(1, true));
         Verify.assertSize(1, this.newWithKeysValues(null, false));

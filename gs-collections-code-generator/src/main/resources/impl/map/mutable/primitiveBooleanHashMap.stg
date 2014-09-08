@@ -57,6 +57,8 @@ import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.primitive.<name>BooleanMap;
@@ -78,6 +80,7 @@ import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.primitive.BooleanLists;
 import com.gs.collections.impl.factory.primitive.<name>BooleanMaps;
 import com.gs.collections.impl.factory.primitive.<name>Sets;
+import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.primitive.Collect<name>ToObjectIterable;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
@@ -1028,7 +1031,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         return appendable.toString();
     }
 
-    public BooleanIterator booleanIterator()
+    public MutableBooleanIterator booleanIterator()
     {
         return new InternalBooleanIterator();
     }
@@ -1562,12 +1565,14 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         }
     }
 
-    private class InternalBooleanIterator implements BooleanIterator
+    private class InternalBooleanIterator implements MutableBooleanIterator
     {
         private int count;
         private int position;
+        private <type> lastKey;
         private boolean handledZero;
         private boolean handledOne;
+        private boolean canRemove;
 
         public boolean hasNext()
         {
@@ -1581,12 +1586,14 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
                 throw new NoSuchElementException("next() called, but the iterator is exhausted");
             }
             this.count++;
+            this.canRemove = true;
 
             if (!this.handledZero)
             {
                 this.handledZero = true;
                 if (<name>BooleanHashMap.this.containsKey(EMPTY_KEY))
                 {
+                    this.lastKey = EMPTY_KEY;
                     return <name>BooleanHashMap.this.sentinelValues.zeroValue;
                 }
             }
@@ -1595,6 +1602,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
                 this.handledOne = true;
                 if (<name>BooleanHashMap.this.containsKey(REMOVED_KEY))
                 {
+                    this.lastKey = REMOVED_KEY;
                     return <name>BooleanHashMap.this.sentinelValues.oneValue;
                 }
             }
@@ -1604,9 +1612,21 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             {
                 this.position++;
             }
+            this.lastKey = keys[this.position];
             boolean result = <name>BooleanHashMap.this.values.get(this.position);
             this.position++;
             return result;
+        }
+
+        public void remove()
+        {
+            if (!this.canRemove)
+            {
+                throw new IllegalStateException();
+            }
+            <name>BooleanHashMap.this.removeKey(this.lastKey);
+            this.count--;
+            this.canRemove = false;
         }
     }
 
@@ -1657,7 +1677,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
         public <name>Iterator <type>Iterator()
         {
-            return new KeySetIterator();
+            return new Unmodifiable<name>Iterator(new KeySetIterator());
         }
 
         public void forEach(<name>Procedure procedure)
@@ -2043,7 +2063,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
     private class KeySet implements Mutable<name>Set
     {
-        public <name>Iterator <type>Iterator()
+        public Mutable<name>Iterator <type>Iterator()
         {
             return new KeySetIterator();
         }
@@ -2924,7 +2944,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             }
         }
 
-        public BooleanIterator booleanIterator()
+        public MutableBooleanIterator booleanIterator()
         {
             return <name>BooleanHashMap.this.booleanIterator();
         }
@@ -3056,12 +3076,14 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         }
     }
 
-    private class KeySetIterator implements <name>Iterator
+    private class KeySetIterator implements Mutable<name>Iterator
     {
         private int count;
         private int position;
+        private <type> lastKey;
         private boolean handledZero;
         private boolean handledOne;
+        private boolean removed = true;
 
         public boolean hasNext()
         {
@@ -3075,13 +3097,15 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
                 throw new NoSuchElementException("next() called, but the iterator is exhausted");
             }
             this.count++;
+            this.removed = false;
 
             if (!this.handledZero)
             {
                 this.handledZero = true;
                 if (<name>BooleanHashMap.this.containsKey(EMPTY_KEY))
                 {
-                    return EMPTY_KEY;
+                    this.lastKey = EMPTY_KEY;
+                    return this.lastKey;
                 }
             }
             if (!this.handledOne)
@@ -3089,7 +3113,8 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
                 this.handledOne = true;
                 if (<name>BooleanHashMap.this.containsKey(REMOVED_KEY))
                 {
-                    return REMOVED_KEY;
+                    this.lastKey = REMOVED_KEY;
+                    return this.lastKey;
                 }
             }
 
@@ -3098,9 +3123,20 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             {
                 this.position++;
             }
-            <type> result = keys[this.position];
+            this.lastKey = keys[this.position];
             this.position++;
-            return result;
+            return this.lastKey;
+        }
+
+        public void remove()
+        {
+            if (this.removed)
+            {
+                throw new IllegalStateException();
+            }
+            <name>BooleanHashMap.this.removeKey(this.lastKey);
+            this.count--;
+            this.removed = true;
         }
     }
 

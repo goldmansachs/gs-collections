@@ -32,6 +32,7 @@ import com.gs.collections.api.block.function.primitive.ObjectByteToObjectFunctio
 import com.gs.collections.api.block.predicate.primitive.BytePredicate;
 import com.gs.collections.api.block.procedure.primitive.ByteProcedure;
 import com.gs.collections.api.iterator.ByteIterator;
+import com.gs.collections.api.iterator.MutableByteIterator;
 import com.gs.collections.api.list.primitive.MutableByteList;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
@@ -503,9 +504,9 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
                 mutableSet.bitGroup1, mutableSet.bitGroup2, mutableSet.size);
     }
 
-    public ByteIterator byteIterator()
+    public MutableByteIterator byteIterator()
     {
-        return new InternalByteIterator();
+        return new MutableInternalByteIterator();
     }
 
     public byte[] toArray()
@@ -1470,10 +1471,12 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
         }
     }
 
-    private class InternalByteIterator implements ByteIterator
+    private class MutableInternalByteIterator implements MutableByteIterator
     {
         private int count;
+        private byte lastReturnedValue;
         private byte minusOneTwentyEightToPlusOneTwentySeven = -128;
+        private boolean canRemove;
 
         public boolean hasNext()
         {
@@ -1488,19 +1491,31 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
             }
 
             this.count++;
+            this.canRemove = true;
 
             while (this.minusOneTwentyEightToPlusOneTwentySeven <= 127)
             {
                 if (ByteHashSet.this.contains(this.minusOneTwentyEightToPlusOneTwentySeven))
                 {
-                    byte result = this.minusOneTwentyEightToPlusOneTwentySeven;
+                    this.lastReturnedValue = this.minusOneTwentyEightToPlusOneTwentySeven;
                     this.minusOneTwentyEightToPlusOneTwentySeven++;
-                    return result;
+                    return this.lastReturnedValue;
                 }
                 this.minusOneTwentyEightToPlusOneTwentySeven++;
             }
 
             throw new NoSuchElementException("no more element, unexpected situation");
+        }
+
+        public void remove()
+        {
+            if (!this.canRemove)
+            {
+                throw new IllegalStateException();
+            }
+            ByteHashSet.this.remove(this.lastReturnedValue);
+            this.count--;
+            this.canRemove = false;
         }
     }
 }

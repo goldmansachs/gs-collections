@@ -30,6 +30,7 @@ import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunc
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
@@ -39,6 +40,7 @@ import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
 import com.gs.collections.api.stack.primitive.MutableBooleanStack;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.factory.primitive.BooleanStacks;
+import com.gs.collections.impl.iterator.UnmodifiableBooleanIterator;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
@@ -213,9 +215,9 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
         }
     }
 
-    public BooleanIterator booleanIterator()
+    public MutableBooleanIterator booleanIterator()
     {
-        return this.delegate.asReversed().booleanIterator();
+        return new UnmodifiableBooleanIterator(this.delegate.asReversed().booleanIterator());
     }
 
     public void forEach(BooleanProcedure procedure)

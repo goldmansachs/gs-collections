@@ -37,7 +37,7 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
-import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.api.map.primitive.MutableObject<name>Map;
@@ -46,6 +46,7 @@ import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.tuple.primitive.Object<name>Pair;
 import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name>Collection;
 import com.gs.collections.impl.factory.primitive.Object<name>Maps;
+import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 
 /**
  * This file was automatically generated from template file unmodifiableObjectPrimitiveMap.stg.
@@ -188,9 +189,9 @@ public final class UnmodifiableObject<name>Map\<K>
         return this.map.reject(predicate);
     }
 
-    public <name>Iterator <type>Iterator()
+    public Mutable<name>Iterator <type>Iterator()
     {
-        return this.map.<type>Iterator();
+        return new Unmodifiable<name>Iterator(this.map.<type>Iterator());
     }
 
     public void forEach(<name>Procedure procedure)

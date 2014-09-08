@@ -391,7 +391,7 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
 
         Verify.assertThrows(NoSuchElementException.class, (Runnable) it::next);
 
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) it::remove);
+        Verify.assertThrows(UnsupportedOperationException.class, it::remove);
 
         Verify.assertThrows(UnsupportedOperationException.class, () -> it.add(null));
     }

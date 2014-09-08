@@ -36,6 +36,7 @@ import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
+import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.lazy.primitive.Reverse<name>Iterable;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -89,7 +90,7 @@ final class Immutable<name>SingletonList implements Immutable<name>List, Seriali
 
     public <name>Iterator <type>Iterator()
     {
-        return <name>ArrayList.newListWith(this.element1).<type>Iterator();
+        return new Unmodifiable<name>Iterator(<name>ArrayList.newListWith(this.element1).<type>Iterator());
     }
 
     public void forEach(<name>Procedure procedure)

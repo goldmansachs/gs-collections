@@ -28,9 +28,10 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
-import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import net.jcip.annotations.ThreadSafe;
 
@@ -132,9 +133,9 @@ public abstract class AbstractUnmodifiable<name>Collection
         throw new UnsupportedOperationException("Cannot call retainAll() on " + this.getClass().getSimpleName());
     }
 
-    public <name>Iterator <type>Iterator()
+    public Mutable<name>Iterator <type>Iterator()
     {
-        return this.collection.<type>Iterator();
+        return new Unmodifiable<name>Iterator(this.collection.<type>Iterator());
     }
 
     public void forEach(<name>Procedure procedure)

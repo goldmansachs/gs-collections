@@ -49,6 +49,7 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.map.primitive.ImmutableObjectBooleanMap;
@@ -348,7 +349,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         }
     }
 
-    public BooleanIterator booleanIterator()
+    public MutableBooleanIterator booleanIterator()
     {
         return new InternalBooleanIterator();
     }
@@ -1394,7 +1395,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             return ObjectBooleanHashMap.this.reject(predicate);
         }
 
-        public BooleanIterator booleanIterator()
+        public MutableBooleanIterator booleanIterator()
         {
             return ObjectBooleanHashMap.this.booleanIterator();
         }
@@ -1551,10 +1552,17 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         }
     }
 
-    private class InternalBooleanIterator implements BooleanIterator
+    private class InternalBooleanIterator implements MutableBooleanIterator
     {
         private int count;
         private int position;
+        private Object lastKey;
+        private boolean canRemove;
+
+        public boolean hasNext()
+        {
+            return this.count != ObjectBooleanHashMap.this.size();
+        }
 
         public boolean next()
         {
@@ -1562,21 +1570,29 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             {
                 throw new NoSuchElementException();
             }
+            this.canRemove = true;
 
             Object[] keys = ObjectBooleanHashMap.this.keys;
             while (!isNonSentinel(keys[this.position]))
             {
                 this.position++;
             }
+            this.lastKey = keys[this.position];
             boolean result = ObjectBooleanHashMap.this.values.get(this.position);
             this.count++;
             this.position++;
             return result;
         }
 
-        public boolean hasNext()
+        public void remove()
         {
-            return this.count != ObjectBooleanHashMap.this.size();
+            if (!this.canRemove)
+            {
+                throw new IllegalStateException();
+            }
+            ObjectBooleanHashMap.this.remove(this.lastKey);
+            this.count--;
+            this.canRemove = false;
         }
     }
 

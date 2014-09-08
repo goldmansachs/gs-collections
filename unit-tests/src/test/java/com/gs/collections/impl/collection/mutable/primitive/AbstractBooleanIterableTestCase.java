@@ -153,9 +153,6 @@ public abstract class AbstractBooleanIterableTestCase
         Assert.assertFalse(falseCollection.containsAll(BooleanArrayList.newListWith(true, false)));
     }
 
-    @Test
-    public abstract void booleanIterator();
-
     @Test(expected = NoSuchElementException.class)
     public void iterator_throws()
     {
@@ -184,6 +181,20 @@ public abstract class AbstractBooleanIterableTestCase
     public void iterator_throws_emptyList()
     {
         this.newWith().booleanIterator().next();
+    }
+
+    @Test
+    public void booleanIterator()
+    {
+        BooleanArrayList list = BooleanArrayList.newListWith(true, false, true);
+        BooleanIterator iterator = this.classUnderTest().booleanIterator();
+        for (int i = 0; i < 3; i++)
+        {
+            Assert.assertTrue(iterator.hasNext());
+            Assert.assertTrue(list.remove(iterator.next()));
+        }
+        Verify.assertEmpty(list);
+        Assert.assertFalse(iterator.hasNext());
     }
 
     @Test

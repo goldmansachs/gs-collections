@@ -30,6 +30,7 @@ import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunc
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.BooleanSet;
@@ -52,7 +53,7 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
     // state = 3 ==> [T, F]
     private int state;
 
-    private static class EmptyBooleanIterator implements BooleanIterator
+    private static class EmptyBooleanIterator implements MutableBooleanIterator
     {
         public boolean next()
         {
@@ -63,11 +64,21 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         {
             return false;
         }
+
+        public void remove()
+        {
+            throw new IllegalStateException();
+        }
     }
 
-    private static class FalseBooleanIterator implements BooleanIterator
+    private class FalseBooleanIterator implements MutableBooleanIterator
     {
         private int currentIndex;
+
+        public boolean hasNext()
+        {
+            return this.currentIndex == 0;
+        }
 
         public boolean next()
         {
@@ -76,18 +87,29 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
                 this.currentIndex++;
                 return false;
             }
+            this.currentIndex = -1;
             throw new NoSuchElementException();
         }
+
+        public void remove()
+        {
+            if (this.currentIndex == 0 || this.currentIndex == -1)
+            {
+                throw new IllegalStateException();
+            }
+            this.currentIndex = -1;
+            BooleanHashSet.this.remove(false);
+        }
+    }
+
+    private class TrueBooleanIterator implements MutableBooleanIterator
+    {
+        private int currentIndex;
 
         public boolean hasNext()
         {
             return this.currentIndex == 0;
         }
-    }
-
-    private static class TrueBooleanIterator implements BooleanIterator
-    {
-        private int currentIndex;
 
         public boolean next()
         {
@@ -96,37 +118,63 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
                 this.currentIndex++;
                 return true;
             }
+            this.currentIndex = -1;
             throw new NoSuchElementException();
         }
 
-        public boolean hasNext()
+        public void remove()
         {
-            return this.currentIndex == 0;
+            if (this.currentIndex == 0 || this.currentIndex == -1)
+            {
+                throw new IllegalStateException();
+            }
+            this.currentIndex = -1;
+            BooleanHashSet.this.remove(true);
         }
     }
 
-    private static class FalseTrueBooleanIterator implements BooleanIterator
+    private class FalseTrueBooleanIterator implements MutableBooleanIterator
     {
         private int currentIndex;
+        private int lastIndex = -1;
+
+        public boolean hasNext()
+        {
+            return this.currentIndex < 2;
+        }
 
         public boolean next()
         {
             switch (this.currentIndex)
             {
                 case 0:
-                    this.currentIndex++;
+                    this.lastIndex = this.currentIndex++;
                     return false;
                 case 1:
-                    this.currentIndex++;
+                    this.lastIndex = this.currentIndex++;
                     return true;
                 default:
                     throw new NoSuchElementException();
             }
         }
 
-        public boolean hasNext()
+        public void remove()
         {
-            return this.currentIndex < 2;
+            switch (this.lastIndex)
+            {
+                case -1:
+                    throw new IllegalStateException();
+                case 0:
+                    BooleanHashSet.this.remove(false);
+                    this.lastIndex = -1;
+                    return;
+                case 1:
+                    BooleanHashSet.this.remove(true);
+                    this.lastIndex = -1;
+                    return;
+                default:
+                    throw new IllegalStateException();
+            }
         }
     }
 
@@ -274,7 +322,7 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         this.state = 0;
     }
 
-    public BooleanIterator booleanIterator()
+    public MutableBooleanIterator booleanIterator()
     {
         switch (this.state)
         {

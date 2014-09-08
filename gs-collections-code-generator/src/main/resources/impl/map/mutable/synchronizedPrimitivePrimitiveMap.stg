@@ -43,7 +43,7 @@ import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
-import com.gs.collections.api.iterator.<name2>Iterator;
+import com.gs.collections.api.iterator.Mutable<name2>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name2>List;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
@@ -60,7 +60,7 @@ import net.jcip.annotations.GuardedBy;
 
 /**
  * A synchronized view of a {@link Mutable<name1><name2>Map}. It is imperative that the user manually synchronize on the collection when iterating over it using the
- * {@link <name2>Iterator} as per {@link Collections#synchronizedCollection(Collection)}.
+ * {@link Mutable<name2>Iterator} as per {@link Collections#synchronizedCollection(Collection)}.
  * \<p>
  * This file was automatically generated from template file synchronizedPrimitivePrimitiveMap.stg.
  * \</p>
@@ -275,7 +275,7 @@ public final class Synchronized<name1><name2>Map
     /**
      * This must be manually synchronized by the developer.
      */
-    public <name2>Iterator <type2>Iterator()
+    public Mutable<name2>Iterator <type2>Iterator()
     {
         return this.map.<type2>Iterator();
     }

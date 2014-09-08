@@ -17,6 +17,7 @@
 package com.gs.collections.impl.map.mutable.primitive;
 
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.test.Verify;
@@ -267,5 +268,34 @@ public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBoole
     {
         super.asUnmodifiable();
         Assert.assertSame(this.map, this.map.asUnmodifiable());
+    }
+
+    @Override
+    @Test
+    public void iterator_remove()
+    {
+        UnmodifiableObjectBooleanMap<String> map = this.classUnderTest();
+        Verify.assertNotEmpty(map);
+        MutableBooleanIterator booleanIterator = map.booleanIterator();
+        Assert.assertTrue(booleanIterator.hasNext());
+        booleanIterator.next();
+        Verify.assertThrows(UnsupportedOperationException.class, booleanIterator::remove);
+    }
+
+    @Override
+    @Test
+    public void iterator_throws_on_invocation_of_remove_before_next()
+    {
+        UnmodifiableObjectBooleanMap<String> map = this.classUnderTest();
+        MutableBooleanIterator booleanIterator = map.booleanIterator();
+        Assert.assertTrue(booleanIterator.hasNext());
+        Verify.assertThrows(UnsupportedOperationException.class, booleanIterator::remove);
+    }
+
+    @Override
+    @Test
+    public void iterator_throws_on_consecutive_invocation_of_remove()
+    {
+        // Not applicable for Unmodifiable*
     }
 }

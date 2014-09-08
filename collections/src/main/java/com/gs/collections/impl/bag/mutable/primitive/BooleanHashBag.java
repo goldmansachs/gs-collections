@@ -34,6 +34,7 @@ import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
@@ -704,7 +705,7 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
         return new LazyBooleanIterableAdapter(this);
     }
 
-    public BooleanIterator booleanIterator()
+    public MutableBooleanIterator booleanIterator()
     {
         return new InternalIterator(this.falseCount, this.trueCount);
     }
@@ -721,35 +722,57 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
         this.trueCount = in.readInt();
     }
 
-    private static final class InternalIterator implements BooleanIterator
+    private final class InternalIterator implements MutableBooleanIterator
     {
-        private int falseCount;
-        private int trueCount;
+        private int internalFalseCount;
+        private int internalTrueCount;
+        private boolean lastBooleanValue;
+        private boolean removedAlready = true;
 
         private InternalIterator(int falseCount, int trueCount)
         {
-            this.falseCount = falseCount;
-            this.trueCount = trueCount;
+            this.internalFalseCount = falseCount;
+            this.internalTrueCount = trueCount;
         }
 
         public boolean hasNext()
         {
-            return this.falseCount > 0 || this.trueCount > 0;
+            return this.internalFalseCount > 0 || this.internalTrueCount > 0;
         }
 
         public boolean next()
         {
-            if (this.falseCount > 0)
+            this.removedAlready = false;
+            if (this.internalFalseCount > 0)
             {
-                this.falseCount--;
+                this.internalFalseCount--;
+                this.lastBooleanValue = false;
                 return false;
             }
-            if (this.trueCount > 0)
+            if (this.internalTrueCount > 0)
             {
-                this.trueCount--;
+                this.internalTrueCount--;
+                this.lastBooleanValue = true;
                 return true;
             }
             throw new NoSuchElementException("next() called, but the iterator is exhausted");
+        }
+
+        public void remove()
+        {
+            if (this.removedAlready)
+            {
+                throw new IllegalStateException();
+            }
+            if (this.lastBooleanValue)
+            {
+                BooleanHashBag.this.trueCount--;
+            }
+            else
+            {
+                BooleanHashBag.this.falseCount--;
+            }
+            this.removedAlready = true;
         }
     }
 }

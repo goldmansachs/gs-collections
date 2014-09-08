@@ -18,6 +18,7 @@ package com.gs.collections.impl.map.mutable.primitive;
 
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.BooleanFunction0;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.primitive.MutableObjectBooleanMap;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -491,5 +492,41 @@ public abstract class AbstractMutableObjectBooleanMapTestCase extends AbstractOb
     {
         Verify.assertInstanceOf(SynchronizedObjectBooleanMap.class, this.map.asSynchronized());
         Assert.assertEquals(new SynchronizedObjectBooleanMap<String>(this.map), this.map.asSynchronized());
+    }
+
+    @Test
+    public void iterator_remove()
+    {
+        MutableObjectBooleanMap<String> map = this.classUnderTest();
+        Verify.assertNotEmpty(map);
+        MutableBooleanIterator booleanIterator = map.booleanIterator();
+
+        while(booleanIterator.hasNext())
+        {
+            booleanIterator.next();
+            booleanIterator.remove();
+        }
+        Verify.assertEmpty(map);
+    }
+
+    @Test
+    public void iterator_throws_on_consecutive_invocation_of_remove()
+    {
+        MutableObjectBooleanMap<String> map = this.classUnderTest();
+        Verify.assertNotEmpty(map);
+        MutableBooleanIterator booleanIterator = map.booleanIterator();
+        Assert.assertTrue(booleanIterator.hasNext());
+        booleanIterator.next();
+        booleanIterator.remove();
+        Verify.assertThrows(IllegalStateException.class, booleanIterator::remove);
+    }
+
+    @Test
+    public void iterator_throws_on_invocation_of_remove_before_next()
+    {
+        MutableObjectBooleanMap<String> map = this.classUnderTest();
+        MutableBooleanIterator booleanIterator = map.booleanIterator();
+        Assert.assertTrue(booleanIterator.hasNext());
+        Verify.assertThrows(IllegalStateException.class, booleanIterator::remove);
     }
 }

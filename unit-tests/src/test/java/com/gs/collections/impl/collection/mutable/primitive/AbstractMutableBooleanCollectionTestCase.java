@@ -19,7 +19,7 @@ package com.gs.collections.impl.collection.mutable.primitive;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
-import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.test.Verify;
@@ -421,23 +421,6 @@ public abstract class AbstractMutableBooleanCollectionTestCase extends AbstractB
         Assert.assertSame(trueCollection, mutableBooleanCollection);
     }
 
-    @Override
-    @Test(expected = NoSuchElementException.class)
-    public void iterator_throws_non_empty_collection()
-    {
-        super.iterator_throws_non_empty_collection();
-        MutableBooleanCollection collection = this.newWith();
-        collection.add(true);
-        collection.add(true);
-        collection.add(true);
-        BooleanIterator iterator = collection.booleanIterator();
-        while (iterator.hasNext())
-        {
-            Assert.assertTrue(iterator.next());
-        }
-        iterator.next();
-    }
-
     @Test
     public void asSynchronized()
     {
@@ -453,5 +436,44 @@ public abstract class AbstractMutableBooleanCollectionTestCase extends AbstractB
         Verify.assertInstanceOf(this.newWith(true, false, true).asUnmodifiable().getClass(), this.classUnderTest().asUnmodifiable());
         Assert.assertEquals(this.newWith(true, false, true).asUnmodifiable(), this.classUnderTest().asUnmodifiable());
         Assert.assertEquals(this.classUnderTest(), this.classUnderTest().asUnmodifiable());
+    }
+
+    @Test
+    public void booleanIterator_with_remove()
+    {
+        MutableBooleanCollection booleanIterable = this.classUnderTest();
+        MutableBooleanIterator iterator = booleanIterable.booleanIterator();
+        int iterationCount = booleanIterable.size();
+        int iterableSize = booleanIterable.size();
+        for (int i = 0; i < iterationCount; i++)
+        {
+            Verify.assertSize(iterableSize--, booleanIterable);
+            Assert.assertTrue(iterator.hasNext());
+            iterator.next();
+            iterator.remove();
+            Verify.assertSize(iterableSize, booleanIterable);
+        }
+        Verify.assertEmpty(booleanIterable);
+        Assert.assertFalse(iterator.hasNext());
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
+    }
+
+    @Test
+    public void iterator_throws_on_invocation_of_remove_before_next()
+    {
+        MutableBooleanCollection booleanIterable = this.newWith(true, false);
+        MutableBooleanIterator iterator = booleanIterable.booleanIterator();
+        Assert.assertTrue(iterator.hasNext());
+        Verify.assertThrows(IllegalStateException.class, iterator::remove);
+    }
+
+    @Test
+    public void iterator_throws_on_consecutive_invocation_of_remove()
+    {
+        MutableBooleanCollection booleanIterable = this.newWith(true, false);
+        MutableBooleanIterator iterator = booleanIterable.booleanIterator();
+        iterator.next();
+        iterator.remove();
+        Verify.assertThrows(IllegalStateException.class, iterator::remove);
     }
 }

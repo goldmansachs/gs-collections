@@ -20,6 +20,7 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 
 /**
  * This file was automatically generated from template file mutablePrimitiveCollection.stg.
@@ -28,6 +29,8 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
  */
 public interface Mutable<name>Collection extends <name>Iterable
 {
+    Mutable<name>Iterator <type>Iterator();
+
     boolean add(<type> element);
 
     boolean addAll(<type>... source);

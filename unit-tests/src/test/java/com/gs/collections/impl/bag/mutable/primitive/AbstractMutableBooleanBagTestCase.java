@@ -21,7 +21,6 @@ import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
-import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableBooleanCollectionTestCase;
@@ -149,21 +148,6 @@ public abstract class AbstractMutableBooleanBagTestCase extends AbstractMutableB
     {
         super.size();
         Verify.assertSize(3, this.classUnderTest());
-    }
-
-    @Override
-    @Test
-    public void booleanIterator()
-    {
-        BooleanArrayList list = BooleanArrayList.newListWith(true, false, true);
-        BooleanIterator iterator = this.classUnderTest().booleanIterator();
-        for (int i = 0; i < 3; i++)
-        {
-            Assert.assertTrue(iterator.hasNext());
-            Assert.assertTrue(list.remove(iterator.next()));
-        }
-        Verify.assertEmpty(list);
-        Assert.assertFalse(iterator.hasNext());
     }
 
     @Override

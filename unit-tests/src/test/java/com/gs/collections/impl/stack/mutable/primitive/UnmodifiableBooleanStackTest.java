@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.stack.mutable.primitive;
 
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.api.stack.primitive.MutableBooleanStack;
 import com.gs.collections.impl.stack.primitive.AbstractBooleanStackTestCase;
 import com.gs.collections.impl.test.Verify;
@@ -90,5 +91,22 @@ public class UnmodifiableBooleanStackTest extends AbstractBooleanStackTestCase
     {
         MutableBooleanStack stack1 = new UnmodifiableBooleanStack(BooleanArrayStack.newStackWith(true, false, true));
         Verify.assertInstanceOf(SynchronizedBooleanStack.class, stack1.asSynchronized());
+    }
+
+    @Test
+    public void booleanIterator_with_remove()
+    {
+        MutableBooleanIterator booleanIterator = (MutableBooleanIterator)this.classUnderTest().booleanIterator();
+        Assert.assertTrue(booleanIterator.hasNext());
+        booleanIterator.next();
+        Verify.assertThrows(UnsupportedOperationException.class, booleanIterator::remove);
+    }
+
+    @Test
+    public void iterator_throws_on_invocation_of_remove_before_next()
+    {
+        MutableBooleanIterator booleanIterator = (MutableBooleanIterator)this.classUnderTest().booleanIterator();
+        Assert.assertTrue(booleanIterator.hasNext());
+        Verify.assertThrows(UnsupportedOperationException.class, booleanIterator::remove);
     }
 }

@@ -49,6 +49,7 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
@@ -335,7 +336,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
     }
 
-    public <name>Iterator <type>Iterator()
+    public Mutable<name>Iterator <type>Iterator()
     {
         return new Internal<name>Iterator();
     }
@@ -1187,10 +1188,17 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         return this.keys.length / OCCUPIED_SENTINEL_RATIO;
     }
 
-    private class Internal<name>Iterator implements <name>Iterator
+    private class Internal<name>Iterator implements Mutable<name>Iterator
     {
         private int count;
         private int position;
+        private Object lastKey;
+        private boolean canRemove;
+
+        public boolean hasNext()
+        {
+            return this.count != Object<name>HashMap.this.size();
+        }
 
         public <type> next()
         {
@@ -1198,21 +1206,29 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             {
                 throw new NoSuchElementException();
             }
+            this.canRemove = true;
 
             Object[] keys = Object<name>HashMap.this.keys;
             while (!isNonSentinel(keys[this.position]))
             {
                 this.position++;
             }
+            this.lastKey = keys[this.position];
             <type> result = Object<name>HashMap.this.values[this.position];
             this.count++;
             this.position++;
             return result;
         }
 
-        public boolean hasNext()
+        public void remove()
         {
-            return this.count != Object<name>HashMap.this.size();
+            if (!this.canRemove)
+            {
+                throw new IllegalStateException();
+            }
+            Object<name>HashMap.this.remove(this.lastKey);
+            this.count--;
+            this.canRemove = false;
         }
     }
 
@@ -1626,7 +1642,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             return <name>Lists.immutable.withAll(this);
         }
 
-        public <name>Iterator <type>Iterator()
+        public Mutable<name>Iterator <type>Iterator()
         {
             return Object<name>HashMap.this.<type>Iterator();
         }

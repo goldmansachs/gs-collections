@@ -359,7 +359,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void clear()
     {
         MutableList<Integer> objects = newWith(1);
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) objects::clear);
+        Verify.assertThrows(UnsupportedOperationException.class, objects::clear);
     }
 
     @Test

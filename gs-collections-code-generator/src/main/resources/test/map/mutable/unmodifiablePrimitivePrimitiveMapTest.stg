@@ -26,6 +26,7 @@ import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
 import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
+import com.gs.collections.api.iterator.Mutable<name2>Iterator;
 import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -316,6 +317,32 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
     {
         super.asUnmodifiable();
         Assert.assertSame(this.map, this.map.asUnmodifiable());
+    }
+
+    @Override
+    @Test
+    public void <type2>Iterator_with_remove()
+    {
+        Mutable<name2>Iterator iterator = this.map.<type2>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        iterator.next();
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
+    }
+
+    @Override
+    @Test
+    public void iterator_throws_on_invocation_of_remove_before_next()
+    {
+        Mutable<name2>Iterator iterator = this.map.<type2>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
+    }
+
+    @Override
+    @Test
+    public void iterator_throws_on_consecutive_invocation_of_remove()
+    {
+        // Not applicable for Unmodifiable*
     }
 }
 

@@ -558,7 +558,7 @@ public abstract class AbstractImmutableSortedSetTestCase
         Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
         Iterator<Integer> intItr = integers.iterator();
         intItr.next();
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) intItr::remove);
+        Verify.assertThrows(UnsupportedOperationException.class, intItr::remove);
     }
 
     @Test

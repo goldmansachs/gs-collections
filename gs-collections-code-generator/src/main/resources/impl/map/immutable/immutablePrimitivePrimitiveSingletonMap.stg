@@ -51,6 +51,7 @@ import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name2>C
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
 import com.gs.collections.impl.factory.primitive.<name1>Lists;
+import com.gs.collections.impl.iterator.Unmodifiable<name2>Iterator;
 import com.gs.collections.impl.lazy.primitive.Lazy<name2>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
@@ -155,7 +156,7 @@ final class Immutable<name1><name2>SingletonMap implements Immutable<name1><name
 
     public <name2>Iterator <type2>Iterator()
     {
-        return <name1><name2>HashMap.newWithKeysValues(this.key1, this.value1).<type2>Iterator();
+        return new Unmodifiable<name2>Iterator(<name1><name2>HashMap.newWithKeysValues(this.key1, this.value1).<type2>Iterator());
     }
 
     public void forEach(<name2>Procedure procedure)

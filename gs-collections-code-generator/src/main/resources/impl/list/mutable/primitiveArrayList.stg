@@ -34,6 +34,7 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
@@ -515,7 +516,7 @@ public final class <name>ArrayList
         return this;
     }
 
-    public <name>Iterator <type>Iterator()
+    public Mutable<name>Iterator <type>Iterator()
     {
         return new Internal<name>Iterator();
     }
@@ -972,12 +973,13 @@ public final class <name>ArrayList
         throw new UnsupportedOperationException("subList not yet implemented!");
     }
 
-    private class Internal<name>Iterator implements <name>Iterator
+    private class Internal<name>Iterator implements Mutable<name>Iterator
     {
         /**
          * Index of element to be returned by subsequent call to next.
          */
         private int currentIndex;
+        private int lastIndex = -1;
 
         public boolean hasNext()
         {
@@ -991,8 +993,19 @@ public final class <name>ArrayList
                 throw new NoSuchElementException();
             }
             <type> next = <name>ArrayList.this.items[this.currentIndex];
-            this.currentIndex++;
+            this.lastIndex = this.currentIndex++;
             return next;
+        }
+
+        public void remove()
+        {
+            if (this.lastIndex == -1)
+            {
+                throw new IllegalStateException();
+            }
+            <name>ArrayList.this.removeAtIndex(this.lastIndex);
+            this.currentIndex--;
+            this.lastIndex = -1;
         }
     }
 }

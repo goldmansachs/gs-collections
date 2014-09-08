@@ -417,7 +417,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void clear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) this.intSet::clear);
+        Verify.assertThrows(UnsupportedOperationException.class, this.intSet::clear);
     }
 
     @Override

@@ -36,6 +36,7 @@ import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
+import com.gs.collections.impl.iterator.ImmutableEmpty<name>Iterator;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.lazy.primitive.Reverse<name>Iterable;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
@@ -84,7 +85,7 @@ final class Immutable<name>EmptyList implements Immutable<name>List, Serializabl
 
     public <name>Iterator <type>Iterator()
     {
-        return new Internal<name>Iterator();
+        return ImmutableEmpty<name>Iterator.INSTANCE;
     }
 
     public void forEach(<name>Procedure procedure)
@@ -302,19 +303,6 @@ final class Immutable<name>EmptyList implements Immutable<name>List, Serializabl
     public Immutable<name>List subList(int fromIndex, int toIndex)
     {
         throw new UnsupportedOperationException("subList not yet implemented!");
-    }
-
-    private static class Internal<name>Iterator implements <name>Iterator
-    {
-        public boolean hasNext()
-        {
-            return false;
-        }
-
-        public <type> next()
-        {
-            throw new NoSuchElementException();
-        }
     }
 }
 

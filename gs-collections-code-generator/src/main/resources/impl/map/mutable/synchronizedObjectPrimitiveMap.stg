@@ -38,7 +38,7 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
-import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
@@ -254,7 +254,7 @@ public final class SynchronizedObject<name>Map\<K>
     /**
      * Must be called in a synchronized block.
      */
-    public <name>Iterator <type>Iterator()
+    public Mutable<name>Iterator <type>Iterator()
     {
         return this.map.<type>Iterator();
     }

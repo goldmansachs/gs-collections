@@ -32,6 +32,7 @@ import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunct
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
@@ -513,7 +514,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return new Immutable<name>HashSet(mutableSet.table, mutableSet.occupiedWithData, mutableSet.zeroToThirtyOne, mutableSet.zeroToThirtyOneOccupied);
     }
 
-    public <name>Iterator <type>Iterator()
+    public Mutable<name>Iterator <type>Iterator()
     {
         return new Internal<name>Iterator();
     }
@@ -1849,11 +1850,13 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         }
     }
 
-    private class Internal<name>Iterator implements <name>Iterator
+    private class Internal<name>Iterator implements Mutable<name>Iterator
     {
         private int count;
         private int position;
         private <type> zeroToThirtyOne;
+        private <type> lastReturned;
+        private boolean canRemove;
 
         public boolean hasNext()
         {
@@ -1867,14 +1870,15 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
                 throw new NoSuchElementException("next() called, but the iterator is exhausted");
             }
             this.count++;
+            this.canRemove = true;
 
             while (this.zeroToThirtyOne \< 32)
             {
                 if (<name>HashSet.this.contains(this.zeroToThirtyOne))
                 {
-                    <type> result = this.zeroToThirtyOne;
+                    this.lastReturned = this.zeroToThirtyOne;
                     this.zeroToThirtyOne++;
-                    return result;
+                    return this.lastReturned;
                 }
                 this.zeroToThirtyOne++;
             }
@@ -1884,9 +1888,20 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             {
                 this.position++;
             }
-            <type> result = table[this.position];
+            this.lastReturned = table[this.position];
             this.position++;
-            return result;
+            return this.lastReturned;
+        }
+
+        public void remove()
+        {
+            if (!this.canRemove)
+            {
+                throw new IllegalStateException();
+            }
+            <name>HashSet.this.remove(this.lastReturned);
+            this.count--;
+            this.canRemove = false;
         }
     }
 }

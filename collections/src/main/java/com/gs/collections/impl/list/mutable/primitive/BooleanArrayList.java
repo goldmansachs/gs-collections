@@ -33,6 +33,7 @@ import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
@@ -472,7 +473,7 @@ public final class BooleanArrayList
         return this;
     }
 
-    public BooleanIterator booleanIterator()
+    public MutableBooleanIterator booleanIterator()
     {
         return new InternalBooleanIterator();
     }
@@ -812,12 +813,13 @@ public final class BooleanArrayList
         }
     }
 
-    private class InternalBooleanIterator implements BooleanIterator
+    private class InternalBooleanIterator implements MutableBooleanIterator
     {
         /**
          * Index of element to be returned by subsequent call to next.
          */
         private int currentIndex;
+        private int lastIndex = -1;
 
         public boolean hasNext()
         {
@@ -831,8 +833,22 @@ public final class BooleanArrayList
                 throw new NoSuchElementException();
             }
             boolean next = BooleanArrayList.this.get(this.currentIndex);
-            this.currentIndex++;
+            this.lastIndex = this.currentIndex++;
             return next;
+        }
+
+        public void remove()
+        {
+            if (this.lastIndex == -1)
+            {
+                throw new IllegalStateException();
+            }
+            BooleanArrayList.this.removeAtIndex(this.lastIndex);
+            if (this.lastIndex < this.currentIndex)
+            {
+                this.currentIndex--;
+            }
+            this.lastIndex = -1;
         }
     }
 }

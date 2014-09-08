@@ -20,8 +20,6 @@ package com.gs.collections.impl.collection.immutable.primitive;
 
 import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
-import com.gs.collections.api.list.primitive.Immutable<name>List;
-import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.impl.collection.mutable.primitive.Abstract<name>IterableTestCase;
 import org.junit.Assert;
 import org.junit.Test;

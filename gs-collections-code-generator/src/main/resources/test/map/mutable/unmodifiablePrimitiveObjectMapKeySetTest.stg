@@ -20,6 +20,7 @@ body(type, name, wrapperName) ::= <<
 
 package com.gs.collections.impl.map.mutable.primitive;
 
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
@@ -197,6 +198,29 @@ public class Unmodifiable<name>ObjectMapKeySetTest extends Abstract<name>SetTest
         Mutable<name>Set set2 = this.newWith(<(literal.(type))("32")>, <(literal.(type))("31")>, <(literal.(type))("1")>, <(literal.(type))("0")>);
         Assert.assertEquals(set1.hashCode(), set2.hashCode());
         Assert.assertEquals(this.newObjectCollectionWith(<(literal.(type))("0")>, <(literal.(type))("1")>, <(literal.(type))("31")>, <(literal.(type))("32")>).hashCode(), set1.hashCode());
+    }
+
+    @Override
+    public void <type>Iterator_with_remove()
+    {
+        Mutable<name>Iterator iterator = this.classUnderTest().<type>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        iterator.next();
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
+    }
+
+    @Override
+    public void <type>Iterator_throws_for_remove_before_next()
+    {
+        Mutable<name>Iterator iterator = this.classUnderTest().<type>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
+    }
+
+    @Override
+    public void <type>Iterator_throws_for_consecutive_remove()
+    {
+        // Not applicable for Unmodifiable
     }
 }
 

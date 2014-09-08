@@ -36,6 +36,7 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
@@ -777,7 +778,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         return <name>Bags.immutable.withAll(this);
     }
 
-    public <name>Iterator <type>Iterator()
+    public Mutable<name>Iterator <type>Iterator()
     {
         return new InternalIterator();
     }
@@ -823,12 +824,13 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         }
     }
 
-    private class InternalIterator implements <name>Iterator
+    private class InternalIterator implements Mutable<name>Iterator
     {
-        private final <name>Iterator <type>Iterator = <name>HashBag.this.items.keysView().<type>Iterator();
+        private final Mutable<name>Iterator <type>Iterator = <name>HashBag.this.items.keySet().<type>Iterator();
 
         private <type> currentItem;
         private int occurrences;
+        private boolean canRemove;
 
         public boolean hasNext()
         {
@@ -843,7 +845,18 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
                 this.occurrences = <name>HashBag.this.occurrencesOf(this.currentItem);
             }
             this.occurrences--;
+            this.canRemove = true;
             return this.currentItem;
+        }
+
+        public void remove()
+        {
+            if (!this.canRemove)
+            {
+                throw new IllegalStateException();
+            }
+            this.<type>Iterator.remove();
+            this.canRemove = false;
         }
     }
 }

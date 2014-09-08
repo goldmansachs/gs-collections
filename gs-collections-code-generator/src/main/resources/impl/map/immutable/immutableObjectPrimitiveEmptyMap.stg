@@ -47,6 +47,7 @@ import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name>Co
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
+import com.gs.collections.impl.iterator.ImmutableEmpty<name>Iterator;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
@@ -71,20 +72,7 @@ final class ImmutableObject<name>EmptyMap\<K> implements ImmutableObject<name>Ma
 
     public <name>Iterator <type>Iterator()
     {
-        return new Internal<name>Iterator();
-    }
-
-    private static class Internal<name>Iterator implements <name>Iterator
-    {
-        public boolean hasNext()
-        {
-            return false;
-        }
-
-        public <type> next()
-        {
-            throw new NoSuchElementException();
-        }
+        return ImmutableEmpty<name>Iterator.INSTANCE;
     }
 
     public void forEach(<name>Procedure procedure)

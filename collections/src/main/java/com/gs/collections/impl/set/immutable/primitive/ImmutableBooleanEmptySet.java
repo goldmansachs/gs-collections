@@ -18,7 +18,6 @@ package com.gs.collections.impl.set.immutable.primitive;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
@@ -35,6 +34,7 @@ import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.iterator.ImmutableEmptyBooleanIterator;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
@@ -46,19 +46,6 @@ final class ImmutableBooleanEmptySet implements ImmutableBooleanSet, Serializabl
     static final ImmutableBooleanSet INSTANCE = new ImmutableBooleanEmptySet();
 
     private static final boolean[] TO_ARRAY = new boolean[0];
-
-    private static final BooleanIterator ITERATOR = new BooleanIterator()
-    {
-        public boolean next()
-        {
-            throw new NoSuchElementException();
-        }
-
-        public boolean hasNext()
-        {
-            return false;
-        }
-    };
 
     private ImmutableBooleanEmptySet()
     {
@@ -93,7 +80,7 @@ final class ImmutableBooleanEmptySet implements ImmutableBooleanSet, Serializabl
 
     public BooleanIterator booleanIterator()
     {
-        return ITERATOR;
+        return ImmutableEmptyBooleanIterator.INSTANCE;
     }
 
     public void forEach(BooleanProcedure procedure)

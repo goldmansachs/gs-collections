@@ -22,7 +22,6 @@ package com.gs.collections.impl.stack.immutable.primitive;
 import java.util.EmptyStackException;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;

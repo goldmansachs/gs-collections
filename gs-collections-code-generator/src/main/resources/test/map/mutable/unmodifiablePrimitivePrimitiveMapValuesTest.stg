@@ -28,6 +28,7 @@ import com.gs.collections.api.<name2>Iterable;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
 import com.gs.collections.api.iterator.<name2>Iterator;
+import com.gs.collections.api.iterator.Mutable<name2>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.primitive.<name2>Predicates;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutable<name2>CollectionTestCase;
@@ -48,7 +49,7 @@ public class Unmodifiable<name1><name2>MapValuesTest extends AbstractMutable<nam
     @Override
     protected Mutable<name2>Collection classUnderTest()
     {
-        return <name1><name2>HashMap.newWithKeysValues(<["1", "2", "3"]:keyValue(); separator=", ">).values();
+        return <name1><name2>HashMap.newWithKeysValues(<["1", "2", "3"]:keyValue(); separator=", ">).values().asUnmodifiable();
     }
 
     @Override
@@ -90,6 +91,34 @@ public class Unmodifiable<name1><name2>MapValuesTest extends AbstractMutable<nam
         Assert.assertFalse(iterator.hasNext());
 
         Verify.assertThrows(NoSuchElementException.class, iterator::next);
+    }
+
+    @Override
+    @Test
+    public void <type2>Iterator_with_remove()
+    {
+        Mutable<name2>Collection <type2>Iterable = this.classUnderTest();
+        Mutable<name2>Iterator iterator = <type2>Iterable.<type2>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        iterator.next();
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
+    }
+
+    @Override
+    @Test
+    public void <type2>Iterator_throws_for_remove_before_next()
+    {
+        Mutable<name2>Collection <type2>Iterable = this.classUnderTest();
+        Mutable<name2>Iterator iterator = <type2>Iterable.<type2>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
+    }
+
+    @Override
+    @Test
+    public void <type2>Iterator_throws_for_consecutive_remove()
+    {
+        // Not applicable for Unmodifiable*
     }
 
     @Override

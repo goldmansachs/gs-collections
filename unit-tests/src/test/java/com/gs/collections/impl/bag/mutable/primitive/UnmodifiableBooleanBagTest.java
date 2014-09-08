@@ -16,11 +16,10 @@
 
 package com.gs.collections.impl.bag.mutable.primitive;
 
-import java.util.NoSuchElementException;
-
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
-import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -163,19 +162,6 @@ public class UnmodifiableBooleanBagTest extends AbstractMutableBooleanBagTestCas
     }
 
     @Override
-    @Test(expected = NoSuchElementException.class)
-    public void iterator_throws_non_empty_collection()
-    {
-        UnmodifiableBooleanBag collection = this.newWith(true, true, true);
-        BooleanIterator iterator = collection.booleanIterator();
-        while (iterator.hasNext())
-        {
-            Assert.assertTrue(iterator.next());
-        }
-        iterator.next();
-    }
-
-    @Override
     @Test
     public void containsAllArray()
     {
@@ -227,5 +213,31 @@ public class UnmodifiableBooleanBagTest extends AbstractMutableBooleanBagTestCas
         super.asUnmodifiable();
         Assert.assertSame(this.bag, this.bag.asUnmodifiable());
         Assert.assertEquals(this.bag, this.bag.asUnmodifiable());
+    }
+
+    @Override
+    @Test
+    public void booleanIterator_with_remove()
+    {
+        MutableBooleanIterator booleanIterator = this.classUnderTest().booleanIterator();
+        Assert.assertTrue(booleanIterator.hasNext());
+        booleanIterator.next();
+        Verify.assertThrows(UnsupportedOperationException.class, booleanIterator::remove);
+    }
+
+    @Override
+    @Test
+    public void iterator_throws_on_invocation_of_remove_before_next()
+    {
+        MutableBooleanIterator booleanIterator = this.classUnderTest().booleanIterator();
+        Assert.assertTrue(booleanIterator.hasNext());
+        Verify.assertThrows(UnsupportedOperationException.class, booleanIterator::remove);
+    }
+
+    @Override
+    @Test
+    public void iterator_throws_on_consecutive_invocation_of_remove()
+    {
+        // Not applicable for Unmodifiable*
     }
 }

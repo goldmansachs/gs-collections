@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.EmptyStackException;
+import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
@@ -39,6 +40,7 @@ import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
 import com.gs.collections.api.stack.primitive.Mutable<name>Stack;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.factory.primitive.<name>Stacks;
+import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
@@ -202,7 +204,7 @@ public final class <name>ArrayStack
 
     public <name>Iterator <type>Iterator()
     {
-        return this.delegate.asReversed().<type>Iterator();
+        return new Unmodifiable<name>Iterator(this.delegate.asReversed().<type>Iterator());
     }
 
     public void forEach(<name>Procedure procedure)

@@ -53,6 +53,7 @@ import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name1>Set;<endif>
 import com.gs.collections.impl.block.procedure.checked.primitive.Checked<name1><name2>Procedure;
 import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name2>Collection;
+import com.gs.collections.impl.iterator.Unmodifiable<name2>Iterator;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
 import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name1>Set;
 
@@ -143,7 +144,7 @@ final class Immutable<name1><name2>HashMap implements Immutable<name1><name2>Map
 
     public <name2>Iterator <type2>Iterator()
     {
-        return this.delegate.<type2>Iterator();
+        return new Unmodifiable<name2>Iterator(this.delegate.<type2>Iterator());
     }
 
     public void forEach(<name2>Procedure procedure)

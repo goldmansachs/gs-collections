@@ -36,6 +36,7 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.factory.primitive.<name>Sets;
@@ -302,7 +303,7 @@ final class Immutable<name>SingletonSet implements Immutable<name>Set, Serializa
 
     public <name>Iterator <type>Iterator()
     {
-        return <name>HashSet.newSetWith(this.element).<type>Iterator();
+        return new Unmodifiable<name>Iterator(<name>HashSet.newSetWith(this.element).<type>Iterator());
     }
 }
 

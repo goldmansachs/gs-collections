@@ -33,6 +33,7 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
 import com.gs.collections.api.stack.primitive.Mutable<name>Stack;
 import com.gs.collections.impl.factory.primitive.<name>Stacks;
+import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import net.jcip.annotations.NotThreadSafe;
 
@@ -121,7 +122,7 @@ public final class Unmodifiable<name>Stack
 
     public <name>Iterator <type>Iterator()
     {
-        return this.stack.<type>Iterator();
+        return new Unmodifiable<name>Iterator(this.stack.<type>Iterator());
     }
 
     public void forEach(<name>Procedure procedure)

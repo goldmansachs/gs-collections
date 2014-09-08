@@ -296,7 +296,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     {
         super.toArray();
         MutableBooleanList list = this.classUnderTest();
-        Assert.assertEquals(3L, list.toArray().length);
+        Assert.assertEquals(3L, (long) list.toArray().length);
         Assert.assertTrue(list.toArray()[0]);
         Assert.assertFalse(list.toArray()[1]);
         Assert.assertTrue(list.toArray()[2]);

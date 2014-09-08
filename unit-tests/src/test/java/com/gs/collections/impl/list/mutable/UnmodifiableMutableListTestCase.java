@@ -70,7 +70,7 @@ public abstract class UnmodifiableMutableListTestCase extends UnmodifiableMemory
 
         Verify.assertThrows(UnsupportedOperationException.class, () -> it.set(null));
 
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) it::remove);
+        Verify.assertThrows(UnsupportedOperationException.class, it::remove);
 
         Verify.assertThrows(UnsupportedOperationException.class, () -> it.add(null));
     }
@@ -87,7 +87,7 @@ public abstract class UnmodifiableMutableListTestCase extends UnmodifiableMemory
 
         Verify.assertThrows(UnsupportedOperationException.class, () -> it.set(null));
 
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) it::remove);
+        Verify.assertThrows(UnsupportedOperationException.class, it::remove);
 
         Verify.assertThrows(UnsupportedOperationException.class, () -> it.add(null));
     }

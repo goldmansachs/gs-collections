@@ -43,6 +43,7 @@ import com.gs.collections.api.map.primitive.MutableObject<name>Map;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.tuple.primitive.Object<name>Pair;
 import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name>Collection;
+import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 import com.gs.collections.impl.map.mutable.primitive.Object<name>HashMap;
 import com.gs.collections.impl.set.mutable.UnmodifiableMutableSet;
 
@@ -64,7 +65,7 @@ final class ImmutableObject<name>HashMap\<K> extends AbstractImmutableObject<nam
 
     public <name>Iterator <type>Iterator()
     {
-        return this.delegate.<type>Iterator();
+        return new Unmodifiable<name>Iterator(this.delegate.<type>Iterator());
     }
 
     public void forEach(<name>Procedure procedure)

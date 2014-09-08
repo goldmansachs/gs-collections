@@ -17,8 +17,11 @@
 package com.gs.collections.impl.set.mutable.primitive;
 
 import java.lang.reflect.Field;
+import java.util.NoSuchElementException;
 
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -64,5 +67,35 @@ public class BooleanHashSetTest extends AbstractBooleanSetTestCase
         Assert.assertEquals(set1, setFromSet1);
         Assert.assertEquals(set2, setFromSet2);
         Assert.assertEquals(set3, setFromSet3);
+    }
+
+    @Override
+    @Test
+    public void booleanIterator_with_remove()
+    {
+        super.booleanIterator_with_remove();
+
+        BooleanHashSet falseSet = this.newWith(false);
+        MutableBooleanIterator mutableBooleanIterator = falseSet.booleanIterator();
+        Assert.assertTrue(mutableBooleanIterator.hasNext());
+        Assert.assertFalse(mutableBooleanIterator.next());
+        mutableBooleanIterator.remove();
+        Verify.assertEmpty(falseSet);
+        Verify.assertThrows(NoSuchElementException.class, mutableBooleanIterator::next);
+        Verify.assertThrows(IllegalStateException.class, mutableBooleanIterator::remove);
+        BooleanHashSet trueSet = this.newWith(true);
+        mutableBooleanIterator = trueSet.booleanIterator();
+        Assert.assertTrue(mutableBooleanIterator.hasNext());
+        Assert.assertTrue(mutableBooleanIterator.next());
+        mutableBooleanIterator.remove();
+        Verify.assertEmpty(trueSet);
+        Verify.assertThrows(NoSuchElementException.class, mutableBooleanIterator::next);
+        Verify.assertThrows(IllegalStateException.class, mutableBooleanIterator::remove);
+        BooleanHashSet emptySet = new BooleanHashSet();
+        mutableBooleanIterator = emptySet.booleanIterator();
+        Assert.assertFalse(mutableBooleanIterator.hasNext());
+        Verify.assertEmpty(emptySet);
+        Verify.assertThrows(NoSuchElementException.class, mutableBooleanIterator::next);
+        Verify.assertThrows(IllegalStateException.class, mutableBooleanIterator::remove);
     }
 }
