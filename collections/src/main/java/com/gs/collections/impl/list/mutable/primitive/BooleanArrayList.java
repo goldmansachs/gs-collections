@@ -844,10 +844,7 @@ public final class BooleanArrayList
                 throw new IllegalStateException();
             }
             BooleanArrayList.this.removeAtIndex(this.lastIndex);
-            if (this.lastIndex < this.currentIndex)
-            {
-                this.currentIndex--;
-            }
+            this.currentIndex--;
             this.lastIndex = -1;
         }
     }
