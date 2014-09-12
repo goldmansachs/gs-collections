@@ -30,7 +30,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <clover.version>3.2.2</clover.version>
+        <clover.version>4.0.1</clover.version>
         <checkstyle.version>2.12.1</checkstyle.version>
 
         <!-- this setting is needed for TeamCity -->

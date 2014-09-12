@@ -73,7 +73,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <clover.version>3.2.2</clover.version>
+        <clover.version>4.0.1</clover.version>
         <checkstyle.version>2.12.1</checkstyle.version>
         <sonar.clover.reportPath>${project.basedir}/target/site/clover/clover.xml</sonar.clover.reportPath>
         <sonar.surefire.reportsPath>${project.basedir}/target/clover/surefire-reports</sonar.surefire.reportsPath>
