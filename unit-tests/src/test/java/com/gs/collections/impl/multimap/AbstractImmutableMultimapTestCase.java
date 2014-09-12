@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -145,5 +145,21 @@ public abstract class AbstractImmutableMultimapTestCase
                 .newWith("B", "A");
         Multimap<String, String> copy = SerializeTestHelper.serializeDeserialize(original);
         Verify.assertEqualsAndHashCode(original, copy);
+    }
+
+    @Test
+    public void selectKeysValues()
+    {
+        Multimap<String, String> multimap = this.classUnderTest().newWith("One", "1").newWith("Two", "2");
+        Multimap<String, String> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && "2".equals(value)));
+        Assert.assertEquals(this.classUnderTest().newWith("Two", "2"), selectedMultimap);
+    }
+
+    @Test
+    public void rejectKeysValues()
+    {
+        Multimap<String, String> multimap = this.classUnderTest().newWith("One", "1").newWith("Two", "2");
+        Multimap<String, String> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) && "2".equals(value)));
+        Assert.assertEquals(this.classUnderTest().newWith("One", "1"), rejectedMultimap);
     }
 }

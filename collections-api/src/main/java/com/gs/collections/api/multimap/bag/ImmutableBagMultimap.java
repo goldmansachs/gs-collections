@@ -17,6 +17,7 @@
 package com.gs.collections.api.multimap.bag;
 
 import com.gs.collections.api.bag.ImmutableBag;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 
 /**
@@ -36,4 +37,8 @@ public interface ImmutableBagMultimap<K, V>
     ImmutableBagMultimap<K, V> newWithAll(K key, Iterable<? extends V> values);
 
     ImmutableBagMultimap<K, V> newWithoutAll(Object key);
+
+    ImmutableBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    ImmutableBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
 }

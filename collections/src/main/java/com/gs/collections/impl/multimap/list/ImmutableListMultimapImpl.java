@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.gs.collections.impl.multimap.list;
 
 import java.io.Serializable;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
@@ -123,5 +124,15 @@ public final class ImmutableListMultimapImpl<K, V>
     public ImmutableListMultimap<K, V> newWithoutAll(Object key)
     {
         return (ImmutableListMultimap<K, V>) super.newWithoutAll(key);
+    }
+
+    public ImmutableListMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.selectKeysValues(predicate, FastListMultimap.<K, V>newMultimap()).toImmutable();
+    }
+
+    public ImmutableListMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.rejectKeysValues(predicate, FastListMultimap.<K, V>newMultimap()).toImmutable();
     }
 }

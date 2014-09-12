@@ -21,6 +21,7 @@ import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -118,5 +119,31 @@ public class SynchronizedPutHashBagMultimapTest extends AbstractMutableMultimapT
                 this.newMultimapWithKeysValues("One", 1, "One", 2);
         String toString = multimap.toString();
         Assert.assertTrue("{One=[1, 2]}".equals(toString) || "{One=[2, 1]}".equals(toString));
+    }
+
+    @Override
+    @Test
+    public void selectKeysValues()
+    {
+        SynchronizedPutHashBagMultimap<String, Integer> multimap = SynchronizedPutHashBagMultimap.newMultimap();
+        multimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 4));
+        multimap.putAll("Two", FastList.newListWith(2, 3, 4, 5, 3, 2));
+        HashBagMultimap<String, Integer> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && (value % 2 == 0)));
+        HashBagMultimap<String, Integer> expectedMultimap = HashBagMultimap.newMultimap();
+        expectedMultimap.putAll("Two", FastList.newListWith(2, 4, 2));
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+    }
+
+    @Override
+    @Test
+    public void rejectKeysValues()
+    {
+        SynchronizedPutHashBagMultimap<String, Integer> multimap = SynchronizedPutHashBagMultimap.newMultimap();
+        multimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 1));
+        multimap.putAll("Two", FastList.newListWith(2, 3, 4, 5));
+        HashBagMultimap<String, Integer> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
+        HashBagMultimap<String, Integer> expectedMultimap = HashBagMultimap.newMultimap();
+        expectedMultimap.putAll("One", FastList.newListWith(1, 3, 1));
+        Assert.assertEquals(expectedMultimap, rejectedMultimap);
     }
 }

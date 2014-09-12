@@ -217,4 +217,34 @@ public class TreeSortedSetMultimapTest extends AbstractMutableMultimapTestCase
         multimap.clear();
         Verify.assertEmpty(multimap);
     }
+
+    @Override
+    @Test
+    public void selectKeysValues()
+    {
+        TreeSortedSetMultimap<String, Integer> multimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        multimap.putAll("One", FastList.newListWith(4, 3, 2, 1, 1));
+        multimap.putAll("Two", FastList.newListWith(5, 4, 3, 2, 2));
+        TreeSortedSetMultimap<String, Integer> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && (value % 2 == 0)));
+        TreeSortedSetMultimap<String, Integer> expectedMultimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        expectedMultimap.putAll("Two", FastList.newListWith(4, 2));
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+        Verify.assertSortedSetsEqual(expectedMultimap.get("Two"), selectedMultimap.get("Two"));
+        Assert.assertEquals(expectedMultimap.comparator(), selectedMultimap.comparator());
+    }
+
+    @Override
+    @Test
+    public void rejectKeysValues()
+    {
+        TreeSortedSetMultimap<String, Integer> multimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        multimap.putAll("One", FastList.newListWith(4, 3, 2, 1, 1));
+        multimap.putAll("Two", FastList.newListWith(5, 4, 3, 2, 2));
+        TreeSortedSetMultimap<String, Integer> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
+        TreeSortedSetMultimap<String, Integer> expectedMultimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        expectedMultimap.putAll("One", FastList.newListWith(3, 1));
+        Assert.assertEquals(expectedMultimap, rejectedMultimap);
+        Verify.assertSortedSetsEqual(expectedMultimap.get("One"), rejectedMultimap.get("One"));
+        Assert.assertEquals(expectedMultimap.comparator(), rejectedMultimap.comparator());
+    }
 }

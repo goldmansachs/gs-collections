@@ -24,6 +24,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimapTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
 import org.junit.Test;
@@ -59,5 +60,37 @@ public class ImmutableListMultimapTest extends AbstractImmutableMultimapTestCase
         multimap.put("Three", 3);
         multimap.toImmutable().forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", FastList.newListWith(2, 1)), Tuples.pair("Three", FastList.newListWith(3, 3))), collection);
+    }
+
+    @Override
+    @Test
+    public void selectKeysValues()
+    {
+        FastListMultimap<String, Integer> mutableMultimap = FastListMultimap.newMultimap();
+        mutableMultimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 2));
+        mutableMultimap.putAll("Two", FastList.newListWith(2, 3, 4, 5, 2));
+        ImmutableListMultimap<String, Integer> immutableMap = mutableMultimap.toImmutable();
+        ImmutableListMultimap<String, Integer> selectedMultimap = immutableMap.selectKeysValues((key, value) -> ("Two".equals(key) && (value % 2 == 0)));
+        FastListMultimap<String, Integer> expectedMultimap = FastListMultimap.newMultimap();
+        expectedMultimap.putAll("Two", FastList.newListWith(2, 4, 2));
+        ImmutableListMultimap<String, Integer> expectedImmutableMultimap = expectedMultimap.toImmutable();
+        Assert.assertEquals(expectedImmutableMultimap, selectedMultimap);
+        Verify.assertIterablesEqual(expectedImmutableMultimap.get("Two"), selectedMultimap.get("Two"));
+    }
+
+    @Override
+    @Test
+    public void rejectKeysValues()
+    {
+        FastListMultimap<String, Integer> mutableMultimap = FastListMultimap.newMultimap();
+        mutableMultimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 1));
+        mutableMultimap.putAll("Two", FastList.newListWith(2, 3, 4, 5, 1));
+        ImmutableListMultimap<String, Integer> immutableMap = mutableMultimap.toImmutable();
+        ImmutableListMultimap<String, Integer> rejectedMultimap = immutableMap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
+        FastListMultimap<String, Integer> expectedMultimap = FastListMultimap.newMultimap();
+        expectedMultimap.putAll("One", FastList.newListWith(1, 3, 1));
+        ImmutableListMultimap<String, Integer> expectedImmutableMultimap = expectedMultimap.toImmutable();
+        Assert.assertEquals(expectedImmutableMultimap, rejectedMultimap);
+        Verify.assertIterablesEqual(expectedImmutableMultimap.get("One"), rejectedMultimap.get("One"));
     }
 }

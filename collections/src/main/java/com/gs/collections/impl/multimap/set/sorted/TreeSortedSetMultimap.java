@@ -22,6 +22,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Comparator;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -155,5 +156,15 @@ public final class TreeSortedSetMultimap<K, V>
     {
         this.comparator = (Comparator<? super V>) in.readObject();
         super.readExternal(in);
+    }
+
+    public TreeSortedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.selectKeysValues(predicate, this.newEmpty());
+    }
+
+    public TreeSortedSetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.rejectKeysValues(predicate, this.newEmpty());
     }
 }

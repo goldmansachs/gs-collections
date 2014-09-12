@@ -25,11 +25,13 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableRichIterable;
 import com.gs.collections.impl.block.factory.Functions;
@@ -253,6 +255,44 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
         });
 
         return result;
+    }
+
+    public <R extends MutableMultimap<K, V>> R selectKeysValues(final Predicate2<? super K, ? super V> predicate, final R target)
+    {
+        this.getMap().forEachKeyValue(new Procedure2<K, C>()
+        {
+            public void value(final K key, C collection)
+            {
+                RichIterable<V> selectedValues = collection.select(new Predicate<V>()
+                {
+                    public boolean accept(V value)
+                    {
+                        return predicate.accept(key, value);
+                    }
+                });
+                target.putAll(key, selectedValues);
+            }
+        });
+        return target;
+    }
+
+    public <R extends MutableMultimap<K, V>> R rejectKeysValues(final Predicate2<? super K, ? super V> predicate, final R target)
+    {
+        this.getMap().forEachKeyValue(new Procedure2<K, C>()
+        {
+            public void value(final K key, C collection)
+            {
+                RichIterable<V> selectedValues = collection.reject(new Predicate<V>()
+                {
+                    public boolean accept(V value)
+                    {
+                        return predicate.accept(key, value);
+                    }
+                });
+                target.putAll(key, selectedValues);
+            }
+        });
+        return target;
     }
 
     private static final class KeyValuePairFunction<V, K> implements Function<V, Pair<K, V>>

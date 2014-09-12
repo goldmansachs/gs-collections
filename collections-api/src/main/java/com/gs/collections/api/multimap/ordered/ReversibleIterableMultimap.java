@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.multimap.ordered;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.ordered.ReversibleIterable;
 
@@ -25,4 +26,8 @@ public interface ReversibleIterableMultimap<K, V>
     ReversibleIterableMultimap<K, V> newEmpty();
 
     ReversibleIterable<V> get(K key);
+
+    ReversibleIterableMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    ReversibleIterableMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
 }

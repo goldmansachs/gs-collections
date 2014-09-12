@@ -203,4 +203,50 @@ public class UnifiedSetWithHashingStrategyMultimapTest extends AbstractMutableMu
         deserialized.putAll(3, PEOPLE);
         Verify.assertSetsEqual(LAST_NAME_HASHED_SET.castToSet(), deserialized.get(3));
     }
+
+    @Override
+    @Test
+    public void selectKeysValues()
+    {
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> multimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
+        multimap.put(1, JOHNSMITH);
+        multimap.put(1, JANESMITH);
+        multimap.put(1, JOHNDOE);
+        multimap.put(1, JANEDOE);
+        multimap.put(2, JOHNSMITH);
+        multimap.put(2, JANESMITH);
+        multimap.put(2, JOHNDOE);
+        multimap.put(2, JANEDOE);
+
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> selectedMultimap = multimap.selectKeysValues((key, value) -> (key % 2 == 0) && "Jane".equals(value.getFirstName()));
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> expectedMultimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
+        expectedMultimap.put(2, JANESMITH);
+        expectedMultimap.put(2, JANEDOE);
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+        Verify.assertMapsEqual(expectedMultimap.getMap(), selectedMultimap.getMap());
+        Assert.assertSame(expectedMultimap.getValueHashingStrategy(), selectedMultimap.getValueHashingStrategy());
+    }
+
+    @Override
+    @Test
+    public void rejectKeysValues()
+    {
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> multimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
+        multimap.put(1, JOHNSMITH);
+        multimap.put(1, JANESMITH);
+        multimap.put(1, JOHNDOE);
+        multimap.put(1, JANEDOE);
+        multimap.put(2, JOHNSMITH);
+        multimap.put(2, JANESMITH);
+        multimap.put(2, JOHNDOE);
+        multimap.put(2, JANEDOE);
+
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> rejectedMultimap = multimap.rejectKeysValues((key, value) -> (key % 2 == 0) || "Jane".equals(value.getFirstName()));
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> expectedMultimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
+        expectedMultimap.put(1, JOHNSMITH);
+        expectedMultimap.put(1, JOHNDOE);
+        Assert.assertEquals(expectedMultimap, rejectedMultimap);
+        Verify.assertMapsEqual(expectedMultimap.getMap(), rejectedMultimap.getMap());
+        Assert.assertSame(expectedMultimap.getValueHashingStrategy(), rejectedMultimap.getValueHashingStrategy());
+    }
 }

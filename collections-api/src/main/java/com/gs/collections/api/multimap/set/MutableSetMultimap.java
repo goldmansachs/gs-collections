@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.multimap.set;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 
@@ -32,4 +33,8 @@ public interface MutableSetMultimap<K, V>
     MutableSetMultimap<K, V> newEmpty();
 
     MutableSet<V> get(K key);
+
+    MutableSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    MutableSetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
 }

@@ -22,6 +22,7 @@ import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.MultiReaderHashBag;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
@@ -128,5 +129,31 @@ public class MultiReaderHashBagMultimapTest extends AbstractMutableMultimapTestC
         Assert.assertEquals(HashBag.newBagWith("Two", "TwoTwo", "Two"), actual.get(Integer.valueOf(2)));
         Assert.assertEquals(HashBag.newBagWith("Three", "ThreeThree", "Three"), actual.get(Integer.valueOf(3)));
         Assert.assertEquals(HashBag.newBagWith("Four", "FourFour", "Four"), actual.get(Integer.valueOf(4)));
+    }
+
+    @Override
+    @Test
+    public void selectKeysValues()
+    {
+        MultiReaderHashBagMultimap<String, Integer> multimap = MultiReaderHashBagMultimap.newMultimap();
+        multimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 4));
+        multimap.putAll("Two", FastList.newListWith(2, 3, 4, 5, 3, 2));
+        HashBagMultimap<String, Integer> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && (value % 2 == 0)));
+        HashBagMultimap<String, Integer> expectedMultimap = HashBagMultimap.newMultimap();
+        expectedMultimap.putAll("Two", FastList.newListWith(2, 4, 2));
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+    }
+
+    @Override
+    @Test
+    public void rejectKeysValues()
+    {
+        MultiReaderHashBagMultimap<String, Integer> multimap = MultiReaderHashBagMultimap.newMultimap();
+        multimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 1));
+        multimap.putAll("Two", FastList.newListWith(2, 3, 4, 5));
+        HashBagMultimap<String, Integer> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
+        HashBagMultimap<String, Integer> expectedMultimap = HashBagMultimap.newMultimap();
+        expectedMultimap.putAll("One", FastList.newListWith(1, 3, 1));
+        Assert.assertEquals(expectedMultimap, rejectedMultimap);
     }
 }

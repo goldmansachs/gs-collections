@@ -20,6 +20,7 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -118,5 +119,33 @@ public class SynchronizedPutUnifiedSetMultimapTest extends AbstractMutableMultim
                 this.newMultimapWithKeysValues("One", 1, "One", 2);
         String toString = multimap.toString();
         Assert.assertTrue("{One=[1, 2]}".equals(toString) || "{One=[2, 1]}".equals(toString));
+    }
+
+    @Override
+    @Test
+    public void selectKeysValues()
+    {
+        SynchronizedPutUnifiedSetMultimap<String, Integer> multimap = SynchronizedPutUnifiedSetMultimap.newMultimap();
+        multimap.putAll("One", FastList.newListWith(1, 1, 2, 3, 4));
+        multimap.putAll("Two", FastList.newListWith(2, 2, 3, 4, 5));
+        UnifiedSetMultimap<String, Integer> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && (value % 2 == 0)));
+        UnifiedSetMultimap<String, Integer> expectedMultimap = UnifiedSetMultimap.newMultimap();
+        expectedMultimap.putAll("Two", FastList.newListWith(2, 4));
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+        Verify.assertSetsEqual(expectedMultimap.get("Two"), selectedMultimap.get("Two"));
+    }
+
+    @Override
+    @Test
+    public void rejectKeysValues()
+    {
+        SynchronizedPutUnifiedSetMultimap<String, Integer> multimap = SynchronizedPutUnifiedSetMultimap.newMultimap();
+        multimap.putAll("One", FastList.newListWith(1, 1, 2, 3, 4));
+        multimap.putAll("Two", FastList.newListWith(2, 2, 3, 4, 5));
+        UnifiedSetMultimap<String, Integer> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
+        UnifiedSetMultimap<String, Integer> expectedMultimap = UnifiedSetMultimap.newMultimap();
+        expectedMultimap.putAll("One", FastList.newListWith(1, 3));
+        Assert.assertEquals(expectedMultimap, rejectedMultimap);
+        Verify.assertSetsEqual(expectedMultimap.get("One"), rejectedMultimap.get("One"));
     }
 }

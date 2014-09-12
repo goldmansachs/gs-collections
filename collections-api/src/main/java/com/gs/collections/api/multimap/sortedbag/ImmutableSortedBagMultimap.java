@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.gs.collections.api.multimap.sortedbag;
 
 import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 
 /**
@@ -37,4 +38,8 @@ public interface ImmutableSortedBagMultimap<K, V>
     ImmutableSortedBagMultimap<K, V> newWithAll(K key, Iterable<? extends V> values);
 
     ImmutableSortedBagMultimap<K, V> newWithoutAll(Object key);
+
+    ImmutableSortedBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    ImmutableSortedBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
 }

@@ -101,4 +101,38 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
         multimap.forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 2, 1)), Tuples.pair("Three", TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 3, 3))), collection);
     }
+
+    @Override
+    @Test
+    public void selectKeysValues()
+    {
+        TreeSortedSetMultimap<String, Integer> mutableMultimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        mutableMultimap.putAll("One", FastList.newListWith(4, 3, 2, 1, 1));
+        mutableMultimap.putAll("Two", FastList.newListWith(5, 4, 3, 2, 2));
+        ImmutableSortedSetMultimap<String, Integer> immutableMap = mutableMultimap.toImmutable();
+        ImmutableSortedSetMultimap<String, Integer> selectedMultimap = immutableMap.selectKeysValues((key, value) -> ("Two".equals(key) && (value % 2 == 0)));
+        TreeSortedSetMultimap<String, Integer> expectedMultimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        expectedMultimap.putAll("Two", FastList.newListWith(4, 2));
+        ImmutableSortedSetMultimap<String, Integer> expectedImmutableMultimap = expectedMultimap.toImmutable();
+        Assert.assertEquals(expectedImmutableMultimap, selectedMultimap);
+        Verify.assertIterablesEqual(expectedImmutableMultimap.get("Two"), selectedMultimap.get("Two"));
+        Assert.assertEquals(expectedMultimap.comparator(), selectedMultimap.comparator());
+    }
+
+    @Override
+    @Test
+    public void rejectKeysValues()
+    {
+        TreeSortedSetMultimap<String, Integer> mutableMultimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        mutableMultimap.putAll("One", FastList.newListWith(4, 3, 2, 1, 1));
+        mutableMultimap.putAll("Two", FastList.newListWith(5, 4, 3, 2, 2));
+        ImmutableSortedSetMultimap<String, Integer> immutableMap = mutableMultimap.toImmutable();
+        ImmutableSortedSetMultimap<String, Integer> rejectedMultimap = immutableMap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
+        TreeSortedSetMultimap<String, Integer> expectedMultimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        expectedMultimap.putAll("One", FastList.newListWith(3, 1));
+        ImmutableSortedSetMultimap<String, Integer> expectedImmutableMultimap = expectedMultimap.toImmutable();
+        Assert.assertEquals(expectedImmutableMultimap, rejectedMultimap);
+        Verify.assertIterablesEqual(expectedImmutableMultimap.get("One"), rejectedMultimap.get("One"));
+        Assert.assertEquals(expectedMultimap.comparator(), rejectedMultimap.comparator());
+    }
 }

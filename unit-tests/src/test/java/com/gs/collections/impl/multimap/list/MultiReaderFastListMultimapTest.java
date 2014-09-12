@@ -23,6 +23,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.MultiReaderFastList;
 import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
+import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
 import org.junit.Test;
@@ -128,5 +129,33 @@ public class MultiReaderFastListMultimapTest extends AbstractMutableMultimapTest
         Assert.assertEquals(FastList.newListWith("Two", "TwoTwo", "Two"), actual.get(Integer.valueOf(2)).toList());
         Assert.assertEquals(FastList.newListWith("Three", "ThreeThree", "Three"), actual.get(Integer.valueOf(3)).toList());
         Assert.assertEquals(FastList.newListWith("Four", "FourFour", "Four"), actual.get(Integer.valueOf(4)).toList());
+    }
+
+    @Override
+    @Test
+    public void selectKeysValues()
+    {
+        MultiReaderFastListMultimap<String, Integer> multimap = MultiReaderFastListMultimap.newMultimap();
+        multimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 4));
+        multimap.putAll("Two", FastList.newListWith(2, 3, 4, 5, 3, 2));
+        FastListMultimap<String, Integer> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && (value % 2 == 0)));
+        FastListMultimap<String, Integer> expectedMultimap = FastListMultimap.newMultimap();
+        expectedMultimap.putAll("Two", FastList.newListWith(2, 4, 2));
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+        Verify.assertListsEqual(expectedMultimap.get("Two"), selectedMultimap.get("Two"));
+    }
+
+    @Override
+    @Test
+    public void rejectKeysValues()
+    {
+        MultiReaderFastListMultimap<String, Integer> multimap = MultiReaderFastListMultimap.newMultimap();
+        multimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 1));
+        multimap.putAll("Two", FastList.newListWith(2, 3, 4, 5));
+        FastListMultimap<String, Integer> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
+        FastListMultimap<String, Integer> expectedMultimap = FastListMultimap.newMultimap();
+        expectedMultimap.putAll("One", FastList.newListWith(1, 3, 1));
+        Assert.assertEquals(expectedMultimap, rejectedMultimap);
+        Verify.assertListsEqual(expectedMultimap.get("One"), rejectedMultimap.get("One"));
     }
 }

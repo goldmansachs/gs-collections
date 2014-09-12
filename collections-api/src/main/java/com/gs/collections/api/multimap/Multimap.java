@@ -21,6 +21,7 @@ import java.util.Collection;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
@@ -36,7 +37,7 @@ import com.gs.collections.api.tuple.Pair;
  * <p>The advantages to using this container over a {@code Map<K, Collection<V>>} is that all of the handling of the
  * value collection can be done automatically.  It also allows implementations to further specialize in how duplicate
  * values will be handled.  Value collections with list semantics would allow duplicate values for a key, while those
- * implementing set semantics would not.
+ * implementing set semantics would not. The value collections can never be empty.
  * <p/>
  * <p>Internal iteration methods for keys and values (singly - {@link #forEachKey(Procedure)}, {@link
  * #forEachValue(Procedure)}, and together - {@link #forEachKeyValue(Procedure2)}), {@link #forEachKeyMultiValue(Procedure2)}) are provided to allow flexible
@@ -241,4 +242,91 @@ public interface Multimap<K, V>
      * The returned Multimap will be {@code Serializable} if this Multimap is {@code Serializable}.
      */
     ImmutableMultimap<K, V> toImmutable();
+
+    /**
+     * Returns all elements of the source multimap that satisfies the predicate.  This method is also
+     * commonly called filter.
+     * <p>
+     * <pre>e.g.
+     * return multimap.<b>selectKeysValues</b>(new Predicate2&lt;Integer, Person&gt;()
+     * {
+     *     public boolean accept(Integer age, Person person)
+     *     {
+     *         return (age >= 18)
+     *                  && (person.getAddress().getCity().equals("Metuchen"));
+     *     }
+     * });
+     * </pre>
+     * <p>
+     *
+     * @param predicate a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the select criteria
+     * @return {@code Multimap}, which contains elements as a result of the select criteria
+     * @since 6.0
+     */
+    Multimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    /**
+     * Same as the select method but uses the specified target multimap for the results.
+     * <p>
+     * <pre>e.g.
+     * return multimap.<b>selectKeysValues</b>(new Predicate2&lt;Integer, Person&gt;()
+     * {
+     *     public boolean accept(Integer age, Person person)
+     *     {
+     *         return (age >= 18)
+     *                  && (person.getAddress().getCity().equals("Metuchen"));
+     *     }
+     * }, FastListMultimap.newMultimap());
+     * </pre>
+     * <p>
+     *
+     * @param predicate a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the select criteria
+     * @param target    the Multimap to append to for all elements in this {@code Multimap} that satisfy the {@code predicate}
+     * @return {@code target}, which contains appended elements as a result of the select criteria
+     * @since 6.0
+     */
+    <R extends MutableMultimap<K, V>> R selectKeysValues(Predicate2<? super K, ? super V> predicate, R target);
+
+    /**
+     * Returns all elements of the source multimap that don't satisfy the predicate.
+     * <p>
+     * <pre>e.g.
+     * return multimap.<b>rejectKeysValues</b>(new Predicate2&lt;Integer, Person&gt;()
+     * {
+     *     public boolean accept(Integer age, Person person)
+     *     {
+     *         return (age >= 18)
+     *                  && (person.getAddress().getCity().equals("Metuchen"));
+     *     }
+     * });
+     * </pre>
+     * <p>
+     *
+     * @param predicate a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the reject criteria
+     * @return {@code Multimap}, which contains elements that don't satisfy the {@code predicate}
+     * @since 6.0
+     */
+    Multimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    /**
+     * Same as the reject method but uses the specified target multimap for the results.
+     * <p>
+     * <pre>e.g.
+     * return multimap.<b>rejectKeysValues</b>(new Predicate2&lt;Integer, Person&gt;()
+     * {
+     *     public boolean accept(Integer age, Person person)
+     *     {
+     *         return (age >= 18)
+     *                  && (person.getAddress().getCity().equals("Metuchen"));
+     *     }
+     * }, FastListMultimap.newMultimap());
+     * </pre>
+     * <p>
+     *
+     * @param predicate a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the reject criteria
+     * @param target    the Multimap to append to for all elements in this {@code Multimap} that don't satisfy the {@code predicate}
+     * @return {@code target}, which contains appended elements that don't satisfy the {@code predicate}
+     * @since 6.0
+     */
+    <R extends MutableMultimap<K, V>> R rejectKeysValues(Predicate2<? super K, ? super V> predicate, R target);
 }

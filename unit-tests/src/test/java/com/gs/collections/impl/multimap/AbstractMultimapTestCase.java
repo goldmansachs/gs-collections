@@ -287,4 +287,20 @@ public abstract class AbstractMultimapTestCase
         Verify.assertSize(3, multimap);
         Assert.assertEquals(2, multimap.sizeDistinct());
     }
+
+    @Test
+    public void selectKeysValues()
+    {
+        Multimap<String, Integer> multimap = this.newMultimapWithKeysValues("One", 1, "One", 12, "Two", 2, "Two", 3);
+        Multimap<String, Integer> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && (value % 2 == 0)));
+        Assert.assertEquals(this.newMultimapWithKeyValue("Two", 2), selectedMultimap);
+    }
+
+    @Test
+    public void rejectKeysValues()
+    {
+        Multimap<String, Integer> multimap = this.newMultimapWithKeysValues("One", 1, "One", 12, "Two", 2, "Two", 4);
+        Multimap<String, Integer> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
+        Assert.assertEquals(this.newMultimapWithKeyValue("One", 1), rejectedMultimap);
+    }
 }

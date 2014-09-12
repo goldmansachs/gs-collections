@@ -17,6 +17,7 @@
 package com.gs.collections.api.multimap;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.tuple.Pair;
 
@@ -57,4 +58,8 @@ public interface MutableMultimap<K, V>
     RichIterable<V> removeAll(Object key);
 
     void clear();
+
+    MutableMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    MutableMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
 }

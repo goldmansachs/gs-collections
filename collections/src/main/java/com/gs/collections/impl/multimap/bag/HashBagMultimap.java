@@ -23,6 +23,7 @@ import java.io.ObjectOutput;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -169,5 +170,15 @@ public final class HashBagMultimap<K, V>
             }
             this.putAll(key, bag);
         }
+    }
+
+    public HashBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.selectKeysValues(predicate, this.newEmpty());
+    }
+
+    public HashBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.rejectKeysValues(predicate, this.newEmpty());
     }
 }

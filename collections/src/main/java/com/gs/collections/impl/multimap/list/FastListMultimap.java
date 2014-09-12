@@ -19,6 +19,7 @@ package com.gs.collections.impl.multimap.list;
 import java.io.Externalizable;
 import java.util.Collection;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
@@ -148,5 +149,15 @@ public final class FastListMultimap<K, V>
         });
 
         return new ImmutableListMultimapImpl<K, V>(map);
+    }
+
+    public FastListMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.selectKeysValues(predicate, this.newEmpty());
+    }
+
+    public FastListMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.rejectKeysValues(predicate, this.newEmpty());
     }
 }

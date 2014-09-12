@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.multimap.sortedset;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 
@@ -32,4 +33,8 @@ public interface MutableSortedSetMultimap<K, V>
     MutableSortedSetMultimap<K, V> newEmpty();
 
     MutableSortedSet<V> get(K key);
+
+    MutableSortedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    MutableSortedSetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
 }

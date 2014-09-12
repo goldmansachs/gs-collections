@@ -23,6 +23,7 @@ import java.io.ObjectOutput;
 import java.util.Comparator;
 
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.sortedbag.ImmutableSortedBagMultimap;
@@ -137,5 +138,15 @@ public final class TreeBagMultimap<K, V>
     {
         this.comparator = (Comparator<? super V>) in.readObject();
         super.readExternal(in);
+    }
+
+    public TreeBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.selectKeysValues(predicate, this.newEmpty());
+    }
+
+    public TreeBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.rejectKeysValues(predicate, this.newEmpty());
     }
 }

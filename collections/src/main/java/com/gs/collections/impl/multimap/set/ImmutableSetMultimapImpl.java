@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.gs.collections.impl.multimap.set;
 
 import java.io.Serializable;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
@@ -123,5 +124,15 @@ public final class ImmutableSetMultimapImpl<K, V>
     public ImmutableSetMultimap<K, V> newWithoutAll(Object key)
     {
         return (ImmutableSetMultimap<K, V>) super.newWithoutAll(key);
+    }
+
+    public ImmutableSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.selectKeysValues(predicate, UnifiedSetMultimap.<K, V>newMultimap()).toImmutable();
+    }
+
+    public ImmutableSetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.rejectKeysValues(predicate, UnifiedSetMultimap.<K, V>newMultimap()).toImmutable();
     }
 }

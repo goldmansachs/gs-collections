@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.multimap.sortedset;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.ordered.SortedIterableMultimap;
 import com.gs.collections.api.multimap.set.SetMultimap;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
@@ -33,4 +34,8 @@ public interface SortedSetMultimap<K, V>
     MutableSortedSetMultimap<K, V> toMutable();
 
     ImmutableSortedSetMultimap<K, V> toImmutable();
+
+    SortedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    SortedSetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
 }

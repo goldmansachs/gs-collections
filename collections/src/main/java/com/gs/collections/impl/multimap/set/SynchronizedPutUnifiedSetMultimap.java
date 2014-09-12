@@ -18,6 +18,7 @@ package com.gs.collections.impl.multimap.set;
 
 import java.io.Externalizable;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
@@ -134,5 +135,15 @@ public final class SynchronizedPutUnifiedSetMultimap<K, V>
         });
 
         return new ImmutableSetMultimapImpl<K, V>(map);
+    }
+
+    public UnifiedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.selectKeysValues(predicate, UnifiedSetMultimap.<K, V>newMultimap());
+    }
+
+    public UnifiedSetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.rejectKeysValues(predicate, UnifiedSetMultimap.<K, V>newMultimap());
     }
 }

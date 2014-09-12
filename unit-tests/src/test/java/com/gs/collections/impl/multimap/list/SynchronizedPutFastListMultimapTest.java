@@ -118,4 +118,32 @@ public class SynchronizedPutFastListMultimapTest extends AbstractMutableMultimap
                 this.newMultimapWithKeysValues("One", 1, "One", 2);
         Assert.assertEquals("{One=[1, 2]}", multimap.toString());
     }
+
+    @Override
+    @Test
+    public void selectKeysValues()
+    {
+        SynchronizedPutFastListMultimap<String, Integer> multimap = SynchronizedPutFastListMultimap.newMultimap();
+        multimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 4));
+        multimap.putAll("Two", FastList.newListWith(2, 3, 4, 5, 3, 2));
+        FastListMultimap<String, Integer> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && (value % 2 == 0)));
+        FastListMultimap<String, Integer> expectedMultimap = FastListMultimap.newMultimap();
+        expectedMultimap.putAll("Two", FastList.newListWith(2, 4, 2));
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+        Verify.assertListsEqual(expectedMultimap.get("Two"), selectedMultimap.get("Two"));
+    }
+
+    @Override
+    @Test
+    public void rejectKeysValues()
+    {
+        SynchronizedPutFastListMultimap<String, Integer> multimap = SynchronizedPutFastListMultimap.newMultimap();
+        multimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 1));
+        multimap.putAll("Two", FastList.newListWith(2, 3, 4, 5));
+        FastListMultimap<String, Integer> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
+        FastListMultimap<String, Integer> expectedMultimap = FastListMultimap.newMultimap();
+        expectedMultimap.putAll("One", FastList.newListWith(1, 3, 1));
+        Assert.assertEquals(expectedMultimap, rejectedMultimap);
+        Verify.assertListsEqual(expectedMultimap.get("One"), rejectedMultimap.get("One"));
+    }
 }

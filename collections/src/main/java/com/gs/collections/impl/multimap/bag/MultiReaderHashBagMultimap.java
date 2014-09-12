@@ -20,6 +20,7 @@ import java.io.Externalizable;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -118,5 +119,15 @@ public final class MultiReaderHashBagMultimap<K, V>
         });
 
         return new ImmutableBagMultimapImpl<K, V>(map);
+    }
+
+    public HashBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.selectKeysValues(predicate, HashBagMultimap.<K, V>newMultimap());
+    }
+
+    public HashBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.rejectKeysValues(predicate, HashBagMultimap.<K, V>newMultimap());
     }
 }

@@ -112,6 +112,11 @@ public final class Person implements Comparable<Person>, Serializable
         return this.lastName;
     }
 
+    public String getFirstName()
+    {
+        return this.firstName;
+    }
+
     @Override
     public String toString()
     {

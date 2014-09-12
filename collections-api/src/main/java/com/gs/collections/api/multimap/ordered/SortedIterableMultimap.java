@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.gs.collections.api.multimap.ordered;
 
 import java.util.Comparator;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.ordered.SortedIterable;
 
@@ -32,4 +33,8 @@ public interface SortedIterableMultimap<K, V>
     SortedIterable<V> get(K key);
 
     Comparator<? super V> comparator();
+
+    SortedIterableMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    SortedIterableMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
 }

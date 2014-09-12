@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
@@ -163,5 +164,15 @@ public final class ImmutableSortedSetMultimapImpl<K, V>
     public ImmutableSortedSetMultimap<K, V> newWithoutAll(Object key)
     {
         return (ImmutableSortedSetMultimap<K, V>) super.newWithoutAll(key);
+    }
+
+    public ImmutableSortedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.selectKeysValues(predicate, TreeSortedSetMultimap.<K, V>newMultimap(this.comparator())).toImmutable();
+    }
+
+    public ImmutableSortedSetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.rejectKeysValues(predicate, TreeSortedSetMultimap.<K, V>newMultimap(this.comparator())).toImmutable();
     }
 }

@@ -17,6 +17,7 @@
 package com.gs.collections.api.multimap.sortedbag;
 
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.MutableMultimap;
 
 /**
@@ -32,4 +33,8 @@ public interface MutableSortedBagMultimap<K, V>
     MutableSortedBagMultimap<K, V> newEmpty();
 
     MutableSortedBag<V> get(K key);
+
+    MutableSortedBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    MutableSortedBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
 }

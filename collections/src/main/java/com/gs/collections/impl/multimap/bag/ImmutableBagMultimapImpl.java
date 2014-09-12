@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import java.io.Serializable;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -174,5 +175,15 @@ public final class ImmutableBagMultimapImpl<K, V>
     public ImmutableBagMultimap<K, V> newWithoutAll(Object key)
     {
         return (ImmutableBagMultimap<K, V>) super.newWithoutAll(key);
+    }
+
+    public ImmutableBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.selectKeysValues(predicate, HashBagMultimap.<K, V>newMultimap()).toImmutable();
+    }
+
+    public ImmutableBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.rejectKeysValues(predicate, HashBagMultimap.<K, V>newMultimap()).toImmutable();
     }
 }

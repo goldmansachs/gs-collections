@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.multimap.list;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 
@@ -36,4 +37,8 @@ public interface ImmutableListMultimap<K, V>
     ImmutableListMultimap<K, V> newWithAll(K key, Iterable<? extends V> values);
 
     ImmutableListMultimap<K, V> newWithoutAll(Object key);
+
+    ImmutableListMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    ImmutableListMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
 }

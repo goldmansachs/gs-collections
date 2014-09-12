@@ -23,6 +23,7 @@ import java.io.ObjectOutput;
 
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
@@ -170,5 +171,15 @@ public final class UnifiedSetWithHashingStrategyMultimap<K, V>
     {
         this.hashingStrategy = (HashingStrategy<? super V>) in.readObject();
         super.readExternal(in);
+    }
+
+    public UnifiedSetWithHashingStrategyMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.selectKeysValues(predicate, this.newEmpty());
+    }
+
+    public UnifiedSetWithHashingStrategyMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    {
+        return this.rejectKeysValues(predicate, this.newEmpty());
     }
 }

@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.multimap.set;
 
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.set.ImmutableSet;
 
@@ -36,4 +37,8 @@ public interface ImmutableSetMultimap<K, V>
     ImmutableSetMultimap<K, V> newWithAll(K key, Iterable<? extends V> values);
 
     ImmutableSetMultimap<K, V> newWithoutAll(Object key);
+
+    ImmutableSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    ImmutableSetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
 }
