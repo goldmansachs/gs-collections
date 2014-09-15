@@ -37,4 +37,8 @@ public interface MutableBagMultimap<K, V>
     MutableBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 
     MutableBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    MutableBagMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
+
+    MutableBagMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 }

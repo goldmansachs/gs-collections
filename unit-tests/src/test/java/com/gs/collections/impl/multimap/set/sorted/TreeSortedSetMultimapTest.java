@@ -34,6 +34,7 @@ import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -246,5 +247,39 @@ public class TreeSortedSetMultimapTest extends AbstractMutableMultimapTestCase
         Assert.assertEquals(expectedMultimap, rejectedMultimap);
         Verify.assertSortedSetsEqual(expectedMultimap.get("One"), rejectedMultimap.get("One"));
         Assert.assertEquals(expectedMultimap.comparator(), rejectedMultimap.comparator());
+    }
+
+    @Override
+    @Test
+    public void selectKeysMultiValues()
+    {
+        TreeSortedSetMultimap<Integer, Integer> multimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        multimap.putAll(1, FastList.newListWith(4, 3, 1));
+        multimap.putAll(2, FastList.newListWith(5, 4, 3, 2, 2));
+        multimap.putAll(3, FastList.newListWith(5, 4, 3, 2, 2));
+        multimap.putAll(4, FastList.newListWith(4, 3, 1));
+        TreeSortedSetMultimap<Integer, Integer> selectedMultimap = multimap.selectKeysMultiValues((key, values) -> (key % 2 == 0 && Iterate.sizeOf(values) > 3));
+        TreeSortedSetMultimap<Integer, Integer> expectedMultimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        expectedMultimap.putAll(2, FastList.newListWith(5, 4, 3, 2, 2));
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+        Verify.assertSortedSetsEqual(expectedMultimap.get(2), selectedMultimap.get(2));
+        Assert.assertEquals(expectedMultimap.comparator(), selectedMultimap.comparator());
+    }
+
+    @Override
+    @Test
+    public void rejectKeysMultiValues()
+    {
+        TreeSortedSetMultimap<Integer, Integer> multimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        multimap.putAll(1, FastList.newListWith(4, 3, 2, 1));
+        multimap.putAll(2, FastList.newListWith(5, 4, 3, 2, 2));
+        multimap.putAll(3, FastList.newListWith(4, 3, 1, 1));
+        multimap.putAll(4, FastList.newListWith(4, 3, 1));
+        TreeSortedSetMultimap<Integer, Integer> selectedMultimap = multimap.rejectKeysMultiValues((key, values) -> (key % 2 == 0 || Iterate.sizeOf(values) > 3));
+        TreeSortedSetMultimap<Integer, Integer> expectedMultimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        expectedMultimap.putAll(3, FastList.newListWith(4, 3, 1, 1));
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+        Verify.assertSortedSetsEqual(expectedMultimap.get(3), selectedMultimap.get(3));
+        Assert.assertEquals(expectedMultimap.comparator(), selectedMultimap.comparator());
     }
 }

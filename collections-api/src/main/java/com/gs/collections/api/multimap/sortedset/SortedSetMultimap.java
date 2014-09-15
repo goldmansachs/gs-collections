@@ -38,4 +38,8 @@ public interface SortedSetMultimap<K, V>
     SortedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 
     SortedSetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    SortedSetMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
+
+    SortedSetMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 }

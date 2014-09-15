@@ -24,6 +24,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -161,5 +162,29 @@ public abstract class AbstractImmutableMultimapTestCase
         Multimap<String, String> multimap = this.classUnderTest().newWith("One", "1").newWith("Two", "2");
         Multimap<String, String> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) && "2".equals(value)));
         Assert.assertEquals(this.classUnderTest().newWith("One", "1"), rejectedMultimap);
+    }
+
+    @Test
+    public void selectKeysMultiValues()
+    {
+        Multimap<String, String> multimap1 = this.classUnderTest().newWith("One", "1").newWith("Two", "2").newWith("Two", "3");
+        Multimap<String, String> selectedMultimap1 = multimap1.selectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
+        Assert.assertEquals(this.classUnderTest().newWith("Two", "2").newWith("Two", "3"), selectedMultimap1);
+
+        Multimap<String, String> multimap2 = this.classUnderTest().newWith("One", "1").newWith("Two", "3");
+        Multimap<String, String> selectedMultimap2 = multimap2.selectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
+        Assert.assertEquals(this.classUnderTest(), selectedMultimap2);
+    }
+
+    @Test
+    public void rejectKeysMultiValues()
+    {
+        Multimap<String, String> multimap1 = this.classUnderTest().newWith("One", "1").newWith("Two", "2").newWith("Two", "3");
+        Multimap<String, String> rejectedMultimap1 = multimap1.rejectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
+        Assert.assertEquals(this.classUnderTest().newWith("One", "1"), rejectedMultimap1);
+
+        Multimap<String, String> multimap2 = this.classUnderTest().newWith("One", "1").newWith("Two", "3");
+        Multimap<String, String> rejectedMultimap2 = multimap2.rejectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
+        Assert.assertEquals(this.classUnderTest().newWith("One", "1"), rejectedMultimap2);
     }
 }

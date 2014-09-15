@@ -135,4 +135,14 @@ public final class ImmutableListMultimapImpl<K, V>
     {
         return this.rejectKeysValues(predicate, FastListMultimap.<K, V>newMultimap()).toImmutable();
     }
+
+    public ImmutableListMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.selectKeysMultiValues(predicate, FastListMultimap.<K, V>newMultimap()).toImmutable();
+    }
+
+    public ImmutableListMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.rejectKeysMultiValues(predicate, FastListMultimap.<K, V>newMultimap()).toImmutable();
+    }
 }

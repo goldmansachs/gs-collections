@@ -167,4 +167,14 @@ public final class TreeSortedSetMultimap<K, V>
     {
         return this.rejectKeysValues(predicate, this.newEmpty());
     }
+
+    public TreeSortedSetMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.selectKeysMultiValues(predicate, this.newEmpty());
+    }
+
+    public TreeSortedSetMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.rejectKeysMultiValues(predicate, this.newEmpty());
+    }
 }

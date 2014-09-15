@@ -34,6 +34,7 @@ import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
+import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -302,5 +303,21 @@ public abstract class AbstractMultimapTestCase
         Multimap<String, Integer> multimap = this.newMultimapWithKeysValues("One", 1, "One", 12, "Two", 2, "Two", 4);
         Multimap<String, Integer> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
         Assert.assertEquals(this.newMultimapWithKeyValue("One", 1), rejectedMultimap);
+    }
+
+    @Test
+    public void selectKeysMultiValues()
+    {
+        Multimap<String, Integer> multimap = this.newMultimapWithKeysValues("One", 1, "One", 12, "Two", 2, "Two", 3);
+        Multimap<String, Integer> selectedMultimap = multimap.selectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, 2));
+        Assert.assertEquals(this.newMultimapWithKeysValues("Two", 2, "Two", 3), selectedMultimap);
+    }
+
+    @Test
+    public void rejectKeysMultiValues()
+    {
+        Multimap<String, Integer> multimap = this.newMultimapWithKeysValues("One", 1, "One", 12, "Two", 2, "Two", 3);
+        Multimap<String, Integer> rejectedMultimap = multimap.rejectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, 2));
+        Assert.assertEquals(this.newMultimapWithKeysValues("One", 1, "One", 12), rejectedMultimap);
     }
 }

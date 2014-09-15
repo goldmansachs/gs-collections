@@ -26,6 +26,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimapTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
+import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -89,6 +90,40 @@ public class ImmutableBagMultimapTest extends AbstractImmutableMultimapTestCase
         HashBagMultimap<String, Integer> expectedMultimap = HashBagMultimap.newMultimap();
         expectedMultimap.putAll("One", FastList.newListWith(1, 3, 1));
         ImmutableBagMultimap<String, Integer> expectedImmutableMultimap = expectedMultimap.toImmutable();
+        Assert.assertEquals(expectedImmutableMultimap, rejectedMultimap);
+    }
+
+    @Override
+    @Test
+    public void selectKeysMultiValues()
+    {
+        HashBagMultimap<Integer, String> mutableMultimap = HashBagMultimap.newMultimap();
+        mutableMultimap.putAll(1, FastList.newListWith("1", "3", "4"));
+        mutableMultimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "2"));
+        mutableMultimap.putAll(3, FastList.newListWith("2", "3", "4", "5", "2"));
+        mutableMultimap.putAll(4, FastList.newListWith("1", "3", "4"));
+        ImmutableBagMultimap<Integer, String> immutableMap = mutableMultimap.toImmutable();
+        ImmutableBagMultimap<Integer, String> selectedMultimap = immutableMap.selectKeysMultiValues((key, values) -> (key % 2 == 0 && Iterate.sizeOf(values) > 3));
+        HashBagMultimap<Integer, String> expectedMultimap = HashBagMultimap.newMultimap();
+        expectedMultimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "2"));
+        ImmutableBagMultimap<Integer, String> expectedImmutableMultimap = expectedMultimap.toImmutable();
+        Assert.assertEquals(expectedImmutableMultimap, selectedMultimap);
+    }
+
+    @Override
+    @Test
+    public void rejectKeysMultiValues()
+    {
+        HashBagMultimap<Integer, String> mutableMultimap = HashBagMultimap.newMultimap();
+        mutableMultimap.putAll(1, FastList.newListWith("1", "2", "3", "4", "1"));
+        mutableMultimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "1"));
+        mutableMultimap.putAll(3, FastList.newListWith("2", "3", "4", "2"));
+        mutableMultimap.putAll(4, FastList.newListWith("1", "3", "4", "5"));
+        ImmutableBagMultimap<Integer, String> immutableMap = mutableMultimap.toImmutable();
+        ImmutableBagMultimap<Integer, String> rejectedMultimap = immutableMap.rejectKeysMultiValues((key, values) -> (key % 2 == 0 || Iterate.sizeOf(values) > 4));
+        HashBagMultimap<Integer, String> expectedMultimap = HashBagMultimap.newMultimap();
+        expectedMultimap.putAll(3, FastList.newListWith("2", "3", "4", "2"));
+        ImmutableBagMultimap<Integer, String> expectedImmutableMultimap = expectedMultimap.toImmutable();
         Assert.assertEquals(expectedImmutableMultimap, rejectedMultimap);
     }
 }

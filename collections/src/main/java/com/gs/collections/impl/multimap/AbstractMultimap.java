@@ -295,6 +295,36 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
         return target;
     }
 
+    public <R extends MutableMultimap<K, V>> R selectKeysMultiValues(final Predicate2<? super K, ? super Iterable<V>> predicate, final R target)
+    {
+        this.forEachKeyMultiValue(new Procedure2<K, Iterable<V>>()
+        {
+            public void value(K key, Iterable<V> collection)
+            {
+                if (predicate.accept(key, collection))
+                {
+                    target.putAll(key, collection);
+                }
+            }
+        });
+        return target;
+    }
+
+    public <R extends MutableMultimap<K, V>> R rejectKeysMultiValues(final Predicate2<? super K, ? super Iterable<V>> predicate, final R target)
+    {
+        this.forEachKeyMultiValue(new Procedure2<K, Iterable<V>>()
+        {
+            public void value(K key, Iterable<V> collection)
+            {
+                if (!predicate.accept(key, collection))
+                {
+                    target.putAll(key, collection);
+                }
+            }
+        });
+        return target;
+    }
+
     private static final class KeyValuePairFunction<V, K> implements Function<V, Pair<K, V>>
     {
         private static final long serialVersionUID = 1L;

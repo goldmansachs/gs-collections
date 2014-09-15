@@ -38,4 +38,8 @@ public interface SortedBagMultimap<K, V>
     SortedBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 
     SortedBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    SortedBagMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
+
+    SortedBagMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 }

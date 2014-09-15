@@ -35,6 +35,7 @@ import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrateg
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.test.domain.Person;
+import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -245,6 +246,61 @@ public class UnifiedSetWithHashingStrategyMultimapTest extends AbstractMutableMu
         UnifiedSetWithHashingStrategyMultimap<Integer, Person> expectedMultimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
         expectedMultimap.put(1, JOHNSMITH);
         expectedMultimap.put(1, JOHNDOE);
+        Assert.assertEquals(expectedMultimap, rejectedMultimap);
+        Verify.assertMapsEqual(expectedMultimap.getMap(), rejectedMultimap.getMap());
+        Assert.assertSame(expectedMultimap.getValueHashingStrategy(), rejectedMultimap.getValueHashingStrategy());
+    }
+
+    @Override
+    @Test
+    public void selectKeysMultiValues()
+    {
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> multimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
+        multimap.put(1, JOHNSMITH);
+        multimap.put(1, JANESMITH);
+        multimap.put(1, JOHNDOE);
+        multimap.put(1, JANEDOE);
+        multimap.put(2, JANESMITH);
+        multimap.put(2, JOHNDOE);
+        multimap.put(2, JANEDOE);
+        multimap.put(3, JANESMITH);
+        multimap.put(3, JOHNDOE);
+        multimap.put(3, JANEDOE);
+        multimap.put(4, JOHNSMITH);
+        multimap.put(4, JOHNDOE);
+
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> selectedMultimap = multimap.selectKeysMultiValues((key, values) -> key % 2 == 0 && Iterate.contains(values, JANEDOE));
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> expectedMultimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
+        expectedMultimap.put(2, JANESMITH);
+        expectedMultimap.put(2, JANEDOE);
+        expectedMultimap.put(2, JOHNDOE);
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+        Verify.assertMapsEqual(expectedMultimap.getMap(), selectedMultimap.getMap());
+        Assert.assertSame(expectedMultimap.getValueHashingStrategy(), selectedMultimap.getValueHashingStrategy());
+    }
+
+    @Override
+    @Test
+    public void rejectKeysMultiValues()
+    {
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> multimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
+        multimap.put(1, JANESMITH);
+        multimap.put(1, JOHNDOE);
+        multimap.put(1, JANEDOE);
+        multimap.put(1, JANEDOE);
+        multimap.put(2, JANESMITH);
+        multimap.put(2, JOHNSMITH);
+        multimap.put(2, JOHNDOE);
+        multimap.put(2, JANEDOE);
+        multimap.put(3, JOHNSMITH);
+        multimap.put(3, JOHNDOE);
+        multimap.put(4, JOHNSMITH);
+        multimap.put(4, JOHNDOE);
+
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> rejectedMultimap = multimap.rejectKeysMultiValues((key, values) -> key % 2 == 0 || Iterate.contains(values, JANEDOE));
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> expectedMultimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
+        expectedMultimap.put(3, JOHNSMITH);
+        expectedMultimap.put(3, JOHNDOE);
         Assert.assertEquals(expectedMultimap, rejectedMultimap);
         Verify.assertMapsEqual(expectedMultimap.getMap(), rejectedMultimap.getMap());
         Assert.assertSame(expectedMultimap.getValueHashingStrategy(), rejectedMultimap.getValueHashingStrategy());

@@ -24,6 +24,7 @@ import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -144,6 +145,36 @@ public class SynchronizedPutHashBagMultimapTest extends AbstractMutableMultimapT
         HashBagMultimap<String, Integer> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
         HashBagMultimap<String, Integer> expectedMultimap = HashBagMultimap.newMultimap();
         expectedMultimap.putAll("One", FastList.newListWith(1, 3, 1));
+        Assert.assertEquals(expectedMultimap, rejectedMultimap);
+    }
+
+    @Override
+    @Test
+    public void selectKeysMultiValues()
+    {
+        SynchronizedPutHashBagMultimap<Integer, String> multimap = SynchronizedPutHashBagMultimap.newMultimap();
+        multimap.putAll(1, FastList.newListWith("1", "3", "4"));
+        multimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "2"));
+        multimap.putAll(3, FastList.newListWith("2", "3", "4", "5", "2"));
+        multimap.putAll(4, FastList.newListWith("1", "3", "4"));
+        HashBagMultimap<Integer, String> selectedMultimap = multimap.selectKeysMultiValues((key, values) -> (key % 2 == 0 && Iterate.sizeOf(values) > 3));
+        HashBagMultimap<Integer, String> expectedMultimap = HashBagMultimap.newMultimap();
+        expectedMultimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "2"));
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+    }
+
+    @Override
+    @Test
+    public void rejectKeysMultiValues()
+    {
+        SynchronizedPutHashBagMultimap<Integer, String> multimap = SynchronizedPutHashBagMultimap.newMultimap();
+        multimap.putAll(1, FastList.newListWith("1", "2", "3", "4", "1"));
+        multimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "1"));
+        multimap.putAll(3, FastList.newListWith("2", "3", "4", "2"));
+        multimap.putAll(4, FastList.newListWith("1", "3", "4", "5"));
+        HashBagMultimap<Integer, String> rejectedMultimap = multimap.rejectKeysMultiValues((key, values) -> (key % 2 == 0 || Iterate.sizeOf(values) > 4));
+        HashBagMultimap<Integer, String> expectedMultimap = HashBagMultimap.newMultimap();
+        expectedMultimap.putAll(3, FastList.newListWith("2", "3", "4", "2"));
         Assert.assertEquals(expectedMultimap, rejectedMultimap);
     }
 }

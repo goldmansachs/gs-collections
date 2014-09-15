@@ -32,6 +32,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -232,5 +233,39 @@ public class TreeBagMultimapTest extends AbstractMutableMultimapTestCase
         Assert.assertEquals(expectedMultimap, rejectedMultimap);
         Verify.assertSortedBagsEqual(expectedMultimap.get("One"), rejectedMultimap.get("One"));
         Assert.assertSame(expectedMultimap.comparator(), rejectedMultimap.comparator());
+    }
+
+    @Override
+    @Test
+    public void selectKeysMultiValues()
+    {
+        TreeBagMultimap<Integer, Integer> multimap = TreeBagMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        multimap.putAll(1, FastList.newListWith(4, 3, 1));
+        multimap.putAll(2, FastList.newListWith(5, 4, 3, 2, 2));
+        multimap.putAll(3, FastList.newListWith(5, 4, 3, 2, 2));
+        multimap.putAll(4, FastList.newListWith(4, 3, 1));
+        TreeBagMultimap<Integer, Integer> selectedMultimap = multimap.selectKeysMultiValues((key, values) -> (key % 2 == 0 && Iterate.sizeOf(values) > 3));
+        TreeBagMultimap<Integer, Integer> expectedMultimap = TreeBagMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        expectedMultimap.putAll(2, FastList.newListWith(5, 4, 3, 2, 2));
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+        Verify.assertSortedBagsEqual(expectedMultimap.get(2), selectedMultimap.get(2));
+        Assert.assertEquals(expectedMultimap.comparator(), selectedMultimap.comparator());
+    }
+
+    @Override
+    @Test
+    public void rejectKeysMultiValues()
+    {
+        TreeBagMultimap<Integer, Integer> multimap = TreeBagMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        multimap.putAll(1, FastList.newListWith(4, 3, 2, 1, 1));
+        multimap.putAll(2, FastList.newListWith(5, 4, 3, 2, 2));
+        multimap.putAll(3, FastList.newListWith(4, 3, 1, 1));
+        multimap.putAll(4, FastList.newListWith(4, 3, 1));
+        TreeBagMultimap<Integer, Integer> selectedMultimap = multimap.rejectKeysMultiValues((key, values) -> (key % 2 == 0 || Iterate.sizeOf(values) > 4));
+        TreeBagMultimap<Integer, Integer> expectedMultimap = TreeBagMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        expectedMultimap.putAll(3, FastList.newListWith(4, 3, 1, 1));
+        Assert.assertEquals(expectedMultimap, selectedMultimap);
+        Verify.assertSortedBagsEqual(expectedMultimap.get(3), selectedMultimap.get(3));
+        Assert.assertEquals(expectedMultimap.comparator(), selectedMultimap.comparator());
     }
 }

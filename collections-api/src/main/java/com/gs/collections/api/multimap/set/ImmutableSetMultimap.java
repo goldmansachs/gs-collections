@@ -41,4 +41,8 @@ public interface ImmutableSetMultimap<K, V>
     ImmutableSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 
     ImmutableSetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    ImmutableSetMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
+
+    ImmutableSetMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 }

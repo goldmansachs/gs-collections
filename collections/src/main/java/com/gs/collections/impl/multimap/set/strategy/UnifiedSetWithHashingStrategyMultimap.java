@@ -182,4 +182,14 @@ public final class UnifiedSetWithHashingStrategyMultimap<K, V>
     {
         return this.rejectKeysValues(predicate, this.newEmpty());
     }
+
+    public UnifiedSetWithHashingStrategyMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.selectKeysMultiValues(predicate, this.newEmpty());
+    }
+
+    public UnifiedSetWithHashingStrategyMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.rejectKeysMultiValues(predicate, this.newEmpty());
+    }
 }

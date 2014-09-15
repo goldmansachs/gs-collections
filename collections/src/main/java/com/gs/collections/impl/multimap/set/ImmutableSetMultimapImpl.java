@@ -135,4 +135,14 @@ public final class ImmutableSetMultimapImpl<K, V>
     {
         return this.rejectKeysValues(predicate, UnifiedSetMultimap.<K, V>newMultimap()).toImmutable();
     }
+
+    public ImmutableSetMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.selectKeysMultiValues(predicate, UnifiedSetMultimap.<K, V>newMultimap()).toImmutable();
+    }
+
+    public ImmutableSetMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.rejectKeysMultiValues(predicate, UnifiedSetMultimap.<K, V>newMultimap()).toImmutable();
+    }
 }

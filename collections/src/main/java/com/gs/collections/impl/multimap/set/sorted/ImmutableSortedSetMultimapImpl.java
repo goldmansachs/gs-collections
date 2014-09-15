@@ -175,4 +175,14 @@ public final class ImmutableSortedSetMultimapImpl<K, V>
     {
         return this.rejectKeysValues(predicate, TreeSortedSetMultimap.<K, V>newMultimap(this.comparator())).toImmutable();
     }
+
+    public ImmutableSortedSetMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.selectKeysMultiValues(predicate, TreeSortedSetMultimap.<K, V>newMultimap(this.comparator())).toImmutable();
+    }
+
+    public ImmutableSortedSetMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.rejectKeysMultiValues(predicate, TreeSortedSetMultimap.<K, V>newMultimap(this.comparator())).toImmutable();
+    }
 }

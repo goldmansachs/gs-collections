@@ -181,4 +181,14 @@ public final class HashBagMultimap<K, V>
     {
         return this.rejectKeysValues(predicate, this.newEmpty());
     }
+
+    public HashBagMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.selectKeysMultiValues(predicate, this.newEmpty());
+    }
+
+    public HashBagMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.rejectKeysMultiValues(predicate, this.newEmpty());
+    }
 }

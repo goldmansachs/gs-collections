@@ -30,4 +30,8 @@ public interface ReversibleIterableMultimap<K, V>
     ReversibleIterableMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 
     ReversibleIterableMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    ReversibleIterableMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
+
+    ReversibleIterableMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 }

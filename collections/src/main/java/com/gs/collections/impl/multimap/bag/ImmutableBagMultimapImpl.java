@@ -186,4 +186,14 @@ public final class ImmutableBagMultimapImpl<K, V>
     {
         return this.rejectKeysValues(predicate, HashBagMultimap.<K, V>newMultimap()).toImmutable();
     }
+
+    public ImmutableBagMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.selectKeysMultiValues(predicate, HashBagMultimap.<K, V>newMultimap()).toImmutable();
+    }
+
+    public ImmutableBagMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.rejectKeysMultiValues(predicate, HashBagMultimap.<K, V>newMultimap()).toImmutable();
+    }
 }

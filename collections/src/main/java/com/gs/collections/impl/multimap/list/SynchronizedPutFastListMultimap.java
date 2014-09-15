@@ -147,4 +147,14 @@ public final class SynchronizedPutFastListMultimap<K, V>
     {
         return this.rejectKeysValues(predicate, FastListMultimap.<K, V>newMultimap());
     }
+
+    public FastListMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.selectKeysMultiValues(predicate, FastListMultimap.<K, V>newMultimap());
+    }
+
+    public FastListMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.rejectKeysMultiValues(predicate, FastListMultimap.<K, V>newMultimap());
+    }
 }

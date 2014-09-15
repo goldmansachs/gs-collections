@@ -37,4 +37,8 @@ public interface MutableListMultimap<K, V>
     MutableListMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 
     MutableListMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    MutableListMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
+
+    MutableListMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 }
