@@ -2862,6 +2862,11 @@ public final class Verify extends Assert
         }
     }
 
+    public static void assertDecodedObjectEquals(Object object, String expectedBase64Form)
+    {
+        Assert.assertEquals(object, Verify.decodeObject(expectedBase64Form));
+    }
+
     private static Object decodeObject(String expectedBase64Form)
     {
         try

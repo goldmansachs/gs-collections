@@ -1093,6 +1093,11 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
     // exposed for testing
     <(spread.(type))(type, "table")>
 
+    private int mask(int spread)
+    {
+        return spread & (this.table.length - 1);
+    }
+
     private void copyTable()
     {
         this.copyOnWrite = false;
@@ -1807,6 +1812,11 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 
         // exposed for testing
         <(spread.(type))(type, "table")>
+
+        private int mask(int spread)
+        {
+            return spread & (this.table.length - 1);
+        }
 
         private class Internal<name>Iterator implements <name>Iterator
         {

@@ -80,19 +80,28 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
     @Test
     public void defaultInitialCapacity() throws Exception
     {
+        <if(!sameTwoPrimitives)>
         Field keys = <name1><name2>HashMap.class.getDeclaredField("keys");
         keys.setAccessible(true);
         Field values = <name1><name2>HashMap.class.getDeclaredField("values");
         values.setAccessible(true);
-
+        <else>
+        Field keysValues = <name1><name2>HashMap.class.getDeclaredField("keysValues");
+        keysValues.setAccessible(true);
+        <endif>
         <name1><name2>HashMap hashMap = new <name1><name2>HashMap();
+        <if(!sameTwoPrimitives)>
         Assert.assertEquals(16L, ((<type1>[]) keys.get(hashMap)).length);
         Assert.assertEquals(16L, ((<type2>[]) values.get(hashMap)).length);
+        <else>
+        Assert.assertEquals(32L, ((<type1>[]) keysValues.get(hashMap)).length);
+        <endif>
     }
 
     @Test
     public void newWithInitialCapacity() throws Exception
     {
+        <if(!sameTwoPrimitives)>
         Field keys = <name1><name2>HashMap.class.getDeclaredField("keys");
         keys.setAccessible(true);
         Field values = <name1><name2>HashMap.class.getDeclaredField("values");
@@ -105,6 +114,15 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
         <name1><name2>HashMap hashMap2 = new <name1><name2>HashMap(15);
         Assert.assertEquals(32L, ((<type1>[]) keys.get(hashMap2)).length);
         Assert.assertEquals(32L, ((<type2>[]) values.get(hashMap2)).length);
+        <else>
+        Field keysValues = <name1><name2>HashMap.class.getDeclaredField("keysValues");
+        keysValues.setAccessible(true);
+        <name1><name2>HashMap hashMap = new <name1><name2>HashMap(3);
+        Assert.assertEquals(16L, ((<type1>[]) keysValues.get(hashMap)).length);
+
+        <name1><name2>HashMap hashMap2 = new <name1><name2>HashMap(15);
+        Assert.assertEquals(64L, ((<type1>[]) keysValues.get(hashMap2)).length);
+        <endif>
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -116,6 +134,7 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
     @Test
     public void newMap() throws Exception
     {
+        <if(!sameTwoPrimitives)>
         Field keys = <name1><name2>HashMap.class.getDeclaredField("keys");
         keys.setAccessible(true);
         Field values = <name1><name2>HashMap.class.getDeclaredField("values");
@@ -124,6 +143,13 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
         <name1><name2>HashMap hashMap = new <name1><name2>HashMap();
         Assert.assertEquals(16L, ((<type1>[]) keys.get(hashMap)).length);
         Assert.assertEquals(16L, ((<type2>[]) values.get(hashMap)).length);
+        <else>
+        Field keysValues = <name1><name2>HashMap.class.getDeclaredField("keysValues");
+        keysValues.setAccessible(true);
+
+        <name1><name2>HashMap hashMap = new <name1><name2>HashMap();
+        Assert.assertEquals(32L, ((<type1>[]) keysValues.get(hashMap)).length);
+        <endif>
         Assert.assertEquals(new <name1><name2>HashMap(), hashMap);
     }
 
@@ -137,12 +163,14 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
             hashMap.put(<(castFromInt.(type1))("i")>, <(castFromInt.(type2))("i")>);
         }
 
+        <if(!sameTwoPrimitives)>
         Field keys = <name1><name2>HashMap.class.getDeclaredField("keys");
         Field values = <name1><name2>HashMap.class.getDeclaredField("values");
         keys.setAccessible(true);
         values.setAccessible(true);
         Assert.assertEquals(16L, ((<type1>[]) keys.get(hashMap)).length);
         Assert.assertEquals(16L, ((<type2>[]) values.get(hashMap)).length);
+        <endif>
         Verify.assertSize(8, hashMap);
         for (int i = 2; i \< 10; i++)
         {
@@ -162,8 +190,6 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
         Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
         hashMap.put(<(literal.(type1))("10")>, <(literal.(type2))("10")>);
         hashMap.put(<(literal.(type1))("11")>, <(literal.(type2))("11")>);
-        Assert.assertEquals(32L, ((<type1>[]) keys.get(hashMap)).length);
-        Assert.assertEquals(32L, ((<type2>[]) values.get(hashMap)).length);
         Assert.assertEquals(9, occupiedWithData.get(hashMap));
         Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
     }
@@ -177,12 +203,14 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
             hashMap.put(<(castFromInt.(type1))("i")>, <(castFromInt.(type2))("i")>);
         }
 
+        <if(!sameTwoPrimitives)>
         Field keys = <name1><name2>HashMap.class.getDeclaredField("keys");
         Field values = <name1><name2>HashMap.class.getDeclaredField("values");
         keys.setAccessible(true);
         values.setAccessible(true);
         Assert.assertEquals(16L, ((<type1>[]) keys.get(hashMap)).length);
         Assert.assertEquals(16L, ((<type2>[]) values.get(hashMap)).length);
+        <endif>
 
         Field occupiedWithData = <name1><name2>HashMap.class.getDeclaredField("occupiedWithData");
         occupiedWithData.setAccessible(true);
@@ -200,8 +228,6 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
         }
 
         hashMap.remove(<(literal.(type1))("6")>);
-        Assert.assertEquals(16L, ((<type1>[]) keys.get(hashMap)).length);
-        Assert.assertEquals(16L, ((<type2>[]) values.get(hashMap)).length);
         Assert.assertEquals(3, occupiedWithData.get(hashMap));
         Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
     }

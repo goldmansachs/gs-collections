@@ -64,7 +64,7 @@ spread8(type, table) ::= <<
 int spread(<type> element)
 {
     // No spreading necessary for 8-bit types
-    return element & (this.<table>.length - 1);
+    return mask(element);
 }
 >>
 
@@ -72,12 +72,12 @@ spread32(type, table) ::= <<
 int spread(<type> element)
 {
     int code = <(bits.(type))("element")>;
-    code ^= 61 ^ (code >\> 16);
-    code += code \<\< 3;
-    code ^= code >\> 4;
-    code *= 0x27d4eb2d;
-    code ^= code >\> 15;
-    return code & (this.<table>.length - 1);
+    code ^= code >\>> 15;
+    code *= 1854960195;
+    code ^= code >\>> 13;
+    code *= -75769267;
+    code ^= code >\>> 11;
+    return mask(code);
 }
 >>
 
@@ -85,14 +85,11 @@ spread64(type, table) ::= <<
 int spread(<type> element)
 {
     long code = <(bits.(type))("element")>;
-    code = ~code + (code \<\< 18);
-    code = (code \<\< 18) - code - 1;
-    code ^= code >\>> 31;
-    code *= 21;
-    code += (code \<\< 2) + (code \<\< 4);
-    code ^= code >\>> 11;
-    code += code \<\< 6;
-    code ^= code >\>> 22;
-    return (int) code & (this.<table>.length - 1);
+    code ^= code >\>> 23;
+    code *= -6261870919139520145L;
+    code ^= code >\>> 39;
+    code *= 2747051607443084853L;
+    code ^= code >\>> 37;
+    return mask((int) code);
 }
 >>

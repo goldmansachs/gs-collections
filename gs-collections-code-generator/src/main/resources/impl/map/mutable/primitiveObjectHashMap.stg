@@ -2739,6 +2739,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     // exposed for testing
     <(spread.(type))(type, "keys")>
 
+    private int mask(int spread)
+    {
+        return spread & (this.keys.length - 1);
+    }
+
     private void allocateTable(int sizeToAllocate)
     {
         this.keys = new <type>[sizeToAllocate];

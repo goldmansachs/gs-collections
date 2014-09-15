@@ -16,7 +16,9 @@
 
 package com.gs.collections.impl.bag.immutable.primitive;
 
+import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ImmutableCharHashBagSerializationTest
@@ -28,7 +30,22 @@ public class ImmutableCharHashBagSerializationTest
                 1L,
                 "rO0ABXNyAGdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcuaW1tdXRhYmxlLnByaW1pdGl2ZS5J\n"
                         + "bW11dGFibGVDaGFySGFzaEJhZyRJbW11dGFibGVDaGFyQmFnU2VyaWFsaXphdGlvblByb3h5AAAA\n"
-                        + "AAAAAAEMAAB4cHcQAAAAAgBhAAAAAQBiAAAAAXg=",
+                        + "AAAAAAEMAAB4cHcQAAAAAgBiAAAAAQBhAAAAAXg=",
                 ImmutableCharHashBag.newBagWith('a', 'b'));
+    }
+    @Test
+    public void deserialize()
+    {
+        ImmutableCharHashBag immutableCharHashBag = SerializeTestHelper.serializeDeserialize(ImmutableCharHashBag.newBagWith('a', 'b'));
+        Assert.assertEquals(ImmutableCharHashBag.newBagWith('a', 'b'), immutableCharHashBag);
+    }
+
+    @Test
+    public void decode()
+    {
+        String expectedBase64Form = "rO0ABXNyAGdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcuaW1tdXRhYmxlLnByaW1pdGl2ZS5J\n"
+                + "bW11dGFibGVDaGFySGFzaEJhZyRJbW11dGFibGVDaGFyQmFnU2VyaWFsaXphdGlvblByb3h5AAAA\n"
+                + "AAAAAAEMAAB4cHcQAAAAAgBhAAAAAQBiAAAAAXg=";
+        Verify.assertDecodedObjectEquals(ImmutableCharHashBag.newBagWith('a', 'b'), expectedBase64Form);
     }
 }

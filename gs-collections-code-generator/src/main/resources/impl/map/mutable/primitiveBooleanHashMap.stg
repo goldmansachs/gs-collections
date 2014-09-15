@@ -367,6 +367,11 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     // exposed for testing
     <(spread.(type))(type, "keys")>
 
+    private int mask(int spread)
+    {
+        return spread & (this.keys.length - 1);
+    }
+
     public void clear()
     {
         this.sentinelValues = null;
