@@ -44,12 +44,13 @@ public class CollectBooleanIterable<T>
 {
     private final LazyIterable<T> iterable;
     private final BooleanFunction<? super T> function;
-    private final BooleanFunctionToProcedure booleanFunctionToProcedure = new BooleanFunctionToProcedure();
+    private final BooleanFunctionToProcedure<T> booleanFunctionToProcedure;
 
     public CollectBooleanIterable(LazyIterable<T> adapted, BooleanFunction<? super T> function)
     {
         this.iterable = adapted;
         this.function = function;
+        this.booleanFunctionToProcedure = new BooleanFunctionToProcedure<T>(function);
     }
 
     public BooleanIterator booleanIterator()
@@ -199,13 +200,19 @@ public class CollectBooleanIterable<T>
         return true;
     }
 
-    private final class BooleanFunctionToProcedure implements Procedure2<T, BooleanProcedure>
+    private static final class BooleanFunctionToProcedure<T> implements Procedure2<T, BooleanProcedure>
     {
-        private static final long serialVersionUID = -4133872659735979655L;
+        private static final long serialVersionUID = 1L;
+        private final BooleanFunction<? super T> function;
 
-        public void value(T each, BooleanProcedure parm)
+        private BooleanFunctionToProcedure(BooleanFunction<? super T> function)
         {
-            parm.value(CollectBooleanIterable.this.function.booleanValueOf(each));
+            this.function = function;
+        }
+
+        public void value(T each, BooleanProcedure procedure)
+        {
+            procedure.value(this.function.booleanValueOf(each));
         }
     }
 }
