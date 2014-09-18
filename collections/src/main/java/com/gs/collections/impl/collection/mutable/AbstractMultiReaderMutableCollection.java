@@ -1236,6 +1236,11 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         this.acquireReadLock();
         try
         {
@@ -1868,6 +1873,11 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
 
         public void forEach(Procedure<? super T> procedure)
+        {
+            this.each(procedure);
+        }
+
+        public void each(Procedure<? super T> procedure)
         {
             this.delegate.forEach(procedure);
         }

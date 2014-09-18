@@ -713,6 +713,10 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
     {
     }
 
+    public void each(Procedure\<? super V> procedure)
+    {
+    }
+
     public void forEachWithIndex(ObjectIntProcedure\<? super V> objectIntProcedure)
     {
     }

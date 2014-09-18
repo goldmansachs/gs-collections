@@ -84,6 +84,12 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    @Override
+    public void each(Procedure<? super T> procedure)
+    {
         int size = this.size();
         for (int i = 0; i < size; i++)
         {

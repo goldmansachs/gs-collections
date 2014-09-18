@@ -290,6 +290,11 @@ public class UnmodifiableMutableMap<K, V>
 
     public void forEach(Procedure<? super V> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super V> procedure)
+    {
         this.getMutableMap().forEach(procedure);
     }
 

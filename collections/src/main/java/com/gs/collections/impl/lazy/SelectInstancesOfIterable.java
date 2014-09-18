@@ -47,6 +47,11 @@ public class SelectInstancesOfIterable<T>
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         Iterate.forEach((Iterable<T>) this.adapted, new IfProcedure<T>(Predicates.instanceOf(this.clazz), procedure));
     }
 

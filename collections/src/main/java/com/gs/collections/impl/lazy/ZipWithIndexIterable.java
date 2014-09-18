@@ -47,6 +47,11 @@ public class ZipWithIndexIterable<T>
 
     public void forEach(Procedure<? super Pair<T, Integer>> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super Pair<T, Integer>> procedure)
+    {
         IterableIterate.forEach(this, procedure);
     }
 

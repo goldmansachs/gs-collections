@@ -323,7 +323,12 @@ public class HashBag<T>
         this.size = (int) this.items.sum();
     }
 
-    public void forEach(final Procedure<? super T> procedure)
+    public void forEach(Procedure<? super T> procedure)
+    {
+        this.each(procedure);
+    }
+
+    public void each(final Procedure<? super T> procedure)
     {
         this.items.forEachKeyValue(new ObjectIntProcedure<T>()
         {
@@ -1451,6 +1456,11 @@ public class HashBag<T>
                 extends AbstractLazyIterable<RootUnsortedBagBatch<T>>
         {
             public void forEach(Procedure<? super RootUnsortedBagBatch<T>> procedure)
+            {
+                this.each(procedure);
+            }
+
+            public void each(Procedure<? super RootUnsortedBagBatch<T>> procedure)
             {
                 for (RootUnsortedBagBatch<T> chunk : this)
                 {

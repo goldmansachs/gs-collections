@@ -39,6 +39,12 @@ public interface InternalIterable<T>
      *     }
      * });
      * </pre>
+     * NOTE: This method started to conflict with {@link Iterable#forEach(java.util.function.Consumer)}
+     * since Java 1.8. It is recommended to use {@link RichIterable#each(Procedure)} instead to avoid casting to Procedure.
+     *
+     * @see RichIterable#each(Procedure)
+     * @see Iterable#forEach(java.util.function.Consumer)
+     *
      */
     void forEach(Procedure<? super T> procedure);
 

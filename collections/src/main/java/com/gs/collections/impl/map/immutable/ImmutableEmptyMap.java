@@ -165,6 +165,11 @@ final class ImmutableEmptyMap<K, V>
     }
 
     @Override
+    public void each(Procedure<? super V> procedure)
+    {
+    }
+
+    @Override
     public <A> A ifPresentApply(K key, Function<? super V, ? extends A> function)
     {
         return null;

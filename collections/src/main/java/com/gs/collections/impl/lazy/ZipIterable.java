@@ -49,6 +49,11 @@ public class ZipIterable<X, Y>
 
     public void forEach(Procedure<? super Pair<X, Y>> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super Pair<X, Y>> procedure)
+    {
         IterableIterate.forEach(this, procedure);
     }
 

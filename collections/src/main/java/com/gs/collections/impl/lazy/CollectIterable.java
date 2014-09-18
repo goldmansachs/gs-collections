@@ -45,6 +45,11 @@ public class CollectIterable<T, V>
 
     public void forEach(Procedure<? super V> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super V> procedure)
+    {
         Iterate.forEach(this.adapted, Functions.bind(procedure, this.function));
     }
 

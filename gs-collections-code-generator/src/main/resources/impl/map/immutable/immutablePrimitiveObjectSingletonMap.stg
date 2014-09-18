@@ -803,6 +803,11 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
 
     public void forEach(Procedure\<? super V> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure\<? super V> procedure)
+    {
         procedure.value(this.value1);
     }
 

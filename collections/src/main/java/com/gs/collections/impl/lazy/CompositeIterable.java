@@ -50,7 +50,12 @@ public final class CompositeIterable<E>
         return new CompositeIterable<T>(FastList.newListWith(iterables));
     }
 
-    public void forEach(final Procedure<? super E> procedure)
+    public void forEach(Procedure<? super E> procedure)
+    {
+        this.each(procedure);
+    }
+
+    public void each(final Procedure<? super E> procedure)
     {
         this.iterables.forEach(new Procedure<Iterable<E>>()
         {

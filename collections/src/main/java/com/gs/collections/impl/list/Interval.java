@@ -456,7 +456,12 @@ public final class Interval
         }
     }
 
-    public void forEach(final Procedure<? super Integer> procedure)
+    public void forEach(Procedure<? super Integer> procedure)
+    {
+        this.each(procedure);
+    }
+
+    public void each(final Procedure<? super Integer> procedure)
     {
         this.forEach(new IntProcedure()
         {

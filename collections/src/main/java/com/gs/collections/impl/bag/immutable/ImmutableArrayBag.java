@@ -395,6 +395,11 @@ public class ImmutableArrayBag<T>
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         for (int i = 0; i < this.keys.length; i++)
         {
             T key = this.keys[i];

@@ -38,7 +38,12 @@ public class CollectBooleanToObjectIterable<V> extends AbstractLazyIterable<V>
         this.function = function;
     }
 
-    public void forEach(final Procedure<? super V> procedure)
+    public void forEach(Procedure<? super V> procedure)
+    {
+        this.each(procedure);
+    }
+
+    public void each(final Procedure<? super V> procedure)
     {
         this.iterable.forEach(new BooleanProcedure()
         {

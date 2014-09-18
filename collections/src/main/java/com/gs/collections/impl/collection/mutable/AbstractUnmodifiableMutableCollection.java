@@ -190,6 +190,11 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         this.getMutableCollection().forEach(procedure);
     }
 

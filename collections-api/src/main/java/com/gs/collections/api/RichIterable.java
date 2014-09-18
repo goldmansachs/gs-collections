@@ -38,6 +38,7 @@ import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableByteCollection;
@@ -145,6 +146,27 @@ public interface
      * @since 1.0
      */
     boolean containsAllArguments(Object... elements);
+
+    /**
+     * The procedure is executed for each element in the iterable.
+     * <p/>
+     * <pre>e.g.
+     * people.each(new Procedure<Person>()
+     * {
+     *     public void value(Person person)
+     *     {
+     *         LOGGER.info(person.getName());
+     *     }
+     * });
+     * </pre>
+     * This method is a variant of {@link InternalIterable#forEach(Procedure)}
+     * that have a signature conflict with {@link Iterable#forEach(java.util.function.Consumer)}.
+     *
+     * @see InternalIterable#forEach(Procedure)
+     * @see Iterable#forEach(java.util.function.Consumer)
+     * @since 6.0
+     */
+    void each(Procedure<? super T> procedure);
 
     /**
      * Returns all elements of the source collection that return true when evaluating the predicate.  This method is also

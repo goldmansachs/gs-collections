@@ -94,6 +94,10 @@ final class ImmutableEmptyList<T>
     {
     }
 
+    public void each(Procedure<? super T> procedure)
+    {
+    }
+
     @Override
     public void reverseForEach(Procedure<? super T> procedure)
     {

@@ -94,6 +94,11 @@ final class ImmutableUnifiedSetWithHashingStrategy<T>
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         this.delegate.forEach(procedure);
     }
 

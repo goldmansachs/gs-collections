@@ -626,6 +626,10 @@ public class LazyIterableTestHelper<T> implements LazyIterable<T>
     {
     }
 
+    public void each(Procedure<? super T> procedure)
+    {
+    }
+
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
     }

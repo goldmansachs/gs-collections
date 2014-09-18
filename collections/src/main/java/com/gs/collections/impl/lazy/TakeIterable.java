@@ -48,6 +48,11 @@ public class TakeIterable<T> extends AbstractLazyIterable<T>
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         int i = 0;
         Iterator<T> iterator = this.adapted.iterator();
         while (i < this.count && iterator.hasNext())

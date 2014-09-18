@@ -654,6 +654,11 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         this.mutableStack.forEach(procedure);
     }
 

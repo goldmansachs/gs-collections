@@ -568,6 +568,11 @@ public class UnifiedSet<T>
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         for (int i = 0; i < this.table.length; i++)
         {
             Object cur = this.table[i];
@@ -3015,6 +3020,11 @@ public class UnifiedSet<T>
                 extends AbstractLazyIterable<RootUnsortedSetBatch<T>>
         {
             public void forEach(Procedure<? super RootUnsortedSetBatch<T>> procedure)
+            {
+                this.each(procedure);
+            }
+
+            public void each(Procedure<? super RootUnsortedSetBatch<T>> procedure)
             {
                 for (RootUnsortedSetBatch<T> chunk : this)
                 {

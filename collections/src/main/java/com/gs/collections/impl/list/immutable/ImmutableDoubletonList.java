@@ -65,6 +65,11 @@ final class ImmutableDoubletonList<T>
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         procedure.value(this.element1);
         procedure.value(this.element2);
     }

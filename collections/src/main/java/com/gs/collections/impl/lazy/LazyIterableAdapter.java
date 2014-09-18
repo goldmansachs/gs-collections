@@ -46,6 +46,11 @@ public class LazyIterableAdapter<T>
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         Iterate.forEach(this.adapted, procedure);
     }
 

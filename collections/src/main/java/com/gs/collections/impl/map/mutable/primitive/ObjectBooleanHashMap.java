@@ -1600,6 +1600,11 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     {
         public void forEach(Procedure<? super K> procedure)
         {
+            this.each(procedure);
+        }
+
+        public void each(Procedure<? super K> procedure)
+        {
             ObjectBooleanHashMap.this.forEachKey(procedure);
         }
 
@@ -1670,6 +1675,11 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     private class KeyValuesView extends AbstractLazyIterable<ObjectBooleanPair<K>>
     {
         public void forEach(Procedure<? super ObjectBooleanPair<K>> procedure)
+        {
+            this.each(procedure);
+        }
+
+        public void each(Procedure<? super ObjectBooleanPair<K>> procedure)
         {
             for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)
             {

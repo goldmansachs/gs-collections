@@ -850,6 +850,11 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         this.delegate.reverseForEach(procedure);
     }
 

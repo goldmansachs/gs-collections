@@ -1120,6 +1120,11 @@ public final class Synchronized<name>ObjectMap\<V>
 
     public void forEach(Procedure\<? super V> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure\<? super V> procedure)
+    {
         synchronized (this.lock)
         {
             this.map.forEach(procedure);

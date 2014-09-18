@@ -257,6 +257,11 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
 
     public void forEach(Procedure<? super V> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super V> procedure)
+    {
         this.forEachValue(procedure);
     }
 

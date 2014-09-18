@@ -54,6 +54,11 @@ public class ChunkIterable<T>
 
     public void forEach(Procedure<? super RichIterable<T>> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super RichIterable<T>> procedure)
+    {
         IterableIterate.forEach(this, procedure);
     }
 

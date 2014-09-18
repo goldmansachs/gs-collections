@@ -172,6 +172,11 @@ final class ImmutableArrayList<T>
 
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super T> procedure)
+    {
         ArrayIterate.forEach(this.items, procedure);
     }
 

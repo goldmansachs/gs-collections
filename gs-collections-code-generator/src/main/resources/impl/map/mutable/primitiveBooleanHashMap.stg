@@ -3149,6 +3149,11 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     {
         public void forEach(Procedure\<? super <name>BooleanPair> procedure)
         {
+            this.each(procedure);
+        }
+
+        public void each(Procedure\<? super <name>BooleanPair> procedure)
+        {
             if (<name>BooleanHashMap.this.sentinelValues != null)
             {
                 if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)

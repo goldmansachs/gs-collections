@@ -1842,6 +1842,11 @@ public class FastList<T>
         {
             public void forEach(Procedure<? super RootListBatch<T>> procedure)
             {
+                this.each(procedure);
+            }
+
+            public void each(Procedure<? super RootListBatch<T>> procedure)
+            {
                 for (RootListBatch<T> chunk : this)
                 {
                     procedure.value(chunk);

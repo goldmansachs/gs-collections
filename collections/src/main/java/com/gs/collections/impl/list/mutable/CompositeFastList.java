@@ -96,7 +96,13 @@ public final class CompositeFastList<E>
     }
 
     @Override
-    public void forEach(final Procedure<? super E> procedure)
+    public void forEach(Procedure<? super E> procedure)
+    {
+        this.each(procedure);
+    }
+
+    @Override
+    public void each(final Procedure<? super E> procedure)
     {
         this.lists.forEach(new Procedure<FastList<E>>()
         {

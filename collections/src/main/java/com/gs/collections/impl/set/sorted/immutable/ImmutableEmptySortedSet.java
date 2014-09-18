@@ -125,6 +125,10 @@ final class ImmutableEmptySortedSet<T>
     {
     }
 
+    public void each(Procedure<? super T> procedure)
+    {
+    }
+
     @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {

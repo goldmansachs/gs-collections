@@ -1077,6 +1077,11 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
 
     public void forEach(Procedure<? super V> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super V> procedure)
+    {
         this.inverse.delegate.forEachKey(procedure);
     }
 

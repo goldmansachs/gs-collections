@@ -152,6 +152,12 @@ public final class RandomAccessListAdapter<T>
     @Override
     public void forEach(Procedure<? super T> procedure)
     {
+        this.each(procedure);
+    }
+
+    @Override
+    public void each(Procedure<? super T> procedure)
+    {
         RandomAccessListIterate.forEach(this.delegate, procedure);
     }
 

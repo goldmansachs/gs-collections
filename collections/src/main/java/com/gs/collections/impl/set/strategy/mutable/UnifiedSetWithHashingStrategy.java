@@ -588,6 +588,11 @@ public class UnifiedSetWithHashingStrategy<K>
 
     public void forEach(Procedure<? super K> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure<? super K> procedure)
+    {
         for (int i = 0; i < this.table.length; i++)
         {
             Object cur = this.table[i];

@@ -749,6 +749,11 @@ public final class Unmodifiable<name>ObjectMap\<V>
 
     public void forEach(Procedure\<? super V> procedure)
     {
+        this.each(procedure);
+    }
+
+    public void each(Procedure\<? super V> procedure)
+    {
         this.map.forEach(procedure);
     }
 
