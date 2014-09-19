@@ -2862,9 +2862,19 @@ public final class Verify extends Assert
         }
     }
 
-    public static void assertDecodedObjectEquals(Object object, String expectedBase64Form)
+    public static void assertDeserializedForm(String expectedBase64Form, Object actualObject)
     {
-        Assert.assertEquals(object, Verify.decodeObject(expectedBase64Form));
+        try
+        {
+            Verify.assertInstanceOf(Serializable.class, actualObject);
+
+            Object decodeToObject = Verify.decodeObject(expectedBase64Form);
+            Assert.assertEquals("Serialization was broken.", decodeToObject, actualObject);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
     }
 
     private static Object decodeObject(String expectedBase64Form)

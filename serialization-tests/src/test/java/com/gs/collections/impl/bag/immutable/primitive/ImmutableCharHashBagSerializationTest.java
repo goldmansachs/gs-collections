@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,9 +43,10 @@ public class ImmutableCharHashBagSerializationTest
     @Test
     public void decode()
     {
-        String expectedBase64Form = "rO0ABXNyAGdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcuaW1tdXRhYmxlLnByaW1pdGl2ZS5J\n"
-                + "bW11dGFibGVDaGFySGFzaEJhZyRJbW11dGFibGVDaGFyQmFnU2VyaWFsaXphdGlvblByb3h5AAAA\n"
-                + "AAAAAAEMAAB4cHcQAAAAAgBhAAAAAQBiAAAAAXg=";
-        Verify.assertDecodedObjectEquals(ImmutableCharHashBag.newBagWith('a', 'b'), expectedBase64Form);
+        Verify.assertDeserializedForm(
+                "rO0ABXNyAGdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcuaW1tdXRhYmxlLnByaW1pdGl2ZS5J\n"
+                        + "bW11dGFibGVDaGFySGFzaEJhZyRJbW11dGFibGVDaGFyQmFnU2VyaWFsaXphdGlvblByb3h5AAAA\n"
+                        + "AAAAAAEMAAB4cHcQAAAAAgBhAAAAAQBiAAAAAXg=",
+                ImmutableCharHashBag.newBagWith('a', 'b'));
     }
 }
