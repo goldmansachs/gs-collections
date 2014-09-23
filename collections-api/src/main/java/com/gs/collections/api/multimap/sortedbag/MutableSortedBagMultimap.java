@@ -17,8 +17,11 @@
 package com.gs.collections.api.multimap.sortedbag;
 
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
+import com.gs.collections.api.tuple.Pair;
 
 /**
  * @since 4.2
@@ -41,4 +44,6 @@ public interface MutableSortedBagMultimap<K, V>
     MutableSortedBagMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 
     MutableSortedBagMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
+
+    <K2, V2> MutableBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function);
 }

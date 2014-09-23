@@ -22,7 +22,9 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -178,5 +180,25 @@ public class SynchronizedPutFastListMultimapTest extends AbstractMutableMultimap
         expectedMultimap.putAll(3, FastList.newListWith("2", "3", "4", "2"));
         Assert.assertEquals(expectedMultimap, rejectedMultimap);
         Verify.assertListsEqual(expectedMultimap.get(3), rejectedMultimap.get(3));
+    }
+
+    @Override
+    @Test
+    public void collectKeysValues()
+    {
+        SynchronizedPutFastListMultimap<String, Integer> multimap = SynchronizedPutFastListMultimap.newMultimap();
+        multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
+        multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
+        HashBagMultimap<Integer, String> collectedMultimap1 = multimap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value.toString() + "Value"));
+        HashBagMultimap<Integer, String> expectedMultimap1 = HashBagMultimap.newMultimap();
+        expectedMultimap1.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
+        expectedMultimap1.putAll(2, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
+        Assert.assertEquals(expectedMultimap1, collectedMultimap1);
+
+        HashBagMultimap<Integer, String> collectedMultimap2 = multimap.collectKeysValues((key, value) -> Tuples.pair(1, value.toString() + "Value"));
+        HashBagMultimap<Integer, String> expectedMultimap2 = HashBagMultimap.newMultimap();
+        expectedMultimap2.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
+        expectedMultimap2.putAll(1, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
+        Assert.assertEquals(expectedMultimap2, collectedMultimap2);
     }
 }

@@ -18,18 +18,22 @@ package com.gs.collections.impl.multimap.list;
 
 import java.io.Serializable;
 
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 import com.gs.collections.impl.multimap.ImmutableMultimapSerializationProxy;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 
 /**
  * The default ImmutableListMultimap implementation.
@@ -144,5 +148,10 @@ public final class ImmutableListMultimapImpl<K, V>
     public ImmutableListMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
     {
         return this.rejectKeysMultiValues(predicate, FastListMultimap.<K, V>newMultimap()).toImmutable();
+    }
+
+    public <K2, V2> ImmutableBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    {
+        return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap()).toImmutable();
     }
 }

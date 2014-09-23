@@ -22,23 +22,17 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 import com.gs.collections.api.block.HashingStrategy;
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
-import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
-import com.gs.collections.api.multimap.set.MutableSetMultimap;
-import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.multimap.AbstractMutableMultimap;
-import com.gs.collections.impl.multimap.set.ImmutableSetMultimapImpl;
+import com.gs.collections.impl.multimap.set.AbstractMutableSetMultimap;
 import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 
 public final class UnifiedSetWithHashingStrategyMultimap<K, V>
-        extends AbstractMutableMultimap<K, V, MutableSet<V>>
-        implements MutableSetMultimap<K, V>, Externalizable
+        extends AbstractMutableSetMultimap<K, V> implements Externalizable
 {
     private static final long serialVersionUID = 1L;
     private HashingStrategy<? super V> hashingStrategy;
@@ -138,25 +132,6 @@ public final class UnifiedSetWithHashingStrategyMultimap<K, V>
     public HashingStrategy<? super V> getValueHashingStrategy()
     {
         return this.hashingStrategy;
-    }
-
-    public MutableSetMultimap<K, V> toMutable()
-    {
-        return new UnifiedSetWithHashingStrategyMultimap<K, V>(this);
-    }
-
-    public ImmutableSetMultimap<K, V> toImmutable()
-    {
-        final MutableMap<K, ImmutableSet<V>> map = UnifiedMap.newMap();
-
-        this.map.collectValues(new Function2<K, MutableSet<V>, Object>()
-        {
-            public Object value(K key, MutableSet<V> set)
-            {
-                return map.put(key, set.toImmutable());
-            }
-        });
-        return new ImmutableSetMultimapImpl<K, V>(map);
     }
 
     @Override

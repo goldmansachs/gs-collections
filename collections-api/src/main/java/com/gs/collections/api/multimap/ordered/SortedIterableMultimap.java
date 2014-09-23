@@ -18,9 +18,12 @@ package com.gs.collections.api.multimap.ordered;
 
 import java.util.Comparator;
 
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.bag.BagMultimap;
 import com.gs.collections.api.ordered.SortedIterable;
+import com.gs.collections.api.tuple.Pair;
 
 /**
  * @since 5.0
@@ -41,4 +44,6 @@ public interface SortedIterableMultimap<K, V>
     SortedIterableMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 
     SortedIterableMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
+
+    <K2, V2> BagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function);
 }

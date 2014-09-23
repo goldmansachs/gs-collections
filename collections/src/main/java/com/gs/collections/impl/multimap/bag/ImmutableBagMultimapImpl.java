@@ -24,12 +24,14 @@ import java.io.Serializable;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
+import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.checked.CheckedObjectIntProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.factory.Bags;
@@ -195,5 +197,10 @@ public final class ImmutableBagMultimapImpl<K, V>
     public ImmutableBagMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
     {
         return this.rejectKeysMultiValues(predicate, HashBagMultimap.<K, V>newMultimap()).toImmutable();
+    }
+
+    public <K2, V2> ImmutableBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    {
+        return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap()).toImmutable();
     }
 }

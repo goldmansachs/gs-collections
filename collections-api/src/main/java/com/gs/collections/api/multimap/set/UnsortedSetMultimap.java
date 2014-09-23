@@ -16,7 +16,10 @@
 
 package com.gs.collections.api.multimap.set;
 
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.set.UnsortedSetIterable;
+import com.gs.collections.api.tuple.Pair;
 
 public interface UnsortedSetMultimap<K, V> extends SetMultimap<K, V>
 {
@@ -27,4 +30,14 @@ public interface UnsortedSetMultimap<K, V> extends SetMultimap<K, V>
     MutableSetMultimap<K, V> toMutable();
 
     ImmutableSetMultimap<K, V> toImmutable();
+
+    UnsortedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    UnsortedSetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);
+
+    UnsortedSetMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
+
+    UnsortedSetMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
+
+    <K2, V2> UnsortedSetMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function);
 }

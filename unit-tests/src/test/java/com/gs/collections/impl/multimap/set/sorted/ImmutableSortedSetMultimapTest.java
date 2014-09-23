@@ -19,6 +19,7 @@ package com.gs.collections.impl.multimap.set.sorted;
 import java.util.Collections;
 
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
@@ -27,6 +28,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimapTestCase;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
@@ -99,7 +101,7 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
         multimap.put("Two", 1);
         multimap.put("Three", 3);
         multimap.put("Three", 3);
-        multimap.forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
+        multimap.toImmutable().forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 2, 1)), Tuples.pair("Three", TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 3, 3))), collection);
     }
 
@@ -173,5 +175,28 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
         Assert.assertEquals(expectedImmutableMultimap, selectedMultimap);
         Verify.assertIterablesEqual(expectedImmutableMultimap.get(3), selectedMultimap.get(3));
         Assert.assertEquals(expectedMultimap.comparator(), selectedMultimap.comparator());
+    }
+
+    @Override
+    @Test
+    public void collectKeysValues()
+    {
+        TreeSortedSetMultimap<String, Integer> mutableMultimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        mutableMultimap.putAll("1", FastList.newListWith(4, 3, 2, 1, 1));
+        mutableMultimap.putAll("2", FastList.newListWith(5, 4, 3, 2, 2));
+        ImmutableSortedSetMultimap<String, Integer> immutableMap = mutableMultimap.toImmutable();
+        ImmutableBagMultimap<Integer, String> collectedMultimap1 = immutableMap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value.toString() + "Value"));
+        HashBagMultimap<Integer, String> expectedMultimap1 = HashBagMultimap.newMultimap();
+        expectedMultimap1.putAll(1, FastList.newListWith("4Value", "3Value", "2Value", "1Value"));
+        expectedMultimap1.putAll(2, FastList.newListWith("5Value", "4Value", "3Value", "2Value"));
+        ImmutableBagMultimap<Integer, String> expectedImmutableMultimap1 = expectedMultimap1.toImmutable();
+        Assert.assertEquals(expectedImmutableMultimap1, collectedMultimap1);
+
+        ImmutableBagMultimap<Integer, String> collectedMultimap2 = immutableMap.collectKeysValues((key, value) -> Tuples.pair(1, value.toString() + "Value"));
+        HashBagMultimap<Integer, String> expectedMultimap2 = HashBagMultimap.newMultimap();
+        expectedMultimap2.putAll(1, FastList.newListWith("4Value", "3Value", "2Value", "1Value"));
+        expectedMultimap2.putAll(1, FastList.newListWith("5Value", "4Value", "3Value", "2Value"));
+        ImmutableBagMultimap<Integer, String> expectedImmutableMultimap2 = expectedMultimap2.toImmutable();
+        Assert.assertEquals(expectedImmutableMultimap2, collectedMultimap2);
     }
 }

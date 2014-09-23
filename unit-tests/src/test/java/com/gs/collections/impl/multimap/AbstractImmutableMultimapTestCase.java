@@ -24,6 +24,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -186,5 +187,13 @@ public abstract class AbstractImmutableMultimapTestCase
         Multimap<String, String> multimap2 = this.classUnderTest().newWith("One", "1").newWith("Two", "3");
         Multimap<String, String> rejectedMultimap2 = multimap2.rejectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
         Assert.assertEquals(this.classUnderTest().newWith("One", "1"), rejectedMultimap2);
+    }
+
+    @Test
+    public void collectKeysValues()
+    {
+        Multimap<String, String> multimap = this.classUnderTest().newWith("One", "1").newWith("Two", "2");
+        Multimap<String, String> collectedMultimap = multimap.collectKeysValues((argument1, argument2) -> Tuples.pair(argument1 + "Key", argument2 + "Value"));
+        Assert.assertEquals(this.classUnderTest().newWith("OneKey", "1Value").newWith("TwoKey", "2Value"), collectedMultimap);
     }
 }

@@ -19,21 +19,15 @@ package com.gs.collections.impl.multimap.set;
 import java.io.Externalizable;
 
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
-import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
-import com.gs.collections.api.multimap.set.MutableSetMultimap;
-import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
 public final class UnifiedSetMultimap<K, V>
-        extends AbstractMutableMultimap<K, V, MutableSet<V>>
-        implements MutableSetMultimap<K, V>, Externalizable
+        extends AbstractMutableSetMultimap<K, V> implements Externalizable
 {
     private static final long serialVersionUID = 1L;
 
@@ -98,26 +92,6 @@ public final class UnifiedSetMultimap<K, V>
     public UnifiedSetMultimap<K, V> newEmpty()
     {
         return new UnifiedSetMultimap<K, V>();
-    }
-
-    public MutableSetMultimap<K, V> toMutable()
-    {
-        return new UnifiedSetMultimap<K, V>(this);
-    }
-
-    public ImmutableSetMultimap<K, V> toImmutable()
-    {
-        final MutableMap<K, ImmutableSet<V>> map = UnifiedMap.newMap();
-
-        this.map.forEachKeyValue(new Procedure2<K, MutableSet<V>>()
-        {
-            public void value(K key, MutableSet<V> set)
-            {
-                map.put(key, set.toImmutable());
-            }
-        });
-
-        return new ImmutableSetMultimapImpl<K, V>(map);
     }
 
     public UnifiedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

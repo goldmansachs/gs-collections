@@ -320,4 +320,13 @@ public abstract class AbstractMultimapTestCase
         Multimap<String, Integer> rejectedMultimap = multimap.rejectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, 2));
         Assert.assertEquals(this.newMultimapWithKeysValues("One", 1, "One", 12), rejectedMultimap);
     }
+
+    @Test
+    public void collectKeysValues()
+    {
+        Multimap<String, Integer> multimap = this.newMultimapWithKeysValues("1", 1, "1", 12, "2", 2, "3", 3);
+        Multimap<Integer, String> collectedMultimap = multimap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value.toString() + "Value"));
+        Multimap<Integer, String> expectedMultimap = this.newMultimapWithKeysValues(1, "1Value", 1, "12Value", 2, "2Value", 3, "3Value");
+        Assert.assertEquals(expectedMultimap, collectedMultimap);
+    }
 }

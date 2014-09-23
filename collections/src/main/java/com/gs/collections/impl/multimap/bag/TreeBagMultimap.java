@@ -23,6 +23,7 @@ import java.io.ObjectOutput;
 import java.util.Comparator;
 
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -158,5 +159,10 @@ public final class TreeBagMultimap<K, V>
     public TreeBagMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
     {
         return this.rejectKeysMultiValues(predicate, this.newEmpty());
+    }
+
+    public <K2, V2> HashBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    {
+        return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap());
     }
 }

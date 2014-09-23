@@ -18,23 +18,16 @@ package com.gs.collections.impl.multimap.bag;
 
 import java.io.Externalizable;
 
-import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
-import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
-import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.MultiReaderHashBag;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 
 public final class MultiReaderHashBagMultimap<K, V>
-        extends AbstractMutableMultimap<K, V, MutableBag<V>>
-        implements MutableBagMultimap<K, V>, Externalizable
+        extends AbstractMutableBagMultimap<K, V> implements Externalizable
 {
     private static final long serialVersionUID = 1L;
 
@@ -99,26 +92,6 @@ public final class MultiReaderHashBagMultimap<K, V>
     public MultiReaderHashBagMultimap<K, V> newEmpty()
     {
         return new MultiReaderHashBagMultimap<K, V>();
-    }
-
-    public MutableBagMultimap<K, V> toMutable()
-    {
-        return new MultiReaderHashBagMultimap<K, V>(this);
-    }
-
-    public ImmutableBagMultimap<K, V> toImmutable()
-    {
-        final MutableMap<K, ImmutableBag<V>> map = UnifiedMap.newMap();
-
-        this.map.forEachKeyValue(new Procedure2<K, MutableBag<V>>()
-        {
-            public void value(K key, MutableBag<V> list)
-            {
-                map.put(key, list.toImmutable());
-            }
-        });
-
-        return new ImmutableBagMultimapImpl<K, V>(map);
     }
 
     public HashBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

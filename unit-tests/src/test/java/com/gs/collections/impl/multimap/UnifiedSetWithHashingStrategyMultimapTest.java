@@ -35,6 +35,7 @@ import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrateg
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.test.domain.Person;
+import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -304,5 +305,37 @@ public class UnifiedSetWithHashingStrategyMultimapTest extends AbstractMutableMu
         Assert.assertEquals(expectedMultimap, rejectedMultimap);
         Verify.assertMapsEqual(expectedMultimap.getMap(), rejectedMultimap.getMap());
         Assert.assertSame(expectedMultimap.getValueHashingStrategy(), rejectedMultimap.getValueHashingStrategy());
+    }
+
+    @Override
+    @Test
+    public void collectKeysValues()
+    {
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> multimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
+        multimap.put(1, JANESMITH);
+        multimap.put(1, JOHNDOE);
+        multimap.put(1, JANEDOE);
+        multimap.put(1, JANEDOE);
+        multimap.put(2, JANESMITH);
+        multimap.put(2, JOHNSMITH);
+        multimap.put(2, JOHNDOE);
+        multimap.put(2, JANEDOE);
+
+        UnifiedSetMultimap<String, Integer> collectedMultimap1 = multimap.collectKeysValues((key, value) -> Tuples.pair(key.toString(), key * value.getAge()));
+        UnifiedSetMultimap<String, Integer> expectedMultimap1 = UnifiedSetMultimap.newMultimap();
+        expectedMultimap1.put("1", 100);
+        expectedMultimap1.put("2", 200);
+
+        Assert.assertEquals(expectedMultimap1, collectedMultimap1);
+        Verify.assertSetsEqual(expectedMultimap1.get("1"), collectedMultimap1.get("1"));
+        Verify.assertSetsEqual(expectedMultimap1.get("2"), collectedMultimap1.get("2"));
+
+        UnifiedSetMultimap<String, Integer> collectedMultimap2 = multimap.collectKeysValues((key, value) -> Tuples.pair("1", key * value.getAge()));
+        UnifiedSetMultimap<String, Integer> expectedMultimap2 = UnifiedSetMultimap.newMultimap();
+        expectedMultimap2.put("1", 100);
+        expectedMultimap2.put("1", 200);
+
+        Assert.assertEquals(expectedMultimap2, collectedMultimap2);
+        Verify.assertSetsEqual(expectedMultimap2.get("1"), collectedMultimap2.get("1"));
     }
 }

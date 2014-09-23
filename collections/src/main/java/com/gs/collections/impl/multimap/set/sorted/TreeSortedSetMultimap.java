@@ -22,6 +22,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Comparator;
 
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
@@ -34,6 +35,7 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 
 public final class TreeSortedSetMultimap<K, V>
@@ -176,5 +178,10 @@ public final class TreeSortedSetMultimap<K, V>
     public TreeSortedSetMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
     {
         return this.rejectKeysMultiValues(predicate, this.newEmpty());
+    }
+
+    public <K2, V2> HashBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    {
+        return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap());
     }
 }

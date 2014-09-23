@@ -18,6 +18,7 @@ package com.gs.collections.impl.multimap.set;
 
 import java.io.Serializable;
 
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
@@ -25,6 +26,7 @@ import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimap;
@@ -144,5 +146,10 @@ public final class ImmutableSetMultimapImpl<K, V>
     public ImmutableSetMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
     {
         return this.rejectKeysMultiValues(predicate, UnifiedSetMultimap.<K, V>newMultimap()).toImmutable();
+    }
+
+    public <K2, V2> ImmutableSetMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    {
+        return this.collectKeysValues(function, UnifiedSetMultimap.<K2, V2>newMultimap()).toImmutable();
     }
 }

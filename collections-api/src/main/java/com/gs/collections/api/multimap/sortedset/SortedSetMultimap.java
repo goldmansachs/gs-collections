@@ -16,10 +16,13 @@
 
 package com.gs.collections.api.multimap.sortedset;
 
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.multimap.bag.BagMultimap;
 import com.gs.collections.api.multimap.ordered.SortedIterableMultimap;
 import com.gs.collections.api.multimap.set.SetMultimap;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.api.tuple.Pair;
 
 /**
  * @since 1.0
@@ -42,4 +45,6 @@ public interface SortedSetMultimap<K, V>
     SortedSetMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 
     SortedSetMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
+
+    <K2, V2> BagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function);
 }

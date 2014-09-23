@@ -21,25 +21,19 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
-import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
-import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.procedure.checked.CheckedObjectIntProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 
 public final class HashBagMultimap<K, V>
-        extends AbstractMutableMultimap<K, V, MutableBag<V>>
-        implements MutableBagMultimap<K, V>, Externalizable
+        extends AbstractMutableBagMultimap<K, V> implements Externalizable
 {
     private static final long serialVersionUID = 1L;
 
@@ -104,26 +98,6 @@ public final class HashBagMultimap<K, V>
     public HashBagMultimap<K, V> newEmpty()
     {
         return new HashBagMultimap<K, V>();
-    }
-
-    public MutableBagMultimap<K, V> toMutable()
-    {
-        return new HashBagMultimap<K, V>(this);
-    }
-
-    public ImmutableBagMultimap<K, V> toImmutable()
-    {
-        final MutableMap<K, ImmutableBag<V>> map = UnifiedMap.newMap();
-
-        this.map.forEachKeyValue(new Procedure2<K, MutableBag<V>>()
-        {
-            public void value(K key, MutableBag<V> bag)
-            {
-                map.put(key, bag.toImmutable());
-            }
-        });
-
-        return new ImmutableBagMultimapImpl<K, V>(map);
     }
 
     @Override

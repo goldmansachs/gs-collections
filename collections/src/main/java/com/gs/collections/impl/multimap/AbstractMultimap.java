@@ -24,6 +24,7 @@ import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -340,5 +341,24 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
         {
             return Tuples.pair(this.key, value);
         }
+    }
+
+    public <K2, V2, R extends MutableMultimap<K2, V2>> R collectKeysValues(final Function2<? super K, ? super V, Pair<K2, V2>> function, final R target)
+    {
+        this.getMap().forEachKeyValue(new Procedure2<K, C>()
+        {
+            public void value(final K key, C collection)
+            {
+                collection.forEach(new Procedure<V>()
+                {
+                    public void value(V value)
+                    {
+                        Pair<K2, V2> pair = function.value(key, value);
+                        target.add(pair);
+                    }
+                });
+            }
+        });
+        return target;
     }
 }

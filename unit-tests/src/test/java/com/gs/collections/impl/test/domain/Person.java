@@ -107,14 +107,19 @@ public final class Person implements Comparable<Person>, Serializable
         return this.lastName.compareTo(other.lastName);
     }
 
+    public String getFirstName()
+    {
+        return this.firstName;
+    }
+
     public String getLastName()
     {
         return this.lastName;
     }
 
-    public String getFirstName()
+    public int getAge()
     {
-        return this.firstName;
+        return this.age;
     }
 
     @Override

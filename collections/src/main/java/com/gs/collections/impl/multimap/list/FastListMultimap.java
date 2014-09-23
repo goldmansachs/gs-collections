@@ -20,21 +20,15 @@ import java.io.Externalizable;
 import java.util.Collection;
 
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
-import com.gs.collections.api.multimap.list.ImmutableListMultimap;
-import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 
 public final class FastListMultimap<K, V>
-        extends AbstractMutableMultimap<K, V, MutableList<V>>
-        implements MutableListMultimap<K, V>, Externalizable
+        extends AbstractMutableListMultimap<K, V> implements Externalizable
 {
     private static final long serialVersionUID = 1L;
 
@@ -129,26 +123,6 @@ public final class FastListMultimap<K, V>
     public FastListMultimap<K, V> newEmpty()
     {
         return new FastListMultimap<K, V>();
-    }
-
-    public MutableListMultimap<K, V> toMutable()
-    {
-        return new FastListMultimap<K, V>(this);
-    }
-
-    public ImmutableListMultimap<K, V> toImmutable()
-    {
-        final MutableMap<K, ImmutableList<V>> map = UnifiedMap.newMap();
-
-        this.map.forEachKeyValue(new Procedure2<K, MutableList<V>>()
-        {
-            public void value(K key, MutableList<V> list)
-            {
-                map.put(key, list.toImmutable());
-            }
-        });
-
-        return new ImmutableListMultimapImpl<K, V>(map);
     }
 
     public FastListMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

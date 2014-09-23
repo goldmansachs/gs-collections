@@ -17,12 +17,14 @@
 package com.gs.collections.impl.multimap.list;
 
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimapTestCase;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -129,5 +131,28 @@ public class ImmutableListMultimapTest extends AbstractImmutableMultimapTestCase
         ImmutableListMultimap<Integer, String> expectedImmutableMultimap = expectedMultimap.toImmutable();
         Assert.assertEquals(expectedImmutableMultimap, rejectedMultimap);
         Verify.assertIterablesEqual(expectedImmutableMultimap.get(3), rejectedMultimap.get(3));
+    }
+
+    @Override
+    @Test
+    public void collectKeysValues()
+    {
+        FastListMultimap<String, Integer> mutableMultimap = FastListMultimap.newMultimap();
+        mutableMultimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 1));
+        mutableMultimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 2));
+        ImmutableListMultimap<String, Integer> immutableMap = mutableMultimap.toImmutable();
+        ImmutableBagMultimap<Integer, String> collectedMultimap1 = immutableMap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value.toString() + "Value"));
+        HashBagMultimap<Integer, String> expectedMultimap1 = HashBagMultimap.newMultimap();
+        expectedMultimap1.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "1Value"));
+        expectedMultimap1.putAll(2, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "2Value"));
+        ImmutableBagMultimap<Integer, String> expectedImmutableMultimap1 = expectedMultimap1.toImmutable();
+        Assert.assertEquals(expectedImmutableMultimap1, collectedMultimap1);
+
+        ImmutableBagMultimap<Integer, String> collectedMultimap2 = immutableMap.collectKeysValues((key, value) -> Tuples.pair(1, value.toString() + "Value"));
+        HashBagMultimap<Integer, String> expectedMultimap2 = HashBagMultimap.newMultimap();
+        expectedMultimap2.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "1Value"));
+        expectedMultimap2.putAll(1, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "2Value"));
+        ImmutableBagMultimap<Integer, String> expectedImmutableMultimap2 = expectedMultimap2.toImmutable();
+        Assert.assertEquals(expectedImmutableMultimap2, collectedMultimap2);
     }
 }
