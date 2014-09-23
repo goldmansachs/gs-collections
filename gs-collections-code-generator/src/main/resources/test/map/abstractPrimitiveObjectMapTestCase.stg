@@ -54,6 +54,8 @@ import com.gs.collections.api.map.primitive.FloatObjectMap;
 import com.gs.collections.api.map.primitive.IntObjectMap;
 import com.gs.collections.api.map.primitive.LongObjectMap;
 import com.gs.collections.api.map.primitive.ShortObjectMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
@@ -863,6 +865,43 @@ public abstract class Abstract<name>ObjectMapTestCase
         Assert.assertEquals(6.0, map2.sumOfFloat(function), 0.0);
         Assert.assertEquals(7.0, map3.sumOfFloat(function), 0.0);
     }
+
+    @Test
+    public void sumByInt()
+    {
+        RichIterable\<String> values = this.newWithKeysValues(<(literal.(type))("1")>, "1", <(literal.(type))("2")>, "2", <(literal.(type))("3")>, "3");
+        ObjectLongMap result = values.sumByInt(s -> Integer.parseInt(s) % 2, Integer::parseInt);
+        Assert.assertEquals(4, result.get(1));
+        Assert.assertEquals(2, result.get(0));
+    }
+
+    @Test
+    public void sumByFloat()
+    {
+        RichIterable\<String> values = this.newWithKeysValues(<(literal.(type))("1")>, "1", <(literal.(type))("2")>, "2", <(literal.(type))("3")>, "3");
+        ObjectDoubleMap result = values.sumByFloat(s -> Integer.parseInt(s) % 2, Float::parseFloat);
+        Assert.assertEquals(4.0f, result.get(1), 0.0);
+        Assert.assertEquals(2.0f, result.get(0), 0.0);
+    }
+
+    @Test
+    public void sumByLong()
+    {
+        RichIterable\<String> values = this.newWithKeysValues(<(literal.(type))("1")>, "1", <(literal.(type))("2")>, "2", <(literal.(type))("3")>, "3");
+        ObjectLongMap result = values.sumByLong(s -> Integer.parseInt(s) % 2, Long::parseLong);
+        Assert.assertEquals(4, result.get(1));
+        Assert.assertEquals(2, result.get(0));
+    }
+
+    @Test
+    public void sumByDouble()
+    {
+        RichIterable\<String> values = this.newWithKeysValues(<(literal.(type))("1")>, "1", <(literal.(type))("2")>, "2", <(literal.(type))("3")>, "3");
+        ObjectDoubleMap result = values.sumByDouble(s -> Integer.parseInt(s) % 2, Double::parseDouble);
+        Assert.assertEquals(4.0d, result.get(1), 0.0);
+        Assert.assertEquals(2.0d, result.get(0), 0.0);
+    }
+
 
     @Test
     public void keysView()

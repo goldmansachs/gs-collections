@@ -81,6 +81,8 @@ import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.primitive.<name>ObjectMap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
@@ -612,6 +614,26 @@ public final class Unmodifiable<name>ObjectMap\<V>
     public double sumOfDouble(DoubleFunction\<? super V> function)
     {
         return this.map.sumOfDouble(function);
+    }
+
+    public \<V1> ObjectLongMap\<V1> sumByInt(Function\<V, V1> groupBy, IntFunction\<? super V> function)
+    {
+        return this.map.sumByInt(groupBy, function);
+    }
+
+    public \<V1> ObjectDoubleMap\<V1> sumByFloat(Function\<V, V1> groupBy, FloatFunction\<? super V> function)
+    {
+        return this.map.sumByFloat(groupBy, function);
+    }
+
+    public \<V1> ObjectLongMap\<V1> sumByLong(Function\<V, V1> groupBy, LongFunction\<? super V> function)
+    {
+        return this.map.sumByLong(groupBy, function);
+    }
+
+    public \<V1> ObjectDoubleMap\<V1> sumByDouble(Function\<V, V1> groupBy, DoubleFunction\<? super V> function)
+    {
+        return this.map.sumByDouble(groupBy, function);
     }
 
     public Mutable<name>Set keySet()

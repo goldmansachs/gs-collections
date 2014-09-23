@@ -41,6 +41,8 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
@@ -989,7 +991,7 @@ public abstract class MapIterableTestCase
     }
 
     @Test
-    public void sumInt()
+    public void sumOfInt()
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
@@ -998,7 +1000,7 @@ public abstract class MapIterableTestCase
     }
 
     @Test
-    public void sumLong()
+    public void sumOfLong()
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
@@ -1007,7 +1009,7 @@ public abstract class MapIterableTestCase
     }
 
     @Test
-    public void sumFloat()
+    public void sumOfFloat()
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
@@ -1016,12 +1018,48 @@ public abstract class MapIterableTestCase
     }
 
     @Test
-    public void sumDouble()
+    public void sumOfDouble()
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
         double actual = map.sumOfDouble(Integer::doubleValue);
         Assert.assertEquals(10.0d, actual, 0.01);
+    }
+
+    @Test
+    public void sumByInt()
+    {
+        RichIterable<String> values = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        ObjectLongMap<Integer> result = values.sumByInt(s -> Integer.parseInt(s) % 2, Integer::parseInt);
+        Assert.assertEquals(4, result.get(1));
+        Assert.assertEquals(2, result.get(0));
+    }
+
+    @Test
+    public void sumByFloat()
+    {
+        RichIterable<String> values = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        ObjectDoubleMap<Integer> result = values.sumByFloat(s -> Integer.parseInt(s) % 2, Float::parseFloat);
+        Assert.assertEquals(4.0f, result.get(1), 0.0);
+        Assert.assertEquals(2.0f, result.get(0), 0.0);
+    }
+
+    @Test
+    public void sumByLong()
+    {
+        RichIterable<String> values = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        ObjectLongMap<Integer> result = values.sumByLong(s -> Integer.parseInt(s) % 2, Long::parseLong);
+        Assert.assertEquals(4, result.get(1));
+        Assert.assertEquals(2, result.get(0));
+    }
+
+    @Test
+    public void sumByDouble()
+    {
+        RichIterable<String> values = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        ObjectDoubleMap<Integer> result = values.sumByDouble(s -> Integer.parseInt(s) % 2, Double::parseDouble);
+        Assert.assertEquals(4.0d, result.get(1), 0.0);
+        Assert.assertEquals(2.0d, result.get(0), 0.0);
     }
 
     @Test

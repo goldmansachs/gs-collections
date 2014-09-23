@@ -88,6 +88,8 @@ import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.primitive.<name>ObjectMap;
 import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
@@ -108,6 +110,7 @@ import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures2;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
@@ -1895,6 +1898,30 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             }
         }
         return sum;
+    }
+
+    public \<V1> ObjectLongMap\<V1> sumByInt(Function\<V, V1> groupBy, IntFunction\<? super V> function)
+    {
+        ObjectLongHashMap\<V1> result = ObjectLongHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByIntFunction(groupBy, function));
+    }
+
+    public \<V1> ObjectDoubleMap\<V1> sumByFloat(Function\<V, V1> groupBy, FloatFunction\<? super V> function)
+    {
+        ObjectDoubleHashMap\<V1> result = ObjectDoubleHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByFloatFunction(groupBy, function));
+    }
+
+    public \<V1> ObjectLongMap\<V1> sumByLong(Function\<V, V1> groupBy, LongFunction\<? super V> function)
+    {
+        ObjectLongHashMap\<V1> result = ObjectLongHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByLongFunction(groupBy, function));
+    }
+
+    public \<V1> ObjectDoubleMap\<V1> sumByDouble(Function\<V, V1> groupBy, DoubleFunction\<? super V> function)
+    {
+        ObjectDoubleHashMap\<V1> result = ObjectDoubleHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByDoubleFunction(groupBy, function));
     }
 
     public void clear()

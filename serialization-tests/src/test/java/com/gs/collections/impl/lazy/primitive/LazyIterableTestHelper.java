@@ -62,6 +62,8 @@ import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -438,6 +440,26 @@ public class LazyIterableTestHelper<T> implements LazyIterable<T>
     public double sumOfDouble(DoubleFunction<? super T> function)
     {
         return 0;
+    }
+
+    public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        return null;
+    }
+
+    public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        return null;
+    }
+
+    public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        return null;
+    }
+
+    public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        return null;
     }
 
     public String makeString()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +63,8 @@ import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
@@ -81,6 +83,8 @@ import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -600,8 +604,8 @@ public final class RandomAccessListIterate
      * Iterates over the section of the list covered by the specified indexes.  The indexes are both inclusive.  If the
      * from is less than the to, the list is iterated in forward order. If the from is greater than the to, then the
      * list is iterated in the reverse order.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * <pre>e.g.
      * MutableList<People> people = FastList.newListWith(ted, mary, bob, sally);
      * ListIterate.forEach(people, 0, 1, new Procedure<Person>()
@@ -612,7 +616,7 @@ public final class RandomAccessListIterate
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * This code would output ted and mary's names.
      */
     public static <T> void forEach(List<T> list, int from, int to, Procedure<? super T> procedure)
@@ -642,8 +646,8 @@ public final class RandomAccessListIterate
      * from is less than the to, the list is iterated in forward order. If the from is greater than the to, then the
      * list is iterated in the reverse order. The index passed into the ObjectIntProcedure is the actual index of the
      * range.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * <pre>e.g.
      * MutableList<People> people = FastList.newListWith(ted, mary, bob, sally);
      * ListIterate.forEachWithIndex(people, 0, 1, new ObjectIntProcedure<Person>()
@@ -654,7 +658,7 @@ public final class RandomAccessListIterate
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * This code would output ted and mary's names.
      */
     public static <T> void forEachWithIndex(List<T> list, int from, int to, ObjectIntProcedure<? super T> objectIntProcedure)
@@ -1475,6 +1479,50 @@ public final class RandomAccessListIterate
                 }
                 return result;
             }
+        }
+        return result;
+    }
+
+    public static <V, T> ObjectLongMap<V> sumByInt(List<T> list, Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        for (int i = 0; i < list.size(); i++)
+        {
+            T item = list.get(i);
+            result.addToValue(groupBy.valueOf(item), function.intValueOf(item));
+        }
+        return result;
+    }
+
+    public static <V, T> ObjectLongMap<V> sumByLong(List<T> list, Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        for (int i = 0; i < list.size(); i++)
+        {
+            T item = list.get(i);
+            result.addToValue(groupBy.valueOf(item), function.longValueOf(item));
+        }
+        return result;
+    }
+
+    public static <V, T> ObjectDoubleMap<V> sumByFloat(List<T> list, Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        for (int i = 0; i < list.size(); i++)
+        {
+            T item = list.get(i);
+            result.addToValue(groupBy.valueOf(item), function.floatValueOf(item));
+        }
+        return result;
+    }
+
+    public static <V, T> ObjectDoubleMap<V> sumByDouble(List<T> list, Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        for (int i = 0; i < list.size(); i++)
+        {
+            T item = list.get(i);
+            result.addToValue(groupBy.valueOf(item), function.doubleValueOf(item));
         }
         return result;
     }

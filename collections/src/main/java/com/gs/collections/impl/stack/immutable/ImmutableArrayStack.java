@@ -62,6 +62,8 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
@@ -729,6 +731,26 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
     public double sumOfDouble(DoubleFunction<? super T> doubleFunction)
     {
         return this.delegate.asReversed().sumOfDouble(doubleFunction);
+    }
+
+    public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        return this.delegate.asReversed().sumByInt(groupBy, function);
+    }
+
+    public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        return this.delegate.asReversed().sumByFloat(groupBy, function);
+    }
+
+    public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        return this.delegate.asReversed().sumByLong(groupBy, function);
+    }
+
+    public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        return this.delegate.asReversed().sumByDouble(groupBy, function);
     }
 
     public String makeString()

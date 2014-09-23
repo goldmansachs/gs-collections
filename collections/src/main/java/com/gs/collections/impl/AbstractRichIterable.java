@@ -52,6 +52,8 @@ import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
@@ -60,6 +62,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
@@ -76,6 +79,8 @@ import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
@@ -401,6 +406,30 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return IterableIterate.sumOfDouble(this, function);
     }
 
+    public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByIntFunction(groupBy, function));
+    }
+
+    public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByFloatFunction(groupBy, function));
+    }
+
+    public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByLongFunction(groupBy, function));
+    }
+
+    public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByDoubleFunction(groupBy, function));
+    }
+
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
         IterableIterate.forEachWithIndex(this, objectIntProcedure);
@@ -426,7 +455,7 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
      * collection's elements in the order they are returned by its iterator, enclosed in square brackets
      * (<tt>"[]"</tt>).  Adjacent elements are separated by the characters <tt>", "</tt> (comma and space).  Elements
      * are converted to strings as by <tt>String.valueOf(Object)</tt>.<p>
-     * <p/>
+     * <p>
      * This implementation creates an empty string buffer, appends a left square bracket, and iterates over the
      * collection appending the string representation of each element in turn.  After appending each element except the
      * last, the string <tt>", "</tt> is appended.  Finally a right bracket is appended.  A string is obtained from the

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,15 +56,20 @@ import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 
 /**
  * AbstractMultiReaderMutableCollection is a common abstraction that provides thread-safe collection behaviors.
@@ -986,6 +991,30 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
+    public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByIntFunction(groupBy, function));
+    }
+
+    public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByFloatFunction(groupBy, function));
+    }
+
+    public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByLongFunction(groupBy, function));
+    }
+
+    public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByDoubleFunction(groupBy, function));
+    }
+
     public <IV, P> IV injectIntoWith(
             IV injectValue,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,
@@ -1098,7 +1127,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
     /**
      * This method is not supported directly on MultiReader collections because it is not thread-safe. If you would like
      * to use an iterator with a MultiReader collection, then you must do the following:
-     * <p/>
+     * <p>
      * <pre>
      * multiReaderList.withReadLockAndDelegate(new Procedure<MutableList<Person>>()
      * {
@@ -1109,7 +1138,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * <pre>
      * final Collection jdkSet = new HashSet();
      * final boolean containsAll = new boolean[1];
@@ -1715,6 +1744,26 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         public double sumOfDouble(DoubleFunction<? super T> function)
         {
             return this.delegate.sumOfDouble(function);
+        }
+
+        public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
+        {
+            return this.delegate.sumByInt(groupBy, function);
+        }
+
+        public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
+        {
+            return this.delegate.sumByFloat(groupBy, function);
+        }
+
+        public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
+        {
+            return this.delegate.sumByLong(groupBy, function);
+        }
+
+        public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
+        {
+            return this.delegate.sumByDouble(groupBy, function);
         }
 
         public <IV, P> IV injectIntoWith(

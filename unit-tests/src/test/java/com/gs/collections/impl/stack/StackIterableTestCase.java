@@ -30,6 +30,8 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.ListMultimap;
@@ -728,6 +730,42 @@ public abstract class StackIterableTestCase
         Assert.assertEquals(10, stack.sumOfLong(Integer::longValue));
         Assert.assertEquals(10.0d, stack.sumOfDouble(Integer::doubleValue), 0.001);
         Assert.assertEquals(10.0f, stack.sumOfFloat(Integer::floatValue), 0.001);
+    }
+
+    @Test
+    public void sumByInt()
+    {
+        RichIterable<Integer> values = this.newStackFromTopToBottom(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        ObjectLongMap<Integer> result = values.sumByInt(i -> i % 2, e -> e);
+        Assert.assertEquals(25, result.get(1));
+        Assert.assertEquals(30, result.get(0));
+    }
+
+    @Test
+    public void sumByFloat()
+    {
+        RichIterable<Integer> values = this.newStackFromTopToBottom(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        ObjectDoubleMap<Integer> result = values.sumByFloat(f -> (int) f % 2, e -> e);
+        Assert.assertEquals(25.0f, result.get(1), 0.0);
+        Assert.assertEquals(30.0f, result.get(0), 0.0);
+    }
+
+    @Test
+    public void sumByLong()
+    {
+        RichIterable<Integer> values = this.newStackFromTopToBottom(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        ObjectLongMap<Integer> result = values.sumByLong(l -> l % 2, e -> e);
+        Assert.assertEquals(25, result.get(1));
+        Assert.assertEquals(30, result.get(0));
+    }
+
+    @Test
+    public void sumByDouble()
+    {
+        RichIterable<Integer> values = this.newStackFromTopToBottom(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        ObjectDoubleMap<Integer> result = values.sumByDouble(d -> (int) d % 2, e -> e);
+        Assert.assertEquals(25.0d, result.get(1), 0.0);
+        Assert.assertEquals(30.0d, result.get(0), 0.0);
     }
 
     @Test

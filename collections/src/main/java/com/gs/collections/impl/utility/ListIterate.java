@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,6 +64,8 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
@@ -611,8 +613,8 @@ public final class ListIterate
      * Iterates over the section of the list covered by the specified indexes.  The indexes are both inclusive.  If the
      * from is less than the to, the list is iterated in forward order. If the from is greater than the to, then the
      * list is iterated in the reverse order.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * <pre>e.g.
      * MutableList<People> people = FastList.newListWith(ted, mary, bob, sally);
      * ListIterate.forEach(people, 0, 1, new Procedure<Person>()
@@ -623,7 +625,7 @@ public final class ListIterate
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * This code would output ted and mary's names.
      */
     public static <T> void forEach(List<T> list, int from, int to, Procedure<? super T> procedure)
@@ -660,8 +662,8 @@ public final class ListIterate
      * from is less than the to, the list is iterated in forward order. If the from is greater than the to, then the
      * list is iterated in the reverse order. The index passed into the ObjectIntProcedure is the actual index of the
      * range.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * <pre>e.g.
      * MutableList<People> people = FastList.newListWith(ted, mary, bob, sally);
      * ListIterate.forEachWithIndex(people, 0, 1, new ObjectIntProcedure<Person>()
@@ -672,7 +674,7 @@ public final class ListIterate
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * This code would output ted and mary's names.
      */
     public static <T> void forEachWithIndex(List<T> list, int from, int to, ObjectIntProcedure<? super T> objectIntProcedure)
@@ -912,6 +914,42 @@ public final class ListIterate
             return RandomAccessListIterate.sumOfDouble(list, function);
         }
         return IterableIterate.sumOfDouble(list, function);
+    }
+
+    public static <V, T> ObjectLongMap<V> sumByInt(List<T> list, Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.sumByInt(list, groupBy, function);
+        }
+        return IterableIterate.sumByInt(list, groupBy, function);
+    }
+
+    public static <V, T> ObjectLongMap<V> sumByLong(List<T> list, Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.sumByLong(list, groupBy, function);
+        }
+        return IterableIterate.sumByLong(list, groupBy, function);
+    }
+
+    public static <V, T> ObjectDoubleMap<V> sumByFloat(List<T> list, Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.sumByFloat(list, groupBy, function);
+        }
+        return IterableIterate.sumByFloat(list, groupBy, function);
+    }
+
+    public static <V, T> ObjectDoubleMap<V> sumByDouble(List<T> list, Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.sumByDouble(list, groupBy, function);
+        }
+        return IterableIterate.sumByDouble(list, groupBy, function);
     }
 
     /**

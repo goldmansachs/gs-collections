@@ -68,6 +68,8 @@ import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
@@ -94,6 +96,8 @@ import com.gs.collections.impl.factory.primitive.IntBags;
 import com.gs.collections.impl.factory.primitive.LongBags;
 import com.gs.collections.impl.factory.primitive.ShortBags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.partition.bag.PartitionHashBag;
@@ -574,6 +578,26 @@ final class ImmutableEmptyBag<T>
     public double sumOfDouble(DoubleFunction<? super T> function)
     {
         return 0.0d;
+    }
+
+    public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        return ObjectLongHashMap.newMap();
+    }
+
+    public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        return ObjectDoubleHashMap.newMap();
+    }
+
+    public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        return ObjectLongHashMap.newMap();
+    }
+
+    public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        return ObjectDoubleHashMap.newMap();
     }
 
     public MutableList<T> toList()

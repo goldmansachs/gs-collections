@@ -51,7 +51,8 @@ public class AnagramTest
     @Test
     public void anagramsWithMultimapInlined()
     {
-        MutableList<RichIterable<String>> results = this.getWords().groupBy(Alphagram::new)
+        MutableList<RichIterable<String>> results = this.getWords()
+                .groupBy(Alphagram::new)
                 .multiValuesView()
                 .select(iterable -> iterable.size() >= SIZE_THRESHOLD)
                 .toSortedListBy(RichIterable::size);

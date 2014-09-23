@@ -60,6 +60,8 @@ import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.tuple.Pair;
@@ -96,7 +98,7 @@ public final class Iterate
 
     /**
      * The procedure is evaluated for each element of the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * Iterate.forEach(people, new Procedure<Person>()
      * {
@@ -134,7 +136,7 @@ public final class Iterate
     /**
      * The procedure2 is evaluated for each element of the iterable with the specified parameter passed
      * as the second argument.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * Iterate.forEachWith(people, new Procedure2<Person, Person>()
      * {
@@ -205,7 +207,7 @@ public final class Iterate
 
     /**
      * Returns a new collection with only the elements that evaluated to true for the specified predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.<b>select</b>(collection, new Predicate&lt;Person&gt;()
      * {
@@ -246,7 +248,7 @@ public final class Iterate
 
     /**
      * Returns a new collection with only elements that evaluated to true for the specified predicate and parameter.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.<b>selectWith</b>(integers, Predicates2.equal(), new Integer(5));
      * </pre>
@@ -285,7 +287,7 @@ public final class Iterate
 
     /**
      * Filters a collection into two separate collections based on a predicate returned via a Twin.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.<b>selectAndRejectWith</b>(lastNames, Predicates2.lessThan(), "Mason");
      * </pre>
@@ -316,7 +318,7 @@ public final class Iterate
 
     /**
      * Filters a collection into a PartitionIterable based on a predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.<b>partition</b>(collection, new Predicate&lt;Person&gt;()
      * {
@@ -350,7 +352,7 @@ public final class Iterate
 
     /**
      * Filters a collection into a PartitionIterable based on a predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.<b>partitionWith</b>(collection, new Predicate&lt;Person, String&gt;()
      * {
@@ -417,7 +419,7 @@ public final class Iterate
 
     /**
      * Returns the total number of elements that evaluate to true for the specified predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.<b>count</b>(collection, new Predicate&lt;Person&gt;()
      * {
@@ -451,7 +453,7 @@ public final class Iterate
 
     /**
      * Returns the total number of elements that evaluate to true for the specified predicate2 and parameter.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.<b>countWith</b>(lastNames, Predicates2.equal(), "Smith");
      * </pre>
@@ -545,7 +547,7 @@ public final class Iterate
 
     /**
      * Same as the select method with two parameters but uses the specified target collection
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.select(collection, new Predicate&lt;Person&gt;()
      * {
@@ -555,7 +557,7 @@ public final class Iterate
      *     }
      * }, FastList.newList());
      * </pre>
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.select(collection, Predicates.attributeEqual("lastName", "Smith"), new ArrayList());
      * </pre>
@@ -667,7 +669,7 @@ public final class Iterate
 
     /**
      * Returns all elements of the iterable that evaluate to false for the specified predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.reject(collection, new Predicate&lt;Person&gt;()
      * {
@@ -677,7 +679,7 @@ public final class Iterate
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.reject(collection, Predicates.attributeEqual("lastName", "Smith"));
      * </pre>
@@ -763,20 +765,20 @@ public final class Iterate
     {
         return Iterate.sortThis(
                 list, new Comparator<T>()
-        {
-            public int compare(T o1, T o2)
-            {
-                if (predicate.accept(o1, o2))
                 {
-                    return -1;
-                }
-                if (predicate.accept(o2, o1))
-                {
-                    return 1;
-                }
-                return 0;
-            }
-        });
+                    public int compare(T o1, T o2)
+                    {
+                        if (predicate.accept(o1, o2))
+                        {
+                            return -1;
+                        }
+                        if (predicate.accept(o2, o1))
+                        {
+                            return 1;
+                        }
+                        return 0;
+                    }
+                });
     }
 
     /**
@@ -894,7 +896,7 @@ public final class Iterate
 
     /**
      * Same as the reject method with two parameters but uses the specified target collection for the results.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.reject(collection, new Predicate&lt;Person&gt;()
      * {
@@ -1008,7 +1010,7 @@ public final class Iterate
 
     /**
      * Returns a new collection with the results of applying the specified function for each element of the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collect(collection, new Function&lt;Person, String&gt;()
      * {
@@ -1053,7 +1055,7 @@ public final class Iterate
 
     /**
      * Returns a new collection with the results of applying the specified booleanFunction for each element of the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectBoolean(collection, new BooleanFunction&lt;Person&gt;()
      * {
@@ -1090,7 +1092,7 @@ public final class Iterate
     /**
      * Same as {@link #collectBoolean(Iterable, BooleanFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectBoolean(collection, new BooleanFunction&lt;Person&gt;()
      * {
@@ -1127,7 +1129,7 @@ public final class Iterate
 
     /**
      * Returns a new collection with the results of applying the specified byteFunction for each element of the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectByte(collection, new ByteFunction&lt;Person&gt;()
      * {
@@ -1164,7 +1166,7 @@ public final class Iterate
     /**
      * Same as {@link #collectByte(Iterable, ByteFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectByte(collection, new ByteFunction&lt;Person&gt;()
      * {
@@ -1201,7 +1203,7 @@ public final class Iterate
 
     /**
      * Returns a new collection with the results of applying the specified charFunction for each element of the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectChar(collection, new CharFunction&lt;Person&gt;()
      * {
@@ -1238,7 +1240,7 @@ public final class Iterate
     /**
      * Same as {@link #collectChar(Iterable, CharFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectChar(collection, new CharFunction&lt;Person&gt;()
      * {
@@ -1275,7 +1277,7 @@ public final class Iterate
 
     /**
      * Returns a new collection with the results of applying the specified doubleFunction for each element of the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectDouble(collection, new DoubleFunction&lt;Person&gt;()
      * {
@@ -1312,7 +1314,7 @@ public final class Iterate
     /**
      * Same as {@link #collectDouble(Iterable, DoubleFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectDouble(collection, new DoubleFunction&lt;Person&gt;()
      * {
@@ -1349,7 +1351,7 @@ public final class Iterate
 
     /**
      * Returns a new collection with the results of applying the specified floatFunction for each element of the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectFloat(collection, new FloatFunction&lt;Person&gt;()
      * {
@@ -1386,7 +1388,7 @@ public final class Iterate
     /**
      * Same as {@link #collectFloat(Iterable, FloatFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectFloat(collection, new FloatFunction&lt;Person&gt;()
      * {
@@ -1423,7 +1425,7 @@ public final class Iterate
 
     /**
      * Returns a new collection with the results of applying the specified intFunction for each element of the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectInt(collection, new IntFunction&lt;Person&gt;()
      * {
@@ -1460,7 +1462,7 @@ public final class Iterate
     /**
      * Same as {@link #collectInt(Iterable, IntFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectInt(collection, new IntFunction&lt;Person&gt;()
      * {
@@ -1497,7 +1499,7 @@ public final class Iterate
 
     /**
      * Returns a new collection with the results of applying the specified longFunction for each element of the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectLong(collection, new LongFunction&lt;Person&gt;()
      * {
@@ -1534,7 +1536,7 @@ public final class Iterate
     /**
      * Same as {@link #collectLong(Iterable, LongFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectLong(collection, new LongFunction&lt;Person&gt;()
      * {
@@ -1571,7 +1573,7 @@ public final class Iterate
 
     /**
      * Returns a new collection with the results of applying the specified shortFunction for each element of the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectShort(collection, new ShortFunction&lt;Person&gt;()
      * {
@@ -1608,7 +1610,7 @@ public final class Iterate
     /**
      * Same as {@link #collectShort(Iterable, ShortFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collectShort(collection, new ShortFunction&lt;Person&gt;()
      * {
@@ -1681,7 +1683,7 @@ public final class Iterate
     /**
      * Same as the collect method with two parameters, except that the results are gathered into the specified
      * targetCollection
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.collect(collection, new Function&lt;Person, String&gt;()
      * {
@@ -1831,7 +1833,7 @@ public final class Iterate
      * Returns the first element of a collection.  In the case of a List it is the element at the first index.  In the
      * case of any other Collection, it is the first element that would be returned during an iteration. If the
      * Collection is empty, the result is {@code null}.
-     * <p/>
+     * <p>
      * WARNING!!! The order of Sets are not guaranteed (except for TreeSets and other Ordered Set implementations), so
      * if you use this method, the first element could be any element from the Set.
      *
@@ -1894,7 +1896,7 @@ public final class Iterate
      * Returns the last element of a collection.  In the case of a List it is the element at the last index.  In the
      * case of any other Collection, it is the last element that would be returned during an iteration. If the
      * Collection is empty, the result is {@code null}.
-     * <p/>
+     * <p>
      * WARNING!!! The order of Sets are not guaranteed (except for TreeSets and other Ordered Set implementations), so
      * if you use this method, the last element could be any element from the Set.
      *
@@ -1928,7 +1930,7 @@ public final class Iterate
     /**
      * Returns the first element of the iterable that evaluates to true for the specified predicate, or null if
      * no element evaluates to true.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return Iterate.detect(collection, new Predicate&lt;Person&gt;()
      * {
@@ -1963,7 +1965,7 @@ public final class Iterate
     /**
      * Returns the first element of the iterable that evaluates to true for the specified predicate2 and parameter,
      * or null if no element evaluates to true.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * Iterate.detectWith(collection, new Predicate2&lt;Person, String&gt;()
      * {
@@ -2217,7 +2219,7 @@ public final class Iterate
         {
             return IterableIterate.sumOfInt(iterable, function);
         }
-        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+        throw new IllegalArgumentException("Cannot perform an sumOfInt on null");
     }
 
     /**
@@ -2237,7 +2239,7 @@ public final class Iterate
         {
             return IterableIterate.sumOfLong(iterable, function);
         }
-        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+        throw new IllegalArgumentException("Cannot perform an sumOfLong on null");
     }
 
     /**
@@ -2257,7 +2259,7 @@ public final class Iterate
         {
             return IterableIterate.sumOfFloat(iterable, function);
         }
-        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+        throw new IllegalArgumentException("Cannot perform an sumOfFloat on null");
     }
 
     /**
@@ -2276,6 +2278,86 @@ public final class Iterate
         if (iterable != null)
         {
             return IterableIterate.sumOfDouble(iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an sumOfDouble on null");
+    }
+
+    /**
+     * @see RichIterable#sumByInt(Function, IntFunction)
+     */
+    public static <T, V> ObjectLongMap<V> sumByInt(Iterable<T> iterable, Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).sumByInt(groupBy, function);
+        }
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumByInt((List<T>) iterable, groupBy, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumByInt(iterable, groupBy, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an sumByInt on null");
+    }
+
+    /**
+     * @see RichIterable#sumByLong(Function, LongFunction)
+     */
+    public static <T, V> ObjectLongMap<V> sumByLong(Iterable<T> iterable, Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).sumByLong(groupBy, function);
+        }
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumByLong((List<T>) iterable, groupBy, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumByLong(iterable, groupBy, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an sumByLong on null");
+    }
+
+    /**
+     * @see RichIterable#sumOfFloat(FloatFunction)
+     */
+    public static <T, V> ObjectDoubleMap<V> sumByFloat(Iterable<T> iterable, Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).sumByFloat(groupBy, function);
+        }
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumByFloat((List<T>) iterable, groupBy, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumByFloat(iterable, groupBy, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+    }
+
+    /**
+     * @see RichIterable#sumOfDouble(DoubleFunction)
+     */
+    public static <T, V> ObjectDoubleMap<V> sumByDouble(Iterable<T> iterable, Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).sumByDouble(groupBy, function);
+        }
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumByDouble((List<T>) iterable, groupBy, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumByDouble(iterable, groupBy, function);
         }
         throw new IllegalArgumentException("Cannot perform an injectInto on null");
     }

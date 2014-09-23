@@ -19,6 +19,7 @@ package com.gs.collections.impl.parallel;
 import java.util.Collection;
 import java.util.List;
 import java.util.RandomAccess;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
@@ -28,20 +29,28 @@ import java.util.concurrent.TimeUnit;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectDoubleProcedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMapUnsafe;
+import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.gs.collections.impl.multimap.list.SynchronizedPutFastListMultimap;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.LazyIterate;
 
 import static com.gs.collections.impl.factory.Iterables.*;
 
@@ -49,7 +58,7 @@ import static com.gs.collections.impl.factory.Iterables.*;
  * The ParallelIterate class contains several parallel algorithms that work with Collections.  All of the higher
  * level parallel algorithms depend on the basic parallel algorithm named {@code forEach}.  The forEach algorithm employs
  * a batching fork and join approach.
- * <p/>
+ * <p>
  * All Collections that are not either a {@link RandomAccess} or {@link List} are first converted to a Java array
  * using {@link Iterate#toArray(Iterable)}, and then run with one of the {@code ParallelArrayIterate.forEach} methods.
  *
@@ -81,7 +90,7 @@ public final class ParallelIterate
     /**
      * Iterate over the collection specified, in parallel batches using default runtime parameter values.  The
      * {@code ObjectIntProcedure} used must be stateless, or use concurrent aware objects if they are to be shared.
-     * <p/>
+     * <p>
      * e.g.
      * <pre>
      * {@code final Map<Integer, Object> chm = new ConcurrentHashMap<Integer, Object>();}
@@ -105,7 +114,7 @@ public final class ParallelIterate
      * Iterate over the collection specified in parallel batches using the default runtime parameters.  The
      * ObjectIntProcedure used must be stateless, or use concurrent aware objects if they are to be shared.  The code
      * is executed against the specified executor.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * {@code final Map<Integer, Object> chm = new ConcurrentHashMap<Integer, Object>();}
      * ParallelIterate.<b>forEachWithIndex</b>(collection, new ObjectIntProcedure()
@@ -249,7 +258,7 @@ public final class ParallelIterate
     /**
      * Iterate over the collection specified in parallel batches using default runtime parameter values.  The
      * {@code Procedure} used must be stateless, or use concurrent aware objects if they are to be shared.
-     * <p/>
+     * <p>
      * e.g.
      * <pre>
      * {@code final Map<Object, Boolean> chm = new ConcurrentHashMap<Object, Boolean>();}
@@ -270,7 +279,7 @@ public final class ParallelIterate
     /**
      * Iterate over the collection specified in parallel batches using default runtime parameter values.  The
      * {@code Procedure} used must be stateless, or use concurrent aware objects if they are to be shared.
-     * <p/>
+     * <p>
      * e.g.
      * <pre>
      * {@code final Map<Object, Boolean> chm = new ConcurrentHashMap<Object, Boolean>();}
@@ -367,9 +376,9 @@ public final class ParallelIterate
     /**
      * Iterate over the collection specified in parallel batches using the default values for the task size.  The
      * ProcedureFactory can create stateful closures that will be collected and combined using the specified Combiner.
-     * <p/>
+     * <p>
      * <pre>e.g. The <b>ParallelIterate.select()</b> implementation
-     * <p/>
+     * <p>
      * {@code CollectionCombiner<T, SelectProcedure<T>> combiner = CollectionCombiner.forSelect(collection);}
      * ParallelIterate.<b>forEach</b>(collection,{@code new SelectProcedureFactory<T>(predicate, taskSize), combiner, 1000);}
      * </pre>
@@ -397,9 +406,9 @@ public final class ParallelIterate
     /**
      * Iterate over the collection specified in parallel batches using the default values for the task size.  The
      * ProcedureFactory can create stateful closures that will be collected and combined using the specified Combiner.
-     * <p/>
+     * <p>
      * <pre>e.g. The <b>ParallelIterate.select()</b> implementation
-     * <p/>
+     * <p>
      * int taskCount = Math.max(DEFAULT_PARALLEL_TASK_COUNT, collection.size() / DEFAULT_MIN_FORK_SIZE);
      * final int taskSize = collection.size() / taskCount / 2;
      * {@code CollectionCombiner<T, SelectProcedure<T>> combiner = CollectionCombiner.forSelect(collection);}
@@ -1156,6 +1165,41 @@ public final class ParallelIterate
         return mutableMap;
     }
 
+    public static <T, V> ObjectDoubleMap<V> sumByDouble(
+            Iterable<T> iterable,
+            Function<T, V> groupBy,
+            DoubleFunction<? super T> function)
+    {
+        int sampleSetSize = Math.max(Iterate.sizeOf(iterable) / 1000, 1);
+        Set<V> set = LazyIterate.take(iterable, sampleSetSize).collect(groupBy, UnifiedSet.<V>newSet(sampleSetSize));
+        if (set.size() < sampleSetSize * 3 / 4)
+        {
+            ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+            ParallelIterate.forEach(
+                    iterable,
+                    new SumByDoubleProcedureFactory<T, V>(groupBy, function),
+                    new SumByDoubleCombiner<T, V>(result),
+                    ParallelIterate.DEFAULT_MIN_FORK_SIZE,
+                    ParallelIterate.EXECUTOR_SERVICE);
+            return result;
+        }
+        ConcurrentHashMapUnsafe<V, Double> concurrentResult = ConcurrentHashMapUnsafe.newMap();
+        ParallelIterate.forEach(
+                iterable,
+                new ConcurrentSumDoubleProcedure<T, V>(concurrentResult, groupBy, function),
+                ParallelIterate.DEFAULT_MIN_FORK_SIZE,
+                ParallelIterate.EXECUTOR_SERVICE);
+        final ObjectDoubleHashMap<V> result = new ObjectDoubleHashMap<V>(concurrentResult.size());
+        concurrentResult.forEachKeyValue(new Procedure2<V, Double>()
+        {
+            public void value(V key, Double value)
+            {
+                result.put(key, value);
+            }
+        });
+        return result;
+    }
+
     /**
      * Same effect as {@link Iterate#groupBy(Iterable, Function)},
      * but executed in parallel batches, and writing output into a SynchronizedPutFastListMultimap.
@@ -1229,7 +1273,7 @@ public final class ParallelIterate
     /**
      * Returns a brand new ExecutorService using the specified poolName with the specified maximum thread pool size. The
      * same poolName may be used more than once resulting in multiple pools with the same name.
-     * <p/>
+     * <p>
      * The pool will be initialised with newPoolSize threads.  If that number of threads are in use and another thread
      * is requested, the pool will reject execution and the submitting thread will execute the task.
      */
@@ -1268,5 +1312,101 @@ public final class ParallelIterate
     public static int getTaskRatio()
     {
         return TASK_RATIO;
+    }
+
+    private static class SumByDoubleProcedure<T, V> implements Procedure<T>
+    {
+        private final ObjectDoubleHashMap<V> map = ObjectDoubleHashMap.newMap();
+        private final Function<T, V> groupBy;
+        private final DoubleFunction<? super T> function;
+
+        public SumByDoubleProcedure(Function<T, V> groupBy, DoubleFunction<? super T> function)
+        {
+            this.groupBy = groupBy;
+            this.function = function;
+        }
+
+        public void value(T each)
+        {
+            this.map.addToValue(this.groupBy.valueOf(each), this.function.doubleValueOf(each));
+        }
+
+        public ObjectDoubleHashMap<V> getResult()
+        {
+            return this.map;
+        }
+    }
+
+    private static class SumByDoubleCombiner<T, V> extends AbstractProcedureCombiner<SumByDoubleProcedure<T, V>>
+    {
+        private final ObjectDoubleHashMap<V> result;
+
+        public SumByDoubleCombiner(ObjectDoubleHashMap<V> result)
+        {
+            super(true);
+            this.result = result;
+        }
+
+        public void combineOne(SumByDoubleProcedure<T, V> thingToCombine)
+        {
+            if (this.result.isEmpty())
+            {
+                this.result.putAll(thingToCombine.getResult());
+            }
+            else
+            {
+                thingToCombine.getResult().forEachKeyValue(new ObjectDoubleProcedure<V>()
+                {
+                    public void value(V each, double value)
+                    {
+                        SumByDoubleCombiner.this.result.addToValue(each, value);
+                    }
+                });
+            }
+        }
+    }
+
+    private static class SumByDoubleProcedureFactory<T, V> implements ProcedureFactory<SumByDoubleProcedure<T, V>>
+    {
+        private final Function<T, V> groupBy;
+        private final DoubleFunction<? super T> function;
+
+        public SumByDoubleProcedureFactory(Function<T, V> groupBy, DoubleFunction<? super T> function)
+        {
+            this.groupBy = groupBy;
+            this.function = function;
+        }
+
+        public SumByDoubleProcedure<T, V> create()
+        {
+            return new SumByDoubleProcedure<T, V>(this.groupBy, this.function);
+        }
+    }
+
+    private static class ConcurrentSumDoubleProcedure<T, V> implements Procedure<T>
+    {
+        public static final Function0<Double> DOUBLE_FUNCTION_0 = Functions0.value(Double.valueOf(0.0d));
+        private final Function2<Double, T, Double> addFunction = new Function2<Double, T, Double>()
+        {
+            public Double value(Double value, T item)
+            {
+                return value + ConcurrentSumDoubleProcedure.this.function.doubleValueOf(item);
+            }
+        };
+        private final ConcurrentHashMapUnsafe<V, Double> concurrentResult;
+        private final Function<T, V> groupBy;
+        private final DoubleFunction<? super T> function;
+
+        public ConcurrentSumDoubleProcedure(ConcurrentHashMapUnsafe<V, Double> concurrentResult, Function<T, V> groupBy, DoubleFunction<? super T> function)
+        {
+            this.concurrentResult = concurrentResult;
+            this.groupBy = groupBy;
+            this.function = function;
+        }
+
+        public void value(T each)
+        {
+            this.concurrentResult.updateValueWith(this.groupBy.valueOf(each), DOUBLE_FUNCTION_0, this.addFunction, each);
+        }
     }
 }

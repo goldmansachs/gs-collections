@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.block.factory;
 
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -24,6 +26,8 @@ import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
+import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 
 public final class PrimitiveFunctions
 {
@@ -115,6 +119,54 @@ public final class PrimitiveFunctions
     public static FloatFunction<Float> unboxFloatToFloat()
     {
         return UNBOX_FLOAT_TO_FLOAT;
+    }
+
+    public static <T, V> Function2<ObjectLongHashMap<V>, T, ObjectLongHashMap<V>> sumByIntFunction(final Function<T, V> groupBy, final IntFunction<? super T> function)
+    {
+        return new Function2<ObjectLongHashMap<V>, T, ObjectLongHashMap<V>>()
+        {
+            public ObjectLongHashMap<V> value(ObjectLongHashMap<V> map, T each)
+            {
+                map.addToValue(groupBy.valueOf(each), function.intValueOf(each));
+                return map;
+            }
+        };
+    }
+
+    public static <T, V> Function2<ObjectDoubleHashMap<V>, T, ObjectDoubleHashMap<V>> sumByFloatFunction(final Function<T, V> groupBy, final FloatFunction<? super T> function)
+    {
+        return new Function2<ObjectDoubleHashMap<V>, T, ObjectDoubleHashMap<V>>()
+        {
+            public ObjectDoubleHashMap<V> value(ObjectDoubleHashMap<V> map, T each)
+            {
+                map.addToValue(groupBy.valueOf(each), function.floatValueOf(each));
+                return map;
+            }
+        };
+    }
+
+    public static <T, V> Function2<ObjectLongHashMap<V>, T, ObjectLongHashMap<V>> sumByLongFunction(final Function<T, V> groupBy, final LongFunction<? super T> function)
+    {
+        return new Function2<ObjectLongHashMap<V>, T, ObjectLongHashMap<V>>()
+        {
+            public ObjectLongHashMap<V> value(ObjectLongHashMap<V> map, T each)
+            {
+                map.addToValue(groupBy.valueOf(each), function.longValueOf(each));
+                return map;
+            }
+        };
+    }
+
+    public static <T, V> Function2<ObjectDoubleHashMap<V>, T, ObjectDoubleHashMap<V>> sumByDoubleFunction(final Function<T, V> groupBy, final DoubleFunction<? super T> function)
+    {
+        return new Function2<ObjectDoubleHashMap<V>, T, ObjectDoubleHashMap<V>>()
+        {
+            public ObjectDoubleHashMap<V> value(ObjectDoubleHashMap<V> map, T each)
+            {
+                map.addToValue(groupBy.valueOf(each), function.doubleValueOf(each));
+                return map;
+            }
+        };
     }
 
     private static class IntegerIsPositive

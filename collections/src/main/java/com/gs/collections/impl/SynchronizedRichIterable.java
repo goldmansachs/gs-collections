@@ -63,6 +63,8 @@ import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -803,6 +805,38 @@ public class SynchronizedRichIterable<T>
         synchronized (this.lock)
         {
             return this.iterable.sumOfDouble(function);
+        }
+    }
+
+    public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.sumByInt(groupBy, function);
+        }
+    }
+
+    public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.sumByFloat(groupBy, function);
+        }
+    }
+
+    public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.sumByLong(groupBy, function);
+        }
+    }
+
+    public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.sumByDouble(groupBy, function);
         }
     }
 

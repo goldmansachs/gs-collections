@@ -51,6 +51,8 @@ import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -97,7 +99,7 @@ public interface
      * case of any other Collection, it is the first element that would be returned during an iteration.  If the
      * iterable is empty, null is returned.  If null is a valid element of the container, then a developer would need to
      * check to see if the iterable is empty to validate that a null result was not due to the container being empty.
-     * <p/>
+     * <p>
      * The order of Sets are not guaranteed (except for TreeSets and other Ordered Set implementations), so if you use
      * this method, the first element could be any element from the Set.
      *
@@ -110,7 +112,7 @@ public interface
      * of any other Collection, it is the last element that would be returned during an iteration.  If the iterable is
      * empty, null is returned.  If null is a valid element of the container, then a developer would need to check to
      * see if the iterable is empty to validate that a null result was not due to the container being empty.
-     * <p/>
+     * <p>
      * The order of Sets are not guaranteed (except for TreeSets and other Ordered Set implementations), so if you use
      * this method, the last element could be any element from the Set.
      *
@@ -149,7 +151,7 @@ public interface
 
     /**
      * The procedure is executed for each element in the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * people.each(new Procedure<Person>()
      * {
@@ -171,7 +173,7 @@ public interface
     /**
      * Returns all elements of the source collection that return true when evaluating the predicate.  This method is also
      * commonly called filter.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.<b>select</b>(new Predicate&lt;Person&gt;()
      * {
@@ -188,7 +190,7 @@ public interface
 
     /**
      * Same as the select method with one parameter but uses the specified target collection for the results.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.select(new Predicate&lt;Person&gt;()
      * {
@@ -198,7 +200,7 @@ public interface
      *     }
      * }, Lists.mutable.of());
      * </pre>
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return collection.select(Predicates.attributeEqual("lastName", "Smith"), new ArrayList());
      * </pre>
@@ -240,7 +242,7 @@ public interface
     /**
      * Returns all elements of the source collection that return false when evaluating of the predicate.  This method is also
      * sometimes called filterNot and is the equivalent of calling iterable.select(Predicates.not(predicate)).
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.reject(new Predicate&lt;Person&gt;()
      * {
@@ -250,7 +252,7 @@ public interface
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.reject(Predicates.attributeEqual("lastName", "Smith"));
      * </pre>
@@ -273,7 +275,7 @@ public interface
 
     /**
      * Same as the reject method with one parameter but uses the specified target collection for the results.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.reject(new Predicate&lt;Person&gt;()
      * {
@@ -293,7 +295,7 @@ public interface
 
     /**
      * Similar to {@link #reject(Predicate, Collection)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
-     * <p/>
+     * <p>
      * E.g. return a {@link Collection} of Person elements where the person has a height <b>greater than</b> 100cm
      * <pre>
      * return people.reject(new Predicate2&lt;Person, Integer&gt;()
@@ -320,7 +322,7 @@ public interface
 
     /**
      * Filters a collection into a PartitionedIterable based on the evaluation of the predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.<b>partition</b>(new Predicate&lt;Person&gt;()
      * {
@@ -337,7 +339,7 @@ public interface
 
     /**
      * Filters a collection into a PartitionIterable based on the evaluation of the predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.<b>partitionWith</b>(new Predicate2&lt;Person, String&gt;()
      * {
@@ -362,7 +364,7 @@ public interface
     /**
      * Returns a new collection with the results of applying the specified function on each element of the source
      * collection.  This method is also commonly called transform or map.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collect(new Function&lt;Person, String&gt;()
      * {
@@ -380,7 +382,7 @@ public interface
     /**
      * Returns a new primitive {@code boolean} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectBoolean(new BooleanFunction&lt;Person&gt;()
      * {
@@ -398,7 +400,7 @@ public interface
     /**
      * Same as {@link #collectBoolean(BooleanFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectBoolean(new BooleanFunction&lt;Person&gt;()
      * {
@@ -419,7 +421,7 @@ public interface
     /**
      * Returns a new primitive {@code byte} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectByte(new ByteFunction&lt;Person&gt;()
      * {
@@ -437,7 +439,7 @@ public interface
     /**
      * Same as {@link #collectByte(ByteFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectByte(new ByteFunction&lt;Person&gt;()
      * {
@@ -458,7 +460,7 @@ public interface
     /**
      * Returns a new primitive {@code char} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectChar(new CharFunction&lt;Person&gt;()
      * {
@@ -476,7 +478,7 @@ public interface
     /**
      * Same as {@link #collectChar(CharFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectChar(new CharFunction&lt;Person&gt;()
      * {
@@ -497,7 +499,7 @@ public interface
     /**
      * Returns a new primitive {@code double} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectDouble(new DoubleFunction&lt;Person&gt;()
      * {
@@ -515,7 +517,7 @@ public interface
     /**
      * Same as {@link #collectDouble(DoubleFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectDouble(new DoubleFunction&lt;Person&gt;()
      * {
@@ -536,7 +538,7 @@ public interface
     /**
      * Returns a new primitive {@code float} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectFloat(new FloatFunction&lt;Person&gt;()
      * {
@@ -554,7 +556,7 @@ public interface
     /**
      * Same as {@link #collectFloat(FloatFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectFloat(new FloatFunction&lt;Person&gt;()
      * {
@@ -575,7 +577,7 @@ public interface
     /**
      * Returns a new primitive {@code int} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectInt(new IntFunction&lt;Person&gt;()
      * {
@@ -593,7 +595,7 @@ public interface
     /**
      * Same as {@link #collectInt(IntFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectInt(new IntFunction&lt;Person&gt;()
      * {
@@ -614,7 +616,7 @@ public interface
     /**
      * Returns a new primitive {@code long} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectLong(new LongFunction&lt;Person&gt;()
      * {
@@ -632,7 +634,7 @@ public interface
     /**
      * Same as {@link #collectLong(LongFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectLong(new LongFunction&lt;Person&gt;()
      * {
@@ -653,7 +655,7 @@ public interface
     /**
      * Returns a new primitive {@code short} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectShort(new ShortFunction&lt;Person&gt;()
      * {
@@ -671,7 +673,7 @@ public interface
     /**
      * Same as {@link #collectShort(ShortFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collectShort(new ShortFunction&lt;Person&gt;()
      * {
@@ -692,7 +694,7 @@ public interface
     /**
      * Same as {@link #collect(Function)}, except that the results are gathered into the specified {@code target}
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collect(new Function&lt;Person, String&gt;()
      * {
@@ -713,7 +715,7 @@ public interface
 
     /**
      * Same as collect with a {@code Function2} and specified parameter which is passed to the block
-     * <p/>
+     * <p>
      * <pre>e.g.
      * Function2<Integer, Integer, Integer> addParameterFunction =
      * new Function2<Integer, Integer, Integer>()
@@ -738,7 +740,7 @@ public interface
 
     /**
      * Same as collectWith but with a targetCollection parameter to gather the results.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * Function2<Integer, Integer, Integer> addParameterFunction =
      * new Function2<Integer, Integer, Integer>()
@@ -766,7 +768,7 @@ public interface
      * Returns a new collection with the results of applying the specified function on each element of the source
      * collection, but only for those elements which return true upon evaluation of the predicate.  This is the
      * the optimized equivalent of calling iterable.select(predicate).collect(function).
-     * <p/>
+     * <p>
      * <pre>e.g.
      * Lists.mutable.of().with(1, 2, 3).collectIf(Predicates.notNull(), Functions.getToString())
      * </pre>
@@ -794,7 +796,7 @@ public interface
      * {@code flatCollect} is a special case of {@link #collect(Function)}. With {@code collect}, when the {@link Function} returns
      * a collection, the result is a collection of collections. {@code flatCollect} outputs a single "flattened" collection
      * instead.  This method is commonly called flatMap.
-     * <p/>
+     * <p>
      * Consider the following example where we have a {@code Person} class, and each {@code Person} has a list of {@code Address} objects.  Take the following {@link Function}:
      * <pre>
      * Function&lt;Person, List&lt;Address&gt;&gt; addressFunction = new Function&lt;Person, List&lt;Address&gt;&gt;()
@@ -834,7 +836,7 @@ public interface
     /**
      * Returns the first element of the iterable for which the predicate evaluates to true or null in the case where no
      * element returns true.  This method is commonly called find.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.detect(new Predicate&lt;Person&gt;()
      * {
@@ -852,7 +854,7 @@ public interface
     /**
      * Returns the first element that evaluates to true for the specified predicate2 and parameter, or null if none
      * evaluate to true.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * people.detectWith(new Predicate2&lt;Person, String&gt;()
      * {
@@ -888,7 +890,7 @@ public interface
 
     /**
      * Return the total number of elements that answer true to the specified predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.<b>count</b>(new Predicate&lt;Person&gt;()
      * {
@@ -905,7 +907,7 @@ public interface
 
     /**
      * Returns the total number of elements that evaluate to true for the specified predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return lastNames.<b>countWith</b>(PredicatesLite.equal(), "Smith");
      * </pre>
@@ -1207,6 +1209,34 @@ public interface
     double sumOfDouble(DoubleFunction<? super T> function);
 
     /**
+     * Groups and sums the values using the two specified functions.
+     *
+     * @since 6.0
+     */
+    <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function);
+
+    /**
+     * Groups and sums the values using the two specified functions.
+     *
+     * @since 6.0
+     */
+    <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function);
+
+    /**
+     * Groups and sums the values using the two specified functions.
+     *
+     * @since 6.0
+     */
+    <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function);
+
+    /**
+     * Groups and sums the values using the two specified functions.
+     *
+     * @since 6.0
+     */
+    <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function);
+
+    /**
      * Returns a string representation of this collection by delegating to {@link #makeString(String)} and defaulting
      * the separator parameter to the characters <tt>", "</tt> (comma and space).
      *
@@ -1263,7 +1293,7 @@ public interface
      * For each element of the iterable, the function is evaluated and the results of these evaluations are collected
      * into a new multimap, where the transformed value is the key and the original values are added to the same (or similar)
      * species of collection as the source iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.groupBy(new Function&lt;Person, String&gt;()
      * {
@@ -1281,7 +1311,7 @@ public interface
     /**
      * Same as {@link #groupBy(Function)}, except that the results are gathered into the specified {@code target}
      * multimap.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.groupBy(new Function&lt;Person, String&gt;()
      * {

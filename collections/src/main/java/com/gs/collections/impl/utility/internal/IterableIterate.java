@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,13 +55,18 @@ import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.utility.Iterate;
 
@@ -106,7 +111,6 @@ public final class IterableIterate
 
     /**
      * @see Iterate#partitionWith(Iterable, Predicate2, Object)
-     *
      * @since 5.0
      */
     public static <T, P> PartitionMutableList<T> partitionWith(Iterable<T> iterable, Predicate2<? super T, ? super P> predicate, P parameter)
@@ -331,7 +335,7 @@ public final class IterableIterate
 
     /**
      * @see Iterate#collectByte(Iterable, ByteFunction,
-     *      MutableByteCollection)
+     * MutableByteCollection)
      */
     public static <T, R extends MutableByteCollection> R collectByte(Iterable<T> iterable, ByteFunction<? super T> byteFunction, R target)
     {
@@ -350,7 +354,7 @@ public final class IterableIterate
 
     /**
      * @see Iterate#collectChar(Iterable, CharFunction,
-     *      MutableCharCollection)
+     * MutableCharCollection)
      */
     public static <T, R extends MutableCharCollection> R collectChar(Iterable<T> iterable, CharFunction<? super T> charFunction, R target)
     {
@@ -369,7 +373,7 @@ public final class IterableIterate
 
     /**
      * @see Iterate#collectDouble(Iterable, DoubleFunction,
-     *      MutableDoubleCollection)
+     * MutableDoubleCollection)
      */
     public static <T, R extends MutableDoubleCollection> R collectDouble(Iterable<T> iterable, DoubleFunction<? super T> doubleFunction, R target)
     {
@@ -388,7 +392,7 @@ public final class IterableIterate
 
     /**
      * @see Iterate#collectFloat(Iterable, FloatFunction,
-     *      MutableFloatCollection)
+     * MutableFloatCollection)
      */
     public static <T, R extends MutableFloatCollection> R collectFloat(Iterable<T> iterable, FloatFunction<? super T> floatFunction, R target)
     {
@@ -407,7 +411,7 @@ public final class IterableIterate
 
     /**
      * @see Iterate#collectInt(Iterable, IntFunction,
-     *      MutableIntCollection)
+     * MutableIntCollection)
      */
     public static <T, R extends MutableIntCollection> R collectInt(Iterable<T> iterable, IntFunction<? super T> intFunction, R target)
     {
@@ -426,7 +430,7 @@ public final class IterableIterate
 
     /**
      * @see Iterate#collectLong(Iterable, LongFunction,
-     *      MutableLongCollection)
+     * MutableLongCollection)
      */
     public static <T, R extends MutableLongCollection> R collectLong(Iterable<T> iterable, LongFunction<? super T> longFunction, R target)
     {
@@ -445,7 +449,7 @@ public final class IterableIterate
 
     /**
      * @see Iterate#collectShort(Iterable, ShortFunction,
-     *      MutableShortCollection)
+     * MutableShortCollection)
      */
     public static <T, R extends MutableShortCollection> R collectShort(Iterable<T> iterable, ShortFunction<? super T> shortFunction, R target)
     {
@@ -600,6 +604,30 @@ public final class IterableIterate
     public static <T> double sumOfDouble(Iterable<T> iterable, DoubleFunction<? super T> function)
     {
         return IteratorIterate.sumOfDouble(iterable.iterator(), function);
+    }
+
+    public static <V, T> ObjectLongMap<V> sumByInt(Iterable<T> iterable, Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        return IterableIterate.injectInto(result, iterable, PrimitiveFunctions.sumByIntFunction(groupBy, function));
+    }
+
+    public static <V, T> ObjectLongMap<V> sumByLong(Iterable<T> iterable, Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        return IterableIterate.injectInto(result, iterable, PrimitiveFunctions.sumByLongFunction(groupBy, function));
+    }
+
+    public static <V, T> ObjectDoubleMap<V> sumByFloat(Iterable<T> iterable, Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        return IterableIterate.injectInto(result, iterable, PrimitiveFunctions.sumByFloatFunction(groupBy, function));
+    }
+
+    public static <V, T> ObjectDoubleMap<V> sumByDouble(Iterable<T> iterable, Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        return IterableIterate.injectInto(result, iterable, PrimitiveFunctions.sumByDoubleFunction(groupBy, function));
     }
 
     /**

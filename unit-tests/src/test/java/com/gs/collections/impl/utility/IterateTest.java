@@ -47,6 +47,8 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
@@ -212,7 +214,6 @@ public class IterateTest
         Assert.assertFalse(Iterate.removeAllIterable(removeFastList, sourceFastList));
         Assert.assertEquals(Lists.immutable.with(1, 2, 3, 4, 5, 6), sourceFastList);
     }
-
 
     @Test
     public void sizeOf()
@@ -2036,6 +2037,42 @@ public class IterateTest
     {
         Assert.assertEquals(6.0d, Iterate.sumOfDouble(FastList.newListWith(Double.valueOf(1), Double.valueOf(2), Double.valueOf(3)), value -> value), 0.0d);
         Verify.assertThrows(IllegalArgumentException.class, () -> {Iterate.sumOfDouble(null, null);});
+    }
+
+    @Test
+    public void sumByInt()
+    {
+        RichIterable<Integer> values = FastList.newList(Interval.oneTo(10));
+        ObjectLongMap<Integer> result = Iterate.sumByInt(values, i -> i % 2, e -> e);
+        Assert.assertEquals(25, result.get(1));
+        Assert.assertEquals(30, result.get(0));
+    }
+
+    @Test
+    public void sumByFloat()
+    {
+        RichIterable<Integer> values = FastList.newList(Interval.oneTo(10));
+        ObjectDoubleMap<Integer> result = Iterate.sumByFloat(values, f -> (int) f % 2, e -> e);
+        Assert.assertEquals(25.0f, result.get(1), 0.0);
+        Assert.assertEquals(30.0f, result.get(0), 0.0);
+    }
+
+    @Test
+    public void sumByLong()
+    {
+        RichIterable<Integer> values = FastList.newList(Interval.oneTo(10));
+        ObjectLongMap<Integer> result = Iterate.sumByLong(values, l -> l % 2, e -> e);
+        Assert.assertEquals(25, result.get(1));
+        Assert.assertEquals(30, result.get(0));
+    }
+
+    @Test
+    public void sumByDouble()
+    {
+        RichIterable<Integer> values = FastList.newList(Interval.oneTo(10));
+        ObjectDoubleMap<Integer> result = Iterate.sumByDouble(values, d -> (int) d % 2, e -> e);
+        Assert.assertEquals(25.0d, result.get(1), 0.0);
+        Assert.assertEquals(30.0d, result.get(0), 0.0);
     }
 
     @Test

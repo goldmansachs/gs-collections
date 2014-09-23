@@ -63,6 +63,8 @@ import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
@@ -86,6 +88,7 @@ import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
@@ -111,6 +114,8 @@ import com.gs.collections.impl.factory.HashingStrategySets;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.multimap.set.strategy.UnifiedSetWithHashingStrategyMultimap;
@@ -1166,6 +1171,30 @@ public class UnifiedSetWithHashingStrategy<K>
     public double sumOfDouble(DoubleFunction<? super K> function)
     {
         return IterableIterate.sumOfDouble(this, function);
+    }
+
+    public <V> ObjectLongMap<V> sumByInt(Function<K, V> groupBy, IntFunction<? super K> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByIntFunction(groupBy, function));
+    }
+
+    public <V> ObjectDoubleMap<V> sumByFloat(Function<K, V> groupBy, FloatFunction<? super K> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByFloatFunction(groupBy, function));
+    }
+
+    public <V> ObjectLongMap<V> sumByLong(Function<K, V> groupBy, LongFunction<? super K> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByLongFunction(groupBy, function));
+    }
+
+    public <V> ObjectDoubleMap<V> sumByDouble(Function<K, V> groupBy, DoubleFunction<? super K> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        return this.injectInto(result, PrimitiveFunctions.sumByDoubleFunction(groupBy, function));
     }
 
     public <IV, P> IV injectIntoWith(
