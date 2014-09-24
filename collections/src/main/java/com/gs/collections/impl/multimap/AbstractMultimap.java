@@ -361,4 +361,16 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
         });
         return target;
     }
+
+    public <V2, R extends MutableMultimap<K, V2>> R collectValues(final Function<? super V, ? extends V2> function, final R target)
+    {
+        this.getMap().forEachKeyValue(new Procedure2<K, C>()
+        {
+            public void value(K key, C collection)
+            {
+                target.putAll(key, collection.collect(function));
+            }
+        });
+        return target;
+    }
 }

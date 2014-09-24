@@ -20,6 +20,7 @@ import java.util.Collections;
 
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
+import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
@@ -29,6 +30,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimapTestCase;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
+import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
@@ -198,5 +200,21 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
         expectedMultimap2.putAll(1, FastList.newListWith("5Value", "4Value", "3Value", "2Value"));
         ImmutableBagMultimap<Integer, String> expectedImmutableMultimap2 = expectedMultimap2.toImmutable();
         Assert.assertEquals(expectedImmutableMultimap2, collectedMultimap2);
+    }
+
+    @Override
+    @Test
+    public void collectValues()
+    {
+        TreeSortedSetMultimap<String, Integer> mutableMultimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        mutableMultimap.putAll("1", FastList.newListWith(4, 3, 2, 1, 1));
+        mutableMultimap.putAll("2", FastList.newListWith(5, 4, 3, 2, 2));
+        ImmutableSortedSetMultimap<String, Integer> immutableMap = mutableMultimap.toImmutable();
+        ImmutableListMultimap<String, String> collectedMultimap = immutableMap.collectValues(value -> value.toString() + "Value");
+        FastListMultimap<String, String> expectedMultimap = FastListMultimap.newMultimap();
+        expectedMultimap.putAll("1", FastList.newListWith("4Value", "3Value", "2Value", "1Value"));
+        expectedMultimap.putAll("2", FastList.newListWith("5Value", "4Value", "3Value", "2Value"));
+        ImmutableListMultimap<String, String> expectedImmutableMultimap = expectedMultimap.toImmutable();
+        Assert.assertEquals(expectedImmutableMultimap, collectedMultimap);
     }
 }

@@ -22,11 +22,13 @@ import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
+import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
@@ -38,6 +40,7 @@ import com.gs.collections.impl.multimap.AbstractImmutableMultimap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 import com.gs.collections.impl.multimap.ImmutableMultimapSerializationProxy;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
+import com.gs.collections.impl.multimap.list.FastListMultimap;
 
 /**
  * The default ImmutableSortedSetMultimap implementation.
@@ -193,5 +196,10 @@ public final class ImmutableSortedSetMultimapImpl<K, V>
     public <K2, V2> ImmutableBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap()).toImmutable();
+    }
+
+    public <V2> ImmutableListMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
+    {
+        return this.collectValues(function, FastListMultimap.<K, V2>newMultimap()).toImmutable();
     }
 }

@@ -196,4 +196,12 @@ public abstract class AbstractImmutableMultimapTestCase
         Multimap<String, String> collectedMultimap = multimap.collectKeysValues((argument1, argument2) -> Tuples.pair(argument1 + "Key", argument2 + "Value"));
         Assert.assertEquals(this.classUnderTest().newWith("OneKey", "1Value").newWith("TwoKey", "2Value"), collectedMultimap);
     }
+
+    @Test
+    public void collectValues()
+    {
+        Multimap<String, String> multimap = this.classUnderTest().newWith("One", "1").newWith("Two", "2");
+        Multimap<String, String> collectedMultimap = multimap.collectValues(value -> value + "Value");
+        Assert.assertEquals(this.classUnderTest().newWith("One", "1Value").newWith("Two", "2Value"), collectedMultimap);
+    }
 }

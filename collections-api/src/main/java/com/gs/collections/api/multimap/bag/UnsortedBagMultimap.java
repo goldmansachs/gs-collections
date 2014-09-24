@@ -17,6 +17,7 @@
 package com.gs.collections.api.multimap.bag;
 
 import com.gs.collections.api.bag.UnsortedBag;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.tuple.Pair;
@@ -40,4 +41,6 @@ public interface UnsortedBagMultimap<K, V> extends BagMultimap<K, V>
     UnsortedBagMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 
     <K2, V2> UnsortedBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function);
+
+    <V2> UnsortedBagMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function);
 }

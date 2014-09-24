@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.multimap.set;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
@@ -71,5 +72,10 @@ public abstract class AbstractMutableSetMultimap<K, V> extends AbstractMutableMu
     public <K2, V2> UnifiedSetMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         return this.collectKeysValues(function, UnifiedSetMultimap.<K2, V2>newMultimap());
+    }
+
+    public <V2> UnifiedSetMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
+    {
+        return this.collectValues(function, UnifiedSetMultimap.<K, V2>newMultimap());
     }
 }

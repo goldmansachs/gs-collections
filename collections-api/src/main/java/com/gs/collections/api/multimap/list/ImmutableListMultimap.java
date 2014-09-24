@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.multimap.list;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ImmutableList;
@@ -50,4 +51,6 @@ public interface ImmutableListMultimap<K, V>
     ImmutableListMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 
     <K2, V2> ImmutableBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function);
+
+    <V2> ImmutableListMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function);
 }

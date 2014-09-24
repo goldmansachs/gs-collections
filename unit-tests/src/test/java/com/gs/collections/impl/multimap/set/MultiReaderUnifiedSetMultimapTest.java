@@ -215,4 +215,20 @@ public class MultiReaderUnifiedSetMultimapTest extends AbstractMutableMultimapTe
         Assert.assertEquals(expectedMultimap2, collectedMultimap2);
         Verify.assertSetsEqual(expectedMultimap2.get(1), collectedMultimap2.get(1));
     }
+
+    @Override
+    @Test
+    public void collectValues()
+    {
+        MultiReaderUnifiedSetMultimap<String, Integer> multimap = MultiReaderUnifiedSetMultimap.newMultimap();
+        multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
+        multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
+        UnifiedSetMultimap<String, String> collectedMultimap = multimap.collectValues(value -> value.toString() + "Value");
+        UnifiedSetMultimap<String, String> expectedMultimap = UnifiedSetMultimap.newMultimap();
+        expectedMultimap.putAll("1", FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
+        expectedMultimap.putAll("2", FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
+        Assert.assertEquals(expectedMultimap, collectedMultimap);
+        Verify.assertSetsEqual(expectedMultimap.get("1"), collectedMultimap.get("1"));
+        Verify.assertSetsEqual(expectedMultimap.get("2"), expectedMultimap.get("2"));
+    }
 }

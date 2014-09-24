@@ -30,7 +30,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test of {@link com.gs.collections.impl.multimap.list.MultiReaderHashBagMultimap}.
+ * Test of {@link MultiReaderHashBagMultimap}.
  */
 public class MultiReaderHashBagMultimapTest extends AbstractMutableMultimapTestCase
 {
@@ -186,6 +186,20 @@ public class MultiReaderHashBagMultimapTest extends AbstractMutableMultimapTestC
         HashBagMultimap<Integer, String> expectedMultimap = HashBagMultimap.newMultimap();
         expectedMultimap.putAll(3, FastList.newListWith("2", "3", "4", "2"));
         Assert.assertEquals(expectedMultimap, rejectedMultimap);
+    }
+
+    @Override
+    @Test
+    public void collectValues()
+    {
+        MultiReaderHashBagMultimap<String, Integer> multimap = MultiReaderHashBagMultimap.newMultimap();
+        multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
+        multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
+        HashBagMultimap<String, String> collectedMultimap = multimap.collectValues(value -> value.toString() + "Value");
+        HashBagMultimap<String, String> expectedMultimap = HashBagMultimap.newMultimap();
+        expectedMultimap.putAll("1", FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
+        expectedMultimap.putAll("2", FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
+        Assert.assertEquals(expectedMultimap, collectedMultimap);
     }
 
     @Override

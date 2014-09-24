@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.multimap.ordered;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.Multimap;
@@ -39,4 +40,6 @@ public interface ReversibleIterableMultimap<K, V>
     ReversibleIterableMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate);
 
     <K2, V2> BagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function);
+
+    <V2> ReversibleIterableMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function);
 }

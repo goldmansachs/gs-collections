@@ -329,4 +329,13 @@ public abstract class AbstractMultimapTestCase
         Multimap<Integer, String> expectedMultimap = this.newMultimapWithKeysValues(1, "1Value", 1, "12Value", 2, "2Value", 3, "3Value");
         Assert.assertEquals(expectedMultimap, collectedMultimap);
     }
+
+    @Test
+    public void collectValues()
+    {
+        Multimap<String, Integer> multimap = this.newMultimapWithKeysValues("1", 1, "1", 12, "2", 2, "3", 3);
+        Multimap<String, String> collectedMultimap = multimap.collectValues(value -> value.toString() + "Value");
+        Multimap<String, String> expectedMultimap = this.newMultimapWithKeysValues("1", "1Value", "1", "12Value", "2", "2Value", "3", "3Value");
+        Assert.assertEquals(expectedMultimap, collectedMultimap);
+    }
 }

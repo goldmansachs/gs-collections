@@ -198,4 +198,18 @@ public class SynchronizedPutHashBagMultimapTest extends AbstractMutableMultimapT
         expectedMultimap2.putAll(1, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
         Assert.assertEquals(expectedMultimap2, collectedMultimap2);
     }
+
+    @Override
+    @Test
+    public void collectValues()
+    {
+        SynchronizedPutHashBagMultimap<String, Integer> multimap = SynchronizedPutHashBagMultimap.newMultimap();
+        multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
+        multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
+        HashBagMultimap<String, String> collectedMultimap = multimap.collectValues(value -> value.toString() + "Value");
+        HashBagMultimap<String, String> expectedMultimap = HashBagMultimap.newMultimap();
+        expectedMultimap.putAll("1", FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
+        expectedMultimap.putAll("2", FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
+        Assert.assertEquals(expectedMultimap, collectedMultimap);
+    }
 }

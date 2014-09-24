@@ -20,6 +20,7 @@ import java.io.Externalizable;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -159,5 +160,10 @@ public final class SynchronizedPutHashBagMultimap<K, V>
     public <K2, V2> HashBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap());
+    }
+
+    public <V2> HashBagMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
+    {
+        return this.collectValues(function, HashBagMultimap.<K, V2>newMultimap());
     }
 }

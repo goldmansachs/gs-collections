@@ -23,6 +23,7 @@ import java.io.ObjectOutput;
 import java.util.Comparator;
 
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
@@ -34,6 +35,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
+import com.gs.collections.impl.multimap.list.FastListMultimap;
 
 /**
  * @deprecated in 5.0. Use {@link com.gs.collections.impl.multimap.bag.sorted.TreeBagMultimap} instead.
@@ -164,5 +166,10 @@ public final class TreeBagMultimap<K, V>
     public <K2, V2> HashBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap());
+    }
+
+    public <V2> FastListMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
+    {
+        return this.collectValues(function, FastListMultimap.<K, V2>newMultimap());
     }
 }

@@ -18,6 +18,7 @@ package com.gs.collections.impl.multimap.list;
 
 import java.io.Externalizable;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -89,9 +90,9 @@ public final class SynchronizedPutFastListMultimap<K, V>
         return new SynchronizedPutFastListMultimap<K, V>();
     }
 
-    public static <K, V> SynchronizedPutFastListMultimap<K, V> newMultimap(int initiaCapacity, float loadFactor, int concurrencyLevel)
+    public static <K, V> SynchronizedPutFastListMultimap<K, V> newMultimap(int initialCapacity, float loadFactor, int concurrencyLevel)
     {
-        return new SynchronizedPutFastListMultimap<K, V>(initiaCapacity);
+        return new SynchronizedPutFastListMultimap<K, V>(initialCapacity);
     }
 
     public static <K, V> SynchronizedPutFastListMultimap<K, V> newMultimap(Multimap<? extends K, ? extends V> multimap)
@@ -163,5 +164,10 @@ public final class SynchronizedPutFastListMultimap<K, V>
     public <K2, V2> HashBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap());
+    }
+
+    public <V2> FastListMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
+    {
+        return this.collectValues(function, FastListMultimap.<K, V2>newMultimap());
     }
 }

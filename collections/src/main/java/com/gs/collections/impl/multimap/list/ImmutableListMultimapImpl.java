@@ -18,6 +18,7 @@ package com.gs.collections.impl.multimap.list;
 
 import java.io.Serializable;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ImmutableList;
@@ -153,5 +154,10 @@ public final class ImmutableListMultimapImpl<K, V>
     public <K2, V2> ImmutableBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap()).toImmutable();
+    }
+
+    public <V2> ImmutableListMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
+    {
+        return this.collectValues(function, FastListMultimap.<K, V2>newMultimap()).toImmutable();
     }
 }

@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.Bag;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -423,7 +424,7 @@ public interface Multimap<K, V>
      * multimap.  This method is also commonly called transform or map.
      * <p>
      * <pre>e.g.
-     * return people.collectKeysValues(new Function2&lt;Integer, Person, Pair&lt;String, String&gt&gt;()
+     * return multimap.collectKeysValues(new Function2&lt;Integer, Person, Pair&lt;String, String&gt&gt;()
      * {
      *     public Pair&lt;String, String&gt; valueOf(Integer age, Person person)
      *     {
@@ -432,18 +433,17 @@ public interface Multimap<K, V>
      * });
      * </pre>
      *
-     * @param function a {@link com.gs.collections.api.block.function.Function2} to use for transformation
+     * @param function a {@link Function2} to use for transformation
      * @return {@code Multimap}, which contains elements as a result of the transformation
      * @since 6.0
      */
     <K2, V2> Multimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
     /**
-     * Returns a new multimap with the results of applying the specified function on each key and value of the source
-     * multimap.  This method is also commonly called transform or map.
+     * Same as the collect method but uses the specified target multimap for the results.
      * <p>
      * <pre>e.g.
-     * return people.collectKeysValues(new Function2&lt;Integer, Person, Pair&lt;String, String&gt&gt;()
+     * return multimap.collectKeysValues(new Function2&lt;Integer, Person, Pair&lt;String, String&gt&gt;()
      * {
      *     public Pair&lt;String, String&gt; valueOf(Integer age, Person person)
      *     {
@@ -452,10 +452,50 @@ public interface Multimap<K, V>
      * }, HashBagMultimap.<String, String>newMultimap());
      * </pre>
      *
-     * @param function a {@link com.gs.collections.api.block.function.Function2} to use for transformation
+     * @param function a {@link Function2} to use for transformation
      * @param target   the Multimap to append for all elements in this {@code Multimap} that are evaluated in {@code function}
      * @return {@code target}, which contains appended elements as a result of the transformation
      * @since 6.0
      */
     <K2, V2, R extends MutableMultimap<K2, V2>> R collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function, R target);
+
+    /**
+     * Returns a new multimap with the results of applying the specified function on each value of the source
+     * multimap.  This method is also commonly called transform or map.
+     * <p>
+     * <pre>e.g.
+     * return multimap.collectValues(new Function&lt;Person, String&gt;()
+     * {
+     *     public String valueOf(Person person)
+     *     {
+     *         return person.getLastName();
+     *     }
+     * });
+     * </pre>
+     *
+     * @param function a {@link Function} to use for transformation
+     * @return {@code Multimap}, which contains elements as a result of the transformation
+     * @since 6.0
+     */
+    <V2> Multimap<K, V2> collectValues(Function<? super V, ? extends V2> function);
+
+    /**
+     * Same as the collect method but uses the specified target multimap for the results.
+     * <p>
+     * <pre>e.g.
+     * return multimap.collectValues(new Function&lt;Person, String&gt;()
+     * {
+     *     public String valueOf(Person person)
+     *     {
+     *         return person.getLastName();
+     *     }
+     * }, FastListMultimap.<Integer, String>newMultimap());
+     * </pre>
+     *
+     * @param function a {@link Function} to use for transformation
+     * @param target   the Multimap to append for all elements in this {@code Multimap} that are evaluated in {@code function}
+     * @return {@code target}, which contains appended elements as a result of the transformation
+     * @since 6.0
+     */
+    <V2, R extends MutableMultimap<K, V2>> R collectValues(Function<? super V, ? extends V2> function, R target);
 }

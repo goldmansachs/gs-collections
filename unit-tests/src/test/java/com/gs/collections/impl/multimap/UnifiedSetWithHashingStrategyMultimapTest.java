@@ -338,4 +338,28 @@ public class UnifiedSetWithHashingStrategyMultimapTest extends AbstractMutableMu
         Assert.assertEquals(expectedMultimap2, collectedMultimap2);
         Verify.assertSetsEqual(expectedMultimap2.get("1"), collectedMultimap2.get("1"));
     }
+
+    @Override
+    @Test
+    public void collectValues()
+    {
+        UnifiedSetWithHashingStrategyMultimap<Integer, Person> multimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
+        multimap.put(1, JANESMITH);
+        multimap.put(1, JOHNDOE);
+        multimap.put(1, JANEDOE);
+        multimap.put(1, JANEDOE);
+        multimap.put(2, JANESMITH);
+        multimap.put(2, JOHNSMITH);
+        multimap.put(2, JOHNDOE);
+        multimap.put(2, JANEDOE);
+
+        UnifiedSetMultimap<Integer, Integer> collectedMultimap = multimap.collectValues(Person::getAge);
+        UnifiedSetMultimap<Integer, Integer> expectedMultimap = UnifiedSetMultimap.newMultimap();
+        expectedMultimap.put(1, 100);
+        expectedMultimap.put(2, 100);
+
+        Assert.assertEquals(expectedMultimap, collectedMultimap);
+        Verify.assertSetsEqual(expectedMultimap.get(1), collectedMultimap.get(1));
+        Verify.assertSetsEqual(expectedMultimap.get(2), collectedMultimap.get(2));
+    }
 }

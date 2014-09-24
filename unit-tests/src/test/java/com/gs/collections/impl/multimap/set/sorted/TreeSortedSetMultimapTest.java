@@ -31,6 +31,7 @@ import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
+import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
@@ -303,5 +304,21 @@ public class TreeSortedSetMultimapTest extends AbstractMutableMultimapTestCase
         expectedMultimap2.putAll(1, FastList.newListWith("4Value", "3Value", "2Value", "1Value"));
         expectedMultimap2.putAll(1, FastList.newListWith("5Value", "4Value", "3Value", "2Value"));
         Assert.assertEquals(expectedMultimap2, collectedMultimap2);
+    }
+
+    @Override
+    @Test
+    public void collectValues()
+    {
+        TreeSortedSetMultimap<String, Integer> multimap = TreeSortedSetMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        multimap.putAll("1", FastList.newListWith(4, 3, 2, 1, 1));
+        multimap.putAll("2", FastList.newListWith(5, 4, 3, 2, 2));
+        FastListMultimap<String, String> collectedMultimap = multimap.collectValues(value -> value.toString() + "Value");
+        FastListMultimap<String, String> expectedMultimap = FastListMultimap.newMultimap();
+        expectedMultimap.putAll("1", FastList.newListWith("4Value", "3Value", "2Value", "1Value"));
+        expectedMultimap.putAll("2", FastList.newListWith("5Value", "4Value", "3Value", "2Value"));
+        Assert.assertEquals(expectedMultimap, collectedMultimap);
+        Verify.assertListsEqual(expectedMultimap.get("1"), collectedMultimap.get("1"));
+        Verify.assertListsEqual(expectedMultimap.get("2"), collectedMultimap.get("2"));
     }
 }
