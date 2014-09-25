@@ -1192,8 +1192,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
     {
         private int count;
         private int position;
-        private Object lastKey;
-        private boolean canRemove;
 
         public boolean hasNext()
         {
@@ -1206,14 +1204,12 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             {
                 throw new NoSuchElementException();
             }
-            this.canRemove = true;
 
             Object[] keys = Object<name>HashMap.this.keys;
             while (!isNonSentinel(keys[this.position]))
             {
                 this.position++;
             }
-            this.lastKey = keys[this.position];
             <type> result = Object<name>HashMap.this.values[this.position];
             this.count++;
             this.position++;
@@ -1222,13 +1218,12 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
         public void remove()
         {
-            if (!this.canRemove)
+            if (this.position == 0 || !isNonSentinel(Object<name>HashMap.this.keys[this.position - 1]))
             {
                 throw new IllegalStateException();
             }
-            Object<name>HashMap.this.remove(this.lastKey);
+            Object<name>HashMap.this.remove(Object<name>HashMap.this.keys[this.position - 1]);
             this.count--;
-            this.canRemove = false;
         }
     }
 

@@ -1556,8 +1556,6 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     {
         private int count;
         private int position;
-        private Object lastKey;
-        private boolean canRemove;
 
         public boolean hasNext()
         {
@@ -1570,14 +1568,12 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             {
                 throw new NoSuchElementException();
             }
-            this.canRemove = true;
 
             Object[] keys = ObjectBooleanHashMap.this.keys;
             while (!isNonSentinel(keys[this.position]))
             {
                 this.position++;
             }
-            this.lastKey = keys[this.position];
             boolean result = ObjectBooleanHashMap.this.values.get(this.position);
             this.count++;
             this.position++;
@@ -1586,13 +1582,12 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
         public void remove()
         {
-            if (!this.canRemove)
+            if (this.position == 0 || !isNonSentinel(ObjectBooleanHashMap.this.keys[this.position - 1]))
             {
                 throw new IllegalStateException();
             }
-            ObjectBooleanHashMap.this.remove(this.lastKey);
+            ObjectBooleanHashMap.this.remove(ObjectBooleanHashMap.this.keys[this.position - 1]);
             this.count--;
-            this.canRemove = false;
         }
     }
 
