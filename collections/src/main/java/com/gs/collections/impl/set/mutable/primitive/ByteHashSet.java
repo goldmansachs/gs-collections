@@ -1474,9 +1474,7 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
     private class MutableInternalByteIterator implements MutableByteIterator
     {
         private int count;
-        private byte lastReturnedValue;
         private byte minusOneTwentyEightToPlusOneTwentySeven = -128;
-        private boolean canRemove;
 
         public boolean hasNext()
         {
@@ -1491,15 +1489,14 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
             }
 
             this.count++;
-            this.canRemove = true;
 
             while (this.minusOneTwentyEightToPlusOneTwentySeven <= 127)
             {
                 if (ByteHashSet.this.contains(this.minusOneTwentyEightToPlusOneTwentySeven))
                 {
-                    this.lastReturnedValue = this.minusOneTwentyEightToPlusOneTwentySeven;
+                    byte result = this.minusOneTwentyEightToPlusOneTwentySeven;
                     this.minusOneTwentyEightToPlusOneTwentySeven++;
-                    return this.lastReturnedValue;
+                    return result;
                 }
                 this.minusOneTwentyEightToPlusOneTwentySeven++;
             }
@@ -1509,13 +1506,11 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
 
         public void remove()
         {
-            if (!this.canRemove)
+            if (this.count == 0 || !ByteHashSet.this.remove((byte) (this.minusOneTwentyEightToPlusOneTwentySeven - 1)))
             {
                 throw new IllegalStateException();
             }
-            ByteHashSet.this.remove(this.lastReturnedValue);
             this.count--;
-            this.canRemove = false;
         }
     }
 }

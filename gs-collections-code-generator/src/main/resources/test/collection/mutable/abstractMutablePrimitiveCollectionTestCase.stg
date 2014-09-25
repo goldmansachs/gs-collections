@@ -363,7 +363,7 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
     @Test
     public void <type>Iterator_with_remove()
     {
-        Mutable<name>Collection <type>Iterable = this.classUnderTest();
+        Mutable<name>Collection <type>Iterable = this.newWith(<["0", "1", "31", "32"]:(literal.(type))(); separator=", ">);
         Mutable<name>Iterator iterator = <type>Iterable.<type>Iterator();
         while (iterator.hasNext())
         {

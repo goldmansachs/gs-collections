@@ -56,7 +56,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
     private static final long serialVersionUID = 1L;
     private static final int OCCUPIED_DATA_RATIO = 2;
     private static final int OCCUPIED_SENTINEL_RATIO = 4;
-    private static final int DEFAULT_INITIAL_CAPACITY = 8;
+    private static final int DEFAULT_INITIAL_CAPACITY = 16;
     private static final <type> EMPTY = <(literal.(type))("0")>;
     private static final <type> REMOVED = <(literal.(type))("1")>;
 
@@ -70,7 +70,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 
     public <name>HashSet()
     {
-        this.allocateTable(DEFAULT_INITIAL_CAPACITY \<\< 1);
+        this.allocateTable(DEFAULT_INITIAL_CAPACITY);
     }
 
     public <name>HashSet(int initialCapacity)
@@ -1102,8 +1102,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
     {
         this.copyOnWrite = false;
         <type>[] copy = new <type>[this.table.length];
-        System.arraycopy(this.table, 0, copy, 0,
-        Math.min(this.table.length, this.table.length));
+        System.arraycopy(this.table, 0, copy, 0, this.table.length);
         this.table = copy;
     }
 
@@ -1865,8 +1864,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         private int count;
         private int position;
         private <type> zeroToThirtyOne;
-        private <type> lastReturned;
-        private boolean canRemove;
 
         public boolean hasNext()
         {
@@ -1880,15 +1877,14 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
                 throw new NoSuchElementException("next() called, but the iterator is exhausted");
             }
             this.count++;
-            this.canRemove = true;
 
             while (this.zeroToThirtyOne \< 32)
             {
                 if (<name>HashSet.this.contains(this.zeroToThirtyOne))
                 {
-                    this.lastReturned = this.zeroToThirtyOne;
+                    <type> result = this.zeroToThirtyOne;
                     this.zeroToThirtyOne++;
-                    return this.lastReturned;
+                    return result;
                 }
                 this.zeroToThirtyOne++;
             }
@@ -1898,20 +1894,36 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             {
                 this.position++;
             }
-            this.lastReturned = table[this.position];
+            <type> result = table[this.position];
             this.position++;
-            return this.lastReturned;
+            return result;
         }
 
         public void remove()
         {
-            if (!this.canRemove)
+            if (this.count == 0)
             {
                 throw new IllegalStateException();
             }
-            <name>HashSet.this.remove(this.lastReturned);
+            <type> removeValue;
+            if (this.zeroToThirtyOne \<= <(literal.(type))("32")> && this.position == 0)
+            {
+                if (<name>HashSet.this.zeroToThirtyOne != (<name>HashSet.this.zeroToThirtyOne | 1 \<\< (<(castRealTypeToInt.(type))("this.zeroToThirtyOne")> - 1)))
+                {
+                    throw new IllegalStateException();
+                }
+                removeValue = <(castIntToNarrowTypeWithParens.(type))("this.zeroToThirtyOne - 1")>;
+            }
+            else if (<name>HashSet.this.table[this.position - 1] == REMOVED)
+            {
+                throw new IllegalStateException();
+            }
+            else
+            {
+                removeValue = <name>HashSet.this.table[this.position - 1];
+            }
+            <name>HashSet.this.remove(removeValue);
             this.count--;
-            this.canRemove = false;
         }
     }
 }

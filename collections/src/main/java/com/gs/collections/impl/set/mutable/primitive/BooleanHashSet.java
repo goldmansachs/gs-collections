@@ -136,7 +136,6 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
     private class FalseTrueBooleanIterator implements MutableBooleanIterator
     {
         private int currentIndex;
-        private int lastIndex = -1;
 
         public boolean hasNext()
         {
@@ -148,10 +147,10 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
             switch (this.currentIndex)
             {
                 case 0:
-                    this.lastIndex = this.currentIndex++;
+                    this.currentIndex++;
                     return false;
                 case 1:
-                    this.lastIndex = this.currentIndex++;
+                    this.currentIndex++;
                     return true;
                 default:
                     throw new NoSuchElementException();
@@ -160,20 +159,21 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
 
         public void remove()
         {
-            switch (this.lastIndex)
+            switch (this.currentIndex)
             {
-                case -1:
-                    throw new IllegalStateException();
                 case 0:
-                    BooleanHashSet.this.remove(false);
-                    this.lastIndex = -1;
-                    return;
-                case 1:
-                    BooleanHashSet.this.remove(true);
-                    this.lastIndex = -1;
-                    return;
-                default:
                     throw new IllegalStateException();
+                case 1:
+                    if (!BooleanHashSet.this.remove(false))
+                    {
+                        throw new IllegalStateException();
+                    }
+                    return;
+                case 2:
+                    if (!BooleanHashSet.this.remove(true))
+                    {
+                        throw new IllegalStateException();
+                    }
             }
         }
     }
