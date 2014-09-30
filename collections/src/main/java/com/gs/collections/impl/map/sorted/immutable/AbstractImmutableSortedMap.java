@@ -50,7 +50,6 @@ import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
-import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
@@ -235,7 +234,7 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return partitionFastList.toImmutable();
     }
 
-    public <P> PartitionIterable<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> PartitionImmutableList<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         PartitionMutableList<V> partitionFastList = new PartitionFastList<V>();
         this.forEach(new PartitionPredicate2Procedure<V, P>(predicate, parameter, partitionFastList));

@@ -34,6 +34,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -94,7 +95,7 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
      * the key followed by an equals sign (<tt>"="</tt>) followed by the
      * associated value.  Keys and values are converted to strings as by
      * <tt>String.valueOf(Object)</tt>.<p>
-     * <p/>
+     * <p>
      * This implementation creates an empty string buffer, appends a left
      * brace, and iterates over the map's <tt>entrySet</tt> view, appending
      * the string representation of each <tt>map.entry</tt> in turn.  After
@@ -310,9 +311,15 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
     }
 
     @Override
-    public <P> RichIterable<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> MutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         return this.select(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public <P> MutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.reject(Predicates.bind(predicate, parameter));
     }
 
     public PartitionMutableList<V> partition(Predicate<? super V> predicate)

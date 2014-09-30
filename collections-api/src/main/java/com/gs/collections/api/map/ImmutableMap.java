@@ -55,14 +55,6 @@ import net.jcip.annotations.Immutable;
 public interface ImmutableMap<K, V>
         extends UnsortedMapIterable<K, V>
 {
-    ImmutableMap<K, V> select(Predicate2<? super K, ? super V> predicate);
-
-    <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
-
-    <R> ImmutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
-
-    ImmutableMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
-
     Map<K, V> castToMap();
 
     ImmutableMap<K, V> newWithKeyValue(K key, V value);
@@ -78,6 +70,30 @@ public interface ImmutableMap<K, V>
     MutableMap<K, V> toMap();
 
     ImmutableSetMultimap<V, K> flip();
+
+    ImmutableMap<K, V> select(Predicate2<? super K, ? super V> predicate);
+
+    ImmutableMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
+
+    ImmutableCollection<V> select(Predicate<? super V> predicate);
+
+    ImmutableCollection<V> reject(Predicate<? super V> predicate);
+
+    <P> ImmutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
+    <P> ImmutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
+    PartitionImmutableCollection<V> partition(Predicate<? super V> predicate);
+
+    <P> PartitionImmutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
+    <S> ImmutableCollection<S> selectInstancesOf(Class<S> clazz);
+
+    <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
+
+    <R> ImmutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+
+    <P, V1> ImmutableCollection<V1> collectWith(Function2<? super V, ? super P, ? extends V1> function, P parameter);
 
     <R> ImmutableCollection<R> collect(Function<? super V, ? extends R> function);
 
@@ -100,16 +116,6 @@ public interface ImmutableMap<K, V>
     <R> ImmutableCollection<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
 
     <R> ImmutableCollection<R> flatCollect(Function<? super V, ? extends Iterable<R>> function);
-
-    ImmutableCollection<V> select(Predicate<? super V> predicate);
-
-    ImmutableCollection<V> reject(Predicate<? super V> predicate);
-
-    PartitionImmutableCollection<V> partition(Predicate<? super V> predicate);
-
-    <P> PartitionImmutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
-
-    <S> ImmutableCollection<S> selectInstancesOf(Class<S> clazz);
 
     <S> ImmutableCollection<Pair<V, S>> zip(Iterable<S> that);
 

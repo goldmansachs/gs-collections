@@ -51,6 +51,8 @@ import com.gs.collections.api.partition.PartitionImmutableCollection;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
@@ -93,7 +95,7 @@ public abstract class AbstractImmutableMap<K, V>
      * Adjacent mappings are separated by the characters <tt>", "</tt> (comma and space).  Each key-value mapping is
      * rendered as the key followed by an equals sign (<tt>"="</tt>) followed by the associated value.  Keys and values
      * are converted to strings as by <tt>String.valueOf(Object)</tt>.<p>
-     * <p/>
+     * <p>
      * This implementation creates an empty string buffer, appends a left brace, and iterates over the map's
      * <tt>entrySet</tt> view, appending the string representation of each <tt>map.entry</tt> in turn.  After appending
      * each entry except the last, the string <tt>", "</tt> is appended.  Finally a right brace is appended.  A string
@@ -244,6 +246,12 @@ public abstract class AbstractImmutableMap<K, V>
     }
 
     @Override
+    public <P, VV> ImmutableCollection<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        return this.collect(Functions.bind(function, parameter));
+    }
+
+    @Override
     public ImmutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction)
     {
         BooleanArrayList result = new BooleanArrayList(this.size());
@@ -310,14 +318,26 @@ public abstract class AbstractImmutableMap<K, V>
         return this.flatCollect(function, FastList.<R>newList(this.size())).toImmutable();
     }
 
+    public ImmutableCollection<V> select(Predicate<? super V> predicate)
+    {
+        return this.select(predicate, FastList.<V>newList(this.size())).toImmutable();
+    }
+
     public ImmutableCollection<V> reject(Predicate<? super V> predicate)
     {
         return this.reject(predicate, FastList.<V>newList(this.size())).toImmutable();
     }
 
-    public ImmutableCollection<V> select(Predicate<? super V> predicate)
+    @Override
+    public <P> ImmutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
-        return this.select(predicate, FastList.<V>newList(this.size())).toImmutable();
+        return this.select(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public <P> ImmutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.reject(Predicates.bind(predicate, parameter));
     }
 
     public PartitionImmutableCollection<V> partition(Predicate<? super V> predicate)

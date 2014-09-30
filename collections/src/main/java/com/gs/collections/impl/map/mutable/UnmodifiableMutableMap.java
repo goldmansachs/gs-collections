@@ -509,7 +509,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectIf(predicate, function, target);
     }
 
-    public <P, VV> RichIterable<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    public <P, VV> MutableCollection<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
     {
         return this.getMutableMap().collectWith(function, parameter);
     }
@@ -739,7 +739,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().selectWith(predicate, parameter, targetCollection);
     }
 
-    public <P> RichIterable<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> MutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         return this.getMutableMap().selectWith(predicate, parameter);
     }
@@ -864,7 +864,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().reject(predicate);
     }
 
-    public <P> RichIterable<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> MutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         return this.getMutableMap().rejectWith(predicate, parameter);
     }

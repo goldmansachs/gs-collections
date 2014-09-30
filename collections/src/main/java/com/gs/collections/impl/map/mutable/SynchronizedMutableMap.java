@@ -163,11 +163,29 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
+    @Override
+    public <P> MutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().selectWith(predicate, parameter);
+        }
+    }
+
     public MutableCollection<V> reject(Predicate<? super V> predicate)
     {
         synchronized (this.lock)
         {
             return this.getMutableMap().reject(predicate);
+        }
+    }
+
+    @Override
+    public <P> MutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().rejectWith(predicate, parameter);
         }
     }
 
@@ -232,6 +250,15 @@ public class SynchronizedMutableMap<K, V>
         synchronized (this.lock)
         {
             return this.getMutableMap().collect(function);
+        }
+    }
+
+    @Override
+    public <P, A> MutableCollection<A> collectWith(Function2<? super V, ? super P, ? extends A> function, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().collectWith(function, parameter);
         }
     }
 
@@ -457,13 +484,11 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    @Override
     public RichIterable<K> keysView()
     {
         return LazyIterate.adapt(this.keySet());
     }
 
-    @Override
     public RichIterable<V> valuesView()
     {
         return LazyIterate.adapt(this.values());

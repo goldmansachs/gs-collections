@@ -20,9 +20,25 @@ import java.util.Comparator;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ListIterable;
+import com.gs.collections.api.list.primitive.BooleanList;
+import com.gs.collections.api.list.primitive.ByteList;
+import com.gs.collections.api.list.primitive.CharList;
+import com.gs.collections.api.list.primitive.DoubleList;
+import com.gs.collections.api.list.primitive.FloatList;
+import com.gs.collections.api.list.primitive.IntList;
+import com.gs.collections.api.list.primitive.LongList;
+import com.gs.collections.api.list.primitive.ShortList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.list.ListMultimap;
 import com.gs.collections.api.multimap.sortedset.SortedSetMultimap;
@@ -55,7 +71,33 @@ public interface SortedMapIterable<K, V>
 
     PartitionList<V> partition(Predicate<? super V> predicate);
 
+    <P> PartitionList<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
     <S> ListIterable<S> selectInstancesOf(Class<S> clazz);
+
+    <V1> ListIterable<V1> collect(Function<? super V, ? extends V1> function);
+
+    BooleanList collectBoolean(BooleanFunction<? super V> booleanFunction);
+
+    ByteList collectByte(ByteFunction<? super V> byteFunction);
+
+    CharList collectChar(CharFunction<? super V> charFunction);
+
+    DoubleList collectDouble(DoubleFunction<? super V> doubleFunction);
+
+    FloatList collectFloat(FloatFunction<? super V> floatFunction);
+
+    IntList collectInt(IntFunction<? super V> intFunction);
+
+    LongList collectLong(LongFunction<? super V> longFunction);
+
+    ShortList collectShort(ShortFunction<? super V> shortFunction);
+
+    <P, V1> ListIterable<V1> collectWith(Function2<? super V, ? super P, ? extends V1> function, P parameter);
+
+    <V1> ListIterable<V1> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends V1> function);
+
+    <V1> ListIterable<V1> flatCollect(Function<? super V, ? extends Iterable<V1>> function);
 
     <S> ListIterable<Pair<V, S>> zip(Iterable<S> that);
 
