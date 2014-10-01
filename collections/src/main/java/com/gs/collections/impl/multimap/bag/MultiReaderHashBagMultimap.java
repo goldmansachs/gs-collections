@@ -22,9 +22,11 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.MultiReaderHashBag;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
+import com.gs.collections.impl.utility.Iterate;
 
 public final class MultiReaderHashBagMultimap<K, V>
         extends AbstractMutableBagMultimap<K, V> implements Externalizable
@@ -92,6 +94,11 @@ public final class MultiReaderHashBagMultimap<K, V>
     public MultiReaderHashBagMultimap<K, V> newEmpty()
     {
         return new MultiReaderHashBagMultimap<K, V>();
+    }
+
+    public MutableBagMultimap<V, K> flip()
+    {
+        return Iterate.flip(this);
     }
 
     public HashBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

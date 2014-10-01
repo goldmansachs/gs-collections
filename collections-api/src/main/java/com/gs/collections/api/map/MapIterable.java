@@ -97,7 +97,8 @@ public interface MapIterable<K, V> extends RichIterable<V>
      *     Assert.assertTrue(result.equals(UnifiedMap.newWithKeysValues("1", 1, "2", 2, "3", 3)));
      * </pre>
      *
-     * @throws IllegalStateException if the MapIterable contains duplicate values.
+     * @exception IllegalStateException
+     *         if the MapIterable contains duplicate values.
      * @since 5.0
      */
     MapIterable<V, K> flipUniqueValues();
@@ -144,18 +145,20 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * Given a map from Domain -> Range return a multimap from Range -> Domain. We chose the name 'flip'
      * rather than 'invert' or 'transpose' since this method does not have the property of applying twice
      * returns the original.
-     * <p/>
+     * <p>
      * Since the keys in the input are unique, the values in the output are unique, so the return type should
      * be a SetMultimap. However since SetMultimap and SortedSetMultimap don't inherit from one another, SetMultimap
      * here does not allow SortedMapIterable to have a SortedSetMultimap return. Thus we compromise and call this
      * Multimap, even though all implementations will be a SetMultimap or SortedSetMultimap.
+     *
+     * @since 5.0
      */
     Multimap<V, K> flip();
 
     /**
      * For each key and value of the map the predicate is evaluated, if the result of the evaluation is true,
      * that key and value are returned in a new map.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * peopleByCity.select(new Predicate2&lt;City, Person&gt;()
      * {
@@ -171,7 +174,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
     /**
      * For each key and value of the map the function is evaluated.  The results of these evaluations are returned in
      * a new map.  The map returned will use the values projected from the function rather than the original values.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * peopleByCity.collectValues(new Function2&lt;City, Person, String&gt;()
      * {
@@ -187,7 +190,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
     /**
      * For each key and value of the map the function is evaluated.  The results of these evaluations are returned in
      * a new map.  The map returned will use the values projected from the function rather than the original values.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * peopleByCity.collect(new Function2&lt;City, Person, String&gt;()
      * {
@@ -203,7 +206,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
     /**
      * For each key and value of the map the predicate is evaluated, if the result of the evaluation is false,
      * that key and value are returned in a new map.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * peopleByCity.reject(new Predicate2&lt;City, Person&gt;()
      * {
@@ -222,7 +225,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * values of the map have been used as arguments. That is, there may be keys and values of the map that are
      * never used as arguments to the predicate. The result is null if predicate does not evaluate to true for
      * any key/value combination.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * peopleByCity.detect(new Predicate2&lt;City, Person&gt;()
      * {

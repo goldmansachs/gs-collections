@@ -16,12 +16,9 @@
 
 package com.gs.collections.impl.multimap.list;
 
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -32,7 +29,7 @@ import org.junit.Test;
 /**
  * Test of {@link SynchronizedPutFastListMultimap}.
  */
-public class SynchronizedPutFastListMultimapTest extends AbstractMutableMultimapTestCase
+public class SynchronizedPutFastListMultimapTest extends AbstractMutableListMultimapTestCase
 {
     @Override
     public <K, V> SynchronizedPutFastListMultimap<K, V> newMultimap()
@@ -55,24 +52,6 @@ public class SynchronizedPutFastListMultimapTest extends AbstractMutableMultimap
         mutableMultimap.put(key1, value1);
         mutableMultimap.put(key2, value2);
         return mutableMultimap;
-    }
-
-    @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return FastList.newListWith(args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
-    {
-        return SynchronizedPutFastListMultimap.newMultimap(pairs);
-    }
-
-    @Override
-    protected <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
-    {
-        return SynchronizedPutFastListMultimap.newMultimap(inputIterable);
     }
 
     @Override
@@ -103,14 +82,24 @@ public class SynchronizedPutFastListMultimapTest extends AbstractMutableMultimap
         return mutableMultimap;
     }
 
-    @Test
+    @SafeVarargs
     @Override
-    public void testClear()
+    public final <K, V> SynchronizedPutFastListMultimap<K, V> newMultimap(Pair<K, V>... pairs)
     {
-        MutableMultimap<Integer, Object> multimap =
-                this.<Integer, Object>newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three", 4, "Four");
-        multimap.clear();
-        Verify.assertEmpty(multimap);
+        return SynchronizedPutFastListMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    public <K, V> SynchronizedPutFastListMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return SynchronizedPutFastListMultimap.newMultimap(inputIterable);
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <V> FastList<V> createCollection(V... args)
+    {
+        return FastList.newListWith(args);
     }
 
     @Test

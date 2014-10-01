@@ -38,6 +38,7 @@ import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimap;
+import com.gs.collections.impl.utility.Iterate;
 
 /**
  * The default ImmutableBagMultimap implementation.
@@ -178,6 +179,11 @@ public final class ImmutableBagMultimapImpl<K, V>
     public ImmutableBagMultimap<K, V> newWithoutAll(Object key)
     {
         return (ImmutableBagMultimap<K, V>) super.newWithoutAll(key);
+    }
+
+    public ImmutableBagMultimap<V, K> flip()
+    {
+        return Iterate.flip(this).toImmutable();
     }
 
     public ImmutableBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

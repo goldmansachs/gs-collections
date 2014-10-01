@@ -39,6 +39,8 @@ public interface MutableSortedBagMultimap<K, V>
 
     MutableSortedBag<V> get(K key);
 
+    MutableBagMultimap<V, K> flip();
+
     MutableSortedBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 
     MutableSortedBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);

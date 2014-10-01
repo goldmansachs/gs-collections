@@ -22,9 +22,11 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.MultiReaderFastList;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
+import com.gs.collections.impl.utility.Iterate;
 
 public final class MultiReaderFastListMultimap<K, V>
         extends AbstractMutableListMultimap<K, V> implements Externalizable
@@ -113,6 +115,11 @@ public final class MultiReaderFastListMultimap<K, V>
     public MultiReaderFastListMultimap<K, V> newEmpty()
     {
         return new MultiReaderFastListMultimap<K, V>();
+    }
+
+    public MutableBagMultimap<V, K> flip()
+    {
+        return Iterate.flip(this);
     }
 
     public FastListMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

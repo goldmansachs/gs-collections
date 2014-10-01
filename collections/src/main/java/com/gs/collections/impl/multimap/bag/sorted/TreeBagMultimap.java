@@ -28,6 +28,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.sortedbag.ImmutableSortedBagMultimap;
 import com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap;
 import com.gs.collections.api.multimap.sortedbag.SortedBagMultimap;
@@ -37,6 +38,7 @@ import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
+import com.gs.collections.impl.utility.Iterate;
 
 public final class TreeBagMultimap<K, V>
         extends AbstractMutableMultimap<K, V, MutableSortedBag<V>>
@@ -149,6 +151,11 @@ public final class TreeBagMultimap<K, V>
     {
         this.comparator = (Comparator<? super V>) in.readObject();
         super.readExternal(in);
+    }
+
+    public MutableBagMultimap<V, K> flip()
+    {
+        return Iterate.flip(this);
     }
 
     public TreeBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

@@ -40,6 +40,8 @@ public interface ImmutableMultimap<K, V>
 
     ImmutableMultimap<K, V> newWithoutAll(Object key);
 
+    ImmutableMultimap<V, K> flip();
+
     ImmutableMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 
     ImmutableMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);

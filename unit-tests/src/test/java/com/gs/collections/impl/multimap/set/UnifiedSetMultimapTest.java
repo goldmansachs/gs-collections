@@ -16,12 +16,9 @@
 
 package com.gs.collections.impl.multimap.set;
 
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -32,16 +29,16 @@ import org.junit.Test;
 /**
  * Test of {@link UnifiedSetMultimap}.
  */
-public class UnifiedSetMultimapTest extends AbstractMutableMultimapTestCase
+public class UnifiedSetMultimapTest extends AbstractMutableSetMultimapTestCase
 {
     @Override
-    public <K, V> UnifiedSetMultimap<K, V> newMultimap()
+    protected <K, V> UnifiedSetMultimap<K, V> newMultimap()
     {
         return UnifiedSetMultimap.newMultimap();
     }
 
     @Override
-    public <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeyValue(K key, V value)
+    protected <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeyValue(K key, V value)
     {
         UnifiedSetMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key, value);
@@ -49,7 +46,7 @@ public class UnifiedSetMultimapTest extends AbstractMutableMultimapTestCase
     }
 
     @Override
-    public <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeysValues(K key1, V value1, K key2, V value2)
+    protected <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeysValues(K key1, V value1, K key2, V value2)
     {
         UnifiedSetMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key1, value1);
@@ -58,25 +55,7 @@ public class UnifiedSetMultimapTest extends AbstractMutableMultimapTestCase
     }
 
     @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return UnifiedSet.newSetWith(args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
-    {
-        return UnifiedSetMultimap.newMultimap(pairs);
-    }
-
-    @Override
-    protected <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
-    {
-        return UnifiedSetMultimap.newMultimap(inputIterable);
-    }
-
-    @Override
-    public <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeysValues(
+    protected <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3)
@@ -89,7 +68,7 @@ public class UnifiedSetMultimapTest extends AbstractMutableMultimapTestCase
     }
 
     @Override
-    public <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeysValues(
+    protected <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3,
@@ -101,6 +80,26 @@ public class UnifiedSetMultimapTest extends AbstractMutableMultimapTestCase
         mutableMultimap.put(key3, value3);
         mutableMultimap.put(key4, value4);
         return mutableMultimap;
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <K, V> UnifiedSetMultimap<K, V> newMultimap(Pair<K, V>... pairs)
+    {
+        return UnifiedSetMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    protected <K, V> UnifiedSetMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return UnifiedSetMultimap.newMultimap(inputIterable);
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <V> UnifiedSet<V> createCollection(V... args)
+    {
+        return UnifiedSet.newSetWith(args);
     }
 
     @Test

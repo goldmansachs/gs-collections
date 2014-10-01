@@ -21,10 +21,12 @@ import java.io.Externalizable;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.set.mutable.MultiReaderUnifiedSet;
+import com.gs.collections.impl.utility.Iterate;
 
 public final class MultiReaderUnifiedSetMultimap<K, V>
         extends AbstractMutableSetMultimap<K, V> implements Externalizable
@@ -92,6 +94,11 @@ public final class MultiReaderUnifiedSetMultimap<K, V>
     public MultiReaderUnifiedSetMultimap<K, V> newEmpty()
     {
         return new MultiReaderUnifiedSetMultimap<K, V>();
+    }
+
+    public MutableSetMultimap<V, K> flip()
+    {
+        return Iterate.flip(this);
     }
 
     public UnifiedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

@@ -17,9 +17,7 @@
 package com.gs.collections.impl.multimap;
 
 import com.gs.collections.api.block.HashingStrategy;
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
@@ -28,6 +26,7 @@ import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.multimap.set.AbstractMutableSetMultimapTestCase;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.multimap.set.strategy.UnifiedSetWithHashingStrategyMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -43,7 +42,7 @@ import org.junit.Test;
 /**
  * Test of {@link UnifiedSetWithHashingStrategyMultimap}.
  */
-public class UnifiedSetWithHashingStrategyMultimapTest extends AbstractMutableMultimapTestCase
+public class UnifiedSetWithHashingStrategyMultimapTest extends AbstractMutableSetMultimapTestCase
 {
     private static final HashingStrategy<Person> LAST_NAME_STRATEGY = HashingStrategies.fromFunction(Person.TO_LAST);
 
@@ -108,21 +107,21 @@ public class UnifiedSetWithHashingStrategyMultimapTest extends AbstractMutableMu
     }
 
     @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.<V>defaultStrategy(), args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
+    protected final <K, V> UnifiedSetWithHashingStrategyMultimap<K, V> newMultimap(Pair<K, V>... pairs)
     {
         return UnifiedSetWithHashingStrategyMultimap.newMultimap(HashingStrategies.<V>defaultStrategy(), pairs);
     }
 
     @Override
-    protected <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    protected <K, V> UnifiedSetWithHashingStrategyMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
     {
         return UnifiedSetWithHashingStrategyMultimap.newMultimap(HashingStrategies.<V>defaultStrategy(), inputIterable);
+    }
+
+    @Override
+    protected final <V> MutableSet<V> createCollection(V... args)
+    {
+        return UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.<V>defaultStrategy(), args);
     }
 
     @Override

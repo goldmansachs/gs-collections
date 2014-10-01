@@ -22,6 +22,7 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 
@@ -38,6 +39,8 @@ public interface MutableSortedSetMultimap<K, V>
     MutableSortedSetMultimap<K, V> newEmpty();
 
     MutableSortedSet<V> get(K key);
+
+    MutableSetMultimap<V, K> flip();
 
     MutableSortedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 

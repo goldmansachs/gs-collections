@@ -33,9 +33,9 @@ import org.junit.Test;
 public class ImmutableBagMultimapTest extends AbstractImmutableMultimapTestCase
 {
     @Override
-    protected ImmutableBagMultimap<String, String> classUnderTest()
+    protected <K, V> ImmutableBagMultimap<K, V> classUnderTest()
     {
-        return HashBagMultimap.<String, String>newMultimap().toImmutable();
+        return HashBagMultimap.<K, V>newMultimap().toImmutable();
     }
 
     @Override
@@ -61,6 +61,20 @@ public class ImmutableBagMultimapTest extends AbstractImmutableMultimapTestCase
         multimap.put("Three", 3);
         multimap.toImmutable().forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", HashBag.newBagWith(2, 1)), Tuples.pair("Three", HashBag.newBagWith(3, 3))), collection);
+    }
+
+    @Override
+    @Test
+    public void flip()
+    {
+        ImmutableBagMultimap<String, Integer> multimap = this.<String, Integer>classUnderTest()
+                .newWith("Less than 2", 1)
+                .newWith("Less than 3", 1)
+                .newWith("Less than 3", 2)
+                .newWith("Less than 3", 2);
+        ImmutableBagMultimap<Integer, String> flipped = multimap.flip();
+        Assert.assertEquals(Bags.immutable.with("Less than 3", "Less than 3"), flipped.get(2));
+        Assert.assertEquals(Bags.immutable.with("Less than 2", "Less than 3"), flipped.get(1));
     }
 
     @Override

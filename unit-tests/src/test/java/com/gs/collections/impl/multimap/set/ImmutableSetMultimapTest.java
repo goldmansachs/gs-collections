@@ -20,6 +20,7 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimapTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -31,9 +32,9 @@ import org.junit.Test;
 public class ImmutableSetMultimapTest extends AbstractImmutableMultimapTestCase
 {
     @Override
-    protected ImmutableSetMultimap<String, String> classUnderTest()
+    protected <K, V> ImmutableSetMultimap<K, V> classUnderTest()
     {
-        return UnifiedSetMultimap.<String, String>newMultimap().toImmutable();
+        return UnifiedSetMultimap.<K, V>newMultimap().toImmutable();
     }
 
     @Override
@@ -60,6 +61,20 @@ public class ImmutableSetMultimapTest extends AbstractImmutableMultimapTestCase
         ImmutableSetMultimap<String, Integer> immutableMultimap = multimap.toImmutable();
         immutableMultimap.forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", UnifiedSet.newSetWith(2, 1)), Tuples.pair("Three", UnifiedSet.newSetWith(3, 3))), collection);
+    }
+
+    @Override
+    @Test
+    public void flip()
+    {
+        ImmutableSetMultimap<String, Integer> multimap = this.<String, Integer>classUnderTest()
+                .newWith("Less than 2", 1)
+                .newWith("Less than 3", 1)
+                .newWith("Less than 3", 2)
+                .newWith("Less than 3", 2);
+        ImmutableSetMultimap<Integer, String> flipped = multimap.flip();
+        Assert.assertEquals(Sets.immutable.with("Less than 3"), flipped.get(2));
+        Assert.assertEquals(Sets.immutable.with("Less than 2", "Less than 3"), flipped.get(1));
     }
 
     @Override

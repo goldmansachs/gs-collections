@@ -40,7 +40,8 @@ public interface MutableMultimap<K, V>
     /**
      * Modification operation similar to put, however, takes the key-value pair as the input.
      *
-     * @param keyValuePair key value pair to add in the multimap
+     * @param keyValuePair
+     *         key value pair to add in the multimap
      * @see #put(Object, Object)
      * @since 6.0
      */
@@ -60,6 +61,8 @@ public interface MutableMultimap<K, V>
     RichIterable<V> removeAll(Object key);
 
     void clear();
+
+    MutableMultimap<V, K> flip();
 
     MutableMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 

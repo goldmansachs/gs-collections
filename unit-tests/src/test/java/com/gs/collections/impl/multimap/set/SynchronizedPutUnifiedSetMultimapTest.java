@@ -16,12 +16,9 @@
 
 package com.gs.collections.impl.multimap.set;
 
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -32,16 +29,16 @@ import org.junit.Test;
 /**
  * Test of {@link SynchronizedPutUnifiedSetMultimap}.
  */
-public class SynchronizedPutUnifiedSetMultimapTest extends AbstractMutableMultimapTestCase
+public class SynchronizedPutUnifiedSetMultimapTest extends AbstractMutableSetMultimapTestCase
 {
     @Override
-    public <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimap()
+    protected <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimap()
     {
         return SynchronizedPutUnifiedSetMultimap.newMultimap();
     }
 
     @Override
-    public <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimapWithKeyValue(K key, V value)
+    protected <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimapWithKeyValue(K key, V value)
     {
         SynchronizedPutUnifiedSetMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key, value);
@@ -49,7 +46,7 @@ public class SynchronizedPutUnifiedSetMultimapTest extends AbstractMutableMultim
     }
 
     @Override
-    public <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimapWithKeysValues(K key1, V value1, K key2, V value2)
+    protected <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimapWithKeysValues(K key1, V value1, K key2, V value2)
     {
         SynchronizedPutUnifiedSetMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key1, value1);
@@ -58,25 +55,7 @@ public class SynchronizedPutUnifiedSetMultimapTest extends AbstractMutableMultim
     }
 
     @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return UnifiedSet.newSetWith(args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
-    {
-        return SynchronizedPutUnifiedSetMultimap.newMultimap(pairs);
-    }
-
-    @Override
-    protected <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
-    {
-        return SynchronizedPutUnifiedSetMultimap.newMultimap(inputIterable);
-    }
-
-    @Override
-    public <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimapWithKeysValues(
+    protected <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3)
@@ -89,7 +68,7 @@ public class SynchronizedPutUnifiedSetMultimapTest extends AbstractMutableMultim
     }
 
     @Override
-    public <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimapWithKeysValues(
+    protected <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3,
@@ -101,6 +80,26 @@ public class SynchronizedPutUnifiedSetMultimapTest extends AbstractMutableMultim
         mutableMultimap.put(key3, value3);
         mutableMultimap.put(key4, value4);
         return mutableMultimap;
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimap(Pair<K, V>... pairs)
+    {
+        return SynchronizedPutUnifiedSetMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    protected <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return SynchronizedPutUnifiedSetMultimap.newMultimap(inputIterable);
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <V> UnifiedSet<V> createCollection(V... args)
+    {
+        return UnifiedSet.newSetWith(args);
     }
 
     @Test

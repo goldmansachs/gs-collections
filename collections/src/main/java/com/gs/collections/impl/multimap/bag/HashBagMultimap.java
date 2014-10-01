@@ -25,12 +25,14 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.procedure.checked.CheckedObjectIntProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.utility.Iterate;
 
 public final class HashBagMultimap<K, V>
         extends AbstractMutableBagMultimap<K, V> implements Externalizable
@@ -144,6 +146,11 @@ public final class HashBagMultimap<K, V>
             }
             this.putAll(key, bag);
         }
+    }
+
+    public MutableBagMultimap<V, K> flip()
+    {
+        return Iterate.flip(this);
     }
 
     public HashBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

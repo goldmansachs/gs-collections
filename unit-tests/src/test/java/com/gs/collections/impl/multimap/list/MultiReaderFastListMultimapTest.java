@@ -16,13 +16,10 @@
 
 package com.gs.collections.impl.multimap.list;
 
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.MultiReaderFastList;
-import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -33,7 +30,7 @@ import org.junit.Test;
 /**
  * Test of {@link com.gs.collections.impl.multimap.list.MultiReaderFastListMultimap}.
  */
-public class MultiReaderFastListMultimapTest extends AbstractMutableMultimapTestCase
+public class MultiReaderFastListMultimapTest extends AbstractMutableListMultimapTestCase
 {
     @Override
     public <K, V> MultiReaderFastListMultimap<K, V> newMultimap()
@@ -56,24 +53,6 @@ public class MultiReaderFastListMultimapTest extends AbstractMutableMultimapTest
         mutableMultimap.put(key1, value1);
         mutableMultimap.put(key2, value2);
         return mutableMultimap;
-    }
-
-    @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return MultiReaderFastList.newListWith(args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
-    {
-        return MultiReaderFastListMultimap.newMultimap(pairs);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
-    {
-        return MultiReaderFastListMultimap.newMultimap(inputIterable);
     }
 
     @Override
@@ -102,6 +81,26 @@ public class MultiReaderFastListMultimapTest extends AbstractMutableMultimapTest
         mutableMultimap.put(key3, value3);
         mutableMultimap.put(key4, value4);
         return mutableMultimap;
+    }
+
+    @SafeVarargs
+    @Override
+    public final <K, V> MultiReaderFastListMultimap<K, V> newMultimap(Pair<K, V>... pairs)
+    {
+        return MultiReaderFastListMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    public <K, V> MultiReaderFastListMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return MultiReaderFastListMultimap.newMultimap(inputIterable);
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <V> MultiReaderFastList<V> createCollection(V... args)
+    {
+        return MultiReaderFastList.newListWith(args);
     }
 
     @Test

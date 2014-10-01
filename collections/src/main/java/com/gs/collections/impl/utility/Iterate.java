@@ -63,6 +63,9 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.bag.BagMultimap;
+import com.gs.collections.api.multimap.list.ListMultimap;
+import com.gs.collections.api.multimap.set.SetMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
@@ -76,7 +79,9 @@ import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
+import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.utility.internal.DefaultSpeciesNewStrategy;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 import com.gs.collections.impl.utility.internal.RandomAccessListIterate;
@@ -618,8 +623,10 @@ public final class Iterate
      * Returns the first count elements of the iterable or the iterable itself if count is greater than the length of
      * the iterable.
      *
-     * @param iterable the collection to take from.
-     * @param count    the number of items to take.
+     * @param iterable
+     *         the collection to take from.
+     * @param count
+     *         the number of items to take.
      * @return a new list with the items take from the given collection.
      */
     public static <T> Collection<T> take(Iterable<T> iterable, int count)
@@ -650,8 +657,10 @@ public final class Iterate
      * Returns a collection without the first count elements of the iterable or the iterable itself if count is
      * non-positive.
      *
-     * @param iterable the collection to drop from.
-     * @param count    the number of items to drop.
+     * @param iterable
+     *         the collection to drop from.
+     * @param count
+     *         the number of items to drop.
      * @return a new list with the items dropped from the given collection.
      */
     public static <T> Collection<T> drop(Iterable<T> iterable, int count)
@@ -763,22 +772,21 @@ public final class Iterate
      */
     public static <T, L extends List<T>> L sortThis(L list, final Predicate2<? super T, ? super T> predicate)
     {
-        return Iterate.sortThis(
-                list, new Comparator<T>()
+        return Iterate.sortThis(list, new Comparator<T>()
+        {
+            public int compare(T o1, T o2)
+            {
+                if (predicate.accept(o1, o2))
                 {
-                    public int compare(T o1, T o2)
-                    {
-                        if (predicate.accept(o1, o2))
-                        {
-                            return -1;
-                        }
-                        if (predicate.accept(o2, o1))
-                        {
-                            return 1;
-                        }
-                        return 0;
-                    }
-                });
+                    return -1;
+                }
+                if (predicate.accept(o2, o1))
+                {
+                    return 1;
+                }
+                return 0;
+            }
+        });
     }
 
     /**
@@ -853,7 +861,7 @@ public final class Iterate
         if (iterable != null)
         {
             IterableIterate.removeIfWith(iterable, predicate, parameter);
-            // TODO: should this method return Iterarable instead?  Would seem less useful if it did
+            // TODO: should this method return Iterable instead?  Would seem less useful if it did
             return null;
         }
         throw new IllegalArgumentException("Cannot perform a remove on null");
@@ -1813,7 +1821,8 @@ public final class Iterate
     /**
      * Flattens a collection of collections into one "flat" collection.
      *
-     * @param iterable A list of lists, e.g. { { 1, 2, 3 }, { 4, 5 }, { 6 } }
+     * @param iterable
+     *         A list of lists, e.g. { { 1, 2, 3 }, { 4, 5 }, { 6 } }
      * @return A flattened list, e.g. { 1, 2, 3, 4, 5, 6 }
      */
     public static <T> Collection<T> flatten(Iterable<? extends Iterable<T>> iterable)
@@ -1837,7 +1846,8 @@ public final class Iterate
      * WARNING!!! The order of Sets are not guaranteed (except for TreeSets and other Ordered Set implementations), so
      * if you use this method, the first element could be any element from the Set.
      *
-     * @throws IllegalArgumentException if the Collection is null
+     * @exception IllegalArgumentException
+     *         if the Collection is null
      */
     public static <T> T getFirst(Iterable<T> iterable)
     {
@@ -1900,7 +1910,8 @@ public final class Iterate
      * WARNING!!! The order of Sets are not guaranteed (except for TreeSets and other Ordered Set implementations), so
      * if you use this method, the last element could be any element from the Set.
      *
-     * @throws IllegalArgumentException if the Collection is null
+     * @exception IllegalArgumentException
+     *         if the Collection is null
      */
     public static <T> T getLast(Iterable<T> iterable)
     {
@@ -3129,5 +3140,62 @@ public final class Iterate
             return IterableIterate.minBy(iterable, function);
         }
         throw new IllegalArgumentException("Cannot perform a minBy on null");
+    }
+
+    public static <K, V> HashBagMultimap<V, K> flip(BagMultimap<K, V> bagMultimap)
+    {
+        final HashBagMultimap<V, K> result = new HashBagMultimap<V, K>();
+        bagMultimap.forEachKeyMultiValue(new Procedure2<K, Iterable<V>>()
+        {
+            public void value(final K key, Iterable<V> values)
+            {
+                forEach(values, new Procedure<V>()
+                {
+                    public void value(V value)
+                    {
+                        result.put(value, key);
+                    }
+                });
+            }
+        });
+        return result;
+    }
+
+    public static <K, V> HashBagMultimap<V, K> flip(ListMultimap<K, V> listMultimap)
+    {
+        final HashBagMultimap<V, K> result = new HashBagMultimap<V, K>();
+        listMultimap.forEachKeyMultiValue(new Procedure2<K, Iterable<V>>()
+        {
+            public void value(final K key, Iterable<V> values)
+            {
+                forEach(values, new Procedure<V>()
+                {
+                    public void value(V value)
+                    {
+                        result.put(value, key);
+                    }
+                });
+            }
+        });
+        return result;
+    }
+
+    public static <K, V> UnifiedSetMultimap<V, K> flip(SetMultimap<K, V> setMultimap)
+    {
+        final UnifiedSetMultimap<V, K> result = new UnifiedSetMultimap<V, K>();
+        setMultimap.forEachKeyMultiValue(new Procedure2<K, Iterable<V>>()
+        {
+            public void value(final K key, Iterable<V> values)
+            {
+                forEach(values, new Procedure<V>()
+                {
+                    public void value(V value)
+                    {
+                        result.put(value, key);
+                    }
+                });
+            }
+        });
+        return result;
     }
 }

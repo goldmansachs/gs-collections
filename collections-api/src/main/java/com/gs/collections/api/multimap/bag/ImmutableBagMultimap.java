@@ -41,6 +41,8 @@ public interface ImmutableBagMultimap<K, V>
 
     ImmutableBagMultimap<K, V> newWithoutAll(Object key);
 
+    ImmutableBagMultimap<V, K> flip();
+
     ImmutableBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 
     ImmutableBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);

@@ -25,11 +25,13 @@ import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.set.AbstractMutableSetMultimap;
 import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
+import com.gs.collections.impl.utility.Iterate;
 
 public final class UnifiedSetWithHashingStrategyMultimap<K, V>
         extends AbstractMutableSetMultimap<K, V> implements Externalizable
@@ -146,6 +148,11 @@ public final class UnifiedSetWithHashingStrategyMultimap<K, V>
     {
         this.hashingStrategy = (HashingStrategy<? super V>) in.readObject();
         super.readExternal(in);
+    }
+
+    public MutableSetMultimap<V, K> flip()
+    {
+        return Iterate.flip(this);
     }
 
     public UnifiedSetWithHashingStrategyMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

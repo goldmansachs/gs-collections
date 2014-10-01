@@ -16,11 +16,12 @@
 
 package com.gs.collections.impl.multimap.list;
 
-import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimapTestCase;
@@ -35,13 +36,13 @@ import org.junit.Test;
 public class ImmutableListMultimapTest extends AbstractImmutableMultimapTestCase
 {
     @Override
-    protected ImmutableListMultimap<String, String> classUnderTest()
+    protected <K, V> ImmutableListMultimap<K, V> classUnderTest()
     {
-        return FastListMultimap.<String, String>newMultimap().toImmutable();
+        return FastListMultimap.<K, V>newMultimap().toImmutable();
     }
 
     @Override
-    protected MutableCollection<String> mutableCollection()
+    protected MutableList<String> mutableCollection()
     {
         return Lists.mutable.of();
     }
@@ -63,6 +64,20 @@ public class ImmutableListMultimapTest extends AbstractImmutableMultimapTestCase
         multimap.put("Three", 3);
         multimap.toImmutable().forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", FastList.newListWith(2, 1)), Tuples.pair("Three", FastList.newListWith(3, 3))), collection);
+    }
+
+    @Override
+    @Test
+    public void flip()
+    {
+        ImmutableListMultimap<String, Integer> multimap = this.<String, Integer>classUnderTest()
+                .newWith("Less than 2", 1)
+                .newWith("Less than 3", 1)
+                .newWith("Less than 3", 2)
+                .newWith("Less than 3", 2);
+        ImmutableBagMultimap<Integer, String> flipped = multimap.flip();
+        Assert.assertEquals(Bags.immutable.with("Less than 3", "Less than 3"), flipped.get(2));
+        Assert.assertEquals(Bags.immutable.with("Less than 2", "Less than 3"), flipped.get(1));
     }
 
     @Override

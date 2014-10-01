@@ -29,6 +29,7 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
+import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
@@ -41,6 +42,7 @@ import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 import com.gs.collections.impl.multimap.ImmutableMultimapSerializationProxy;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
+import com.gs.collections.impl.utility.Iterate;
 
 /**
  * The default ImmutableSortedSetMultimap implementation.
@@ -171,6 +173,11 @@ public final class ImmutableSortedSetMultimapImpl<K, V>
     public ImmutableSortedSetMultimap<K, V> newWithoutAll(Object key)
     {
         return (ImmutableSortedSetMultimap<K, V>) super.newWithoutAll(key);
+    }
+
+    public ImmutableSetMultimap<V, K> flip()
+    {
+        return Iterate.flip(this).toImmutable();
     }
 
     public ImmutableSortedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

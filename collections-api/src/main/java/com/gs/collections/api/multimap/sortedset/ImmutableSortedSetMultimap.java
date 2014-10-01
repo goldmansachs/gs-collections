@@ -22,6 +22,7 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
+import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 
@@ -42,6 +43,8 @@ public interface ImmutableSortedSetMultimap<K, V>
     ImmutableSortedSetMultimap<K, V> newWithAll(K key, Iterable<? extends V> values);
 
     ImmutableSortedSetMultimap<K, V> newWithoutAll(Object key);
+
+    ImmutableSetMultimap<V, K> flip();
 
     ImmutableSortedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 

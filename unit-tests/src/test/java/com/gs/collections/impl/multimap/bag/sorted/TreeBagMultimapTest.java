@@ -19,8 +19,6 @@ package com.gs.collections.impl.multimap.bag.sorted;
 import java.util.Collections;
 
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap;
 import com.gs.collections.api.tuple.Pair;
@@ -29,7 +27,6 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.test.SerializeTestHelper;
@@ -42,7 +39,7 @@ import org.junit.Test;
 /**
  * Test of {@link com.gs.collections.impl.multimap.bag.sorted.TreeBagMultimap}.
  */
-public class TreeBagMultimapTest extends AbstractMutableMultimapTestCase
+public class TreeBagMultimapTest extends AbstractMutableSortedBagMultimapTestCase
 {
     @Override
     public <K, V> TreeBagMultimap<K, V> newMultimap()
@@ -65,24 +62,6 @@ public class TreeBagMultimapTest extends AbstractMutableMultimapTestCase
         mutableMultimap.put(key1, value1);
         mutableMultimap.put(key2, value2);
         return mutableMultimap;
-    }
-
-    @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return TreeBag.newBagWith(args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
-    {
-        return TreeBagMultimap.newMultimap(pairs);
-    }
-
-    @Override
-    protected <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
-    {
-        return TreeBagMultimap.newMultimap(inputIterable);
     }
 
     @Override
@@ -111,6 +90,26 @@ public class TreeBagMultimapTest extends AbstractMutableMultimapTestCase
         mutableMultimap.put(key3, value3);
         mutableMultimap.put(key4, value4);
         return mutableMultimap;
+    }
+
+    @SafeVarargs
+    @Override
+    public final <K, V> TreeBagMultimap<K, V> newMultimap(Pair<K, V>... pairs)
+    {
+        return TreeBagMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    protected <K, V> TreeBagMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return TreeBagMultimap.newMultimap(inputIterable);
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <V> TreeBag<V> createCollection(V... args)
+    {
+        return TreeBag.newBagWith(args);
     }
 
     @Test

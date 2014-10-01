@@ -33,6 +33,7 @@ import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 import com.gs.collections.impl.multimap.ImmutableMultimapSerializationProxy;
+import com.gs.collections.impl.utility.Iterate;
 
 /**
  * The default ImmutableBagMultimap implementation.
@@ -127,6 +128,11 @@ public final class ImmutableSetMultimapImpl<K, V>
     public ImmutableSetMultimap<K, V> newWithoutAll(Object key)
     {
         return (ImmutableSetMultimap<K, V>) super.newWithoutAll(key);
+    }
+
+    public ImmutableSetMultimap<V, K> flip()
+    {
+        return Iterate.flip(this).toImmutable();
     }
 
     public ImmutableSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

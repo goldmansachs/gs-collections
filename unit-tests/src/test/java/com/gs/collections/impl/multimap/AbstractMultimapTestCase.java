@@ -39,7 +39,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Helper class for testing {@link Multimap}s
+ * Helper class for testing {@link Multimap}s.
  */
 public abstract class AbstractMultimapTestCase
 {
@@ -154,7 +154,7 @@ public abstract class AbstractMultimapTestCase
         MutableBag<String> collection = Bags.mutable.of();
         Multimap<Integer, String> multimap =
                 this.newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three");
-        multimap.forEachKeyValue((key, value) -> { collection.add(key + value); });
+        multimap.forEachKeyValue((key, value) -> collection.add(key + value));
         Assert.assertEquals(HashBag.newBagWith("1One", "2Two", "3Three"), collection);
     }
 
@@ -338,4 +338,7 @@ public abstract class AbstractMultimapTestCase
         Multimap<String, String> expectedMultimap = this.newMultimapWithKeysValues("1", "1Value", "1", "12Value", "2", "2Value", "3", "3Value");
         Assert.assertEquals(expectedMultimap, collectedMultimap);
     }
+
+    @Test
+    public abstract void flip();
 }

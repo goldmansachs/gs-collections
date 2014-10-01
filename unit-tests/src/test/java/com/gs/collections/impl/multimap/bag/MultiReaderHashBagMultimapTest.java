@@ -17,13 +17,10 @@
 package com.gs.collections.impl.multimap.bag;
 
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.MultiReaderHashBag;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
@@ -32,7 +29,7 @@ import org.junit.Test;
 /**
  * Test of {@link MultiReaderHashBagMultimap}.
  */
-public class MultiReaderHashBagMultimapTest extends AbstractMutableMultimapTestCase
+public class MultiReaderHashBagMultimapTest extends AbstractMutableBagMultimapTestCase
 {
     @Override
     public <K, V> MultiReaderHashBagMultimap<K, V> newMultimap()
@@ -55,24 +52,6 @@ public class MultiReaderHashBagMultimapTest extends AbstractMutableMultimapTestC
         mutableMultimap.put(key1, value1);
         mutableMultimap.put(key2, value2);
         return mutableMultimap;
-    }
-
-    @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return MultiReaderHashBag.newBagWith(args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
-    {
-        return MultiReaderHashBagMultimap.newMultimap(pairs);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
-    {
-        return MultiReaderHashBagMultimap.newMultimap(inputIterable);
     }
 
     @Override
@@ -101,6 +80,26 @@ public class MultiReaderHashBagMultimapTest extends AbstractMutableMultimapTestC
         mutableMultimap.put(key3, value3);
         mutableMultimap.put(key4, value4);
         return mutableMultimap;
+    }
+
+    @SafeVarargs
+    @Override
+    public final <K, V> MultiReaderHashBagMultimap<K, V> newMultimap(Pair<K, V>... pairs)
+    {
+        return MultiReaderHashBagMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    public <K, V> MultiReaderHashBagMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return MultiReaderHashBagMultimap.newMultimap(inputIterable);
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <V> MultiReaderHashBag<V> createCollection(V... args)
+    {
+        return MultiReaderHashBag.newBagWith(args);
     }
 
     @Test

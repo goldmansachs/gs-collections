@@ -36,30 +36,30 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Helper class for testing {@link Multimap}s
+ * Helper class for testing {@link Multimap}s.
  */
 public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTestCase
 {
     @Override
-    public abstract <K, V> MutableMultimap<K, V> newMultimap();
+    protected abstract <K, V> MutableMultimap<K, V> newMultimap();
 
     @Override
-    public abstract <K, V> MutableMultimap<K, V> newMultimapWithKeyValue(
+    protected abstract <K, V> MutableMultimap<K, V> newMultimapWithKeyValue(
             K key, V value);
 
     @Override
-    public abstract <K, V> MutableMultimap<K, V> newMultimapWithKeysValues(
+    protected abstract <K, V> MutableMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2);
 
     @Override
-    public abstract <K, V> MutableMultimap<K, V> newMultimapWithKeysValues(
+    protected abstract <K, V> MutableMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3);
 
     @Override
-    public abstract <K, V> MutableMultimap<K, V> newMultimapWithKeysValues(
+    protected abstract <K, V> MutableMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3,

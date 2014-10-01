@@ -21,11 +21,13 @@ import java.util.Collections;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
+import com.gs.collections.api.multimap.set.UnsortedSetMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimapTestCase;
@@ -43,9 +45,9 @@ import org.junit.Test;
 public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTestCase
 {
     @Override
-    protected ImmutableSortedSetMultimap<String, String> classUnderTest()
+    protected <K, V> ImmutableSortedSetMultimap<K, V> classUnderTest()
     {
-        return TreeSortedSetMultimap.<String, String>newMultimap().toImmutable();
+        return TreeSortedSetMultimap.<K, V>newMultimap().toImmutable();
     }
 
     @Override
@@ -58,7 +60,7 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
     public void testConstructor()
     {
         UnifiedMap<Integer, ImmutableSortedSet<Integer>> map = UnifiedMap.newWithKeysValues(1, TreeSortedSet.newSetWith(1).toImmutable());
-        ImmutableSortedSetMultimapImpl<Integer, Integer> immutableMap = new ImmutableSortedSetMultimapImpl<Integer, Integer>(map, null);
+        ImmutableSortedSetMultimap<Integer, Integer> immutableMap = new ImmutableSortedSetMultimapImpl<Integer, Integer>(map, null);
         Assert.assertEquals(FastList.newListWith(1), immutableMap.get(1).toList());
         Assert.assertNull(immutableMap.comparator());
         Verify.assertSize(1, immutableMap);
@@ -67,7 +69,7 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
     @Test
     public void testNewEmpty()
     {
-        ImmutableSortedSetMultimapImpl<Integer, Integer> map = new ImmutableSortedSetMultimapImpl<Integer, Integer>(UnifiedMap.<Integer, ImmutableSortedSet<Integer>>newMap(), Collections.<Integer>reverseOrder());
+        ImmutableSortedSetMultimap<Integer, Integer> map = new ImmutableSortedSetMultimapImpl<Integer, Integer>(UnifiedMap.<Integer, ImmutableSortedSet<Integer>>newMap(), Collections.<Integer>reverseOrder());
         Assert.assertEquals(Collections.<Integer>reverseOrder(), map.newEmpty().comparator());
         Verify.assertEmpty(map.newEmpty());
     }
@@ -105,6 +107,20 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
         multimap.put("Three", 3);
         multimap.toImmutable().forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 2, 1)), Tuples.pair("Three", TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 3, 3))), collection);
+    }
+
+    @Override
+    @Test
+    public void flip()
+    {
+        ImmutableSortedSetMultimap<String, Integer> multimap = this.<String, Integer>classUnderTest()
+                .newWith("Less than 2", 1)
+                .newWith("Less than 3", 1)
+                .newWith("Less than 3", 2)
+                .newWith("Less than 3", 2);
+        UnsortedSetMultimap<Integer, String> flipped = multimap.flip();
+        Assert.assertEquals(Sets.immutable.with("Less than 3"), flipped.get(2));
+        Assert.assertEquals(Sets.immutable.with("Less than 2", "Less than 3"), flipped.get(1));
     }
 
     @Override

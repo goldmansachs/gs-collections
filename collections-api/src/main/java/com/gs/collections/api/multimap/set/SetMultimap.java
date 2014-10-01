@@ -27,6 +27,8 @@ public interface SetMultimap<K, V>
 
     SetIterable<V> get(K key);
 
+    UnsortedSetMultimap<V, K> flip();
+
     SetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 
     SetMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);

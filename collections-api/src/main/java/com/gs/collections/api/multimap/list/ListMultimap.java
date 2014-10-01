@@ -21,6 +21,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.multimap.bag.BagMultimap;
+import com.gs.collections.api.multimap.bag.UnsortedBagMultimap;
 import com.gs.collections.api.multimap.ordered.ReversibleIterableMultimap;
 import com.gs.collections.api.tuple.Pair;
 
@@ -34,6 +35,8 @@ public interface ListMultimap<K, V>
     MutableListMultimap<K, V> toMutable();
 
     ImmutableListMultimap<K, V> toImmutable();
+
+    UnsortedBagMultimap<V, K> flip();
 
     ListMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 

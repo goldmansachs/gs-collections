@@ -168,4 +168,9 @@ public final class SynchronizedPutUnifiedSetMultimap<K, V>
     {
         return this.collectValues(function, UnifiedSetMultimap.<K, V2>newMultimap());
     }
+
+    public MutableSetMultimap<V, K> flip()
+    {
+        return Iterate.flip(this);
+    }
 }

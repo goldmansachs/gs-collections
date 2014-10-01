@@ -16,13 +16,10 @@
 
 package com.gs.collections.impl.multimap.bag;
 
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
@@ -32,7 +29,7 @@ import org.junit.Test;
 /**
  * Test of {@link SynchronizedPutHashBagMultimap}.
  */
-public class SynchronizedPutHashBagMultimapTest extends AbstractMutableMultimapTestCase
+public class SynchronizedPutHashBagMultimapTest extends AbstractMutableBagMultimapTestCase
 {
     @Override
     public <K, V> SynchronizedPutHashBagMultimap<K, V> newMultimap()
@@ -55,24 +52,6 @@ public class SynchronizedPutHashBagMultimapTest extends AbstractMutableMultimapT
         mutableMultimap.put(key1, value1);
         mutableMultimap.put(key2, value2);
         return mutableMultimap;
-    }
-
-    @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return HashBag.newBagWith(args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
-    {
-        return SynchronizedPutHashBagMultimap.newMultimap(pairs);
-    }
-
-    @Override
-    protected <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
-    {
-        return SynchronizedPutHashBagMultimap.newMultimap(inputIterable);
     }
 
     @Override
@@ -101,6 +80,26 @@ public class SynchronizedPutHashBagMultimapTest extends AbstractMutableMultimapT
         mutableMultimap.put(key3, value3);
         mutableMultimap.put(key4, value4);
         return mutableMultimap;
+    }
+
+    @SafeVarargs
+    @Override
+    public final <K, V> SynchronizedPutHashBagMultimap<K, V> newMultimap(Pair<K, V>... pairs)
+    {
+        return SynchronizedPutHashBagMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    protected <K, V> SynchronizedPutHashBagMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return SynchronizedPutHashBagMultimap.newMultimap(inputIterable);
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <V> HashBag<V> createCollection(V... args)
+    {
+        return HashBag.newBagWith(args);
     }
 
     @Test

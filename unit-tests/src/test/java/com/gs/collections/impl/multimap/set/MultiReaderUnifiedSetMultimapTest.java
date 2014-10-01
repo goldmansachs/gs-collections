@@ -16,12 +16,9 @@
 
 package com.gs.collections.impl.multimap.set;
 
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.set.mutable.MultiReaderUnifiedSet;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -33,16 +30,16 @@ import org.junit.Test;
 /**
  * Test of {@link MultiReaderUnifiedSetMultimap}.
  */
-public class MultiReaderUnifiedSetMultimapTest extends AbstractMutableMultimapTestCase
+public class MultiReaderUnifiedSetMultimapTest extends AbstractMutableSetMultimapTestCase
 {
     @Override
-    public <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimap()
+    protected <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimap()
     {
         return MultiReaderUnifiedSetMultimap.newMultimap();
     }
 
     @Override
-    public <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimapWithKeyValue(K key, V value)
+    protected <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimapWithKeyValue(K key, V value)
     {
         MultiReaderUnifiedSetMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key, value);
@@ -50,7 +47,7 @@ public class MultiReaderUnifiedSetMultimapTest extends AbstractMutableMultimapTe
     }
 
     @Override
-    public <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimapWithKeysValues(K key1, V value1, K key2, V value2)
+    protected <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimapWithKeysValues(K key1, V value1, K key2, V value2)
     {
         MultiReaderUnifiedSetMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key1, value1);
@@ -59,25 +56,7 @@ public class MultiReaderUnifiedSetMultimapTest extends AbstractMutableMultimapTe
     }
 
     @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return MultiReaderUnifiedSet.newSetWith(args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
-    {
-        return MultiReaderUnifiedSetMultimap.newMultimap(pairs);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
-    {
-        return MultiReaderUnifiedSetMultimap.newMultimap(inputIterable);
-    }
-
-    @Override
-    public <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimapWithKeysValues(
+    protected <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3)
@@ -90,7 +69,7 @@ public class MultiReaderUnifiedSetMultimapTest extends AbstractMutableMultimapTe
     }
 
     @Override
-    public <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimapWithKeysValues(
+    protected <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3,
@@ -102,6 +81,26 @@ public class MultiReaderUnifiedSetMultimapTest extends AbstractMutableMultimapTe
         mutableMultimap.put(key3, value3);
         mutableMultimap.put(key4, value4);
         return mutableMultimap;
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimap(Pair<K, V>... pairs)
+    {
+        return MultiReaderUnifiedSetMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    protected <K, V> MultiReaderUnifiedSetMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return MultiReaderUnifiedSetMultimap.newMultimap(inputIterable);
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <V> MultiReaderUnifiedSet<V> createCollection(V... args)
+    {
+        return MultiReaderUnifiedSet.newSetWith(args);
     }
 
     @Test

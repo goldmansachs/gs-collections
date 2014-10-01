@@ -18,8 +18,6 @@ package com.gs.collections.impl.multimap.set.sorted;
 
 import java.util.Collections;
 
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
@@ -29,7 +27,6 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
@@ -44,7 +41,7 @@ import org.junit.Test;
 /**
  * Test of {@link TreeSortedSetMultimap}.
  */
-public class TreeSortedSetMultimapTest extends AbstractMutableMultimapTestCase
+public class TreeSortedSetMultimapTest extends AbstractMutableSortedSetMultimapTestCase
 {
     @Override
     public <K, V> TreeSortedSetMultimap<K, V> newMultimap()
@@ -67,24 +64,6 @@ public class TreeSortedSetMultimapTest extends AbstractMutableMultimapTestCase
         mutableMultimap.put(key1, value1);
         mutableMultimap.put(key2, value2);
         return mutableMultimap;
-    }
-
-    @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return TreeSortedSet.newSetWith(args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
-    {
-        return TreeSortedSetMultimap.newMultimap(pairs);
-    }
-
-    @Override
-    protected <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
-    {
-        return TreeSortedSetMultimap.newMultimap(inputIterable);
     }
 
     @Override
@@ -113,6 +92,26 @@ public class TreeSortedSetMultimapTest extends AbstractMutableMultimapTestCase
         mutableMultimap.put(key3, value3);
         mutableMultimap.put(key4, value4);
         return mutableMultimap;
+    }
+
+    @SafeVarargs
+    @Override
+    public final <K, V> TreeSortedSetMultimap<K, V> newMultimap(Pair<K, V>... pairs)
+    {
+        return TreeSortedSetMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    protected <K, V> TreeSortedSetMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return TreeSortedSetMultimap.newMultimap(inputIterable);
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <V> TreeSortedSet<V> createCollection(V... args)
+    {
+        return TreeSortedSet.newSetWith(args);
     }
 
     @Test

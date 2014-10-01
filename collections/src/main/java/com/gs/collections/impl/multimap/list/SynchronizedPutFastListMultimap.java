@@ -27,6 +27,7 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.tuple.Pair;
@@ -139,6 +140,11 @@ public final class SynchronizedPutFastListMultimap<K, V>
         });
 
         return new ImmutableListMultimapImpl<K, V>(map);
+    }
+
+    public MutableBagMultimap<V, K> flip()
+    {
+        return Iterate.flip(this);
     }
 
     public FastListMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

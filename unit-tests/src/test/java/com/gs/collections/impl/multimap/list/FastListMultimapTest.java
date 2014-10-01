@@ -16,12 +16,10 @@
 
 package com.gs.collections.impl.multimap.list;
 
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -32,7 +30,7 @@ import org.junit.Test;
 /**
  * Test of {@link FastListMultimap}.
  */
-public class FastListMultimapTest extends AbstractMutableMultimapTestCase
+public class FastListMultimapTest extends AbstractMutableListMultimapTestCase
 {
     @Override
     public <K, V> FastListMultimap<K, V> newMultimap()
@@ -55,24 +53,6 @@ public class FastListMultimapTest extends AbstractMutableMultimapTestCase
         mutableMultimap.put(key1, value1);
         mutableMultimap.put(key2, value2);
         return mutableMultimap;
-    }
-
-    @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return FastList.newListWith(args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
-    {
-        return FastListMultimap.newMultimap(pairs);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
-    {
-        return FastListMultimap.newMultimap(inputIterable);
     }
 
     @Override
@@ -103,6 +83,26 @@ public class FastListMultimapTest extends AbstractMutableMultimapTestCase
         return mutableMultimap;
     }
 
+    @SafeVarargs
+    @Override
+    public final <K, V> FastListMultimap<K, V> newMultimap(Pair<K, V>... pairs)
+    {
+        return FastListMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    public <K, V> FastListMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return FastListMultimap.newMultimap(inputIterable);
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <V> FastList<V> createCollection(V... args)
+    {
+        return FastList.newListWith(args);
+    }
+
     @Test
     public void pairIterableConstructorTest()
     {
@@ -123,7 +123,7 @@ public class FastListMultimapTest extends AbstractMutableMultimapTestCase
 
         MutableList<Pair<Integer, String>> testList = FastList.<Pair<Integer, String>>newListWith(pair1, pair2, pair3, pair4, pair11, pair22, pair33, pair44, pair111, pair222, pair333, pair444);
 
-        FastListMultimap<Integer, String> actual = FastListMultimap.newMultimap(testList);
+        MutableListMultimap<Integer, String> actual = FastListMultimap.newMultimap(testList);
 
         Assert.assertEquals(FastList.newListWith(Integer.valueOf(1), Integer.valueOf(2), Integer.valueOf(3), Integer.valueOf(4)), actual.keysView().toList());
         Assert.assertEquals(FastList.newListWith("One", "OneOne", "One"), actual.get(Integer.valueOf(1)).toList());

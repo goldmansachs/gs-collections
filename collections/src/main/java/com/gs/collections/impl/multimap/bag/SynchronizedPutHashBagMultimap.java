@@ -166,4 +166,9 @@ public final class SynchronizedPutHashBagMultimap<K, V>
     {
         return this.collectValues(function, HashBagMultimap.<K, V2>newMultimap());
     }
+
+    public MutableBagMultimap<V, K> flip()
+    {
+        return Iterate.flip(this);
+    }
 }

@@ -27,6 +27,8 @@ public interface BagMultimap<K, V>
 
     Bag<V> get(K key);
 
+    UnsortedBagMultimap<V, K> flip();
+
     BagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 
     BagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate);

@@ -28,6 +28,7 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.multimap.sortedset.SortedSetMultimap;
@@ -39,6 +40,7 @@ import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
+import com.gs.collections.impl.utility.Iterate;
 
 public final class TreeSortedSetMultimap<K, V>
         extends AbstractMutableMultimap<K, V, MutableSortedSet<V>>
@@ -160,6 +162,11 @@ public final class TreeSortedSetMultimap<K, V>
     {
         this.comparator = (Comparator<? super V>) in.readObject();
         super.readExternal(in);
+    }
+
+    public MutableSetMultimap<V, K> flip()
+    {
+        return Iterate.flip(this);
     }
 
     public TreeSortedSetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

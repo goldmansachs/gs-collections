@@ -16,12 +16,10 @@
 
 package com.gs.collections.impl.multimap.bag;
 
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
@@ -30,16 +28,16 @@ import org.junit.Test;
 /**
  * Test of {@link HashBagMultimap}.
  */
-public class HashBagMultimapTest extends AbstractMutableMultimapTestCase
+public class HashBagMultimapTest extends AbstractMutableBagMultimapTestCase
 {
     @Override
-    public <K, V> HashBagMultimap<K, V> newMultimap()
+    protected <K, V> HashBagMultimap<K, V> newMultimap()
     {
         return HashBagMultimap.newMultimap();
     }
 
     @Override
-    public <K, V> HashBagMultimap<K, V> newMultimapWithKeyValue(K key, V value)
+    protected <K, V> HashBagMultimap<K, V> newMultimapWithKeyValue(K key, V value)
     {
         HashBagMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key, value);
@@ -47,7 +45,7 @@ public class HashBagMultimapTest extends AbstractMutableMultimapTestCase
     }
 
     @Override
-    public <K, V> HashBagMultimap<K, V> newMultimapWithKeysValues(K key1, V value1, K key2, V value2)
+    protected <K, V> HashBagMultimap<K, V> newMultimapWithKeysValues(K key1, V value1, K key2, V value2)
     {
         HashBagMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key1, value1);
@@ -56,25 +54,7 @@ public class HashBagMultimapTest extends AbstractMutableMultimapTestCase
     }
 
     @Override
-    protected <V> MutableCollection<V> createCollection(V... args)
-    {
-        return Bags.mutable.of(args);
-    }
-
-    @Override
-    public <K, V> Multimap<K, V> newMultimap(Pair<K, V>... pairs)
-    {
-        return HashBagMultimap.newMultimap(pairs);
-    }
-
-    @Override
-    protected <K, V> Multimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
-    {
-        return HashBagMultimap.newMultimap(inputIterable);
-    }
-
-    @Override
-    public <K, V> HashBagMultimap<K, V> newMultimapWithKeysValues(
+    protected <K, V> HashBagMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3)
@@ -87,7 +67,7 @@ public class HashBagMultimapTest extends AbstractMutableMultimapTestCase
     }
 
     @Override
-    public <K, V> HashBagMultimap<K, V> newMultimapWithKeysValues(
+    protected <K, V> HashBagMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3,
@@ -99,6 +79,26 @@ public class HashBagMultimapTest extends AbstractMutableMultimapTestCase
         mutableMultimap.put(key3, value3);
         mutableMultimap.put(key4, value4);
         return mutableMultimap;
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <K, V> HashBagMultimap<K, V> newMultimap(Pair<K, V>... pairs)
+    {
+        return HashBagMultimap.newMultimap(pairs);
+    }
+
+    @Override
+    protected <K, V> HashBagMultimap<K, V> newMultimapFromPairs(Iterable<Pair<K, V>> inputIterable)
+    {
+        return HashBagMultimap.newMultimap(inputIterable);
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <V> MutableBag<V> createCollection(V... args)
+    {
+        return Bags.mutable.of(args);
     }
 
     @Override

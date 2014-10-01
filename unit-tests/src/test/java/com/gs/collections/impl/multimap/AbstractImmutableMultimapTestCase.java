@@ -31,7 +31,7 @@ import org.junit.Test;
 
 public abstract class AbstractImmutableMultimapTestCase
 {
-    protected abstract ImmutableMultimap<String, String> classUnderTest();
+    protected abstract <K, V> ImmutableMultimap<K, V> classUnderTest();
 
     protected abstract MutableCollection<String> mutableCollection();
 
@@ -39,7 +39,7 @@ public abstract class AbstractImmutableMultimapTestCase
     public void size()
     {
         Verify.assertEmpty(this.classUnderTest());
-        ImmutableMultimap<String, String> one = this.classUnderTest().newWith("1", "1");
+        ImmutableMultimap<String, String> one = this.<String, String>classUnderTest().newWith("1", "1");
         Verify.assertSize(1, one);
         ImmutableMultimap<String, String> two = one.newWith("2", "2");
         Verify.assertSize(2, two);
@@ -49,7 +49,7 @@ public abstract class AbstractImmutableMultimapTestCase
     public void allowDuplicates()
     {
         Verify.assertEmpty(this.classUnderTest());
-        ImmutableMultimap<String, String> one = this.classUnderTest().newWith("1", "1");
+        ImmutableMultimap<String, String> one = this.<String, String>classUnderTest().newWith("1", "1");
         Verify.assertSize(1, one);
         ImmutableMultimap<String, String> two = one.newWith("1", "1");
         Verify.assertSize(2, two);
@@ -59,7 +59,7 @@ public abstract class AbstractImmutableMultimapTestCase
     public void noDuplicates()
     {
         Verify.assertEmpty(this.classUnderTest());
-        ImmutableMultimap<String, String> one = this.classUnderTest().newWith("1", "1");
+        ImmutableMultimap<String, String> one = this.<String, String>classUnderTest().newWith("1", "1");
         Verify.assertSize(1, one);
         ImmutableMultimap<String, String> two = one.newWith("1", "1");
         Verify.assertSize(1, two);
@@ -140,59 +140,59 @@ public abstract class AbstractImmutableMultimapTestCase
     @Test
     public void testSerialization()
     {
-        Multimap<String, String> original = this.classUnderTest()
+        ImmutableMultimap<String, String> original = this.<String, String>classUnderTest()
                 .newWith("A", "A")
                 .newWith("A", "B")
                 .newWith("A", "B")
                 .newWith("B", "A");
-        Multimap<String, String> copy = SerializeTestHelper.serializeDeserialize(original);
+        ImmutableMultimap<String, String> copy = SerializeTestHelper.serializeDeserialize(original);
         Verify.assertEqualsAndHashCode(original, copy);
     }
 
     @Test
     public void selectKeysValues()
     {
-        Multimap<String, String> multimap = this.classUnderTest().newWith("One", "1").newWith("Two", "2");
-        Multimap<String, String> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && "2".equals(value)));
+        ImmutableMultimap<String, String> multimap = this.<String, String>classUnderTest().newWith("One", "1").newWith("Two", "2");
+        ImmutableMultimap<String, String> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && "2".equals(value)));
         Assert.assertEquals(this.classUnderTest().newWith("Two", "2"), selectedMultimap);
     }
 
     @Test
     public void rejectKeysValues()
     {
-        Multimap<String, String> multimap = this.classUnderTest().newWith("One", "1").newWith("Two", "2");
-        Multimap<String, String> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) && "2".equals(value)));
+        ImmutableMultimap<String, String> multimap = this.<String, String>classUnderTest().newWith("One", "1").newWith("Two", "2");
+        ImmutableMultimap<String, String> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) && "2".equals(value)));
         Assert.assertEquals(this.classUnderTest().newWith("One", "1"), rejectedMultimap);
     }
 
     @Test
     public void selectKeysMultiValues()
     {
-        Multimap<String, String> multimap1 = this.classUnderTest().newWith("One", "1").newWith("Two", "2").newWith("Two", "3");
-        Multimap<String, String> selectedMultimap1 = multimap1.selectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
+        ImmutableMultimap<String, String> multimap1 = this.<String, String>classUnderTest().newWith("One", "1").newWith("Two", "2").newWith("Two", "3");
+        ImmutableMultimap<String, String> selectedMultimap1 = multimap1.selectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
         Assert.assertEquals(this.classUnderTest().newWith("Two", "2").newWith("Two", "3"), selectedMultimap1);
 
-        Multimap<String, String> multimap2 = this.classUnderTest().newWith("One", "1").newWith("Two", "3");
-        Multimap<String, String> selectedMultimap2 = multimap2.selectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
+        ImmutableMultimap<String, String> multimap2 = this.<String, String>classUnderTest().newWith("One", "1").newWith("Two", "3");
+        ImmutableMultimap<String, String> selectedMultimap2 = multimap2.selectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
         Assert.assertEquals(this.classUnderTest(), selectedMultimap2);
     }
 
     @Test
     public void rejectKeysMultiValues()
     {
-        Multimap<String, String> multimap1 = this.classUnderTest().newWith("One", "1").newWith("Two", "2").newWith("Two", "3");
-        Multimap<String, String> rejectedMultimap1 = multimap1.rejectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
+        ImmutableMultimap<String, String> multimap1 = this.<String, String>classUnderTest().newWith("One", "1").newWith("Two", "2").newWith("Two", "3");
+        ImmutableMultimap<String, String> rejectedMultimap1 = multimap1.rejectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
         Assert.assertEquals(this.classUnderTest().newWith("One", "1"), rejectedMultimap1);
 
-        Multimap<String, String> multimap2 = this.classUnderTest().newWith("One", "1").newWith("Two", "3");
-        Multimap<String, String> rejectedMultimap2 = multimap2.rejectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
+        ImmutableMultimap<String, String> multimap2 = this.<String, String>classUnderTest().newWith("One", "1").newWith("Two", "3");
+        ImmutableMultimap<String, String> rejectedMultimap2 = multimap2.rejectKeysMultiValues((key, values) -> "Two".equals(key) && Iterate.contains(values, "2"));
         Assert.assertEquals(this.classUnderTest().newWith("One", "1"), rejectedMultimap2);
     }
 
     @Test
     public void collectKeysValues()
     {
-        Multimap<String, String> multimap = this.classUnderTest().newWith("One", "1").newWith("Two", "2");
+        Multimap<String, String> multimap = this.<String, String>classUnderTest().newWith("One", "1").newWith("Two", "2");
         Multimap<String, String> collectedMultimap = multimap.collectKeysValues((argument1, argument2) -> Tuples.pair(argument1 + "Key", argument2 + "Value"));
         Assert.assertEquals(this.classUnderTest().newWith("OneKey", "1Value").newWith("TwoKey", "2Value"), collectedMultimap);
     }
@@ -200,8 +200,11 @@ public abstract class AbstractImmutableMultimapTestCase
     @Test
     public void collectValues()
     {
-        Multimap<String, String> multimap = this.classUnderTest().newWith("One", "1").newWith("Two", "2");
+        Multimap<String, String> multimap = this.<String, String>classUnderTest().newWith("One", "1").newWith("Two", "2");
         Multimap<String, String> collectedMultimap = multimap.collectValues(value -> value + "Value");
         Assert.assertEquals(this.classUnderTest().newWith("One", "1Value").newWith("Two", "2Value"), collectedMultimap);
     }
+
+    @Test
+    public abstract void flip();
 }
