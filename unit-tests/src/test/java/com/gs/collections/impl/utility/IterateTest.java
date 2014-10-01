@@ -112,6 +112,7 @@ public class IterateTest
         this.iterables.add(Interval.oneTo(5).toSortedMap(i -> i, i -> i));
         this.iterables.add(Interval.oneTo(5).toMap(i -> i, i -> i));
         this.iterables.add(Interval.oneTo(5).addAllTo(new ArrayList<Integer>(5)));
+        this.iterables.add(Interval.oneTo(5).addAllTo(new LinkedList<Integer>()));
         this.iterables.add(Collections.unmodifiableList(new ArrayList<Integer>(Interval.oneTo(5))));
         this.iterables.add(Collections.unmodifiableCollection(new ArrayList<Integer>(Interval.oneTo(5))));
         this.iterables.add(Interval.oneTo(5));
@@ -872,6 +873,16 @@ public class IterateTest
     {
         this.iterables.forEach(Procedures.cast(each -> {
             PartitionIterable<Integer> result = Iterate.partition(each, Predicates.greaterThan(3));
+            Assert.assertEquals(iBag(4, 5), result.getSelected().toBag());
+            Assert.assertEquals(iBag(1, 2, 3), result.getRejected().toBag());
+        }));
+    }
+
+    @Test
+    public void partitionWith()
+    {
+        this.iterables.forEach(Procedures.cast(each -> {
+            PartitionIterable<Integer> result = Iterate.partitionWith(each, Predicates2.greaterThan(), 3);
             Assert.assertEquals(iBag(4, 5), result.getSelected().toBag());
             Assert.assertEquals(iBag(1, 2, 3), result.getRejected().toBag());
         }));
@@ -2042,37 +2053,45 @@ public class IterateTest
     @Test
     public void sumByInt()
     {
-        RichIterable<Integer> values = FastList.newList(Interval.oneTo(10));
-        ObjectLongMap<Integer> result = Iterate.sumByInt(values, i -> i % 2, e -> e);
-        Assert.assertEquals(25, result.get(1));
-        Assert.assertEquals(30, result.get(0));
+        this.iterables.each(each ->
+        {
+            ObjectLongMap<Integer> result = Iterate.sumByInt(each, i -> i % 2, e -> e);
+            Assert.assertEquals(9, result.get(1));
+            Assert.assertEquals(6, result.get(0));
+        });
     }
 
     @Test
     public void sumByFloat()
     {
-        RichIterable<Integer> values = FastList.newList(Interval.oneTo(10));
-        ObjectDoubleMap<Integer> result = Iterate.sumByFloat(values, f -> (int) f % 2, e -> e);
-        Assert.assertEquals(25.0f, result.get(1), 0.0);
-        Assert.assertEquals(30.0f, result.get(0), 0.0);
+        this.iterables.each(each ->
+        {
+            ObjectDoubleMap<Integer> result = Iterate.sumByFloat(each, f -> (int) f % 2, e -> e);
+            Assert.assertEquals(9.0d, result.get(1), 0.0);
+            Assert.assertEquals(6.0d, result.get(0), 0.0);
+        });
     }
 
     @Test
     public void sumByLong()
     {
-        RichIterable<Integer> values = FastList.newList(Interval.oneTo(10));
-        ObjectLongMap<Integer> result = Iterate.sumByLong(values, l -> l % 2, e -> e);
-        Assert.assertEquals(25, result.get(1));
-        Assert.assertEquals(30, result.get(0));
+        this.iterables.each(each ->
+        {
+            ObjectLongMap<Integer> result = Iterate.sumByLong(each, l -> l % 2, e -> e);
+            Assert.assertEquals(9, result.get(1));
+            Assert.assertEquals(6, result.get(0));
+        });
     }
 
     @Test
     public void sumByDouble()
     {
-        RichIterable<Integer> values = FastList.newList(Interval.oneTo(10));
-        ObjectDoubleMap<Integer> result = Iterate.sumByDouble(values, d -> (int) d % 2, e -> e);
-        Assert.assertEquals(25.0d, result.get(1), 0.0);
-        Assert.assertEquals(30.0d, result.get(0), 0.0);
+        this.iterables.each(each ->
+        {
+            ObjectDoubleMap<Integer> result = Iterate.sumByDouble(each, d -> (int) d % 2, e -> e);
+            Assert.assertEquals(9.0d, result.get(1), 0.0);
+            Assert.assertEquals(6.0d, result.get(0), 0.0);
+        });
     }
 
     @Test

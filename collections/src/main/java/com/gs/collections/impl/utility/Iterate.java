@@ -119,9 +119,9 @@ public final class Iterate
         {
             ArrayListIterate.forEach((ArrayList<T>) iterable, procedure);
         }
-        else if (iterable instanceof RandomAccess)
+        else if (iterable instanceof List)
         {
-            RandomAccessListIterate.forEach((List<T>) iterable, procedure);
+            ListIterate.forEach((List<T>) iterable, procedure);
         }
         else if (iterable != null)
         {
@@ -163,9 +163,9 @@ public final class Iterate
         {
             ArrayListIterate.forEachWith((ArrayList<T>) iterable, procedure, parameter);
         }
-        else if (iterable instanceof RandomAccess)
+        else if (iterable instanceof List)
         {
-            RandomAccessListIterate.forEachWith((List<T>) iterable, procedure, parameter);
+            ListIterate.forEachWith((List<T>) iterable, procedure, parameter);
         }
         else if (iterable != null)
         {
@@ -191,9 +191,9 @@ public final class Iterate
         {
             ArrayListIterate.forEachWithIndex((ArrayList<T>) iterable, objectIntProcedure);
         }
-        else if (iterable instanceof RandomAccess)
+        else if (iterable instanceof List)
         {
-            RandomAccessListIterate.forEachWithIndex((List<T>) iterable, objectIntProcedure);
+            ListIterate.forEachWithIndex((List<T>) iterable, objectIntProcedure);
         }
         else if (iterable != null)
         {
@@ -228,9 +228,9 @@ public final class Iterate
         {
             return ArrayListIterate.select((ArrayList<T>) iterable, predicate);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.select((List<T>) iterable, predicate);
+            return ListIterate.select((List<T>) iterable, predicate);
         }
         if (iterable instanceof Collection)
         {
@@ -266,9 +266,9 @@ public final class Iterate
         {
             return ArrayListIterate.selectWith((ArrayList<T>) iterable, predicate, parameter);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.selectWith((List<T>) iterable, predicate, parameter);
+            return ListIterate.selectWith((List<T>) iterable, predicate, parameter);
         }
         if (iterable instanceof Collection)
         {
@@ -305,9 +305,9 @@ public final class Iterate
         {
             return ArrayListIterate.selectAndRejectWith((ArrayList<T>) iterable, predicate, injectedValue);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.selectAndRejectWith((List<T>) iterable, predicate, injectedValue);
+            return ListIterate.selectAndRejectWith((List<T>) iterable, predicate, injectedValue);
         }
         if (iterable != null)
         {
@@ -339,9 +339,9 @@ public final class Iterate
         {
             return ArrayListIterate.partition((ArrayList<T>) iterable, predicate);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.partition((List<T>) iterable, predicate);
+            return ListIterate.partition((List<T>) iterable, predicate);
         }
         if (iterable != null)
         {
@@ -375,9 +375,9 @@ public final class Iterate
         {
             return ArrayListIterate.partitionWith((ArrayList<T>) iterable, predicate, parameter);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.partitionWith((List<T>) iterable, predicate, parameter);
+            return ListIterate.partitionWith((List<T>) iterable, predicate, parameter);
         }
         if (iterable != null)
         {
@@ -399,9 +399,9 @@ public final class Iterate
         {
             return ArrayListIterate.selectInstancesOf((ArrayList<?>) iterable, clazz);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.selectInstancesOf((List<?>) iterable, clazz);
+            return ListIterate.selectInstancesOf((List<?>) iterable, clazz);
         }
         if (iterable instanceof Collection)
         {
@@ -440,9 +440,9 @@ public final class Iterate
         {
             return ArrayListIterate.count((ArrayList<T>) iterable, predicate);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.count((List<T>) iterable, predicate);
+            return ListIterate.count((List<T>) iterable, predicate);
         }
         if (iterable != null)
         {
@@ -471,9 +471,9 @@ public final class Iterate
         {
             return ArrayListIterate.countWith((ArrayList<T>) iterable, predicate, injectedValue);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.countWith((List<T>) iterable, predicate, injectedValue);
+            return ListIterate.countWith((List<T>) iterable, predicate, injectedValue);
         }
         if (iterable != null)
         {
@@ -498,9 +498,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectIf((ArrayList<T>) iterable, predicate, function);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectIf((List<T>) iterable, predicate, function);
+            return ListIterate.collectIf((List<T>) iterable, predicate, function);
         }
         if (iterable instanceof Collection)
         {
@@ -534,9 +534,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectIf((ArrayList<T>) iterable, predicate, function, target);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectIf((List<T>) iterable, predicate, function, target);
+            return ListIterate.collectIf((List<T>) iterable, predicate, function, target);
         }
         if (iterable != null)
         {
@@ -575,9 +575,9 @@ public final class Iterate
         {
             return ArrayListIterate.select((ArrayList<T>) iterable, predicate, targetCollection);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.select((List<T>) iterable, predicate, targetCollection);
+            return ListIterate.select((List<T>) iterable, predicate, targetCollection);
         }
         if (iterable != null)
         {
@@ -603,9 +603,9 @@ public final class Iterate
         {
             return ArrayListIterate.selectWith((ArrayList<T>) iterable, predicate, parameter, targetCollection);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.selectWith((List<T>) iterable, predicate, parameter, targetCollection);
+            return ListIterate.selectWith((List<T>) iterable, predicate, parameter, targetCollection);
         }
         if (iterable != null)
         {
@@ -694,9 +694,9 @@ public final class Iterate
         {
             return ArrayListIterate.reject((ArrayList<T>) iterable, predicate);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.reject((List<T>) iterable, predicate);
+            return ListIterate.reject((List<T>) iterable, predicate);
         }
         if (iterable instanceof Collection)
         {
@@ -805,9 +805,9 @@ public final class Iterate
         {
             return ArrayListIterate.removeIf((ArrayList<T>) iterable, predicate);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.removeIf((List<T>) iterable, predicate);
+            return ListIterate.removeIf((List<T>) iterable, predicate);
         }
         if (iterable instanceof Collection)
         {
@@ -841,9 +841,9 @@ public final class Iterate
         {
             return ArrayListIterate.removeIfWith((ArrayList<T>) iterable, predicate, parameter);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.removeIfWith((List<T>) iterable, predicate, parameter);
+            return ListIterate.removeIfWith((List<T>) iterable, predicate, parameter);
         }
         if (iterable instanceof Collection)
         {
@@ -875,9 +875,9 @@ public final class Iterate
         {
             return ArrayListIterate.rejectWith((ArrayList<T>) iterable, predicate, parameter);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.rejectWith((List<T>) iterable, predicate, parameter);
+            return ListIterate.rejectWith((List<T>) iterable, predicate, parameter);
         }
         if (iterable instanceof Collection)
         {
@@ -920,9 +920,9 @@ public final class Iterate
         {
             return ArrayListIterate.reject((ArrayList<T>) iterable, predicate, targetCollection);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.reject((List<T>) iterable, predicate, targetCollection);
+            return ListIterate.reject((List<T>) iterable, predicate, targetCollection);
         }
         if (iterable != null)
         {
@@ -1078,9 +1078,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectBoolean((ArrayList<T>) iterable, booleanFunction);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectBoolean((List<T>) iterable, booleanFunction);
+            return ListIterate.collectBoolean((List<T>) iterable, booleanFunction);
         }
         if (iterable != null)
         {
@@ -1116,9 +1116,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectBoolean((ArrayList<T>) iterable, booleanFunction, target);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectBoolean((List<T>) iterable, booleanFunction, target);
+            return ListIterate.collectBoolean((List<T>) iterable, booleanFunction, target);
         }
         if (iterable != null)
         {
@@ -1152,9 +1152,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectByte((ArrayList<T>) iterable, byteFunction);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectByte((List<T>) iterable, byteFunction);
+            return ListIterate.collectByte((List<T>) iterable, byteFunction);
         }
         if (iterable != null)
         {
@@ -1190,9 +1190,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectByte((ArrayList<T>) iterable, byteFunction, target);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectByte((List<T>) iterable, byteFunction, target);
+            return ListIterate.collectByte((List<T>) iterable, byteFunction, target);
         }
         if (iterable != null)
         {
@@ -1226,9 +1226,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectChar((ArrayList<T>) iterable, charFunction);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectChar((List<T>) iterable, charFunction);
+            return ListIterate.collectChar((List<T>) iterable, charFunction);
         }
         if (iterable != null)
         {
@@ -1264,9 +1264,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectChar((ArrayList<T>) iterable, charFunction, target);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectChar((List<T>) iterable, charFunction, target);
+            return ListIterate.collectChar((List<T>) iterable, charFunction, target);
         }
         if (iterable != null)
         {
@@ -1300,9 +1300,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectDouble((ArrayList<T>) iterable, doubleFunction);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectDouble((List<T>) iterable, doubleFunction);
+            return ListIterate.collectDouble((List<T>) iterable, doubleFunction);
         }
         if (iterable != null)
         {
@@ -1338,9 +1338,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectDouble((ArrayList<T>) iterable, doubleFunction, target);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectDouble((List<T>) iterable, doubleFunction, target);
+            return ListIterate.collectDouble((List<T>) iterable, doubleFunction, target);
         }
         if (iterable != null)
         {
@@ -1374,9 +1374,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectFloat((ArrayList<T>) iterable, floatFunction);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectFloat((List<T>) iterable, floatFunction);
+            return ListIterate.collectFloat((List<T>) iterable, floatFunction);
         }
         if (iterable != null)
         {
@@ -1412,9 +1412,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectFloat((ArrayList<T>) iterable, floatFunction, target);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectFloat((List<T>) iterable, floatFunction, target);
+            return ListIterate.collectFloat((List<T>) iterable, floatFunction, target);
         }
         if (iterable != null)
         {
@@ -1448,9 +1448,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectInt((ArrayList<T>) iterable, intFunction);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectInt((List<T>) iterable, intFunction);
+            return ListIterate.collectInt((List<T>) iterable, intFunction);
         }
         if (iterable != null)
         {
@@ -1486,9 +1486,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectInt((ArrayList<T>) iterable, intFunction, target);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectInt((List<T>) iterable, intFunction, target);
+            return ListIterate.collectInt((List<T>) iterable, intFunction, target);
         }
         if (iterable != null)
         {
@@ -1522,9 +1522,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectLong((ArrayList<T>) iterable, longFunction);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectLong((List<T>) iterable, longFunction);
+            return ListIterate.collectLong((List<T>) iterable, longFunction);
         }
         if (iterable != null)
         {
@@ -1560,9 +1560,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectLong((ArrayList<T>) iterable, longFunction, target);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectLong((List<T>) iterable, longFunction, target);
+            return ListIterate.collectLong((List<T>) iterable, longFunction, target);
         }
         if (iterable != null)
         {
@@ -1596,9 +1596,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectShort((ArrayList<T>) iterable, shortFunction);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectShort((List<T>) iterable, shortFunction);
+            return ListIterate.collectShort((List<T>) iterable, shortFunction);
         }
         if (iterable != null)
         {
@@ -1634,9 +1634,9 @@ public final class Iterate
         {
             return ArrayListIterate.collectShort((ArrayList<T>) iterable, shortFunction, target);
         }
-        if (iterable instanceof RandomAccess)
+        if (iterable instanceof List)
         {
-            return RandomAccessListIterate.collectShort((List<T>) iterable, shortFunction, target);
+            return ListIterate.collectShort((List<T>) iterable, shortFunction, target);
         }
         if (iterable != null)
         {
