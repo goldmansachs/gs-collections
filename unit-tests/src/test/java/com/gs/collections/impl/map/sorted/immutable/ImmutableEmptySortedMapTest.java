@@ -28,7 +28,6 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.SortedMaps;
-import com.gs.collections.impl.map.sorted.ImmutableSortedMapTestCase;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;

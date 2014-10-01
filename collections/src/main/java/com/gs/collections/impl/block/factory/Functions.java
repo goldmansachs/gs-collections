@@ -686,8 +686,8 @@ public final class Functions
     }
 
     public static <T, V1, V2> Function<T, Pair<V1, V2>> pair(
-            final Function<T, V1> function1,
-            final Function<T, V2> function2)
+            final Function<? super T, V1> function1,
+            final Function<? super T, V2> function2)
     {
         return new Function<T, Pair<V1, V2>>()
         {

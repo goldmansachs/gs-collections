@@ -18,7 +18,6 @@ package com.gs.collections.impl.map.sorted.immutable;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedMap;
 
 import com.gs.collections.api.block.function.Function;
@@ -52,7 +51,6 @@ import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
-import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -83,8 +81,6 @@ import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
-import com.gs.collections.impl.tuple.ImmutableEntry;
 import com.gs.collections.impl.utility.MapIterate;
 import net.jcip.annotations.Immutable;
 
@@ -121,19 +117,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
     public void clear()
     {
         throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
-    }
-
-    public Set<Entry<K, V>> entrySet()
-    {
-        final MutableSet<Entry<K, V>> set = UnifiedSet.newSet(this.size());
-        this.forEachKeyValue(new Procedure2<K, V>()
-        {
-            public void value(K key, V value)
-            {
-                set.add(ImmutableEntry.of(key, value));
-            }
-        });
-        return set.toImmutable().castToSet();
     }
 
     public ImmutableSortedMap<K, V> newWithKeyValue(K key, V value)

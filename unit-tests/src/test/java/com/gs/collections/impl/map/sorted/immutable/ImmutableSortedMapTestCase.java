@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.map.sorted;
+package com.gs.collections.impl.map.sorted.immutable;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 
 import com.gs.collections.api.RichIterable;
@@ -40,6 +41,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.test.Verify;
@@ -399,9 +401,14 @@ public abstract class ImmutableSortedMapTestCase
     @Test
     public void entrySet()
     {
-        ImmutableSortedMap<Integer, String> immutable = this.classUnderTest();
-        Map<Integer, String> map = new HashMap<Integer, String>(immutable.castToSortedMap());
-        Assert.assertEquals(map.entrySet(), immutable.castToSortedMap().entrySet());
+        ImmutableSortedMap<Integer, String> immutableSortedMap = this.classUnderTest();
+        Map<Integer, String> map = new HashMap<Integer, String>(immutableSortedMap.castToSortedMap());
+        Assert.assertEquals(map.entrySet(), immutableSortedMap.castToSortedMap().entrySet());
+
+        Set<Map.Entry<Integer, String>> entries = immutableSortedMap.castToSortedMap().entrySet();
+        MutableList<Map.Entry<Integer, String>> entriesList = FastList.newList(entries);
+        MutableList<Map.Entry<Integer, String>> sortedEntryList = entriesList.toSortedListBy(Functions.getKeyFunction());
+        Assert.assertEquals(sortedEntryList, entriesList);
     }
 
     @Test

@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.list.MutableList;
@@ -542,6 +543,16 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
                         ImmutableEntry.of("Two", 2),
                         ImmutableEntry.of("Three", 3)),
                 map.entrySet());
+    }
+
+    @Test
+    public void entrySet_sorted()
+    {
+        LazyIterable<Pair<String, Integer>> pairs = Interval.oneTo(100).collect(Functions.pair(Functions.getToString(), Functions.<Integer>getPassThru()));
+        MutableSortedMap<String, Integer> mutableSortedMap = new TreeSortedMap<String, Integer>(pairs.toArray(new Pair[]{}));
+        MutableList<Map.Entry<String, Integer>> entries = FastList.newList(mutableSortedMap.entrySet());
+        MutableList<Map.Entry<String, Integer>> sortedEntries = entries.toSortedListBy(Functions.getKeyFunction());
+        Assert.assertEquals(sortedEntries, entries);
     }
 
     @Test

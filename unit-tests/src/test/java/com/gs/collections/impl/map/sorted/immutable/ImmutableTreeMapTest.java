@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,18 @@
 package com.gs.collections.impl.map.sorted.immutable;
 
 import java.util.Comparator;
+import java.util.Map;
 
+import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
+import com.gs.collections.api.map.sorted.MutableSortedMap;
+import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.factory.SortedMaps;
-import com.gs.collections.impl.map.sorted.ImmutableSortedMapTestCase;
+import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,6 +50,20 @@ public class ImmutableTreeMapTest extends ImmutableSortedMapTestCase
     protected int size()
     {
         return 4;
+    }
+
+    @Override
+    public void entrySet()
+    {
+        super.entrySet();
+
+        Interval interval = Interval.oneTo(100);
+        LazyIterable<Pair<String, Integer>> pairs = interval.collect(Object::toString).zip(interval);
+        MutableSortedMap<String, Integer> mutableSortedMap = new TreeSortedMap<String, Integer>(pairs.toArray(new Pair[]{}));
+        ImmutableSortedMap<String, Integer> immutableSortedMap = mutableSortedMap.toImmutable();
+        MutableList<Map.Entry<String, Integer>> entries = FastList.newList(immutableSortedMap.castToSortedMap().entrySet());
+        MutableList<Map.Entry<String, Integer>> sortedEntries = entries.toSortedListBy(Map.Entry::getKey);
+        Assert.assertEquals(sortedEntries, entries);
     }
 
     @Test

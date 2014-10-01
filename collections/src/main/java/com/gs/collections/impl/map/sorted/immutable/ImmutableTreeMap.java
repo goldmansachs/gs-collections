@@ -137,4 +137,9 @@ public class ImmutableTreeMap<K, V>
     {
         return UnmodifiableMutableCollection.of(this.delegate.values());
     }
+
+    public Set<Entry<K, V>> entrySet()
+    {
+        return this.delegate.entrySet().asUnmodifiable();
+    }
 }

@@ -219,6 +219,11 @@ final class ImmutableEmptySortedMap<K, V>
         return this;
     }
 
+    public Set<Entry<K, V>> entrySet()
+    {
+        return Sets.immutable.<Entry<K, V>>with().castToSet();
+    }
+
     @Override
     public ImmutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate)
     {
