@@ -20,6 +20,7 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ChunkIterable;
@@ -33,6 +34,7 @@ import com.gs.collections.impl.lazy.RejectIterable;
 import com.gs.collections.impl.lazy.SelectInstancesOfIterable;
 import com.gs.collections.impl.lazy.SelectIterable;
 import com.gs.collections.impl.lazy.TakeIterable;
+import com.gs.collections.impl.lazy.TapIterable;
 import com.gs.collections.impl.lazy.ZipIterable;
 import com.gs.collections.impl.lazy.ZipWithIndexIterable;
 
@@ -165,5 +167,15 @@ public final class LazyIterate
     public static <T> LazyIterable<RichIterable<T>> chunk(Iterable<T> iterable, int size)
     {
         return new ChunkIterable<T>(iterable, size);
+    }
+
+    /**
+     * Creates a deferred tap iterable for the specified iterable
+     *
+     * @since 6.0
+     */
+    public static <T> LazyIterable<T> tap(Iterable<T> iterable, Procedure<T> procedure)
+    {
+        return new TapIterable<T>(iterable, procedure);
     }
 }
