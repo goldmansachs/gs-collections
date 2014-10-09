@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.bimap;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MapIterable;
@@ -33,16 +34,36 @@ public interface BiMap<K, V> extends MapIterable<K, V>
      */
     BiMap<V, K> inverse();
 
+    BiMap<V, K> flipUniqueValues();
+
     /**
      * Converts the BiMap to an ImmutableBiMap.  If the bimap is immutable, it returns itself.
      */
     ImmutableBiMap<K, V> toImmutable();
 
-    <R> BiMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
-
     BiMap<K, V> select(Predicate2<? super K, ? super V> predicate);
 
+    BiMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
+
+    /**
+     * {@inheritDoc}
+     *
+     * Implementations are expected to delegate to {@link MutableBiMap#put(Object, Object)},
+     * {@link ImmutableBiMap#newWithKeyValue(Object, Object)}, or equivalent, not {@link MutableBiMap#forcePut(Object, Object)}.
+     *
+     * @throws RuntimeException when {@code function} returns colliding keys or values.
+     */
     <K2, V2> BiMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
-    BiMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
+    /**
+     * {@inheritDoc}
+     *
+     * Implementations are expected to delegate to {@link MutableBiMap#put(Object, Object)},
+     * {@link ImmutableBiMap#newWithKeyValue(Object, Object)}, or equivalent, not {@link MutableBiMap#forcePut(Object, Object)}.
+     *
+     * @throws RuntimeException when {@code function} returns colliding values.
+     */
+    <R> BiMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+
+    <VV> BiMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function);
 }

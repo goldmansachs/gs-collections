@@ -18,6 +18,7 @@ package com.gs.collections.api.bimap;
 
 import java.util.Map;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
@@ -30,11 +31,11 @@ import com.gs.collections.api.tuple.Pair;
  */
 public interface MutableBiMap<K, V> extends BiMap<K, V>, MutableMap<K, V>
 {
-    MutableBiMap<K, V> clone();
-
     MutableBiMap<K, V> newEmpty();
 
     MutableBiMap<V, K> inverse();
+
+    MutableBiMap<V, K> flipUniqueValues();
 
     /**
      * Similar to {@link Map#put(Object, Object)}, except that it throws on the addition of a duplicate value.
@@ -53,13 +54,15 @@ public interface MutableBiMap<K, V> extends BiMap<K, V>, MutableMap<K, V>
 
     MutableBiMap<K, V> asUnmodifiable();
 
+    MutableBiMap<K, V> clone();
+
     MutableBiMap<K, V> select(Predicate2<? super K, ? super V> predicate);
-
-    <R> MutableBiMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
-
-    <K2, V2> MutableBiMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
     MutableBiMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
 
-    MutableBiMap<V, K> flipUniqueValues();
+    <K2, V2> MutableBiMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
+
+    <R> MutableBiMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+
+    <VV> MutableBiMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function);
 }

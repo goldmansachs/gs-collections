@@ -20,11 +20,13 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.bimap.BiMap;
+import com.gs.collections.api.bimap.ImmutableBiMap;
 import com.gs.collections.api.bimap.MutableBiMap;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.IntegerWithCast;
+import com.gs.collections.impl.factory.BiMaps;
 import com.gs.collections.impl.map.mutable.MutableMapTestCase;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
@@ -494,11 +496,11 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
     }
 
     @Override
-    @Test(expected = UnsupportedOperationException.class)
     public void toImmutable()
     {
-        // toImmutable not implemented yet
-        this.classUnderTest().toImmutable();
+        ImmutableBiMap<Integer, Character> expectedImmutableBiMap = BiMaps.immutable.of(null, 'b', 1, null, 3, 'c');
+        ImmutableBiMap<Integer, Character> characters = this.classUnderTest().toImmutable();
+        Assert.assertEquals(expectedImmutableBiMap, characters);
     }
 
     @Override

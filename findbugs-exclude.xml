@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2013 Goldman Sachs.
+  ~ Copyright 2014 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -219,6 +219,8 @@
             <Class name="com.gs.collections.impl.multimap.set.ImmutableSetMultimapImpl" />
             <Class name="com.gs.collections.impl.multimap.bag.ImmutableBagMultimapImpl" />
             <Class name="com.gs.collections.impl.multimap.set.sorted.ImmutableSortedSetMultimapImpl" />
+            <Class name="com.gs.collections.impl.bimap.immutable.ImmutableHashBiMap" />
+            <Class name="com.gs.collections.impl.bimap.immutable.AbstractImmutableBiMap$Inverse" />
             <Class name="com.gs.collections.impl.bag.mutable.SynchronizedBag" />
             <Class name="com.gs.collections.impl.bag.mutable.UnmodifiableBag" />
             <Class name="com.gs.collections.impl.bag.sorted.mutable.UnmodifiableSortedBag" />

@@ -75,7 +75,10 @@ class ImmutableMapSerializationProxy<K, V> implements Externalizable
 
         for (int i = 0; i < size; i++)
         {
-            deserializedMap.put((K) in.readObject(), (V) in.readObject());
+            if (deserializedMap.put((K) in.readObject(), (V) in.readObject()) != null)
+            {
+                throw new IllegalStateException();
+            }
         }
 
         this.map = deserializedMap.toImmutable();
