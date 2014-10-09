@@ -28,6 +28,20 @@ import org.junit.Test;
 public class FunctionsSerializationTest
 {
     @Test
+    public void throwing()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRU\n"
+                        + "aHJvd2luZ0Z1bmN0aW9uQWRhcHRlcgAAAAAAAAABAgABTAAQdGhyb3dpbmdGdW5jdGlvbnQAQUxj\n"
+                        + "b20vZ3MvY29sbGVjdGlvbnMvaW1wbC9ibG9jay9mdW5jdGlvbi9jaGVja2VkL1Rocm93aW5nRnVu\n"
+                        + "Y3Rpb247eHIAPmNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZ1bmN0aW9uLmNoZWNrZWQu\n"
+                        + "Q2hlY2tlZEZ1bmN0aW9uAAAAAAAAAAECAAB4cHA=",
+                Functions.throwing(null)
+        );
+    }
+
+    @Test
     public void getPassThru()
     {
         Verify.assertSerializedForm(

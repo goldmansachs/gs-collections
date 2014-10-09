@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.block.factory;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -30,6 +31,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.ListIterate;
 import org.junit.Assert;
@@ -70,6 +72,16 @@ public class PredicatesTest
         this.diane.addDependent(new Dependent(DependentType.GRANDPARENT));
 
         this.employees = FastList.newListWith(this.alice, this.bob, this.charlie, this.diane);
+    }
+
+    @Test
+    public void throwing()
+    {
+        Verify.assertThrowsWithCause(
+                RuntimeException.class,
+                IOException.class,
+                () -> Predicates.throwing(e -> {throw new IOException();}).accept(null)
+        );
     }
 
     @Test

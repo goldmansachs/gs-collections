@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.block.function;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -32,6 +33,16 @@ import org.junit.Test;
 
 public class Functions0Test
 {
+    @Test
+    public void throwing()
+    {
+        Verify.assertThrowsWithCause(
+                RuntimeException.class,
+                IOException.class,
+                () -> Functions0.throwing(() -> {throw new IOException();}).value()
+        );
+    }
+
     @Test
     public void newFastList()
     {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package com.gs.collections.impl.block.procedure.checked;
 
 import com.gs.collections.api.block.procedure.Procedure;
 
-public abstract class CheckedProcedure<T> implements Procedure<T>
+public abstract class CheckedProcedure<T> implements Procedure<T>, ThrowingProcedure<T>
 {
     private static final long serialVersionUID = 1L;
 
@@ -37,7 +37,4 @@ public abstract class CheckedProcedure<T> implements Procedure<T>
             throw new RuntimeException("Checked exception caught in Procedure", e);
         }
     }
-
-    @SuppressWarnings("ProhibitedExceptionDeclared")
-    public abstract void safeValue(T object) throws Exception;
 }

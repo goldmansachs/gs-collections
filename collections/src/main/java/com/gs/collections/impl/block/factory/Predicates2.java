@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.gs.collections.impl.block.factory;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.impl.block.predicate.checked.CheckedPredicate2;
+import com.gs.collections.impl.block.predicate.checked.ThrowingPredicate2;
 import com.gs.collections.impl.utility.Iterate;
 
 /**
@@ -54,6 +56,11 @@ public abstract class Predicates2<T, P>
     public Predicates2<T, P> or(Predicate2<? super T, ? super P> op)
     {
         return Predicates2.or(this, op);
+    }
+
+    public static <T, P> Predicate2<T, P> throwing(ThrowingPredicate2<T, P> throwingPredicate2)
+    {
+        return new ThrowingPredicate2Adapter<T, P>(throwingPredicate2);
     }
 
     public static <T, P> Predicates2<T, P> not(Predicate2<T, P> predicate)
@@ -578,6 +585,22 @@ public abstract class Predicates2<T, P>
         public String toString()
         {
             return "always false";
+        }
+    }
+
+    private static class ThrowingPredicate2Adapter<T, P> extends CheckedPredicate2<T, P>
+    {
+        private static final long serialVersionUID = 1L;
+        private final ThrowingPredicate2<T, P> throwingPredicate2;
+
+        public ThrowingPredicate2Adapter(ThrowingPredicate2<T, P> throwingPredicate2)
+        {
+            this.throwingPredicate2 = throwingPredicate2;
+        }
+
+        public boolean safeAccept(T object, P param) throws Exception
+        {
+            return this.throwingPredicate2.safeAccept(object, param);
         }
     }
 }

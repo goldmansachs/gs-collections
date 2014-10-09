@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.function.PassThruFunction0;
+import com.gs.collections.impl.block.function.checked.CheckedFunction0;
+import com.gs.collections.impl.block.function.checked.ThrowingFunction0;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
@@ -64,6 +66,11 @@ public final class Functions0
     public static <K, V> Function0<MutableMap<K, V>> newUnifiedMap()
     {
         return (Function0<MutableMap<K, V>>) NEW_UNIFIED_MAP_FUNCTION;
+    }
+
+    public static <T> Function0<T> throwing(ThrowingFunction0<T> throwingFunction0)
+    {
+        return new ThrowingFunction0Adapter<T>(throwingFunction0);
     }
 
     public static <T> Function0<T> nullValue()
@@ -163,6 +170,22 @@ public final class Functions0
         public AtomicLong value()
         {
             return new AtomicLong(0);
+        }
+    }
+
+    private static class ThrowingFunction0Adapter<T> extends CheckedFunction0<T>
+    {
+        private static final long serialVersionUID = 1L;
+        private final ThrowingFunction0<T> throwingFunction0;
+
+        public ThrowingFunction0Adapter(ThrowingFunction0<T> throwingFunction0)
+        {
+            this.throwingFunction0 = throwingFunction0;
+        }
+
+        public T safeValue() throws Exception
+        {
+            return this.throwingFunction0.safeValue();
         }
     }
 }

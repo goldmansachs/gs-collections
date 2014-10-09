@@ -20,6 +20,8 @@ import java.util.Collection;
 
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
+import com.gs.collections.impl.block.procedure.checked.ThrowingProcedure2;
 
 /**
  * Contains factory methods for creating {@link Procedure2} instances.
@@ -32,6 +34,11 @@ public final class Procedures2
     private Procedures2()
     {
         throw new AssertionError("Suppress default constructor for noninstantiability");
+    }
+
+    public static <T, P> Procedure2<T, P> throwing(ThrowingProcedure2<T, P> throwingProcedure2)
+    {
+        return new ThrowingProcedure2Adapter<T, P>(throwingProcedure2);
     }
 
     public static <T, P> Procedure2<T, P> fromProcedure(Procedure<? super T> procedure)
@@ -82,6 +89,22 @@ public final class Procedures2
         public void value(T each, Collection<T> target)
         {
             target.remove(each);
+        }
+    }
+
+    private static class ThrowingProcedure2Adapter<T, P> extends CheckedProcedure2<T, P>
+    {
+        private static final long serialVersionUID = 1L;
+        private final ThrowingProcedure2<T, P> throwingProcedure2;
+
+        public ThrowingProcedure2Adapter(ThrowingProcedure2<T, P> throwingProcedure2)
+        {
+            this.throwingProcedure2 = throwingProcedure2;
+        }
+
+        public void safeValue(T object, P parameter) throws Exception
+        {
+            this.throwingProcedure2.safeValue(object, parameter);
         }
     }
 }

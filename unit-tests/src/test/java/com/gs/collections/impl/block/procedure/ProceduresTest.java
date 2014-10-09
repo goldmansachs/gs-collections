@@ -40,6 +40,16 @@ import org.junit.Test;
 public class ProceduresTest
 {
     @Test
+    public void throwing()
+    {
+        Verify.assertThrowsWithCause(
+                RuntimeException.class,
+                IOException.class,
+                () -> Procedures.throwing(a -> {throw new IOException();}).value(null)
+        );
+    }
+
+    @Test
     public void println()
     {
         TestPrintStream stream = new TestPrintStream(FastList.newListWith(1));

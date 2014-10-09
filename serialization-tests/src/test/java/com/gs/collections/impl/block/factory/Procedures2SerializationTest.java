@@ -22,6 +22,19 @@ import org.junit.Test;
 public class Procedures2SerializationTest
 {
     @Test
+    public void throwing()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByb2NlZHVyZXMy\n"
+                        + "JFRocm93aW5nUHJvY2VkdXJlMkFkYXB0ZXIAAAAAAAAAAQIAAUwAEnRocm93aW5nUHJvY2VkdXJl\n"
+                        + "MnQARExjb20vZ3MvY29sbGVjdGlvbnMvaW1wbC9ibG9jay9wcm9jZWR1cmUvY2hlY2tlZC9UaHJv\n"
+                        + "d2luZ1Byb2NlZHVyZTI7eHIAQWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLnByb2NlZHVy\n"
+                        + "ZS5jaGVja2VkLkNoZWNrZWRQcm9jZWR1cmUyAAAAAAAAAAECAAB4cHA=",
+                Procedures2.throwing(null));
+    }
+
+    @Test
     public void addToCollection()
     {
         Verify.assertSerializedForm(

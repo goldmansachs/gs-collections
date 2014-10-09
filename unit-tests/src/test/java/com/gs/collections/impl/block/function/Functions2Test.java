@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.block.function;
 
+import java.io.IOException;
+
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.test.Verify;
@@ -24,6 +26,16 @@ import org.junit.Test;
 
 public class Functions2Test
 {
+    @Test
+    public void throwing()
+    {
+        Verify.assertThrowsWithCause(
+                RuntimeException.class,
+                IOException.class,
+                () -> Functions2.throwing((a, b) -> {throw new IOException();}).value(null, null)
+        );
+    }
+
     @Test
     public void asFunction2Function()
     {

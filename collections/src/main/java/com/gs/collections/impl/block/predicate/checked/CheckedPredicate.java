@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.gs.collections.impl.block.predicate.checked;
 import com.gs.collections.api.block.predicate.Predicate;
 
 public abstract class CheckedPredicate<T>
-        implements Predicate<T>
+        implements Predicate<T>, ThrowingPredicate<T>
 {
     private static final long serialVersionUID = 1L;
 
@@ -38,7 +38,4 @@ public abstract class CheckedPredicate<T>
             throw new RuntimeException("Checked exception caught in Predicate", e);
         }
     }
-
-    @SuppressWarnings("ProhibitedExceptionDeclared")
-    public abstract boolean safeAccept(T object) throws Exception;
 }

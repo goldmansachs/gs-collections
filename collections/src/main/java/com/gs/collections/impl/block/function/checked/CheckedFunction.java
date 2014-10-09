@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.gs.collections.impl.block.function.checked;
 import com.gs.collections.api.block.function.Function;
 
 public abstract class CheckedFunction<T, V>
-        implements Function<T, V>
+        implements Function<T, V>, ThrowingFunction<T, V>
 {
     private static final long serialVersionUID = 1L;
 
@@ -38,7 +38,4 @@ public abstract class CheckedFunction<T, V>
             throw new RuntimeException("Checked exception caught in Function", e);
         }
     }
-
-    @SuppressWarnings("ProhibitedExceptionDeclared")
-    public abstract V safeValueOf(T object) throws Exception;
 }

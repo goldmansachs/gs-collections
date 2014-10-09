@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,19 @@ import org.junit.Test;
 
 public class ProceduresSerializationTest
 {
+    @Test
+    public void throwing()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByb2NlZHVyZXMk\n"
+                        + "VGhyb3dpbmdQcm9jZWR1cmVBZGFwdGVyAAAAAAAAAAECAAFMABF0aHJvd2luZ1Byb2NlZHVyZXQA\n"
+                        + "Q0xjb20vZ3MvY29sbGVjdGlvbnMvaW1wbC9ibG9jay9wcm9jZWR1cmUvY2hlY2tlZC9UaHJvd2lu\n"
+                        + "Z1Byb2NlZHVyZTt4cgBAY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2sucHJvY2VkdXJlLmNo\n"
+                        + "ZWNrZWQuQ2hlY2tlZFByb2NlZHVyZQAAAAAAAAABAgAAeHBw",
+                Procedures.throwing(null));
+    }
+
     @Test
     public void println()
     {

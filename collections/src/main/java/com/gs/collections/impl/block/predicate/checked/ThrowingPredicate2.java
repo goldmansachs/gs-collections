@@ -16,26 +16,13 @@
 
 package com.gs.collections.impl.block.predicate.checked;
 
-import com.gs.collections.api.block.predicate.Predicate2;
+import java.io.Serializable;
 
-public abstract class CheckedPredicate2<T, P>
-        implements Predicate2<T, P>, ThrowingPredicate2<T, P>
+/**
+ * A functional interface that can be represented by a Lambda that can throw a CheckedException.
+ */
+public interface ThrowingPredicate2<T, P> extends Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    public boolean accept(T item, P param)
-    {
-        try
-        {
-            return this.safeAccept(item, param);
-        }
-        catch (RuntimeException e)
-        {
-            throw e;
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Checked exception caught in Predicate", e);
-        }
-    }
+    @SuppressWarnings("ProhibitedExceptionDeclared")
+    boolean safeAccept(T object, P param) throws Exception;
 }

@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.block.factory;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
@@ -52,6 +53,16 @@ public class FunctionsTest
     private static final Function<Integer, Boolean> IS_ODD = object -> Boolean.valueOf(object.intValue() % 2 != 0);
 
     private static final Function<Boolean, String> BOOLEAN_STRING = String::valueOf;
+
+    @Test
+    public void throwing()
+    {
+        Verify.assertThrowsWithCause(
+                RuntimeException.class,
+                IOException.class,
+                () -> Functions.throwing(a -> {throw new IOException();}).valueOf(null)
+        );
+    }
 
     @Test
     public void getPassThru()

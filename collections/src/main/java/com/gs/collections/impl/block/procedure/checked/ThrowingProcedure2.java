@@ -14,28 +14,15 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.block.function.checked;
+package com.gs.collections.impl.block.procedure.checked;
 
-import com.gs.collections.api.block.function.Function0;
+import java.io.Serializable;
 
-public abstract class CheckedFunction0<R>
-        implements Function0<R>, ThrowingFunction0<R>
+/**
+ * A functional interface that can be represented by a Lambda that can throw a CheckedException.
+ */
+public interface ThrowingProcedure2<T, P> extends Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    public final R value()
-    {
-        try
-        {
-            return this.safeValue();
-        }
-        catch (RuntimeException e)
-        {
-            throw e;
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Checked exception caught in Function0", e);
-        }
-    }
+    @SuppressWarnings("ProhibitedExceptionDeclared")
+    void safeValue(T object, P parameter) throws Exception;
 }

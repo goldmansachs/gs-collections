@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.block.procedure;
 
+import java.io.IOException;
+
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -25,6 +27,16 @@ import org.junit.Test;
 
 public class Procedures2Test
 {
+    @Test
+    public void throwing()
+    {
+        Verify.assertThrowsWithCause(
+                RuntimeException.class,
+                IOException.class,
+                () -> Procedures2.throwing((a, b) -> {throw new IOException();}).value(null, null)
+        );
+    }
+
     @Test
     public void asProcedure2()
     {

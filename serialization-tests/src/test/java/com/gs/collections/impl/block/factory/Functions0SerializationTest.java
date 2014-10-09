@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,19 @@ import org.junit.Test;
 
 public class Functions0SerializationTest
 {
+    @Test
+    public void throwing()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczAk\n"
+                        + "VGhyb3dpbmdGdW5jdGlvbjBBZGFwdGVyAAAAAAAAAAECAAFMABF0aHJvd2luZ0Z1bmN0aW9uMHQA\n"
+                        + "Qkxjb20vZ3MvY29sbGVjdGlvbnMvaW1wbC9ibG9jay9mdW5jdGlvbi9jaGVja2VkL1Rocm93aW5n\n"
+                        + "RnVuY3Rpb24wO3hyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mdW5jdGlvbi5jaGVj\n"
+                        + "a2VkLkNoZWNrZWRGdW5jdGlvbjAAAAAAAAAAAQIAAHhwcA==",
+                Functions0.throwing(null));
+    }
+
     @Test
     public void newFastList()
     {

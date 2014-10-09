@@ -16,26 +16,13 @@
 
 package com.gs.collections.impl.block.function.checked;
 
-import com.gs.collections.api.block.function.Function2;
+import java.io.Serializable;
 
-public abstract class CheckedFunction2<T1, T2, R>
-        implements Function2<T1, T2, R>, ThrowingFunction2<T1, T2, R>
+/**
+ * A functional interface that can be represented by a Lambda that can throw a CheckedException.
+ */
+public interface ThrowingFunction<T, V> extends Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    public final R value(T1 argument1, T2 argument2)
-    {
-        try
-        {
-            return this.safeValue(argument1, argument2);
-        }
-        catch (RuntimeException e)
-        {
-            throw e;
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Checked exception caught in Function2", e);
-        }
-    }
+    @SuppressWarnings("ProhibitedExceptionDeclared")
+    V safeValueOf(T object) throws Exception;
 }

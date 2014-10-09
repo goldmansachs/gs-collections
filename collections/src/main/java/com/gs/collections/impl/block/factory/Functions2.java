@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.gs.collections.impl.block.factory;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.impl.block.function.checked.CheckedFunction2;
+import com.gs.collections.impl.block.function.checked.ThrowingFunction2;
 
 /**
  * Contains factory methods for creating {@link Function2} instances.
@@ -34,6 +36,11 @@ public final class Functions2
     public static <T, V, P> Function2<T, P, V> fromFunction(Function<? super T, ? extends V> function)
     {
         return new FunctionAdapter<T, P, V>(function);
+    }
+
+    public static <T, V, P> Function2<T, P, V> throwing(ThrowingFunction2<T, P, V> throwingFunction2)
+    {
+        return new ThrowingFunction2Adapter<T, P, V>(throwingFunction2);
     }
 
     public static Function2<Integer, Integer, Integer> integerAddition()
@@ -64,6 +71,22 @@ public final class Functions2
         public Integer value(Integer aggregate, Integer value)
         {
             return aggregate + value;
+        }
+    }
+
+    private static class ThrowingFunction2Adapter<T, P, V> extends CheckedFunction2<T, P, V>
+    {
+        private static final long serialVersionUID = 1L;
+        private final ThrowingFunction2<T, P, V> throwingFunction2;
+
+        public ThrowingFunction2Adapter(ThrowingFunction2<T, P, V> throwingFunction2)
+        {
+            this.throwingFunction2 = throwingFunction2;
+        }
+
+        public V safeValue(T argument1, P argument2) throws Exception
+        {
+            return this.throwingFunction2.safeValue(argument1, argument2);
         }
     }
 }

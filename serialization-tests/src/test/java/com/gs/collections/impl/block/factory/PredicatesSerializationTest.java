@@ -26,6 +26,19 @@ import org.junit.Test;
 public class PredicatesSerializationTest
 {
     @Test
+    public void throwing()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMk\n"
+                        + "VGhyb3dpbmdQcmVkaWNhdGVBZGFwdGVyAAAAAAAAAAECAAFMABF0aHJvd2luZ1ByZWRpY2F0ZXQA\n"
+                        + "Q0xjb20vZ3MvY29sbGVjdGlvbnMvaW1wbC9ibG9jay9wcmVkaWNhdGUvY2hlY2tlZC9UaHJvd2lu\n"
+                        + "Z1ByZWRpY2F0ZTt4cgBAY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2sucHJlZGljYXRlLmNo\n"
+                        + "ZWNrZWQuQ2hlY2tlZFByZWRpY2F0ZQAAAAAAAAABAgAAeHBw",
+                Predicates.throwing(null));
+    }
+
+    @Test
     public void alwaysTrue()
     {
         Verify.assertSerializedForm(

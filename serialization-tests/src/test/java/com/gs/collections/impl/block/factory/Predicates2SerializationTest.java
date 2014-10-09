@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,19 @@ import org.junit.Test;
 
 public class Predicates2SerializationTest
 {
+    @Test
+    public void throwing()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMy\n"
+                        + "JFRocm93aW5nUHJlZGljYXRlMkFkYXB0ZXIAAAAAAAAAAQIAAUwAEnRocm93aW5nUHJlZGljYXRl\n"
+                        + "MnQARExjb20vZ3MvY29sbGVjdGlvbnMvaW1wbC9ibG9jay9wcmVkaWNhdGUvY2hlY2tlZC9UaHJv\n"
+                        + "d2luZ1ByZWRpY2F0ZTI7eHIAQWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLnByZWRpY2F0\n"
+                        + "ZS5jaGVja2VkLkNoZWNrZWRQcmVkaWNhdGUyAAAAAAAAAAECAAB4cHA=",
+                Predicates2.throwing(null));
+    }
+
     @Test
     public void alwaysTrue()
     {

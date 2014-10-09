@@ -23,12 +23,12 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.primitive.CharPredicates;
 import com.gs.collections.impl.block.factory.primitive.CharToCharFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.primitive.CodePointFunction;
 import com.gs.collections.impl.block.predicate.CodePointPredicate;
-import com.gs.collections.impl.block.procedure.checked.CheckedProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CodePointProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -363,15 +363,8 @@ public class StringIterateTest
     public void forEachToken()
     {
         String tokens = "1,2";
-        final MutableList<Integer> list = Lists.mutable.of();
-        StringIterate.forEachToken(tokens, ",", new CheckedProcedure<String>()
-        {
-            @Override
-            public void safeValue(String string)
-            {
-                list.add(Integer.valueOf(string));
-            }
-        });
+        MutableList<Integer> list = Lists.mutable.of();
+        StringIterate.forEachToken(tokens, ",", Procedures.throwing(string -> list.add(Integer.valueOf(string))));
         Verify.assertSize(2, list);
         Verify.assertContains(1, list);
         Verify.assertContains(2, list);
@@ -381,15 +374,8 @@ public class StringIterateTest
     public void forEachTrimmedToken()
     {
         String tokens = " 1,2 ";
-        final MutableList<Integer> list = Lists.mutable.of();
-        StringIterate.forEachTrimmedToken(tokens, ",", new CheckedProcedure<String>()
-        {
-            @Override
-            public void safeValue(String string)
-            {
-                list.add(Integer.valueOf(string));
-            }
-        });
+        MutableList<Integer> list = Lists.mutable.of();
+        StringIterate.forEachTrimmedToken(tokens, ",", Procedures.throwing(string -> list.add(Integer.valueOf(string))));
         Verify.assertSize(2, list);
         Verify.assertContains(1, list);
         Verify.assertContains(2, list);

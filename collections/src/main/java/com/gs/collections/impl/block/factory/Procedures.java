@@ -25,6 +25,8 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.procedure.CaseProcedure;
 import com.gs.collections.impl.block.procedure.IfProcedure;
+import com.gs.collections.impl.block.procedure.checked.CheckedProcedure;
+import com.gs.collections.impl.block.procedure.checked.ThrowingProcedure;
 
 /**
  * Factory class for commonly used procedures.
@@ -52,6 +54,11 @@ public final class Procedures
     public static <T> Procedure<T> append(Appendable appendable)
     {
         return new AppendProcedure<T>(appendable);
+    }
+
+    public static <T> Procedure<T> throwing(ThrowingProcedure<T> throwingProcedure)
+    {
+        return new ThrowingProcedureAdapter<T>(throwingProcedure);
     }
 
     /**
@@ -210,6 +217,22 @@ public final class Procedures
         public void value(T each)
         {
             this.procedure.value(each, this.parameter);
+        }
+    }
+
+    private static class ThrowingProcedureAdapter<T> extends CheckedProcedure<T>
+    {
+        private static final long serialVersionUID = 1L;
+        private final ThrowingProcedure<T> throwingProcedure;
+
+        public ThrowingProcedureAdapter(ThrowingProcedure<T> throwingProcedure)
+        {
+            this.throwingProcedure = throwingProcedure;
+        }
+
+        public void safeValue(T object) throws Exception
+        {
+            this.throwingProcedure.safeValue(object);
         }
     }
 }

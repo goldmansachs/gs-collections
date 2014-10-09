@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,13 @@
 
 package com.gs.collections.impl.block.factory;
 
+import java.io.IOException;
+
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.ListIterate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,6 +32,16 @@ public class Predicates2Test
     private static final Predicates2<Object, Object> TRUE = Predicates2.alwaysTrue();
     private static final Predicates2<Object, Object> FALSE = Predicates2.alwaysFalse();
     private static final Object OBJECT = new Object();
+
+    @Test
+    public void throwing()
+    {
+        Verify.assertThrowsWithCause(
+                RuntimeException.class,
+                IOException.class,
+                () -> Predicates2.throwing((a, b) -> {throw new IOException();}).accept(null, null)
+        );
+    }
 
     @Test
     public void staticOr()

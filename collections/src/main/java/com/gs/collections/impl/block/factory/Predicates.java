@@ -24,6 +24,8 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.set.SetIterable;
+import com.gs.collections.impl.block.predicate.checked.CheckedPredicate;
+import com.gs.collections.impl.block.predicate.checked.ThrowingPredicate;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.Iterate;
 
@@ -46,6 +48,11 @@ public abstract class Predicates<T>
     public static <T> Predicates<T> adapt(Predicate<T> predicate)
     {
         return new PredicateAdapter<T>(predicate);
+    }
+
+    public static <T> Predicate<T> throwing(ThrowingPredicate<T> throwingPredicate)
+    {
+        return new ThrowingPredicateAdapter<T>(throwingPredicate);
     }
 
     public static <P, T> Predicate<T> bind(Predicate2<? super T, ? super P> predicate, P parameter)
@@ -1467,6 +1474,22 @@ public abstract class Predicates<T>
         public String toString()
         {
             return "Predicates.bind(" + this.predicate + ", " + this.parameter + ")";
+        }
+    }
+
+    private static class ThrowingPredicateAdapter<T> extends CheckedPredicate<T>
+    {
+        private static final long serialVersionUID = 1L;
+        private final ThrowingPredicate<T> throwingPredicate;
+
+        public ThrowingPredicateAdapter(ThrowingPredicate<T> throwingPredicate)
+        {
+            this.throwingPredicate = throwingPredicate;
+        }
+
+        public boolean safeAccept(T object) throws Exception
+        {
+            return this.throwingPredicate.safeAccept(object);
         }
     }
 }

@@ -45,6 +45,7 @@ import com.gs.collections.impl.block.comparator.primitive.ShortFunctionComparato
 import com.gs.collections.impl.block.function.CaseFunction;
 import com.gs.collections.impl.block.function.IfFunction;
 import com.gs.collections.impl.block.function.checked.CheckedFunction;
+import com.gs.collections.impl.block.function.checked.ThrowingFunction;
 import com.gs.collections.impl.block.function.primitive.IntegerFunctionImpl;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
@@ -184,6 +185,11 @@ public final class Functions
         {
             return "stringToInteger";
         }
+    }
+
+    public static <T, V> Function<T, V> throwing(ThrowingFunction<T, V> throwingFunction)
+    {
+        return new ThrowingFunctionAdapter<T, V>(throwingFunction);
     }
 
     public static <T> Function<T, T> getPassThru()
@@ -983,7 +989,6 @@ public final class Functions
     {
         private static final long serialVersionUID = 1L;
 
-        @Override
         public Class<?> safeValueOf(String className) throws ClassNotFoundException
         {
             return Class.forName(className);
@@ -1069,6 +1074,22 @@ public final class Functions
         public Pair<T, S> valueOf(Pair<S, T> pair)
         {
             return pair.swap();
+        }
+    }
+
+    private static class ThrowingFunctionAdapter<T, V> extends CheckedFunction<T, V>
+    {
+        private static final long serialVersionUID = 1L;
+        private final ThrowingFunction<T, V> throwingFunction;
+
+        public ThrowingFunctionAdapter(ThrowingFunction<T, V> throwingFunction)
+        {
+            this.throwingFunction = throwingFunction;
+        }
+
+        public V safeValueOf(T object) throws Exception
+        {
+            return this.throwingFunction.safeValueOf(object);
         }
     }
 }
