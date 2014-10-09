@@ -48,6 +48,7 @@ import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
@@ -742,6 +743,11 @@ public abstract class AbstractLazyIterable<T>
     public LazyIterable<RichIterable<T>> chunk(int size)
     {
         return LazyIterate.chunk(this, size);
+    }
+
+    public LazyIterable<T> tap(Procedure<T> procedure)
+    {
+        return LazyIterate.tap(this, procedure);
     }
 
     public <K, V> MapIterable<K, V> aggregateInPlaceBy(

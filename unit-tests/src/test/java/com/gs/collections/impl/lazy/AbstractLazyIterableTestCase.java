@@ -24,6 +24,7 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableByteCollection;
 import com.gs.collections.api.collection.primitive.MutableCharCollection;
@@ -48,6 +49,7 @@ import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -792,6 +794,17 @@ public abstract class AbstractLazyIterableTestCase
     public void chunk_large_size()
     {
         Assert.assertEquals(this.lazyIterable.toBag(), this.lazyIterable.chunk(10).getFirst().toBag());
+    }
+
+    @Test
+    public void tap()
+    {
+        StringBuilder tapStringBuilder = new StringBuilder();
+        Procedure<Integer> appendProcedure = Procedures.append(tapStringBuilder);
+        LazyIterable<Integer> list = this.lazyIterable.tap(appendProcedure);
+
+        Verify.assertIterablesEqual(this.lazyIterable, list);
+        Assert.assertEquals("1234567", tapStringBuilder.toString());
     }
 
     @Test

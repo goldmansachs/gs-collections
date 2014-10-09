@@ -544,6 +544,11 @@ public class LazyIterableTestHelper<T> implements LazyIterable<T>
         return null;
     }
 
+    public LazyIterable<T> tap(Procedure<T> procedure)
+    {
+        return null;
+    }
+
     public <K, V> MapIterable<K, V> aggregateInPlaceBy(Function<? super T, ? extends K> groupBy, Function0<? extends V> zeroValueFactory, Procedure2<? super V, ? super T> mutatingAggregator)
     {
         return null;

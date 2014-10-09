@@ -170,7 +170,7 @@ public final class LazyIterate
     }
 
     /**
-     * Creates a deferred tap iterable for the specified iterable
+     * Creates a deferred tap iterable for the specified iterable.
      *
      * @since 6.0
      */
