@@ -25,6 +25,7 @@ import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -158,6 +159,13 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
         Assert.assertEquals(
                 Maps.fixedSize.of(String.class, VAL),
                 this.newBag().toMap(Object::getClass, String::valueOf));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey()
+    {
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1").toImmutable(), this.newBag().groupByUniqueKey(Functions.getPassThru()));
     }
 
     @Test

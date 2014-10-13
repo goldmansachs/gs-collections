@@ -64,6 +64,7 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -1314,6 +1315,15 @@ public final class ListIterate
             return RandomAccessListIterate.groupByEach(list, function, target);
         }
         return IterableIterate.groupByEach(list, function, target);
+    }
+
+    public static <K, T> MutableMap<K, T> groupByUniqueKey(List<T> list, Function<? super T, ? extends K> function)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.groupByUniqueKey(list, function);
+        }
+        return IterableIterate.groupByUniqueKey(list, function);
     }
 
     /**

@@ -1068,9 +1068,9 @@ public abstract class AbstractMutableList<T>
         return ListIterate.groupByEach(this, function);
     }
 
-    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    public <K> MutableMap<K, T> groupByUniqueKey(Function<? super T, ? extends K> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return ListIterate.groupByUniqueKey(this, function);
     }
 
     public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)

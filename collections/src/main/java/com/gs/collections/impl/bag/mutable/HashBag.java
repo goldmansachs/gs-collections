@@ -100,6 +100,7 @@ import com.gs.collections.impl.partition.bag.PartitionHashBag;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.internal.IterableIterate;
 
 /**
  * A HashBag is a MutableBag which uses a Map as its underlying data store.  Each key in the Map represents some item,
@@ -753,7 +754,7 @@ public class HashBag<T>
 
     public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return IterableIterate.groupByUniqueKey(this, function);
     }
 
     public MutableSet<Pair<T, Integer>> zipWithIndex()

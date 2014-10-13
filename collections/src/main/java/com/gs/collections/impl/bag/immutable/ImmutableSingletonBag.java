@@ -33,7 +33,6 @@ import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
@@ -345,11 +344,6 @@ final class ImmutableSingletonBag<T>
     {
         this.forEach(MultimapEachPutProcedure.on(target, function));
         return target;
-    }
-
-    public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public int sizeDistinct()

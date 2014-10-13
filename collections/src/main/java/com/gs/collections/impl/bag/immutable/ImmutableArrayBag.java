@@ -31,7 +31,6 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
@@ -315,11 +314,6 @@ public class ImmutableArrayBag<T>
     public <V> ImmutableBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, HashBagMultimap.<V, T>newMultimap()).toImmutable();
-    }
-
-    public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public T getFirst()

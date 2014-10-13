@@ -1158,7 +1158,7 @@ public abstract class ImmutableBagTestCase
         Verify.assertPostSerializedEqualsAndHashCode(bag);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test(expected = IllegalStateException.class)
     public void groupByUniqueKey()
     {
         this.newBag().groupByUniqueKey(Functions.getPassThru());

@@ -623,10 +623,8 @@ public final class Iterate
      * Returns the first count elements of the iterable or the iterable itself if count is greater than the length of
      * the iterable.
      *
-     * @param iterable
-     *         the collection to take from.
-     * @param count
-     *         the number of items to take.
+     * @param iterable the collection to take from.
+     * @param count    the number of items to take.
      * @return a new list with the items take from the given collection.
      */
     public static <T> Collection<T> take(Iterable<T> iterable, int count)
@@ -657,10 +655,8 @@ public final class Iterate
      * Returns a collection without the first count elements of the iterable or the iterable itself if count is
      * non-positive.
      *
-     * @param iterable
-     *         the collection to drop from.
-     * @param count
-     *         the number of items to drop.
+     * @param iterable the collection to drop from.
+     * @param count    the number of items to drop.
      * @return a new list with the items dropped from the given collection.
      */
     public static <T> Collection<T> drop(Iterable<T> iterable, int count)
@@ -1821,8 +1817,7 @@ public final class Iterate
     /**
      * Flattens a collection of collections into one "flat" collection.
      *
-     * @param iterable
-     *         A list of lists, e.g. { { 1, 2, 3 }, { 4, 5 }, { 6 } }
+     * @param iterable A list of lists, e.g. { { 1, 2, 3 }, { 4, 5 }, { 6 } }
      * @return A flattened list, e.g. { 1, 2, 3, 4, 5, 6 }
      */
     public static <T> Collection<T> flatten(Iterable<? extends Iterable<T>> iterable)
@@ -1846,8 +1841,7 @@ public final class Iterate
      * WARNING!!! The order of Sets are not guaranteed (except for TreeSets and other Ordered Set implementations), so
      * if you use this method, the first element could be any element from the Set.
      *
-     * @exception IllegalArgumentException
-     *         if the Collection is null
+     * @throws IllegalArgumentException if the Collection is null
      */
     public static <T> T getFirst(Iterable<T> iterable)
     {
@@ -1910,8 +1904,7 @@ public final class Iterate
      * WARNING!!! The order of Sets are not guaranteed (except for TreeSets and other Ordered Set implementations), so
      * if you use this method, the last element could be any element from the Set.
      *
-     * @exception IllegalArgumentException
-     *         if the Collection is null
+     * @throws IllegalArgumentException if the Collection is null
      */
     public static <T> T getLast(Iterable<T> iterable)
     {
@@ -2865,7 +2858,20 @@ public final class Iterate
         {
             return IterableIterate.groupByEach(iterable, function, targetCollection);
         }
-        throw new IllegalArgumentException("Cannot perform a groupBy on null");
+        throw new IllegalArgumentException("Cannot perform a groupByEach on null");
+    }
+
+    public static <V, T> MutableMap<V, T> groupByUniqueKey(Iterable<T> iterable, Function<? super T, ? extends V> function)
+    {
+        if (iterable instanceof List)
+        {
+            return ListIterate.groupByUniqueKey((List<T>) iterable, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.groupByUniqueKey(iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform a groupByUniqueKey on null");
     }
 
     /**

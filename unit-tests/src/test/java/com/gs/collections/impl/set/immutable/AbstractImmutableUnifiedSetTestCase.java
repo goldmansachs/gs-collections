@@ -449,9 +449,9 @@ public abstract class AbstractImmutableUnifiedSetTestCase
         Verify.assertInstanceOf(ImmutableSet.class, powerSet.getLast());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void groupByUniqueKey()
     {
-        this.newSetWith(1, 2, 3).groupByUniqueKey(Functions.getPassThru());
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), this.newSetWith(1, 2, 3).groupByUniqueKey(Functions.getPassThru()));
     }
 }

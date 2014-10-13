@@ -62,7 +62,6 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
-import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
@@ -843,11 +842,6 @@ public class TreeBag<T>
     public <V> TreeBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, TreeBagMultimap.<V, T>newMultimap(this.comparator()));
-    }
-
-    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public MutableByteList collectByte(final ByteFunction<? super T> byteFunction)

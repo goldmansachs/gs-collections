@@ -44,7 +44,6 @@ import com.gs.collections.api.list.primitive.ImmutableFloatList;
 import com.gs.collections.api.list.primitive.ImmutableIntList;
 import com.gs.collections.api.list.primitive.ImmutableLongList;
 import com.gs.collections.api.list.primitive.ImmutableShortList;
-import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
@@ -298,11 +297,6 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
     public <V> ImmutableSortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, TreeSortedSetMultimap.<V, T>newMultimap(this.comparator())).toImmutable();
-    }
-
-    public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that)

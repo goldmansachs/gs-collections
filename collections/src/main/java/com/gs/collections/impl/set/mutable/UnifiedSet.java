@@ -2443,7 +2443,7 @@ public class UnifiedSet<T>
 
     public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return IterableIterate.groupByUniqueKey(this, function);
     }
 
     public <S> MutableSet<Pair<T, S>> zip(Iterable<S> that)

@@ -197,9 +197,9 @@ public class ImmutableArrayListTest extends AbstractImmutableListTestCase
         this.classUnderTest().iterator().remove();
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void groupByUniqueKey()
     {
-        this.newList(1, 2, 3).groupByUniqueKey(Functions.getPassThru());
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), this.newList(1, 2, 3).groupByUniqueKey(Functions.getPassThru()));
     }
 }

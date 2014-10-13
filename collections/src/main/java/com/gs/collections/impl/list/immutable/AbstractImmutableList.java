@@ -55,7 +55,6 @@ import com.gs.collections.api.list.primitive.ImmutableFloatList;
 import com.gs.collections.api.list.primitive.ImmutableIntList;
 import com.gs.collections.api.list.primitive.ImmutableLongList;
 import com.gs.collections.api.list.primitive.ImmutableShortList;
-import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
@@ -737,11 +736,6 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
             R target)
     {
         return ListIterate.groupByEach(this, function, target);
-    }
-
-    public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     @Override

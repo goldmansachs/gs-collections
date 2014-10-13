@@ -1211,9 +1211,9 @@ public abstract class AbstractRichIterableTestCase
         }
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void groupByUniqueKey()
     {
-        this.newWith(1, 2, 3).groupByUniqueKey(Functions.getPassThru());
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), this.newWith(1, 2, 3).groupByUniqueKey(Functions.getPassThru()));
     }
 }

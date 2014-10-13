@@ -805,7 +805,7 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
 
     public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return this.delegate.groupByUniqueKey(function).toImmutable();
     }
 
     public <S> ImmutableStack<Pair<T, S>> zip(Iterable<S> that)

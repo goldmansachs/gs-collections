@@ -1167,9 +1167,9 @@ public abstract class StackIterableTestCase
         }
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void groupByUniqueKey()
     {
-        this.newStackWith(1, 2, 3).groupByUniqueKey(Functions.getPassThru());
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), this.newStackWith(1, 2, 3).groupByUniqueKey(Functions.getPassThru()));
     }
 }

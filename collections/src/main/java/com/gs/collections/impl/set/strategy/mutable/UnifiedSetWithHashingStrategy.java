@@ -2318,7 +2318,7 @@ public class UnifiedSetWithHashingStrategy<K>
 
     public <V> MutableMap<V, K> groupByUniqueKey(Function<? super K, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return IterableIterate.groupByUniqueKey(this, function);
     }
 
     public <S> MutableSet<Pair<K, S>> zip(Iterable<S> that)

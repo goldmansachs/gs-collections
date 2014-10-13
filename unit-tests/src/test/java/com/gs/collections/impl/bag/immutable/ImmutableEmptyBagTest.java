@@ -38,6 +38,7 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -461,5 +462,12 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         }, 1, targetCollection);
         Assert.assertEquals(targetCollection, actual);
         Assert.assertSame(targetCollection, actual);
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey()
+    {
+        Assert.assertEquals(UnifiedMap.newMap().toImmutable(), this.newBag().groupByUniqueKey(Functions.getPassThru()));
     }
 }

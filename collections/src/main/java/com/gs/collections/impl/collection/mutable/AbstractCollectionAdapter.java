@@ -747,7 +747,7 @@ public abstract class AbstractCollectionAdapter<T>
 
     public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return Iterate.groupByUniqueKey(this.getDelegate(), function);
     }
 
     public <V, R extends MutableMultimap<V, T>> R groupByEach(

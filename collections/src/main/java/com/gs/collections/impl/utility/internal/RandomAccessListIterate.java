@@ -1229,6 +1229,22 @@ public final class RandomAccessListIterate
         return target;
     }
 
+    public static <K, T> MutableMap<K, T> groupByUniqueKey(List<T> list, Function<? super T, ? extends K> function)
+    {
+        MutableMap<K, T> result = UnifiedMap.newMap();
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            T value = list.get(i);
+            K key = function.valueOf(value);
+            if (result.put(key, value) != null)
+            {
+                throw new IllegalStateException("Attempt to put duplicate keys using groupByUniqueKey");
+            }
+        }
+        return result;
+    }
+
     public static <T, V extends Comparable<? super V>> T minBy(List<T> list, Function<? super T, ? extends V> function)
     {
         if (list.isEmpty())

@@ -924,10 +924,12 @@ public abstract class AbstractImmutableSortedSetTestCase
         Assert.assertEquals(ArrayStack.newStackWith(4, 3, 2, 1), set.toStack());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void groupByUniqueKey()
     {
-        this.classUnderTest().groupByUniqueKey(Functions.getPassThru());
+        Assert.assertEquals(
+                this.classUnderTest().toBag().groupByUniqueKey(Functions.getPassThru()),
+                this.classUnderTest().groupByUniqueKey(Functions.getPassThru()));
     }
 
     @Test

@@ -643,7 +643,7 @@ public class UnmodifiableRichIterable<T>
 
     public <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return this.iterable.groupByUniqueKey(function);
     }
 
     public <S> RichIterable<Pair<T, S>> zip(Iterable<S> that)

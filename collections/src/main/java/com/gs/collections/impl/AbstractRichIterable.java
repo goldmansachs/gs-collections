@@ -51,6 +51,7 @@ import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
@@ -572,5 +573,10 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
     {
         this.forEach(MultimapEachPutProcedure.on(target, function));
         return target;
+    }
+
+    public <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        return Iterate.groupByUniqueKey(this, function);
     }
 }

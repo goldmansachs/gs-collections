@@ -37,6 +37,7 @@ import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.utility.Iterate;
 
 public abstract class AbstractImmutableCollection<T> extends AbstractRichIterable<T> implements ImmutableCollection<T>, Collection<T>
 {
@@ -60,6 +61,11 @@ public abstract class AbstractImmutableCollection<T> extends AbstractRichIterabl
         MutableMap<K, V> map = UnifiedMap.newMap();
         this.forEach(new NonMutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map.toImmutable();
+    }
+
+    public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        return Iterate.groupByUniqueKey(this, function).toImmutable();
     }
 
     public boolean add(T t)

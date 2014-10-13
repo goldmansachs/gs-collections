@@ -472,7 +472,7 @@ final class ImmutableEmptyBag<T>
 
     public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return Maps.immutable.of();
     }
 
     public T detect(Predicate<? super T> predicate)

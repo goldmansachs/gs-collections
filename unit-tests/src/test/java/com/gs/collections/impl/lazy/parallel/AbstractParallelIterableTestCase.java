@@ -833,15 +833,26 @@ public abstract class AbstractParallelIterableTestCase
         final MutableCollection<Integer> actual1 = HashBag.<Integer>newBag().asSynchronized();
 
         Thread.currentThread().interrupt();
-        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> this.classUnderTest().forEach(new CheckedProcedure<Integer>()
-        {
-            @Override
-            public void safeValue(Integer each) throws InterruptedException
-            {
-                Thread.sleep(1000);
-                actual1.add(each);
-            }
-        }));
+        Verify.assertThrowsWithCause(
+                RuntimeException.class,
+                InterruptedException.class,
+                new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        AbstractParallelIterableTestCase.this.classUnderTest().forEach(new CheckedProcedure<Integer>()
+                        {
+                            @Override
+                            public void safeValue(Integer each) throws InterruptedException
+                            {
+                                Thread.sleep(1000);
+                                actual1.add(each);
+                            }
+                        });
+                    }
+                }
+        );
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
 

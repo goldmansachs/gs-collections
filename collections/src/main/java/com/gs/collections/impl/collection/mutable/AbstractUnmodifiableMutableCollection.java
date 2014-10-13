@@ -747,7 +747,7 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
 
     public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return this.getMutableCollection().groupByUniqueKey(function);
     }
 
     public <S> MutableCollection<Pair<T, S>> zip(Iterable<S> that)

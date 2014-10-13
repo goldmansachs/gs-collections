@@ -919,6 +919,11 @@ public final class IterableIterate
         return IteratorIterate.groupByEach(iterable.iterator(), function, target);
     }
 
+    public static <K, T> MutableMap<K, T> groupByUniqueKey(Iterable<T> iterable, Function<? super T, ? extends K> function)
+    {
+        return IteratorIterate.groupByUniqueKey(iterable.iterator(), function);
+    }
+
     public static <T> T getOnly(Iterable<T> iterable)
     {
         Iterator<? extends T> iterator = iterable.iterator();
