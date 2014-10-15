@@ -237,7 +237,7 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
         });
     }
 
-    public void forEachKeyMultiValue(Procedure2<K, ? super Iterable<V>> procedure)
+    public void forEachKeyMultiValues(Procedure2<K, ? super Iterable<V>> procedure)
     {
         this.getMap().forEachKeyValue(procedure);
     }
@@ -298,7 +298,7 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
 
     public <R extends MutableMultimap<K, V>> R selectKeysMultiValues(final Predicate2<? super K, ? super Iterable<V>> predicate, final R target)
     {
-        this.forEachKeyMultiValue(new Procedure2<K, Iterable<V>>()
+        this.forEachKeyMultiValues(new Procedure2<K, Iterable<V>>()
         {
             public void value(K key, Iterable<V> collection)
             {
@@ -313,7 +313,7 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
 
     public <R extends MutableMultimap<K, V>> R rejectKeysMultiValues(final Predicate2<? super K, ? super Iterable<V>> predicate, final R target)
     {
-        this.forEachKeyMultiValue(new Procedure2<K, Iterable<V>>()
+        this.forEachKeyMultiValues(new Procedure2<K, Iterable<V>>()
         {
             public void value(K key, Iterable<V> collection)
             {

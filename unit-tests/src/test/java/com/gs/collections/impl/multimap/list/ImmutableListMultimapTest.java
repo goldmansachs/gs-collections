@@ -62,7 +62,7 @@ public class ImmutableListMultimapTest extends AbstractImmutableMultimapTestCase
         multimap.put("Two", 1);
         multimap.put("Three", 3);
         multimap.put("Three", 3);
-        multimap.toImmutable().forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
+        multimap.toImmutable().forEachKeyMultiValues((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", FastList.newListWith(2, 1)), Tuples.pair("Three", FastList.newListWith(3, 3))), collection);
     }
 

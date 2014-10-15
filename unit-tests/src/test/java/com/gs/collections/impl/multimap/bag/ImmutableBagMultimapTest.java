@@ -59,7 +59,7 @@ public class ImmutableBagMultimapTest extends AbstractImmutableMultimapTestCase
         multimap.put("Two", 1);
         multimap.put("Three", 3);
         multimap.put("Three", 3);
-        multimap.toImmutable().forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
+        multimap.toImmutable().forEachKeyMultiValues((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", HashBag.newBagWith(2, 1)), Tuples.pair("Three", HashBag.newBagWith(3, 3))), collection);
     }
 

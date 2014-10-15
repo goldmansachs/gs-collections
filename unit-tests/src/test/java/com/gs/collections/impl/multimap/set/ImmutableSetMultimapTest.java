@@ -59,7 +59,7 @@ public class ImmutableSetMultimapTest extends AbstractImmutableMultimapTestCase
         multimap.put("Three", 3);
         multimap.put("Three", 3);
         ImmutableSetMultimap<String, Integer> immutableMultimap = multimap.toImmutable();
-        immutableMultimap.forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
+        immutableMultimap.forEachKeyMultiValues((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", UnifiedSet.newSetWith(2, 1)), Tuples.pair("Three", UnifiedSet.newSetWith(3, 3))), collection);
     }
 

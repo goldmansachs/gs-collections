@@ -164,7 +164,7 @@ public abstract class AbstractMultimapTestCase
         MutableSet<Pair<Integer, Iterable<String>>> collection = UnifiedSet.newSet();
         Multimap<Integer, String> multimap =
                 this.newMultimapWithKeysValues(2, "2", 2, "1", 3, "3", 3, "3");
-        multimap.forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
+        multimap.forEachKeyMultiValues((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair(2, this.createCollection("2", "1")), Tuples.pair(3, this.createCollection("3", "3"))), collection);
     }
 

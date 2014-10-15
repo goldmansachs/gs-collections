@@ -42,7 +42,7 @@ import com.gs.collections.api.tuple.Pair;
  * implementing set semantics would not. The value collections can never be empty.
  * <p>
  * <p>Internal iteration methods for keys and values (singly - {@link #forEachKey(Procedure)}, {@link
- * #forEachValue(Procedure)}, and together - {@link #forEachKeyValue(Procedure2)}), {@link #forEachKeyMultiValue(Procedure2)}) are provided to allow flexible
+ * #forEachValue(Procedure)}, and together - {@link #forEachKeyValue(Procedure2)}), {@link #forEachKeyMultiValues(Procedure2)}) are provided to allow flexible
  * browsing of the collection's contents.  Similarly, views also are provided for keys ({@link #keysView()}), values
  * ({@link #valuesView()}) and the combination thereof ({@link #keyValuePairsView()}, {@link
  * #keyMultiValuePairsView()}).
@@ -124,7 +124,7 @@ public interface Multimap<K, V>
      *
      * @since 6.0
      */
-    void forEachKeyMultiValue(Procedure2<K, ? super Iterable<V>> procedure);
+    void forEachKeyMultiValues(Procedure2<K, ? super Iterable<V>> procedure);
 
     /**
      * Returns the number of key-value entry pairs.

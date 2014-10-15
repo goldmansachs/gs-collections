@@ -3151,7 +3151,7 @@ public final class Iterate
     public static <K, V> HashBagMultimap<V, K> flip(BagMultimap<K, V> bagMultimap)
     {
         final HashBagMultimap<V, K> result = new HashBagMultimap<V, K>();
-        bagMultimap.forEachKeyMultiValue(new Procedure2<K, Iterable<V>>()
+        bagMultimap.forEachKeyMultiValues(new Procedure2<K, Iterable<V>>()
         {
             public void value(final K key, Iterable<V> values)
             {
@@ -3170,7 +3170,7 @@ public final class Iterate
     public static <K, V> HashBagMultimap<V, K> flip(ListMultimap<K, V> listMultimap)
     {
         final HashBagMultimap<V, K> result = new HashBagMultimap<V, K>();
-        listMultimap.forEachKeyMultiValue(new Procedure2<K, Iterable<V>>()
+        listMultimap.forEachKeyMultiValues(new Procedure2<K, Iterable<V>>()
         {
             public void value(final K key, Iterable<V> values)
             {
@@ -3189,7 +3189,7 @@ public final class Iterate
     public static <K, V> UnifiedSetMultimap<V, K> flip(SetMultimap<K, V> setMultimap)
     {
         final UnifiedSetMultimap<V, K> result = new UnifiedSetMultimap<V, K>();
-        setMultimap.forEachKeyMultiValue(new Procedure2<K, Iterable<V>>()
+        setMultimap.forEachKeyMultiValues(new Procedure2<K, Iterable<V>>()
         {
             public void value(final K key, Iterable<V> values)
             {

@@ -105,7 +105,7 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
         multimap.put("Two", 1);
         multimap.put("Three", 3);
         multimap.put("Three", 3);
-        multimap.toImmutable().forEachKeyMultiValue((key, values) -> collection.add(Tuples.pair(key, values)));
+        multimap.toImmutable().forEachKeyMultiValues((key, values) -> collection.add(Tuples.pair(key, values)));
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair("Two", TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 2, 1)), Tuples.pair("Three", TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 3, 3))), collection);
     }
 
