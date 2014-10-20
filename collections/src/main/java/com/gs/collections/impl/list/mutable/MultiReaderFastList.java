@@ -882,7 +882,7 @@ public final class MultiReaderFastList<T>
 
         public ImmutableList<T> toImmutable()
         {
-            return Lists.immutable.ofAll(this.getDelegate());
+            return this.getDelegate().toImmutable();
         }
 
         @Override

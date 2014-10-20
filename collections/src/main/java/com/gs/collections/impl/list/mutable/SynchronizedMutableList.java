@@ -141,7 +141,7 @@ public class SynchronizedMutableList<T>
     {
         synchronized (this.getLock())
         {
-            return Lists.immutable.ofAll(this);
+            return this.getMutableList().toImmutable();
         }
     }
 

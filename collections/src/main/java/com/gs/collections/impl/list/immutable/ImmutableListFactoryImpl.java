@@ -16,6 +16,9 @@
 
 package com.gs.collections.impl.list.immutable;
 
+import java.util.Collection;
+import java.util.List;
+
 import com.gs.collections.api.factory.list.ImmutableListFactory;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.utility.Iterate;
@@ -185,7 +188,10 @@ public final class ImmutableListFactoryImpl implements ImmutableListFactory
         {
             return (ImmutableList<T>) items;
         }
-
+        if (Iterate.isEmpty(items))
+        {
+            return this.of();
+        }
         return this.of((T[]) Iterate.toArray(items));
     }
 }

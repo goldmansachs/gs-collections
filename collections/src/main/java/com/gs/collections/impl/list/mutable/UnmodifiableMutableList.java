@@ -117,7 +117,7 @@ public class UnmodifiableMutableList<T>
     @Override
     public ImmutableList<T> toImmutable()
     {
-        return Lists.immutable.ofAll(this.getMutableList());
+        return this.getMutableList().toImmutable();
     }
 
     @Override
