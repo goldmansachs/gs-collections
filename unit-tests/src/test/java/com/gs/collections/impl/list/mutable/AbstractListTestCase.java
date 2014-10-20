@@ -158,6 +158,7 @@ public abstract class AbstractListTestCase
     {
         super.toImmutable();
         Verify.assertInstanceOf(ImmutableList.class, this.newWith().toImmutable());
+        Assert.assertSame(this.newWith().toImmutable(), this.newWith().toImmutable());
     }
 
     @Override

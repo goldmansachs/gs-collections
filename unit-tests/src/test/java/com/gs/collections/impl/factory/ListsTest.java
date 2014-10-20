@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,19 @@ public class ListsTest
         Verify.assertInstanceOf(ImmutableList.class, listFactory.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
         Assert.assertEquals(FastList.newListWith(1, 2, 3), listFactory.ofAll(FastList.newListWith(1, 2, 3)));
         Verify.assertInstanceOf(ImmutableList.class, listFactory.ofAll(FastList.newListWith(1, 2, 3)));
+    }
+
+    @Test
+    public void immutableWithListTest()
+    {
+        Assert.assertEquals(Lists.mutable.of(), Lists.mutable.of().toImmutable());
+        Assert.assertEquals(Lists.mutable.of(1).without(1), Lists.mutable.of(1).without(1).toImmutable());
+        for (int i = 0; i < 12; i++)
+        {
+            MutableList<Integer> integers = Interval.fromTo(0, i).toList();
+            Assert.assertEquals(integers, integers.toImmutable());
+            Assert.assertEquals(integers.toImmutable(), integers.toImmutable());
+        }
     }
 
     @Test

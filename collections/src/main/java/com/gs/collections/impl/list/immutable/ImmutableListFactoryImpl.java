@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package com.gs.collections.impl.list.immutable;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.RandomAccess;
 
 import com.gs.collections.api.factory.list.ImmutableListFactory;
 import com.gs.collections.api.list.ImmutableList;
@@ -177,6 +177,38 @@ public final class ImmutableListFactoryImpl implements ImmutableListFactory
         }
     }
 
+    private <T> ImmutableList<T> withList(List<T> items)
+    {
+        switch (items.size())
+        {
+            case 0:
+                return this.of();
+            case 1:
+                return this.of(items.get(0));
+            case 2:
+                return this.of(items.get(0), items.get(1));
+            case 3:
+                return this.of(items.get(0), items.get(1), items.get(2));
+            case 4:
+                return this.of(items.get(0), items.get(1), items.get(2), items.get(3));
+            case 5:
+                return this.of(items.get(0), items.get(1), items.get(2), items.get(3), items.get(4));
+            case 6:
+                return this.of(items.get(0), items.get(1), items.get(2), items.get(3), items.get(4), items.get(5));
+            case 7:
+                return this.of(items.get(0), items.get(1), items.get(2), items.get(3), items.get(4), items.get(5), items.get(6));
+            case 8:
+                return this.of(items.get(0), items.get(1), items.get(2), items.get(3), items.get(4), items.get(5), items.get(6), items.get(7));
+            case 9:
+                return this.of(items.get(0), items.get(1), items.get(2), items.get(3), items.get(4), items.get(5), items.get(6), items.get(7), items.get(8));
+            case 10:
+                return this.of(items.get(0), items.get(1), items.get(2), items.get(3), items.get(4), items.get(5), items.get(6), items.get(7), items.get(8), items.get(9));
+
+            default:
+                return ImmutableArrayList.newListWith((T[]) items.toArray());
+        }
+    }
+
     public <T> ImmutableList<T> ofAll(Iterable<? extends T> items)
     {
         return this.withAll(items);
@@ -187,6 +219,10 @@ public final class ImmutableListFactoryImpl implements ImmutableListFactory
         if (items instanceof ImmutableList<?>)
         {
             return (ImmutableList<T>) items;
+        }
+        if (items instanceof List && items instanceof RandomAccess)
+        {
+            return this.withList((List<T>) items);
         }
         if (Iterate.isEmpty(items))
         {
