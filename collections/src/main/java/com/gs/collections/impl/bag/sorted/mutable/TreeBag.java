@@ -70,13 +70,13 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.Counter;
+import com.gs.collections.impl.bag.mutable.AbstractMutableBag;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
-import com.gs.collections.impl.collection.AbstractMutableBag;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
@@ -392,7 +392,6 @@ public class TreeBag<T>
         {
             this.items.forEachKeyValue(new CheckedProcedure2<T, Counter>()
             {
-                @Override
                 public void safeValue(T object, Counter parameter) throws Exception
                 {
                     out.writeObject(object);

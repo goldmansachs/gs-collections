@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.collection;
+package com.gs.collections.impl.bag.mutable;
 
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.bag.primitive.MutableByteBag;
