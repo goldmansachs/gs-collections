@@ -28,6 +28,8 @@ import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
+import com.gs.collections.api.set.primitive.<name>Set;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
@@ -539,6 +541,37 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("33")>, 1), map3);
         Assert.assertEquals(Integer.valueOf(2), map3.updateValueWith(<(literal.(type))("33")>, zeroFactory, incrementFunction, 1));
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("33")>, 2), map3);
+    }
+
+    @Test
+    public void freeze()
+    {
+        Mutable<name>ObjectMap mutable<name>ObjectMap = this.classUnderTest();
+        <name>Set frozenSet = mutable<name>ObjectMap.keySet().freeze();
+        <name>Set frozenSetCopy = <name>HashSet.newSetWith(mutable<name>ObjectMap.keySet().toArray());
+        Assert.assertEquals(frozenSet, frozenSetCopy);
+        Assert.assertEquals(frozenSetCopy, mutable<name>ObjectMap.keySet().freeze());
+        for (int i = 0; i \< 32; i++)
+        {
+            mutable<name>ObjectMap.put((<type>) i, new Object());
+            Assert.assertEquals(frozenSet, frozenSetCopy);
+        }
+
+        <name>Set frozenSetForRemove = mutable<name>ObjectMap.keySet().freeze();
+        <name>Set frozenSetCopyForRemove = <name>HashSet.newSetWith(mutable<name>ObjectMap.keySet().toArray());
+        Assert.assertEquals(frozenSetForRemove, frozenSetCopyForRemove);
+        Assert.assertEquals(frozenSetCopyForRemove, mutable<name>ObjectMap.keySet().freeze());
+        for (int i = 0; i \< 32; i++)
+        {
+            mutable<name>ObjectMap.remove((<type>) i);
+            Assert.assertEquals(frozenSetForRemove, frozenSetCopyForRemove);
+        }
+
+        Mutable<name>ObjectMap mutable<name>ObjectMapForClear = this.classUnderTest();
+        <name>Set frozenSetForClear = mutable<name>ObjectMapForClear.keySet().freeze();
+        <name>Set frozenSetCopyForClear = <name>HashSet.newSetWith(mutable<name>ObjectMapForClear.keySet().toArray());
+        mutable<name>ObjectMapForClear.clear();
+        Assert.assertEquals(frozenSetForClear, frozenSetCopyForClear);
     }
 
     @Test

@@ -28,6 +28,9 @@ import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
 import com.gs.collections.api.iterator.Mutable<name2>Iterator;
 import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
+import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
+import com.gs.collections.api.set.primitive.<name1>Set;
+import com.gs.collections.impl.set.mutable.primitive.<name1>HashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -242,6 +245,15 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
     {
         <name1>To<name2>Function function = (<type1> <type1>Parameter) -> <castExactly(type2, {<type1>Parameter}, sameTwoPrimitives)>;
         Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getIfAbsentPutWithKey(<(literal.(type1))("0")>, function)<(wideDelta.(type2))>);
+    }
+
+    @Test
+    public void freeze()
+    {
+        Mutable<name1><name2>Map mutable<name1><name2>Map = this.classUnderTest();
+        <name1>Set frozenSet = mutable<name1><name2>Map.keySet().freeze();
+        <name1>Set frozenSetCopy = <name1>HashSet.newSetWith(mutable<name1><name2>Map.keySet().toArray());
+        Assert.assertEquals(frozenSet, frozenSetCopy);
     }
 
     @Test(expected = UnsupportedOperationException.class)

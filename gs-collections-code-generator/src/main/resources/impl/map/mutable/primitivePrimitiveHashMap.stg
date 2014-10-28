@@ -125,6 +125,8 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     private SentinelValues sentinelValues;
 
+    private boolean copyKeysOnWrite = false;
+
     public <name1><name2>HashMap()
     {
         this.allocateTable(DEFAULT_INITIAL_CAPACITY \<\< 1);
@@ -559,6 +561,10 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         this.sentinelValues = null;
         this.occupiedWithData = 0;
         this.occupiedWithSentinels = 0;
+        if (this.copyKeysOnWrite)
+        {
+            this.copyKeys();
+        }
         <if(!sameTwoPrimitives)>
         Arrays.fill(this.<keyArray>, EMPTY_KEY);
         Arrays.fill(this.<valueArray>, EMPTY_VALUE);
@@ -582,21 +588,14 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         }
 
         int index = this.probe(key);
-        this.<valueArray>[<incrementIndex>] = value;
-
         <type1> keyAtindex = this.<keyArray>[index];
         if (keyAtindex != key)
         {
-            if (keyAtindex == REMOVED_KEY)
-            {
-                this.occupiedWithSentinels--;
-            }
-            this.<keyArray>[index] = key;
-            this.occupiedWithData++;
-            if (this.occupiedWithData > this.maxOccupiedWithData())
-            {
-                this.rehashAndGrow();
-            }
+            this.addKeyValueAtIndex(key, value, index);
+        }
+        else
+        {
+            this.<valueArray>[<incrementIndex>] = value;
         }
     }
 
@@ -654,14 +653,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         int index = this.probe(key);
         if (<(equals.(type1))({this.<keyArray>[index]}, "key")>)
         {
-            this.<keyArray>[index] = REMOVED_KEY;
-            this.<valueArray>[<incrementIndex>] = EMPTY_VALUE;
-            this.occupiedWithData--;
-            this.occupiedWithSentinels++;
-            if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
-            {
-                this.rehash();
-            }
+            this.removeKeyAtIndex(index);
         }
     }
 
@@ -695,16 +687,8 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         int index = this.probe(key);
         if (<(equals.(type1))({this.<keyArray>[index]}, "key")>)
         {
-            this.<keyArray>[index] = REMOVED_KEY;
             <type2> oldValue = this.<valueArray>[<incrementIndex>];
-            this.<valueArray>[<incrementIndex>] = EMPTY_VALUE;
-            this.occupiedWithData--;
-            this.occupiedWithSentinels++;
-            if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
-            {
-                this.rehash();
-            }
-
+            this.removeKeyAtIndex(index);
             return oldValue;
         }
         return value;
@@ -782,6 +766,10 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         {
             this.occupiedWithSentinels--;
         }
+        if (this.copyKeysOnWrite)
+        {
+            this.copyKeys();
+        }
         this.<keyArray>[index] = key;
         this.<valueArray>[<incrementIndex>] = value;
         this.occupiedWithData++;
@@ -789,6 +777,30 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         {
             this.rehashAndGrow();
         }
+    }
+
+    private void removeKeyAtIndex(int index)
+    {
+        if (this.copyKeysOnWrite)
+        {
+            this.copyKeys();
+        }
+        this.<keyArray>[index] = REMOVED_KEY;
+        this.<valueArray>[<incrementIndex>] = EMPTY_VALUE;
+        this.occupiedWithData--;
+        this.occupiedWithSentinels++;
+        if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
+        {
+            this.rehash();
+        }
+    }
+
+    private void copyKeys()
+    {
+        <type1>[] copy = new <type1>[this.<keyArray>.length];
+        System.arraycopy(this.<keyArray>, 0, copy, 0, this.<keyArray>.length);
+        this.<keyArray> = copy;
+        this.copyKeysOnWrite = false;
     }
 
     private void addEmptyKeyValue(<type2> value)
@@ -2206,7 +2218,19 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
         public <name1>Set freeze()
         {
-            throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".freeze() not implemented yet");
+            <name1><name2>HashMap.this.copyKeysOnWrite = true;
+            boolean containsZeroKey = false;
+            boolean containsOneKey = false;
+            if (<name1><name2>HashMap.this.sentinelValues != null)
+            {
+                containsZeroKey = <name1><name2>HashMap.this.sentinelValues.containsZeroKey;
+                containsOneKey = <name1><name2>HashMap.this.sentinelValues.containsOneKey;
+            }
+            <if(sameTwoPrimitives)>
+            return new Immutable<name1><name2>MapKeySet(<name1><name2>HashMap.this.<keyArray>, <name1><name2>HashMap.this.occupiedWithData, containsZeroKey, containsOneKey);
+            <else>
+            return new Immutable<name1>MapKeySet(<name1><name2>HashMap.this.<keyArray>, <name1><name2>HashMap.this.occupiedWithData, containsZeroKey, containsOneKey);
+            <endif>
         }
 
         public Immutable<name1>Set toImmutable()

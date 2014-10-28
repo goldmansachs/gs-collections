@@ -99,12 +99,6 @@ public class Unmodifiable<name1><name2>MapKeySetTest extends Abstract<name1>SetT
         this.classUnderTest().withAll(new <name1>ArrayList());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void freeze()
-    {
-        this.classUnderTest().freeze();
-    }
-
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void withoutAll()

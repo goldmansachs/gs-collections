@@ -96,12 +96,6 @@ public class <name>ObjectHashMapKeySetTest extends Abstract<name>SetTestCase
         this.classUnderTest().withAll(new <name>ArrayList());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void freeze()
-    {
-        this.classUnderTest().freeze();
-    }
-
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void withoutAll()

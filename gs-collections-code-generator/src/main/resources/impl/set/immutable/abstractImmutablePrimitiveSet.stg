@@ -1,0 +1,76 @@
+import "copyright.stg"
+
+skipBoolean() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/set/immutable/primitive"
+
+fileName(primitive) ::= "AbstractImmutable<primitive.name>Set"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name)::= <<
+<copyright()>
+
+package com.gs.collections.impl.set.immutable.primitive;
+
+import java.io.Serializable;
+import java.util.Arrays;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.set.ImmutableSet;
+import com.gs.collections.api.set.primitive.Immutable<name>Set;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.api.set.primitive.<name>Set;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
+import com.gs.collections.impl.set.primitive.Abstract<name>Set;
+
+/**
+ * This file was automatically generated from template file abstractImmutablePrimitiveSet.stg.
+ *
+ * @since 6.0.
+ */
+
+public abstract class AbstractImmutable<name>Set extends Abstract<name>Set implements Immutable<name>Set, Serializable
+{
+    public Immutable<name>Set newWith(<type> element)
+    {
+        return <name>HashSet.newSet(this).with(element).toImmutable();
+    }
+
+    public Immutable<name>Set newWithout(<type> element)
+    {
+        return <name>HashSet.newSet(this).without(element).toImmutable();
+    }
+
+    public Immutable<name>Set newWithAll(<name>Iterable elements)
+    {
+        return <name>HashSet.newSet(this).withAll(elements).toImmutable();
+    }
+
+    public Immutable<name>Set newWithoutAll(<name>Iterable elements)
+    {
+        return <name>HashSet.newSet(this).withoutAll(elements).toImmutable();
+    }
+
+    public <name>Set freeze()
+    {
+        return this;
+    }
+
+    public Immutable<name>Set toImmutable()
+    {
+        return this;
+    }
+}
+
+>>

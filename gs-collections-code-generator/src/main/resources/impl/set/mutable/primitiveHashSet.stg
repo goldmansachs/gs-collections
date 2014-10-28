@@ -45,13 +45,15 @@ import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.immutable.primitive.Immutable<name>SetSerializationProxy;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.set.immutable.primitive.AbstractImmutable<name>Set;
+import com.gs.collections.impl.set.primitive.Abstract<name>Set;
 
 /**
  * This file was automatically generated from template file primitiveHashSet.stg.
  *
  * @since 3.0.
  */
-public final class <name>HashSet implements Mutable<name>Set, Externalizable
+public final class <name>HashSet extends Abstract<name>Set implements Mutable<name>Set, Externalizable
 {
     private static final long serialVersionUID = 1L;
     private static final int OCCUPIED_DATA_RATIO = 2;
@@ -132,23 +134,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-
-        if (!(obj instanceof <name>Set))
-        {
-            return false;
-        }
-
-        <name>Set other = (<name>Set) obj;
-        return this.size() == other.size() && this.containsAll(other.toArray());
-    }
-
-    @Override
     public int hashCode()
     {
         int result = 0;
@@ -172,52 +157,9 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return result;
     }
 
-    @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
     public int size()
     {
         return this.occupiedWithData + this.zeroToThirtyOneOccupied;
-    }
-
-    public boolean isEmpty()
-    {
-        return this.size() == 0;
-    }
-
-    public boolean notEmpty()
-    {
-        return this.size() != 0;
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
     }
 
     public void appendString(Appendable appendable, String start, String separator, String end)
@@ -554,30 +496,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return <(equals.(type))("this.table[this.probe(value)]", "value")>;
     }
 
-    public boolean containsAll(<type>... source)
-    {
-        for (<type> item : source)
-        {
-            if (!this.contains(item))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean containsAll(<name>Iterable source)
-    {
-        for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext();)
-        {
-            if (!this.contains(iterator.next()))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public void forEach(<name>Procedure procedure)
     {
         int zeroToThirtyOne = this.zeroToThirtyOne;
@@ -806,26 +724,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return true;
     }
 
-    public Mutable<name>List toList()
-    {
-        return <name>ArrayList.newList(this);
-    }
-
-    public Mutable<name>Set toSet()
-    {
-        return <name>HashSet.newSet(this);
-    }
-
-    public Mutable<name>Bag toBag()
-    {
-        return <name>HashBag.newBag(this);
-    }
-
-    public Lazy<name>Iterable asLazy()
-    {
-        return new Lazy<name>IterableAdapter(this);
-    }
-
     public <wideType.(type)> sum()
     {
         <wideType.(type)> result = <wideZero.(type)>;
@@ -868,15 +766,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return max;
     }
 
-    public <type> maxIfEmpty(<type> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.max();
-    }
-
     public <type> min()
     {
         if (this.isEmpty())
@@ -895,53 +784,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             }
         }
         return min;
-    }
-
-    public <type> minIfEmpty(<type> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.min();
-    }
-
-    public double average()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        return <castSum.(type)>this.sum() / (double) this.size();
-    }
-
-    public double median()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        <type>[] sortedArray = this.toSortedArray();
-        int middleIndex = sortedArray.length >\> 1;
-        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-        {
-            <type> first = sortedArray[middleIndex];
-            <type> second = sortedArray[middleIndex - 1];
-            return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
-        }
-        return <castDouble.(type)>sortedArray[middleIndex];
-    }
-
-    public <type>[] toSortedArray()
-    {
-        <type>[] array = this.toArray();
-        Arrays.sort(array);
-        return array;
-    }
-
-    public Mutable<name>List toSortedList()
-    {
-        return <name>ArrayList.newList(this).sortThis();
     }
 
     public <name>Set freeze()
@@ -1123,7 +965,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return <(notEquals.(type))("value", "EMPTY")> && <(notEquals.(type))("value", "REMOVED")>;
     }
 
-    private static final class Immutable<name>HashSet implements Immutable<name>Set, Serializable
+    private static final class Immutable<name>HashSet extends AbstractImmutable<name>Set implements Serializable
     {
         private static final long serialVersionUID = 1L;
         private final <type>[] table;
@@ -1155,23 +997,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
-            if (this == obj)
-            {
-                return true;
-            }
-
-            if (!(obj instanceof <name>Set))
-            {
-                return false;
-            }
-
-            <name>Set other = (<name>Set) obj;
-            return this.size() == other.size() && this.containsAll(other.toArray());
-        }
-
-        @Override
         public int hashCode()
         {
             int result = 0;
@@ -1195,72 +1020,9 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return result;
         }
 
-        @Override
-        public String toString()
-        {
-            return this.makeString("[", ", ", "]");
-        }
-
-        public Immutable<name>Set newWith(<type> element)
-        {
-            return <name>HashSet.newSet(this).with(element).toImmutable();
-        }
-
-        public Immutable<name>Set newWithout(<type> element)
-        {
-            return <name>HashSet.newSet(this).without(element).toImmutable();
-        }
-
-        public Immutable<name>Set newWithAll(<name>Iterable elements)
-        {
-            return <name>HashSet.newSet(this).withAll(elements).toImmutable();
-        }
-
-        public Immutable<name>Set newWithoutAll(<name>Iterable elements)
-        {
-            return <name>HashSet.newSet(this).withoutAll(elements).toImmutable();
-        }
-
         public int size()
         {
             return this.occupied + this.zeroToThirtyOneOccupied;
-        }
-
-        public boolean isEmpty()
-        {
-            return this.size() == 0;
-        }
-
-        public boolean notEmpty()
-        {
-            return this.size() != 0;
-        }
-
-        public String makeString()
-        {
-            return this.makeString(", ");
-        }
-
-        public String makeString(String separator)
-        {
-            return this.makeString("", separator, "");
-        }
-
-        public String makeString(String start, String separator, String end)
-        {
-            Appendable stringBuilder = new StringBuilder();
-            this.appendString(stringBuilder, start, separator, end);
-            return stringBuilder.toString();
-        }
-
-        public void appendString(Appendable appendable)
-        {
-            this.appendString(appendable, ", ");
-        }
-
-        public void appendString(Appendable appendable, String separator)
-        {
-            this.appendString(appendable, "", separator, "");
         }
 
         public void appendString(Appendable appendable, String start, String separator, String end)
@@ -1341,30 +1103,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
                 return ((temp >\>> <(castRealTypeToInt.(type))("value")>) & 1) != 0;
             }
             return <(equals.(type))("this.table[this.probe(value)]", "value")>;
-        }
-
-        public boolean containsAll(<type>... source)
-        {
-            for (<type> item : source)
-            {
-                if (!this.contains(item))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public boolean containsAll(<name>Iterable source)
-        {
-            for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext();)
-            {
-                if (!this.contains(iterator.next()))
-                {
-                    return false;
-                }
-            }
-            return true;
         }
 
         public void forEach(<name>Procedure procedure)
@@ -1595,26 +1333,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return true;
         }
 
-        public Mutable<name>List toList()
-        {
-            return <name>ArrayList.newList(this);
-        }
-
-        public Mutable<name>Set toSet()
-        {
-            return <name>HashSet.newSet(this);
-        }
-
-        public Mutable<name>Bag toBag()
-        {
-            return <name>HashBag.newBag(this);
-        }
-
-        public Lazy<name>Iterable asLazy()
-        {
-            return new Lazy<name>IterableAdapter(this);
-        }
-
         public <wideType.(type)> sum()
         {
             <wideType.(type)> result = <wideZero.(type)>;
@@ -1657,15 +1375,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return max;
         }
 
-        public <type> maxIfEmpty(<type> defaultValue)
-        {
-            if (this.isEmpty())
-            {
-                return defaultValue;
-            }
-            return this.max();
-        }
-
         public <type> min()
         {
             if (this.isEmpty())
@@ -1684,53 +1393,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
                 }
             }
             return min;
-        }
-
-        public <type> minIfEmpty(<type> defaultValue)
-        {
-            if (this.isEmpty())
-            {
-                return defaultValue;
-            }
-            return this.min();
-        }
-
-        public double average()
-        {
-            if (this.isEmpty())
-            {
-                throw new ArithmeticException();
-            }
-            return <castSum.(type)>this.sum() / (double) this.size();
-        }
-
-        public double median()
-        {
-            if (this.isEmpty())
-            {
-                throw new ArithmeticException();
-            }
-            <type>[] sortedArray = this.toSortedArray();
-            int middleIndex = sortedArray.length >\> 1;
-            if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-            {
-                <type> first = sortedArray[middleIndex];
-                <type> second = sortedArray[middleIndex - 1];
-                return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
-            }
-            return <castDouble.(type)>sortedArray[middleIndex];
-        }
-
-        public <type>[] toSortedArray()
-        {
-            <type>[] array = this.toArray();
-            Arrays.sort(array);
-            return array;
-        }
-
-        public Mutable<name>List toSortedList()
-        {
-            return <name>ArrayList.newList(this).sortThis();
         }
 
         public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
@@ -1752,16 +1414,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
                 }
             }
             return result;
-        }
-
-        public <name>Set freeze()
-        {
-            return this;
-        }
-
-        public Immutable<name>Set toImmutable()
-        {
-            return this;
         }
 
         private Object writeReplace()

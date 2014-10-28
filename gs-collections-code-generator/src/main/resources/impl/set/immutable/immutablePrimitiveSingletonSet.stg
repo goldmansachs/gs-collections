@@ -221,7 +221,7 @@ final class Immutable<name>SingletonSet implements Immutable<name>Set, Serializa
     @Override
     public int hashCode()
     {
-        return <(hashCode.(type))("this.element")> ^ 1;
+        return <(hashCode.(type))("this.element")>;
     }
 
     public Mutable<name>Set toSet()

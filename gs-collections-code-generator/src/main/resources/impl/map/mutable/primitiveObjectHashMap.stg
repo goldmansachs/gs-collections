@@ -16,7 +16,7 @@ class(primitive) ::= <<
 collectPrimitive(name, type) ::= <<
 public Mutable<name>Collection collect<name>(<name>Function\<? super V> <type>Function)
 {
-    return this.collect<name>(<type>Function,  new <name>ArrayList(this.size()));
+    return this.collect<name>(<type>Function, new <name>ArrayList(this.size()));
 }
 
 public \<R extends Mutable<name>Collection> R collect<name>(<name>Function\<? super V> <type>Function, R target)
@@ -60,6 +60,7 @@ import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToBooleanFunction;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
@@ -172,9 +173,12 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
     private <type>[] keys;
     private V[] values;
-    private SentinelValues\<V> sentinelValues;
     private int occupiedWithData;
     private int occupiedWithSentinels;
+
+    private SentinelValues\<V> sentinelValues;
+
+    private boolean copyKeysOnWrite = false;
 
     public <name>ObjectHashMap()
     {
@@ -211,7 +215,6 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         }
         return possibleResult;
     }
-
 
     public static \<V> <name>ObjectHashMap\<V> newMap()
     {
@@ -1546,7 +1549,6 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return null;
     }
 
-
     public MutableList\<V> toList()
     {
         MutableList\<V> list = Lists.mutable.of();
@@ -1929,6 +1931,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         this.sentinelValues = null;
         this.occupiedWithData = 0;
         this.occupiedWithSentinels = 0;
+        if (this.copyKeysOnWrite)
+        {
+            this.keys = new <type>[this.keys.length];
+            this.copyKeysOnWrite = false;
+        }
         Arrays.fill(this.keys, EMPTY_KEY);
         Arrays.fill(this.values, null);
     }
@@ -1969,17 +1976,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             return oldValue;
         }
 
-        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
-        {
-            --this.occupiedWithSentinels;
-        }
-        this.keys[index] = key;
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return null;
     }
 
@@ -2095,17 +2092,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         {
             return this.values[index];
         }
-        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
-        {
-            this.occupiedWithSentinels--;
-        }
-        this.keys[index] = key;
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -2154,18 +2141,8 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         {
             return this.values[index];
         }
-        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
-        {
-            this.occupiedWithSentinels--;
-        }
-        this.keys[index] = key;
         V value = function.value();
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -2214,18 +2191,8 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         {
             return this.values[index];
         }
-        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
-        {
-            this.occupiedWithSentinels--;
-        }
-        this.keys[index] = key;
         V value = function.valueOf(parameter);
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -2274,18 +2241,8 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         {
             return this.values[index];
         }
-        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
-        {
-            this.occupiedWithSentinels--;
-        }
-        this.keys[index] = key;
         V value = function.valueOf(key);
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -2335,18 +2292,8 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             this.values[index] = function.valueOf(this.values[index]);
             return this.values[index];
         }
-        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
-        {
-            this.occupiedWithSentinels--;
-        }
-        this.keys[index] = key;
         V value = function.valueOf(factory.value());
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -2396,18 +2343,8 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             this.values[index] = function.value(this.values[index], parameter);
             return this.values[index];
         }
-        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
-        {
-            this.occupiedWithSentinels--;
-        }
-        this.keys[index] = key;
         V value =  function.value(factory.value(), parameter);
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -2452,15 +2389,8 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         int index = this.probe(key);
         if (<(equals.(type))("this.keys[index]", "key")>)
         {
-            this.keys[index] = REMOVED_KEY;
             V oldValue = this.values[index];
-            this.values[index] = null;
-            this.occupiedWithData--;
-            this.occupiedWithSentinels++;
-            if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
-            {
-                this.rehash();
-            }
+            this.removeKeyAtIndex(index);
             return oldValue;
         }
         return null;
@@ -2568,6 +2498,49 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         }
     }
 
+    private void addKeyValueAtIndex(<type> key, V value, int index)
+    {
+        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
+        {
+            this.occupiedWithSentinels--;
+        }
+        if (this.copyKeysOnWrite)
+        {
+            this.copyKeys();
+        }
+        this.keys[index] = key;
+        this.values[index] = value;
+        ++this.occupiedWithData;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
+        }
+    }
+
+    private void removeKeyAtIndex(int index)
+    {
+        if (this.copyKeysOnWrite)
+        {
+            this.copyKeys();
+        }
+        this.keys[index] = REMOVED_KEY;
+        this.values[index] = null;
+        this.occupiedWithData--;
+        this.occupiedWithSentinels++;
+        if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
+        {
+            this.rehash();
+        }
+    }
+
+    private void copyKeys()
+    {
+        <type>[] copy = new <type>[this.keys.length];
+        System.arraycopy(this.keys, 0, copy, 0, this.keys.length);
+        this.keys = copy;
+        this.copyKeysOnWrite = false;
+    }
+
     private class SentinelValues\<V>
     {
         private boolean containsZeroKey;
@@ -2670,14 +2643,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             if (isNonSentinel(this.currentKey))
             {
                 int index = this.position - 1;
-                <name>ObjectHashMap.this.keys[index] = REMOVED_KEY;
-                <name>ObjectHashMap.this.values[index] = null;
-                <name>ObjectHashMap.this.occupiedWithData--;
-                <name>ObjectHashMap.this.occupiedWithSentinels++;
-                if (<name>ObjectHashMap.this.occupiedWithSentinels > <name>ObjectHashMap.this.maxOccupiedWithSentinels())
-                {
-                    <name>ObjectHashMap.this.rehash();
-                }
+                <name>ObjectHashMap.this.removeKeyAtIndex(index);
             }
             else
             {
@@ -2725,6 +2691,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                 this.put(old[i], oldValues[i]);
             }
         }
+        this.copyKeysOnWrite = false;
     }
 
     // exposed for testing
@@ -2808,6 +2775,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     {
         return this.keys.length / OCCUPIED_SENTINEL_RATIO;
     }
+
     private class KeySet implements Mutable<name>Set
     {
         public Mutable<name>Iterator <type>Iterator()
@@ -3357,7 +3325,15 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
         public <name>Set freeze()
         {
-            throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".freeze() not implemented yet");
+            <name>ObjectHashMap.this.copyKeysOnWrite = true;
+            boolean containsZeroKey = false;
+            boolean containsOneKey = false;
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                containsZeroKey = <name>ObjectHashMap.this.sentinelValues.containsZeroKey;
+                containsOneKey = <name>ObjectHashMap.this.sentinelValues.containsOneKey;
+            }
+            return new Immutable<name>MapKeySet(<name>ObjectHashMap.this.keys, <name>ObjectHashMap.this.occupiedWithData, containsZeroKey, containsOneKey);
         }
 
         public Immutable<name>Set toImmutable()

@@ -98,12 +98,6 @@ public class <name1><name2>HashMapKeySetTest extends Abstract<name1>SetTestCase
         this.classUnderTest().withAll(new <name1>ArrayList());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void freeze()
-    {
-        this.classUnderTest().freeze();
-    }
-
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void withoutAll()

@@ -112,12 +112,6 @@ public class Synchronized<name>ObjectMapKeySetTest extends Abstract<name>SetTest
         Assert.assertEquals(expectedSet.toList(), setWithout.toList());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void freeze()
-    {
-        this.classUnderTest().freeze();
-    }
-
     @Override
     public void testEquals()
     {

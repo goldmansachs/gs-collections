@@ -32,6 +32,8 @@ import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.api.set.primitive.<name>Set;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -227,6 +229,15 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     {
         <name>ToObjectFunction\<String> toString = String::valueOf;
         this.map.getIfAbsentPutWithKey(<(literal.(type))("1")>, toString);
+    }
+
+    @Test
+    public void freeze()
+    {
+        Mutable<name>ObjectMap mutable<name>ObjectMap = this.classUnderTest();
+        <name>Set frozenSet = mutable<name>ObjectMap.keySet().freeze();
+        <name>Set frozenSetCopy = <name>HashSet.newSetWith(mutable<name>ObjectMap.keySet().toArray());
+        Assert.assertEquals(frozenSet, frozenSetCopy);
     }
 
     @Override

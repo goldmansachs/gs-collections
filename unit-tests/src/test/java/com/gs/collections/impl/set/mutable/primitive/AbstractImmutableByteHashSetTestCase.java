@@ -43,7 +43,16 @@ public abstract class AbstractImmutableByteHashSetTestCase extends AbstractImmut
     protected abstract ImmutableByteSet newWith(byte... elements);
 
     @Override
-    protected abstract MutableByteSet newMutableCollectionWith(byte... elements);
+    protected MutableByteSet newMutableCollectionWith(byte... elements)
+    {
+        return ByteHashSet.newSetWith(elements);
+    }
+
+    @Override
+    protected MutableSet<Byte> newObjectCollectionWith(Byte... elements)
+    {
+        return UnifiedSet.newSetWith(elements);
+    }
 
     @Override
     @Test
