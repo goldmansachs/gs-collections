@@ -13,13 +13,29 @@ fileName(primitive1, primitive2, sameTwoPrimitives) ::= "<primitive1.name><primi
 
 class(primitive1, primitive2, sameTwoPrimitives) ::= <<
 <if(!sameTwoPrimitives)>
-<body(type1 = primitive1.type, type2 = primitive2.type, name1 = primitive1.name, name2 = primitive2.name, keyArray = "keys", valueArray = "values", increment = "i++", valueIndex = "i", incrementIndex = "index")>
+<body(
+    type1 = primitive1.type,
+    type2 = primitive2.type,
+    name1 = primitive1.name,
+    name2 = primitive2.name,
+    keyArray = "keys",
+    valueArray = "values",
+    increment = "++",
+    valueIndex = "")>
 <else>
-<body(type1 = primitive1.type, type2 = primitive2.type, name1 = primitive1.name, name2 = primitive2.name, keyArray = "keysValues", valueArray = "keysValues", increment = "i += 2", valueIndex = "i + 1", incrementIndex = "index + 1")>
+<body(
+    type1 = primitive1.type,
+    type2 = primitive2.type,
+    name1 = primitive1.name,
+    name2 = primitive2.name,
+    keyArray = "keysValues",
+    valueArray = "keysValues",
+    increment = " += 2",
+    valueIndex = " + 1")>
 <endif>
 >>
 
-body(type1, type2, name1, name2, keyArray, valueArray, increment, valueIndex, incrementIndex) ::= <<
+body(type1, type2, name1, name2, keyArray, valueArray, increment, valueIndex) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.map.mutable.primitive;
@@ -36,7 +52,6 @@ import com.gs.collections.api.<name1>Iterable;
 import com.gs.collections.api.Lazy<name1>Iterable;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name2>Iterable;<endif>
 <if(!sameTwoPrimitives)>import com.gs.collections.api.<name2>Iterable;<endif>
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name1>Bag;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;<endif>
@@ -78,7 +93,6 @@ import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name2>Set;<endif>
 import com.gs.collections.impl.bag.mutable.primitive.<name1>HashBag;
 <if(!sameTwoPrimitives)>import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;<endif>
-import com.gs.collections.impl.block.factory.primitive.<name1>Predicates;
 import com.gs.collections.impl.collection.mutable.primitive.Synchronized<name2>Collection;
 import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name2>Collection;
 import com.gs.collections.impl.factory.Sets;
@@ -113,12 +127,12 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     private static final int DEFAULT_INITIAL_CAPACITY = 8;
 
-    <if(!sameTwoPrimitives)>
+<if(!sameTwoPrimitives)>
     private <type1>[] keys;
     private <type2>[] values;
-    <else>
+<else>
     private <type1>[] keysValues;
-    <endif>
+<endif>
 
     private int occupiedWithData;
     private int occupiedWithSentinels;
@@ -203,10 +217,10 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 return false;
             }
         }
-        for (int i = 0; i \< this.<keyArray>.length; <increment>)
+        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
         {
             <type1> key = this.<keyArray>[i];
-            if (isNonSentinel(key) && (!other.containsKey(key) || <(notEquals.(type2))({this.<valueArray>[<valueIndex>]}, "other.getOrThrow(key)")>))
+            if (isNonSentinel(key) && (!other.containsKey(key) || <(notEquals.(type2))({this.<valueArray>[i<valueIndex>]}, "other.getOrThrow(key)")>))
             {
                 return false;
             }
@@ -250,7 +264,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 first = false;
             }
         }
-        for (int i = 0; i \< this.<keyArray>.length; <increment>)
+        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
         {
             <type1> key = this.<keyArray>[i];
             if (isNonSentinel(key))
@@ -259,7 +273,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 {
                     appendable.append(", ");
                 }
-                appendable.append(String.valueOf(key)).append("=").append(String.valueOf(this.<valueArray>[<valueIndex>]));
+                appendable.append(String.valueOf(key)).append("=").append(String.valueOf(this.<valueArray>[i<valueIndex>]));
                 first = false;
             }
         }
@@ -335,7 +349,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     first = false;
                 }
             }
-            for (int i = 0; i \< this.<keyArray>.length; <increment>)
+            for (int i = 0; i \< this.<keyArray>.length; i<increment>)
             {
                 <type1> key = this.<keyArray>[i];
                 if (isNonSentinel(key))
@@ -344,7 +358,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     {
                         appendable.append(separator);
                     }
-                    appendable.append(String.valueOf(this.<valueArray>[<valueIndex>]));
+                    appendable.append(String.valueOf(this.<valueArray>[i<valueIndex>]));
                     first = false;
                 }
             }
@@ -366,8 +380,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         <type2>[] array = new <type2>[this.size()];
         int index = 0;
 
-        <forEachValue(template =
-        {array[index] = <value>;<\n>index++})>
+        <forEachValue(template = {array[index] = <value>;<\n>index++})>
 
         return array;
     }
@@ -428,11 +441,11 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 result.add(this.sentinelValues.oneValue);
             }
         }
-        for (int i = 0; i \< this.<keyArray>.length; <increment>)
+        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
         {
-            if (isNonSentinel(this.<keyArray>[i]) && !predicate.accept(this.<valueArray>[<valueIndex>]))
+            if (isNonSentinel(this.<keyArray>[i]) && !predicate.accept(this.<valueArray>[i<valueIndex>]))
             {
-                result.add(this.<valueArray>[<valueIndex>]);
+                result.add(this.<valueArray>[i<valueIndex>]);
             }
         }
         return result;
@@ -452,11 +465,11 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 target.add(function.valueOf(this.sentinelValues.oneValue));
             }
         }
-        for (int i = 0; i \< this.<keyArray>.length; <increment>)
+        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
         {
             if (isNonSentinel(this.<keyArray>[i]))
             {
-                target.add(function.valueOf(this.<valueArray>[<valueIndex>]));
+                target.add(function.valueOf(this.<valueArray>[i<valueIndex>]));
             }
         }
         return target;
@@ -494,9 +507,9 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 return false;
             }
         }
-        for (int i = 0; i \< this.<keyArray>.length; <increment>)
+        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
         {
-            if (isNonSentinel(this.<keyArray>[i]) && !predicate.accept(this.<valueArray>[<valueIndex>]))
+            if (isNonSentinel(this.<keyArray>[i]) && !predicate.accept(this.<valueArray>[i<valueIndex>]))
             {
                 return false;
             }
@@ -517,9 +530,9 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 return false;
             }
         }
-        for (int i = 0; i \< this.<keyArray>.length; <increment>)
+        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
         {
-            if (isNonSentinel(this.<keyArray>[i]) && predicate.accept(this.<valueArray>[<valueIndex>]))
+            if (isNonSentinel(this.<keyArray>[i]) && predicate.accept(this.<valueArray>[i<valueIndex>]))
             {
                 return false;
             }
@@ -595,7 +608,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         }
         else
         {
-            this.<valueArray>[<incrementIndex>] = value;
+            this.<valueArray>[index<valueIndex>] = value;
         }
     }
 
@@ -687,7 +700,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         int index = this.probe(key);
         if (<(equals.(type1))({this.<keyArray>[index]}, "key")>)
         {
-            <type2> oldValue = this.<valueArray>[<incrementIndex>];
+            <type2> oldValue = this.<valueArray>[index<valueIndex>];
             this.removeKeyAtIndex(index);
             return oldValue;
         }
@@ -753,11 +766,11 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         int index = this.probe(key);
         if (<(equals.(type1))({this.<keyArray>[index]}, "key")>)
         {
-            this.<valueArray>[<incrementIndex>] += toBeAdded;
-            return this.<valueArray>[<incrementIndex>];
+            this.<valueArray>[index<valueIndex>] += toBeAdded;
+            return this.<valueArray>[index<valueIndex>];
         }
         this.addKeyValueAtIndex(key, toBeAdded, index);
-        return this.<valueArray>[<incrementIndex>];
+        return this.<valueArray>[index<valueIndex>];
     }
 
     private void addKeyValueAtIndex(<type1> key, <type2> value, int index)
@@ -771,7 +784,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             this.copyKeys();
         }
         this.<keyArray>[index] = key;
-        this.<valueArray>[<incrementIndex>] = value;
+        this.<valueArray>[index<valueIndex>] = value;
         this.occupiedWithData++;
         if (this.occupiedWithData > this.maxOccupiedWithData())
         {
@@ -786,7 +799,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             this.copyKeys();
         }
         this.<keyArray>[index] = REMOVED_KEY;
-        this.<valueArray>[<incrementIndex>] = EMPTY_VALUE;
+        this.<valueArray>[index<valueIndex>] = EMPTY_VALUE;
         this.occupiedWithData--;
         this.occupiedWithSentinels++;
         if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
@@ -880,8 +893,8 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         int index = this.probe(key);
         if (<(equals.(type1))({this.<keyArray>[index]}, "key")>)
         {
-            this.<valueArray>[<incrementIndex>] = function.valueOf(this.<valueArray>[<incrementIndex>]);
-            return this.<valueArray>[<incrementIndex>];
+            this.<valueArray>[index<valueIndex>] = function.valueOf(this.<valueArray>[index<valueIndex>]);
+            return this.<valueArray>[index<valueIndex>];
         }
         <type2> value = function.valueOf(initialValueIfAbsent);
         this.addKeyValueAtIndex(key, value, index);
@@ -959,7 +972,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         int index = this.probe(key);
         if (<(equals.(type1))({this.<keyArray>[index]}, "key")>)
         {
-            return this.<valueArray>[<incrementIndex>];
+            return this.<valueArray>[index<valueIndex>];
         }
         return ifAbsent;
     }
@@ -985,7 +998,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         int index = this.probe(key);
         if (isNonSentinel(this.<keyArray>[index]))
         {
-            return this.<valueArray>[<incrementIndex>];
+            return this.<valueArray>[index<valueIndex>];
         }
         throw new IllegalStateException("Key " + key + " not present.");
     }
@@ -1009,9 +1022,9 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         {
             return true;
         }
-        for (int i = 0; i \< this.<valueArray>.length; <increment>)
+        for (int i = 0; i \< this.<valueArray>.length; i<increment>)
         {
-            if (isNonSentinel(this.<keyArray>[i]) && <(equals.(type2))({this.<valueArray>[<valueIndex>]}, "value")>)
+            if (isNonSentinel(this.<keyArray>[i]) && <(equals.(type2))({this.<valueArray>[i<valueIndex>]}, "value")>)
             {
                 return true;
             }
@@ -1026,7 +1039,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     public void forEachKey(<name1>Procedure procedure)
     {
-        <forEachKey(template = {procedure.value(<value>)})>
+        <forEachKey(template = {procedure.value(<key>)})>
     }
 
     public void forEachKeyValue(<name1><name2>Procedure procedure)
@@ -1068,11 +1081,11 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 result.put(REMOVED_KEY, this.sentinelValues.oneValue);
             }
         }
-        for (int i = 0; i \< this.<keyArray>.length; <increment>)
+        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
         {
-            if (isNonSentinel(this.<keyArray>[i]) && !predicate.accept(this.<keyArray>[i], this.<valueArray>[<valueIndex>]))
+            if (isNonSentinel(this.<keyArray>[i]) && !predicate.accept(this.<keyArray>[i], this.<valueArray>[i<valueIndex>]))
             {
-                result.put(this.<keyArray>[i], this.<valueArray>[<valueIndex>]);
+                result.put(this.<keyArray>[i], this.<valueArray>[i<valueIndex>]);
             }
         }
         return result;
@@ -1197,12 +1210,12 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 out.write<name2>(this.sentinelValues.oneValue);
             }
         }
-        for (int i = 0; i \< this.<keyArray>.length; <increment>)
+        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
         {
             if (isNonSentinel(this.<keyArray>[i]))
             {
                 out.write<name1>(this.<keyArray>[i]);
-                out.write<name2>(this.<valueArray>[<valueIndex>]);
+                out.write<name2>(this.<valueArray>[i<valueIndex>]);
             }
         }
     }
@@ -1226,62 +1239,39 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     private void rehash()
     {
-        <if(!sameTwoPrimitives)>
-        this.rehash(this.keys.length);
-        <else>
-        this.rehash(this.keysValues.length >\> 1);
-        <endif>
+        this.rehash(this.<keyArray>.length<if(sameTwoPrimitives)> >\> 1<endif>);
     }
 
     private void rehashAndGrow()
     {
-        <if(!sameTwoPrimitives)>
-        this.rehash(this.<keyArray>.length \<\< 1);
-        <else>
-        this.rehash(this.keysValues.length);
-        <endif>
+        this.rehash(this.<keyArray>.length<if(!sameTwoPrimitives)> \<\< 1<endif>);
     }
 
     private void rehash(int newCapacity)
     {
+        int oldLength = this.<keyArray>.length;
+        <type1>[] old = this.<keyArray>;
         <if(!sameTwoPrimitives)>
-        int oldLength = this.keys.length;
-        <type1>[] old = this.keys;
         <type2>[] oldValues = this.values;
-        this.allocateTable(newCapacity);
-        this.occupiedWithData = 0;
-        this.occupiedWithSentinels = 0;
-
-        for (int i = 0; i \< oldLength; i++)
-        {
-            if (isNonSentinel(old[i]))
-            {
-                this.put(old[i], oldValues[i]);
-            }
-        }
-        <else>
-        int oldLength = this.keysValues.length;
-        <type1>[] old = this.keysValues;
-        this.allocateTable(newCapacity);
-        this.occupiedWithData = 0;
-        this.occupiedWithSentinels = 0;
-
-        for (int i = 0; i \< oldLength; i += 2)
-        {
-            if (isNonSentinel(old[i]))
-            {
-                this.put(old[i], old[i + 1]);
-            }
-        }
         <endif>
+        this.allocateTable(newCapacity);
+        this.occupiedWithData = 0;
+        this.occupiedWithSentinels = 0;
+
+        for (int i = 0; i \< oldLength; i<increment>)
+        {
+            if (isNonSentinel(old[i]))
+            {
+                this.put(old[i], old<if(!sameTwoPrimitives)>Values<endif>[i<valueIndex>]);
+            }
+        }
     }
 
     // exposed for testing
     int probe(<type1> element)
     {
-        <if(!sameTwoPrimitives)>
-        int index = this.spread(element);
-        <type1> keyAtIndex = this.keys[index];
+        int index = this.spread(element)<if(sameTwoPrimitives)> \<\< 1<endif>;
+        <type1> keyAtIndex = this.<keyArray>[index];
 
         if (<(equals.(type1))("keyAtIndex", "element")> || <(equals.(type1))("keyAtIndex", "EMPTY_KEY")>)
         {
@@ -1290,95 +1280,47 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
         int removedIndex = <(equals.(type1))("keyAtIndex", "REMOVED_KEY")> ? index : -1;
         int nextIndex = index;
-        int probe = 17;
+        int probe = <if(sameTwoPrimitives)>34<else>17<endif>;
 
         // loop until an empty slot is reached
         while (true)
         {
             // Probe algorithm: 17*n*(n+1)/2 where n = number of collisions
             nextIndex += probe;
-            probe += 17;
-            nextIndex &= this.keys.length - 1;
+            probe += <if(sameTwoPrimitives)>34<else>17<endif>;
+            nextIndex &= this.<keyArray>.length - 1;
 
-            if (<(equals.(type1))("this.keys[nextIndex]", "element")>)
+            if (<(equals.(type1))({this.<keyArray>[nextIndex]}, "element")>)
             {
                 return nextIndex;
             }
-            if (<(equals.(type1))("this.keys[nextIndex]", "REMOVED_KEY")>)
+            if (<(equals.(type1))({this.<keyArray>[nextIndex]}, "REMOVED_KEY")>)
             {
                 if (removedIndex == -1)
                 {
                     removedIndex = nextIndex;
                 }
             }
-            else if (<(equals.(type1))("this.keys[nextIndex]", "EMPTY_KEY")>)
+            else if (<(equals.(type1))({this.<keyArray>[nextIndex]}, "EMPTY_KEY")>)
             {
                 return removedIndex == -1 ? nextIndex : removedIndex;
             }
         }
-        <else>
-        int index = this.spread(element) \<\< 1;
-        <type1> keyAtIndex = this.keysValues[index];
-
-        if (<(equals.(type1))("keyAtIndex", "element")> || <(equals.(type1))("keyAtIndex", "EMPTY_KEY")>)
-        {
-            return index;
-        }
-
-        int removedIndex = <(equals.(type1))("keyAtIndex", "REMOVED_KEY")> ? index : -1;
-        int nextIndex = index;
-        int probe = 34;
-
-        // loop until an empty slot is reached
-        while (true)
-        {
-            // Probe algorithm: 17*n*(n+1)/2 where n = number of collisions
-            nextIndex += probe;
-            probe += 34;
-            nextIndex &= this.keysValues.length - 1;
-
-            if (<(equals.(type1))("this.keysValues[nextIndex]", "element")>)
-            {
-                return nextIndex;
-            }
-            if (<(equals.(type1))("this.keysValues[nextIndex]", "REMOVED_KEY")>)
-            {
-                if (removedIndex == -1)
-                {
-                    removedIndex = nextIndex;
-                }
-            }
-            else if (<(equals.(type1))("this.keysValues[nextIndex]", "EMPTY_KEY")>)
-            {
-                return removedIndex == -1 ? nextIndex : removedIndex;
-            }
-        }
-        <endif>
     }
 
     // exposed for testing
-    <if(!sameTwoPrimitives)>
-    <(spread.(type1))(type1, "keys")>
-    <else>
-    <(spread.(type1))(type1, "keysValues")>
-    <endif>
+    <(spread.(type1))(type1, (keyArray))>
 
     private int mask(int spread)
     {
-        <if(!sameTwoPrimitives)>
-        return spread & (this.<keyArray>.length - 1);
-        <else>
-        return spread & ((this.keysValues.length >\> 1) - 1);
-        <endif>
+        return spread & (<if(sameTwoPrimitives)>(<endif>this.<keyArray>.length <if(sameTwoPrimitives)>\>> 1)<endif> - 1);
     }
 
     private void allocateTable(int sizeToAllocate)
     {
+        this.<keyArray> = new <type1>[sizeToAllocate<if(sameTwoPrimitives)> \<\< 1<endif>];
         <if(!sameTwoPrimitives)>
-        this.keys = new <type1>[sizeToAllocate];
         this.values = new <type2>[sizeToAllocate];
-        <else>
-        this.keysValues = new <type1>[sizeToAllocate \<\< 1];
         <endif>
     }
 
@@ -1399,20 +1341,12 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     private int maxOccupiedWithData()
     {
-        <if(!sameTwoPrimitives)>
-        return this.keys.length >\> 1;
-        <else>
-        return this.keysValues.length >\> 2;
-        <endif>
+        return this.<keyArray>.length >\> <if(!sameTwoPrimitives)>1<else>2<endif>;
     }
 
     private int maxOccupiedWithSentinels()
     {
-        <if(!sameTwoPrimitives)>
-        return this.keys.length >\> 2;
-        <else>
-        return this.keysValues.length >\> 3;
-        <endif>
+        return this.<keyArray>.length >\> <if(!sameTwoPrimitives)>2<else>3<endif>;
     }
 
     private static final class SentinelValues
@@ -1479,20 +1413,11 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             <type1>[] keys = <name1><name2>HashMap.this.<keyArray>;
             while (!isNonSentinel(keys[this.position]))
             {
-                <if(!sameTwoPrimitives)>
-                this.position++;
-                <else>
-                this.position += 2;
-                <endif>
+                this.position<increment>;
             }
             this.lastKey = keys[this.position];
-            <if(!sameTwoPrimitives)>
-            <type2> result = <name1><name2>HashMap.this.values[this.position];
-            this.position++;
-            <else>
-            <type2> result = <name1><name2>HashMap.this.keysValues[this.position + 1];
-            this.position += 2;
-            <endif>
+            <type2> result = <name1><name2>HashMap.this.<valueArray>[this.position<valueIndex>];
+            this.position<increment>;
 
             return result;
         }
@@ -1564,24 +1489,14 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 }
             }
 
-            <if(!sameTwoPrimitives)>
-            <type1>[] keys = <name1><name2>HashMap.this.keys;
+            <type1>[] keys = <name1><name2>HashMap.this.<keyArray>;
             while (!isNonSentinel(keys[this.position]))
             {
-                this.position++;
+                this.position<increment>;
             }
             this.lastKey = keys[this.position];
-            this.position++;
+            this.position<increment>;
 
-            <else>
-            <type1>[] keys = <name1><name2>HashMap.this.keysValues;
-            while (!isNonSentinel(keys[this.position]))
-            {
-                this.position += 2;
-            }
-            this.lastKey = keys[this.position];
-            this.position += 2;
-            <endif>
             return this.lastKey;
         }
 
@@ -1628,23 +1543,13 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     count++;
                 }
             }
-            <if(!sameTwoPrimitives)>
-            for (<type1> key : <name1><name2>HashMap.this.keys)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
-                if (isNonSentinel(key) && predicate.accept(key))
+                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
                 {
                     count++;
                 }
             }
-            <else>
-            for (int i = 0; i \< <name1><name2>HashMap.this.keysValues.length; i += 2)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.keysValues[i]) && predicate.accept(<name1><name2>HashMap.this.keysValues[i]))
-                {
-                    count++;
-                }
-            }
-            <endif>
             return count;
         }
 
@@ -1667,23 +1572,13 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     return false;
                 }
             }
-            <if(!sameTwoPrimitives)>
-            for (<type1> key : <name1><name2>HashMap.this.keys)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
-                if (isNonSentinel(key) && !predicate.accept(key))
+                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && !predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
                 {
                     return false;
                 }
             }
-            <else>
-            for (int i = 0; i \< <name1><name2>HashMap.this.keysValues.length; i += 2)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.keysValues[i]) && !predicate.accept(<name1><name2>HashMap.this.keysValues[i]))
-                {
-                    return false;
-                }
-            }
-            <endif>
             return true;
         }
 
@@ -1700,23 +1595,13 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     return false;
                 }
             }
-            <if(!sameTwoPrimitives)>
-            for (<type1> key : <name1><name2>HashMap.this.keys)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
-                if (isNonSentinel(key) && predicate.accept(key))
+                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
                 {
                     return false;
                 }
             }
-            <else>
-            for (int i = 0; i \< <name1><name2>HashMap.this.keysValues.length; i += 2)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.keysValues[i]) && predicate.accept(<name1><name2>HashMap.this.keysValues[i]))
-                {
-                    return false;
-                }
-            }
-            <endif>
             return true;
         }
 
@@ -1776,11 +1661,9 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             });
             if (retained.size() != oldSize)
             {
+                <name1><name2>HashMap.this.<keyArray> = retained.<keyArray>;
                 <if(!sameTwoPrimitives)>
-                <name1><name2>HashMap.this.keys = retained.keys;
                 <name1><name2>HashMap.this.values = retained.values;
-                <else>
-                <name1><name2>HashMap.this.keysValues = retained.keysValues;
                 <endif>
                 <name1><name2>HashMap.this.sentinelValues = retained.sentinelValues;
                 <name1><name2>HashMap.this.occupiedWithData = retained.occupiedWithData;
@@ -1814,23 +1697,13 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     result.add(REMOVED_KEY);
                 }
             }
-            <if(!sameTwoPrimitives)>
-            for (<type1> key : <name1><name2>HashMap.this.keys)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
-                if (isNonSentinel(key) && predicate.accept(key))
+                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
                 {
-                    result.add(key);
+                    result.add(<name1><name2>HashMap.this.<keyArray>[i]);
                 }
             }
-            <else>
-            for (int i = 0; i \< <name1><name2>HashMap.this.keysValues.length; i += 2)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.keysValues[i]) && predicate.accept(<name1><name2>HashMap.this.keysValues[i]))
-                {
-                    result.add(<name1><name2>HashMap.this.keysValues[i]);
-                }
-            }
-            <endif>
             return result;
         }
 
@@ -1848,23 +1721,13 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     result.add(REMOVED_KEY);
                 }
             }
-            <if(!sameTwoPrimitives)>
-            for (<type1> key : <name1><name2>HashMap.this.keys)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
-                if (isNonSentinel(key) && !predicate.accept(key))
+                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && !predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
                 {
-                    result.add(key);
+                    result.add(<name1><name2>HashMap.this.<keyArray>[i]);
                 }
             }
-            <else>
-            for (int i = 0; i \< <name1><name2>HashMap.this.keysValues.length; i += 2)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.keysValues[i]) && !predicate.accept(<name1><name2>HashMap.this.keysValues[i]))
-                {
-                    result.add(<name1><name2>HashMap.this.keysValues[i]);
-                }
-            }
-            <endif>
             return result;
         }
 
@@ -1901,23 +1764,13 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     return REMOVED_KEY;
                 }
             }
-            <if(!sameTwoPrimitives)>
-            for (<type1> key : <name1><name2>HashMap.this.keys)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
-                if (isNonSentinel(key) && predicate.accept(key))
+                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
                 {
-                    return key;
+                    return <name1><name2>HashMap.this.<keyArray>[i];
                 }
             }
-            <else>
-            for (int i = 0; i \< <name1><name2>HashMap.this.keysValues.length; i += 2)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.keysValues[i]) && predicate.accept(<name1><name2>HashMap.this.keysValues[i]))
-                {
-                    return <name1><name2>HashMap.this.keysValues[i];
-                }
-            }
-            <endif>
             return ifNone;
         }
 
@@ -1935,23 +1788,13 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     result.add(function.valueOf(REMOVED_KEY));
                 }
             }
-            <if(!sameTwoPrimitives)>
-            for (<type1> key : <name1><name2>HashMap.this.keys)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
-                if (isNonSentinel(key))
+                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]))
                 {
-                    result.add(function.valueOf(key));
+                    result.add(function.valueOf(<name1><name2>HashMap.this.<keyArray>[i]));
                 }
             }
-            <else>
-            for (int i = 0; i \< <name1><name2>HashMap.this.keysValues.length; i += 2)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.keysValues[i]))
-                {
-                    result.add(function.valueOf(<name1><name2>HashMap.this.keysValues[i]));
-                }
-            }
-            <endif>
             return result;
         }
 
@@ -1979,23 +1822,13 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     sum += REMOVED_KEY;
                 }
             }
-            <if(!sameTwoPrimitives)>
-            for (<type1> key : <name1><name2>HashMap.this.keys)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
-                if (isNonSentinel(key))
+                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]))
                 {
-                    sum += key;
+                    sum += <name1><name2>HashMap.this.<keyArray>[i];
                 }
             }
-            <else>
-            for (int i = 0; i \< <name1><name2>HashMap.this.keysValues.length; i += 2)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.keysValues[i]))
-                {
-                    sum += <name1><name2>HashMap.this.keysValues[i];
-                }
-            }
-            <endif>
             return sum;
         }
 
@@ -2022,7 +1855,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     isMaxSet = true;
                 }
             }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; <increment>)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
                 if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && (!isMaxSet || <(lessThan.(type1))({max}, {<name1><name2>HashMap.this.<keyArray>[i]})>))
                 {
@@ -2066,7 +1899,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     isMinSet = true;
                 }
             }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; <increment>)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
                 if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && (!isMinSet || <(lessThan.(type1))({<name1><name2>HashMap.this.<keyArray>[i]}, {min})>))
                 {
@@ -2206,7 +2039,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     result = function.valueOf(result, REMOVED_KEY);
                 }
             }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; <increment>)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
                 if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]))
                 {
@@ -2286,7 +2119,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     result += <(hashCode.(type1))("REMOVED_KEY")>;
                 }
             }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; <increment>)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
                 if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]))
                 {
@@ -2353,33 +2186,18 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                         first = false;
                     }
                 }
-                <if(!sameTwoPrimitives)>
-                for (<type1> key : <name1><name2>HashMap.this.keys)
+                for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
                 {
-                    if (isNonSentinel(key))
+                    if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]))
                     {
                         if (!first)
                         {
                             appendable.append(separator);
                         }
-                        appendable.append(String.valueOf(key));
+                        appendable.append(String.valueOf(<name1><name2>HashMap.this.<keyArray>[i]));
                         first = false;
                     }
                 }
-                <else>
-                for (int i = 0; i \< <name1><name2>HashMap.this.keysValues.length; i += 2)
-                {
-                    if (isNonSentinel(<name1><name2>HashMap.this.keysValues[i]))
-                    {
-                        if (!first)
-                        {
-                            appendable.append(separator);
-                        }
-                        appendable.append(String.valueOf(<name1><name2>HashMap.this.keysValues[i]));
-                        first = false;
-                    }
-                }
-                <endif>
                 appendable.append(end);
             }
             catch (IOException e)
@@ -2603,7 +2421,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                         first = false;
                     }
                 }
-                for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; <increment>)
+                for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
                 {
                     <type1> key = <name1><name2>HashMap.this.<keyArray>[i];
                     if (isNonSentinel(key))
@@ -2612,7 +2430,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                         {
                             appendable.append(separator);
                         }
-                        appendable.append(String.valueOf(<name1><name2>HashMap.this.<valueArray>[<valueIndex>]));
+                        appendable.append(String.valueOf(<name1><name2>HashMap.this.<valueArray>[i<valueIndex>]));
                         first = false;
                     }
                 }
@@ -2684,9 +2502,9 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     <name1><name2>HashMap.this.removeKey(REMOVED_KEY);
                 }
             }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; <increment>)
+            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
             {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && <(equals.(type2))({item}, {<name1><name2>HashMap.this.<valueArray>[<valueIndex>]})>)
+                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && <(equals.(type2))({item}, {<name1><name2>HashMap.this.<valueArray>[i<valueIndex>]})>)
                 {
                     <name1><name2>HashMap.this.removeKey(<name1><name2>HashMap.this.<keyArray>[i]);
                 }
@@ -2730,11 +2548,9 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             });
             if (retained.size() != oldSize)
             {
+                <name1><name2>HashMap.this.<keyArray> = retained.<keyArray>;
                 <if(!sameTwoPrimitives)>
-                <name1><name2>HashMap.this.keys = retained.keys;
-                <name1><name2>HashMap.this.values = retained.values;
-                <else>
-                <name1><name2>HashMap.this.keysValues = retained.keysValues;
+                <name1><name2>HashMap.this.<valueArray> = retained.values;
                 <endif>
                 <name1><name2>HashMap.this.sentinelValues = retained.sentinelValues;
                 <name1><name2>HashMap.this.occupiedWithData = retained.occupiedWithData;
@@ -2820,23 +2636,13 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     }
                 }
 
-                <if(!sameTwoPrimitives)>
-                <type1>[] keys = <name1><name2>HashMap.this.keys;
+                <type1>[] keys = <name1><name2>HashMap.this.<keyArray>;
                 while (!isNonSentinel(keys[this.position]))
                 {
-                    this.position++;
+                    this.position<increment>;
                 }
-                <name1><name2>Pair result = PrimitiveTuples.pair(keys[this.position], <name1><name2>HashMap.this.values[this.position]);
-                this.position++;
-                <else>
-                <type1>[] keys = <name1><name2>HashMap.this.keysValues;
-                while (!isNonSentinel(keysValues[this.position]))
-                {
-                    this.position += 2;
-                }
-                <name1><name2>Pair result = PrimitiveTuples.pair(keys[this.position], <name1><name2>HashMap.this.keysValues[this.position + 1]);
-                this.position += 2;
-                <endif>
+                <name1><name2>Pair result = PrimitiveTuples.pair(keys[this.position], <name1><name2>HashMap.this.<valueArray>[this.position<valueIndex>]);
+                this.position<increment>;
                 return result;
             }
 
@@ -2867,11 +2673,11 @@ if (<if(innerClass)><name1><name2>HashMap.<endif>this.sentinelValues != null)
         <"REMOVED_KEY", {<if(innerClass)><name1><name2>HashMap.<endif>this.sentinelValues.oneValue}:{key, value | <(template)>}>;
     }
 }
-for (int i = 0; i \< <if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>.length; <increment>)
+for (int i = 0; i \< <if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>.length; i<increment>)
 {
     if (isNonSentinel(<if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>[i]))
     {
-        <{<if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>[i]}, {<if(innerClass)><name1><name2>HashMap.<endif>this.<valueArray>[<valueIndex>]}:{key, value | <(template)>}>;
+        <{<if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>[i]}, {<if(innerClass)><name1><name2>HashMap.<endif>this.<valueArray>[i<valueIndex>]}:{key, value | <(template)>}>;
     }
 }
 >>
@@ -2888,11 +2694,11 @@ if (this.sentinelValues != null)
         <"REMOVED_KEY", "this.sentinelValues.oneValue":{key, value | <template>}>;
     }
 }
-for (int i = 0; i \< this.<keyArray>.length; <increment>)
+for (int i = 0; i \< this.<keyArray>.length; i<increment>)
 {
-    if (isNonSentinel(this.<keyArray>[i]) && predicate.accept(this.<keyArray>[i], this.<valueArray>[<valueIndex>]))
+    if (isNonSentinel(this.<keyArray>[i]) && predicate.accept(this.<keyArray>[i], this.<valueArray>[i<valueIndex>]))
     {
-        <{this.<keyArray>[i]}, {this.<valueArray>[<valueIndex>]}:{key, value | <template>}>;
+        <{this.<keyArray>[i]}, {this.<valueArray>[i<valueIndex>]}:{key, value | <template>}>;
     }
 }
 >>
@@ -2902,30 +2708,20 @@ if (<if(innerClass)><name1><name2>HashMap.<endif>this.sentinelValues != null)
 {
     if (<if(innerClass)><name1><name2>HashMap.<endif>this.sentinelValues.containsZeroKey)
     {
-        <"EMPTY_KEY":{value | <template>}>;
+        <"EMPTY_KEY":{key | <template>}>;
     }
     if (<if(innerClass)><name1><name2>HashMap.<endif>this.sentinelValues.containsOneKey)
     {
-        <"REMOVED_KEY":{value | <template>}>;
+        <"REMOVED_KEY":{key | <template>}>;
     }
 }
-<if(!sameTwoPrimitives)>
-for (<type1> key : <if(innerClass)><name1><name2>HashMap.<endif>this.keys)
+for (int i = 0; i \< <if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>.length; i<increment>)
 {
-    if (isNonSentinel(key))
+    if (isNonSentinel(<keyArray>[i]))
     {
-        <"key":{value | <template>}>;
+        <{<keyArray>[i]}:{key | <template>}>;
     }
 }
-<else>
-for (int i = 0; i \< <if(innerClass)><name1><name2>HashMap.<endif>this.keysValues.length; i += 2)
-{
-    if (isNonSentinel(keysValues[i]))
-    {
-        <{keysValues[i]}:{value | <template>}>;
-    }
-}
-<endif>
 >>
 
 forEachKeySatisfying(template) ::= <<
@@ -2933,30 +2729,20 @@ if (<name1><name2>HashMap.this.sentinelValues != null)
 {
     if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
     {
-        <"EMPTY_KEY":{value | <template>}>;
+        <"EMPTY_KEY":{key | <template>}>;
     }
     if (<name1><name2>HashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
     {
-        <"REMOVED_KEY":{value | <template>}>;
+        <"REMOVED_KEY":{key | <template>}>;
     }
 }
-<if(!sameTwoPrimitives)>
-for (<type1> key : <name1><name2>HashMap.this.keys)
+for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
 {
-    if (isNonSentinel(key) && predicate.accept(key))
+    if (isNonSentinel(<keyArray>[i]) && predicate.accept(<keyArray>[i]))
     {
-        <"key":{value | <template>}>;
+        <{this.<keyArray>[i]}:{key | <template>}>;
     }
 }
-<else>
-for (int i = 0; i \< <name1><name2>HashMap.this.keysValues.length; i += 2)
-{
-    if (isNonSentinel(keysValues[i]) && predicate.accept(keysValues[i]))
-    {
-        <{this.keysValues[i]}:{value | <template>}>;
-    }
-}
-<endif>
 >>
 
 forEachValue(template) ::= <<
@@ -2971,11 +2757,11 @@ if (this.sentinelValues != null)
         <"this.sentinelValues.oneValue":{value | <template>}>;
     }
 }
-for (int i = 0; i \< this.<keyArray>.length; <increment>)
+for (int i = 0; i \< this.<keyArray>.length; i<increment>)
 {
     if (isNonSentinel(this.<keyArray>[i]))
     {
-        <{this.<valueArray>[<valueIndex>]}:{value | <template>}>;
+        <{this.<valueArray>[i<valueIndex>]}:{value | <template>}>;
     }
 }
 >>
@@ -2992,23 +2778,13 @@ if (this.sentinelValues != null)
         <"this.sentinelValues.oneValue":{ value | <template>}>;
     }
 }
-<if(!sameTwoPrimitives)>
-for (int i = 0; i \< this.<keyArray>.length; <increment>)
+for (int i = 0; i \< this.<keyArray>.length; i<increment>)
 {
-    if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+    if (isNonSentinel(this.<keyArray>[i]) && predicate.accept(this.<valueArray>[i<valueIndex>]))
     {
-        <{this.values[i]}:{ value | <template>}>;
+        <{this.<valueArray>[i<valueIndex>]}:{ value | <template>}>;
     }
 }
-<else>
-for (int i = 0; i \< this.keysValues.length; i += 2)
-{
-    if (isNonSentinel(this.keysValues[i]) && predicate.accept(this.keysValues[i + 1]))
-    {
-        <{this.keysValues[i + 1]}:{ value | <template>}>;
-    }
-}
-<endif>
 >>
 
 getIfAbsentPut(function) ::= <<
@@ -3049,7 +2825,7 @@ if (isRemovedKey(key))
 int index = this.probe(key);
 if (<(equals.(type1))({this.<keyArray>[index]}, "key")>)
 {
-    return this.<valueArray>[<incrementIndex>];
+    return this.<valueArray>[index<valueIndex>];
 }
 <function>
 this.addKeyValueAtIndex(key, value, index);
