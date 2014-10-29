@@ -56,10 +56,10 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
 
     /**
      * Creates the collection of values for a single key.
-     * <p/>
+     * <p>
      * Collections with weak, soft, or phantom references are not supported.
      * Each call to {@code createCollection} should create a new instance.
-     * <p/>
+     * <p>
      * The returned collection class determines whether duplicate key-value
      * pairs are allowed.
      *
@@ -173,7 +173,7 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
 
     /**
      * Returns the hash code for this multimap.
-     * <p/>
+     * <p>
      * The hash code of a multimap is defined as the hash code of the map view,
      * as returned by {@link Multimap#toMap()}.
      *

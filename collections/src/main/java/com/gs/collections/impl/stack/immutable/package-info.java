@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains implementations of the {@link com.gs.collections.api.stack.ImmutableStack} interface.
  * <p>
  *     ImmutableStack is the immutable equivalent of MutableStack.
- * </p>
  * <p>
  *     This package contains 3 stack implementations:
  * <ul>
@@ -26,7 +25,6 @@
  *          {@link com.gs.collections.impl.stack.immutable.ImmutableArrayStack} - an ImmutableStack backed by a FastList.
  *     </li>
  * </ul>
- * </p>
  * <p>
  *     This package contains one factory implementation:
  * <ul>
@@ -34,6 +32,5 @@
  *         {@link com.gs.collections.impl.stack.immutable.ImmutableStackFactoryImpl} - a factory which creates instances of type {@link com.gs.collections.api.stack.ImmutableStack}.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.impl.stack.immutable;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import com.gs.collections.impl.utility.MapIterate;
 
 /**
  * The ParallelMapIterate class contains parallel algorithms that work with Maps.
- * <p/>
+ * <p>
  * The forEachEtry algorithm employs a batching fork and join approach approach which does
  * not yet allow for specification of a Factory for the blocks or a Combiner for the results.
  * This means that forEachKeyValue can only support pure forking or forking with a shared

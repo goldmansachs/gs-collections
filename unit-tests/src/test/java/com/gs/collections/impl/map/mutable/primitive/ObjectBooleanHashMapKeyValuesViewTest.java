@@ -19,7 +19,6 @@ package com.gs.collections.impl.map.mutable.primitive;
 /**
  * Abstract JUnit test for {@link ObjectBooleanHashMap#keyValuesView()}.
  */
-
 public class ObjectBooleanHashMapKeyValuesViewTest extends AbstractObjectBooleanMapKeyValuesViewTestCase
 {
     @Override

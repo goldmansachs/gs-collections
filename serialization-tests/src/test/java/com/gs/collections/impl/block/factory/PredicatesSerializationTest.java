@@ -591,8 +591,7 @@ public class PredicatesSerializationTest
                         + "cmVkaWNhdGUyO3hwcHNyADdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlBy\n"
                         + "ZWRpY2F0ZXMyJEVxdWFsAAAAAAAAAAECAAB4cgAxY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxv\n"
                         + "Y2suZmFjdG9yeS5QcmVkaWNhdGVzMgAAAAAAAAABAgAAeHA=",
-                Predicates.bind(Predicates2.equal(), null)
-        );
+                Predicates.bind(Predicates2.equal(), null));
     }
 }
 

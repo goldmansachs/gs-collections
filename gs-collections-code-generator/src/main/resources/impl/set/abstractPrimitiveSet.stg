@@ -39,7 +39,6 @@ import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
  *
  * @since 6.0.
  */
-
 public abstract class Abstract<name>Set implements <name>Set
 {
     @Override

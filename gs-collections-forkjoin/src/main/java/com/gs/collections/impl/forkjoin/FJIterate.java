@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ import com.gs.collections.impl.utility.Iterate;
  * The FJIterate class contains several parallel algorithms that work with Collections and make use of Java's fork-join
  * framework.  All of the higher level parallel algorithms depend on the basic parallel algorithm named {@code forEach}.
  * The forEach algorithm employs a batching fork and join approach.
- * <p/>
+ * <p>
  * All Collections that are not either a {@link RandomAccess} or {@link List} are first converted to a Java array
  * using {@link Iterate#toArray(Iterable)}, and then run with one of the {@code FJIterate.forEach} methods.
  *
@@ -87,7 +87,7 @@ public final class FJIterate
     /**
      * Iterate over the collection specified, in parallel batches using default runtime parameter values.  The
      * {@code ObjectIntProcedure} used must be stateless, or use concurrent aware objects if they are to be shared.
-     * <p/>
+     * <p>
      * e.g.
      * <pre>
      * {@code final ConcurrentMutableMap<Integer, Object> chm = new ConcurrentHashMap<Integer, Object>();}
@@ -111,7 +111,7 @@ public final class FJIterate
      * Iterate over the collection specified in parallel batches using the default runtime parameters.  The
      * ObjectIntProcedure used must be stateless, or use concurrent aware objects if they are to be shared.  The code
      * is executed against the specified executor.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * {@code final ConcurrentMutableMap<Integer, Object> chm = new ConcurrentHashMap<Integer, Object>();}
      * FJIterate.<b>forEachWithIndex</b>(collection, new ObjectIntProcedure()
@@ -243,7 +243,7 @@ public final class FJIterate
     /**
      * Iterate over the collection specified in parallel batches using default runtime parameter values.  The
      * {@code Procedure} used must be stateless, or use concurrent aware objects if they are to be shared.
-     * <p/>
+     * <p>
      * e.g.
      * <pre>
      * {@code final ConcurrentMutableMap<Object, Boolean> chm = new ConcurrentHashMap<Object, Boolean>();}
@@ -264,7 +264,7 @@ public final class FJIterate
     /**
      * Iterate over the collection specified in parallel batches using default runtime parameter values.  The
      * {@code Procedure} used must be stateless, or use concurrent aware objects if they are to be shared.
-     * <p/>
+     * <p>
      * e.g.
      * <pre>
      * {@code final ConcurrentMutableMap<Object, Boolean> chm = new ConcurrentHashMap<Object, Boolean>();}

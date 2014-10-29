@@ -66,7 +66,7 @@ public class AbstractImmutableEntry<K, V> implements Map.Entry<K, V>, Serializab
     /**
      * {@inheritDoc}
      * <p>
-     * <p>This implementation throws an {@link UnsupportedOperationException}. Override this method to support mutable
+     * This implementation throws an {@link UnsupportedOperationException}. Override this method to support mutable
      * map entries.
      */
     public V setValue(V value)

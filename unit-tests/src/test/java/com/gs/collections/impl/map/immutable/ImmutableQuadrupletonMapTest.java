@@ -30,7 +30,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit test for {@link com.gs.collections.impl.map.immutable.ImmutableQuadrupletonMap}.
+ * JUnit test for {@link ImmutableQuadrupletonMap}.
  */
 public class ImmutableQuadrupletonMapTest extends ImmutableMemoryEfficientMapTestCase
 {

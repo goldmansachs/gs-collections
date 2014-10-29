@@ -91,8 +91,7 @@ public class FastListTest extends AbstractListTestCase
                         Lists.mutable.with(),
                         Lists.mutable.with(),
                         Lists.mutable.with()),
-                FastList.newWithNValues(5, FastList::new)
-        );
+                FastList.newWithNValues(5, FastList::new));
     }
 
     @Test

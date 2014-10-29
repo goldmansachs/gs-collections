@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains static utilities that provide internal iteration pattern implementations which work with JCF collections.
  * <p>
  *     All the iteration patterns in this package are internal. It is used by iterators specialized for various collections.
- * </p>
  * <p>
  *     This package contains 10 Iteration implementations:
  * <ul>
@@ -53,6 +52,5 @@
  *          {@link com.gs.collections.impl.utility.internal.SortedSetIterables} - a class provides for sortedSet algebra operations.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.impl.utility.internal;

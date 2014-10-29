@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains interfaces for {@link com.gs.collections.api.partition.PartitionIterable}.
  * <p>
  *     A PartitionIterable is the result of splitting an iterable into two iterables based on a {@link com.gs.collections.api.block.predicate.Predicate}.
- * </p>
  * <p>
  *      This package contains 3 interfaces:
  * <ul>
@@ -32,6 +31,5 @@
  *         {@link com.gs.collections.api.partition.PartitionImmutableCollection} - the non-modifiable equivalent interface to {@link com.gs.collections.api.partition.PartitionMutableCollection}.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.api.partition;

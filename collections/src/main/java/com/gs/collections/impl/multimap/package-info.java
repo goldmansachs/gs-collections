@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains implementations of the {@link com.gs.collections.api.multimap.Multimap} interface.
  * <p>
  *     A {@link com.gs.collections.api.multimap.Multimap} is a type of {@code Map} that can associate multiple values for keys.
- * </p>
  */
 package com.gs.collections.impl.multimap;

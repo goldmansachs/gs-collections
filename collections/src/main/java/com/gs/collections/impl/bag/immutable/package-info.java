@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains implementations of the {@link com.gs.collections.api.bag.ImmutableBag} interface.
  * <p>
  *     An {@link com.gs.collections.api.bag.ImmutableBag} is an immutable collection which contains elements that are unordered, and may contain duplicate entries.
- * </p>
  * <p>
  *     This package contains 4 immutable bag implementations:
  * <ul>
@@ -35,7 +34,6 @@
  *          {@link com.gs.collections.impl.bag.immutable.ImmutableSingletonBag} - an {@link com.gs.collections.api.bag.ImmutableBag} which contains only one element.
  *     </li>
  * </ul>
- * </p>
  * <p>
  *     This package contains one factory implementation:
  * <ul>
@@ -43,6 +41,5 @@
  *         {@link com.gs.collections.impl.bag.immutable.ImmutableBagFactoryImpl} - a factory which creates instances of type {@link com.gs.collections.api.bag.ImmutableBag}.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.impl.bag.immutable;

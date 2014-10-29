@@ -171,6 +171,7 @@ public abstract class AbstractMutableCollection<T>
         return this.size() != oldSize;
     }
 
+    @Override
     public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
         return Iterate.groupByUniqueKey(this, function);

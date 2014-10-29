@@ -83,8 +83,7 @@ public class ImmutableHashBiMapInverse2Test extends MapIterableTestCase
                 this.newMapWithKeysValues(
                         new IntegerWithCast(0), "Test 2",
                         null, "Test 1"),
-                map
-        );
+                map);
         Assert.assertEquals("Test 2", map.get(new IntegerWithCast(0)));
         Assert.assertEquals("Test 1", map.get(null));
     }

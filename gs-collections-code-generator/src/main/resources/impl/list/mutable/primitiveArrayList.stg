@@ -83,7 +83,7 @@ public final class <name>ArrayList
 
     /**
      * Creates a new list using the passed {@code elements} argument as the backing store.
-     * \<p/>
+     * \<p>
      * !!! WARNING: This method uses the passed in array, so can be very unsafe if the original
      * array is held onto anywhere else. !!!
      */

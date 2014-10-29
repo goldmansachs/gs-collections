@@ -33,8 +33,7 @@ public class Procedures2Test
         Verify.assertThrowsWithCause(
                 RuntimeException.class,
                 IOException.class,
-                () -> Procedures2.throwing((a, b) -> {throw new IOException();}).value(null, null)
-        );
+                () -> Procedures2.throwing((a, b) -> {throw new IOException();}).value(null, null));
     }
 
     @Test

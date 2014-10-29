@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,7 +111,7 @@ public interface MutableSet<T>
 
     /**
      * Returns an immutable copy of this set. If the set is immutable, it returns itself.
-     * <p/>
+     * <p>
      * The returned set will be <tt>Serializable</tt> if this set is <tt>Serializable</tt>.
      */
     ImmutableSet<T> toImmutable();

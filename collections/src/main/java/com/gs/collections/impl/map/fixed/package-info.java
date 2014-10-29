@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains implementations of the {@link com.gs.collections.api.map.FixedSizeMap} interface.
  * <p>
  *     A {@link com.gs.collections.api.map.FixedSizeMap} is a map that may be mutated, but cannot grow or shrink in size.
- * </p>
  */
 package com.gs.collections.impl.map.fixed;

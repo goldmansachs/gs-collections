@@ -1068,6 +1068,7 @@ public abstract class AbstractMutableList<T>
         return ListIterate.groupByEach(this, function);
     }
 
+    @Override
     public <K> MutableMap<K, T> groupByUniqueKey(Function<? super T, ? extends K> function)
     {
         return ListIterate.groupByUniqueKey(this, function);

@@ -97,8 +97,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
      *     Assert.assertTrue(result.equals(UnifiedMap.newWithKeysValues("1", 1, "2", 2, "3", 3)));
      * </pre>
      *
-     * @exception IllegalStateException
-     *         if the MapIterable contains duplicate values.
+     * @throws IllegalStateException if the MapIterable contains duplicate values.
      * @since 5.0
      */
     MapIterable<V, K> flipUniqueValues();
@@ -241,13 +240,11 @@ public interface MapIterable<K, V> extends RichIterable<V>
     /**
      * Follows the same general contract as {@link Map#equals(Object)}.
      */
-    @Override
     boolean equals(Object o);
 
     /**
      * Follows the same general contract as {@link Map#hashCode()}.
      */
-    @Override
     int hashCode();
 
     /**

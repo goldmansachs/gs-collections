@@ -23,7 +23,6 @@ import com.gs.collections.impl.map.mutable.primitive.ObjectBooleanHashMap;
 /**
  * Abstract JUnit test for {@link ImmutableObjectBooleanHashMap#keyValuesView()}.
  */
-
 public class ImmutableObjectBooleanHashMapKeyValuesViewTest extends AbstractObjectBooleanMapKeyValuesViewTestCase
 {
     @Override

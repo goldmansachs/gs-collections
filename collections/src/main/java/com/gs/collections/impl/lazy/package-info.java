@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains implementations of the {@link com.gs.collections.api.LazyIterable} interface.
  * <p>
  *     A LazyIterable is RichIterable which will defer evaluation for certain methods like select, reject, collect, etc.
- * </p>
  */
 package com.gs.collections.impl.lazy;

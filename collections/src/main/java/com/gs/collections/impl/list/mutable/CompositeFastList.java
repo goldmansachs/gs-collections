@@ -470,7 +470,7 @@ public final class CompositeFastList<E>
      * as are the other methods like set() and add() (and especially, remove).
      * Convert the internal lists to one list (if not already just one list)
      * and return that list's list iterator.
-     * <p/>
+     * <p>
      * AFAIK list iterator is only commonly used in sorting.
      *
      * @return a ListIterator for this, with internal state convertedto one list if needed.
@@ -486,7 +486,7 @@ public final class CompositeFastList<E>
      * as are the other methods like set() and add() (and especially, remove).
      * Convert the internal lists to one list (if not already just one list)
      * and return that list's list iterator.
-     * <p/>
+     * <p>
      * AFAIK list iterator is only commonly used in sorting.
      *
      * @return a ListIterator for this, with internal state convertedto one list if needed.

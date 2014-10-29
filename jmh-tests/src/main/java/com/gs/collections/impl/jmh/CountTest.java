@@ -145,8 +145,7 @@ public class CountTest
                     this.integersJDK.stream().mapToLong(each -> each + 2).reduce(0, (accum, each) -> {
                         Assert.assertTrue(each >= 0);
                         return accum + each;
-                    })
-            );
+                    }));
 
             Assert.assertEquals(
                     500003500000L,
@@ -154,8 +153,7 @@ public class CountTest
                         long result = accum + each;
                         Assert.assertTrue(each >= 0);
                         return result;
-                    })
-            );
+                    }));
 
             // parallelStream().mapToLong().reduce()
             Assert.assertEquals(
@@ -167,8 +165,7 @@ public class CountTest
                     this.integersJDK.parallelStream().mapToLong(each -> each + 2).reduce(0, (accum, each) -> {
                         Assert.assertTrue(each >= 0);
                         return accum + each;
-                    })
-            );
+                    }));
 
             Assert.assertEquals(
                     500003500000L,
@@ -176,8 +173,7 @@ public class CountTest
                         long result = accum + each;
                         Assert.assertTrue(each >= 0);
                         return result;
-                    })
-            );
+                    }));
         }
 
         if (this.megamorphicWarmupLevel > 2)

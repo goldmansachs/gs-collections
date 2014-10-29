@@ -18,7 +18,6 @@
  * This package contains implementations of the {@link com.gs.collections.api.multimap.bag.BagMultimap} interface.
  * <p>
  *     A {@link com.gs.collections.api.multimap.bag.BagMultimap} is a type of {@code Multimap} that uses a Bag as its underlying store for the multiple values of a given key.
- * </p>
  * <p>
  *     This package contains the following implementations:
  * <ul>
@@ -31,6 +30,5 @@
  *     <li>
  *          {@link com.gs.collections.impl.multimap.bag.SynchronizedPutHashBagMultimap} - a {@code MutableBagMultimap} that is optimized for parallel writes, but is not protected for concurrent reads.
  *     </li>
- * </p>
  */
 package com.gs.collections.impl.multimap.bag;

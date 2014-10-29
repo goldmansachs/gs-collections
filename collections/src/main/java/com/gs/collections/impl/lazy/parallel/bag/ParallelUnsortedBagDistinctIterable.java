@@ -49,6 +49,7 @@ class ParallelUnsortedBagDistinctIterable<T> extends AbstractParallelUnsortedSet
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".split() not implemented yet");
     }
 
+    @Override
     public ParallelUnsortedSetIterable<T> asUnique()
     {
         return this;

@@ -45,8 +45,7 @@ public class ProceduresTest
         Verify.assertThrowsWithCause(
                 RuntimeException.class,
                 IOException.class,
-                () -> Procedures.throwing(a -> {throw new IOException();}).value(null)
-        );
+                () -> Procedures.throwing(a -> {throw new IOException();}).value(null));
     }
 
     @Test

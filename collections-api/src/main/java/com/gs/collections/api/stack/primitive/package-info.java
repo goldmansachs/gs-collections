@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains mutable and immutable primitive stack API.
  * <p>
  *     A primitive stack is similar to {@link com.gs.collections.api.stack.StackIterable} and is memory-optimized for primitives.
- * </p>
  */
 package com.gs.collections.api.stack.primitive;

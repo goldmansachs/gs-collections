@@ -44,7 +44,6 @@ import com.gs.collections.impl.set.immutable.primitive.AbstractImmutable<name>Se
  *
  * @since 6.0.
  */
-
 class <className> extends AbstractImmutable<name>Set implements Serializable
 {
     private static final long serialVersionUID = 1L;

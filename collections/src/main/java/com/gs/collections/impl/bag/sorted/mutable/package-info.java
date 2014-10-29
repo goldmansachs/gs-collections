@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,6 @@
 /**
  * This package contains implementations of {@link com.gs.collections.api.bag.sorted.MutableSortedBag}.
  * <p>
- *
- * </p>
- * <p>
  *     This package contains 2 sorted mutable bag implementation:
  * <ul>
  *     <li>
@@ -29,6 +26,5 @@
  *          {@link com.gs.collections.impl.bag.sorted.mutable.UnmodifiableSortedBag} -  an unmodifiable view of a SortedBag.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.impl.bag.sorted.mutable;

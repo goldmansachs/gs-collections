@@ -37,7 +37,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test of {@link com.gs.collections.impl.multimap.bag.sorted.TreeBagMultimap}.
+ * Test of {@link TreeBagMultimap}.
  */
 public class TreeBagMultimapTest extends AbstractMutableSortedBagMultimapTestCase
 {

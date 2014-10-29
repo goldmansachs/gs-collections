@@ -55,8 +55,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
         String string = collection.toString();
         Assert.assertTrue(
                 ("[1, (this " + simpleName + ")]").equals(string)
-                        || ("[(this " + simpleName + "), 1]").equals(string)
-        );
+                        || ("[(this " + simpleName + "), 1]").equals(string));
     }
 
     @Override

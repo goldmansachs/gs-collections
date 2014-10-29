@@ -24,7 +24,6 @@ import org.junit.Test;
 /**
  * JUnit test for {@link BooleanBooleanPairImpl}.
  */
-
 public class BooleanObjectPairImplTest
 {
     @Test

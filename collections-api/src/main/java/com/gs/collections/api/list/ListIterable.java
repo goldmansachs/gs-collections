@@ -61,8 +61,7 @@ public interface ListIterable<T>
     /**
      * Iterates over the section of the list covered by the specified inclusive indexes.  The indexes are
      * both inclusive.
-     * <p/>
-     * <p/>
+     * <p>
      * <pre>e.g.
      * ListIterable<People> people = FastList.newListWith(ted, mary, bob, sally)
      * people.forEach(0, 1, new Procedure<Person>()
@@ -73,7 +72,7 @@ public interface ListIterable<T>
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * This code would output ted and mary's names.
      */
     void forEach(int startIndex, int endIndex, Procedure<? super T> procedure);
@@ -81,8 +80,7 @@ public interface ListIterable<T>
     /**
      * Iterates over the section of the list covered by the specified inclusive indexes.  The indexes are
      * both inclusive.
-     * <p/>
-     * <p/>
+     * <p>
      * <pre>e.g.
      * ListIterable<People> people = FastList.newListWith(ted, mary, bob, sally)
      * people.forEachWithIndex(0, 1, new ObjectIntProcedure<Person>()
@@ -93,7 +91,7 @@ public interface ListIterable<T>
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * This code would output ted and mary's names.
      */
     void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure);
@@ -193,7 +191,7 @@ public interface ListIterable<T>
 
     /**
      * Returns a new {@code ListIterable} containing the distinct elements in this list.
-     * <p/>
+     * <p>
      * Conceptually similar to {@link #toSet()}.{@link #toList()} but retains the original order. If an element appears
      * multiple times in this list, the first one will be copied into the result.
      *
@@ -256,12 +254,10 @@ public interface ListIterable<T>
     /**
      * Follows the same general contract as {@link List#equals(Object)}.
      */
-    @Override
     boolean equals(Object o);
 
     /**
      * Follows the same general contract as {@link List#hashCode()}.
      */
-    @Override
     int hashCode();
 }

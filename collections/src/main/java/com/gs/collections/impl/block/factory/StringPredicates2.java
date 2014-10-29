@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,6 +68,7 @@ public final class StringPredicates2
 
     /**
      * Returns false if a String passed to the the accept method starts with the string specified on the predicate.
+     *
      * @since 5.0
      */
     public static Predicates2<String, String> notStartsWith()
@@ -85,6 +86,7 @@ public final class StringPredicates2
 
     /**
      * Returns false if a String passed to the the accept method ends with the string specified on the predicate.
+     *
      * @since 5.0
      */
     public static Predicates2<String, String> notEndsWith()

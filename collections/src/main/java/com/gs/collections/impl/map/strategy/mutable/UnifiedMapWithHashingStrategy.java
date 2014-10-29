@@ -62,7 +62,7 @@ import net.jcip.annotations.NotThreadSafe;
  * table like in java.util.HashMap. Instead of trying to deal with collisions in the main array using Entry objects,
  * we put a special object in the key slot and put a regular Object[] in the value slot. The array contains the key value
  * pairs in consecutive slots, just like the main array, but it's a linear list with no hashing.
- * <p/>
+ * <p>
  * The difference between UnifiedMap and UnifiedMapWithHashingStrategy is that a HashingStrategy based UnifiedMap
  * does not rely on the hashCode or equality of the object at the key, but instead relies on a HashingStrategy
  * implementation provided by a developer to compute the hashCode and equals for the objects stored in the map.

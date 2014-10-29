@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -789,8 +789,7 @@ public final class ArrayListIterate
      * Iterates over the section of the list covered by the specified indexes.  The indexes are both inclusive.  If the
      * from is less than the to, the list is iterated in forward order. If the from is greater than the to, then the
      * list is iterated in the reverse order.
-     * <p/>
-     * <p/>
+     * <p>
      * <pre>e.g.
      * ArrayList<People> people = new ArrayList<People>(FastList.newListWith(ted, mary, bob, sally));
      * ArrayListIterate.forEach(people, 0, 1, new Procedure<Person>()
@@ -801,7 +800,7 @@ public final class ArrayListIterate
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * This code would output ted and mary's names.
      */
     public static <T> void forEach(ArrayList<T> list, int from, int to, Procedure<? super T> procedure)
@@ -824,8 +823,7 @@ public final class ArrayListIterate
      * from is less than the to, the list is iterated in forward order. If the from is greater than the to, then the
      * list is iterated in the reverse order. The index passed into the ObjectIntProcedure is the actual index of the
      * range.
-     * <p/>
-     * <p/>
+     * <p>
      * <pre>e.g.
      * ArrayList<People> people = new ArrayList<People>(FastList.newListWith(ted, mary, bob, sally));
      * ArrayListIterate.forEachWithIndex(people, 0, 1, new ObjectIntProcedure<Person>()
@@ -836,7 +834,7 @@ public final class ArrayListIterate
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * This code would output ted and mary's names.
      */
     public static <T> void forEachWithIndex(

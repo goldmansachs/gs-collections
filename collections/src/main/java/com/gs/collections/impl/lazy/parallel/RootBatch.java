@@ -20,8 +20,7 @@ import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.predicate.Predicate;
 
 /**
- * A {@link com.gs.collections.impl.lazy.parallel.Batch} that must be at the root of the chain,
- * not wrapped in other Batches.
+ * A {@link Batch} that must be at the root of the chain, not wrapped in other Batches.
  */
 @Beta
 public interface RootBatch<T> extends Batch<T>

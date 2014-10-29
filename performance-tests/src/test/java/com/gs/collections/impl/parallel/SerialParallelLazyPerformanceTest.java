@@ -283,50 +283,50 @@ public class SerialParallelLazyPerformanceTest
     @Category(ParallelTests.class)
     public void anySatisfyShortCircuitInMiddle()
     {
-        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The Middle", each -> this.anySatisfy(
-                        each.value(),
-                        0,
-                        true),
-                false
-        );
+        this.measureAlgorithmForIntegerIterable(
+                "AnySatisfy Short Circuit In The Middle",
+                each -> this.anySatisfy(each.value(), 0, true),
+                false);
     }
 
     @Test
     @Category(ParallelTests.class)
     public void anySatisfyShortCircuitInEnd()
     {
-        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The End", each -> this.anySatisfy(
-                        each.value(),
-                        3,
-                        false),
-                false
-        );
+        this.measureAlgorithmForIntegerIterable(
+                "AnySatisfy Short Circuit In The End",
+                each -> this.anySatisfy(each.value(), 3, false),
+                false);
     }
 
     @Test
     @Category(ParallelTests.class)
     public void detectShortCircuitInBeginning()
     {
-        this.measureAlgorithmForIntegerIterable("Detect Short Circuit In The Beginning", each -> this.detect(
-                        each.value(),
-                        2,
-                        true),
-                false
-        );
+        this.measureAlgorithmForIntegerIterable(
+                "Detect Short Circuit In The Beginning",
+                each -> this.detect(each.value(), 2, true),
+                false);
     }
 
     @Test
     @Category(ParallelTests.class)
     public void detectShortCircuitInMiddle()
     {
-        this.measureAlgorithmForIntegerIterable("Detect Short Circuit In The Middle", each -> this.detect(each.value(), 0, true), false);
+        this.measureAlgorithmForIntegerIterable(
+                "Detect Short Circuit In The Middle",
+                each -> this.detect(each.value(), 0, true),
+                false);
     }
 
     @Test
     @Category(ParallelTests.class)
     public void detectShortCircuitInEnd()
     {
-        this.measureAlgorithmForIntegerIterable("Detect Short Circuit In The End", each -> this.detect(each.value(), 3, false), false);
+        this.measureAlgorithmForIntegerIterable(
+                "Detect Short Circuit In The End",
+                each -> this.detect(each.value(), 3, false),
+                false);
     }
 
     @Test

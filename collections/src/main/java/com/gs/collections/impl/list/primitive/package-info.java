@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,5 @@
  *     <li>
  *          {@link com.gs.collections.impl.list.primitive.IntInterval} - a range of primitive ints that may be iterated over using a step value.
  *     </li>
- * </p>
  */
 package com.gs.collections.impl.list.primitive;

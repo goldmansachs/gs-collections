@@ -751,6 +751,7 @@ public class HashBag<T>
         return this.groupBy(function, HashBagMultimap.<V, T>newMultimap());
     }
 
+    @Override
     public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
         return IterableIterate.groupByUniqueKey(this, function);

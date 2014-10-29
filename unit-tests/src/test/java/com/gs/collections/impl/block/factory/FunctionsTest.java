@@ -60,8 +60,7 @@ public class FunctionsTest
         Verify.assertThrowsWithCause(
                 RuntimeException.class,
                 IOException.class,
-                () -> Functions.throwing(a -> {throw new IOException();}).valueOf(null)
-        );
+                () -> Functions.throwing(a -> {throw new IOException();}).valueOf(null));
     }
 
     @Test

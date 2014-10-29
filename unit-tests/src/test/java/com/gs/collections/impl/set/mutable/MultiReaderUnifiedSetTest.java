@@ -137,8 +137,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
         MutableCollection<Object> collection = this.newWith(1, 2);
         Assert.assertTrue(
                 "[1, 2]".equals(collection.toString())
-                        || "[2, 1]".equals(collection.toString())
-        );
+                        || "[2, 1]".equals(collection.toString()));
     }
 
     @Override
@@ -299,8 +298,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
                 set,
                 cartesianProduct
                         .select(Predicates.attributeEqual((Function<Pair<?, String>, String>) Pair::getTwo, "One"))
-                        .collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet()
-        );
+                        .collect((Function<Pair<String, ?>, String>) Pair::getOne).toSet());
     }
 
     @Override

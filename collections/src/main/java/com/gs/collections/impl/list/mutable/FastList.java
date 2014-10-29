@@ -1481,6 +1481,7 @@ public class FastList<T>
         return result;
     }
 
+    @Override
     public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
     {
         ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
@@ -1492,6 +1493,7 @@ public class FastList<T>
         return result;
     }
 
+    @Override
     public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
     {
         ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
@@ -1503,6 +1505,7 @@ public class FastList<T>
         return result;
     }
 
+    @Override
     public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
     {
         ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
@@ -1514,6 +1517,7 @@ public class FastList<T>
         return result;
     }
 
+    @Override
     public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
     {
         ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();

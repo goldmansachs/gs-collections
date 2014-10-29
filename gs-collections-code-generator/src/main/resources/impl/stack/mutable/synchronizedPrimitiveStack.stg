@@ -45,7 +45,6 @@ import net.jcip.annotations.ThreadSafe;
  * {@link <name>Iterator}, as per {@link Collections#synchronizedCollection(Collection)}.
  * \<p>
  * This file was automatically generated from template file synchronizedPrimitiveStack.stg.
- * \</p>
  *
  * @see Mutable<name>Stack#asSynchronized()
  * @see MutableStack#asSynchronized()

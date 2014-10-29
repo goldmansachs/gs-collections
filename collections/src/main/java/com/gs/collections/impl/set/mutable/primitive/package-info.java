@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,5 @@
  * <p>
  *     Primitive Set is similar to {@link com.gs.collections.api.set.MutableSet} that is memory-optimized for primitives.
  *     HashTables are used for performance optimization.
- * </p>
  */
 package com.gs.collections.impl.set.mutable.primitive;

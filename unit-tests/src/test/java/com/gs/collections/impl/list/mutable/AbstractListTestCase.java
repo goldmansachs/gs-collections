@@ -713,8 +713,7 @@ public abstract class AbstractListTestCase
                         FastList.newListWith("3", "4"),
                         FastList.newListWith("5", "6"),
                         FastList.newListWith("7")),
-                groups
-        );
+                groups);
     }
 
     @Test

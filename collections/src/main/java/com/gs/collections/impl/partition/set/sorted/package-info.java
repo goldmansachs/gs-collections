@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,5 @@
  *             {@link com.gs.collections.impl.partition.set.sorted.PartitionTreeSortedSet} - Result of splitting a tree sorted set into two tree sorted sets based on a Predicate.
  *         </li>
  *     </ul>
- * </p>
  */
 package com.gs.collections.impl.partition.set.sorted;

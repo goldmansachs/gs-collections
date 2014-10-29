@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains implementations of the {@link com.gs.collections.api.partition.set.PartitionMutableSet} interface.
  * <p>
  *     A {@link com.gs.collections.impl.partition.set.strategy.PartitionUnifiedSetWithHashingStrategy} is the result of splitting a {@link com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy} based on a Predicate.
- * </p>
  */
 package com.gs.collections.impl.partition.set.strategy;

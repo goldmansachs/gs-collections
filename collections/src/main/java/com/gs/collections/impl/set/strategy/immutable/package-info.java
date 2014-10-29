@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@
  *          {@link com.gs.collections.impl.set.strategy.immutable.ImmutableUnifiedSetWithHashingStrategy} - an {@link com.gs.collections.impl.set.immutable.ImmutableUnifiedSet} with user defined hashing strategy.
  *     </li>
  * </ul>
- * </p>
  * <p>
  *     This package contains one factory implementation:
  * <ul>
@@ -34,6 +33,5 @@
  *          {@link com.gs.collections.impl.set.strategy.immutable.ImmutableHashingStrategySetFactoryImpl} - a factory which creates instances of type {@link com.gs.collections.api.set.ImmutableSet} with user defined hashing strategy.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.impl.set.strategy.immutable;

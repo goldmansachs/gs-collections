@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
  * <p>
  *     A Bag is a {@link java.util.Collection} which contains elements that are unordered, and may contain duplicate entries. It adds a protocol for
  * adding, removing, and determining the number of occurrences for an item.
- * </p>
  * <p>
  *     This package contains 3 interfaces:
  * <ul>
@@ -33,6 +32,5 @@
  *          {@link com.gs.collections.api.bag.ImmutableBag} - a Bag whose contents cannot be altered after initialization.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.api.bag;

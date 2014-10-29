@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains a implementation which is used to generate code for primitive collections.
  * <p>
  *     String Template is used to generate the code for primitive collections.
- * </p>
  */
 package com.gs.collections.codegenerator;

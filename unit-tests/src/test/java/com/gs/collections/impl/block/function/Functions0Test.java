@@ -39,8 +39,7 @@ public class Functions0Test
         Verify.assertThrowsWithCause(
                 RuntimeException.class,
                 IOException.class,
-                () -> Functions0.throwing(() -> {throw new IOException();}).value()
-        );
+                () -> Functions0.throwing(() -> {throw new IOException();}).value());
     }
 
     @Test

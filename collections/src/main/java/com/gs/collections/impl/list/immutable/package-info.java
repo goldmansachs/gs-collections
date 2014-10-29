@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains implementations of the {@link com.gs.collections.api.list.ImmutableList} interface.
  * <p>
  *     An {@link com.gs.collections.api.list.ImmutableList} is the non-modifiable equivalent interface to {@link com.gs.collections.api.list.MutableList}.
- * </p>
  */
 package com.gs.collections.impl.list.immutable;

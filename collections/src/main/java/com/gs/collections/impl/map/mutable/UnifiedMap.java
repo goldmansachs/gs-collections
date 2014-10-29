@@ -60,7 +60,7 @@ import net.jcip.annotations.NotThreadSafe;
  * Instead of trying to deal with collisions in the main array using Entry objects, we put a special object in
  * the key slot and put a regular Object[] in the value slot. The array contains the key value pairs in consecutive slots,
  * just like the main array, but it's a linear list with no hashing.
- * <p/>
+ * <p>
  * The final result is a Map implementation that's leaner than java.util.HashMap and faster than Trove's THashMap.
  * The best of both approaches unified together, and thus the name UnifiedMap.
  */

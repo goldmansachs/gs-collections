@@ -144,7 +144,6 @@ public final class ImmutableBagMultimapImpl<K, V>
                     out.writeInt(bag.sizeDistinct());
                     bag.forEachWithOccurrences(new CheckedObjectIntProcedure<V>()
                     {
-                        @Override
                         public void safeValue(V value, int count) throws IOException
                         {
                             out.writeObject(value);

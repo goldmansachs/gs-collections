@@ -67,7 +67,7 @@ public final class IntInterval
     /**
      * This static {@code from} method allows IntInterval to act as a fluent builder for itself.
      * It works in conjunction with the instance methods {@link #to(int)} and {@link #by(int)}.
-     * <p/>
+     * <p>
      * Usage Example:
      * <pre>
      * IntInterval interval1 = IntInterval.from(1).to(5);         // results in: 1, 2, 3, 4, 5.
@@ -82,7 +82,7 @@ public final class IntInterval
     /**
      * This instance {@code to} method allows IntInterval to act as a fluent builder for itself.
      * It works in conjunction with the static method {@link #from(int)} and instance method {@link #by(int)}.
-     * <p/>
+     * <p>
      * Usage Example:
      * <pre>
      * IntInterval interval1 = IntInterval.from(1).to(5);         // results in: 1, 2, 3, 4, 5.
@@ -97,7 +97,7 @@ public final class IntInterval
     /**
      * This instance {@code by} method allows IntInterval to act as a fluent builder for itself.
      * It works in conjunction with the static method {@link #from(int)} and instance method {@link #to(int)}.
-     * <p/>
+     * <p>
      * Usage Example:
      * <pre>
      * IntInterval interval1 = IntInterval.from(1).to(5);         // results in: 1, 2, 3, 4, 5.
@@ -111,7 +111,7 @@ public final class IntInterval
 
     /**
      * Returns an IntInterval starting at zero.
-     * <p/>
+     * <p>
      * Usage Example:
      * <pre>
      * IntInterval interval1 = IntInterval.zero().to(5);         // results in: 0, 1, 2, 3, 4, 5.

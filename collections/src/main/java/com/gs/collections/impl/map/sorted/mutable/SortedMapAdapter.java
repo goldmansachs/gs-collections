@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import com.gs.collections.impl.utility.MapIterate;
 /**
  * This class provides a MutableSortedMap wrapper around a JDK Collections SortedMap interface instance.  All of the MutableSortedMap
  * interface methods are supported in addition to the JDK SortedMap interface methods.
- * <p/>
+ * <p>
  * To create a new wrapper around an existing SortedMap instance, use the {@link #adapt(SortedMap)} factory method.
  */
 public class SortedMapAdapter<K, V>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains interfaces for {@link com.gs.collections.api.partition.set.PartitionSet}.
  * <p>
  *     A PartitionSet is the result of splitting a set into two sets based on a Predicate.
- * </p>
  * <p>
  * This package contains 4 interfaces:
  * <ul>
@@ -35,6 +34,5 @@
  *         {@link com.gs.collections.api.partition.set.PartitionUnsortedSet} - the result of splitting two UnsortedSetIterables based on a Predicate.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.api.partition.set;

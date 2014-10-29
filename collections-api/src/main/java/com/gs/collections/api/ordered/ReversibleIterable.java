@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public interface ReversibleIterable<T> extends RichIterable<T>
 {
     /**
      * Evaluates the procedure for each element of the list iterating in reverse order.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * people.reverseForEach(new Procedure<Person>()
      * {
@@ -99,7 +99,7 @@ public interface ReversibleIterable<T> extends RichIterable<T>
 
     /**
      * Returns a new {@code ReversibleIterable} containing the distinct elements in this iterable.
-     * <p/>
+     * <p>
      * Conceptually similar to {@link #toSet()}.{@link #toList()} but retains the original order. If an element appears
      * multiple times in this iterable, the first one will be copied into the result.
      *

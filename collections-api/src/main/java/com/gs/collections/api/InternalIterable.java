@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public interface InternalIterable<T>
 {
     /**
      * The procedure is executed for each element in the iterable.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * people.forEach(new Procedure<Person>()
      * {
@@ -44,7 +44,6 @@ public interface InternalIterable<T>
      *
      * @see RichIterable#each(Procedure)
      * @see Iterable#forEach(java.util.function.Consumer)
-     *
      */
     void forEach(Procedure<? super T> procedure);
 
@@ -66,7 +65,7 @@ public interface InternalIterable<T>
     /**
      * The procedure2 is evaluated for each element in the iterable with the specified parameter provided
      * as the second argument.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * people.forEachWith(new Procedure2<Person, Person>()
      * {

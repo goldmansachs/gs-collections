@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains interfaces for Predicate API.
  * <p>
  *     A Predicate is a lambda with a boolean result.
- * </p>
  * <p>
  *     This package contains 2 interfaces.
  *     <ul>
@@ -29,6 +28,5 @@
  *              {@link com.gs.collections.api.block.predicate.Predicate2} - a two argument Predicate. Primarily used in methods like selectWith, detectWith, rejectWith.
  *         </li>
  *     </ul>
- * </p>
  */
 package com.gs.collections.api.block.predicate;

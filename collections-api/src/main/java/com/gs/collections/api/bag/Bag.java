@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,6 @@ public interface Bag<T>
      *
      * @see Map#equals(Object)
      */
-    @Override
     boolean equals(Object object);
 
     /**
@@ -53,7 +52,6 @@ public interface Bag<T>
      *
      * @see Map#hashCode()
      */
-    @Override
     int hashCode();
 
     Bag<T> select(Predicate<? super T> predicate);
@@ -110,7 +108,7 @@ public interface Bag<T>
      * separated by the characters <tt>", "</tt> (comma and space).  Each element-count mapping is rendered as the element
      * followed by an equals sign (<tt>"="</tt>) followed by the number of ooccurrences. Elements and are converted to
      * strings as by {@link String#valueOf(Object)}.
-     * <p/>
+     * <p>
      * The string representation is similar to {@link java.util.AbstractMap#toString()}, not {@link RichIterable#toString()}.
      *
      * @return a string representation of this bag

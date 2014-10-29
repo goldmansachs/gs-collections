@@ -80,12 +80,12 @@ public final class Verify extends Assert
     /**
      * Mangles the stack trace of {@link AssertionError} so that it looks like its been thrown from the line that
      * called to a custom assertion.
-     * <p/>
-     * <p>This method behaves identically to {@link #throwMangledException(AssertionError, int)} and is provided
+     * <p>
+     * This method behaves identically to {@link #throwMangledException(AssertionError, int)} and is provided
      * for convenience for assert methods that only want to pop two stack frames. The only time that you would want to
      * call the other {@link #throwMangledException(AssertionError, int)} method is if you have a custom assert
      * that calls another custom assert i.e. the source line calling the custom asserts is more than two stack frames
-     * away</p>
+     * away
      *
      * @param e The exception to mangle.
      * @see #throwMangledException(AssertionError, int)
@@ -101,12 +101,12 @@ public final class Verify extends Assert
     }
 
     /**
-     * <p>Mangles the stack trace of {@link AssertionError} so that it looks like
-     * its been thrown from the line that called to a custom assertion.</p>
-     * <p/>
-     * <p>This is useful for when you are in a debugging session and you want to go to the source
+     * Mangles the stack trace of {@link AssertionError} so that it looks like
+     * its been thrown from the line that called to a custom assertion.
+     * <p>
+     * This is useful for when you are in a debugging session and you want to go to the source
      * of the problem in the test case quickly. The regular use case for this would be something
-     * along the lines of:</p>
+     * along the lines of:
      * <pre>
      * public class TestFoo extends junit.framework.TestCase
      * {
@@ -133,10 +133,10 @@ public final class Verify extends Assert
      *   }
      * }
      * </pre>
-     * <p/>
-     * <p>Without the {@code try ... catch} block around lines 11-13 the stack trace following a test failure
+     * <p>
+     * Without the {@code try ... catch} block around lines 11-13 the stack trace following a test failure
      * would look a little like:
-     * <p/>
+     * <p>
      * <pre>
      * java.lang.AssertionError: ...
      *  at TestFoo.assertFoo(TestFoo.java:11)
@@ -147,14 +147,14 @@ public final class Verify extends Assert
      *  at java.lang.reflect.Method.invoke(Method.java:324)
      *  ...
      * </pre>
-     * <p/>
-     * <p>Note that the source of the error isn't readily apparent as the first line in the stack trace
+     * <p>
+     * Note that the source of the error isn't readily apparent as the first line in the stack trace
      * is the code within the custom assert. If we were debugging the failure we would be more interested
-     * in the second line of the stack trace which shows us where in our tests the assert failed.</p>
-     * <p/>
-     * <p>With the {@code try ... catch} block around lines 11-13 the stack trace would look like the
-     * following:</p>
-     * <p/>
+     * in the second line of the stack trace which shows us where in our tests the assert failed.
+     * <p>
+     * With the {@code try ... catch} block around lines 11-13 the stack trace would look like the
+     * following:
+     * <p>
      * <pre>
      * java.lang.AssertionError: ...
      *  at TestFoo.testFoo(TestFoo.java:5)
@@ -164,9 +164,9 @@ public final class Verify extends Assert
      *  at java.lang.reflect.Method.invoke(Method.java:324)
      *  ...
      * </pre>
-     * <p/>
-     * <p>Here the source of the error is more visible as we can instantly see that the testFoo test is
-     * failing at line 5.</p>
+     * <p>
+     * Here the source of the error is more visible as we can instantly see that the testFoo test is
+     * failing at line 5.
      *
      * @param e           The exception to mangle.
      * @param framesToPop The number of frames to remove from the stack trace.
@@ -2379,8 +2379,7 @@ public final class Verify extends Assert
                                 + ">, "
                                 + "but had actualValue:<"
                                 + actualValue
-                                + '>'
-                );
+                                + '>');
             }
         }
         catch (AssertionError e)
@@ -2433,8 +2432,7 @@ public final class Verify extends Assert
                                 + ">, "
                                 + "but had actualValue:<"
                                 + actualValue
-                                + '>'
-                );
+                                + '>');
             }
         }
         catch (AssertionError e)
@@ -3145,8 +3143,7 @@ public final class Verify extends Assert
                                 + expectedErrorClass.getName()
                                 + '>',
                         expectedErrorClass,
-                        ex.getClass()
-                );
+                        ex.getClass());
                 return;
             }
             catch (AssertionError e)
@@ -3172,7 +3169,6 @@ public final class Verify extends Assert
      * {@code Callable} is most appropriate when a checked exception will be thrown.
      * If a subclass of {@link RuntimeException} will be thrown, the form
      * {@link #assertThrows(Class, Runnable)} may be more convenient.
-     * <p>
      * <p>
      * e.g.
      * <pre>
@@ -3209,8 +3205,7 @@ public final class Verify extends Assert
                                 + "Exception Message: " + ex.getMessage()
                                 + '\n',
                         expectedExceptionClass,
-                        ex.getClass()
-                );
+                        ex.getClass());
                 return;
             }
             catch (AssertionError e)
@@ -3236,7 +3231,6 @@ public final class Verify extends Assert
      * {@code Runnable} is most appropriate when a subclass of {@link RuntimeException} will be thrown.
      * If a checked exception will be thrown, the form {@link #assertThrows(Class, Callable)} may be more
      * convenient.
-     * <p>
      * <p>
      * e.g.
      * <pre>
@@ -3274,8 +3268,7 @@ public final class Verify extends Assert
                                 + "Exception Message: " + ex.getMessage()
                                 + '\n',
                         expectedExceptionClass,
-                        ex.getClass()
-                );
+                        ex.getClass());
                 return;
             }
             catch (AssertionError e)
@@ -3301,7 +3294,6 @@ public final class Verify extends Assert
      * {@code Callable} is most appropriate when a checked exception will be thrown.
      * If a subclass of {@link RuntimeException} will be thrown, the form
      * {@link #assertThrowsWithCause(Class, Class, Runnable)} may be more convenient.
-     * <p>
      * <p>
      * e.g.
      * <pre>
@@ -3344,15 +3336,13 @@ public final class Verify extends Assert
                                 + expectedExceptionClass.getName()
                                 + '>',
                         expectedExceptionClass,
-                        ex.getClass()
-                );
+                        ex.getClass());
                 Throwable actualCauseClass = ex.getCause();
                 Assert.assertNotNull(
                         "Caught exception with null cause, expected cause of type <"
                                 + expectedCauseClass.getName()
                                 + '>',
-                        actualCauseClass
-                );
+                        actualCauseClass);
                 Assert.assertSame(
                         "Caught exception with cause of type<"
                                 + actualCauseClass.getClass().getName()
@@ -3360,8 +3350,7 @@ public final class Verify extends Assert
                                 + expectedCauseClass.getName()
                                 + '>',
                         expectedCauseClass,
-                        actualCauseClass.getClass()
-                );
+                        actualCauseClass.getClass());
                 return;
             }
             catch (AssertionError e)
@@ -3387,7 +3376,6 @@ public final class Verify extends Assert
      * {@code Runnable} is most appropriate when a subclass of {@link RuntimeException} will be thrown.
      * If a checked exception will be thrown, the form {@link #assertThrowsWithCause(Class, Class, Callable)}
      * may be more convenient.
-     * <p>
      * <p>
      * e.g.
      * <pre>
@@ -3429,15 +3417,13 @@ public final class Verify extends Assert
                                 + expectedExceptionClass.getName()
                                 + '>',
                         expectedExceptionClass,
-                        ex.getClass()
-                );
+                        ex.getClass());
                 Throwable actualCauseClass = ex.getCause();
                 Assert.assertNotNull(
                         "Caught exception with null cause, expected cause of type <"
                                 + expectedCauseClass.getName()
                                 + '>',
-                        actualCauseClass
-                );
+                        actualCauseClass);
                 Assert.assertSame(
                         "Caught exception with cause of type<"
                                 + actualCauseClass.getClass().getName()
@@ -3445,8 +3431,7 @@ public final class Verify extends Assert
                                 + expectedCauseClass.getName()
                                 + '>',
                         expectedCauseClass,
-                        actualCauseClass.getClass()
-                );
+                        actualCauseClass.getClass());
                 return;
             }
             catch (AssertionError e)

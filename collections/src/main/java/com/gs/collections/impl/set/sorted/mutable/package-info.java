@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,6 @@
 /**
  * This package contains implementations of {@link com.gs.collections.api.set.sorted.MutableSortedSet}.
  * <p>
- *
- * </p>
- * <p>
  *     This package contains 4 sorted mutable set implementation:
  * <ul>
  *     <li>
@@ -35,7 +32,6 @@
  *          {@link com.gs.collections.impl.set.sorted.mutable.UnmodifiableSortedSet} -  an unmodifiable view of a SortedSet.
  *     </li>
  * </ul>
- * </p>
  * <p>
  *     This package contains 1 factory implementation:
  * <ul>
@@ -43,6 +39,5 @@
  *          {@link com.gs.collections.impl.set.sorted.mutable.MutableSortedSetFactoryImpl} - a factory which creates instances of type {@link com.gs.collections.api.set.sorted.MutableSortedSet}.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.impl.set.sorted.mutable;

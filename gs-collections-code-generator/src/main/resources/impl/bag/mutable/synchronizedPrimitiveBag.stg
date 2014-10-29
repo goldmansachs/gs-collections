@@ -40,7 +40,6 @@ import net.jcip.annotations.ThreadSafe;
  * {@link <name>Iterator}, as per {@link Collections#synchronizedCollection(Collection)}.
  * \<p>
  * This file was automatically generated from template file synchronizedPrimitiveBag.stg.
- * \</p>
  *
  * @see Mutable<name>Bag#asSynchronized()
  * @see MutableBag#asSynchronized()

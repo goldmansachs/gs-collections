@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains interfaces for BiMap API.
  * <p>
  *      A BiMap is a map that allows users to look up key-value pairs from either direction. Uniqueness is enforced on both the keys and values.
- * </p>
  * <p>
  *     This package contains 3 interfaces:
  * <ul>
@@ -32,6 +31,5 @@
  *          {@link com.gs.collections.api.bimap.ImmutableBiMap} - a BiMap whose contents cannot be altered after initialization.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.api.bimap;

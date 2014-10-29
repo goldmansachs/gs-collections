@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains implementations of the immutable primitive bag interfaces.
  * <p>
  *     A immutable primitive bag is similar to an {@link com.gs.collections.api.bag.ImmutableBag}, but is memory-optimized for primitives.
- * </p>
  */
 package com.gs.collections.impl.bag.immutable.primitive;

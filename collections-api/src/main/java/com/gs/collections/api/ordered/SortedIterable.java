@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ public interface SortedIterable<T> extends RichIterable<T>
 
     /**
      * Returns a new {@code SortedIterable} containing the distinct elements in this iterable.
-     * <p/>
+     * <p>
      * Conceptually similar to {@link #toSet()}.{@link #toList()} but retains the original order. If an element appears
      * multiple times in this iterable, the first one will be copied into the result.
      *
@@ -81,9 +81,8 @@ public interface SortedIterable<T> extends RichIterable<T>
      * Returns the minimum element out of this container based on the natural order, not the order of this container.
      * If you want the minimum element based on the order of this container, use {@link #getFirst()}.
      *
-     * @throws ClassCastException if the elements are not {@link Comparable}
-     * @throws java.util.NoSuchElementException
-     *                            if the SortedIterable is empty
+     * @throws ClassCastException               if the elements are not {@link Comparable}
+     * @throws java.util.NoSuchElementException if the SortedIterable is empty
      */
     T min();
 
@@ -91,9 +90,8 @@ public interface SortedIterable<T> extends RichIterable<T>
      * Returns the maximum element out of this container based on the natural order, not the order of this container.
      * If you want the maximum element based on the order of this container, use {@link #getLast()}.
      *
-     * @throws ClassCastException if the elements are not {@link Comparable}
-     * @throws java.util.NoSuchElementException
-     *                            if the SortedIterable is empty
+     * @throws ClassCastException               if the elements are not {@link Comparable}
+     * @throws java.util.NoSuchElementException if the SortedIterable is empty
      */
     T max();
 

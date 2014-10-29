@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains implementations of the mutable primitive stack interfaces.
  * <p>
  *     Primitive Stack is similar to {@link com.gs.collections.api.stack.MutableStack} that is memory-optimized for primitives.
- * </p>
  */
 package com.gs.collections.impl.stack.mutable.primitive;

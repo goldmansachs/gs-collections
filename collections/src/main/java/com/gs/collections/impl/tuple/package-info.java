@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains implementations of {@link com.gs.collections.api.tuple.Pair} and {@link com.gs.collections.api.tuple.Twin}.
  * <p>
  *     A tuple is a container that holds two related objects.
- * </p>
  * <p>
  *     This package contains the following implementations:
  * <ul>
@@ -35,6 +34,5 @@
  *          {@link com.gs.collections.impl.tuple.TwinImpl} - a convenience class for PairImpl, that has the same type for both items.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.impl.tuple;

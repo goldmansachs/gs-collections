@@ -615,7 +615,6 @@ public final class ListIterate
      * from is less than the to, the list is iterated in forward order. If the from is greater than the to, then the
      * list is iterated in the reverse order.
      * <p>
-     * <p>
      * <pre>e.g.
      * MutableList<People> people = FastList.newListWith(ted, mary, bob, sally);
      * ListIterate.forEach(people, 0, 1, new Procedure<Person>()
@@ -663,7 +662,6 @@ public final class ListIterate
      * from is less than the to, the list is iterated in forward order. If the from is greater than the to, then the
      * list is iterated in the reverse order. The index passed into the ObjectIntProcedure is the actual index of the
      * range.
-     * <p>
      * <p>
      * <pre>e.g.
      * MutableList<People> people = FastList.newListWith(ted, mary, bob, sally);

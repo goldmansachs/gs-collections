@@ -148,6 +148,7 @@ public class ImmutableHashBag<T>
         return this.delegate.groupByEach(function, target);
     }
 
+    @Override
     public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
         return this.delegate.groupByUniqueKey(function).toImmutable();

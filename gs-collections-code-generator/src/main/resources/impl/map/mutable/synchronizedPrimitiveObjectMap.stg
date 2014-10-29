@@ -109,7 +109,6 @@ import net.jcip.annotations.GuardedBy;
  * standard JDK iterator or JDK 5 for loop, as per {@link Collections#synchronizedCollection(Collection)}.
  * \<p>
  * This file was automatically generated from template file synchronizedPrimitiveObjectMap.stg.
- * \</p>
  *
  * @see Mutable<name>ObjectMap#asSynchronized()
  * @see MutableMap#asSynchronized()

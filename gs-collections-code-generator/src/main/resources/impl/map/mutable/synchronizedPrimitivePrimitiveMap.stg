@@ -63,7 +63,6 @@ import net.jcip.annotations.GuardedBy;
  * {@link Mutable<name2>Iterator} as per {@link Collections#synchronizedCollection(Collection)}.
  * \<p>
  * This file was automatically generated from template file synchronizedPrimitivePrimitiveMap.stg.
- * \</p>
  *
  * @see Mutable<name1><name2>Map#asSynchronized()
  * @see MutableMap#asSynchronized()

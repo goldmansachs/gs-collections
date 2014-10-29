@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains implementations of the mutable primitive-primitive, primitive-object and object-primitive map interfaces.
  * <p>
  *     A mutable primitive map is similar to a {@link com.gs.collections.api.map.MutableMap}, but is memory-optimized for primitives.
- * </p>
  */
 package com.gs.collections.impl.map.mutable.primitive;

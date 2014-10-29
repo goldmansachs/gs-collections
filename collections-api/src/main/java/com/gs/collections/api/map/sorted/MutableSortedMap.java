@@ -108,7 +108,7 @@ public interface MutableSortedMap<K, V>
      * Any query operations on the returned map that "read through" to this map and attempt
      * to modify the returned map, whether direct or via its iterator, result in an
      * {@link UnsupportedOperationException}.
-     * <p/>
+     * <p>
      * The returned map will be <tt>Serializable</tt> if this map is <tt>Serializable</tt>.
      *
      * @return an unmodifiable view of this map.
@@ -118,7 +118,7 @@ public interface MutableSortedMap<K, V>
     /**
      * Returns an immutable copy of this map.
      * If the map is immutable, it returns itself.
-     * <p/>
+     * <p>
      * The returned map will be <tt>Serializable</tt> if this map is <tt>Serializable</tt>.
      */
     ImmutableSortedMap<K, V> toImmutable();
@@ -128,7 +128,7 @@ public interface MutableSortedMap<K, V>
      * map.  In order to guarantee serial access, it is critical that
      * <strong>all</strong> access to the backing map is accomplished
      * through the returned map.<p>
-     * <p/>
+     * <p>
      * It is imperative that the user manually synchronize on the returned
      * map when iterating over any of its collection views:
      * <pre>
@@ -144,7 +144,7 @@ public interface MutableSortedMap<K, V>
      *  }
      * </pre>
      * Failure to follow this advice may result in non-deterministic behavior.
-     * <p/>
+     * <p>
      * The preferred way of iterating over a synchronized collection is to use the collection.forEach()
      * method which is properly synchronized internally.
      * <pre>
@@ -160,8 +160,8 @@ public interface MutableSortedMap<K, V>
      *      }
      *  });
      * </pre>
-     * <p/>
-     * <p>The returned map will be serializable if the specified map is
+     * <p>
+     * The returned map will be serializable if the specified map is
      * serializable.
      */
     MutableSortedMap<K, V> asSynchronized();

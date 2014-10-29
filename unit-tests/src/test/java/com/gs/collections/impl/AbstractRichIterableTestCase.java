@@ -203,8 +203,7 @@ public abstract class AbstractRichIterableTestCase
                 this.newWith(1, 2, 3, 4, 5).selectWith(
                         Predicates2.<Integer>lessThan(),
                         3),
-                1, 2
-        );
+                1, 2);
     }
 
     @Test
@@ -575,15 +574,13 @@ public abstract class AbstractRichIterableTestCase
                 this.newWith(1, 2, 3, 4, 5).detectWithIfNone(
                         Predicates2.<Integer>greaterThan(),
                         4,
-                        function)
-        );
+                        function));
         Assert.assertEquals(
                 Integer.valueOf(-42),
                 this.newWith(1, 2, 3, 4, 5).detectWithIfNone(
                         Predicates2.<Integer>lessThan(),
                         0,
-                        function)
-        );
+                        function));
     }
 
     @Test
@@ -648,15 +645,13 @@ public abstract class AbstractRichIterableTestCase
                 this.newWith(1, 2, 3).collectIf(
                         Integer.class::isInstance,
                         Object::toString),
-                "1", "2", "3"
-        );
+                "1", "2", "3");
         Verify.assertContainsAll(
                 this.newWith(1, 2, 3).collectIf(
                         Integer.class::isInstance,
                         Object::toString,
                         UnifiedSet.<String>newSet()),
-                "1", "2", "3"
-        );
+                "1", "2", "3");
     }
 
     @Test

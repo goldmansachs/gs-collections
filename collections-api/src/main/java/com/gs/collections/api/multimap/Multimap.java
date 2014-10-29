@@ -48,10 +48,8 @@ import com.gs.collections.api.tuple.Pair;
  * #keyMultiValuePairsView()}).
  * <p>
  *
- * @param <K>
- *         the type of keys used
- * @param <V>
- *         the type of mapped values
+ * @param <K> the type of keys used
+ * @param <V> the type of mapped values
  * @since 1.0
  */
 @SuppressWarnings("JavaDoc")
@@ -141,26 +139,22 @@ public interface Multimap<K, V>
     /**
      * Returns {@code true} if any values are mapped to the specified key.
      *
-     * @param key
-     *         the key to search for
+     * @param key the key to search for
      */
     boolean containsKey(Object key);
 
     /**
      * Returns {@code true} if any key is mapped to the specified value.
      *
-     * @param value
-     *         the value to search for
+     * @param value the value to search for
      */
     boolean containsValue(Object value);
 
     /**
      * Returns {@code true} if the specified key-value pair is mapped.
      *
-     * @param key
-     *         the key to search for
-     * @param value
-     *         the value to search for
+     * @param key   the key to search for
+     * @param value the value to search for
      */
     boolean containsKeyAndValue(Object key, Object value);
 
@@ -169,8 +163,7 @@ public interface Multimap<K, V>
      * <p>
      * If the given key does not exist, an empty {@link RichIterable} is returned.
      *
-     * @param key
-     *         the key to search for
+     * @param key the key to search for
      */
     RichIterable<V> get(K key);
 
@@ -212,8 +205,7 @@ public interface Multimap<K, V>
     /**
      * Returns a new {@link MutableMap} of keys from this Multimap to the mapped values as a {@link RichIterable}.
      *
-     * @param collectionFactory
-     *         used to create the collections that hold the values and affects the return type
+     * @param collectionFactory used to create the collections that hold the values and affects the return type
      */
     <R extends Collection<V>> MutableMap<K, R> toMap(Function0<R> collectionFactory);
 
@@ -222,22 +214,20 @@ public interface Multimap<K, V>
      * <p>
      * Two Multimaps are equal when their map views (as returned by {@link #toMap}) are also equal.
      * <p>
-     * <p>In general, two Multimaps with identical key-value mappings may or may not be equal, depending on the type of
+     * In general, two Multimaps with identical key-value mappings may or may not be equal, depending on the type of
      * the collections holding the values. If the backing collections are Sets, then two instances with the same
      * key-value mappings are equal, but if the backing collections are Lists, equality depends on the ordering of the
      * values for each key.
      * <p>
      * Any two empty Multimaps are equal, because they both have empty {@link #toMap} views.
      */
-    @Override
     boolean equals(Object obj);
 
     /**
      * Returns the hash code for this Multimap.
      * <p>
-     * <p>The hash code of a Multimap is defined as the hash code of the map view, as returned by {@link #toMap}.
+     * The hash code of a Multimap is defined as the hash code of the map view, as returned by {@link #toMap}.
      */
-    @Override
     int hashCode();
 
     /**
@@ -281,8 +271,7 @@ public interface Multimap<K, V>
      * </pre>
      * <p>
      *
-     * @param predicate
-     *         a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the select criteria
+     * @param predicate a {@link Predicate2} to use as the select criteria
      * @return {@code Multimap}, which contains elements as a result of the select criteria
      * @since 6.0
      */
@@ -303,10 +292,8 @@ public interface Multimap<K, V>
      * </pre>
      * <p>
      *
-     * @param predicate
-     *         a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the select criteria
-     * @param target
-     *         the Multimap to append to for all elements in this {@code Multimap} that satisfy the {@code predicate}
+     * @param predicate a {@link Predicate2} to use as the select criteria
+     * @param target    the Multimap to append to for all elements in this {@code Multimap} that satisfy the {@code predicate}
      * @return {@code target}, which contains appended elements as a result of the select criteria
      * @since 6.0
      */
@@ -327,8 +314,7 @@ public interface Multimap<K, V>
      * </pre>
      * <p>
      *
-     * @param predicate
-     *         a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the reject criteria
+     * @param predicate a {@link Predicate2} to use as the reject criteria
      * @return {@code Multimap}, which contains elements that don't satisfy the {@code predicate}
      * @since 6.0
      */
@@ -349,10 +335,8 @@ public interface Multimap<K, V>
      * </pre>
      * <p>
      *
-     * @param predicate
-     *         a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the reject criteria
-     * @param target
-     *         the Multimap to append to for all elements in this {@code Multimap} that don't satisfy the {@code predicate}
+     * @param predicate a {@link Predicate2} to use as the reject criteria
+     * @param target    the Multimap to append to for all elements in this {@code Multimap} that don't satisfy the {@code predicate}
      * @return {@code target}, which contains appended elements that don't satisfy the {@code predicate}
      * @since 6.0
      */
@@ -374,8 +358,7 @@ public interface Multimap<K, V>
      * </pre>
      * <p>
      *
-     * @param predicate
-     *         a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the select criteria
+     * @param predicate a {@link Predicate2} to use as the select criteria
      * @return {@code Multimap}, which contains elements as a result of the select criteria
      * @since 6.0
      */
@@ -396,10 +379,8 @@ public interface Multimap<K, V>
      * </pre>
      * <p>
      *
-     * @param predicate
-     *         a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the select criteria
-     * @param target
-     *         the Multimap to append to for all elements in this {@code Multimap} that satisfy the {@code predicate}
+     * @param predicate a {@link Predicate2} to use as the select criteria
+     * @param target    the Multimap to append to for all elements in this {@code Multimap} that satisfy the {@code predicate}
      * @return {@code target}, which contains appended elements as a result of the select criteria
      * @since 6.0
      */
@@ -420,8 +401,7 @@ public interface Multimap<K, V>
      * </pre>
      * <p>
      *
-     * @param predicate
-     *         a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the reject criteria
+     * @param predicate a {@link Predicate2} to use as the reject criteria
      * @return {@code Multimap}, which contains elements that don't satisfy the {@code predicate}
      * @since 6.0
      */
@@ -442,10 +422,8 @@ public interface Multimap<K, V>
      * </pre>
      * <p>
      *
-     * @param predicate
-     *         a {@link com.gs.collections.api.block.predicate.Predicate2} to use as the reject criteria
-     * @param target
-     *         the Multimap to append to for all elements in this {@code Multimap} that don't satisfy the {@code predicate}
+     * @param predicate a {@link Predicate2} to use as the reject criteria
+     * @param target    the Multimap to append to for all elements in this {@code Multimap} that don't satisfy the {@code predicate}
      * @return {@code target}, which contains appended elements that don't satisfy the {@code predicate}
      * @since 6.0
      */
@@ -465,8 +443,7 @@ public interface Multimap<K, V>
      * });
      * </pre>
      *
-     * @param function
-     *         a {@link Function2} to use for transformation
+     * @param function a {@link Function2} to use for transformation
      * @return {@code Multimap}, which contains elements as a result of the transformation
      * @since 6.0
      */
@@ -485,10 +462,8 @@ public interface Multimap<K, V>
      * }, HashBagMultimap.<String, String>newMultimap());
      * </pre>
      *
-     * @param function
-     *         a {@link Function2} to use for transformation
-     * @param target
-     *         the Multimap to append for all elements in this {@code Multimap} that are evaluated in {@code function}
+     * @param function a {@link Function2} to use for transformation
+     * @param target   the Multimap to append for all elements in this {@code Multimap} that are evaluated in {@code function}
      * @return {@code target}, which contains appended elements as a result of the transformation
      * @since 6.0
      */
@@ -508,8 +483,7 @@ public interface Multimap<K, V>
      * });
      * </pre>
      *
-     * @param function
-     *         a {@link Function} to use for transformation
+     * @param function a {@link Function} to use for transformation
      * @return {@code Multimap}, which contains elements as a result of the transformation
      * @since 6.0
      */
@@ -528,10 +502,8 @@ public interface Multimap<K, V>
      * }, FastListMultimap.<Integer, String>newMultimap());
      * </pre>
      *
-     * @param function
-     *         a {@link Function} to use for transformation
-     * @param target
-     *         the Multimap to append for all elements in this {@code Multimap} that are evaluated in {@code function}
+     * @param function a {@link Function} to use for transformation
+     * @param target   the Multimap to append for all elements in this {@code Multimap} that are evaluated in {@code function}
      * @return {@code target}, which contains appended elements as a result of the transformation
      * @since 6.0
      */

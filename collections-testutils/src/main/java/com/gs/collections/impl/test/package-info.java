@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,5 @@
  *       {@link com.gs.collections.impl.test.Verify} - an extension of the {@link org.junit.Assert} class, which adds useful additional "assert" methods.
  *   </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.impl.test;

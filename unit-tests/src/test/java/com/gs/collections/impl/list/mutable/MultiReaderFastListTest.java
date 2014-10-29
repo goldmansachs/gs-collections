@@ -380,15 +380,13 @@ public class MultiReaderFastListTest extends AbstractListTestCase
                 FastList.newListWith("1", "2", "3"),
                 MultiReaderFastList.newListWith(1, 2, 3).collectIf(
                         Integer.class::isInstance,
-                        String::valueOf)
-        );
+                        String::valueOf));
         Assert.assertEquals(
                 FastList.newListWith("1", "2", "3"),
                 MultiReaderFastList.newListWith(1, 2, 3).collectIf(
                         Integer.class::isInstance,
                         String::valueOf,
-                        FastList.<String>newList())
-        );
+                        FastList.<String>newList()));
     }
 
     @Override
@@ -401,8 +399,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
                 MultiReaderFastList.newListWith(1, 2, 3).collectWith(
                         addZeroFunction,
                         0,
-                        FastList.<Integer>newList()), 1, 2, 3
-        );
+                        FastList.<Integer>newList()), 1, 2, 3);
     }
 
     @Override

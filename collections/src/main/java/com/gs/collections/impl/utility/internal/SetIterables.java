@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import com.gs.collections.impl.utility.LazyIterate;
 
 /**
  * Set algebra operations.
- * <p/>
+ * <p>
  * Most operations are non-destructive, i.e. no input sets are modified during execution.
  * The exception is operations ending in "Into." These accept the target collection of
  * the final calculation as the first parameter.

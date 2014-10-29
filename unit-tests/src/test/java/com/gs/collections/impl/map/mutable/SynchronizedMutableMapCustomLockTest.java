@@ -19,7 +19,7 @@ package com.gs.collections.impl.map.mutable;
 import com.gs.collections.api.map.MutableMap;
 
 /**
- * JUnit test for {@link com.gs.collections.impl.map.mutable.SynchronizedMutableMap}.
+ * JUnit test for {@link SynchronizedMutableMap}.
  */
 public class SynchronizedMutableMapCustomLockTest extends MutableMapTestCase
 {

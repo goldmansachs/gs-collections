@@ -22,9 +22,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit test for {@link com.gs.collections.impl.tuple.primitive.BooleanBooleanPairImpl}.
+ * JUnit test for {@link BooleanBooleanPairImpl}.
  */
-
 public class BooleanBooleanPairImplTest
 {
     @Test

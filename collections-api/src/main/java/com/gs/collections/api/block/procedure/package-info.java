@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains interfaces for Procedure API.
  * <p>
  *     A Procedure is a single argument lambda which has no return argument.
- * </p>
  * <p>
  *     This package contains the following interfaces:
  *     <ul>
@@ -29,6 +28,5 @@
  *              {@link com.gs.collections.api.block.procedure.Procedure2} - a two argument Procedure. Used by forEachWith() methods and for MapIterate.forEachKeyValue().
  *         </li>
  *     </ul>
- * </p>
  */
 package com.gs.collections.api.block.procedure;

@@ -377,15 +377,13 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
                 this.newWith(1, true, 2, false, 3, true).collectIf(
                         ObjectBooleanPair.class::isInstance,
                         String::valueOf),
-                "1:true", "2:false", "3:true"
-        );
+                "1:true", "2:false", "3:true");
         Verify.assertContainsAll(
                 this.newWith(1, true, 2, false, 3, true).collectIf(
                         ObjectBooleanPair.class::isInstance,
                         String::valueOf,
                         UnifiedSet.<String>newSet()),
-                "1:true", "2:false", "3:true"
-        );
+                "1:true", "2:false", "3:true");
     }
 
     @Test
@@ -611,8 +609,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
                         PrimitiveTuples.pair(Integer.valueOf(5), false),
                         PrimitiveTuples.pair(Integer.valueOf(2), true),
                         PrimitiveTuples.pair(Integer.valueOf(1), true)),
-                set
-        );
+                set);
     }
 
     @Test
@@ -766,8 +763,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
         Assert.assertEquals(Bags.immutable.of(FastList.newListWith(PrimitiveTuples.pair(Integer.valueOf(1), true)),
                         FastList.newListWith(PrimitiveTuples.pair(Integer.valueOf(2), false)),
                         FastList.newListWith(PrimitiveTuples.pair(Integer.valueOf(3), true))),
-                collection.chunk(1).toBag()
-        );
+                collection.chunk(1).toBag());
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -153,7 +153,7 @@ public interface MutableMap<K, V>
      *  });
      * </pre>
      * <p>
-     * <p>The returned map will be serializable if the specified map is serializable.
+     * The returned map will be serializable if the specified map is serializable.
      */
     MutableMap<K, V> asSynchronized();
 

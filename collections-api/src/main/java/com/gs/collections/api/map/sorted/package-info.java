@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains mutable and immutable sorted map interfaces.
  * <p>
  *     A sorted map is a map which contains elements in sorted order. It allows for faster retrievals.
- * </p>
  * <p>
  * This package contains 3 interfaces:
  * <ul>
@@ -32,6 +31,5 @@
  *         {@link com.gs.collections.api.map.sorted.SortedMapIterable} - a map which contains elements in sorted order.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.api.map.sorted;

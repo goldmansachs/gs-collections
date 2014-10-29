@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains API for primitive predicates.
  * <p>
  *     A primitive predicate is a lambda which returns a boolean. It reduces the overhead of autoboxing where primitives can be directly used.
- * </p>
  */
 package com.gs.collections.api.block.predicate.primitive;

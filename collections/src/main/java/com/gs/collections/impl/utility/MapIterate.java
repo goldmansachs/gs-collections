@@ -131,7 +131,7 @@ public final class MapIterate
     /**
      * Get and return the value in the Map at the specified key, or if there is no value at the key, return the result
      * of evaluating the specified {@link Function0}, and put that value in the map at the specified key.
-     * <p/>
+     * <p>
      * This method handles the {@code null}-value-at-key case correctly.
      */
     public static <K, V> V getIfAbsentPut(Map<K, V> map, K key, Function0<? extends V> instanceBlock)

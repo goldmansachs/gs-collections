@@ -55,7 +55,7 @@ import com.gs.collections.api.tuple.Twin;
  * detect, collect, injectInto, anySatisfy, allSatisfy. These include count, remove, partition, collectIf.  The API also
  * includes converter methods to convert a MutableCollection to a List (toList), to a sorted List (toSortedList), to a
  * Set (toSet), and to a Map (toMap).
- * <p/>
+ * <p>
  * There are several extensions to MutableCollection, including MutableList, MutableSet, and MutableBag.
  */
 public interface MutableCollection<T>
@@ -67,7 +67,7 @@ public interface MutableCollection<T>
      * the original collection and appending the new element to form the new collection.  In the case of mutable
      * collections, the original collection is modified, and is returned.  In order to use this method properly with
      * mutable and fixed size collections the following approach must be taken:
-     * <p/>
+     * <p>
      * <pre>
      * MutableCollection<String> list;
      * list = list.with("1");
@@ -89,7 +89,7 @@ public interface MutableCollection<T>
      * that would be left from the original collection after calling remove.  In the case of mutable collections, the
      * original collection is modified, and is returned.  In order to use this method properly with mutable and fixed
      * size collections the following approach must be taken:
-     * <p/>
+     * <p>
      * <pre>
      * MutableCollection<String> list;
      * list = list.without("1");
@@ -111,7 +111,7 @@ public interface MutableCollection<T>
      * elements of  the original collection and appending the new elements to form the new collection.  In the case of
      * mutable collections, the original collection is modified, and is returned.  In order to use this method properly
      * with mutable and fixed size collections the following approach must be taken:
-     * <p/>
+     * <p>
      * <pre>
      * MutableCollection<String> list;
      * list = list.withAll(FastList.newListWith("1", "2"));
@@ -132,7 +132,7 @@ public interface MutableCollection<T>
      * elements that would be left from the original collection after calling removeAll.  In the case of mutable
      * collections, the original collection is modified, and is returned.  In order to use this method properly with
      * mutable and fixed size collections the following approach must be taken:
-     * <p/>
+     * <p>
      * <pre>
      * MutableCollection<String> list;
      * list = list.withoutAll(FastList.newListWith("1", "2"));
@@ -156,7 +156,7 @@ public interface MutableCollection<T>
 
     /**
      * Returns a MutableCollection with all elements that evaluate to true for the specified predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.<b>select</b>(new Predicate&lt;Person&gt;()
      * {
@@ -171,7 +171,7 @@ public interface MutableCollection<T>
 
     /**
      * Returns a MutableCollection with all elements that evaluate to true for the specified predicate2 and parameter.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return integers.<b>selectWith</b>(PredicatesLite.equal(), Integer.valueOf(5));
      * </pre>
@@ -180,7 +180,7 @@ public interface MutableCollection<T>
 
     /**
      * Returns a MutableCollection with all elements that evaluate to false for the specified predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.reject(new Predicate&lt;Person&gt;()
      * {
@@ -190,7 +190,7 @@ public interface MutableCollection<T>
      *     }
      * });
      * </pre>
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.reject(Predicates.attributeEqual("lastName", "Smith"));
      * </pre>
@@ -199,7 +199,7 @@ public interface MutableCollection<T>
 
     /**
      * Returns a MutableCollection with all elements that evaluate to false for the specified predicate2 and parameter.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return integers.<b>rejectWith</b>(PredicatesLite.equal(), Integer.valueOf(5));
      * </pre>
@@ -210,7 +210,7 @@ public interface MutableCollection<T>
 
     /**
      * Filters a collection into two separate collections based on a predicate returned via a Pair.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return lastNames.<b>selectAndRejectWith</b>(PredicatesLite.lessThan(), "Mason");
      * </pre>
@@ -227,7 +227,7 @@ public interface MutableCollection<T>
 
     /**
      * Removes all elements in the collection that evaluate to true for the specified predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return lastNames.<b>removeIf</b>(Predicates.isNull());
      * </pre>
@@ -236,7 +236,7 @@ public interface MutableCollection<T>
 
     /**
      * Removes all elements in the collection that evaluate to true for the specified predicate2 and parameter.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return lastNames.<b>removeIfWith</b>(PredicatesLite.isNull(), null);
      * </pre>
@@ -246,7 +246,7 @@ public interface MutableCollection<T>
     /**
      * Returns a new MutableCollection with the results of applying the specified function to each element of the source
      * collection.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * return people.collect(new Function&lt;Person, String&gt;()
      * {
@@ -280,7 +280,7 @@ public interface MutableCollection<T>
     /**
      * Returns a new MutableCollection with the results of applying the specified function to each element of the source
      * collection, but only for elements that evaluate to true for the specified predicate.
-     * <p/>
+     * <p>
      * <pre>e.g.
      * Lists.mutable.of().with(1, 2, 3).collectIf(Predicates.notNull(), Functions.getToString())
      * </pre>
@@ -299,11 +299,11 @@ public interface MutableCollection<T>
      * access to internal collections.  Query operations on the returned collection "read through" to this collection,
      * and attempts to modify the returned collection, whether direct or via its iterator, result in an
      * <tt>UnsupportedOperationException</tt>.
-     * <p/>
+     * <p>
      * The returned collection does <i>not</i> pass the hashCode and equals operations through to the backing
      * collection, but relies on <tt>Object</tt>'s <tt>equals</tt> and <tt>hashCode</tt> methods.  This is necessary to
      * preserve the contracts of these operations in the case that the backing collection is a set or a list.<p>
-     * <p/>
+     * <p>
      * The returned collection will be serializable if this collection is serializable.
      *
      * @return an unmodifiable view of this collection.
@@ -315,7 +315,7 @@ public interface MutableCollection<T>
      * Returns a synchronized (thread-safe) collection backed by this collection.  In order to guarantee serial access,
      * it is critical that <strong>all</strong> access to the backing collection is accomplished through the returned
      * collection.
-     * <p/>
+     * <p>
      * It is imperative that the user manually synchronize on the returned collection when iterating over it using the
      * standard JDK iterator or JDK 5 for loop.
      * <pre>
@@ -329,7 +329,7 @@ public interface MutableCollection<T>
      *  }
      * </pre>
      * Failure to follow this advice may result in non-deterministic behavior.
-     * <p/>
+     * <p>
      * The preferred way of iterating over a synchronized collection is to use the collection.forEach() method which is
      * properly synchronized internally.
      * <pre>
@@ -343,11 +343,11 @@ public interface MutableCollection<T>
      *      }
      *  });
      * </pre>
-     * <p/>
+     * <p>
      * The returned collection does <i>not</i> pass the <tt>hashCode</tt> and <tt>equals</tt> operations through to the
      * backing collection, but relies on <tt>Object</tt>'s equals and hashCode methods.  This is necessary to preserve
      * the contracts of these operations in the case that the backing collection is a set or a list.
-     * <p/>
+     * <p>
      * The returned collection will be serializable if this collection is serializable.
      *
      * @return a synchronized view of this collection.

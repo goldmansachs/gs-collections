@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,11 @@
  * This package contains implementations of the {@link com.gs.collections.api.list.ListIterable} interface.
  * <p>
  *     A {@link com.gs.collections.api.list.ListIterable} is an {@link java.lang.Iterable} whose items are ordered and may be accessed directly by index.
- * </p>
  * <p>
  *     This package contains the following implementations:
  * <ul>
  *     <li>
  *          {@link com.gs.collections.impl.list.Interval} - a range of integers that may be iterated over using a step value.
  *     </li>
- * </p>
  */
 package com.gs.collections.impl.list;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains implementations of the {@link com.gs.collections.api.list.MutableList} interface.
  * <p>
  *     A MutableList is an implementation of a {@link java.util.List} which provides methods matching the Smalltalk Collection protocol.
- * </p>
  * <p>
  *     This package contains the following implementations:
  * <ul>
@@ -47,7 +46,6 @@
  *          {@link com.gs.collections.impl.list.mutable.UnmodifiableMutableList} - an unmodifiable view of a list.
  *     </li>
  * </ul>
- * </p>
  * <p>
  *     This package contains one factory implementation:
  * <ul>
@@ -55,6 +53,5 @@
  *         {@link com.gs.collections.impl.list.mutable.MutableListFactoryImpl} - a factory which creates instances of type {@link com.gs.collections.api.list.MutableList}.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.impl.list.mutable;

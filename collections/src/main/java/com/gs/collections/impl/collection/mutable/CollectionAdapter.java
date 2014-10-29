@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ import com.gs.collections.impl.utility.Iterate;
 /**
  * This class provides a MutableCollection interface wrapper around a JDK Collections Collection interface instance.  All
  * of the MutableCollection interface methods are supported in addition to the JDK Collection interface methods.
- * <p/>
+ * <p>
  * To create a new instance that wraps a collection with the MutableSet interface, use the {@link #wrapSet(Iterable)}
  * factory method.  To create a new instance that wraps a collection with the MutableList interface, use the
  * {@link #wrapList(Iterable)} factory method.  To wrap a collection with the MutableCollection interface alone, use

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,11 @@
  * This package contains implementations of the {@link com.gs.collections.api.map.MapIterable} interface.
  * <p>
  *     A {@link com.gs.collections.api.map.MapIterable} contains read-only Map API, with the minor exception inherited from java.lang.Iterable.
- * </p>
  * <p>
  *     This package contains the following implementations:
  * <ul>
  *     <li>
  *          {@link com.gs.collections.impl.map.SynchronizedMapIterable} - a synchronized view of a map.
  *     </li>
- * </p>
  */
 package com.gs.collections.impl.map;

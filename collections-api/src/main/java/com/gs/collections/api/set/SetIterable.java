@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,12 +113,10 @@ public interface SetIterable<T> extends RichIterable<T>
     /**
      * Follows the same general contract as {@link Set#equals(Object)}.
      */
-    @Override
     boolean equals(Object o);
 
     /**
      * Follows the same general contract as {@link Set#hashCode()}.
      */
-    @Override
     int hashCode();
 }

@@ -49,13 +49,13 @@ import com.gs.collections.api.tuple.Pair;
 /**
  * StackIterable is a last-in-first-out data structure. All iteration methods iterate from the "top" of the stack to the
  * "bottom". In other words, it processes the most recently added elements first.
- * <p/>
+ * <p>
  * For example:
- * <p/>
+ * <p>
  * {@link #forEach(Procedure)} iterates over every element, starting with the most recently added
- * <p/>
+ * <p>
  * {@link #getFirst()} returns the most recently added element, not the element that was added first
- * <p/>
+ * <p>
  * {@link #toString()} follows the same rules as {@link AbstractCollection#toString()} except it processes the elements
  * in the same order as {@code forEach()}.
  */
@@ -84,8 +84,6 @@ public interface StackIterable<T> extends RichIterable<T>
 
     /**
      * Should not work as it violates the contract of a Stack.
-     *
-     * @throws UnsupportedOperationException
      */
     T getLast();
 
@@ -98,13 +96,11 @@ public interface StackIterable<T> extends RichIterable<T>
     /**
      * Follows the same general contract as {@link List#equals(Object)}, but for Stacks.
      */
-    @Override
     boolean equals(Object o);
 
     /**
      * Follows the same general contract as {@link List#hashCode()}, but for Stacks.
      */
-    @Override
     int hashCode();
 
     /**

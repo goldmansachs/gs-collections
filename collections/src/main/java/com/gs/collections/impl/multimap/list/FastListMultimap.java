@@ -60,8 +60,7 @@ public final class FastListMultimap<K, V>
                 multimap.keysView().size(),
                 multimap instanceof FastListMultimap
                         ? ((FastListMultimap<?, ?>) multimap).initialListCapacity
-                        : DEFAULT_CAPACITY
-        );
+                        : DEFAULT_CAPACITY);
         this.putAll(multimap);
     }
 

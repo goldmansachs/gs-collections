@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,5 @@
  *             {@link com.gs.collections.impl.partition.bag.sorted.PartitionTreeBag} - Result of splitting a tree sorted bag into two tree sorted bags based on a Predicate.
  *         </li>
  *     </ul>
- * </p>
  */
 package com.gs.collections.impl.partition.bag.sorted;

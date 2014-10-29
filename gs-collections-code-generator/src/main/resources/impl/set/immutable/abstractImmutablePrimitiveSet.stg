@@ -39,7 +39,6 @@ import com.gs.collections.impl.set.primitive.Abstract<name>Set;
  *
  * @since 6.0.
  */
-
 public abstract class AbstractImmutable<name>Set extends Abstract<name>Set implements Immutable<name>Set, Serializable
 {
     public Immutable<name>Set newWith(<type> element)

@@ -43,7 +43,7 @@ import com.gs.collections.impl.utility.ListIterate;
 /**
  * This class provides a MutableList wrapper around a JDK Collections List interface instance.  All of the MutableList
  * interface methods are supported in addition to the JDK List interface methods.
- * <p/>
+ * <p>
  * To create a new wrapper around an existing List instance, use the {@link #adapt(List)} factory method.
  */
 public final class ListAdapter<T>

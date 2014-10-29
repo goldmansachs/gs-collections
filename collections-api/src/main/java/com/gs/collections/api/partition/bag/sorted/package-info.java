@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains interfaces for {@link com.gs.collections.api.partition.bag.sorted.PartitionSortedBag}.
  * <p>
  *     A PartitionSortedBag is the result of splitting a sorted bag into two sorted bags based on a Predicate.
- * </p>
  * <p>
  *      This package contains the following interfaces:
  * <ul>
@@ -29,6 +28,5 @@
  *         {@link com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag} - a modifiable PartitionSortedSet.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.api.partition.bag.sorted;

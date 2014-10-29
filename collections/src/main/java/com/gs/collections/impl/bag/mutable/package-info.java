@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
  * <p>
  *     A MutableBag is a {@link java.util.Collection} which contains elements that are unordered and may contain duplicate entries. It adds a protocol for
  * adding, removing, and determining the number of occurrences for an item.
- * </p>
  * <p>
  *     This package contains 3 bag implementations:
  * <ul>
@@ -33,7 +32,6 @@
  *          {@link com.gs.collections.impl.bag.mutable.UnmodifiableBag} - an unmodifiable view of a bag.
  *     </li>
  * </ul>
- * </p>
  * <p>
  *     This package contains one factory implementation:
  * <ul>
@@ -41,6 +39,5 @@
  *         {@link com.gs.collections.impl.bag.mutable.MutableBagFactoryImpl} - a factory which creates instances of type {@link com.gs.collections.api.bag.MutableBag}.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.impl.bag.mutable;

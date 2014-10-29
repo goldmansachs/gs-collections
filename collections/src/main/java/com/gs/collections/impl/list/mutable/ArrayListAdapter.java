@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +68,7 @@ import com.gs.collections.impl.utility.Iterate;
 /**
  * This class provides a MutableList wrapper around a JDK Collections ArrayList instance.  All of the MutableList
  * interface methods are supported in addition to the JDK ArrayList methods.
- * <p/>
+ * <p>
  * To create a new wrapper around an existing ArrayList instance, use the {@link #adapt(ArrayList)} factory method.  To
  * create a new empty wrapper, use the {@link #newList()} or {@link #newList(int)} factory methods.
  */

@@ -851,8 +851,7 @@ public abstract class AbstractParallelIterableTestCase
                             }
                         });
                     }
-                }
-        );
+                });
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
 

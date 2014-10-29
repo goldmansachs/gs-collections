@@ -226,6 +226,7 @@ public abstract class AbstractMutableSet<T>
         return this.groupByEach(function, UnifiedSetMultimap.<V, T>newMultimap());
     }
 
+    @Override
     public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");

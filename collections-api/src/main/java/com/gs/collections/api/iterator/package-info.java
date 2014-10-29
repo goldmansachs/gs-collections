@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,5 @@
  * This package contains primitive iterator API.
  * <p>
  *     This package contains 8 iterator interfaces one each for boolean, byte, char, int, long, double, short and float.
- * </p>
  */
 package com.gs.collections.api.iterator;

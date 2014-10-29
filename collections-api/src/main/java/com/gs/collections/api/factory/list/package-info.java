@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,5 @@
  *          {@link com.gs.collections.api.factory.list.MutableListFactory} - a factory which creates instances of type {@link com.gs.collections.api.list.MutableList}.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.api.factory.list;

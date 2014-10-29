@@ -28,7 +28,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test of {@link com.gs.collections.impl.multimap.list.MultiReaderFastListMultimap}.
+ * Test of {@link MultiReaderFastListMultimap}.
  */
 public class MultiReaderFastListMultimapTest extends AbstractMutableListMultimapTestCase
 {

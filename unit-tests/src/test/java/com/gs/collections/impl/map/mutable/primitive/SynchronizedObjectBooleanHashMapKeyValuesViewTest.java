@@ -21,7 +21,6 @@ import com.gs.collections.api.map.primitive.MutableObjectBooleanMap;
 /**
  * Abstract JUnit test for {@link SynchronizedObjectBooleanMap#keyValuesView()}.
  */
-
 public class SynchronizedObjectBooleanHashMapKeyValuesViewTest extends AbstractObjectBooleanMapKeyValuesViewTestCase
 {
     @Override

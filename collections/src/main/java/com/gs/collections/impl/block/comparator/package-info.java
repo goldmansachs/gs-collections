@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,5 @@
  *          {@link  com.gs.collections.impl.block.comparator.FunctionComparator} - a simple {@link java.util.Comparator} that uses a {@link com.gs.collections.api.block.function.Function}.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.impl.block.comparator;

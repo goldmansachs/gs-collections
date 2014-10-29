@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,7 +90,7 @@ import com.gs.collections.impl.utility.internal.SortedSetIterables;
 /**
  * This class provides a MutableSortedSet wrapper around a JDK Collections SortedSet interface instance.  All of the MutableSortedSet
  * interface methods are supported in addition to the JDK SortedSet interface methods.
- * <p/>
+ * <p>
  * To create a new wrapper around an existing SortedSet instance, use the {@link #adapt(SortedSet)} factory method.
  */
 public final class SortedSetAdapter<T>

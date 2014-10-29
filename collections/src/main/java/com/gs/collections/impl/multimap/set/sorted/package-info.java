@@ -18,7 +18,6 @@
  * This package contains implementations of the {@link com.gs.collections.api.multimap.sortedset.SortedSetMultimap} interface.
  * <p>
  *     A {@link com.gs.collections.api.multimap.sortedset.SortedSetMultimap} is a type of {@code Multimap} that uses a sorted set as its underlying store for the multiple values of a given key.
- * </p>
  * <p>
  *     This package contains the following implementations:
  * <ul>
@@ -28,6 +27,5 @@
  *     <li>
  *          {@link com.gs.collections.impl.multimap.set.sorted.ImmutableSortedSetMultimapImpl} - the default {@code ImmutableSortedSetMultimap} implementation.
  *     </li>
- * </p>
  */
 package com.gs.collections.impl.multimap.set.sorted;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  * This package contains interfaces for {@link com.gs.collections.api.partition.bag.PartitionBag}.
  * <p>
  *     A PartitionBag is the result of splitting a {@link com.gs.collections.api.bag.Bag} into two bags based on a Predicate.
- * </p>
  * <p>
  *      This package contains 3 interfaces:
  * <ul>
@@ -32,6 +31,5 @@
  *         {@link com.gs.collections.api.partition.bag.PartitionImmutableBag} - the non-modifiable equivalent interface to {@link com.gs.collections.api.partition.bag.PartitionMutableBag}.
  *     </li>
  * </ul>
- * </p>
  */
 package com.gs.collections.api.partition.bag;
