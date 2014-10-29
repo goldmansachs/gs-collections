@@ -50,22 +50,22 @@ public final class Functions0
 
     public static <T> Function0<MutableList<T>> newFastList()
     {
-        return (Function0<MutableList<T>>) NEW_FAST_LIST_FUNCTION;
+        return (Function0<MutableList<T>>) (Function0<?>) NEW_FAST_LIST_FUNCTION;
     }
 
     public static <T> Function0<MutableSet<T>> newUnifiedSet()
     {
-        return (Function0<MutableSet<T>>) NEW_UNIFIED_SET_FUNCTION;
+        return (Function0<MutableSet<T>>) (Function0<?>) NEW_UNIFIED_SET_FUNCTION;
     }
 
     public static <T> Function0<MutableBag<T>> newHashBag()
     {
-        return (Function0<MutableBag<T>>) NEW_HASH_BAG_FUNCTION;
+        return (Function0<MutableBag<T>>) (Function0<?>) NEW_HASH_BAG_FUNCTION;
     }
 
     public static <K, V> Function0<MutableMap<K, V>> newUnifiedMap()
     {
-        return (Function0<MutableMap<K, V>>) NEW_UNIFIED_MAP_FUNCTION;
+        return (Function0<MutableMap<K, V>>) (Function0<?>) NEW_UNIFIED_MAP_FUNCTION;
     }
 
     public static <T> Function0<T> throwing(ThrowingFunction0<T> throwingFunction0)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,14 +32,12 @@ public class MultimapKeyValuesSerializingProcedure<K, V>
         this.out = out;
     }
 
-    @Override
     public void safeValue(K key, RichIterable<V> iterable) throws IOException
     {
         this.out.writeObject(key);
         this.out.writeInt(iterable.size());
         iterable.forEach(new CheckedProcedure<V>()
         {
-            @Override
             public void safeValue(V object) throws IOException
             {
                 MultimapKeyValuesSerializingProcedure.this.out.writeObject(object);

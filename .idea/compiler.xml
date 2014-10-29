@@ -49,7 +49,7 @@
       <module name="memory-tests" target="1.7" />
       <module name="performance-tests" target="1.8" />
       <module name="scala-unit-tests" target="1.5" />
-      <module name="serialization-tests" target="1.5" />
+      <module name="serialization-tests" target="1.6" />
       <module name="unit-tests" target="1.8" />
     </bytecodeTargetLevel>
   </component>

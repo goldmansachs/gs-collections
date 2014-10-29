@@ -371,7 +371,7 @@ public abstract class ImmutableBagTestCase
         Assert.assertEquals(this.numKeys(), result.sizeDistinct());
         for (int i = 1; i <= this.numKeys(); i++)
         {
-            Assert.assertEquals(i, result.occurrencesOf((char) ((int) '0' + i)));
+            Assert.assertEquals(i, result.occurrencesOf((char) ('0' + i)));
         }
     }
 
@@ -384,7 +384,7 @@ public abstract class ImmutableBagTestCase
         Assert.assertEquals(this.numKeys(), result.sizeDistinct());
         for (int i = 1; i <= this.numKeys(); i++)
         {
-            Assert.assertEquals(i, result.occurrencesOf((char) ((int) '0' + i)));
+            Assert.assertEquals(i, result.occurrencesOf((char) ('0' + i)));
         }
     }
 

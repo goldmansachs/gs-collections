@@ -131,9 +131,7 @@ public class AnagramTest
     public void anagramsUsingMapGetIfAbsentPutInsteadOfGroupBy()
     {
         MutableMap<Alphagram, MutableList<String>> map = UnifiedMap.newMap();
-        this.getWords().forEach(Procedures.cast(word -> {
-            map.getIfAbsentPut(new Alphagram(word), FastList::new).add(word);
-        }));
+        this.getWords().forEach(Procedures.cast(word -> map.getIfAbsentPut(new Alphagram(word), FastList::new).add(word)));
         MutableList<MutableList<String>> results =
                 map.select(iterable -> iterable.size() >= SIZE_THRESHOLD, Lists.mutable.<MutableList<String>>of())
                         .sortThisBy(iterable -> -iterable.size());

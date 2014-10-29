@@ -902,7 +902,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         ImmutableSortedSet<Integer> set = this.classUnderTest();
         LazyIterable<Pair<Integer, Integer>> cartesianProduct = set.cartesianProduct(UnifiedSet.newSet(Interval.oneTo(set.size())));
-        Assert.assertEquals((long) (set.size() * set.size()), (long) cartesianProduct.size());
+        Assert.assertEquals(set.size() * set.size(), cartesianProduct.size());
         Assert.assertEquals(set, cartesianProduct
                 .select(Predicates.attributeEqual((Function<Pair<?, Integer>, Integer>) Pair::getTwo, 1))
                 .collect((Function<Pair<Integer, ?>, Integer>) Pair::getOne).toSet());

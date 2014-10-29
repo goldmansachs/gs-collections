@@ -2005,7 +2005,7 @@ public class IterateTest
 
     private void aggregateByImmutableResult(Iterable<Integer> iterable)
     {
-        Function0<Integer> valueCreator = () -> (Integer) 0;
+        Function0<Integer> valueCreator = () -> 0;
         Function2<Integer, Integer, Integer> sumAggregator = (aggregate, value) -> aggregate + value;
         MapIterable<String, Integer> aggregation = Iterate.aggregateBy(iterable, String::valueOf, valueCreator, sumAggregator);
         if (iterable instanceof Set)
@@ -2066,7 +2066,7 @@ public class IterateTest
     {
         this.iterables.each(each ->
         {
-            ObjectDoubleMap<Integer> result = Iterate.sumByFloat(each, f -> (int) f % 2, e -> e);
+            ObjectDoubleMap<Integer> result = Iterate.sumByFloat(each, f -> f % 2, e -> e);
             Assert.assertEquals(9.0d, result.get(1), 0.0);
             Assert.assertEquals(6.0d, result.get(0), 0.0);
         });
@@ -2088,7 +2088,7 @@ public class IterateTest
     {
         this.iterables.each(each ->
         {
-            ObjectDoubleMap<Integer> result = Iterate.sumByDouble(each, d -> (int) d % 2, e -> e);
+            ObjectDoubleMap<Integer> result = Iterate.sumByDouble(each, d -> d % 2, e -> e);
             Assert.assertEquals(9.0d, result.get(1), 0.0);
             Assert.assertEquals(6.0d, result.get(0), 0.0);
         });

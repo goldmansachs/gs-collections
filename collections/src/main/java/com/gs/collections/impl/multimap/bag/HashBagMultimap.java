@@ -109,7 +109,6 @@ public final class HashBagMultimap<K, V>
         out.writeInt(keysCount);
         this.map.forEachKeyValue(new CheckedProcedure2<K, MutableBag<V>>()
         {
-            @Override
             public void safeValue(K key, MutableBag<V> bag) throws IOException
             {
                 out.writeObject(key);

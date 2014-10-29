@@ -40,17 +40,17 @@ public class AbstractImmutableEntry<K, V> implements Map.Entry<K, V>, Serializab
 
     public static <K> Function<Map.Entry<K, ?>, K> getKeyFunction()
     {
-        return (Function<Map.Entry<K, ?>, K>) TO_KEY;
+        return (Function<Map.Entry<K, ?>, K>) (Function<?, ?>) TO_KEY;
     }
 
     public static <V> Function<Map.Entry<?, V>, V> getValueFunction()
     {
-        return (Function<Map.Entry<?, V>, V>) TO_VALUE;
+        return (Function<Map.Entry<?, V>, V>) (Function<?, ?>) TO_VALUE;
     }
 
     public static <K, V> Function<Map.Entry<K, V>, Pair<K, V>> getPairFunction()
     {
-        return (Function<Map.Entry<K, V>, Pair<K, V>>) TO_PAIR;
+        return (Function<Map.Entry<K, V>, Pair<K, V>>) (Function<?, ?>) TO_PAIR;
     }
 
     public K getKey()
@@ -65,7 +65,7 @@ public class AbstractImmutableEntry<K, V> implements Map.Entry<K, V>, Serializab
 
     /**
      * {@inheritDoc}
-     * <p/>
+     * <p>
      * <p>This implementation throws an {@link UnsupportedOperationException}. Override this method to support mutable
      * map entries.
      */
@@ -75,7 +75,7 @@ public class AbstractImmutableEntry<K, V> implements Map.Entry<K, V>, Serializab
     }
 
     /**
-     * Returns a string representation of the form {@code {key}={value}}.
+     * Returns a string representation of the form <code>{key}={value}</code>.
      */
     @Override
     public String toString()

@@ -50,7 +50,6 @@ class ImmutableMapSerializationProxy<K, V> implements Externalizable
         {
             this.map.forEachKeyValue(new CheckedProcedure2<K, V>()
             {
-                @Override
                 public void safeValue(K key, V value) throws IOException
                 {
                     out.writeObject(key);

@@ -63,6 +63,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
             .with(COLLISION_6, COLLISION_7, COLLISION_8, COLLISION_9);
     protected static final int SIZE = 8;
 
+    @Override
     protected abstract <T> MutableSet<T> newWith(T... littleElements);
 
     @Override

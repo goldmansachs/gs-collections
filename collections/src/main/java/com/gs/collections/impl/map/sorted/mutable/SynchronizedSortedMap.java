@@ -225,13 +225,11 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    @Override
     public RichIterable<K> keysView()
     {
         return LazyIterate.adapt(this.keySet());
     }
 
-    @Override
     public RichIterable<V> valuesView()
     {
         return LazyIterate.adapt(this.values());

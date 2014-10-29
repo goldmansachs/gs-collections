@@ -1239,7 +1239,7 @@ public class TreeBag<T>
             public void value(T each, int occurrences)
             {
                 long longValue = function.longValueOf(each);
-                sum[0] += longValue * (long) occurrences;
+                sum[0] += longValue * occurrences;
             }
         });
         return sum[0];
@@ -1254,7 +1254,7 @@ public class TreeBag<T>
             public void value(T each, int occurrences)
             {
                 double doubleValue = function.doubleValueOf(each);
-                sum[0] += doubleValue * (double) occurrences;
+                sum[0] += doubleValue * occurrences;
             }
         });
         return sum[0];
