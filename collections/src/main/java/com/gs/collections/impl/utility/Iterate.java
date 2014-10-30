@@ -789,7 +789,7 @@ public final class Iterate
      * Sort the list by comparing an attribute defined by the function.
      * SortThisBy is a mutating method.  The List passed in is also returned.
      */
-    public static <T, V extends Comparable<V>, L extends List<T>> L sortThisBy(L list, Function<? super T, ? extends V> function)
+    public static <T, V extends Comparable<? super V>, L extends List<T>> L sortThisBy(L list, Function<? super T, ? extends V> function)
     {
         return Iterate.sortThis(list, Comparators.byFunction(function));
     }

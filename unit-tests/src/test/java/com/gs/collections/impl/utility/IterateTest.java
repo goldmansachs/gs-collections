@@ -1743,7 +1743,9 @@ public class IterateTest
         MutableList<Integer> list = Interval.oneTo(5).toList();
         Interval.oneTo(5).addAllTo(list);
         Collections.shuffle(list);
-        Verify.assertStartsWith(Iterate.sortThisBy(list, String::valueOf), 1, 1, 2, 2, 3, 3, 4, 4, 5, 5);
+        MutableList<Integer> sortedList = Iterate.sortThisBy(list, String::valueOf);
+        Assert.assertSame(list, sortedList);
+        Assert.assertEquals(Lists.immutable.of(1, 1, 2, 2, 3, 3, 4, 4, 5, 5), list);
     }
 
     @Test
