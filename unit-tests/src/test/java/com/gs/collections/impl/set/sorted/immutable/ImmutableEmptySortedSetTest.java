@@ -366,6 +366,7 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
         ImmutableSortedSet<Integer> set = this.classUnderTest();
         Verify.assertNotContains(Integer.valueOf(1), set.castToSortedSet());
         Verify.assertEmpty(set.castToSortedSet());
+        Verify.assertThrows(NullPointerException.class, () -> set.contains(null));
     }
 
     @Override

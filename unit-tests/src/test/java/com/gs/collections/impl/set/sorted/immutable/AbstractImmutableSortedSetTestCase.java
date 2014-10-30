@@ -21,6 +21,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
@@ -62,6 +64,12 @@ public abstract class AbstractImmutableSortedSetTestCase
     protected abstract ImmutableSortedSet<Integer> classUnderTest();
 
     protected abstract ImmutableSortedSet<Integer> classUnderTest(Comparator<? super Integer> comparator);
+
+    @Test(expected = NullPointerException.class)
+    public void noSupportForNull()
+    {
+        this.classUnderTest().newWith(null);
+    }
 
     @Test
     public void equalsAndHashCode()
@@ -126,24 +134,47 @@ public abstract class AbstractImmutableSortedSetTestCase
     @Test
     public void contains()
     {
-        ImmutableSortedSet<Integer> set = this.classUnderTest();
-        for (int i = 1; i <= set.size(); i++)
+        ImmutableSortedSet<Integer> set1 = this.classUnderTest();
+        for (int i = 1; i <= set1.size(); i++)
         {
-            Verify.assertContains(i, set.castToSortedSet());
+            Verify.assertContains(i, set1.castToSortedSet());
         }
-        Verify.assertNotContains(Integer.valueOf(set.size() + 1), set.castToSortedSet());
+        Verify.assertNotContains(Integer.valueOf(set1.size() + 1), set1.castToSortedSet());
+
+        SortedSet<Integer> set2 = new TreeSet<>(set1.castToSortedSet());
+
+        Verify.assertThrows(ClassCastException.class, () -> set1.contains(new Object()));
+        Verify.assertThrows(ClassCastException.class, () -> set2.contains(new Object()));
+
+        Verify.assertThrows(ClassCastException.class, () -> set1.contains("1"));
+        Verify.assertThrows(ClassCastException.class, () -> set2.contains("1"));
+
+        Verify.assertThrows(NullPointerException.class, () -> set1.contains(null));
+        Verify.assertThrows(NullPointerException.class, () -> set2.contains(null));
     }
 
     @Test
     public void containsAllArray()
     {
-        Assert.assertTrue(this.classUnderTest().containsAllArguments(this.classUnderTest().toArray()));
+        ImmutableSortedSet<Integer> set1 = this.classUnderTest();
+        SortedSet<Integer> set2 = new TreeSet<>(set1.castToSortedSet());
+
+        Assert.assertTrue(set1.containsAllArguments(set1.toArray()));
+
+        Verify.assertThrows(NullPointerException.class, () -> set1.containsAllArguments(null, null));
+        Verify.assertThrows(NullPointerException.class, () -> set2.containsAll(FastList.newListWith(null, null)));
     }
 
     @Test
     public void containsAllIterable()
     {
-        Assert.assertTrue(this.classUnderTest().containsAllIterable(Interval.oneTo(this.classUnderTest().size())));
+        ImmutableSortedSet<Integer> set1 = this.classUnderTest();
+        SortedSet<Integer> set2 = new TreeSet<>(set1.castToSortedSet());
+
+        Assert.assertTrue(set1.containsAllIterable(Interval.oneTo(set1.size())));
+
+        Verify.assertThrows(NullPointerException.class, () -> set1.containsAllIterable(FastList.newListWith(null, null)));
+        Verify.assertThrows(NullPointerException.class, () -> set2.containsAll(FastList.newListWith(null, null)));
     }
 
     @Test
@@ -160,7 +191,9 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         ImmutableSortedSet<Integer> set = this.classUnderTest();
-        set.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
+        set.forEachWith((argument1, argument2) -> {
+            result.add(argument1 + argument2);
+        }, 0);
         Verify.assertListsEqual(result, set.toList());
     }
 
@@ -169,7 +202,9 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         ImmutableSortedSet<Integer> set = this.classUnderTest();
-        set.forEachWithIndex((object, index) -> { result.add(object); });
+        set.forEachWithIndex((object, index) -> {
+            result.add(object);
+        });
         Verify.assertListsEqual(result, set.toList());
     }
 
@@ -342,45 +377,6 @@ public abstract class AbstractImmutableSortedSetTestCase
 
         ImmutableList<String> expected = this.classUnderTest().collect(String::valueOf);
         Verify.assertSetsEqual(expected.toSet(), actual);
-    }
-
-    private static final class Holder
-    {
-        private final int number;
-
-        private Holder(int i)
-        {
-            this.number = i;
-        }
-
-        @Override
-        public boolean equals(Object o)
-        {
-            if (this == o)
-            {
-                return true;
-            }
-            if (o == null || this.getClass() != o.getClass())
-            {
-                return false;
-            }
-
-            Holder holder = (Holder) o;
-
-            return this.number == holder.number;
-        }
-
-        @Override
-        public int hashCode()
-        {
-            return this.number;
-        }
-
-        @Override
-        public String toString()
-        {
-            return String.valueOf(this.number);
-        }
     }
 
     @Test
@@ -973,4 +969,43 @@ public abstract class AbstractImmutableSortedSetTestCase
 
     @Test
     public abstract void collectShort();
+
+    private static final class Holder
+    {
+        private final int number;
+
+        private Holder(int i)
+        {
+            this.number = i;
+        }
+
+        @Override
+        public boolean equals(Object o)
+        {
+            if (this == o)
+            {
+                return true;
+            }
+            if (o == null || this.getClass() != o.getClass())
+            {
+                return false;
+            }
+
+            Holder holder = (Holder) o;
+
+            return this.number == holder.number;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return this.number;
+        }
+
+        @Override
+        public String toString()
+        {
+            return String.valueOf(this.number);
+        }
+    }
 }

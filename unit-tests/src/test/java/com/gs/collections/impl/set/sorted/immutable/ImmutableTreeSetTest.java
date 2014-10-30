@@ -16,13 +16,16 @@
 
 package com.gs.collections.impl.set.sorted.immutable;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.TreeSet;
 
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -51,6 +54,37 @@ public class ImmutableTreeSetTest
     protected ImmutableSortedSet<Integer> classUnderTest(Comparator<? super Integer> comparator)
     {
         return ImmutableTreeSet.newSetWith(comparator, 1, 2, 3, 4);
+    }
+
+    @Test
+    public void constructWithNull()
+    {
+        Verify.assertThrows(ClassCastException.class, () -> new TreeSet<>(Arrays.asList(new Object())));
+        Verify.assertThrows(NullPointerException.class, () -> new TreeSet<>(Arrays.asList(null, null)));
+        Verify.assertThrows(NullPointerException.class, () -> new TreeSet<>(Arrays.asList((Object) null)));
+
+        Verify.assertThrows(ClassCastException.class, () -> SortedSets.immutable.of(new Object()));
+        Verify.assertThrows(NullPointerException.class, () -> SortedSets.immutable.of((Object) null, null));
+        Verify.assertThrows(NullPointerException.class, () -> SortedSets.immutable.of((Object) null));
+    }
+
+    @Override
+    @Test
+    public void equalsAndHashCode()
+    {
+        super.equalsAndHashCode();
+
+        Assert.assertNotEquals(
+                new TreeSet<>(Arrays.asList("1", "2", "3")),
+                new TreeSet<>(Arrays.asList(1, 2, 3)));
+
+        Assert.assertNotEquals(
+                new TreeSet<>(Arrays.asList("1", "2", "3")),
+                Sets.immutable.of("1", "2", null));
+
+        Assert.assertNotEquals(
+                SortedSets.immutable.of("1", "2", "3"),
+                SortedSets.immutable.of(1, 2, 3));
     }
 
     @Test
@@ -97,6 +131,18 @@ public class ImmutableTreeSetTest
 
         Verify.assertListsEqual(expectedSortedSet, intPowerSet.toList());
         Verify.assertListsEqual(expectedRevSortedSet, revPowerSet.toList());
+    }
+
+    @Test
+    public void compareTo()
+    {
+        ImmutableSortedSet<Integer> set = SortedSets.immutable.of(1, 2, 3);
+        Assert.assertEquals(0, set.compareTo(set));
+        Assert.assertEquals(-1, set.compareTo(SortedSets.immutable.of(1, 2, 3, 4)));
+        Assert.assertEquals(1, set.compareTo(SortedSets.immutable.of(1, 2)));
+
+        Assert.assertEquals(-1, set.compareTo(SortedSets.immutable.of(1, 2, 4)));
+        Assert.assertEquals(1, set.compareTo(SortedSets.immutable.of(1, 2, 2)));
     }
 
     @Override
