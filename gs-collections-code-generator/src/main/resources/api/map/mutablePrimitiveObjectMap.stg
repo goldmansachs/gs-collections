@@ -66,14 +66,6 @@ public interface Mutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>, Mutable
 
     Mutable<name>ObjectMap\<V> reject(<name>ObjectPredicate\<? super V> predicate);
 
-    MutableCollection\<V> select(Predicate\<? super V> predicate);
-
-    MutableCollection\<V> reject(Predicate\<? super V> predicate);
-
-    \<V1> MutableCollection\<V1> collect(Function\<? super V, ? extends V1> function);
-
-    \<P, VV> MutableCollection\<VV> collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter);
-
     Mutable<name>ObjectMap\<V> withKeyValue(<type> key, V value);
 
     Mutable<name>ObjectMap\<V> withoutKey(<type> key);
