@@ -412,18 +412,18 @@ public class ImmutableArrayBag<T>
     private final class ArrayBagIterator
             implements Iterator<T>
     {
-        private int keyCount = -1;
-        private int countCount = -1;
+        private int position;
+        private int remainingOccurrences = -1;
 
         private ArrayBagIterator()
         {
-            this.keyCount = ImmutableArrayBag.this.keys.length - 1;
-            this.countCount = this.keyCount < 0 ? -1 : ImmutableArrayBag.this.counts[ImmutableArrayBag.this.keys.length - 1];
+            this.remainingOccurrences = ImmutableArrayBag.this.sizeDistinct() > 0 ? ImmutableArrayBag.this.counts[0] : 0;
         }
 
         public boolean hasNext()
         {
-            return this.keyCount >= 0;
+            return this.position != ImmutableArrayBag.this.keys.length
+                    && !(this.position == ImmutableArrayBag.this.keys.length - 1 && this.remainingOccurrences == 0);
         }
 
         public T next()
@@ -432,12 +432,17 @@ public class ImmutableArrayBag<T>
             {
                 throw new NoSuchElementException();
             }
-            T result = ImmutableArrayBag.this.keys[this.keyCount];
-            --this.countCount;
-            if (this.countCount == 0)
+
+            T result = ImmutableArrayBag.this.keys[this.position];
+
+            this.remainingOccurrences--;
+            if (this.remainingOccurrences == 0)
             {
-                --this.keyCount;
-                this.countCount = this.keyCount < 0 ? 0 : ImmutableArrayBag.this.counts[this.keyCount];
+                this.position++;
+                if (this.position != ImmutableArrayBag.this.keys.length)
+                {
+                    this.remainingOccurrences = ImmutableArrayBag.this.counts[this.position];
+                }
             }
             return result;
         }
