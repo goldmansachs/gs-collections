@@ -48,7 +48,7 @@ final class ImmutableEmptySortedSet<T>
 {
     static final ImmutableSortedSet<?> INSTANCE = new ImmutableEmptySortedSet<Object>();
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     private final Comparator<? super T> comparator;
 
     ImmutableEmptySortedSet()
@@ -61,13 +61,9 @@ final class ImmutableEmptySortedSet<T>
         this.comparator = comparator;
     }
 
-    private Object readResolve()
+    private Object writeReplace()
     {
-        if (this.comparator == null)
-        {
-            return INSTANCE;
-        }
-        return this;
+        return new ImmutableSortedSetSerializationProxy<T>(this);
     }
 
     @Override

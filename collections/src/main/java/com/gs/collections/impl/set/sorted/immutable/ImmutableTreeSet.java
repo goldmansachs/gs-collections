@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ final class ImmutableTreeSet<T>
         extends AbstractImmutableSortedSet<T>
         implements Serializable
 {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     private final TreeSortedSet<T> delegate;
 
     private ImmutableTreeSet(TreeSortedSet<T> delegate)
@@ -44,6 +44,11 @@ final class ImmutableTreeSet<T>
     public int size()
     {
         return this.delegate.size();
+    }
+
+    private Object writeReplace()
+    {
+        return new ImmutableSortedSetSerializationProxy<T>(this);
     }
 
     @Override
