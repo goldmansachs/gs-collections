@@ -44,7 +44,7 @@ public class SynchronizedMutableSetTest extends AbstractSynchronizedCollectionTe
     {
         super.newEmpty();
 
-        Verify.assertInstanceOf(UnifiedSet.class, this.newWith().newEmpty());
+        Verify.assertInstanceOf(SynchronizedMutableSet.class, this.newWith().newEmpty());
     }
 
     @Override

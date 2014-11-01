@@ -871,7 +871,7 @@ public class AbstractSynchronizedMutableCollection<T>
     {
         synchronized (this.lock)
         {
-            return this.collection.newEmpty();
+            return this.collection.newEmpty().asSynchronized();
         }
     }
 

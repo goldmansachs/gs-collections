@@ -26,6 +26,7 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.SynchronizedMutableList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -50,7 +51,7 @@ public class SynchronizedMutableCollectionTest extends AbstractSynchronizedColle
     {
         super.newEmpty();
 
-        Verify.assertInstanceOf(FastList.class, this.newWith().newEmpty());
+        Verify.assertInstanceOf(SynchronizedMutableList.class, this.newWith().newEmpty());
     }
 
     @Override

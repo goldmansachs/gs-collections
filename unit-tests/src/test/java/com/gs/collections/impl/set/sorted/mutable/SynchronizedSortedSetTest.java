@@ -47,7 +47,7 @@ public class SynchronizedSortedSetTest extends AbstractSynchronizedCollectionTes
     {
         super.newEmpty();
 
-        Verify.assertInstanceOf(TreeSortedSet.class, this.newWith().newEmpty());
+        Verify.assertInstanceOf(SynchronizedSortedSet.class, this.newWith().newEmpty());
     }
 
     @Override

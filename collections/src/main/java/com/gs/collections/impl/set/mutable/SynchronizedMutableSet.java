@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -269,7 +269,7 @@ public class SynchronizedMutableSet<T>
     {
         synchronized (this.getLock())
         {
-            return this.getMutableSet().newEmpty();
+            return this.getMutableSet().newEmpty().asSynchronized();
         }
     }
 

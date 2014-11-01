@@ -51,7 +51,7 @@ public class SynchronizedBagTest extends AbstractSynchronizedCollectionTestCase
     {
         super.newEmpty();
 
-        Verify.assertInstanceOf(HashBag.class, this.newWith().newEmpty());
+        Verify.assertInstanceOf(SynchronizedBag.class, this.newWith().newEmpty());
     }
 
     @Override

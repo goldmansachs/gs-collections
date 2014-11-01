@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,6 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.AbstractSynchronizedMutableCollection;
 import com.gs.collections.impl.collection.mutable.SynchronizedCollectionSerializationProxy;
-import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ReverseIterable;
 import net.jcip.annotations.GuardedBy;
 
@@ -317,7 +316,7 @@ public class SynchronizedMutableList<T>
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().newEmpty();
+            return this.getMutableList().newEmpty().asSynchronized();
         }
     }
 
