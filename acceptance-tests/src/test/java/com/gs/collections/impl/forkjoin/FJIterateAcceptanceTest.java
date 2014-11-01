@@ -299,7 +299,7 @@ public class FJIterateAcceptanceTest
         Integer[] array = new Integer[200];
         FastList<Integer> list = (FastList<Integer>) Interval.oneTo(200).toList();
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        FJIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; });
+        FJIterate.forEachWithIndex(list, (each, index) -> array[index] = each);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
@@ -309,7 +309,7 @@ public class FJIterateAcceptanceTest
         Integer[] array = new Integer[200];
         FastList<Integer> list = (FastList<Integer>) Interval.oneTo(200).toList();
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        FJIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 10, 10);
+        FJIterate.forEachWithIndex(list, (each, index) -> array[index] = each, 10, 10);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
@@ -319,7 +319,7 @@ public class FJIterateAcceptanceTest
         Integer[] array = new Integer[200];
         ImmutableList<Integer> list = Interval.oneTo(200).toList().toImmutable();
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        FJIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 10, 10);
+        FJIterate.forEachWithIndex(list, (each, index) -> array[index] = each, 10, 10);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
@@ -329,7 +329,7 @@ public class FJIterateAcceptanceTest
         Integer[] array = new Integer[200];
         MutableList<Integer> list = FastList.newList(Interval.oneTo(200));
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        FJIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 10, 10);
+        FJIterate.forEachWithIndex(list, (each, index) -> array[index] = each, 10, 10);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
@@ -339,7 +339,7 @@ public class FJIterateAcceptanceTest
         Integer[] array = new Integer[10];
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        FJIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 1, 2);
+        FJIterate.forEachWithIndex(list, (each, index) -> array[index] = each, 1, 2);
         Assert.assertArrayEquals(array, list.toArray(new Integer[list.size()]));
     }
 
@@ -478,7 +478,7 @@ public class FJIterateAcceptanceTest
     @Test
     public void aggregateInPlaceBy()
     {
-        Procedure2<AtomicInteger, Integer> countAggregator = (aggregate, value) -> { aggregate.incrementAndGet(); };
+        Procedure2<AtomicInteger, Integer> countAggregator = (aggregate, value) -> aggregate.incrementAndGet();
         List<Integer> list = Interval.oneTo(20000);
         MutableMap<String, AtomicInteger> aggregation =
                 FJIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, AtomicInteger::new, countAggregator);

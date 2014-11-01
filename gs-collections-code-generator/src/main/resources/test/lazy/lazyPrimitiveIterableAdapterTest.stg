@@ -105,4 +105,5 @@ public class Lazy<name>IterableAdapterTest extends AbstractLazy<name>IterableTes
         Verify.assertClassNonInstantiable(Lazy<name>Iterate.class);
     }
 }
+
 >>

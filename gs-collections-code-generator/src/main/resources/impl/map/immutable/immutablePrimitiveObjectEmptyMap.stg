@@ -132,8 +132,9 @@ import com.gs.collections.api.collection.primitive.MutableShortCollection;
  */
 final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMap\<V>, Serializable
 {
-    private static final long serialVersionUID = 1L;
     static final Immutable<name>ObjectMap\<?> INSTANCE = new Immutable<name>ObjectEmptyMap\<Object>();
+
+    private static final long serialVersionUID = 1L;
 
     private Object readResolve()
     {

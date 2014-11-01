@@ -796,9 +796,7 @@ public class ArrayListIterateTest
         MutableList<Pair<String, String>> list = Lists.mutable.of();
         ArrayList<String> list1 = new ArrayList<String>(mList("1", "2"));
         ArrayList<String> list2 = new ArrayList<String>(mList("a", "b"));
-        ArrayListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> {
-            list.add(Tuples.twin(argument1, argument2));
-        });
+        ArrayListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> list.add(Tuples.twin(argument1, argument2)));
 
         Assert.assertEquals(FastList.newListWith(Tuples.twin("1", "a"), Tuples.twin("2", "b")), list);
     }

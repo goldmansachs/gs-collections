@@ -61,9 +61,7 @@ public class ComparatorsTest
         Assert.assertEquals(
                 FastList.newListWith("1", "2", "3", "4"),
                 list.sortThis(Comparators.naturalOrder()));
-        Verify.assertThrows(NullPointerException.class, () -> {
-            FastList.newListWith("1", "2", null, "4").sortThis(Comparators.naturalOrder());
-        });
+        Verify.assertThrows(NullPointerException.class, () -> FastList.newListWith("1", "2", null, "4").sortThis(Comparators.naturalOrder()));
     }
 
     @Test
@@ -82,7 +80,7 @@ public class ComparatorsTest
         Assert.assertEquals(
                 FastList.newListWith("4", "3", "2", "1"),
                 list.sortThis(Comparators.reverse(String::compareTo)));
-        Verify.assertThrows(NullPointerException.class, () -> { Comparators.reverse(null); });
+        Verify.assertThrows(NullPointerException.class, () -> Comparators.reverse(null));
     }
 
     @Test

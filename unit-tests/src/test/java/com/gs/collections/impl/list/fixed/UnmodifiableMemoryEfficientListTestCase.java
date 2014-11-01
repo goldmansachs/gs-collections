@@ -55,9 +55,7 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
     @Test
     public void addAllAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.getCollection().addAll(0, FastList.<T>newList().with((T) null));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().addAll(0, FastList.<T>newList().with((T) null)));
     }
 
     @Test
@@ -69,7 +67,7 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
     @Test
     public void removeFromIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.getCollection().remove(0); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().remove(0));
     }
 
     @Test

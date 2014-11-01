@@ -45,4 +45,5 @@ public class Immutable<name>HashBagTest extends AbstractImmutable<name>BagTestCa
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("6")>), result);
     }
 }
+
 >>

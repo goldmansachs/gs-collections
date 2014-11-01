@@ -71,9 +71,7 @@ public abstract class AbstractImmutableBooleanBagTestCase extends AbstractImmuta
     public void forEachWithOccurrences()
     {
         StringBuilder stringBuilder = new StringBuilder();
-        this.classUnderTest().forEachWithOccurrences((argument1, argument2) -> {
-            stringBuilder.append(argument1).append(argument2);
-        });
+        this.classUnderTest().forEachWithOccurrences((argument1, argument2) -> stringBuilder.append(argument1).append(argument2));
         String string = stringBuilder.toString();
         Assert.assertTrue("true2false1".equals(string)
                 || "false1true2".equals(string));

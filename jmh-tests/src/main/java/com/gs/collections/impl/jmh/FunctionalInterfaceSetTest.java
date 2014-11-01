@@ -39,8 +39,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
@@ -60,13 +60,14 @@ public class FunctionalInterfaceSetTest
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;
+
+    @Param({"0", "1", "2", "3"})
+    public int megamorphicWarmupLevel;
+
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final FastList<Integer> integersGSC = new FastList<>(Interval.oneTo(SIZE));
 
     private ExecutorService executorService;
-
-    @Param({"0", "1", "2", "3"})
-    public int megamorphicWarmupLevel;
 
     @Before
     @Setup
@@ -276,7 +277,7 @@ public class FunctionalInterfaceSetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Set<Integer> serial_lazy_jdk()
     {
         Set<Integer> set = this.integersJDK.stream()
@@ -299,7 +300,7 @@ public class FunctionalInterfaceSetTest
 
     @Warmup(iterations = 50)
     @Measurement(iterations = 25)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Set<Integer> parallel_lazy_jdk()
     {
         Set<Integer> set = this.integersJDK.parallelStream()
@@ -324,7 +325,7 @@ public class FunctionalInterfaceSetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableSet<Integer> serial_eager_gsc()
     {
         FastList<Integer> select1 = this.integersGSC.select(each -> each % 10_000 != 0);
@@ -345,7 +346,7 @@ public class FunctionalInterfaceSetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableSet<Integer> serial_lazy_gsc()
     {
         MutableSet<Integer> set = this.integersGSC
@@ -369,7 +370,7 @@ public class FunctionalInterfaceSetTest
 
     @Warmup(iterations = 50)
     @Measurement(iterations = 25)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableSet<Integer> parallel_lazy_gsc()
     {
         MutableSet<Integer> set = this.integersGSC

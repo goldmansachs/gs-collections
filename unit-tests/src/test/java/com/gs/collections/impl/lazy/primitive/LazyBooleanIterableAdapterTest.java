@@ -51,7 +51,7 @@ public class LazyBooleanIterableAdapterTest
     public void forEach()
     {
         int[] sum = new int[1];
-        this.iterable.forEach(each -> { sum[0] += each ? 1 : 0; });
+        this.iterable.forEach(each -> sum[0] += each ? 1 : 0);
         Assert.assertEquals(2, sum[0]);
     }
 

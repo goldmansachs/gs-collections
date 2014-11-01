@@ -201,14 +201,14 @@ public abstract class AbstractBooleanIterableTestCase
     public void forEach()
     {
         long[] sum = new long[1];
-        this.classUnderTest().forEach(each -> { sum[0] += each ? 1 : 0; });
+        this.classUnderTest().forEach(each -> sum[0] += each ? 1 : 0);
 
         int size = this.classUnderTest().size();
         int halfSize = size / 2;
         Assert.assertEquals((size & 1) == 0 ? halfSize : halfSize + 1, sum[0]);
 
         long[] sum1 = new long[1];
-        this.newWith(true, false, false, true, true, true).forEach(each -> { sum1[0] += each ? 1 : 2; });
+        this.newWith(true, false, false, true, true, true).forEach(each -> sum1[0] += each ? 1 : 2);
 
         Assert.assertEquals(8L, sum1[0]);
     }

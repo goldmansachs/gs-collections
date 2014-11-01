@@ -278,7 +278,7 @@ allMethods(name, type) ::=<<
     public <wideType.(type)> sum()
     {
         <wideType.(type)> sum = <wideZero.(type)>;
-        for (<name>Iterator <type>Iterator = this.<type>Iterator(); <type>Iterator.hasNext() ;)
+        for (<name>Iterator <type>Iterator = this.<type>Iterator(); <type>Iterator.hasNext(); )
         {
             sum += <type>Iterator.next();
         }

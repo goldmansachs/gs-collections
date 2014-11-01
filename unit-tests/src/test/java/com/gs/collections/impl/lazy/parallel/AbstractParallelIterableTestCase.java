@@ -864,17 +864,15 @@ public abstract class AbstractParallelIterableTestCase
     public void anySatisfy_interruptedException()
     {
         Thread.currentThread().interrupt();
-        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> {
-            this.classUnderTest().anySatisfy(new CheckedPredicate<Integer>()
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> this.classUnderTest().anySatisfy(new CheckedPredicate<Integer>()
+        {
+            @Override
+            public boolean safeAccept(Integer each) throws InterruptedException
             {
-                @Override
-                public boolean safeAccept(Integer each) throws InterruptedException
-                {
-                    Thread.sleep(1000);
-                    return each < 1;
-                }
-            });
-        });
+                Thread.sleep(1000);
+                return each < 1;
+            }
+        }));
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
 
@@ -885,17 +883,15 @@ public abstract class AbstractParallelIterableTestCase
     public void allSatisfy_interruptedException()
     {
         Thread.currentThread().interrupt();
-        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> {
-            this.classUnderTest().allSatisfy(new CheckedPredicate<Integer>()
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> this.classUnderTest().allSatisfy(new CheckedPredicate<Integer>()
+        {
+            @Override
+            public boolean safeAccept(Integer each) throws InterruptedException
             {
-                @Override
-                public boolean safeAccept(Integer each) throws InterruptedException
-                {
-                    Thread.sleep(1000);
-                    return each < 5;
-                }
-            });
-        });
+                Thread.sleep(1000);
+                return each < 5;
+            }
+        }));
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
 
@@ -906,17 +902,15 @@ public abstract class AbstractParallelIterableTestCase
     public void detect_interruptedException()
     {
         Thread.currentThread().interrupt();
-        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> {
-            this.classUnderTest().detect(new CheckedPredicate<Integer>()
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> this.classUnderTest().detect(new CheckedPredicate<Integer>()
+        {
+            @Override
+            public boolean safeAccept(Integer each) throws InterruptedException
             {
-                @Override
-                public boolean safeAccept(Integer each) throws InterruptedException
-                {
-                    Thread.sleep(1000);
-                    return each.intValue() == 3;
-                }
-            });
-        });
+                Thread.sleep(1000);
+                return each.intValue() == 3;
+            }
+        }));
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
 
@@ -927,17 +921,15 @@ public abstract class AbstractParallelIterableTestCase
     public void toString_interruptedException()
     {
         Thread.currentThread().interrupt();
-        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> {
-            this.classUnderTest().collect(new CheckedFunction<Integer, String>()
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, () -> this.classUnderTest().collect(new CheckedFunction<Integer, String>()
+        {
+            @Override
+            public String safeValueOf(Integer each) throws InterruptedException
             {
-                @Override
-                public String safeValueOf(Integer each) throws InterruptedException
-                {
-                    Thread.sleep(1000);
-                    return String.valueOf(each);
-                }
-            }).toString();
-        });
+                Thread.sleep(1000);
+                return String.valueOf(each);
+            }
+        }).toString());
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
 

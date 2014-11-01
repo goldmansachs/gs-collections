@@ -508,7 +508,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     {
         super.forEach();
         Object[] results = new Object[1];
-        this.newBag().forEach(Procedures.cast(each -> { results[0] = each; }));
+        this.newBag().forEach(Procedures.cast(each -> results[0] = each));
         Assert.assertEquals(VAL, results[0]);
     }
 

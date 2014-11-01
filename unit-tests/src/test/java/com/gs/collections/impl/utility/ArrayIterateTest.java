@@ -102,18 +102,10 @@ public class ArrayIterateTest
     @Test
     public void injectIntoThrowsOnNullArgument()
     {
-        Verify.assertThrows(IllegalArgumentException.class, () -> {
-            ArrayIterate.injectInto(0, null, (int intParameter, Object objectParameter) -> 0);
-        });
-        Verify.assertThrows(IllegalArgumentException.class, () -> {
-            ArrayIterate.injectInto(0L, null, (long longParameter, Object objectParameter) -> 0);
-        });
-        Verify.assertThrows(IllegalArgumentException.class, () -> {
-            ArrayIterate.injectInto((double) 0, null, (doubleParameter, objectParameter) -> 0.0);
-        });
-        Verify.assertThrows(IllegalArgumentException.class, () -> {
-            ArrayIterate.injectInto(null, null, null);
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> ArrayIterate.injectInto(0, null, (int intParameter, Object objectParameter) -> 0));
+        Verify.assertThrows(IllegalArgumentException.class, () -> ArrayIterate.injectInto(0L, null, (long longParameter, Object objectParameter) -> 0));
+        Verify.assertThrows(IllegalArgumentException.class, () -> ArrayIterate.injectInto((double) 0, null, (doubleParameter, objectParameter) -> 0.0));
+        Verify.assertThrows(IllegalArgumentException.class, () -> ArrayIterate.injectInto(null, null, null));
     }
 
     @Test(expected = IllegalArgumentException.class)

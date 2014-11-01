@@ -34,7 +34,7 @@ public class BooleanIterableIterateTest
         String[] sum = new String[2];
         sum[0] = "";
         sum[1] = "";
-        BooleanIterableIterate.forEach(this.iterable, each -> { sum[0] += each + " "; });
+        BooleanIterableIterate.forEach(this.iterable, each -> sum[0] += each + " ");
         Assert.assertEquals("true false true ", sum[0]);
     }
 

@@ -86,7 +86,7 @@ public class LazyIterableAdapterTest extends AbstractLazyIterableTestCase
     {
         LazyIterable<Integer> select = new LazyIterableAdapter<Integer>(Interval.oneTo(5));
         Sum sum = new IntegerSum(0);
-        select.forEachWith((each, aSum) -> { aSum.add(each); }, sum);
+        select.forEachWith((each, aSum) -> aSum.add(each), sum);
         Assert.assertEquals(15, sum.getValue().intValue());
     }
 

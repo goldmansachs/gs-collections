@@ -67,12 +67,8 @@ public class MapAdapterTest extends MutableMapTestCase
     @Test
     public void adaptNull()
     {
-        Verify.assertThrows(
-                NullPointerException.class,
-                () -> { new MapAdapter<Object, Object>(null); });
+        Verify.assertThrows(NullPointerException.class, () -> new MapAdapter<Object, Object>(null));
 
-        Verify.assertThrows(
-                NullPointerException.class,
-                () -> { MapAdapter.adapt(null); });
+        Verify.assertThrows(NullPointerException.class, () -> MapAdapter.adapt(null));
     }
 }

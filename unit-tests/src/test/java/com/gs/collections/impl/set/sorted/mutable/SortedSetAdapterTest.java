@@ -161,7 +161,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         super.forEachWithIndex();
         MutableList<Integer> result = Lists.mutable.of();
         MutableCollection<Integer> collection = this.newWith(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4);
-        collection.forEachWithIndex((object, index) -> { result.add(object); });
+        collection.forEachWithIndex((object, index) -> result.add(object));
         Verify.assertListsEqual(FastList.newListWith(4, 3, 2, 1), result);
     }
 
@@ -172,9 +172,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         super.getFirst();
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getFirst());
         Assert.assertEquals(Integer.valueOf(3), this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 3).getFirst());
-        Verify.assertThrows(NoSuchElementException.class, () -> {
-            new SortedSetAdapter<Object>(new TreeSet<Object>()).getFirst();
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> new SortedSetAdapter<Object>(new TreeSet<Object>()).getFirst());
     }
 
     @Override
@@ -185,9 +183,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(1), this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 3).getLast());
-        Verify.assertThrows(NoSuchElementException.class, () -> {
-            new SortedSetAdapter<Object>(new TreeSet<Object>()).getLast();
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> new SortedSetAdapter<Object>(new TreeSet<Object>()).getLast());
     }
 
     @Override
@@ -227,7 +223,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     @Test
     public void adaptNull()
     {
-        Verify.assertThrows(NullPointerException.class, () -> { new SortedSetAdapter<Object>(null); });
-        Verify.assertThrows(NullPointerException.class, () -> { SortedSetAdapter.adapt(null); });
+        Verify.assertThrows(NullPointerException.class, () -> new SortedSetAdapter<Object>(null));
+        Verify.assertThrows(NullPointerException.class, () -> SortedSetAdapter.adapt(null));
     }
 }

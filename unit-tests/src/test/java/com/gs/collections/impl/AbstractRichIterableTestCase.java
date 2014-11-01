@@ -161,7 +161,7 @@ public abstract class AbstractRichIterableTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         RichIterable<Integer> collection = this.newWith(1, 2, 3, 4);
-        collection.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
+        collection.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 0);
         Verify.assertSize(4, result);
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }
@@ -819,7 +819,7 @@ public abstract class AbstractRichIterableTestCase
     public void sumByFloat()
     {
         RichIterable<Integer> values = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        ObjectDoubleMap<Integer> result = values.sumByFloat(f -> (int) f % 2, e -> e);
+        ObjectDoubleMap<Integer> result = values.sumByFloat(f -> f % 2, e -> e);
         Assert.assertEquals(25.0f, result.get(1), 0.0);
         Assert.assertEquals(30.0f, result.get(0), 0.0);
     }
@@ -837,7 +837,7 @@ public abstract class AbstractRichIterableTestCase
     public void sumByDouble()
     {
         RichIterable<Integer> values = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        ObjectDoubleMap<Integer> result = values.sumByDouble(d -> (int) d % 2, e -> e);
+        ObjectDoubleMap<Integer> result = values.sumByDouble(d -> d % 2, e -> e);
         Assert.assertEquals(25.0d, result.get(1), 0.0);
         Assert.assertEquals(30.0d, result.get(0), 0.0);
     }

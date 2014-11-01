@@ -247,7 +247,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableSet<Integer> set = this.classUnderTest().collect(Integer::valueOf);
 
         MutableMultimap<Integer, Integer> expected = UnifiedSetMultimap.newMultimap();
-        set.forEach(Procedures.cast(value -> { expected.putAll(-value, Interval.fromTo(value, set.size())); }));
+        set.forEach(Procedures.cast(value -> expected.putAll(-value, Interval.fromTo(value, set.size()))));
 
         Multimap<Integer, Integer> actual =
                 set.groupByEach(new NegativeIntervalFunction());

@@ -39,8 +39,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
@@ -88,7 +88,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Product, DoubleSummaryStatistics> aggregateByProduct_serial_lazy_jdk()
     {
         Map<Product, DoubleSummaryStatistics> result =
@@ -102,7 +102,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Account, DoubleSummaryStatistics> aggregateByAccount_serial_lazy_jdk()
     {
         Map<Account, DoubleSummaryStatistics> accountDoubleMap =
@@ -116,7 +116,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<String, DoubleSummaryStatistics> aggregateByCategory_serial_lazy_jdk()
     {
         Map<String, DoubleSummaryStatistics> categoryDoubleMap =
@@ -130,7 +130,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Product, DoubleSummaryStatistics> aggregateByProduct_parallel_lazy_jdk()
     {
         Map<Product, DoubleSummaryStatistics> result =
@@ -144,7 +144,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Account, DoubleSummaryStatistics> aggregateByAccount_parallel_lazy_jdk()
     {
         Map<Account, DoubleSummaryStatistics> result =
@@ -158,7 +158,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<String, DoubleSummaryStatistics> aggregateByCategory_parallel_lazy_jdk()
     {
         Map<String, DoubleSummaryStatistics> result =
@@ -170,7 +170,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<Product, ImmutableMarketValueStatistics> aggregateByProduct_serial_eager_gsc()
     {
         MutableMap<Product, ImmutableMarketValueStatistics> result =
@@ -184,7 +184,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<Account, ImmutableMarketValueStatistics> aggregateByAccount_serial_eager_gsc()
     {
         MutableMap<Account, ImmutableMarketValueStatistics> result =
@@ -198,7 +198,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<String, ImmutableMarketValueStatistics> aggregateByCategory_serial_eager_gsc()
     {
         MutableMap<String, ImmutableMarketValueStatistics> result =
@@ -212,7 +212,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<Product, ImmutableMarketValueStatistics> aggregateByProduct_parallel_eager_gsc()
     {
         MutableMap<Product, ImmutableMarketValueStatistics> result =
@@ -227,7 +227,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<Account, ImmutableMarketValueStatistics> aggregateByAccount_parallel_eager_gsc()
     {
         MutableMap<Account, ImmutableMarketValueStatistics> result =
@@ -242,7 +242,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<String, ImmutableMarketValueStatistics> aggregateByCategory_parallel_eager_gsc()
     {
         MutableMap<String, ImmutableMarketValueStatistics> result =
@@ -257,7 +257,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MapIterable<Product, ImmutableMarketValueStatistics> aggregateByProduct_serial_lazy_gsc()
     {
         MapIterable<Product, ImmutableMarketValueStatistics> result =
@@ -271,7 +271,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MapIterable<Account, ImmutableMarketValueStatistics> aggregateByAccount_serial_lazy_gsc()
     {
         MapIterable<Account, ImmutableMarketValueStatistics> result =
@@ -285,7 +285,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MapIterable<String, ImmutableMarketValueStatistics> aggregateByCategory_serial_lazy_gsc()
     {
         MapIterable<String, ImmutableMarketValueStatistics> result =
@@ -299,7 +299,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MapIterable<Product, ImmutableMarketValueStatistics> aggregateByProduct_parallel_lazy_gsc()
     {
         MapIterable<Product, ImmutableMarketValueStatistics> result =
@@ -323,7 +323,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MapIterable<Account, ImmutableMarketValueStatistics> aggregateByAccount_parallel_lazy_gsc()
     {
         MapIterable<Account, ImmutableMarketValueStatistics> result =
@@ -347,7 +347,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MapIterable<String, ImmutableMarketValueStatistics> aggregateByCategory_parallel_lazy_gsc()
     {
         MapIterable<String, ImmutableMarketValueStatistics> result =
@@ -371,7 +371,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<Product, MarketValueStatistics> aggregateInPlaceByProduct_serial_eager_gsc()
     {
         MutableMap<Product, MarketValueStatistics> result =
@@ -385,7 +385,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<Account, MarketValueStatistics> aggregateInPlaceByAccount_serial_eager_gsc()
     {
         MutableMap<Account, MarketValueStatistics> result =
@@ -399,7 +399,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<String, MarketValueStatistics> aggregateInPlaceByCategory_serial_eager_gsc()
     {
         MutableMap<String, MarketValueStatistics> result =
@@ -413,7 +413,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<Product, MarketValueStatistics> aggregateInPlaceByProduct_parallel_eager_gsc()
     {
         MutableMap<Product, MarketValueStatistics> result =
@@ -428,7 +428,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<Account, MarketValueStatistics> aggregateInPlaceByAccount_parallel_eager_gsc()
     {
         MutableMap<Account, MarketValueStatistics> result =
@@ -443,7 +443,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MutableMap<String, MarketValueStatistics> aggregateInPlaceByCategory_parallel_eager_gsc()
     {
         MutableMap<String, MarketValueStatistics> result =
@@ -458,7 +458,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MapIterable<Product, MarketValueStatistics> aggregateInPlaceByProduct_parallel_lazy_gsc()
     {
         MapIterable<Product, MarketValueStatistics> result =
@@ -482,7 +482,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MapIterable<Account, MarketValueStatistics> aggregateInPlaceByAccount_parallel_lazy_gsc()
     {
         MapIterable<Account, MarketValueStatistics> result =
@@ -506,7 +506,7 @@ public class AggregateByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public MapIterable<String, MarketValueStatistics> aggregateInPlaceByCategory_parallel_lazy_gsc()
     {
         MapIterable<String, MarketValueStatistics> result =
@@ -615,12 +615,12 @@ public class AggregateByTest
         @Override
         public String toString()
         {
-            return "ImmutableMarketValueStatistics{" +
-                    "count=" + this.count +
-                    ", sum=" + this.sum +
-                    ", min=" + this.min +
-                    ", max=" + this.max +
-                    '}';
+            return "ImmutableMarketValueStatistics{"
+                    + "count=" + this.count
+                    + ", sum=" + this.sum
+                    + ", min=" + this.min
+                    + ", max=" + this.max
+                    + '}';
         }
     }
 
@@ -791,11 +791,11 @@ public class AggregateByTest
         @Override
         public String toString()
         {
-            return "Product{" +
-                    "name='" + this.name + '\'' +
-                    ", category='" + this.category + '\'' +
-                    ", price=" + this.price +
-                    '}';
+            return "Product{"
+                    + "name='" + this.name + '\''
+                    + ", category='" + this.category + '\''
+                    + ", price=" + this.price
+                    + '}';
         }
     }
 }

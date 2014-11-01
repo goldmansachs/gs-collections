@@ -39,7 +39,7 @@ public class Predicates2Test
         Verify.assertThrowsWithCause(
                 RuntimeException.class,
                 IOException.class,
-                () -> Predicates2.throwing((a, b) -> {throw new IOException();}).accept(null, null));
+                () -> Predicates2.throwing((a, b) -> { throw new IOException(); }).accept(null, null));
     }
 
     @Test

@@ -487,4 +487,5 @@ public abstract class AbstractLazy<name>IterableTestCase
         Assert.assertSame(iterable, iterable.asLazy());
     }
 }
+
 >>

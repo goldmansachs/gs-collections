@@ -1817,6 +1817,7 @@ public final class Verify extends Assert
                 MutableSet<?> inActualOnlySet = UnifiedSet.newSet(actualSet);
                 inActualOnlySet.removeAll(expectedSet);
 
+                //noinspection UseOfObsoleteAssert
                 junit.framework.Assert.failNotEquals(message, inExpectedOnlySet, inActualOnlySet);
             }
         }
@@ -1933,6 +1934,7 @@ public final class Verify extends Assert
 
                 if (!Comparators.nullSafeEquals(eachExpected, eachActual))
                 {
+                    //noinspection UseOfObsoleteAssert
                     junit.framework.Assert.failNotEquals(iterableName + " first differed at element [" + index + "];", eachExpected, eachActual);
                 }
                 index++;

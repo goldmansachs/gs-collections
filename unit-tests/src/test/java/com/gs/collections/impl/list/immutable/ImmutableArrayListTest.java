@@ -182,12 +182,8 @@ public class ImmutableArrayListTest extends AbstractImmutableListTestCase
     public void get()
     {
         ImmutableList<Integer> list = this.classUnderTest();
-        Verify.assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
-            list.get(list.size() + 1);
-        });
-        Verify.assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
-            list.get(-1);
-        });
+        Verify.assertThrows(ArrayIndexOutOfBoundsException.class, () -> list.get(list.size() + 1));
+        Verify.assertThrows(ArrayIndexOutOfBoundsException.class, () -> list.get(-1));
     }
 
     @Test(expected = IllegalStateException.class)

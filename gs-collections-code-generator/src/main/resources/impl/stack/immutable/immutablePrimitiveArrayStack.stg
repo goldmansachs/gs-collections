@@ -54,7 +54,7 @@ import net.jcip.annotations.Immutable;
  * @since 4.0.
  */
 @Immutable
-class Immutable<name>ArrayStack
+final class Immutable<name>ArrayStack
         implements Immutable<name>Stack, Serializable
 {
     private static final long serialVersionUID = 1L;

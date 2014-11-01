@@ -125,8 +125,8 @@ public abstract class Abstract<name1><name2>MapTestCase
         Assert.assertEquals(<(wideLiteral.(type2))("31")>, this.map.getOrThrow(<(literal.(type1))("31")>)<wideDelta.(type2)>);
         Assert.assertEquals(<(wideLiteral.(type2))("32")>, this.map.getOrThrow(<(literal.(type1))("32")>)<wideDelta.(type2)>);
 
-        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow(<(literal.(type1))("1")>);});
-        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow(<(literal.(type1))("33")>);});
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(<(literal.(type1))("1")>); });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(<(literal.(type1))("33")>); });
     }
 
     @Test
@@ -824,7 +824,7 @@ public abstract class Abstract<name1><name2>MapTestCase
 
         Assert.assertEquals(expected, actual);
         Verify.assertThrows(NoSuchElementException.class, iterator::next);
-        Verify.assertThrows(NoSuchElementException.class, () -> {this.getEmptyMap().<type2>Iterator().next();});
+        Verify.assertThrows(NoSuchElementException.class, () -> { this.getEmptyMap().<type2>Iterator().next(); });
     }
 
     @Test

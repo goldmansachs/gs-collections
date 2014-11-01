@@ -258,6 +258,7 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
                 this.changed |= AbstractMutableMultimap.this.putAll(key, value);
             }
         }
+
         PutProcedure putProcedure = new PutProcedure();
         other.map.forEachKeyValue(putProcedure);
         return putProcedure.changed;

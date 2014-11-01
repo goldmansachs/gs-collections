@@ -89,12 +89,12 @@ public class ListIterateTest
     {
         MutableList<Integer> result = FastList.newList();
         MutableList<Integer> list = FastList.newListWith(1, 2, 3, 4);
-        ListIterate.forEachWith(list, (argument1, argument2) -> { result.add(argument1 + argument2); }, 1);
+        ListIterate.forEachWith(list, (argument1, argument2) -> result.add(argument1 + argument2), 1);
         Assert.assertEquals(FastList.newListWith(2, 3, 4, 5), result);
 
         List<Integer> result2 = new LinkedList<Integer>();
         List<Integer> linkedList = new LinkedList<Integer>(FastList.newListWith(1, 2, 3, 4));
-        ListIterate.forEachWith(linkedList, (argument1, argument2) -> { result2.add(argument1 + argument2); }, 1);
+        ListIterate.forEachWith(linkedList, (argument1, argument2) -> result2.add(argument1 + argument2), 1);
         Assert.assertEquals(FastList.newListWith(2, 3, 4, 5), result2);
     }
 
@@ -374,9 +374,7 @@ public class ListIterateTest
     private void assertForEachInBoth(List<String> list1, List<String> list2)
     {
         List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
-        ListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> {
-            list.add(Tuples.twin(argument1, argument2));
-        });
+        ListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> list.add(Tuples.twin(argument1, argument2)));
         Assert.assertEquals(FastList.newListWith(Tuples.twin("1", "a"), Tuples.twin("2", "b")), list);
     }
 

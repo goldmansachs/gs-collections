@@ -91,7 +91,7 @@ public class ReverseBooleanIterableTest
     {
         BooleanIterable iterable = BooleanArrayList.newListWith(false, false, true).asReversed();
         boolean[] result = {true};
-        iterable.forEach(each -> { result[0] &= each; });
+        iterable.forEach(each -> result[0] &= each);
 
         Assert.assertFalse(result[0]);
     }

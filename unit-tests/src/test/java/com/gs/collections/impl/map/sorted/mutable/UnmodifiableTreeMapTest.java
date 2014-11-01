@@ -116,7 +116,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void removeObject()
     {
         MutableSortedMap<String, Integer> map = this.newMapWithKeysValues("One", 1, "Two", 2, "Three", 3);
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.remove("One"); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.remove("One"));
     }
 
     @Override
@@ -124,7 +124,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void removeKey()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.removeKey(1); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.removeKey(1));
     }
 
     @Override
@@ -132,9 +132,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void removeFromEntrySet()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            map.entrySet().remove(ImmutableEntry.of(2, "Two"));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.entrySet().remove(ImmutableEntry.of(2, "Two")));
     }
 
     @Override
@@ -142,9 +140,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void removeAllFromEntrySet()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            map.entrySet().removeAll(FastList.newListWith(ImmutableEntry.of(2, "Two")));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.entrySet().removeAll(FastList.newListWith(ImmutableEntry.of(2, "Two"))));
     }
 
     @Override
@@ -152,9 +148,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void retainAllFromEntrySet()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            map.entrySet().retainAll(FastList.newListWith(ImmutableEntry.of(2, "Two")));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.entrySet().retainAll(FastList.newListWith(ImmutableEntry.of(2, "Two"))));
     }
 
     @Override
@@ -170,7 +164,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void removeFromKeySet()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.keySet().remove(2); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.keySet().remove(2));
     }
 
     @Override
@@ -178,9 +172,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void removeAllFromKeySet()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            map.keySet().removeAll(FastList.newListWith(1, 2));
-        });
+    Verify.assertThrows(UnsupportedOperationException.class, () -> map.keySet().removeAll(FastList.newListWith(1, 2)));
     }
 
     @Override
@@ -188,7 +180,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void retainAllFromKeySet()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.keySet().retainAll(Lists.mutable.of()); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.keySet().retainAll(Lists.mutable.of()));
     }
 
     @Override
@@ -204,7 +196,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void removeFromValues()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.values().remove("Two"); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.values().remove("Two"));
     }
 
     @Override
@@ -212,9 +204,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void removeAllFromValues()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            map.values().removeAll(FastList.newListWith("One", "Two"));
-        });
+    Verify.assertThrows(UnsupportedOperationException.class, () -> map.values().removeAll(FastList.newListWith("One", "Two")));
     }
 
     @Override
@@ -222,7 +212,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void removeNullFromValues()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.values().remove(null); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.values().remove(null));
     }
 
     @Override
@@ -230,7 +220,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void retainAllFromValues()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "Two");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.values().retainAll(Lists.mutable.of()); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.values().retainAll(Lists.mutable.of()));
     }
 
     @Override
@@ -266,7 +256,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void putAllFromCollection()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "2");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.collectKeysAndValues(null, null, null); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.collectKeysAndValues(null, null, null));
     }
 
     @Override
@@ -274,7 +264,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public void clear()
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "2");
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) map::clear);
+        Verify.assertThrows(UnsupportedOperationException.class, map::clear);
     }
 
     @Override
@@ -290,11 +280,9 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "2").asUnmodifiable();
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.entrySet().remove(null); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.entrySet().remove(null));
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            Iterate.getFirst(map.entrySet()).setValue("Three");
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> Iterate.getFirst(map.entrySet()).setValue("Three"));
 
         Assert.assertEquals(this.newMapWithKeysValues(1, "One", 2, "2"), map);
     }
@@ -370,14 +358,14 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
 
     private void checkMutability(MutableSortedMap<Integer, String> map)
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.put(3, "3"); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.put(3, "3"));
 
         Verify.assertThrows(UnsupportedOperationException.class, () -> map.putAll(TreeSortedMap.newMapWith(1, "1", 2, "2")));
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.remove(2); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.remove(2));
 
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) map::clear);
+        Verify.assertThrows(UnsupportedOperationException.class, map::clear);
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { map.with(Tuples.pair(1, "1")); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.with(Tuples.pair(1, "1")));
     }
 }

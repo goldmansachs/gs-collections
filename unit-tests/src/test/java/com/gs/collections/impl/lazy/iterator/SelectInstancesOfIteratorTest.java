@@ -49,9 +49,7 @@ public class SelectInstancesOfIteratorTest
     @Test
     public void noSuchElementException()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> {
-            new SelectInstancesOfIterator<Object>(Lists.fixedSize.of(), Object.class).next();
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> new SelectInstancesOfIterator<Object>(Lists.fixedSize.of(), Object.class).next());
     }
 
     @Test

@@ -101,4 +101,5 @@ public class Immutable<name>EmptyBagTest extends AbstractImmutable<name>BagTestC
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("0")>), result);
     }
 }
+
 >>

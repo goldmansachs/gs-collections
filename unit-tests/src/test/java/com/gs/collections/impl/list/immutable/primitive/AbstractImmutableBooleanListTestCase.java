@@ -164,7 +164,7 @@ public abstract class AbstractImmutableBooleanListTestCase extends AbstractImmut
         super.forEach();
         String[] sum = new String[1];
         sum[0] = "";
-        this.classUnderTest().forEach(each -> { sum[0] += each; });
+        this.classUnderTest().forEach(each -> sum[0] += each);
 
         StringBuilder expectedString = new StringBuilder();
         for (int i = 0; i < this.classUnderTest().size(); i++)
@@ -180,8 +180,8 @@ public abstract class AbstractImmutableBooleanListTestCase extends AbstractImmut
         String[] sum = new String[2];
         sum[0] = "";
         sum[1] = "";
-        this.classUnderTest().forEachWithIndex((each, index) -> { sum[0] += index + ":" + each; });
-        this.newWith().forEachWithIndex((each, index) -> { sum[1] += index + ":" + each; });
+        this.classUnderTest().forEachWithIndex((each, index) -> sum[0] += index + ":" + each);
+        this.newWith().forEachWithIndex((each, index) -> sum[1] += index + ":" + each);
         Assert.assertEquals("0:true1:false2:true", sum[0]);
         Assert.assertEquals("", sum[1]);
     }

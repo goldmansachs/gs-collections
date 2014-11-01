@@ -146,15 +146,15 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         bag.addOccurrences(2, 2);
         bag.addOccurrences(3, 1);
         IntegerSum sum = new IntegerSum(0);
-        bag.forEachWithOccurrences((each, index) -> { sum.add(each * index); });
+        bag.forEachWithOccurrences((each, index) -> sum.add(each * index));
         Assert.assertEquals(10, sum.getIntSum());
         bag.removeOccurrences(2, 1);
         IntegerSum sum2 = new IntegerSum(0);
-        bag.forEachWithOccurrences((each, index) -> { sum2.add(each * index); });
+        bag.forEachWithOccurrences((each, index) -> sum2.add(each * index));
         Assert.assertEquals(8, sum2.getIntSum());
         bag.removeOccurrences(1, 3);
         IntegerSum sum3 = new IntegerSum(0);
-        bag.forEachWithOccurrences((each, index) -> { sum3.add(each * index); });
+        bag.forEachWithOccurrences((each, index) -> sum3.add(each * index));
         Assert.assertEquals(5, sum3.getIntSum());
     }
 

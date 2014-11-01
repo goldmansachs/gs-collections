@@ -129,7 +129,7 @@ public class CollectBooleanIterableTest
     public void toArray()
     {
         boolean[] actual = Interval.zeroTo(2).collectBoolean(PrimitiveFunctions.integerIsPositive()).toArray();
-        Verify.assertEquals(3, actual.length);
+        Assert.assertEquals(3, actual.length);
         Assert.assertFalse(actual[0]);
         Assert.assertTrue(actual[1]);
         Assert.assertTrue(actual[2]);

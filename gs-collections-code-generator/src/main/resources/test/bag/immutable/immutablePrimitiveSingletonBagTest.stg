@@ -55,4 +55,5 @@ public class Immutable<name>SingletonBagTest extends AbstractImmutable<name>BagT
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("2")>), result);
     }
 }
+
 >>

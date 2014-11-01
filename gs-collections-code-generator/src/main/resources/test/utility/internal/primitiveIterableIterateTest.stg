@@ -67,4 +67,5 @@ public class <name>IterableIterateTest
         Verify.assertIterableSize(3, <name>IterableIterate.collect(this.iterable, String::valueOf, FastList.\<String>newList()));
     }
 }
+
 >>

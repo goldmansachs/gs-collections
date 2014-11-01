@@ -42,7 +42,7 @@ public abstract class AbstractImmutable<name>CollectionTestCase extends Abstract
     protected void assertSizeAndContains(Immutable<name>Collection collection, <type>... elements)
     {
         Assert.assertEquals(elements.length, collection.size());
-        for(<type> i: elements)
+        for (<type> i: elements)
         {
             Assert.assertTrue(collection.contains(i));
         }

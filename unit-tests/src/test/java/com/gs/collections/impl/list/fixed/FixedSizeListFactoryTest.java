@@ -45,8 +45,8 @@ public class FixedSizeListFactoryTest
         Assert.assertFalse(list.notEmpty());
         Assert.assertNull(list.getFirst());
         Assert.assertNull(list.getLast());
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { list.get(0); });
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { list.set(0, "nope"); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> list.get(0));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> list.set(0, "nope"));
     }
 
     @Test

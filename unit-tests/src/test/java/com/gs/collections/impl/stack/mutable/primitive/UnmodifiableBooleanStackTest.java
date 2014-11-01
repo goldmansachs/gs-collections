@@ -96,7 +96,7 @@ public class UnmodifiableBooleanStackTest extends AbstractBooleanStackTestCase
     @Test
     public void booleanIterator_with_remove()
     {
-        MutableBooleanIterator booleanIterator = (MutableBooleanIterator)this.classUnderTest().booleanIterator();
+        MutableBooleanIterator booleanIterator = (MutableBooleanIterator) this.classUnderTest().booleanIterator();
         Assert.assertTrue(booleanIterator.hasNext());
         booleanIterator.next();
         Verify.assertThrows(UnsupportedOperationException.class, booleanIterator::remove);
@@ -105,7 +105,7 @@ public class UnmodifiableBooleanStackTest extends AbstractBooleanStackTestCase
     @Test
     public void iterator_throws_on_invocation_of_remove_before_next()
     {
-        MutableBooleanIterator booleanIterator = (MutableBooleanIterator)this.classUnderTest().booleanIterator();
+        MutableBooleanIterator booleanIterator = (MutableBooleanIterator) this.classUnderTest().booleanIterator();
         Assert.assertTrue(booleanIterator.hasNext());
         Verify.assertThrows(UnsupportedOperationException.class, booleanIterator::remove);
     }

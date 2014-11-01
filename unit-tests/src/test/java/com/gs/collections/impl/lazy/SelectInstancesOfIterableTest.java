@@ -79,7 +79,7 @@ public class SelectInstancesOfIterableTest extends AbstractLazyIterableTestCase
     {
         InternalIterable<Integer> select = new SelectInstancesOfIterable<Integer>(FastList.newListWith(1, 2.0, 3, 4.0, 5), Integer.class);
         Sum sum = new IntegerSum(0);
-        select.forEachWith((each, aSum) -> { aSum.add(each); }, sum);
+        select.forEachWith((each, aSum) -> aSum.add(each), sum);
         Assert.assertEquals(9, sum.getValue().intValue());
     }
 

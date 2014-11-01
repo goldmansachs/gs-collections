@@ -48,7 +48,7 @@ public class Immutable<name>SingletonStackTest extends AbstractImmutable<name>St
     {
         Immutable<name>Stack stack = this.classUnderTest();
         Immutable<name>Stack modified = stack.pop();
-        Verify.assertEmpty( modified);
+        Verify.assertEmpty(modified);
         Verify.assertSize(1, stack);
         Assert.assertNotSame(modified, stack);
         Assert.assertEquals(this.classUnderTest(), stack);
@@ -63,7 +63,7 @@ public class Immutable<name>SingletonStackTest extends AbstractImmutable<name>St
         Assert.assertSame(stack1, stack);
         Assert.assertEquals(this.classUnderTest(), stack);
         Immutable<name>Stack modified = stack.pop(1);
-        Verify.assertEmpty( modified);
+        Verify.assertEmpty(modified);
         Verify.assertSize(1, stack);
         Assert.assertNotSame(modified, stack);
         Assert.assertEquals(this.classUnderTest(), stack);
@@ -86,7 +86,7 @@ public class Immutable<name>SingletonStackTest extends AbstractImmutable<name>St
         Assert.assertEquals(<name>ArrayList.newListWith(), this.classUnderTest().peek(0));
         Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>),
                 this.classUnderTest().peek(1));
-        Verify.assertThrows(IllegalArgumentException.class, () -> {this.classUnderTest().peek(2);});
+        Verify.assertThrows(IllegalArgumentException.class, () -> { this.classUnderTest().peek(2); });
     }
 
     @Override

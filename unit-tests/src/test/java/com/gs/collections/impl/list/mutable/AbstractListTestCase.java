@@ -76,9 +76,7 @@ public abstract class AbstractListTestCase
     @Test
     public void randomAccess_throws()
     {
-        Verify.assertThrows(IllegalArgumentException.class, () -> {
-            new ListAdapter<Integer>(FastList.newListWith(1, 2, 3));
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> new ListAdapter<Integer>(FastList.newListWith(1, 2, 3)));
     }
 
     @Override
@@ -597,7 +595,7 @@ public abstract class AbstractListTestCase
             List<Integer> expectedOutput)
     {
         MutableList<Integer> outputList = Lists.mutable.of();
-        list.forEachWithIndex(from, to, (each, index) -> { outputList.add(each); });
+        list.forEachWithIndex(from, to, (each, index) -> outputList.add(each));
 
         Assert.assertEquals(expectedOutput, outputList);
     }
@@ -654,9 +652,7 @@ public abstract class AbstractListTestCase
     {
         Object item = new Object();
 
-        Verify.assertThrows(
-                IndexOutOfBoundsException.class,
-                () -> { this.newWith(item).get(1); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> this.newWith(item).get(1));
     }
 
     @Test
@@ -664,9 +660,7 @@ public abstract class AbstractListTestCase
     {
         Object item = new Object();
 
-        Verify.assertThrows(
-                ArrayIndexOutOfBoundsException.class,
-                () -> { this.newWith(item).get(-1); });
+        Verify.assertThrows(ArrayIndexOutOfBoundsException.class, () -> this.newWith(item).get(-1));
     }
 
     @Test

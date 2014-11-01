@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -43,7 +43,7 @@ public class FlatCollectTest
     private final List<List<Integer>> integersJDK = new ArrayList<>(FastList.<List<Integer>>newWithNValues(COUNT, () -> new ArrayList<Integer>(Interval.oneTo(LIST_SIZE))));
     private final MutableList<MutableList<Integer>> integersGSC = FastList.newWithNValues(COUNT, () -> Interval.oneTo(LIST_SIZE).toList());
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_jdk()
     {
         List<Integer> flatMap = this.integersJDK.stream().flatMap(e -> e.stream()).collect(Collectors.toList());
@@ -51,13 +51,13 @@ public class FlatCollectTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_gsc()
     {
         MutableList<Integer> flatCollect = this.integersGSC.flatCollect(e -> e);
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_gsc()
     {
         MutableList<Integer> flatCollect = this.integersGSC.asLazy().flatCollect(e -> e).toList();

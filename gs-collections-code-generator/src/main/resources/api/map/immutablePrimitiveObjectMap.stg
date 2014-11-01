@@ -72,7 +72,7 @@ public interface Immutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>
 
     ImmutableLongCollection collectLong(LongFunction\<? super V> longFunction);
 
-    ImmutableShortCollection collectShort(ShortFunction\<? super V> ShortFunction);
+    ImmutableShortCollection collectShort(ShortFunction\<? super V> shortFunction);
 
     \<P, VV> ImmutableCollection\<VV> collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter);
 

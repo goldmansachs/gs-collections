@@ -195,15 +195,15 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         this.allocateTable(capacity);
     }
 
-    private int smallestPowerOfTwoGreaterThan(int n)
-    {
-        return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
-    }
-
     public <name>ObjectHashMap(<name>ObjectMap\<? extends V> map)
     {
         this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY));
         this.putAll(map);
+    }
+
+    private int smallestPowerOfTwoGreaterThan(int n)
+    {
+        return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
     }
 
     private int fastCeil(float v)
@@ -3672,7 +3672,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     {
         public <name>Iterator <type>Iterator()
         {
-            return new Unmodifiable<name>Iterator (new KeysSetIterator());
+            return new Unmodifiable<name>Iterator(new KeysSetIterator());
         }
 
         public void forEach(<name>Procedure procedure)

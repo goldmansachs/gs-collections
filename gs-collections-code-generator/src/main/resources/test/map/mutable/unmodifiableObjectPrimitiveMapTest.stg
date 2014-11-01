@@ -184,7 +184,7 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPut_FunctionThrowsException()
     {
-        <name>Function0 factory = () -> {throw new AssertionError();};
+        <name>Function0 factory = () -> { throw new AssertionError(); };
 
         this.map.getIfAbsentPut("10", factory);
     }
@@ -201,7 +201,7 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithThrowsException()
     {
-        <name>Function\<String> functionLength = (String string) -> {throw new AssertionError();};
+        <name>Function\<String> functionLength = (String string) -> { throw new AssertionError(); };
 
         this.map.getIfAbsentPutWith("10", functionLength, "123456789");
     }
@@ -218,7 +218,7 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWithKeyThrowsException()
     {
-        <name>Function\<Integer> function = (Integer anObject) -> {throw new AssertionError();};
+        <name>Function\<Integer> function = (Integer anObject) -> { throw new AssertionError(); };
 
         this.\<Integer>getEmptyMap().getIfAbsentPutWithKey(10, function);
     }
@@ -234,7 +234,7 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
     @Test(expected = UnsupportedOperationException.class)
     public void updateValue()
     {
-        <name>To<name>Function incrementFunction = (<type> value) -> {throw new AssertionError();};
+        <name>To<name>Function incrementFunction = (<type> value) -> { throw new AssertionError(); };
 
         MutableObject<name>Map\<Integer> map1 = this.getEmptyMap();
         map1.updateValue(0, <(literal.(type))("0")>, incrementFunction);
@@ -248,8 +248,8 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
         Assert.assertEquals(<(wideLiteral.(type))("1")>, this.map.getOrThrow("1")<delta.(type)>);
         Assert.assertEquals(<(wideLiteral.(type))("2")>, this.map.getOrThrow("2")<delta.(type)>);
 
-        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow("5");});
-        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow(null);});
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow("5"); });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(null); });
     }
 
     @Override

@@ -49,6 +49,8 @@ import org.junit.Test;
  */
 public abstract class AbstractObject<name>MapTestCase
 {
+    private final Object<name>Map\<String> map = this.classUnderTest();
+
     protected abstract Object<name>Map\<String> classUnderTest();
 
     protected abstract \<T> Object<name>Map\<T> newWithKeysValues(T key1, <type> value1);
@@ -60,8 +62,6 @@ public abstract class AbstractObject<name>MapTestCase
     protected abstract \<T> Object<name>Map\<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2, T key3, <type> value3, T key4, <type> value4);
 
     protected abstract \<T> Object<name>Map\<T> getEmptyMap();
-
-    private final Object<name>Map\<String> map = this.classUnderTest();
 
     @Test
     public void keySet()
@@ -102,8 +102,8 @@ public abstract class AbstractObject<name>MapTestCase
         Assert.assertEquals(<(literal.(type))("0")>, this.map.getOrThrow("0")<delta.(type)>);
         Assert.assertEquals(<(literal.(type))("1")>, this.map.getOrThrow("1")<delta.(type)>);
         Assert.assertEquals(<(literal.(type))("2")>, this.map.getOrThrow("2")<delta.(type)>);
-        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow("5");});
-        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow(null);});
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow("5"); });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(null); });
     }
 
     @Test
@@ -244,7 +244,7 @@ public abstract class AbstractObject<name>MapTestCase
 
         Assert.assertEquals(expected, actual);
         Verify.assertThrows(NoSuchElementException.class, iterator::next);
-        Verify.assertThrows(NoSuchElementException.class, () -> {this.getEmptyMap().<type>Iterator().next();});
+        Verify.assertThrows(NoSuchElementException.class, () -> { this.getEmptyMap().<type>Iterator().next(); });
     }
 
     @Test

@@ -28,8 +28,8 @@ import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -48,14 +48,14 @@ public class CollectIfTest
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final FastList<Integer> integersGSC = FastList.newList(Interval.oneTo(SIZE));
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_jdk()
     {
         List<String> evenStrings = this.integersJDK.stream().filter(e -> e % 2 == 0).map(Object::toString).collect(Collectors.toList());
         List<String> oddStrings = this.integersJDK.stream().filter(e -> e % 2 == 1).map(Object::toString).collect(Collectors.toList());
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_jdk()
     {
         List<String> evenStrings = this.integersJDK.parallelStream().filter(e -> e % 2 == 0).map(Object::toString).collect(Collectors.toList());
@@ -64,28 +64,28 @@ public class CollectIfTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_gsc()
     {
         MutableList<String> evenStrings = this.integersGSC.collectIf(e -> e % 2 == 0, Object::toString);
         MutableList<String> oddStrings = this.integersGSC.collectIf(e -> e % 2 == 1, Object::toString);
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_eager_gsc()
     {
         Collection<String> evenStrings = ParallelIterate.collectIf(this.integersGSC, e -> e % 2 == 0, Object::toString);
         Collection<String> oddStrings = ParallelIterate.collectIf(this.integersGSC, e -> e % 2 == 1, Object::toString);
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_gsc()
     {
         MutableList<String> evenStrings = this.integersGSC.asLazy().select(e -> e % 2 == 0).collect(Object::toString).toList();
         MutableList<String> oddStrings = this.integersGSC.asLazy().select(e -> e % 2 == 1).collect(Object::toString).toList();
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_gsc()
     {
         ParallelListIterable<Integer> parallelListIterable = this.integersGSC.asParallel(this.service, BATCH_SIZE);

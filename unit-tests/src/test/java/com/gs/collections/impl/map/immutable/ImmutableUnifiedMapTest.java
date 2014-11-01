@@ -57,7 +57,7 @@ public class ImmutableUnifiedMapTest extends ImmutableMapTestCase
     {
         Sum sum = new IntegerSum(0);
         BatchIterable<String> integerBatchIterable = (BatchIterable<String>) this.classUnderTest();
-        integerBatchIterable.batchForEach(each -> { sum.add(Integer.valueOf(each)); }, 0, 1);
+        integerBatchIterable.batchForEach(each -> sum.add(Integer.valueOf(each)), 0, 1);
         Assert.assertEquals(10, sum.getValue());
     }
 }

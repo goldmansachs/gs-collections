@@ -588,10 +588,10 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         {
             sum[i] = "";
         }
-        this.emptySet.forEach(each -> { sum[0] += each; });
-        this.setWithFalse.forEach(each -> { sum[1] += each; });
-        this.setWithTrue.forEach(each -> { sum[2] += each; });
-        this.setWithTrueFalse.forEach(each -> { sum[3] += each; });
+        this.emptySet.forEach(each -> sum[0] += each);
+        this.setWithFalse.forEach(each -> sum[1] += each);
+        this.setWithTrue.forEach(each -> sum[2] += each);
+        this.setWithTrueFalse.forEach(each -> sum[3] += each);
 
         Assert.assertEquals("", sum[0]);
         Assert.assertEquals("false", sum[1]);

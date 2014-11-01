@@ -65,7 +65,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     {
         MutableList<String> collection = Lists.mutable.of();
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "One");
-        map.forEachKeyValue((key, value) -> { collection.add(key + value); });
+        map.forEachKeyValue((key, value) -> collection.add(key + value));
         Assert.assertEquals(FastList.newListWith("1One"), collection);
     }
 
@@ -182,9 +182,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void getIfAbsentPut()
     {
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            map.getIfAbsentPut(4, new PassThruFunction0<String>("4"));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.getIfAbsentPut(4, new PassThruFunction0<String>("4")));
         Assert.assertEquals("1", map.getIfAbsentPut(1, new PassThruFunction0<String>("1")));
     }
 
@@ -193,9 +191,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void getIfAbsentPutWith()
     {
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            map.getIfAbsentPutWith(4, String::valueOf, 4);
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.getIfAbsentPutWith(4, String::valueOf, 4));
         Assert.assertEquals("1", map.getIfAbsentPutWith(1, String::valueOf, 1));
     }
 
@@ -254,7 +250,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     {
         MutableList<Integer> result = Lists.mutable.of();
         MutableMap<Integer, Integer> map = new SingletonMap<Integer, Integer>(1, 1);
-        map.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 10);
+        map.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 10);
         Assert.assertEquals(FastList.newListWith(11), result);
     }
 

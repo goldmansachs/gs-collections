@@ -140,7 +140,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     public void forEachWith()
     {
         MutableCollection<Integer> result = UnifiedSet.newSet();
-        this.classUnderTest().forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
+        this.classUnderTest().forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 0);
         Assert.assertEquals(this.classUnderTest(), result);
     }
 
@@ -148,7 +148,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     public void forEachWithIndex()
     {
         MutableCollection<Integer> result = UnifiedSet.newSet();
-        this.classUnderTest().forEachWithIndex((object, index) -> { result.add(object); });
+        this.classUnderTest().forEachWithIndex((object, index) -> result.add(object));
         Assert.assertEquals(this.classUnderTest(), result);
     }
 

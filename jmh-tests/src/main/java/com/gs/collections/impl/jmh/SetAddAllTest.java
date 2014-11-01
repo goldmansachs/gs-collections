@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
@@ -39,7 +39,7 @@ public class SetAddAllTest
     private final Set<Integer> integersJDK = new HashSet<>(Interval.oneTo(SIZE));
     private final MutableSet<Integer> integersGSC = Interval.oneTo(SIZE).toSet();
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void jdk()
     {
         Set<Integer> result = new HashSet<>();
@@ -49,7 +49,7 @@ public class SetAddAllTest
         }
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void gsc()
     {
         MutableSet<Integer> result = UnifiedSet.newSet();

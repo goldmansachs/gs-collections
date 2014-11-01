@@ -23,8 +23,8 @@ import com.google.common.collect.Multiset;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.Interval;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
@@ -39,7 +39,7 @@ public class BagAddAllTest
     private final Multiset<Integer> integersGuava = HashMultiset.create(Interval.oneTo(SIZE));
     private final MutableBag<Integer> integersGSC = Interval.oneTo(SIZE).toBag();
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void guava()
     {
         Multiset<Integer> result = HashMultiset.create();
@@ -49,7 +49,7 @@ public class BagAddAllTest
         }
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void gsc()
     {
         MutableBag<Integer> result = HashBag.newBag();

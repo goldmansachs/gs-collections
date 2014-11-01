@@ -616,8 +616,8 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         set.clear();
         Verify.assertEmpty(subSet);
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> { subSet.add(5); });
-        Verify.assertThrows(IllegalArgumentException.class, () -> { subSet.add(0); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> subSet.add(5));
+        Verify.assertThrows(IllegalArgumentException.class, () -> subSet.add(0));
     }
 
     @Test
@@ -639,7 +639,7 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         set.clear();
         Verify.assertEmpty(subSet);
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> { subSet.add(6); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> subSet.add(6));
         Assert.assertTrue(subSet.add(0));
     }
 
@@ -662,7 +662,7 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         set.clear();
         Verify.assertEmpty(subSet);
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> { subSet.add(1); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> subSet.add(1));
         Assert.assertTrue(subSet.add(10));
     }
 

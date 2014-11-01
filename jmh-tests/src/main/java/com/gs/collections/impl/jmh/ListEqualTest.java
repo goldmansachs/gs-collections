@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.list.Interval;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
@@ -42,7 +42,7 @@ public class ListEqualTest
     private final MutableList<Integer> integersGSC2 = Interval.oneTo(SIZE).toList();
     private final MutableList<Integer> integersGSC3 = Interval.oneTo(SIZE / 2).toList();
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void jdk()
     {
         boolean result0 = this.integersJDK1.equals(this.integersJDK1);
@@ -52,7 +52,7 @@ public class ListEqualTest
         boolean result4 = this.integersJDK1.equals(this.integersGSC3);
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void gsc()
     {
         boolean result0 = this.integersGSC1.equals(this.integersGSC1);

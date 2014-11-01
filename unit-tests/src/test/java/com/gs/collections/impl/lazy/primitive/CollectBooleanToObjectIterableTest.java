@@ -72,7 +72,7 @@ public class CollectBooleanToObjectIterableTest
     {
         InternalIterable<Boolean> select = this.newPrimitiveWith(true, false, true, false, true);
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith((each, aBuilder) -> { aBuilder.append(each); }, builder);
+        select.forEachWith((each, aBuilder) -> aBuilder.append(each), builder);
         Assert.assertEquals("truefalsetruefalsetrue", builder.toString());
     }
 

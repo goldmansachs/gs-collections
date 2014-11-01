@@ -171,7 +171,9 @@ public class Reverse<name>Iterable extends AbstractLazy<name>Iterable
         }
     }
 }
+
 >>
+
 arithmeticMethods ::= [
 "byte": "allMethods",
 "short": "allMethods",

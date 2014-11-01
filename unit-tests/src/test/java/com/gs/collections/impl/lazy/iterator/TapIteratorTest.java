@@ -27,13 +27,13 @@ public class TapIteratorTest
     @Test(expected = NoSuchElementException.class)
     public void nextIfDoesntHaveAnything()
     {
-        new TapIterator<Object>(Lists.immutable.of(), object -> {}).next();
+        new TapIterator<Object>(Lists.immutable.of(), object -> { }).next();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void removeIsUnsupported()
     {
-        new TapIterator<Object>(Lists.immutable.of().iterator(), object -> {}).remove();
+        new TapIterator<Object>(Lists.immutable.of().iterator(), object -> { }).remove();
     }
 
     @Test
@@ -41,7 +41,7 @@ public class TapIteratorTest
     {
         Object expected = new Object();
         TapIterator<Object> iterator = new TapIterator<Object>(
-                Lists.fixedSize.of(expected), object -> {});
+                Lists.fixedSize.of(expected), object -> { });
         Assert.assertSame(expected, iterator.next());
     }
 }

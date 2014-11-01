@@ -177,9 +177,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
         MutableList<Pair<String, String>> list = MultiReaderFastList.newList();
         MutableList<String> list1 = MultiReaderFastList.newListWith("1", "2");
         MutableList<String> list2 = MultiReaderFastList.newListWith("a", "b");
-        ListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> {
-            list.add(Tuples.pair(argument1, argument2));
-        });
+        ListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> list.add(Tuples.pair(argument1, argument2)));
         Assert.assertEquals(FastList.newListWith(Tuples.pair("1", "a"), Tuples.pair("2", "b")), list);
     }
 
@@ -342,7 +340,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     {
         MutableList<Integer> result = FastList.newList();
         MutableList<Integer> collection = MultiReaderFastList.newListWith(1, 2, 3, 4);
-        collection.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
+        collection.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 0);
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), result);
     }
 
@@ -799,7 +797,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void outOfBoundsCondition()
     {
         MutableList<Integer> integers = this.newWith(1, 2, 3, 4);
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { integers.get(4); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.get(4));
     }
 
     @Override
@@ -1044,8 +1042,8 @@ public class MultiReaderFastListTest extends AbstractListTestCase
 
     private void verifyDelegateIsUnmodifiable(MutableList<Integer> delegate)
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.add(2); });
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.remove(0); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> delegate.add(2));
+        Verify.assertThrows(UnsupportedOperationException.class, () -> delegate.remove(0));
     }
 
     @Override

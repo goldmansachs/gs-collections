@@ -138,11 +138,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         this.allocateTable(capacity);
     }
 
-    private int smallestPowerOfTwoGreaterThan(int n)
-    {
-        return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
-    }
-
     public <name>BooleanHashMap(<name>BooleanMap map)
     {
         this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY));
@@ -156,6 +151,11 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     public <name>BooleanHashMap(int initialCapacity, float loadFactor)
     {
         this(initialCapacity);
+    }
+
+    private int smallestPowerOfTwoGreaterThan(int n)
+    {
+        return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
     }
 
     public Mutable<name>BooleanMap asUnmodifiable()

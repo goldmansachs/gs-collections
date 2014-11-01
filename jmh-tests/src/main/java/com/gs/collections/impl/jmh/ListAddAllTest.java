@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
@@ -39,7 +39,7 @@ public class ListAddAllTest
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void jdk()
     {
         List<Integer> result = new ArrayList<>();
@@ -49,7 +49,7 @@ public class ListAddAllTest
         }
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void gsc()
     {
         MutableList<Integer> result = FastList.newList();

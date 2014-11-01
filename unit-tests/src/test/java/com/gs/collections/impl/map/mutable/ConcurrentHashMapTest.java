@@ -266,9 +266,7 @@ public class ConcurrentHashMapTest extends ConcurrentHashMapTestCase
     public void parallelGroupByIntoConcurrentHashMap()
     {
         MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMap.newMap();
-        ParallelIterate.forEach(Interval.oneTo(100), each -> {
-            actual.getIfAbsentPut(each % 10, () -> HashBag.<Integer>newBag().asSynchronized()).add(each);
-        }, 10, this.executor);
+        ParallelIterate.forEach(Interval.oneTo(100), each -> actual.getIfAbsentPut(each % 10, () -> HashBag.<Integer>newBag().asSynchronized()).add(each), 10, this.executor);
         Verify.assertEqualsAndHashCode(SMALL_BAG_MUTABLE_MAP, actual);
     }
 
@@ -278,9 +276,7 @@ public class ConcurrentHashMapTest extends ConcurrentHashMapTestCase
         ConcurrentHashMap<Integer, Integer> source =
                 ConcurrentHashMap.newMap(Interval.oneTo(100).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
         MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMap.newMap();
-        Procedure<Integer> procedure = each -> {
-            actual.getIfAbsentPut(each % 10, () -> HashBag.<Integer>newBag().asSynchronized()).add(each);
-        };
+        Procedure<Integer> procedure = each -> actual.getIfAbsentPut(each % 10, () -> HashBag.<Integer>newBag().asSynchronized()).add(each);
         source.parallelForEachValue(FastList.newList(Collections.nCopies(5, procedure)), this.executor);
         Verify.assertEqualsAndHashCode(SMALL_BAG_MUTABLE_MAP, actual);
     }
@@ -291,9 +287,7 @@ public class ConcurrentHashMapTest extends ConcurrentHashMapTestCase
         ConcurrentHashMap<Integer, Integer> source =
                 ConcurrentHashMap.newMap(Interval.oneTo(100).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
         MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMap.newMap();
-        Procedure2<Integer, Integer> procedure2 = (key, value) -> {
-            actual.getIfAbsentPut(value % 10, () -> HashBag.<Integer>newBag().asSynchronized()).add(value);
-        };
+        Procedure2<Integer, Integer> procedure2 = (key, value) -> actual.getIfAbsentPut(value % 10, () -> HashBag.<Integer>newBag().asSynchronized()).add(value);
         source.parallelForEachKeyValue(FastList.newList(Collections.nCopies(5, procedure2)), this.executor);
         Verify.assertEqualsAndHashCode(SMALL_BAG_MUTABLE_MAP, actual);
     }

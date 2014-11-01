@@ -192,51 +192,43 @@ public class UnmodifiableMutableCollectionTest
     @Test
     public void nullCollection()
     {
-        Verify.assertThrows(NullPointerException.class, () -> { new UnmodifiableMutableCollection<Object>(null); });
+        Verify.assertThrows(NullPointerException.class, () -> new UnmodifiableMutableCollection<Object>(null));
     }
 
     @Test
     public void add()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.unmodifiableCollection.add("Madonna"); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableCollection.add("Madonna"));
     }
 
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.unmodifiableCollection.remove(METALLICA);
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableCollection.remove(METALLICA));
     }
 
     @Test
     public void addAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.unmodifiableCollection.addAll(FastList.<String>newList().with("Madonna"));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableCollection.addAll(FastList.<String>newList().with("Madonna")));
     }
 
     @Test
     public void removeAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.unmodifiableCollection.removeAll(FastList.<String>newList().with(METALLICA));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableCollection.removeAll(FastList.<String>newList().with(METALLICA)));
     }
 
     @Test
     public void retainAll()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.unmodifiableCollection.retainAll(FastList.<String>newList().with(METALLICA));
-        });
+{
+Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableCollection.retainAll(FastList.<String>newList().with(METALLICA)));
     }
 
     @Test
     public void clear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) () -> this.unmodifiableCollection.clear());
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableCollection.clear());
     }
 
     @Test
@@ -330,9 +322,7 @@ public class UnmodifiableMutableCollectionTest
     public void forEachWith()
     {
         StringBuilder buf = new StringBuilder();
-        this.unmodifiableCollection.forEachWith((band, param) -> {
-            buf.append(param).append('<').append(band).append('>');
-        }, "GreatBand");
+    this.unmodifiableCollection.forEachWith((band, param) -> buf.append(param).append('<').append(band).append('>'), "GreatBand");
         Assert.assertEquals("GreatBand<Metallica>GreatBand<Bon Jovi>GreatBand<Europe>GreatBand<Scorpions>", buf.toString());
     }
 

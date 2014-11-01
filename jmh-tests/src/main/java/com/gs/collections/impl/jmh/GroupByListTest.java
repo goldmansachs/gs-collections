@@ -26,8 +26,8 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -46,7 +46,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_2_keys_serial_lazy_jdk()
     {
         Verify.assertSize(2, this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 2 == 0)));
@@ -54,7 +54,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_100_keys_serial_lazy_jdk()
     {
         Verify.assertSize(100, this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 100)));
@@ -62,7 +62,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_10000_keys_serial_lazy_jdk()
     {
         Verify.assertSize(10_000, this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 10_000)));
@@ -70,7 +70,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_2_keys_serial_eager_guava()
     {
         Verify.assertSize(2, Multimaps.index(this.integersJDK, each -> each % 2 == 0).asMap());
@@ -78,7 +78,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_100_keys_serial_eager_guava()
     {
         Verify.assertSize(100, Multimaps.index(this.integersJDK, each -> each % 100).asMap());
@@ -86,7 +86,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_10000_keys_serial_eager_guava()
     {
         Verify.assertSize(10_000, Multimaps.index(this.integersJDK, each -> each % 10000).asMap());
@@ -94,7 +94,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_2_keys_serial_eager_gsc()
     {
         Assert.assertEquals(2, this.integersGSC.groupBy(each -> each % 2 == 0).sizeDistinct());
@@ -102,7 +102,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_100_keys_serial_eager_gsc()
     {
         Assert.assertEquals(100, this.integersGSC.groupBy(each -> each % 100).sizeDistinct());
@@ -110,7 +110,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_10000_keys_serial_eager_gsc()
     {
         Assert.assertEquals(10_000, this.integersGSC.groupBy(each -> each % 10_000).sizeDistinct());
@@ -118,7 +118,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_2_keys_serial_lazy_gsc()
     {
         Assert.assertEquals(2, this.integersGSC.asLazy().groupBy(each -> each % 2 == 0).sizeDistinct());
@@ -126,7 +126,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_100_keys_serial_lazy_gsc()
     {
         Assert.assertEquals(100, this.integersGSC.asLazy().groupBy(each -> each % 100).sizeDistinct());
@@ -134,7 +134,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_10000_keys_serial_lazy_gsc()
     {
         Assert.assertEquals(10_000, this.integersGSC.asLazy().groupBy(each -> each % 10_000).sizeDistinct());
@@ -142,7 +142,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_2_keys_serial_eager_scala()
     {
         GroupByScalaTest.groupBy_2_keys_serial_eager_scala();
@@ -150,7 +150,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_100_keys_serial_eager_scala()
     {
         GroupByScalaTest.groupBy_100_keys_serial_eager_scala();
@@ -158,7 +158,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_10000_keys_serial_eager_scala()
     {
         GroupByScalaTest.groupBy_10000_keys_serial_eager_scala();
@@ -166,7 +166,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_2_keys_serial_lazy_scala()
     {
         GroupByScalaTest.groupBy_2_keys_serial_lazy_scala();
@@ -174,7 +174,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_100_keys_serial_lazy_scala()
     {
         GroupByScalaTest.groupBy_100_keys_serial_lazy_scala();
@@ -182,7 +182,7 @@ public class GroupByListTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_10000_keys_serial_lazy_scala()
     {
         GroupByScalaTest.groupBy_10000_keys_serial_lazy_scala();

@@ -101,45 +101,45 @@ public class UnmodifiableMutableListTest
     @Test
     public void sortThis()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {this.unmodifiableList.sortThis();});
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.sortThis());
     }
 
     @Test
     public void sortThisWithComparator()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.unmodifiableList.sortThis(String::compareTo);
-        });
+        Verify.assertThrows(
+                UnsupportedOperationException.class,
+                () -> this.unmodifiableList.sortThis(String::compareTo));
     }
 
     @Test
     public void sortThisBy()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.unmodifiableList.sortThisBy(Functions.getStringToInteger());
-        });
+        Verify.assertThrows(
+                UnsupportedOperationException.class,
+                () -> this.unmodifiableList.sortThisBy(Functions.getStringToInteger()));
     }
 
     @Test
     public void reverseThis()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.unmodifiableList.reverseThis();
-        });
+        Verify.assertThrows(
+                UnsupportedOperationException.class,
+                () -> this.unmodifiableList.reverseThis());
     }
 
     @Test
     public void addAllAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.unmodifiableList.addAll(0, Lists.mutable.of("Madonna"));
-        });
+        Verify.assertThrows(
+                UnsupportedOperationException.class,
+                () -> this.unmodifiableList.addAll(0, Lists.mutable.of("Madonna")));
     }
 
     @Test
     public void set()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.unmodifiableList.set(0, "Madonna"); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.set(0, "Madonna"));
     }
 
     @Test
@@ -151,7 +151,7 @@ public class UnmodifiableMutableListTest
     @Test
     public void removeFromIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.unmodifiableList.remove(0); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.remove(0));
     }
 
     @Test

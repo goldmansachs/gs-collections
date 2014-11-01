@@ -25,8 +25,8 @@ import java.util.concurrent.TimeUnit;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -61,13 +61,13 @@ public class NoneSatisfyTest
         this.executorService.awaitTermination(1L, TimeUnit.SECONDS);
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void short_circuit_middle_serial_lazy_jdk()
     {
         Assert.assertFalse(this.integersJDK.stream().noneMatch(each -> each > SIZE / 2));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void process_none_serial_lazy_jdk()
     {
         Assert.assertTrue(this.integersJDK.stream().noneMatch(each -> each < 0));
@@ -75,7 +75,7 @@ public class NoneSatisfyTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void short_circuit_middle_serial_eager_gsc()
     {
         Assert.assertFalse(this.integersGSC.noneSatisfy(each -> each > SIZE / 2));
@@ -83,43 +83,43 @@ public class NoneSatisfyTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void process_none_serial_eager_gsc()
     {
         Assert.assertTrue(this.integersGSC.noneSatisfy(each -> each < 0));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void short_circuit_middle_serial_lazy_gsc()
     {
         Assert.assertFalse(this.integersGSC.asLazy().noneSatisfy(each -> each > SIZE / 2));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void process_none_serial_lazy_gsc()
     {
         Assert.assertTrue(this.integersGSC.asLazy().noneSatisfy(each -> each < 0));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void short_circuit_middle_parallel_lazy_jdk()
     {
         Assert.assertFalse(this.integersJDK.parallelStream().noneMatch(each -> each == SIZE / 2 - 1));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void process_all_parallel_lazy_jdk()
     {
         Assert.assertTrue(this.integersJDK.parallelStream().noneMatch(each -> each < 0));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void short_circuit_middle_parallel_lazy_gsc()
     {
         Assert.assertFalse(this.integersGSC.asParallel(this.executorService, BATCH_SIZE).noneSatisfy(each -> each == SIZE / 2 - 1));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void process_all_parallel_lazy_gsc()
     {
         Assert.assertTrue(this.integersGSC.asParallel(this.executorService, BATCH_SIZE).noneSatisfy(each -> each < 0));

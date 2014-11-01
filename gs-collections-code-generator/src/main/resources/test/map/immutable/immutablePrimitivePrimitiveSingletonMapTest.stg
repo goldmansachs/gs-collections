@@ -140,8 +140,8 @@ public class Immutable<name1><name2>SingletonMapTest extends AbstractImmutable<n
     {
         Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getOrThrow(<(literal.(type1))("0")>)<wideDelta.(type2)>);
 
-        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow(<(literal.(type1))("31")>);});
-        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow(<(literal.(type1))("32")>);});
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(<(literal.(type1))("31")>); });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(<(literal.(type1))("32")>); });
     }
 
     @Override

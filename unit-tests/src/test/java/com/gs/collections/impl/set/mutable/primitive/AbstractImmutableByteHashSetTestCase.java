@@ -117,7 +117,7 @@ public abstract class AbstractImmutableByteHashSetTestCase extends AbstractImmut
         super.forEach();
         long[] sum = new long[1];
         ImmutableByteSet set = this.newWith((byte) 0, (byte) 1, (byte) 31);
-        set.forEach(each -> { sum[0] += each; });
+        set.forEach(each -> sum[0] += each);
 
         Assert.assertEquals(32L, sum[0]);
     }

@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.list.Interval;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -41,7 +41,7 @@ public class MinTest
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_jdk()
     {
         int max = this.integersJDK.stream().min(Comparator.<Integer>naturalOrder()).get();
@@ -50,14 +50,14 @@ public class MinTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_gsc()
     {
         int max = this.integersGSC.min(Comparator.<Integer>naturalOrder());
         int maxReverse = this.integersGSC.min(Comparator.<Integer>reverseOrder());
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_gsc()
     {
         int max = this.integersGSC.asLazy().min(Comparator.<Integer>naturalOrder());

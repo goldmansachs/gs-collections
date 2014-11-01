@@ -127,9 +127,9 @@ public abstract class StackIterableTestCase
     public void peek_illegal_arguments()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        Verify.assertThrows(IllegalArgumentException.class, () -> { stack.peek(-1); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> stack.peek(-1));
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> { stack.peek(4); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> stack.peek(4));
 
         Assert.assertEquals(FastList.newListWith(1, 2, 3), stack.peek(3));
     }
@@ -154,7 +154,7 @@ public abstract class StackIterableTestCase
     public void peekAt_illegal_arguments()
     {
         StackIterable<String> stack = this.newStackWith("1", "2", "3");
-        Verify.assertThrows(IllegalArgumentException.class, () -> { stack.peekAt(stack.size()); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> stack.peekAt(stack.size()));
     }
 
     @Test
@@ -189,7 +189,7 @@ public abstract class StackIterableTestCase
         StackIterable<Integer> stack = this.newStackWith(1, 2, 3);
         Assert.assertEquals(Integer.valueOf(3), stack.getFirst());
         Assert.assertEquals(stack.peek(), stack.getFirst());
-        Verify.assertThrows(EmptyStackException.class, () -> { this.newStackWith().getFirst(); });
+        Verify.assertThrows(EmptyStackException.class, () -> this.newStackWith().getFirst());
         StackIterable<Integer> stack2 = this.newStackFromTopToBottom(1, 2, 3);
         Assert.assertEquals(Integer.valueOf(1), stack2.getFirst());
     }
@@ -745,7 +745,7 @@ public abstract class StackIterableTestCase
     public void sumByFloat()
     {
         RichIterable<Integer> values = this.newStackFromTopToBottom(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        ObjectDoubleMap<Integer> result = values.sumByFloat(f -> (int) f % 2, e -> e);
+        ObjectDoubleMap<Integer> result = values.sumByFloat(f -> f % 2, e -> e);
         Assert.assertEquals(25.0f, result.get(1), 0.0);
         Assert.assertEquals(30.0f, result.get(0), 0.0);
     }
@@ -763,7 +763,7 @@ public abstract class StackIterableTestCase
     public void sumByDouble()
     {
         RichIterable<Integer> values = this.newStackFromTopToBottom(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        ObjectDoubleMap<Integer> result = values.sumByDouble(d -> (int) d % 2, e -> e);
+        ObjectDoubleMap<Integer> result = values.sumByDouble(d -> d % 2, e -> e);
         Assert.assertEquals(25.0d, result.get(1), 0.0);
         Assert.assertEquals(30.0d, result.get(0), 0.0);
     }
@@ -859,7 +859,7 @@ public abstract class StackIterableTestCase
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
 
         MutableMultimap<Integer, Integer> expected = FastListMultimap.newMultimap();
-        stack.forEach(Procedures.cast(value -> { expected.putAll(-value, Interval.fromTo(value, stack.size())); }));
+        stack.forEach(Procedures.cast(value -> expected.putAll(-value, Interval.fromTo(value, stack.size()))));
 
         Multimap<Integer, Integer> actual =
                 stack.groupByEach(new NegativeIntervalFunction());
@@ -897,7 +897,7 @@ public abstract class StackIterableTestCase
     {
         StackIterable<String> stack = this.newStackWith("1", "2", "3", "4");
         StringBuilder builder = new StringBuilder();
-        stack.forEachWith((argument1, argument2) -> { builder.append(argument1).append(argument2); }, 0);
+        stack.forEachWith((argument1, argument2) -> builder.append(argument1).append(argument2), 0);
         Assert.assertEquals("40302010", builder.toString());
     }
 
@@ -906,7 +906,7 @@ public abstract class StackIterableTestCase
     {
         StackIterable<String> stack = this.newStackFromTopToBottom("5", "4", "3", "2", "1");
         StringBuilder builder = new StringBuilder();
-        stack.forEachWithIndex((each, index) -> { builder.append(each).append(index); });
+        stack.forEachWithIndex((each, index) -> builder.append(each).append(index));
         Assert.assertEquals("5041322314", builder.toString());
     }
 
@@ -1083,7 +1083,7 @@ public abstract class StackIterableTestCase
     @Test
     public void aggregateByNonMutating()
     {
-        Function0<Integer> valueCreator = () -> (Integer) 0;
+        Function0<Integer> valueCreator = () -> 0;
         Function2<Integer, Integer, Integer> sumAggregator = (integer1, integer2) -> integer1 + integer2;
         StackIterable<Integer> collection = this.newStackWith(1, 1, 1, 2, 2, 3);
         MapIterable<String, Integer> aggregation = collection.aggregateBy(String::valueOf, valueCreator, sumAggregator);

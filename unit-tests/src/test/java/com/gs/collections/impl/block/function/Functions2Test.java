@@ -32,7 +32,7 @@ public class Functions2Test
         Verify.assertThrowsWithCause(
                 RuntimeException.class,
                 IOException.class,
-                () -> Functions2.throwing((a, b) -> {throw new IOException();}).value(null, null));
+                () -> Functions2.throwing((a, b) -> { throw new IOException(); }).value(null, null));
     }
 
     @Test

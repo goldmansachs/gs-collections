@@ -41,8 +41,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -81,7 +81,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Boolean, Set<Integer>> groupBy_2_keys_serial_lazy_jdk()
     {
         Map<Boolean, Set<Integer>> multimap = this.integersJDK.stream()
@@ -102,7 +102,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Integer, Set<Integer>> groupBy_100_keys_serial_lazy_jdk()
     {
         Map<Integer, Set<Integer>> multimap = this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 100, Collectors.toSet()));
@@ -124,7 +124,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Integer, Set<Integer>> groupBy_10000_keys_serial_lazy_jdk()
     {
         Map<Integer, Set<Integer>> multimap = this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 10_000, Collectors.toSet()));
@@ -146,7 +146,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Boolean, Set<Integer>> groupBy_2_keys_parallel_lazy_jdk()
     {
         Map<Boolean, Set<Integer>> multimap = this.integersJDK.parallelStream().collect(Collectors.groupingBy(each -> each % 2 == 0, Collectors.toSet()));
@@ -166,7 +166,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Integer, Set<Integer>> groupBy_100_keys_parallel_lazy_jdk()
     {
         Map<Integer, Set<Integer>> multimap = this.integersJDK.parallelStream().collect(Collectors.groupingBy(each -> each % 100, Collectors.toSet()));
@@ -188,7 +188,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Integer, Set<Integer>> groupBy_10000_keys_parallel_lazy_jdk()
     {
         Map<Integer, Set<Integer>> multimap = this.integersJDK.parallelStream().collect(Collectors.groupingBy(each -> each % 10_000, Collectors.toSet()));
@@ -210,7 +210,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public ImmutableListMultimap<Boolean, Integer> groupBy_unordered_lists_2_keys_serial_eager_guava()
     {
         ImmutableListMultimap<Boolean, Integer> multimap = Multimaps.index(this.integersJDK, each -> each % 2 == 0);
@@ -231,7 +231,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public ImmutableListMultimap<Integer, Integer> groupBy_unordered_lists_100_keys_serial_eager_guava()
     {
         ImmutableListMultimap<Integer, Integer> multimap = Multimaps.index(this.integersJDK, each -> each % 100);
@@ -253,7 +253,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public ImmutableListMultimap<Integer, Integer> groupBy_unordered_lists_10000_keys_serial_eager_guava()
     {
         ImmutableListMultimap<Integer, Integer> multimap = Multimaps.index(this.integersJDK, each -> each % 10000);
@@ -275,7 +275,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public UnifiedSetMultimap<Boolean, Integer> groupBy_2_keys_serial_eager_gsc()
     {
         UnifiedSetMultimap<Boolean, Integer> multimap = this.integersGSC.groupBy(each -> each % 2 == 0);
@@ -295,7 +295,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public UnifiedSetMultimap<Integer, Integer> groupBy_100_keys_serial_eager_gsc()
     {
         UnifiedSetMultimap<Integer, Integer> multimap = this.integersGSC.groupBy(each -> each % 100);
@@ -317,7 +317,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public UnifiedSetMultimap<Integer, Integer> groupBy_10000_keys_serial_eager_gsc()
     {
         UnifiedSetMultimap<Integer, Integer> multimap = this.integersGSC.groupBy(each -> each % 10_000);
@@ -339,7 +339,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Multimap<Boolean, Integer> groupBy_unordered_lists_2_keys_serial_lazy_gsc()
     {
         Multimap<Boolean, Integer> multimap = this.integersGSC.asLazy().groupBy(each -> each % 2 == 0);
@@ -359,7 +359,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Multimap<Integer, Integer> groupBy_unordered_lists_100_keys_serial_lazy_gsc()
     {
         Multimap<Integer, Integer> multimap = this.integersGSC.asLazy().groupBy(each -> each % 100);
@@ -381,7 +381,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Multimap<Integer, Integer> groupBy_unordered_lists_10000_keys_serial_lazy_gsc()
     {
         Multimap<Integer, Integer> multimap = this.integersGSC.asLazy().groupBy(each -> each % 10_000);
@@ -403,7 +403,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public UnsortedSetMultimap<Boolean, Integer> groupBy_2_keys_parallel_lazy_gsc()
     {
         UnsortedSetMultimap<Boolean, Integer> multimap = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).groupBy(each -> each % 2 == 0);
@@ -423,7 +423,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public UnsortedSetMultimap<Integer, Integer> groupBy_100_keys_parallel_lazy_gsc()
     {
         UnsortedSetMultimap<Integer, Integer> multimap = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).groupBy(each -> each % 100);
@@ -445,7 +445,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public UnsortedSetMultimap<Integer, Integer> groupBy_10000_keys_parallel_lazy_gsc()
     {
         UnsortedSetMultimap<Integer, Integer> multimap = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).groupBy(each -> each % 10_000);
@@ -467,7 +467,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_2_keys_serial_eager_scala()
     {
         GroupBySetScalaTest.groupBy_2_keys_serial_eager_scala();
@@ -481,7 +481,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_100_keys_serial_eager_scala()
     {
         GroupBySetScalaTest.groupBy_100_keys_serial_eager_scala();
@@ -495,7 +495,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_10000_keys_serial_eager_scala()
     {
         GroupBySetScalaTest.groupBy_10000_keys_serial_eager_scala();
@@ -509,7 +509,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_2_keys_serial_lazy_scala()
     {
         GroupBySetScalaTest.groupBy_unordered_lists_2_keys_serial_lazy_scala();
@@ -523,7 +523,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_100_keys_serial_lazy_scala()
     {
         GroupBySetScalaTest.groupBy_unordered_lists_100_keys_serial_lazy_scala();
@@ -537,7 +537,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_10000_keys_serial_lazy_scala()
     {
         GroupBySetScalaTest.groupBy_unordered_lists_10000_keys_serial_lazy_scala();
@@ -551,7 +551,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_2_keys_parallel_lazy_scala()
     {
         GroupBySetScalaTest.groupBy_2_keys_parallel_lazy_scala();
@@ -565,7 +565,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_100_keys_parallel_lazy_scala()
     {
         GroupBySetScalaTest.groupBy_100_keys_parallel_lazy_scala();
@@ -579,7 +579,7 @@ public class GroupBySetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void groupBy_10000_keys_parallel_lazy_scala()
     {
         GroupBySetScalaTest.groupBy_10000_keys_parallel_lazy_scala();

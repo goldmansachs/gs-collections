@@ -1160,7 +1160,7 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
 
         public ImmutableByteSet select(final BytePredicate predicate)
         {
-            final ByteHashSet result = new ByteHashSet();
+            final MutableByteSet result = new ByteHashSet();
 
             this.forEach(new ByteProcedure()
             {

@@ -45,7 +45,7 @@ public class ProceduresTest
         Verify.assertThrowsWithCause(
                 RuntimeException.class,
                 IOException.class,
-                () -> Procedures.throwing(a -> {throw new IOException();}).value(null));
+                () -> Procedures.throwing(a -> { throw new IOException(); }).value(null));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class ProceduresTest
         ImmutableList<String> expectedResults = Lists.immutable.of("zero0", "one1", "two2");
 
         MutableList<String> actualResults = Lists.mutable.of();
-        ObjectIntProcedure<String> objectIntProcedure = (each, index) -> { actualResults.add(each + index); };
+        ObjectIntProcedure<String> objectIntProcedure = (each, index) -> actualResults.add(each + index);
 
         ImmutableList<String> numberStrings = Lists.immutable.of("zero", "one", "two");
         Procedure<String> procedure = Procedures.fromObjectIntProcedure(objectIntProcedure);
@@ -105,8 +105,8 @@ public class ProceduresTest
     public void ifElse()
     {
         MutableMap<String, Integer> pathCalled = UnifiedMap.newWithKeysValues("result", 0);
-        Procedure<Integer> ifBlock = each -> { pathCalled.put("result", 1); };
-        Procedure<Integer> elseBlock = each -> { pathCalled.put("result", -1); };
+        Procedure<Integer> ifBlock = each -> pathCalled.put("result", 1);
+        Procedure<Integer> elseBlock = each -> pathCalled.put("result", -1);
 
         Procedures.ifElse(ignored -> true, ifBlock, elseBlock).value(1);
         Verify.assertContainsKeyValue("result", 1, pathCalled);

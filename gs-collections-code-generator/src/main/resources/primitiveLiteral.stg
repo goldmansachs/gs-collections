@@ -164,7 +164,7 @@ castDouble ::= [
 castSum ::= [
     "byte": "(double) ",
     "short": "(double) ",
-    "char": "(double)",
+    "char": "(double) ",
     "int": "(double) ",
     "long": "(double) ",
     "float": "",

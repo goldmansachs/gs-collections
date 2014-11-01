@@ -205,7 +205,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     @Test
     public void collect()
     {
-        RichIterable<Integer> result1 = this.newWith(2, true, 3, false, 4, true).collect(object -> (int) object.getOne());
+        RichIterable<Integer> result1 = this.newWith(2, true, 3, false, 4, true).collect(ObjectBooleanPair::getOne);
 
         Assert.assertEquals(HashBag.newBagWith(2, 3, 4), result1.toBag());
     }
@@ -279,7 +279,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     @Test
     public void maxBy()
     {
-        Function<ObjectBooleanPair<Integer>, Integer> function = object -> (int) object.getOne() & 1;
+        Function<ObjectBooleanPair<Integer>, Integer> function = object -> object.getOne() & 1;
         Assert.assertEquals(PrimitiveTuples.pair(Integer.valueOf(3), false), this.newWith(2, true, 3, false, 4, true).maxBy(function));
     }
 
@@ -391,7 +391,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     {
         Assert.assertEquals(
                 Bags.mutable.of(5L, 7L, 9L),
-                this.newWith(2, true, 3, false, 4, true).collectWith((argument1, argument2) -> (long) (argument1.getOne() + argument1.getOne() + argument2), 1L).toBag());
+                this.newWith(2, true, 3, false, 4, true).collectWith((argument1, argument2) -> (argument1.getOne() + argument1.getOne() + argument2), 1L).toBag());
     }
 
     @Test
@@ -399,7 +399,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     {
         Assert.assertEquals(
                 Bags.mutable.of(5L, 7L, 9L),
-                this.newWith(2, true, 3, false, 4, true).collectWith((argument1, argument2) -> (long) (argument1.getOne() + argument1.getOne() + argument2), 1L, HashBag.<Long>newBag()));
+                this.newWith(2, true, 3, false, 4, true).collectWith((argument1, argument2) -> (argument1.getOne() + argument1.getOne() + argument2), 1L, HashBag.<Long>newBag()));
     }
 
     @Test
@@ -443,7 +443,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
         }
 
         Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) iterator::remove);
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
         Assert.assertEquals(objects.toBag(), actual);
     }
 
@@ -465,7 +465,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void injectInto()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        Long result = objects.injectInto(1L, (Long argument1, ObjectBooleanPair<Integer> argument2) -> (long) (argument1 + argument2.getOne() + argument2.getOne()));
+        Long result = objects.injectInto(1L, (Long argument1, ObjectBooleanPair<Integer> argument2) -> argument1 + argument2.getOne() + argument2.getOne());
         Assert.assertEquals(Long.valueOf(19), result);
     }
 
@@ -473,7 +473,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void injectIntoInt()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        int result = objects.injectInto(1, (int intParameter, ObjectBooleanPair<Integer> argument2) -> (int) (intParameter + argument2.getOne() + argument2.getOne()));
+        int result = objects.injectInto(1, (int intParameter, ObjectBooleanPair<Integer> argument2) -> intParameter + argument2.getOne() + argument2.getOne());
         Assert.assertEquals(19, result);
     }
 
@@ -481,7 +481,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void injectIntoLong()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        long result = objects.injectInto(1L, (long parameter, ObjectBooleanPair<Integer> argument2) -> (long) (parameter + argument2.getOne() + argument2.getOne()));
+        long result = objects.injectInto(1L, (long parameter, ObjectBooleanPair<Integer> argument2) -> parameter + argument2.getOne() + argument2.getOne());
         Assert.assertEquals(19, result);
     }
 
@@ -489,7 +489,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void injectIntoDouble()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        double result = objects.injectInto(1.0, (parameter, argument2) -> (double) (parameter + argument2.getOne() + argument2.getOne()));
+        double result = objects.injectInto(1.0, (parameter, argument2) -> parameter + argument2.getOne() + argument2.getOne());
         Assert.assertEquals(19.0, result, 0.0);
     }
 
@@ -497,7 +497,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void injectIntoFloat()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        float result = objects.injectInto(1.0f, (float parameter, ObjectBooleanPair<Integer> argument2) -> (float) (parameter + argument2.getOne() + argument2.getOne()));
+        float result = objects.injectInto(1.0f, (float parameter, ObjectBooleanPair<Integer> argument2) -> parameter + argument2.getOne() + argument2.getOne());
         Assert.assertEquals(19.0, result, 0.0);
     }
 
@@ -521,7 +521,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     public void sumInteger()
     {
         RichIterable<ObjectBooleanPair<Integer>> objects = this.newWith(2, true, 3, false, 4, true);
-        long actual = objects.sumOfInt(each -> (int) (each.getOne() + each.getOne()));
+        long actual = objects.sumOfInt(each -> each.getOne() + each.getOne());
         Assert.assertEquals(18, actual);
     }
 
@@ -798,9 +798,7 @@ public abstract class AbstractObjectBooleanMapKeyValuesViewTestCase
     @Test
     public void aggregateByMutating()
     {
-        Procedure2<AtomicInteger, ObjectBooleanPair<Integer>> sumAggregator = (aggregate, value) -> {
-            aggregate.addAndGet(value.getOne());
-        };
+        Procedure2<AtomicInteger, ObjectBooleanPair<Integer>> sumAggregator = (aggregate, value) -> aggregate.addAndGet(value.getOne());
         RichIterable<ObjectBooleanPair<Integer>> collection = this.newWith(2, true, 3, false, 4, true);
         MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(String::valueOf, AtomicInteger::new, sumAggregator);
         Assert.assertEquals(4, aggregation.get("4:true").intValue());

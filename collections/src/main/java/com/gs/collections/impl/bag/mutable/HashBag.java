@@ -396,7 +396,7 @@ public class HashBag<T>
         if (newValue <= 0)
         {
             this.size -= occurrences + newValue;
-            this.items.remove((T) item);
+            this.items.remove(item);
             return newValue + occurrences != 0;
         }
 

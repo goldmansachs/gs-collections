@@ -178,7 +178,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     public void forEachWith()
     {
         MutableList<Integer> result = Lists.mutable.of();
-        this.intSet.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
+        this.intSet.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 0);
         Verify.assertSize(1, result);
         Verify.assertContainsAll(result, 1);
     }
@@ -187,7 +187,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     public void forEachWithIndex()
     {
         MutableList<Integer> result = Lists.mutable.of();
-        this.intSet.forEachWithIndex((object, index) -> { result.add(object + index); });
+        this.intSet.forEachWithIndex((object, index) -> result.add(object + index));
         Verify.assertContainsAll(result, 1);
     }
 
@@ -401,17 +401,13 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void removeAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.intSet.removeAll(Lists.fixedSize.of(1, 2));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.intSet.removeAll(Lists.fixedSize.of(1, 2)));
     }
 
     @Test
     public void retainAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.intSet.retainAll(Lists.fixedSize.of(2));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.intSet.retainAll(Lists.fixedSize.of(2)));
     }
 
     @Test

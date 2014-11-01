@@ -33,11 +33,14 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionImmutableSet;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
@@ -48,6 +51,14 @@ import com.gs.collections.api.set.primitive.ImmutableFloatSet;
 import com.gs.collections.api.set.primitive.ImmutableIntSet;
 import com.gs.collections.api.set.primitive.ImmutableLongSet;
 import com.gs.collections.api.set.primitive.ImmutableShortSet;
+import com.gs.collections.api.set.primitive.MutableBooleanSet;
+import com.gs.collections.api.set.primitive.MutableByteSet;
+import com.gs.collections.api.set.primitive.MutableCharSet;
+import com.gs.collections.api.set.primitive.MutableDoubleSet;
+import com.gs.collections.api.set.primitive.MutableFloatSet;
+import com.gs.collections.api.set.primitive.MutableIntSet;
+import com.gs.collections.api.set.primitive.MutableLongSet;
+import com.gs.collections.api.set.primitive.MutableShortSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -87,8 +98,8 @@ import com.gs.collections.impl.utility.internal.SetIterables;
 import net.jcip.annotations.Immutable;
 
 /**
- * This class is the parent class for all ImmutableLists.  All implementations of ImmutableList must implement the List
- * interface so anArrayList.equals(anImmutableList) can return true when the contents and order are the same.
+ * This class is the parent class for all ImmutableSets.  All implementations of ImmutableSet must implement the Set
+ * interface so anArraySet.equals(anImmutableSet) can return true when the contents and order are the same.
  */
 @Immutable
 public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollection<T>
@@ -108,7 +119,7 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
     {
         if (!this.contains(element))
         {
-            UnifiedSet<T> result = UnifiedSet.newSet(this);
+            MutableSet<T> result = UnifiedSet.newSet(this);
             result.add(element);
             return result.toImmutable();
         }
@@ -119,7 +130,7 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
     {
         if (this.contains(element))
         {
-            UnifiedSet<T> result = UnifiedSet.newSet(this);
+            MutableSet<T> result = UnifiedSet.newSet(this);
             result.remove(element);
             return result.toImmutable();
         }
@@ -128,21 +139,21 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
 
     public ImmutableSet<T> newWithAll(Iterable<? extends T> elements)
     {
-        UnifiedSet<T> result = UnifiedSet.newSet(elements);
+        MutableSet<T> result = UnifiedSet.newSet(elements);
         result.addAll(this);
         return result.toImmutable();
     }
 
     public ImmutableSet<T> newWithoutAll(Iterable<? extends T> elements)
     {
-        UnifiedSet<T> result = UnifiedSet.newSet(this);
+        MutableSet<T> result = UnifiedSet.newSet(this);
         this.removeAllFrom(elements, result);
         return result.toImmutable();
     }
 
     public ImmutableSet<T> select(Predicate<? super T> predicate)
     {
-        FastList<T> intermediateResult = FastList.newList();
+        MutableList<T> intermediateResult = FastList.newList();
         this.forEach(new SelectProcedure<T>(predicate, intermediateResult));
         return Sets.immutable.ofAll(intermediateResult);
     }
@@ -154,7 +165,7 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
 
     public ImmutableSet<T> reject(Predicate<? super T> predicate)
     {
-        FastList<T> intermediateResult = FastList.newList();
+        MutableList<T> intermediateResult = FastList.newList();
         this.forEach(new RejectProcedure<T>(predicate, intermediateResult));
         return Sets.immutable.ofAll(intermediateResult);
     }
@@ -180,70 +191,70 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
 
     public <S> ImmutableSet<S> selectInstancesOf(Class<S> clazz)
     {
-        UnifiedSet<S> result = UnifiedSet.newSet(this.size());
+        MutableSet<S> result = UnifiedSet.newSet(this.size());
         this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
         return result.toImmutable();
     }
 
     public <V> ImmutableSet<V> collect(Function<? super T, ? extends V> function)
     {
-        UnifiedSet<V> result = UnifiedSet.newSet();
+        MutableSet<V> result = UnifiedSet.newSet();
         this.forEach(new CollectProcedure<T, V>(function, result));
         return result.toImmutable();
     }
 
     public ImmutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        BooleanHashSet result = new BooleanHashSet();
+        MutableBooleanSet result = new BooleanHashSet();
         this.forEach(new CollectBooleanProcedure<T>(booleanFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableByteSet collectByte(ByteFunction<? super T> byteFunction)
     {
-        ByteHashSet result = new ByteHashSet(this.size());
+        MutableByteSet result = new ByteHashSet();
         this.forEach(new CollectByteProcedure<T>(byteFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableCharSet collectChar(CharFunction<? super T> charFunction)
     {
-        CharHashSet result = new CharHashSet(this.size());
+        MutableCharSet result = new CharHashSet(this.size());
         this.forEach(new CollectCharProcedure<T>(charFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        DoubleHashSet result = new DoubleHashSet(this.size());
+        MutableDoubleSet result = new DoubleHashSet(this.size());
         this.forEach(new CollectDoubleProcedure<T>(doubleFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
     {
-        FloatHashSet result = new FloatHashSet(this.size());
+        MutableFloatSet result = new FloatHashSet(this.size());
         this.forEach(new CollectFloatProcedure<T>(floatFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableIntSet collectInt(IntFunction<? super T> intFunction)
     {
-        IntHashSet result = new IntHashSet(this.size());
+        MutableIntSet result = new IntHashSet(this.size());
         this.forEach(new CollectIntProcedure<T>(intFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableLongSet collectLong(LongFunction<? super T> longFunction)
     {
-        LongHashSet result = new LongHashSet(this.size());
+        MutableLongSet result = new LongHashSet(this.size());
         this.forEach(new CollectLongProcedure<T>(longFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableShortSet collectShort(ShortFunction<? super T> shortFunction)
     {
-        ShortHashSet result = new ShortHashSet(this.size());
+        MutableShortSet result = new ShortHashSet(this.size());
         this.forEach(new CollectShortProcedure<T>(shortFunction, result));
         return result.toImmutable();
     }
@@ -255,14 +266,14 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
 
     public <V> ImmutableSet<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        UnifiedSet<V> result = UnifiedSet.newSet();
+        MutableSet<V> result = UnifiedSet.newSet();
         this.forEach(new CollectIfProcedure<T, V>(result, function, predicate));
         return result.toImmutable();
     }
 
     public <V> ImmutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        UnifiedSet<V> result = UnifiedSet.newSet();
+        MutableSet<V> result = UnifiedSet.newSet();
         this.forEach(new FlatCollectProcedure<T, V>(function, result));
         return result.toImmutable();
     }

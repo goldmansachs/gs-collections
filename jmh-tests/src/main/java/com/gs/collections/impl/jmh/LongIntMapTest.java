@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.map.primitive.MutableLongIntMap;
 import com.gs.collections.impl.map.mutable.primitive.LongIntHashMap;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -31,7 +31,7 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
-import org.openjdk.jmh.logic.BlackHole;
+import org.openjdk.jmh.infra.Blackhole;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -93,8 +93,8 @@ public class LongIntMapTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
-    public void get(BlackHole blackHole)
+    @Benchmark
+    public void get(Blackhole blackHole)
     {
         for (int j = 0; j < 10_000_000 / this.mapSizeDividedBy16000 / 64; j++)
         {
@@ -107,7 +107,7 @@ public class LongIntMapTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void put()
     {
         for (int j = 0; j < 10_000_000 / this.mapSizeDividedBy16000 / 64; j++)
@@ -122,7 +122,7 @@ public class LongIntMapTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void presizedPut()
     {
         for (int j = 0; j < 10_000_000 / this.mapSizeDividedBy16000 / 64; j++)
@@ -137,7 +137,7 @@ public class LongIntMapTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void remove()
     {
         for (int j = 0; j < 10_000_000 / this.mapSizeDividedBy16000 / 64; j++)
@@ -152,8 +152,8 @@ public class LongIntMapTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
-    public void copyTest(BlackHole blackHole)
+    @Benchmark
+    public void copyTest(Blackhole blackHole)
     {
         for (int j = 0; j < 10_000_000 / this.mapSizeDividedBy16000 / 64; j++)
         {

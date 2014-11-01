@@ -23,7 +23,6 @@ import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Immutable<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
-import com.gs.collections.impl.map.mutable.primitive.<name>ByteHashMap;
 import com.gs.collections.impl.set.immutable.primitive.Frozen<name>HashSetTest;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.mutable.primitive.AbstractImmutable<name>HashSetTestCase;

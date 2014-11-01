@@ -29,6 +29,8 @@ import org.junit.Test;
  */
 public class SynchronizedObject<name>MapTest extends AbstractMutableObject<name>MapTestCase
 {
+    private final SynchronizedObject<name>Map\<String> map = this.classUnderTest();
+
     @Override
     protected SynchronizedObject<name>Map\<String> classUnderTest()
     {
@@ -64,8 +66,6 @@ public class SynchronizedObject<name>MapTest extends AbstractMutableObject<name>
     {
         return new SynchronizedObject<name>Map\<T>(new Object<name>HashMap\<T>());
     }
-
-    private final SynchronizedObject<name>Map\<String> map = this.classUnderTest();
 
     @Override
     @Test

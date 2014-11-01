@@ -69,9 +69,9 @@ import org.junit.Test;
  */
 public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>ObjectMapTestCase
 {
-    public static final Predicate2\<String, String> ERROR_THROWING_PREDICATE_2 = (String argument1, String argument2) -> {throw new AssertionError();};
+    public static final Predicate2\<String, String> ERROR_THROWING_PREDICATE_2 = (String argument1, String argument2) -> { throw new AssertionError(); };
 
-    public static final Predicate\<String> ERROR_THROWING_PREDICATE = (String each) -> {throw new AssertionError();};
+    public static final Predicate\<String> ERROR_THROWING_PREDICATE = (String each) -> { throw new AssertionError(); };
 
     @Override
     protected Immutable<name>ObjectMap\<String> classUnderTest()
@@ -417,41 +417,41 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void min_withComparator()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().min(Comparators.naturalOrder());});
+        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().min(Comparators.naturalOrder()); });
     }
 
     @Test
     public void max_withComparator()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().max(Comparators.naturalOrder());});
+        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().max(Comparators.naturalOrder()); });
     }
 
     @Override
     @Test
     public void minBy()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().minBy(String::valueOf);});
+        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().minBy(String::valueOf); });
     }
 
     @Override
     @Test
     public void maxBy()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().maxBy(String::valueOf);});
+        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().maxBy(String::valueOf); });
     }
 
     @Override
     @Test
     public void min()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().min();});
+        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().min(); });
     }
 
     @Override
     @Test
     public void max()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> {this.classUnderTest().max();});
+        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().max(); });
     }
 
     @Override

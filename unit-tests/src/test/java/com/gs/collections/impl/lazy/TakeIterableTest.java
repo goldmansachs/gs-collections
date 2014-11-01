@@ -94,7 +94,7 @@ public class TakeIterableTest extends AbstractLazyIterableTestCase
     public void forEachWithIndex()
     {
         FastList<Integer> indices = FastList.newList(5);
-        ObjectIntProcedure<Integer> indexRecordingProcedure = (each, index) -> { indices.add(index); };
+        ObjectIntProcedure<Integer> indexRecordingProcedure = (each, index) -> indices.add(index);
 
         this.takeIterable.forEachWithIndex(indexRecordingProcedure);
         Assert.assertEquals(FastList.newListWith(0, 1), indices);
@@ -119,7 +119,7 @@ public class TakeIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWith()
     {
-        Procedure2<Integer, Sum> sumAdditionProcedure = (each, sum) -> { sum.add(each); };
+        Procedure2<Integer, Sum> sumAdditionProcedure = (each, sum) -> sum.add(each);
 
         Sum sum1 = new IntegerSum(0);
         this.takeIterable.forEachWith(sumAdditionProcedure, sum1);

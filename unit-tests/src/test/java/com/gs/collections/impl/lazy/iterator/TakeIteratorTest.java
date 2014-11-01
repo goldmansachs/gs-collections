@@ -70,12 +70,8 @@ public class TakeIteratorTest
     @Test
     public void noSuchElementException()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> {
-            new TakeIterator<Integer>(Lists.fixedSize.<Integer>of(), 0).next();
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> new TakeIterator<Integer>(Lists.fixedSize.<Integer>of(), 0).next());
 
-        Verify.assertThrows(NoSuchElementException.class, () -> {
-            new TakeIterator<Integer>(Lists.fixedSize.of(1, 2, 3), 0).next();
-        });
+        Verify.assertThrows(NoSuchElementException.class, () -> new TakeIterator<Integer>(Lists.fixedSize.of(1, 2, 3), 0).next());
     }
 }

@@ -91,6 +91,17 @@ public final class <name>HashSet extends Abstract<name>Set implements Mutable<na
         this.addAll(elements);
     }
 
+    public <name>HashSet(<name>HashSet set)
+    {
+        this.occupiedWithData = set.occupiedWithData;
+        this.occupiedWithSentinels = set.occupiedWithSentinels;
+        this.zeroToThirtyOneOccupied = set.zeroToThirtyOneOccupied;
+        this.zeroToThirtyOne = set.zeroToThirtyOne;
+        this.allocateTable(set.table.length);
+
+        System.arraycopy(set.table, 0, this.table, 0, set.table.length);
+    }
+
     private int smallestPowerOfTwoGreaterThan(int n)
     {
         return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
@@ -104,17 +115,6 @@ public final class <name>HashSet extends Abstract<name>Set implements Mutable<na
             possibleResult++;
         }
         return possibleResult;
-    }
-
-    public <name>HashSet(<name>HashSet set)
-    {
-        this.occupiedWithData = set.occupiedWithData;
-        this.occupiedWithSentinels = set.occupiedWithSentinels;
-        this.zeroToThirtyOneOccupied = set.zeroToThirtyOneOccupied;
-        this.zeroToThirtyOne = set.zeroToThirtyOne;
-        this.allocateTable(set.table.length);
-
-        System.arraycopy(set.table, 0, this.table, 0, set.table.length);
     }
 
     public static <name>HashSet newSet(<name>Iterable source)

@@ -36,6 +36,8 @@ import org.junit.Test;
  */
 public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObject<name>MapTestCase
 {
+    private final MutableObject<name>Map\<String> map = this.classUnderTest();
+
     @Override
     protected abstract MutableObject<name>Map\<String> classUnderTest();
 
@@ -53,8 +55,6 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
 
     @Override
     protected abstract \<T> MutableObject<name>Map\<T> getEmptyMap();
-
-    private final MutableObject<name>Map\<String> map = this.classUnderTest();
 
     protected static MutableList\<String> generateCollisions()
     {
@@ -264,7 +264,7 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
         super.getOrThrow();
 
         this.map.removeKey("0");
-        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow("0");});
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow("0"); });
 
         this.map.put("0", <(literal.(type))("1")>);
         Assert.assertEquals(<(literal.(type))("1")>, this.map.getOrThrow("0")<delta.(type)>);
@@ -329,7 +329,7 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
         MutableObject<name>Map\<Integer> map1 = this.getEmptyMap();
         Assert.assertEquals(<(literal.(type))("100")>, map1.getIfAbsentPut(0, factory)<delta.(type)>);
 
-        <name>Function0 factoryThrows = () -> {throw new AssertionError();};
+        <name>Function0 factoryThrows = () -> { throw new AssertionError(); };
 
         Assert.assertEquals(<(literal.(type))("100")>, map1.getIfAbsentPut(0, factoryThrows)<delta.(type)>);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(0, <(literal.(type))("100")>), map1);
@@ -358,7 +358,7 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
 
         MutableObject<name>Map\<Integer> map1 = this.getEmptyMap();
         Assert.assertEquals(<(literal.(type))("9")>, map1.getIfAbsentPutWith(0, functionLength, "123456789")<delta.(type)>);
-        <name>Function\<String> functionThrows = (String each) -> {throw new AssertionError();};
+        <name>Function\<String> functionThrows = (String each) -> { throw new AssertionError(); };
         Assert.assertEquals(<(literal.(type))("9")>, map1.getIfAbsentPutWith(0, functionThrows, "unused")<delta.(type)>);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(0, <(literal.(type))("9")>), map1);
         Assert.assertEquals(<(literal.(type))("9")>, map1.getIfAbsentPutWith(1, functionLength, "123456789")<delta.(type)>);
@@ -386,7 +386,7 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
 
         MutableObject<name>Map\<Integer> map1 = this.getEmptyMap();
         Assert.assertEquals(<(literal.(type))("0")>, map1.getIfAbsentPutWithKey(0, function)<delta.(type)>);
-        <name>Function\<Integer> functionThrows = (Integer <type>Parameter) -> {throw new AssertionError();};
+        <name>Function\<Integer> functionThrows = (Integer <type>Parameter) -> { throw new AssertionError(); };
         Assert.assertEquals(<(literal.(type))("0")>, map1.getIfAbsentPutWithKey(0, functionThrows)<delta.(type)>);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(0, <(literal.(type))("0")>), map1);
         Assert.assertEquals(<(literal.(type))("1")>, map1.getIfAbsentPutWithKey(1, function)<delta.(type)>);

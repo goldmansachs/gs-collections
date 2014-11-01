@@ -141,7 +141,7 @@ public class DropIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWith()
     {
-        Procedure2<Integer, Sum> sumAdditionProcedure = (each, sum) -> { sum.add(each); };
+        Procedure2<Integer, Sum> sumAdditionProcedure = (each, sum) -> sum.add(each);
 
         Sum sum1 = new IntegerSum(0);
         this.dropIterable.forEachWith(sumAdditionProcedure, sum1);

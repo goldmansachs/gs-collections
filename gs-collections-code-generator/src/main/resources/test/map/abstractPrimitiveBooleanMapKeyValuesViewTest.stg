@@ -769,8 +769,8 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     public void testToString()
     {
         RichIterable\<<name>BooleanPair> collection = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true);
-        Assert.assertTrue("[<(toStringLiteral.(type))("1")>:false, <(toStringLiteral.(type))("2")>:true]".equals(collection.toString()) ||
-                "[<(toStringLiteral.(type))("2")>:true, <(toStringLiteral.(type))("1")>:false]".equals(collection.toString()));
+        Assert.assertTrue("[<(toStringLiteral.(type))("1")>:false, <(toStringLiteral.(type))("2")>:true]".equals(collection.toString())
+                || "[<(toStringLiteral.(type))("2")>:true, <(toStringLiteral.(type))("1")>:false]".equals(collection.toString()));
     }
 
     @Test
@@ -853,8 +853,8 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
         RichIterable\<<name>BooleanPair> collection = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true);
         RichIterable\<Pair\<<name>BooleanPair, Integer>\> result = collection.zip(Interval.oneTo(5));
 
-        Assert.assertTrue(Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("1")>, false), 1), Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("2")>, true), 2)).equals(result.toBag()) ||
-                Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("2")>, true), 1), Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("1")>, false), 2)).equals(result.toBag()));
+        Assert.assertTrue(Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("1")>, false), 1), Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("2")>, true), 2)).equals(result.toBag())
+                || Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("2")>, true), 1), Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("1")>, false), 2)).equals(result.toBag()));
     }
 
     @Test
@@ -862,8 +862,8 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     {
         RichIterable\<<name>BooleanPair> collection = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true);
         RichIterable\<Pair\<<name>BooleanPair, Integer>\> result = collection.zipWithIndex();
-        Assert.assertTrue(Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("1")>, false), 0), Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("2")>, true), 1)).equals(result.toBag()) ||
-                Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("2")>, true), 0), Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("1")>, false), 1)).equals(result.toBag()));
+        Assert.assertTrue(Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("1")>, false), 0), Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("2")>, true), 1)).equals(result.toBag())
+                || Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("2")>, true), 0), Tuples.pair(PrimitiveTuples.pair(<(literal.(type))("1")>, false), 1)).equals(result.toBag()));
     }
 
     @Test

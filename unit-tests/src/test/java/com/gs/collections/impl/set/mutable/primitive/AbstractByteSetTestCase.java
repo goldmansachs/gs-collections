@@ -251,7 +251,7 @@ public abstract class AbstractByteSetTestCase extends AbstractMutableByteCollect
         super.forEach();
         long[] sum = new long[1];
         MutableByteSet set = this.newWith((byte) 0, (byte) 1, (byte) 31, (byte) 63, (byte) 65, (byte) 100, (byte) 127, (byte) 12, (byte) -76, (byte) -1, (byte) -54, (byte) -64, (byte) -63, (byte) -95, (byte) -128, (byte) -127);
-        set.forEach(each -> { sum[0] += each; });
+        set.forEach(each -> sum[0] += each);
 
         Assert.assertEquals(-209L, sum[0]);
     }

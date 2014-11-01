@@ -44,7 +44,7 @@ public class Select<name>IterableTest
     public void <type>Iterator()
     {
         <wideType.(type)> sum = <wideZero.(type)>;
-        for (<name>Iterator iterator = this.iterable.<type>Iterator(); iterator.hasNext() ;)
+        for (<name>Iterator iterator = this.iterable.<type>Iterator(); iterator.hasNext(); )
         {
             sum += iterator.next();
         }
@@ -282,4 +282,5 @@ public class Select<name>IterableTest
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("3")>), result);
     }
 }
+
 >>

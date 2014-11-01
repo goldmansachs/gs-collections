@@ -261,9 +261,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
 
         for (int i = 0; i < batchIterable.getBatchCount(7); ++i)
         {
-            batchIterable.batchForEach(each -> {
-                sum.add(each == null ? 1 : each);
-            }, i, batchIterable.getBatchCount(7));
+            batchIterable.batchForEach(each -> sum.add(each == null ? 1 : each), i, batchIterable.getBatchCount(7));
         }
         Assert.assertEquals(expectedValue, sum.getValue());
     }
@@ -382,7 +380,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     {
         //Testing forEach handling null keys and null values
         Sum sum = new IntegerSum(0);
-        batchIterable.forEach(each -> { sum.add(each == null ? 0 : each); });
+        batchIterable.forEach(each -> sum.add(each == null ? 0 : each));
         Assert.assertEquals(expectedValue, sum.getValue());
     }
 
@@ -430,9 +428,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
 
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
         UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
-        COLLISIONS.subList(0, 5).forEach(Procedures.cast(each -> {
-            map.getIfAbsentPut(each, new PassThruFunction0<Integer>(each));
-        }));
+        COLLISIONS.subList(0, 5).forEach(Procedures.cast(each -> map.getIfAbsentPut(each, new PassThruFunction0<Integer>(each))));
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(5), map);
 
@@ -458,9 +454,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
         UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
         COLLISIONS.subList(0, 5).forEach(Procedures.cast(each -> {
-            Verify.assertThrows(RuntimeException.class, () -> {
-                map.getIfAbsentPut(each, () -> { throw new RuntimeException(); });
-            });
+            Verify.assertThrows(RuntimeException.class, () -> map.getIfAbsentPut(each, () -> { throw new RuntimeException(); }));
             map.put(each, each);
         }));
 

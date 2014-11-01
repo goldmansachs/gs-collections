@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.list.Interval;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -40,37 +40,37 @@ public class SumOfIntTest
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
-    @GenerateMicroBenchmark
-    public void serial_lazy_collectIntSum_jdk()
+    @Benchmark
+    public int serial_lazy_collectIntSum_jdk()
     {
-        int result = this.integersJDK.stream().mapToInt(each -> each).sum();
+        return this.integersJDK.stream().mapToInt(each -> each).sum();
     }
 
-    @GenerateMicroBenchmark
-    public void serial_lazy_collectLongSum_jdk()
+    @Benchmark
+    public long serial_lazy_collectLongSum_jdk()
     {
-        long result = this.integersJDK.stream().mapToLong(each -> each).sum();
-    }
-
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
-    public void serial_eager_directSumOfInt_gsc()
-    {
-        long result = this.integersGSC.sumOfInt(each -> each);
+        return this.integersJDK.stream().mapToLong(each -> each).sum();
     }
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
-    public void serial_eager_collectIntSum_gsc()
+    @Benchmark
+    public long serial_eager_directSumOfInt_gsc()
     {
-        long result = this.integersGSC.collectInt(each -> each).sum();
+        return this.integersGSC.sumOfInt(each -> each);
     }
 
-    @GenerateMicroBenchmark
-    public void serial_lazy_collectIntSum_gsc()
+    @Warmup(iterations = 20)
+    @Measurement(iterations = 10)
+    @Benchmark
+    public long serial_eager_collectIntSum_gsc()
     {
-        long result = this.integersGSC.asLazy().collectInt(each -> each).sum();
+        return this.integersGSC.collectInt(each -> each).sum();
+    }
+
+    @Benchmark
+    public long serial_lazy_collectIntSum_gsc()
+    {
+        return this.integersGSC.asLazy().collectInt(each -> each).sum();
     }
 }

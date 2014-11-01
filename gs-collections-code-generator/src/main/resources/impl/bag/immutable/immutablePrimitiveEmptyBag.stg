@@ -50,9 +50,9 @@ import net.jcip.annotations.Immutable;
 @Immutable
 final class Immutable<name>EmptyBag implements Immutable<name>Bag, Serializable
 {
-    private static final long serialVersionUID = 1L;
-
     static final Immutable<name>Bag INSTANCE = new Immutable<name>EmptyBag();
+
+    private static final long serialVersionUID = 1L;
 
     private Object readResolve()
     {

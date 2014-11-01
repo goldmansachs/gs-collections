@@ -61,9 +61,10 @@ import com.gs.collections.impl.utility.LazyIterate;
  */
 final class ImmutableObject<name>EmptyMap\<K> implements ImmutableObject<name>Map\<K>, Serializable
 {
+    static final ImmutableObject<name>Map\<?> INSTANCE = new ImmutableObject<name>EmptyMap\<Object>();
+
     private static final long serialVersionUID = 1L;
     private static final <type> EMPTY_VALUE = <zero.(type)>;
-    static final ImmutableObject<name>Map\<?> INSTANCE = new ImmutableObject<name>EmptyMap\<Object>();
 
     private Object readResolve()
     {

@@ -110,4 +110,5 @@ public class Collect<name>ToObjectIterableTest
         this.newPrimitiveWith().iterator().remove();
     }
 }
+
 >>

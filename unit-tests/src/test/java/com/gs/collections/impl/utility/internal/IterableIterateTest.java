@@ -517,7 +517,7 @@ public class IterableIterateTest
     {
         Sum result = new IntegerSum(0);
         Iterable<Integer> integers = new IterableAdapter<Integer>(Interval.oneTo(5));
-        Iterate.forEachWith(integers, (each, parm) -> { result.add(each.intValue() * parm.intValue()); }, 2);
+        Iterate.forEachWith(integers, (each, parm) -> result.add(each.intValue() * parm.intValue()), 2);
         Assert.assertEquals(30, result.getValue().intValue());
     }
 

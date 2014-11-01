@@ -27,19 +27,19 @@ import com.gs.collections.impl.map.primitive.AbstractObject<name>MapKeyValuesVie
 public class UnmodifiableObject<name>MapKeyValuesViewTest extends AbstractObject<name>MapKeyValuesViewTestCase
 {
     @Override
-    public \<T> MutableObject<name>Map \<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2, T key3, <type> value3)
+    public \<T> MutableObject<name>Map\<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2, T key3, <type> value3)
     {
         return Object<name>HashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3).asUnmodifiable();
     }
 
     @Override
-    public \<T> MutableObject<name>Map \<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2)
+    public \<T> MutableObject<name>Map\<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2)
     {
         return Object<name>HashMap.newWithKeysValues(key1, value1, key2, value2).asUnmodifiable();
     }
 
     @Override
-    public \<T> MutableObject<name>Map \<T> newWithKeysValues(T key1, <type> value1)
+    public \<T> MutableObject<name>Map\<T> newWithKeysValues(T key1, <type> value1)
     {
         return Object<name>HashMap.newWithKeysValues(key1, value1).asUnmodifiable();
     }

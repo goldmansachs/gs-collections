@@ -10,8 +10,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="gs-collections-code-generator" />
-    <orderEntry type="library" name="Maven: org.antlr:ST4:4.0.7" level="project" />
-    <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.5" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:ST4:4.0.8" level="project" />
+    <orderEntry type="library" name="Maven: org.antlr:antlr-runtime:3.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-plugin-api:2.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-project:2.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.maven:maven-profile:2.0" level="project" />

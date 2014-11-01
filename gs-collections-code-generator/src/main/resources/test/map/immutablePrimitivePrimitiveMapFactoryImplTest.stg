@@ -49,6 +49,7 @@ public class Immutable<name1><name2>MapFactoryImplTest
         Assert.assertEquals(new <name1><name2>HashMap().toImmutable(), <name1><name2>Maps.immutable.withAll(map));
     }
 }
+
 >>
 
 keyValue(value) ::= <<

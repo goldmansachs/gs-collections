@@ -87,4 +87,5 @@ public final class Immutable<name>SetSerializationProxy implements Externalizabl
         return this.set.toImmutable();
     }
 }
+
 >>

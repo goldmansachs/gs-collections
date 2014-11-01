@@ -194,9 +194,9 @@ public class ImmutableObjectBooleanSingletonMapTest extends AbstractImmutableObj
     public void getOrThrow()
     {
         Assert.assertTrue(this.classUnderTest().getOrThrow("1"));
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow("5"); });
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow("0"); });
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow(null); });
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow("5"));
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow("0"));
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow(null));
     }
 
     @Override

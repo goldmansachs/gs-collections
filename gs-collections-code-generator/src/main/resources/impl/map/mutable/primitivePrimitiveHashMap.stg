@@ -156,11 +156,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         this.allocateTable(capacity);
     }
 
-    private int smallestPowerOfTwoGreaterThan(int n)
-    {
-        return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
-    }
-
     public <name1><name2>HashMap(<name1><name2>Map map)
     {
         this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY));
@@ -177,6 +172,11 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     <newWithKeysValues(["1", "2", "3"])>
 
     <newWithKeysValues(["1", "2", "3", "4"])>
+
+    private int smallestPowerOfTwoGreaterThan(int n)
+    {
+        return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
+    }
 
     @Override
     public boolean equals(Object obj)

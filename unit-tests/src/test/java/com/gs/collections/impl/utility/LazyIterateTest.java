@@ -70,7 +70,7 @@ public class LazyIterateTest
     {
         LazyIterable<Integer> select = LazyIterate.select(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
-        select.forEachWith((each, aSum) -> { aSum.add(each); }, sum);
+        select.forEachWith((each, aSum) -> aSum.add(each), sum);
         Assert.assertEquals(10, sum.getValue().intValue());
     }
 
@@ -111,7 +111,7 @@ public class LazyIterateTest
     {
         LazyIterable<Integer> select = LazyIterate.reject(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
-        select.forEachWith((each, aSum) -> { aSum.add(each); }, sum);
+        select.forEachWith((each, aSum) -> aSum.add(each), sum);
         Assert.assertEquals(5, sum.getValue().intValue());
     }
 
@@ -154,7 +154,7 @@ public class LazyIterateTest
     {
         LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), String::valueOf);
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith((each, aBuilder) -> { aBuilder.append(each); }, builder);
+        select.forEachWith((each, aBuilder) -> aBuilder.append(each), builder);
         Assert.assertEquals("12345", builder.toString());
     }
 

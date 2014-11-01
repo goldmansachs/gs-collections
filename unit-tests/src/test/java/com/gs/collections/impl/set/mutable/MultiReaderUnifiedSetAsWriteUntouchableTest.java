@@ -64,13 +64,13 @@ public class MultiReaderUnifiedSetAsWriteUntouchableTest extends AbstractCollect
     @Test
     public void asSynchronized()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.newWith().asSynchronized(); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newWith().asSynchronized());
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.newWith().asUnmodifiable(); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newWith().asUnmodifiable());
     }
 }

@@ -55,7 +55,7 @@ final class Immutable<name>SingletonBag implements Immutable<name>Bag, Serializa
 
     private final <type> element1;
 
-    Immutable<name>SingletonBag (<type> element)
+    Immutable<name>SingletonBag(<type> element)
     {
         this.element1 = element;
     }

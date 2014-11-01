@@ -307,7 +307,7 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
     public void injectInto()
     {
         Mutable<name>Set set = this.newWith(<["0", "2", "31"]:(literal.(type))(); separator=", ">);
-        <wrapperName> sum = set.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, <type> value) -> <wrapperName>.valueOf((<type>)(result + value)));
+        <wrapperName> sum = set.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, <type> value) -> <wrapperName>.valueOf((<type>) (result + value)));
         Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("33")>), sum);
     }
 

@@ -70,4 +70,5 @@ public class Boolean<name>PairImplTest
         Assert.assertEquals(-1, PrimitiveTuples.pair(true, <(literal.(type))("1")>).compareTo(PrimitiveTuples.pair(true, <(literal.(type))("2")>)));
     }
 }
+
 >>

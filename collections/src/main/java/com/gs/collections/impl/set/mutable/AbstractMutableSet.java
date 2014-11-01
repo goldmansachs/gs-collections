@@ -147,56 +147,56 @@ public abstract class AbstractMutableSet<T>
 
     public MutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        BooleanHashSet result = new BooleanHashSet();
+        MutableBooleanSet result = new BooleanHashSet();
         this.forEach(new CollectBooleanProcedure<T>(booleanFunction, result));
         return result;
     }
 
     public MutableByteSet collectByte(ByteFunction<? super T> byteFunction)
     {
-        ByteHashSet result = new ByteHashSet(this.size());
+        MutableByteSet result = new ByteHashSet();
         this.forEach(new CollectByteProcedure<T>(byteFunction, result));
         return result;
     }
 
     public MutableCharSet collectChar(CharFunction<? super T> charFunction)
     {
-        CharHashSet result = new CharHashSet(this.size());
+        MutableCharSet result = new CharHashSet(this.size());
         this.forEach(new CollectCharProcedure<T>(charFunction, result));
         return result;
     }
 
     public MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        DoubleHashSet result = new DoubleHashSet(this.size());
+        MutableDoubleSet result = new DoubleHashSet(this.size());
         this.forEach(new CollectDoubleProcedure<T>(doubleFunction, result));
         return result;
     }
 
     public MutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
     {
-        FloatHashSet result = new FloatHashSet(this.size());
+        MutableFloatSet result = new FloatHashSet(this.size());
         this.forEach(new CollectFloatProcedure<T>(floatFunction, result));
         return result;
     }
 
     public MutableIntSet collectInt(IntFunction<? super T> intFunction)
     {
-        IntHashSet result = new IntHashSet(this.size());
+        MutableIntSet result = new IntHashSet(this.size());
         this.forEach(new CollectIntProcedure<T>(intFunction, result));
         return result;
     }
 
     public MutableLongSet collectLong(LongFunction<? super T> longFunction)
     {
-        LongHashSet result = new LongHashSet(this.size());
+        MutableLongSet result = new LongHashSet(this.size());
         this.forEach(new CollectLongProcedure<T>(longFunction, result));
         return result;
     }
 
     public MutableShortSet collectShort(ShortFunction<? super T> shortFunction)
     {
-        ShortHashSet result = new ShortHashSet(this.size());
+        MutableShortSet result = new ShortHashSet(this.size());
         this.forEach(new CollectShortProcedure<T>(shortFunction, result));
         return result;
     }

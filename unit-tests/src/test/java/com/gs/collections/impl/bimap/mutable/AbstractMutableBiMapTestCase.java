@@ -132,12 +132,12 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
         Verify.assertSize(4, biMap);
         Verify.assertSize(4, biMap.inverse());
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> { biMap.put(5, 'e'); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> biMap.put(5, 'e'));
         assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'e', null, 'b', 3, 'c', 4, 'd'), biMap);
         Verify.assertSize(4, biMap);
         Verify.assertSize(4, biMap.inverse());
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> { biMap.put(4, 'e'); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> biMap.put(4, 'e'));
         assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'e', null, 'b', 3, 'c', 4, 'd'), biMap);
         Verify.assertSize(4, biMap);
         Verify.assertSize(4, biMap.inverse());
@@ -410,7 +410,7 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
         MutableBiMap<Integer, Character> biMap = this.classUnderTest();
         Iterator<Character> iterator = biMap.iterator();
         Assert.assertTrue(iterator.hasNext());
-        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator::remove);
+        Verify.assertThrows(IllegalStateException.class, iterator::remove);
         Verify.assertSize(3, biMap);
         Verify.assertSize(3, biMap.inverse());
         for (int i = 0; i < 3; i++)

@@ -57,7 +57,7 @@ final class Immutable<name>SingletonSet implements Immutable<name>Set, Serializa
 
     private final <type> element;
 
-    Immutable<name>SingletonSet (<type> element)
+    Immutable<name>SingletonSet(<type> element)
     {
         this.element = element;
     }

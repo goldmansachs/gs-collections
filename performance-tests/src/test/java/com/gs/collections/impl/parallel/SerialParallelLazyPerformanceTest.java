@@ -443,9 +443,7 @@ public class SerialParallelLazyPerformanceTest
     private void forEach(FastList<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> {
-            this.basicSerialForEachPerformance(collection, SERIAL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicSerialForEachPerformance(collection, SERIAL_RUN_COUNT));
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
         runnables.add(() -> {
@@ -498,21 +496,13 @@ public class SerialParallelLazyPerformanceTest
     private void toList(FastList<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> {
-            this.basicSerialToListPerformance(collection, SERIAL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicSerialToListPerformance(collection, SERIAL_RUN_COUNT));
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
-        runnables.add(() -> {
-            this.basicParallelLazyToListPerformance(collection, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyToListPerformance(collection, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicParallelLazyToListPerformance(collection, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicJava8ParallelLazyToListPerformance(collection, PARALLEL_RUN_COUNT));
         List<Integer> arrayList = new ArrayList<>(collection);
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyToListPerformance(arrayList, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicJava8ParallelLazyToListPerformance(arrayList, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
         service.shutdown();
         try
@@ -528,33 +518,17 @@ public class SerialParallelLazyPerformanceTest
     private void select(FastList<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> {
-            this.basicSerialSelectPerformance(collection, PREDICATES_LAMBDA, SERIAL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicSerialSelectPerformance(collection, PREDICATES_LAMBDA, SERIAL_RUN_COUNT));
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
-        runnables.add(() -> {
-            this.basicParallelLazySelectPerformance(collection, "Lambda", PREDICATES_LAMBDA, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazySelectPerformance(collection, "Predicate", PREDICATES, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazySelectPerformance(collection, "MethodRef", PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazySelectPerformance(collection, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicParallelLazySelectPerformance(collection, "Lambda", PREDICATES_LAMBDA, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazySelectPerformance(collection, "Predicate", PREDICATES, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazySelectPerformance(collection, "MethodRef", PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicJava8ParallelLazySelectPerformance(collection, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT));
         List<Integer> arrayList = new ArrayList<Integer>(collection);
-        runnables.add(() -> {
-            this.basicJava8ParallelLazySelectPerformance(arrayList, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazySelectPerformance(arrayList, "Predicate", JAVA_PREDICATES, PARALLEL_RUN_COUNT);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazySelectPerformance(arrayList, "MethodRef", JAVA_PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicJava8ParallelLazySelectPerformance(arrayList, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicJava8ParallelLazySelectPerformance(arrayList, "Predicate", JAVA_PREDICATES, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicJava8ParallelLazySelectPerformance(arrayList, "MethodRef", JAVA_PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
         service.shutdown();
         try
@@ -570,33 +544,17 @@ public class SerialParallelLazyPerformanceTest
     private void reject(FastList<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> {
-            this.basicSerialRejectPerformance(collection, PREDICATES_LAMBDA, SERIAL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicSerialRejectPerformance(collection, PREDICATES_LAMBDA, SERIAL_RUN_COUNT));
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
-        runnables.add(() -> {
-            this.basicParallelLazyRejectPerformance(collection, "Lambda", PREDICATES_LAMBDA, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyRejectPerformance(collection, "Predicate", PREDICATES, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyRejectPerformance(collection, "MethodRef", PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyRejectPerformance(collection, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicParallelLazyRejectPerformance(collection, "Lambda", PREDICATES_LAMBDA, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazyRejectPerformance(collection, "Predicate", PREDICATES, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazyRejectPerformance(collection, "MethodRef", PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicJava8ParallelLazyRejectPerformance(collection, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT));
         List<Integer> arrayList = new ArrayList<>(collection);
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyRejectPerformance(arrayList, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyRejectPerformance(arrayList, "Predicate", JAVA_PREDICATES, PARALLEL_RUN_COUNT);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyRejectPerformance(arrayList, "MethodRef", JAVA_PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicJava8ParallelLazyRejectPerformance(arrayList, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicJava8ParallelLazyRejectPerformance(arrayList, "Predicate", JAVA_PREDICATES, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicJava8ParallelLazyRejectPerformance(arrayList, "MethodRef", JAVA_PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
         service.shutdown();
         try
@@ -612,33 +570,17 @@ public class SerialParallelLazyPerformanceTest
     private void anySatisfy(FastList<Integer> collection, int index, boolean expectedResult)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> {
-            this.basicSerialAnySatisfyPerformance(collection, PREDICATES_LAMBDA.get(index), expectedResult, SERIAL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicSerialAnySatisfyPerformance(collection, PREDICATES_LAMBDA.get(index), expectedResult, SERIAL_RUN_COUNT));
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
-        runnables.add(() -> {
-            this.basicParallelLazyAnySatisfyPerformance(collection, PREDICATES_LAMBDA.get(index), "Lambda", expectedResult, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyAnySatisfyPerformance(collection, PREDICATES.get(index), "Predicate", expectedResult, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyAnySatisfyPerformance(collection, PREDICATES_METHOD_REF.get(index), "MethodRef", expectedResult, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyAnySatisfyPerformance(collection, "Lambda", JAVA_PREDICATES_LAMBDA.get(index), expectedResult, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicParallelLazyAnySatisfyPerformance(collection, PREDICATES_LAMBDA.get(index), "Lambda", expectedResult, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazyAnySatisfyPerformance(collection, PREDICATES.get(index), "Predicate", expectedResult, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazyAnySatisfyPerformance(collection, PREDICATES_METHOD_REF.get(index), "MethodRef", expectedResult, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicJava8ParallelLazyAnySatisfyPerformance(collection, "Lambda", JAVA_PREDICATES_LAMBDA.get(index), expectedResult, PARALLEL_RUN_COUNT));
         List<Integer> arrayList = new ArrayList<>(collection);
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyAnySatisfyPerformance(arrayList, "Lambda", JAVA_PREDICATES_LAMBDA.get(index), expectedResult, PARALLEL_RUN_COUNT);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyAnySatisfyPerformance(arrayList, "Predicate", JAVA_PREDICATES.get(index), expectedResult, PARALLEL_RUN_COUNT);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyAnySatisfyPerformance(arrayList, "MethodRef", JAVA_PREDICATES_METHOD_REF.get(index), expectedResult, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicJava8ParallelLazyAnySatisfyPerformance(arrayList, "Lambda", JAVA_PREDICATES_LAMBDA.get(index), expectedResult, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicJava8ParallelLazyAnySatisfyPerformance(arrayList, "Predicate", JAVA_PREDICATES.get(index), expectedResult, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicJava8ParallelLazyAnySatisfyPerformance(arrayList, "MethodRef", JAVA_PREDICATES_METHOD_REF.get(index), expectedResult, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
         service.shutdown();
         try
@@ -654,20 +596,12 @@ public class SerialParallelLazyPerformanceTest
     private void detect(FastList<Integer> collection, int index, boolean expectedResult)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> {
-            this.basicSerialDetectPerformance(collection, PREDICATES_LAMBDA.get(index), expectedResult, SERIAL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicSerialDetectPerformance(collection, PREDICATES_LAMBDA.get(index), expectedResult, SERIAL_RUN_COUNT));
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
-        runnables.add(() -> {
-            this.basicParallelLazyDetectPerformance(collection, PREDICATES_LAMBDA.get(index), "Lambda", expectedResult, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyDetectPerformance(collection, PREDICATES.get(index), "Predicate", expectedResult, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyDetectPerformance(collection, PREDICATES_METHOD_REF.get(index), "MethodRef", expectedResult, PARALLEL_RUN_COUNT, cores, service);
-        });
+        runnables.add(() -> this.basicParallelLazyDetectPerformance(collection, PREDICATES_LAMBDA.get(index), "Lambda", expectedResult, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazyDetectPerformance(collection, PREDICATES.get(index), "Predicate", expectedResult, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazyDetectPerformance(collection, PREDICATES_METHOD_REF.get(index), "MethodRef", expectedResult, PARALLEL_RUN_COUNT, cores, service));
         this.shuffleAndRun(runnables);
         service.shutdown();
         try
@@ -683,33 +617,17 @@ public class SerialParallelLazyPerformanceTest
     private void collect(FastList<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> {
-            this.basicSerialCollectPerformance(collection, SERIAL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicSerialCollectPerformance(collection, SERIAL_RUN_COUNT));
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
-        runnables.add(() -> {
-            this.basicParallelLazyCollectPerformance(collection, "Lambda", FUNCTIONS_LAMBDA, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyCollectPerformance(collection, "Function", FUNCTIONS, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyCollectPerformance(collection, "MethodRef", FUNCTIONS_METHOD_REF, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyCollectPerformance(collection, "Lambda", JAVA_FUNCTIONS_LAMBDA, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicParallelLazyCollectPerformance(collection, "Lambda", FUNCTIONS_LAMBDA, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazyCollectPerformance(collection, "Function", FUNCTIONS, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazyCollectPerformance(collection, "MethodRef", FUNCTIONS_METHOD_REF, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicJava8ParallelLazyCollectPerformance(collection, "Lambda", JAVA_FUNCTIONS_LAMBDA, PARALLEL_RUN_COUNT));
         List<Integer> arrayList = new ArrayList<>(collection);
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyCollectPerformance(arrayList, "Lambda", JAVA_FUNCTIONS_LAMBDA, PARALLEL_RUN_COUNT);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyCollectPerformance(arrayList, "Function", JAVA_FUNCTIONS, PARALLEL_RUN_COUNT);
-        });
-        runnables.add(() -> {
-            this.basicJava8ParallelLazyCollectPerformance(arrayList, "MethodRef", JAVA_FUNCTIONS_METHOD_REF, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicJava8ParallelLazyCollectPerformance(arrayList, "Lambda", JAVA_FUNCTIONS_LAMBDA, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicJava8ParallelLazyCollectPerformance(arrayList, "Function", JAVA_FUNCTIONS, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicJava8ParallelLazyCollectPerformance(arrayList, "MethodRef", JAVA_FUNCTIONS_METHOD_REF, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
         service.shutdown();
         try
@@ -725,33 +643,17 @@ public class SerialParallelLazyPerformanceTest
     private void groupBy(UnifiedSet<String> words)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> {
-            this.basicSerialGroupByPerformance(words, SERIAL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicSerialGroupByPerformance(words, SERIAL_RUN_COUNT));
         int cores = Runtime.getRuntime().availableProcessors();
         ExecutorService service = Executors.newFixedThreadPool(cores);
-        runnables.add(() -> {
-            this.basicParallelLazyGroupByPerformance(words, "Lambda", ALPHAGRAM_LAMBDA, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyGroupByPerformance(words, "Function", ALPHAGRAM_FUNCTION, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyGroupByPerformance(words, "MethodRef", ALPHAGRAM_METHOD_REF, PARALLEL_RUN_COUNT, cores, service);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyJava8GroupByPerformance(words, "Lambda", JAVA_ALPHAGRAM_LAMBDA, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicParallelLazyGroupByPerformance(words, "Lambda", ALPHAGRAM_LAMBDA, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazyGroupByPerformance(words, "Function", ALPHAGRAM_FUNCTION, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazyGroupByPerformance(words, "MethodRef", ALPHAGRAM_METHOD_REF, PARALLEL_RUN_COUNT, cores, service));
+        runnables.add(() -> this.basicParallelLazyJava8GroupByPerformance(words, "Lambda", JAVA_ALPHAGRAM_LAMBDA, PARALLEL_RUN_COUNT));
         Set<String> hashSet = new HashSet<>(words);
-        runnables.add(() -> {
-            this.basicParallelLazyJava8GroupByPerformance(hashSet, "Lambda", JAVA_ALPHAGRAM_LAMBDA, PARALLEL_RUN_COUNT);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyJava8GroupByPerformance(hashSet, "Function", JAVA_ALPHAGRAM_FUNCTION, PARALLEL_RUN_COUNT);
-        });
-        runnables.add(() -> {
-            this.basicParallelLazyJava8GroupByPerformance(hashSet, "MethodRef", JAVA_ALPHAGRAM_METHOD_REF, PARALLEL_RUN_COUNT);
-        });
+        runnables.add(() -> this.basicParallelLazyJava8GroupByPerformance(hashSet, "Lambda", JAVA_ALPHAGRAM_LAMBDA, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicParallelLazyJava8GroupByPerformance(hashSet, "Function", JAVA_ALPHAGRAM_FUNCTION, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicParallelLazyJava8GroupByPerformance(hashSet, "MethodRef", JAVA_ALPHAGRAM_METHOD_REF, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
         service.shutdown();
         try

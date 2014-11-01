@@ -157,7 +157,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         MutableCollection<Integer> collection = this.newWith(1, 2, 3, 4);
-        collection.forEachWithIndex((object, index) -> { result.add(object); });
+        collection.forEachWithIndex((object, index) -> result.add(object));
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }
 
@@ -213,8 +213,8 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     @Test
     public void adaptNull()
     {
-        Verify.assertThrows(NullPointerException.class, () -> { new SetAdapter<Object>(null); });
+        Verify.assertThrows(NullPointerException.class, () -> new SetAdapter<Object>(null));
 
-        Verify.assertThrows(NullPointerException.class, () -> { SetAdapter.adapt(null); });
+        Verify.assertThrows(NullPointerException.class, () -> SetAdapter.adapt(null));
     }
 }

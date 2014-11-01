@@ -33,6 +33,7 @@ public class ImmutableCharHashBagSerializationTest
                         + "AAAAAAEMAAB4cHcQAAAAAgBiAAAAAQBhAAAAAXg=",
                 ImmutableCharHashBag.newBagWith('a', 'b'));
     }
+
     @Test
     public void deserialize()
     {

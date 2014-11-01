@@ -39,6 +39,8 @@ import org.junit.Test;
  */
 public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestCase
 {
+    private final Object<name>HashMap\<String> map = this.classUnderTest();
+
     @Override
     protected Object<name>HashMap\<String> classUnderTest()
     {
@@ -74,8 +76,6 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
     {
         return new Object<name>HashMap\<T>();
     }
-
-    private final Object<name>HashMap\<String> map = this.classUnderTest();
 
     @Test
     public void defaultInitialCapacity() throws Exception

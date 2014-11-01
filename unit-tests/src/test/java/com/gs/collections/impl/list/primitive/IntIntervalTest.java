@@ -128,7 +128,7 @@ public class IntIntervalTest
     public void forEach()
     {
         long[] sum = new long[1];
-        this.intInterval.forEach(each -> { sum[0] += each; });
+        this.intInterval.forEach(each -> sum[0] += each);
 
         Assert.assertEquals(6L, sum[0]);
     }
@@ -518,10 +518,10 @@ public class IntIntervalTest
     public void forEachWithIndex()
     {
         IntegerSum sum = new IntegerSum(0);
-        IntInterval.oneTo(5).forEachWithIndex((each, index) -> { sum.add(each + index); });
+        IntInterval.oneTo(5).forEachWithIndex((each, index) -> sum.add(each + index));
         Assert.assertEquals(25, sum.getIntSum());
         IntegerSum zeroSum = new IntegerSum(0);
-        IntInterval.fromTo(0, -4).forEachWithIndex((each, index) -> { zeroSum.add(each + index); });
+        IntInterval.fromTo(0, -4).forEachWithIndex((each, index) -> zeroSum.add(each + index));
         Assert.assertEquals(0, zeroSum.getIntSum());
     }
 
@@ -613,8 +613,8 @@ public class IntIntervalTest
         Assert.assertEquals(5, interval.get(3));
         Assert.assertEquals(10, interval.get(4));
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { interval.get(-1); });
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { interval.get(5); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> interval.get(-1));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> interval.get(5));
     }
 
     @Test

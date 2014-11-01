@@ -866,4 +866,5 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         }
     }
 }
+
 >>

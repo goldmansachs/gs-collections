@@ -24,11 +24,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit test for {@link com.gs.collections.api.set.primitive.ImmutableByteSet} created from the freeze() method.
+ * JUnit test for {@link ImmutableByteSet} created from the freeze() method.
  */
 public class ImmutableByteByteMapKeySetTest extends AbstractImmutableByteHashSetTestCase
 {
-
     protected static ByteArrayList generateCollisions()
     {
         ByteArrayList collisions = new ByteArrayList();

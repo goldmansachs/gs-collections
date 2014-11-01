@@ -85,7 +85,7 @@ public class ImmutableBooleanEmptyListTest extends AbstractImmutableBooleanListT
     {
         String[] sum = new String[2];
         sum[0] = "";
-        this.classUnderTest().forEachWithIndex((each, index) -> { sum[0] += index + ":" + each; });
+        this.classUnderTest().forEachWithIndex((each, index) -> sum[0] += index + ":" + each);
         Assert.assertEquals("", sum[0]);
     }
 

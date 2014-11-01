@@ -76,7 +76,7 @@ public class QuadrupletonListTest extends AbstractMemoryEfficientMutableListTest
     @Test
     public void testRemove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.remove(0); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.list.remove(0));
         this.assertUnchanged();
     }
 
@@ -90,7 +90,7 @@ public class QuadrupletonListTest extends AbstractMemoryEfficientMutableListTest
     @Test
     public void testAdd()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.add("1"); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.list.add("1"));
         this.assertUnchanged();
     }
 
@@ -106,7 +106,7 @@ public class QuadrupletonListTest extends AbstractMemoryEfficientMutableListTest
     public void testGet()
     {
         Verify.assertStartsWith(this.list, "1", "2", "3", "4");
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { this.list.get(4); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> this.list.get(4));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class QuadrupletonListTest extends AbstractMemoryEfficientMutableListTest
         Assert.assertEquals("3", list.set(2, "2"));
         Assert.assertEquals("4", list.set(3, "1"));
         Assert.assertEquals(FastList.newListWith("4", "3", "2", "1"), list);
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { list.set(4, "0"); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> list.set(4, "0"));
     }
 
     private void assertUnchanged()

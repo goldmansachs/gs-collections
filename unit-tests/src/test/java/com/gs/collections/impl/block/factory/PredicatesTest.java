@@ -80,7 +80,7 @@ public class PredicatesTest
         Verify.assertThrowsWithCause(
                 RuntimeException.class,
                 IOException.class,
-                () -> Predicates.throwing(e -> {throw new IOException();}).accept(null));
+                () -> Predicates.throwing(e -> { throw new IOException(); }).accept(null));
     }
 
     @Test

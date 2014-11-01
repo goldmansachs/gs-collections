@@ -155,13 +155,12 @@ public final class <name>IteratorIterate
     public static \<T> T injectInto(<name>Iterator iterator, T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
     {
         T result = injectedValue;
-        while(iterator.hasNext())
+        while (iterator.hasNext())
         {
             result = function.valueOf(result, iterator.next());
         }
         return result;
     }
-
     <(arithmeticMethods.(type))()>
 }
 
@@ -173,6 +172,7 @@ arithmeticMethods ::= [
     ]
 
 allMethods() ::= <<
+<\n>
 public static <wideType.(type)> sum(<name>Iterator iterator)
 {
     <wideType.(type)> sum = <wideZero.(type)>;
@@ -210,7 +210,6 @@ public static <type> min(<name>Iterator iterator)
     }
     return min;
 }
-
 >>
 
 noMethods() ::= ""

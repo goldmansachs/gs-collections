@@ -116,9 +116,7 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
             Verify.assertEqualsAndHashCode(HashBag.newBag(interval), Bags.immutable.ofAll(interval));
         }
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> {
-            new ImmutableArrayBag<Integer>(new Integer[]{2, 3}, new int[]{2});
-        });
+        Verify.assertThrows(IllegalArgumentException.class, () -> new ImmutableArrayBag<Integer>(new Integer[]{2, 3}, new int[]{2}));
     }
 
     @Test

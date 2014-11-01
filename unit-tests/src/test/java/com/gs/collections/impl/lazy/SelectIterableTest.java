@@ -81,7 +81,7 @@ public class SelectIterableTest extends AbstractLazyIterableTestCase
     {
         InternalIterable<Integer> select = new SelectIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
-        select.forEachWith((each, aSum) -> { aSum.add(each); }, sum);
+        select.forEachWith((each, aSum) -> aSum.add(each), sum);
         Assert.assertEquals(10, sum.getValue().intValue());
     }
 

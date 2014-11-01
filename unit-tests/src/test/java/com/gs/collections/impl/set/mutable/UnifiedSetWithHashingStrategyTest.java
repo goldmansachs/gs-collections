@@ -201,9 +201,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Assert.assertEquals(UnifiedSetWithHashingStrategy.newSetWith(INTEGER_HASHING_STRATEGY, 1, 2, 3), set1);
 
         //testing null
-        Verify.assertThrows(NullPointerException.class, () -> {
-            UnifiedSetWithHashingStrategy.newSet(INTEGER_HASHING_STRATEGY, null);
-        });
+        Verify.assertThrows(NullPointerException.class, () -> UnifiedSetWithHashingStrategy.newSet(INTEGER_HASHING_STRATEGY, null));
     }
 
     @Override
@@ -298,9 +296,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Verify.assertSetsEqual(UnifiedSet.newSetWith(null, 1, 2, 3), caseB);
 
         //Testing add throws NullPointerException if the hashingStrategy is not null safe
-        Verify.assertThrows(NullPointerException.class, () -> {
-            UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).add(null);
-        });
+        Verify.assertThrows(NullPointerException.class, () -> UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).add(null));
     }
 
     @Override
@@ -356,9 +352,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Verify.assertSetsEqual(UnifiedSet.newSet(LAST_NAME_HASHED_SET).with(notInSet, null), people);
 
         //Testing addAllIterable throws NullPointerException if the hashingStrategy is not null safe
-        Verify.assertThrows(NullPointerException.class, () -> {
-            UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).addAllIterable(UnifiedSet.newSetWith((Person) null));
-        });
+        Verify.assertThrows(NullPointerException.class, () -> UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).addAllIterable(UnifiedSet.newSetWith((Person) null)));
     }
 
     @Test
@@ -410,9 +404,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Assert.assertNull(people.get(new Person("John", "NotHere")));
 
         //Testing get throws NullPointerException if the hashingStrategy is not null safe
-        Verify.assertThrows(NullPointerException.class, () -> {
-            UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).get(null);
-        });
+    Verify.assertThrows(NullPointerException.class, () -> UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).get(null));
     }
 
     @Test
@@ -493,9 +485,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Verify.assertSize(4, people);
 
         //Testing put throws NullPointerException if the hashingStrategy is not null safe
-        Verify.assertThrows(NullPointerException.class, () -> {
-            UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).put(null);
-        });
+    Verify.assertThrows(NullPointerException.class, () -> UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).put(null));
     }
 
     @Test

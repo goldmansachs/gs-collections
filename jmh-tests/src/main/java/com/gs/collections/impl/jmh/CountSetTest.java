@@ -28,8 +28,8 @@ import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Assert;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
@@ -48,13 +48,14 @@ public class CountSetTest
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;
+
+    @Param({"0", "1", "2", "3"})
+    public int megamorphicWarmupLevel;
+
     private final Set<Integer> integersJDK = new HashSet<>(Interval.oneTo(SIZE));
     private final UnifiedSet<Integer> integersGSC = new UnifiedSet<>(Interval.oneTo(SIZE));
 
     private ExecutorService executorService;
-
-    @Param({"0", "1", "2", "3"})
-    public int megamorphicWarmupLevel;
 
     @Setup
     public void setUp()
@@ -198,7 +199,7 @@ public class CountSetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_jdk()
     {
         long evens = this.integersJDK.stream().filter(each -> each % 2 == 0).count();
@@ -207,7 +208,7 @@ public class CountSetTest
 
     @Warmup(iterations = 50)
     @Measurement(iterations = 25)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_jdk()
     {
         long evens = this.integersJDK.parallelStream().filter(each -> each % 2 == 0).count();
@@ -216,7 +217,7 @@ public class CountSetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_gsc()
     {
         int evens = this.integersGSC.count(each -> each % 2 == 0);
@@ -225,7 +226,7 @@ public class CountSetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_gsc()
     {
         int evens = this.integersGSC.asLazy().count(each -> each % 2 == 0);
@@ -234,7 +235,7 @@ public class CountSetTest
 
     @Warmup(iterations = 50)
     @Measurement(iterations = 25)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_eager_gsc()
     {
         int evens = ParallelIterate.count(this.integersGSC, each -> each % 2 == 0, BATCH_SIZE, this.executorService);
@@ -243,7 +244,7 @@ public class CountSetTest
 
     @Warmup(iterations = 50)
     @Measurement(iterations = 25)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_gsc()
     {
         int evens = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).count(each -> each % 2 == 0);
@@ -252,7 +253,7 @@ public class CountSetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_scala()
     {
         CountSetScalaTest.serial_eager_scala();
@@ -260,7 +261,7 @@ public class CountSetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_scala()
     {
         CountSetScalaTest.serial_lazy_scala();
@@ -268,7 +269,7 @@ public class CountSetTest
 
     @Warmup(iterations = 50)
     @Measurement(iterations = 25)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_scala()
     {
         CountSetScalaTest.parallel_lazy_scala();

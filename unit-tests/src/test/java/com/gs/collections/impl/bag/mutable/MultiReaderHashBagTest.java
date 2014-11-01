@@ -416,8 +416,8 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
 
     private void verifyDelegateIsUnmodifiable(MutableBag<Integer> delegate)
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.add(2); });
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.remove(0); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> delegate.add(2));
+        Verify.assertThrows(UnsupportedOperationException.class, () -> delegate.remove(0));
     }
 
     @Test
@@ -486,9 +486,9 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
         });
         Assert.assertEquals(HashBag.newBagWith(1, 2, 2, 3, 4), bag);
 
-        Verify.assertThrows(NullPointerException.class, () -> { iterator.get().hasNext(); });
+        Verify.assertThrows(NullPointerException.class, () -> iterator.get().hasNext());
 
-        Verify.assertThrows(NullPointerException.class, () -> { delegateList.get().iterator(); });
+        Verify.assertThrows(NullPointerException.class, () -> delegateList.get().iterator());
     }
 
     @Test

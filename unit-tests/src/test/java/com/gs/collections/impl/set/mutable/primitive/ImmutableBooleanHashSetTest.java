@@ -283,10 +283,10 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         {
             sum[i] = "";
         }
-        this.emptySet.forEach(each -> { sum[0] += each; });
-        this.falseSet.forEach(each -> { sum[1] += each; });
-        this.trueSet.forEach(each -> { sum[2] += each; });
-        this.trueFalseSet.forEach(each -> { sum[3] += each; });
+        this.emptySet.forEach(each -> sum[0] += each);
+        this.falseSet.forEach(each -> sum[1] += each);
+        this.trueSet.forEach(each -> sum[2] += each);
+        this.trueFalseSet.forEach(each -> sum[3] += each);
 
         Assert.assertEquals("", sum[0]);
         Assert.assertEquals("false", sum[1]);

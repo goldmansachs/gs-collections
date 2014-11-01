@@ -305,7 +305,7 @@ public class ParallelIterateAcceptanceTest
         Integer[] array = new Integer[200];
         FastList<Integer> list = (FastList<Integer>) Interval.oneTo(200).toList();
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        ParallelIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; });
+        ParallelIterate.forEachWithIndex(list, (each, index) -> array[index] = each);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
@@ -315,7 +315,7 @@ public class ParallelIterateAcceptanceTest
         Integer[] array = new Integer[200];
         FastList<Integer> list = (FastList<Integer>) Interval.oneTo(200).toList();
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        ParallelIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 10, 10);
+        ParallelIterate.forEachWithIndex(list, (each, index) -> array[index] = each, 10, 10);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
@@ -325,7 +325,7 @@ public class ParallelIterateAcceptanceTest
         Integer[] array = new Integer[200];
         ImmutableList<Integer> list = Interval.oneTo(200).toList().toImmutable();
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        ParallelIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 10, 10);
+        ParallelIterate.forEachWithIndex(list, (each, index) -> array[index] = each, 10, 10);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
@@ -335,7 +335,7 @@ public class ParallelIterateAcceptanceTest
         Integer[] array = new Integer[200];
         List<Integer> list = new ArrayList<Integer>(Interval.oneTo(200));
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        ParallelIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 10, 10);
+        ParallelIterate.forEachWithIndex(list, (each, index) -> array[index] = each, 10, 10);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
     }
 
@@ -345,7 +345,7 @@ public class ParallelIterateAcceptanceTest
         Integer[] array = new Integer[10];
         List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
-        ParallelIterate.forEachWithIndex(list, (each, index) -> { array[index] = each; }, 1, 2);
+        ParallelIterate.forEachWithIndex(list, (each, index) -> array[index] = each, 1, 2);
         Assert.assertArrayEquals(array, list.toArray(new Integer[list.size()]));
     }
 
@@ -543,7 +543,7 @@ public class ParallelIterateAcceptanceTest
     @Test
     public void aggregateInPlaceBy()
     {
-        Procedure2<AtomicInteger, Integer> countAggregator = (aggregate, value) -> { aggregate.incrementAndGet(); };
+        Procedure2<AtomicInteger, Integer> countAggregator = (aggregate, value) -> aggregate.incrementAndGet();
         List<Integer> list = Interval.oneTo(20000);
         MutableMap<String, AtomicInteger> aggregation =
                 ParallelIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator);

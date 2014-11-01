@@ -68,7 +68,6 @@ public interface <name>Iterable extends PrimitiveIterable
     Lazy<name>Iterable asLazy();
 
     \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function);
-
     <(arithmeticMethods.(type))()>
 }
 
@@ -86,6 +85,7 @@ arithmeticMethods ::= [
     ]
 
 allMethods() ::= <<
+<\n>
 <(wideType.(type))> sum();
 
 <type> max();
@@ -103,7 +103,6 @@ double median();
 <type>[] toSortedArray();
 
 Mutable<name>List toSortedList();
-
 >>
 
 noMethods() ::= ""

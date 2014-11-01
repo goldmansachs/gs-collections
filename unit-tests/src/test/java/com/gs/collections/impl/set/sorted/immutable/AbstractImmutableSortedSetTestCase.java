@@ -191,9 +191,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         ImmutableSortedSet<Integer> set = this.classUnderTest();
-        set.forEachWith((argument1, argument2) -> {
-            result.add(argument1 + argument2);
-        }, 0);
+        set.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 0);
         Verify.assertListsEqual(result, set.toList());
     }
 
@@ -202,9 +200,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         ImmutableSortedSet<Integer> set = this.classUnderTest();
-        set.forEachWithIndex((object, index) -> {
-            result.add(object);
-        });
+        set.forEachWithIndex((object, index) -> result.add(object));
         Verify.assertListsEqual(result, set.toList());
     }
 

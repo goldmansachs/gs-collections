@@ -431,7 +431,9 @@ public final class <name>ArrayStack
         this.delegate = <name>ArrayList.newListWith(array);
     }
 }
+
 >>
+
 arithmeticMethods ::= [
     "byte": "allMethods",
     "short": "allMethods",

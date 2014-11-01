@@ -32,7 +32,7 @@
 
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
-        <jmh.version>0.6</jmh.version>
+        <jmh.version>1.1.1</jmh.version>
     </properties>
 
     <prerequisites>
@@ -80,7 +80,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>17.0</version>
+            <version>18.0</version>
         </dependency>
 
         <dependency>
@@ -100,6 +100,7 @@
             <groupId>org.openjdk.jmh</groupId>
             <artifactId>jmh-generator-annprocess</artifactId>
             <version>${jmh.version}</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

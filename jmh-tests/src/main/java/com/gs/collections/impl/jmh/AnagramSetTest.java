@@ -42,8 +42,8 @@ import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -82,19 +82,19 @@ public class AnagramSetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_scala()
     {
         AnagramSetScalaTest.serial_eager_scala();
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_scala()
     {
         AnagramSetScalaTest.serial_lazy_scala();
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_scala()
     {
         AnagramSetScalaTest.parallel_lazy_scala();
@@ -102,7 +102,7 @@ public class AnagramSetTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_gsc()
     {
         MutableSetMultimap<Alphagram, String> groupBy = this.gscWords.groupBy(Alphagram::new);
@@ -114,7 +114,7 @@ public class AnagramSetTest
                 .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_eager_gsc()
     {
         MutableMultimap<Alphagram, String> groupBy = ParallelIterate.groupBy(this.gscWords, Alphagram::new);
@@ -125,7 +125,7 @@ public class AnagramSetTest
         ParallelIterate.forEach(collect, Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_gsc()
     {
         UnsortedSetMultimap<Alphagram, String> multimap = this.gscWords.asParallel(this.executorService, BATCH_SIZE)
@@ -139,7 +139,7 @@ public class AnagramSetTest
                 .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_eager_forkjoin_gsc()
     {
         MutableMultimap<Alphagram, String> groupBy = FJIterate.groupBy(this.gscWords, Alphagram::new);
@@ -150,7 +150,7 @@ public class AnagramSetTest
         FJIterate.forEach(collect, Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_jdk()
     {
         Map<Alphagram, Set<String>> groupBy = this.jdkWords.stream().collect(Collectors.groupingBy(Alphagram::new, Collectors.<String>toSet()));
@@ -163,7 +163,7 @@ public class AnagramSetTest
                 .forEach(e -> Assert.assertFalse(e.isEmpty()));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_jdk()
     {
         Map<Alphagram, Set<String>> groupBy = this.jdkWords.parallelStream().collect(Collectors.groupingBy(Alphagram::new, Collectors.<String>toSet()));

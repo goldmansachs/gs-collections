@@ -150,7 +150,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     {
         List<Integer> result = new ArrayList<Integer>();
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
-        collection.forEachWithIndex((object, index) -> { result.add(object + index); });
+        collection.forEachWithIndex((object, index) -> result.add(object + index));
         Verify.assertContainsAll(result, 1, 3, 5, 7);
     }
 
@@ -158,7 +158,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void testAdd()
     {
         MutableList<String> collection = ArrayAdapter.newArray();
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { collection.add(null); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> collection.add(null));
     }
 
     @Test
@@ -172,16 +172,14 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void testAddAll()
     {
         MutableList<String> collection = ArrayAdapter.newArray();
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { collection.addAll(Lists.fixedSize.of("")); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> collection.addAll(Lists.fixedSize.of("")));
     }
 
     @Test
     public void testAddAllAtIndex()
     {
         MutableList<String> collection = ArrayAdapter.newArray();
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            collection.addAll(0, Lists.fixedSize.of(""));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> collection.addAll(0, Lists.fixedSize.of("")));
     }
 
     @Test
@@ -248,17 +246,13 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testRemoveAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.newWith(1, 2, 3).removeAll(Lists.fixedSize.of(1, 2));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newWith(1, 2, 3).removeAll(Lists.fixedSize.of(1, 2)));
     }
 
     @Test
     public void testRetainAll()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.newWith(1, 2, 3).retainAll(Lists.fixedSize.of(1, 2));
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newWith(1, 2, 3).retainAll(Lists.fixedSize.of(1, 2)));
     }
 
     @Test
@@ -306,7 +300,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testRemoveObject()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.newWith(1, 2, 3).remove(3); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newWith(1, 2, 3).remove(3));
     }
 
     @Test
@@ -327,9 +321,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testRemoveAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            ArrayAdapter.newArrayWith(1, 2, 3, null).remove(0);
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ArrayAdapter.newArrayWith(1, 2, 3, null).remove(0));
     }
 
     @Test
@@ -383,7 +375,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     {
         List<Integer> result = new ArrayList<Integer>();
         MutableList<Integer> collection = ArrayAdapter.newArrayWith(1, 2, 3, 4);
-        collection.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
+        collection.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 0);
         Verify.assertSize(4, result);
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }

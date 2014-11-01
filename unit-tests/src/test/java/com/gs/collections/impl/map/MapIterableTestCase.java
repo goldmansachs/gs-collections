@@ -175,7 +175,7 @@ public abstract class MapIterableTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         MapIterable<Integer, Integer> map = this.newMapWithKeysValues(-1, 1, -2, 2, -3, 3, -4, 4);
-        map.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 10);
+        map.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 10);
         Verify.assertSize(4, result);
         Verify.assertContainsAll(result, 11, 12, 13, 14);
     }
@@ -230,9 +230,7 @@ public abstract class MapIterableTestCase
         MapIterable<String, Integer> result = map.flipUniqueValues();
         Assert.assertEquals(UnifiedMap.newWithKeysValues("1", 1, "2", 2, "3", 3), result);
 
-        Verify.assertThrows(IllegalStateException.class, () -> {
-            this.newMapWithKeysValues(1, "2", 2, "2").flipUniqueValues();
-        });
+        Verify.assertThrows(IllegalStateException.class, () -> this.newMapWithKeysValues(1, "2", 2, "2").flipUniqueValues());
     }
 
     @Test
@@ -1261,7 +1259,7 @@ public abstract class MapIterableTestCase
     @Test
     public void aggregateByNonMutating()
     {
-        Function0<Integer> valueCreator = () -> (Integer) 0;
+        Function0<Integer> valueCreator = () -> 0;
         Function2<Integer, Integer, Integer> sumAggregator = (integer1, integer2) -> integer1 + integer2;
         RichIterable<Integer> collection = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);
         MapIterable<String, Integer> aggregation = collection.aggregateBy(String::valueOf, valueCreator, sumAggregator);

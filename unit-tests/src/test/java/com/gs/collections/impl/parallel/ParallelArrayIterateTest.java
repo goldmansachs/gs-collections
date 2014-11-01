@@ -93,9 +93,9 @@ public class ParallelArrayIterateTest
     private void basicTestParallelSums(Object[] array, Sum parallelSum1, Sum parallelSum2)
             throws InterruptedException
     {
-        Thread thread1 = new Thread(() -> { this.parallelSum(array, parallelSum1); });
+        Thread thread1 = new Thread(() -> this.parallelSum(array, parallelSum1));
         thread1.start();
-        Thread thread2 = new Thread(() -> { this.parallelSum(array, parallelSum2); });
+        Thread thread2 = new Thread(() -> this.parallelSum(array, parallelSum2));
         thread2.start();
         thread1.join();
         thread2.join();

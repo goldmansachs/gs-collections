@@ -74,7 +74,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <clover.version>4.0.1</clover.version>
-        <checkstyle.version>2.12.1</checkstyle.version>
+        <checkstyle.version>2.13</checkstyle.version>
         <sonar.clover.reportPath>${project.basedir}/target/site/clover/clover.xml</sonar.clover.reportPath>
         <sonar.surefire.reportsPath>${project.basedir}/target/clover/surefire-reports</sonar.surefire.reportsPath>
         <!-- this setting is needed for TeamCity -->
@@ -296,10 +296,17 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${checkstyle.version}</version>
                 <configuration>
-                    <configLocation>checkstyle-configuration.xml</configLocation>
+                    <configLocation>../checkstyle-configuration.xml</configLocation>
                     <logViolationsToConsole>true</logViolationsToConsole>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>6.0</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>

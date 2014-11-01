@@ -51,9 +51,9 @@ import net.jcip.annotations.Immutable;
 @Immutable
 final class Immutable<name>EmptySet implements Immutable<name>Set, Serializable
 {
-    private static final long serialVersionUID = 1L;
-
     static final Immutable<name>Set INSTANCE = new Immutable<name>EmptySet();
+
+    private static final long serialVersionUID = 1L;
 
     private Object readResolve()
     {

@@ -4,7 +4,7 @@
     "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
 <!--
-  ~ Copyright 2013 Goldman Sachs.
+  ~ Copyright 2014 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -35,8 +35,6 @@
     <suppress checks="RedundantThrows" files="FixedSizeCollection.java" />
     <suppress checks="RedundantThrows" files="FixedSizeMap.java" />
 
-    <suppress checks="EqualsAvoidNull" files="Verify.java" />
-
     <suppress checks="IllegalThrows" files="AlwaysTearDownTestCase.java" />
     <suppress checks="IllegalThrows" files="CollectionFactoryTest.java" />
 
@@ -59,13 +57,13 @@
 
     <suppress checks="MethodName" files="GsCollectionsCodeGenerator.java" />
 
-    <suppress checks="EqualsAvoidNull" files="StringPredicatesSerializationTest.java" />
-
     <suppress checks="IllegalImport" files="ConcurrentHashMapUnsafe.java" />
 
     <suppress checks="RegexpHeader" files="MemoryTestBench.java" />
 
     <!--suppress lambda expression-->
     <suppress checks="[a-zA-Z0-0]*" files="SerialParallelLazyPerformanceTest.java" />
+
+    <suppress checks="ImportOrder" files="((Boolean)|(Byte)|(Char)|(Double)|(Int)|(Float)|(Long)|(Short)).*.java" />
 
 </suppressions>

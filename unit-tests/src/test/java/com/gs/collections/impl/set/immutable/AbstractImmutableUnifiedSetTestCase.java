@@ -141,7 +141,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         ImmutableSet<Integer> set = this.newSetWith(1, 2, 3, 4);
-        set.forEachWithIndex((object, index) -> { result.add(object + index); });
+        set.forEachWithIndex((object, index) -> result.add(object + index));
         Verify.assertContainsAll(result, 1, 3, 5, 7);
     }
 
@@ -351,7 +351,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         ImmutableSet<Integer> collection = this.newSetWith(1, 2, 3, 4);
-        collection.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 0);
+        collection.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 0);
         Verify.assertSize(4, result);
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }

@@ -74,7 +74,7 @@ public class FlatCollectIterableTest extends AbstractLazyIterableTestCase
     {
         InternalIterable<Integer> select = new FlatCollectIterable<Integer, Integer>(Interval.oneTo(5), Interval::oneTo);
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith((each, aBuilder) -> { aBuilder.append(each); }, builder);
+        select.forEachWith((each, aBuilder) -> aBuilder.append(each), builder);
         Assert.assertEquals("112123123412345", builder.toString());
     }
 

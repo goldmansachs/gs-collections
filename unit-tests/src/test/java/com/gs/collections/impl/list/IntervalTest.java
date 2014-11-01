@@ -137,7 +137,7 @@ public class IntervalTest
     {
         MutableList<String> result = Lists.mutable.of();
         ExecutorService service = Executors.newSingleThreadExecutor();
-        Interval.oneTo(3).run(() -> { result.add(null); }, service);
+        Interval.oneTo(3).run(() -> result.add(null), service);
         service.shutdown();
         service.awaitTermination(20, TimeUnit.SECONDS);
         Assert.assertEquals(FastList.<String>newListWith(null, null, null), result);
@@ -148,7 +148,7 @@ public class IntervalTest
     {
         MutableList<String> result = Lists.mutable.of();
         ExecutorService service = Executors.newSingleThreadExecutor();
-        Interval.fromTo(3, 1).run(() -> { result.add(null); }, service);
+        Interval.fromTo(3, 1).run(() -> result.add(null), service);
         service.shutdown();
         service.awaitTermination(20, TimeUnit.SECONDS);
         Assert.assertEquals(FastList.<String>newListWith(null, null, null), result);
@@ -485,7 +485,7 @@ public class IntervalTest
     @Test
     public void factorial()
     {
-        Verify.assertThrows(IllegalStateException.class, () -> { Interval.fromTo(-1, -5).factorial(); });
+        Verify.assertThrows(IllegalStateException.class, () -> Interval.fromTo(-1, -5).factorial());
         Assert.assertEquals(1, Interval.zero().factorial().intValue());
         Assert.assertEquals(1, Interval.oneTo(1).factorial().intValue());
         Assert.assertEquals(6, Interval.oneTo(3).factorial().intValue());
@@ -539,12 +539,10 @@ public class IntervalTest
     public void forEachWithIndex()
     {
         IntegerSum sum = new IntegerSum(0);
-        Interval.oneTo(5).forEachWithIndex((ObjectIntProcedure<Integer>) (each, index) -> { sum.add(each + index); });
+        Interval.oneTo(5).forEachWithIndex((ObjectIntProcedure<Integer>) (each, index) -> sum.add(each + index));
         Assert.assertEquals(25, sum.getIntSum());
         IntegerSum zeroSum = new IntegerSum(0);
-        Interval.fromTo(0, -4).forEachWithIndex((ObjectIntProcedure<Integer>) (each, index) -> {
-            zeroSum.add(each + index);
-        });
+        Interval.fromTo(0, -4).forEachWithIndex((ObjectIntProcedure<Integer>) (each, index) -> zeroSum.add(each + index));
         Assert.assertEquals(0, zeroSum.getIntSum());
 
         Verify.assertThrows(IndexOutOfBoundsException.class, () -> Interval.zeroTo(10).forEachWithIndex(null, -1, 10));
@@ -554,10 +552,10 @@ public class IntervalTest
     public void run()
     {
         IntegerSum sum = new IntegerSum(0);
-        Interval.oneTo(5).run(() -> { sum.add(1); });
+        Interval.oneTo(5).run(() -> sum.add(1));
         Assert.assertEquals(5, sum.getIntSum());
         IntegerSum sum2 = new IntegerSum(0);
-        Interval.fromTo(5, 1).run(() -> { sum2.add(1); });
+        Interval.fromTo(5, 1).run(() -> sum2.add(1));
         Assert.assertEquals(5, sum2.getIntSum());
     }
 
@@ -565,10 +563,10 @@ public class IntervalTest
     public void forEachWith()
     {
         IntegerSum sum = new IntegerSum(0);
-        Interval.oneTo(5).forEachWith((Integer each, Integer parameter) -> { sum.add(each + parameter); }, 0);
+        Interval.oneTo(5).forEachWith((Integer each, Integer parameter) -> sum.add(each + parameter), 0);
         Assert.assertEquals(15, sum.getIntSum());
         IntegerSum sum2 = new IntegerSum(0);
-        Interval.fromTo(5, 1).forEachWith((Integer each, Integer parameter) -> { sum2.add(each + parameter); }, 0);
+        Interval.fromTo(5, 1).forEachWith((Integer each, Integer parameter) -> sum2.add(each + parameter), 0);
         Assert.assertEquals(15, sum2.getIntSum());
     }
 
@@ -720,8 +718,8 @@ public class IntervalTest
         Assert.assertEquals(Integer.valueOf(5), interval.get(3));
         Assert.assertEquals(Integer.valueOf(10), interval.get(4));
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { interval.get(-1); });
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { interval.get(5); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> interval.get(-1));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> interval.get(5));
     }
 
     @Test
@@ -804,7 +802,7 @@ public class IntervalTest
         Assert.assertEquals(FastList.newListWith(1, 2), Interval.fromTo(1, 3).take(2));
         Assert.assertEquals(FastList.newListWith(1, 2), Interval.fromTo(1, 2).take(3));
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> { Interval.fromTo(1, 3).take(-1); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> Interval.fromTo(1, 3).take(-1));
     }
 
     @Test
@@ -813,7 +811,7 @@ public class IntervalTest
         Assert.assertEquals(FastList.newListWith(3, 4), Interval.fromTo(1, 4).drop(2));
         Verify.assertIterableEmpty(Interval.fromTo(1, 2).drop(3));
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> { Interval.fromTo(1, 3).drop(-1); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> Interval.fromTo(1, 3).drop(-1));
     }
 
     @Test

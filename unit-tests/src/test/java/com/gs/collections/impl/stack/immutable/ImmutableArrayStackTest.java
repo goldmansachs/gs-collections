@@ -83,7 +83,7 @@ public class ImmutableArrayStackTest extends ImmutableStackTestCase
     @Test
     public void pop()
     {
-        Verify.assertThrows(EmptyStackException.class, () -> { this.newStackWith().pop(); });
+        Verify.assertThrows(EmptyStackException.class, () -> this.newStackWith().pop());
 
         ImmutableStack<Integer> stack = this.newStackWith(1, 2, 3);
         ImmutableStack<Integer> modifiedStack = stack.pop();
@@ -101,7 +101,7 @@ public class ImmutableArrayStackTest extends ImmutableStackTestCase
     @Test
     public void popCount()
     {
-        Verify.assertThrows(EmptyStackException.class, () -> { this.newStackWith().pop(1); });
+        Verify.assertThrows(EmptyStackException.class, () -> this.newStackWith().pop(1));
 
         Assert.assertEquals(this.newStackWith(), this.newStackWith().pop(0));
 
@@ -112,7 +112,7 @@ public class ImmutableArrayStackTest extends ImmutableStackTestCase
         Assert.assertNotSame(this.newStackWith(1, 2, 3), stack);
 
         ImmutableStack<Integer> stack1 = this.newStackWith(1);
-        Verify.assertThrows(IllegalArgumentException.class, () -> { stack1.pop(2); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> stack1.pop(2));
         ImmutableStack<Integer> modifiedStack1 = stack1.pop(1);
         Assert.assertEquals(this.newStackWith(), modifiedStack1);
         Assert.assertNotSame(modifiedStack1, stack1);

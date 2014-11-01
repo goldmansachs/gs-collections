@@ -795,8 +795,8 @@ public abstract class Abstract<name1><name2>MapKeyValuesViewTestCase
     public void testToString()
     {
         RichIterable\<<name1><name2>Pair> collection = this.newWith(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("2")>, <(literal.(type2))("3")>);
-        Assert.assertTrue("[<(toStringLiteral.(type1))("1")>:<(toStringLiteral.(type2))("2")>, <(toStringLiteral.(type1))("2")>:<(toStringLiteral.(type2))("3")>]".equals(collection.toString()) ||
-                                    "[<(toStringLiteral.(type1))("2")>:<(toStringLiteral.(type2))("3")>, <(toStringLiteral.(type1))("1")>:<(toStringLiteral.(type2))("2")>]".equals(collection.toString()));
+        Assert.assertTrue("[<(toStringLiteral.(type1))("1")>:<(toStringLiteral.(type2))("2")>, <(toStringLiteral.(type1))("2")>:<(toStringLiteral.(type2))("3")>]".equals(collection.toString())
+                || "[<(toStringLiteral.(type1))("2")>:<(toStringLiteral.(type2))("3")>, <(toStringLiteral.(type1))("1")>:<(toStringLiteral.(type2))("2")>]".equals(collection.toString()));
     }
 
     @Test
@@ -879,8 +879,8 @@ public abstract class Abstract<name1><name2>MapKeyValuesViewTestCase
         RichIterable\<<name1><name2>Pair> collection = this.newWith(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("2")>, <(literal.(type2))("3")>);
         RichIterable\<Pair\<<name1><name2>Pair, Integer>\> result = collection.zip(Interval.oneTo(5));
 
-        Assert.assertTrue(Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("1")>, <(literal.(type2))("2")>), 1), Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), 2)).equals(result.toBag()) ||
-                Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), 1), Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("1")>, <(literal.(type2))("2")>), 2)).equals(result.toBag()));
+        Assert.assertTrue(Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("1")>, <(literal.(type2))("2")>), 1), Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), 2)).equals(result.toBag())
+                || Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), 1), Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("1")>, <(literal.(type2))("2")>), 2)).equals(result.toBag()));
     }
 
     @Test
@@ -888,8 +888,8 @@ public abstract class Abstract<name1><name2>MapKeyValuesViewTestCase
     {
         RichIterable\<<name1><name2>Pair> collection = this.newWith(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("2")>, <(literal.(type2))("3")>);
         RichIterable\<Pair\<<name1><name2>Pair, Integer>\> result = collection.zipWithIndex();
-        Assert.assertTrue(Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("1")>, <(literal.(type2))("2")>), 0), Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), 1)).equals(result.toBag()) ||
-                Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), 0), Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("1")>, <(literal.(type2))("2")>), 1)).equals(result.toBag()));
+        Assert.assertTrue(Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("1")>, <(literal.(type2))("2")>), 0), Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), 1)).equals(result.toBag())
+                || Bags.mutable.of(Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), 0), Tuples.pair(PrimitiveTuples.pair(<(literal.(type1))("1")>, <(literal.(type2))("2")>), 1)).equals(result.toBag()));
     }
 
     @Test

@@ -134,7 +134,7 @@ public class SerialParallelPerformanceTest
     public MutableList<String> generateWordsList(int count)
     {
         FastList<String> words = FastList.newList();
-        Interval.oneTo(count).forEach((int each) -> { words.add(RandomStringUtils.randomAlphabetic(2)); });
+        Interval.oneTo(count).forEach((int each) -> words.add(RandomStringUtils.randomAlphabetic(2)));
         return words;
     }
 
@@ -238,54 +238,54 @@ public class SerialParallelPerformanceTest
     private void aggregateBy(Iterable<String> words)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> { this.basicSerialAggregateByPerformance(words, SERIAL_RUN_COUNT); });
-        runnables.add(() -> { this.basicParallelAggregateByPerformance(words, PARALLEL_RUN_COUNT); });
-        runnables.add(() -> { this.basicForkJoinAggregateByPerformance(words, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> this.basicSerialAggregateByPerformance(words, SERIAL_RUN_COUNT));
+        runnables.add(() -> this.basicParallelAggregateByPerformance(words, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicForkJoinAggregateByPerformance(words, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
     }
 
     private void aggregateInPlaceBy(Iterable<String> words)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> { this.basicSerialAggregateInPlaceByPerformance(words, SERIAL_RUN_COUNT); });
-        runnables.add(() -> { this.basicParallelAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT); });
-        runnables.add(() -> { this.basicForkJoinAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> this.basicSerialAggregateInPlaceByPerformance(words, SERIAL_RUN_COUNT));
+        runnables.add(() -> this.basicParallelAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicForkJoinAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
     }
 
     private void groupBy(Iterable<String> words)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> { this.basicSerialGroupByPerformance(words, SERIAL_RUN_COUNT); });
-        runnables.add(() -> { this.basicParallelGroupByPerformance(words, PARALLEL_RUN_COUNT); });
-        runnables.add(() -> { this.basicForkJoinGroupByPerformance(words, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> this.basicSerialGroupByPerformance(words, SERIAL_RUN_COUNT));
+        runnables.add(() -> this.basicParallelGroupByPerformance(words, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicForkJoinGroupByPerformance(words, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
     }
 
     private void collect(Iterable<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> { this.basicSerialCollectPerformance(collection, SERIAL_RUN_COUNT); });
-        runnables.add(() -> { this.basicParallelCollectPerformance(collection, PARALLEL_RUN_COUNT); });
-        runnables.add(() -> { this.basicForkJoinCollectPerformance(collection, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> this.basicSerialCollectPerformance(collection, SERIAL_RUN_COUNT));
+        runnables.add(() -> this.basicParallelCollectPerformance(collection, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicForkJoinCollectPerformance(collection, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
     }
 
     private void collectIf(Iterable<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> { this.basicSerialCollectIfPerformance(collection, PREDICATES, SERIAL_RUN_COUNT); });
-        runnables.add(() -> { this.basicParallelCollectIfPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
-        runnables.add(() -> { this.basicForkJoinCollectIfPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> this.basicSerialCollectIfPerformance(collection, PREDICATES, SERIAL_RUN_COUNT));
+        runnables.add(() -> this.basicParallelCollectIfPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicForkJoinCollectIfPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
     }
 
     private void count(Iterable<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> { this.basicSerialCountPerformance(collection, PREDICATES, SERIAL_RUN_COUNT); });
-        runnables.add(() -> { this.basicParallelCountPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
-        runnables.add(() -> { this.basicForkJoinCountPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> this.basicSerialCountPerformance(collection, PREDICATES, SERIAL_RUN_COUNT));
+        runnables.add(() -> this.basicParallelCountPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicForkJoinCountPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
     }
 
@@ -298,18 +298,18 @@ public class SerialParallelPerformanceTest
     private void reject(Iterable<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> { this.basicSerialRejectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT); });
-        runnables.add(() -> { this.basicParallelRejectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
-        runnables.add(() -> { this.basicForkJoinRejectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> this.basicSerialRejectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT));
+        runnables.add(() -> this.basicParallelRejectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicForkJoinRejectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
     }
 
     private void select(Iterable<Integer> collection)
     {
         MutableList<Runnable> runnables = FastList.newList();
-        runnables.add(() -> { this.basicSerialSelectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT); });
-        runnables.add(() -> { this.basicParallelSelectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
-        runnables.add(() -> { this.basicForkJoinSelectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT); });
+        runnables.add(() -> this.basicSerialSelectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT));
+        runnables.add(() -> this.basicParallelSelectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT));
+        runnables.add(() -> this.basicForkJoinSelectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT));
         this.shuffleAndRun(runnables);
     }
 
@@ -636,12 +636,8 @@ public class SerialParallelPerformanceTest
             int count)
     {
         Assert.assertEquals(
-                ParallelIterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
-                    value.incrementAndGet();
-                }),
-                Iterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
-                    value.incrementAndGet();
-                }));
+                ParallelIterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> value.incrementAndGet()),
+                Iterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> value.incrementAndGet()));
         return TimeKeeper.logAverageMillisecondsToRun("Serial** AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
@@ -650,9 +646,7 @@ public class SerialParallelPerformanceTest
                         iterable,
                         Alphagram::new,
                         (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0),
-                        (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
-                            value.incrementAndGet();
-                        })), count, 10);
+                        (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> value.incrementAndGet())), count, 10);
     }
 
     private double basicSerialAggregateByPerformance(
@@ -748,12 +742,8 @@ public class SerialParallelPerformanceTest
     private double basicParallelAggregateInPlaceByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
-                ParallelIterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
-                    value.incrementAndGet();
-                }),
-                Iterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
-                    value.incrementAndGet();
-                }));
+                ParallelIterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> value.incrementAndGet()),
+                Iterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> value.incrementAndGet()));
         return TimeKeeper.logAverageMillisecondsToRun("Parallel AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
@@ -762,20 +752,14 @@ public class SerialParallelPerformanceTest
                         iterable,
                         Alphagram::new,
                         (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0),
-                        (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
-                            value.incrementAndGet();
-                        })), count, WARM_UP_COUNT);
+                        (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> value.incrementAndGet())), count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinAggregateInPlaceByPerformance(Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
-                FJIterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
-                    value.incrementAndGet();
-                }),
-                Iterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
-                    value.incrementAndGet();
-                }));
+                FJIterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> value.incrementAndGet()),
+                Iterate.aggregateInPlaceBy(iterable, Alphagram::new, (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0), (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> value.incrementAndGet()));
         return TimeKeeper.logAverageMillisecondsToRun("ForkJoin AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
@@ -784,9 +768,7 @@ public class SerialParallelPerformanceTest
                         iterable,
                         Alphagram::new,
                         (Function0<AtomicIntegerWithEquals>) () -> new AtomicIntegerWithEquals(0),
-                        (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> {
-                            value.incrementAndGet();
-                        })), count, WARM_UP_COUNT);
+                        (Procedure2<AtomicIntegerWithEquals, String>) (value, each) -> value.incrementAndGet())), count, WARM_UP_COUNT);
     }
 
     private double basicParallelAggregateByPerformance(Iterable<String> iterable, int count)

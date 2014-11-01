@@ -200,7 +200,7 @@ public abstract class ImmutableBagTestCase
     {
         MutableBag<String> result = Bags.mutable.of();
         ImmutableBag<String> bag = this.newBag();
-        bag.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, "");
+        bag.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), "");
         Assert.assertEquals(bag, result);
     }
 

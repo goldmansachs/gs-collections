@@ -48,7 +48,7 @@ public class UnmodifiableMapTest
     @Test
     public void testNullConstructorArgument()
     {
-        Verify.assertThrows(NullPointerException.class, () -> { new UnmodifiableMap<Object, Object>(null); });
+        Verify.assertThrows(NullPointerException.class, () -> new UnmodifiableMap<Object, Object>(null));
     }
 
     @Test
@@ -84,15 +84,13 @@ public class UnmodifiableMapTest
     @Test
     public void testPut()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.unmodifiableMap.put("foo", Lists.mutable.<String>of());
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableMap.put("foo", Lists.mutable.<String>of()));
     }
 
     @Test
     public void testRemove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.unmodifiableMap.remove(ROCK_OUT); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableMap.remove(ROCK_OUT));
     }
 
     @Test
@@ -104,7 +102,7 @@ public class UnmodifiableMapTest
     @Test
     public void testClear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) this.unmodifiableMap::clear);
+        Verify.assertThrows(UnsupportedOperationException.class, this.unmodifiableMap::clear);
     }
 
     @Test

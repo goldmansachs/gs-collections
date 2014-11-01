@@ -126,7 +126,7 @@ public class ImmutableQuadrupletonMapTest extends ImmutableMemoryEfficientMapTes
         super.forEachWith();
         MutableList<Integer> result = Lists.mutable.of();
         ImmutableMap<Integer, Integer> map = new ImmutableQuadrupletonMap<Integer, Integer>(1, 1, 2, 2, 3, 3, 4, 4);
-        map.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 10);
+        map.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 10);
         Assert.assertEquals(FastList.newListWith(11, 12, 13, 14), result);
     }
 

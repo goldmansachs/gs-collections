@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.list.Interval;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -45,7 +45,7 @@ public class RejectTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_jdk_lambda_not()
     {
         List<Integer> evens = this.integersJDK.stream().filter(each -> each % 2 != 1).collect(Collectors.toList());
@@ -54,7 +54,7 @@ public class RejectTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_jdk_lambda_negate()
     {
         Predicate<Integer> predicate1 = each -> (each % 2 == 1);
@@ -65,7 +65,7 @@ public class RejectTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_gsc_select_predicates_not()
     {
         MutableList<Integer> evens = this.integersGSC.select(Predicates.not(each -> each % 2 == 1));
@@ -74,7 +74,7 @@ public class RejectTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_gsc()
     {
         MutableList<Integer> evens = this.integersGSC.reject(each -> each % 2 == 1);
@@ -83,7 +83,7 @@ public class RejectTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_gsc()
     {
         MutableList<Integer> evens = this.integersGSC.asLazy().reject(each -> each % 2 == 1).toList();

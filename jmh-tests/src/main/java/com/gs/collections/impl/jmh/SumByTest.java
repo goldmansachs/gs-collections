@@ -34,8 +34,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
@@ -77,7 +77,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Product, Double> sumByProduct_serial_lazy_jdk()
     {
         Map<Product, Double> result =
@@ -91,7 +91,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Account, Double> sumByAccount_serial_lazy_jdk()
     {
         Map<Account, Double> accountDoubleMap =
@@ -105,7 +105,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<String, Double> sumByCategory_serial_lazy_jdk()
     {
         Map<String, Double> categoryDoubleMap =
@@ -119,7 +119,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Product, Double> sumByProduct_parallel_lazy_jdk()
     {
         Map<Product, Double> result =
@@ -133,7 +133,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<Account, Double> sumByAccount_parallel_lazy_jdk()
     {
         Map<Account, Double> result =
@@ -147,7 +147,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public Map<String, Double> sumByCategory_parallel_lazy_jdk()
     {
         Map<String, Double> result =
@@ -161,7 +161,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public ObjectDoubleMap<Product> sumByProduct_serial_eager_gsc()
     {
         ObjectDoubleMap<Product> result =
@@ -172,7 +172,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public ObjectDoubleMap<Product> sumByProduct_parallel_eager_gsc()
     {
         ObjectDoubleMap<Product> result =
@@ -195,7 +195,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public ObjectDoubleMap<Account> sumByAccount_serial_eager_gsc()
     {
         ObjectDoubleMap<Account> result =
@@ -206,7 +206,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public ObjectDoubleMap<Account> sumByAccount_parallel_eager_gsc()
     {
         ObjectDoubleMap<Account> result =
@@ -229,7 +229,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public ObjectDoubleMap<String> sumByCategory_serial_eager_gsc()
     {
         ObjectDoubleMap<String> result =
@@ -240,7 +240,7 @@ public class SumByTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public ObjectDoubleMap<String> sumByCategory_parallel_eager_gsc()
     {
         ObjectDoubleMap<String> result =
@@ -373,11 +373,11 @@ public class SumByTest
         @Override
         public String toString()
         {
-            return "Product{" +
-                    "name='" + this.name + '\'' +
-                    ", category='" + this.category + '\'' +
-                    ", price=" + this.price +
-                    '}';
+            return "Product{"
+                    + "name='" + this.name + '\''
+                    + ", category='" + this.category + '\''
+                    + ", price=" + this.price
+                    + '}';
         }
     }
 }

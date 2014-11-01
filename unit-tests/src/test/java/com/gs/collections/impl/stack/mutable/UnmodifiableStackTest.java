@@ -76,29 +76,21 @@ public class UnmodifiableStackTest extends StackIterableTestCase
     @Test
     public void testNullStack()
     {
-        Verify.assertThrows(IllegalArgumentException.class, () -> { UnmodifiableStack.of(null); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> UnmodifiableStack.of(null));
     }
 
     @Test
     public void testPop()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.newStackFromTopToBottom(1, 2, 3).pop();
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newStackFromTopToBottom(1, 2, 3).pop());
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.newStackFromTopToBottom(1, 2).pop(3); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newStackFromTopToBottom(1, 2).pop(3));
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.newStackFromTopToBottom(1, 2, 3).pop(3);
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newStackFromTopToBottom(1, 2, 3).pop(3));
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.newStackFromTopToBottom(1, 2, 3).pop(3, FastList.<Integer>newList());
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newStackFromTopToBottom(1, 2, 3).pop(3, FastList.<Integer>newList()));
 
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.newStackFromTopToBottom(1, 2, 3).pop(3, ArrayStack.<Integer>newStack());
-        });
+    Verify.assertThrows(UnsupportedOperationException.class, () -> this.newStackFromTopToBottom(1, 2, 3).pop(3, ArrayStack.<Integer>newStack()));
     }
 
     @Test

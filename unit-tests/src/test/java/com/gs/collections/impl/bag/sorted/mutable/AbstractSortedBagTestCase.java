@@ -658,7 +658,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 
         Iterator<Integer> sortedBagIterator = sortedBag.iterator();
         MutableSortedBag<Integer> expected = this.newWith(Collections.reverseOrder(), 1, 1, 1, 1, 2);
-        Verify.assertThrows(IllegalStateException.class, (Runnable) sortedBagIterator::remove);
+        Verify.assertThrows(IllegalStateException.class, sortedBagIterator::remove);
 
         this.assertIteratorRemove(sortedBag, sortedBagIterator, expected);
         this.assertIteratorRemove(sortedBag, sortedBagIterator, expected);
@@ -677,7 +677,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         iterator.remove();
         expected.remove(first);
         Verify.assertSortedBagsEqual(expected, bag);
-        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator::remove);
+        Verify.assertThrows(IllegalStateException.class, iterator::remove);
     }
 
     @Override
@@ -740,11 +740,11 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Assert.assertEquals(140, sum.getIntSum());
         bag2.removeOccurrences(2, 1);
         IntegerSum sum2 = new IntegerSum(0);
-        bag2.forEachWithOccurrences((each, occurrences) -> { sum2.add(each * occurrences); });
+        bag2.forEachWithOccurrences((each, occurrences) -> sum2.add(each * occurrences));
         Assert.assertEquals(58, sum2.getIntSum());
         bag2.removeOccurrences(1, 3);
         IntegerSum sum3 = new IntegerSum(0);
-        bag2.forEachWithOccurrences((each, occurrences) -> { sum3.add(each * occurrences); });
+        bag2.forEachWithOccurrences((each, occurrences) -> sum3.add(each * occurrences));
         Assert.assertEquals(55, sum3.getIntSum());
     }
 
@@ -1055,7 +1055,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 
         MutableSortedBag<String> bag = this.newWith(Collections.reverseOrder(), "1", "2", "2", "3", "4");
         StringBuilder builder = new StringBuilder();
-        bag.forEachWith((argument1, argument2) -> { builder.append(argument1).append(argument2); }, 0);
+        bag.forEachWith((argument1, argument2) -> builder.append(argument1).append(argument2), 0);
         Assert.assertEquals("4030202010", builder.toString());
     }
 
@@ -1067,7 +1067,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 
         MutableSortedBag<String> bag = this.newWith(Collections.reverseOrder(), "1", "2", "2", "3", "4");
         StringBuilder builder = new StringBuilder();
-        bag.forEachWithIndex((each, index) -> { builder.append(each).append(index); });
+        bag.forEachWithIndex((each, index) -> builder.append(each).append(index));
         Assert.assertEquals("4031222314", builder.toString());
     }
 
@@ -1572,7 +1572,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     {
         super.aggregateByNonMutating();
 
-        Function0<Integer> zeroValueFactory = () -> (Integer) 0;
+        Function0<Integer> zeroValueFactory = () -> 0;
         Function2<Integer, Integer, Integer> sumAggregator = (integer1, integer2) -> integer1 + integer2;
         MutableSortedBag<Integer> sortedBag = this.newWith(Comparators.reverseNaturalOrder(), 3, 2, 2, 1, 1, 1);
         MapIterable<String, Integer> aggregation = sortedBag.aggregateBy(String::valueOf, zeroValueFactory, sumAggregator);

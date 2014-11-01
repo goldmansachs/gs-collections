@@ -65,7 +65,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void testRemove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.remove(0); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.list.remove(0));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void testAdd()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.list.add("1"); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.list.add("1"));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void testGet()
     {
         Verify.assertStartsWith(this.list, "1", "2");
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { this.list.get(2); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> this.list.get(2));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
         Assert.assertEquals("1", this.list.set(0, "2"));
         Assert.assertEquals("2", this.list.set(1, "1"));
         Assert.assertEquals(FastList.newListWith("2", "1"), this.list);
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> { this.list.set(2, "0"); });
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> this.list.set(2, "0"));
     }
 
     @Test

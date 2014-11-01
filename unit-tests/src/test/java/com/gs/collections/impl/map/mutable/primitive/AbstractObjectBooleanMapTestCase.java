@@ -77,8 +77,8 @@ public abstract class AbstractObjectBooleanMapTestCase
         Assert.assertTrue(this.classUnderTest().getOrThrow("1"));
         Assert.assertFalse(this.classUnderTest().getOrThrow("2"));
 
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow("5"); });
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow(null); });
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow("5"));
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow(null));
     }
 
     @Test
@@ -101,7 +101,7 @@ public abstract class AbstractObjectBooleanMapTestCase
     @Test
     public void size()
     {
-        Verify.assertEmpty( this.getEmptyMap());
+        Verify.assertEmpty(this.getEmptyMap());
         Verify.assertSize(1, this.newWithKeysValues(0, false));
         Verify.assertSize(1, this.newWithKeysValues(1, true));
         Verify.assertSize(1, this.newWithKeysValues(null, false));
@@ -198,19 +198,19 @@ public abstract class AbstractObjectBooleanMapTestCase
         ObjectBooleanMap<Integer> map01 = this.newWithKeysValues(0, true, 1, false);
         String[] sum01 = new String[1];
         sum01[0] = "";
-        map01.forEachValue(each -> { sum01[0] += String.valueOf(each); });
+        map01.forEachValue(each -> sum01[0] += String.valueOf(each));
         Assert.assertTrue("truefalse".equals(sum01[0]) || "falsetrue".equals(sum01[0]));
 
         ObjectBooleanMap<Integer> map = this.newWithKeysValues(3, true, 4, true);
         String[] sum = new String[1];
         sum[0] = "";
-        map.forEachValue(each -> { sum[0] += String.valueOf(each); });
+        map.forEachValue(each -> sum[0] += String.valueOf(each));
         Assert.assertEquals("truetrue", sum[0]);
 
         ObjectBooleanMap<Integer> map1 = this.newWithKeysValues(3, false, null, true);
         String[] sum1 = new String[1];
         sum1[0] = "";
-        map1.forEachValue(each -> { sum1[0] += String.valueOf(each); });
+        map1.forEachValue(each -> sum1[0] += String.valueOf(each));
         Assert.assertTrue("truefalse".equals(sum1[0]) || "falsetrue".equals(sum1[0]));
     }
 
@@ -220,19 +220,19 @@ public abstract class AbstractObjectBooleanMapTestCase
         ObjectBooleanMap<Integer> map01 = this.newWithKeysValues(0, true, 1, false);
         String[] sum01 = new String[1];
         sum01[0] = "";
-        map01.forEach(each -> { sum01[0] += String.valueOf(each); });
+        map01.forEach(each -> sum01[0] += String.valueOf(each));
         Assert.assertTrue("truefalse".equals(sum01[0]) || "falsetrue".equals(sum01[0]));
 
         ObjectBooleanMap<Integer> map = this.newWithKeysValues(3, true, 4, true);
         String[] sum = new String[1];
         sum[0] = "";
-        map.forEach(each -> { sum[0] += String.valueOf(each); });
+        map.forEach(each -> sum[0] += String.valueOf(each));
         Assert.assertEquals("truetrue", sum[0]);
 
         ObjectBooleanMap<Integer> map1 = this.newWithKeysValues(3, false, null, true);
         String[] sum1 = new String[1];
         sum1[0] = "";
-        map1.forEach(each -> { sum1[0] += String.valueOf(each); });
+        map1.forEach(each -> sum1[0] += String.valueOf(each));
         Assert.assertTrue("truefalse".equals(sum1[0]) || "falsetrue".equals(sum1[0]));
     }
 
@@ -241,13 +241,13 @@ public abstract class AbstractObjectBooleanMapTestCase
     {
         ObjectBooleanMap<Integer> map01 = this.newWithKeysValues(0, true, 1, false);
         int[] sum01 = new int[1];
-        map01.forEachKey(each -> { sum01[0] += each; });
+        map01.forEachKey(each -> sum01[0] += each);
         Assert.assertEquals(1, sum01[0]);
 
         ObjectBooleanMap<Integer> map = this.newWithKeysValues(3, false, null, true);
         String[] sum = new String[1];
         sum[0] = "";
-        map.forEachKey(each -> { sum[0] += String.valueOf(each); });
+        map.forEachKey(each -> sum[0] += String.valueOf(each));
         Assert.assertTrue("3null".equals(sum[0]) || "null3".equals(sum[0]));
     }
 

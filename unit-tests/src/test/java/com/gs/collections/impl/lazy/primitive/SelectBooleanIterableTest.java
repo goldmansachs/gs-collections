@@ -43,7 +43,7 @@ public class SelectBooleanIterableTest
     {
         String[] concat = new String[1];
         concat[0] = "";
-        this.iterable.forEach(each -> { concat[0] += each; });
+        this.iterable.forEach(each -> concat[0] += each);
         Assert.assertEquals("truetrue", concat[0]);
     }
 

@@ -50,7 +50,7 @@ public class ImmutableBooleanSingletonListTest extends AbstractImmutableBooleanL
     {
         String[] sum = new String[2];
         sum[0] = "";
-        this.classUnderTest().forEachWithIndex((each, index) -> { sum[0] += index + ":" + each; });
+        this.classUnderTest().forEachWithIndex((each, index) -> sum[0] += index + ":" + each);
         Assert.assertEquals("0:true", sum[0]);
     }
 }

@@ -192,8 +192,8 @@ public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBoole
         Assert.assertTrue(this.map.getOrThrow("1"));
         Assert.assertFalse(this.map.getOrThrow("2"));
 
-        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow("5"); });
-        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(null); });
+        Verify.assertThrows(IllegalStateException.class, () -> this.map.getOrThrow("5"));
+        Verify.assertThrows(IllegalStateException.class, () -> this.map.getOrThrow(null));
     }
 
     @Override

@@ -42,7 +42,7 @@ public class ParallelIterate2Test
 
         Collection<Callable<Integer>> tasks = new ArrayList<Callable<Integer>>();
 
-        Interval.oneTo(howManyTimes).run(() -> { tasks.add(counter::getAndIncrement); });
+        Interval.oneTo(howManyTimes).run(() -> tasks.add(counter::getAndIncrement));
 
         ExecutorService executorService1 = ParallelIterate.newPooledExecutor(4, "test pool 2 4", true);
         executorService1.invokeAll(tasks);

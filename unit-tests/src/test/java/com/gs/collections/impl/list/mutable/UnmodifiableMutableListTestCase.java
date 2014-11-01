@@ -49,12 +49,12 @@ public abstract class UnmodifiableMutableListTestCase extends UnmodifiableMemory
     {
         super.subList();
         MutableList<Integer> subList = this.getCollection().subList(0, 1);
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) subList::clear);
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { subList.set(0, null); });
+        Verify.assertThrows(UnsupportedOperationException.class, subList::clear);
+        Verify.assertThrows(UnsupportedOperationException.class, () -> subList.set(0, null));
         Verify.assertThrows(UnsupportedOperationException.class, () -> subList.add(0, null));
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { subList.add(null); });
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { subList.remove(0); });
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { subList.remove(null); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> subList.add(null));
+        Verify.assertThrows(UnsupportedOperationException.class, () -> subList.remove(0));
+        Verify.assertThrows(UnsupportedOperationException.class, () -> subList.remove(null));
     }
 
     @Override
@@ -95,7 +95,7 @@ public abstract class UnmodifiableMutableListTestCase extends UnmodifiableMemory
     @Test
     public void set()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.getCollection().set(0, null); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().set(0, null));
     }
 
     @Override
@@ -109,47 +109,43 @@ public abstract class UnmodifiableMutableListTestCase extends UnmodifiableMemory
     @Test
     public void addAllAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.getCollection().addAll(0, null); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().addAll(0, null));
     }
 
     @Test
     public void removeAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.getCollection().remove(0); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().remove(0));
     }
 
     @Test
     public void setAtIndex()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.getCollection().set(0, null); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().set(0, null));
     }
 
     @Test
     public void sortThis()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.getCollection().sortThis(); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().sortThis());
     }
 
     @Test
     public void sortThisWithComparator()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.getCollection().sortThis(Comparators.naturalOrder());
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().sortThis(Comparators.naturalOrder()));
     }
 
     @Test
     public void sortThisBy()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            this.getCollection().sortThisBy(String::valueOf);
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().sortThisBy(String::valueOf));
     }
 
     @Test
     public void reverseThis()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { this.getCollection().reverseThis(); });
+{
+    Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().reverseThis());
     }
 
     @Test

@@ -91,7 +91,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     @Test
     public void iterator()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { MultiReaderUnifiedSet.newSet().iterator(); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> MultiReaderUnifiedSet.newSet().iterator());
     }
 
     @Test
@@ -317,7 +317,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     @Test
     public void aggregateByNonMutating()
     {
-        Function0<Integer> valueCreator = () -> (Integer) 0;
+        Function0<Integer> valueCreator = () -> 0;
         Function2<Integer, Integer, Integer> sumAggregator = (integer1, integer2) -> integer1 + integer2;
         MutableCollection<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
         MapIterable<String, Integer> aggregation = collection.aggregateBy(String::valueOf, valueCreator, sumAggregator);
@@ -354,14 +354,14 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
         });
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), set);
 
-        Verify.assertThrows(NullPointerException.class, () -> { iterator.get().hasNext(); });
+        Verify.assertThrows(NullPointerException.class, () -> iterator.get().hasNext());
 
-        Verify.assertThrows(NullPointerException.class, () -> { delegateList.get().iterator(); });
+        Verify.assertThrows(NullPointerException.class, () -> delegateList.get().iterator());
     }
 
     private void verifyDelegateIsUnmodifiable(MutableSet<Integer> delegate)
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.add(2); });
-        Verify.assertThrows(UnsupportedOperationException.class, () -> { delegate.remove(0); });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> delegate.add(2));
+        Verify.assertThrows(UnsupportedOperationException.class, () -> delegate.remove(0));
     }
 }

@@ -38,9 +38,7 @@ public class ImmutableBooleanSingletonBagTest extends AbstractImmutableBooleanBa
     public void forEachWithOccurrences()
     {
         StringBuilder stringBuilder = new StringBuilder();
-        this.classUnderTest().forEachWithOccurrences((argument1, argument2) -> {
-            stringBuilder.append(argument1).append(argument2);
-        });
+        this.classUnderTest().forEachWithOccurrences((argument1, argument2) -> stringBuilder.append(argument1).append(argument2));
         String string = stringBuilder.toString();
         Assert.assertEquals("true1", string);
     }

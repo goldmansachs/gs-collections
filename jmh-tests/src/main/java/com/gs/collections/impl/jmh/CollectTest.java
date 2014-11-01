@@ -30,8 +30,8 @@ import com.gs.collections.impl.list.mutable.CompositeFastList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.test.Verify;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -68,33 +68,33 @@ public class CollectTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_jdk()
     {
         List<String> strings = this.integersJDK.stream().map(Object::toString).collect(Collectors.toList());
         Verify.assertSize(SIZE, strings);
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_jdk()
     {
         List<String> strings = this.integersJDK.parallelStream().map(Object::toString).collect(Collectors.toList());
         Verify.assertSize(SIZE, strings);
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_scala()
     {
         CollectScalaTest.serial_eager_scala();
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_scala()
     {
         CollectScalaTest.serial_lazy_scala();
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_scala()
     {
         CollectScalaTest.parallel_lazy_scala();
@@ -102,21 +102,21 @@ public class CollectTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_gsc()
     {
         MutableList<String> strings = this.integersGSC.collect(Object::toString);
         Verify.assertSize(SIZE, strings);
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_eager_gsc()
     {
         Collection<String> strings = ParallelIterate.collect(this.integersGSC, Object::toString);
         Verify.assertSize(SIZE, strings);
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_eager_fixed_pool_gsc()
     {
         Collection<String> strings = ParallelIterate.collect(
@@ -131,14 +131,14 @@ public class CollectTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_gsc()
     {
         MutableList<String> strings = this.integersGSC.asLazy().collect(Object::toString).toList();
         Verify.assertSize(SIZE, strings);
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_gsc()
     {
         MutableList<String> strings = this.integersGSC.asParallel(this.executorService, BATCH_SIZE).collect(Object::toString).toList();

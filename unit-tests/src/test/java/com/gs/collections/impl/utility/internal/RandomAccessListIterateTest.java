@@ -278,9 +278,7 @@ public class RandomAccessListIterateTest
         MutableList<String> list1 = Lists.fixedSize.of("1", "2");
         MutableList<String> list2 = Lists.fixedSize.of("a", "b");
         List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
-        RandomAccessListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> {
-            list.add(Tuples.twin(argument1, argument2));
-        });
+        RandomAccessListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> list.add(Tuples.twin(argument1, argument2)));
         Assert.assertEquals(FastList.newListWith(Tuples.twin("1", "a"), Tuples.twin("2", "b")), list);
     }
 

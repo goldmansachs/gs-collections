@@ -397,6 +397,7 @@ public final class Synchronized<name>Stack
         }
     }
 }
+
 >>
 
 arithmeticMethods ::= [

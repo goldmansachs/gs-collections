@@ -77,6 +77,7 @@ class <className> extends AbstractImmutable<name>Set implements Serializable
     {
         return !isEmptyKey(key) && !isRemovedKey(key);
     }
+
     @Override
     public int hashCode()
     {
@@ -414,6 +415,7 @@ class <className> extends AbstractImmutable<name>Set implements Serializable
         }
     }
 }
+
 >>
 
 forEachKey(procedure) ::= <<

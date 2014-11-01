@@ -276,8 +276,8 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
         String[] sum = new String[2];
         sum[0] = "";
         sum[1] = "";
-        this.classUnderTest().forEach(each -> { sum[0] += each + " "; });
-        this.newWith().forEach(each -> { sum[1] += each; });
+        this.classUnderTest().forEach(each -> sum[0] += each + " ");
+        this.newWith().forEach(each -> sum[1] += each);
         Assert.assertEquals("true false true ", sum[0]);
         Assert.assertEquals("", sum[1]);
     }
@@ -332,8 +332,8 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
         String[] sum = new String[2];
         sum[0] = "";
         sum[1] = "";
-        this.classUnderTest().forEachWithIndex((each, index) -> { sum[0] += index + ":" + each; });
-        this.newWith().forEachWithIndex((each, index) -> { sum[1] += index + ":" + each; });
+        this.classUnderTest().forEachWithIndex((each, index) -> sum[0] += index + ":" + each);
+        this.newWith().forEachWithIndex((each, index) -> sum[1] += index + ":" + each);
         Assert.assertEquals("0:true1:false2:true", sum[0]);
         Assert.assertEquals("", sum[1]);
     }

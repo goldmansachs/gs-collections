@@ -294,4 +294,5 @@ public class <name>HashSetTest extends Abstract<name>SetTestCase
         Verify.assertClassNonInstantiable(<name>Sets.class);
     }
 }
+
 >>

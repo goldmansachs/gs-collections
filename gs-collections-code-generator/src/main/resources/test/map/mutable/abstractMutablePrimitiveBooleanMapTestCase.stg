@@ -278,7 +278,7 @@ public abstract class AbstractMutable<name>BooleanMapTestCase extends Abstract<n
         super.getOrThrow();
 
         this.map.removeKey(<(literal.(type))("0")>);
-        Verify.assertThrows(IllegalStateException.class, () -> {this.map.getOrThrow(<(literal.(type))("0")>);});
+        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(<(literal.(type))("0")>); });
 
         this.map.put(<(literal.(type))("0")>, false);
         Assert.assertFalse(this.map.getOrThrow(<(literal.(type))("0")>));
@@ -327,7 +327,7 @@ public abstract class AbstractMutable<name>BooleanMapTestCase extends Abstract<n
     public void getIfAbsentPut_Function()
     {
         BooleanFunction0 factory = () -> true;
-        BooleanFunction0 factoryThrows = () -> {throw new AssertionError();};
+        BooleanFunction0 factoryThrows = () -> { throw new AssertionError(); };
 
         Mutable<name>BooleanMap map1 = this.getEmptyMap();
         Assert.assertTrue(map1.getIfAbsentPut(<(literal.(type))("0")>, factory));
@@ -360,7 +360,7 @@ public abstract class AbstractMutable<name>BooleanMapTestCase extends Abstract<n
     public void getIfAbsentPutWith()
     {
         BooleanFunction\<String> functionLengthEven = (String string) -> (string.length() & 1) == <(literal.(type))("0")>;
-        BooleanFunction\<String> functionThrows = (String string) -> {throw new AssertionError();};
+        BooleanFunction\<String> functionThrows = (String string) -> { throw new AssertionError(); };
 
         Mutable<name>BooleanMap map1 = this.getEmptyMap();
         Assert.assertTrue(map1.getIfAbsentPutWith(<(literal.(type))("0")>, functionLengthEven, "12345678"));
@@ -393,7 +393,7 @@ public abstract class AbstractMutable<name>BooleanMapTestCase extends Abstract<n
     public void getIfAbsentPutWithKey()
     {
         <name>ToBooleanFunction keyIsEven = (<type> parameter) -> (<(castRealTypeToInt.(type))("parameter")> & 1) == <(literal.(type))("0")>;
-        <name>ToBooleanFunction functionThrows = (<type> <type>Parameter) -> {throw new AssertionError();};
+        <name>ToBooleanFunction functionThrows = (<type> <type>Parameter) -> { throw new AssertionError(); };
 
         Mutable<name>BooleanMap map1 = this.getEmptyMap();
         Assert.assertTrue(map1.getIfAbsentPutWithKey(<(literal.(type))("0")>, keyIsEven));
@@ -623,7 +623,7 @@ public abstract class AbstractMutable<name>BooleanMapTestCase extends Abstract<n
     {
         Mutable<name>BooleanMap map = this.classUnderTest();
         MutableBooleanIterator iterator = map.booleanIterator();
-        while(iterator.hasNext())
+        while (iterator.hasNext())
         {
             iterator.next();
             iterator.remove();

@@ -124,8 +124,8 @@ public class Immutable<name1><name2>EmptyMapTest extends AbstractImmutable<name1
     @Test
     public void getOrThrow()
     {
-        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow(<(literal.(type1))("0")>);});
-        Verify.assertThrows(IllegalStateException.class, () -> {this.classUnderTest().getOrThrow(<(literal.(type1))("32")>);});
+        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow(<(literal.(type1))("0")>); });
+        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow(<(literal.(type1))("32")>); });
     }
 
     @Override

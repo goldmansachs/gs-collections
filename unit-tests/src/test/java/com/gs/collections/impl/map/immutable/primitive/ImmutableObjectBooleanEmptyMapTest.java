@@ -166,9 +166,9 @@ public class ImmutableObjectBooleanEmptyMapTest extends AbstractImmutableObjectB
     @Test
     public void getOrThrow()
     {
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow("5"); });
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow("0"); });
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow(null); });
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow("5"));
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow("0"));
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow(null));
     }
 
     @Override

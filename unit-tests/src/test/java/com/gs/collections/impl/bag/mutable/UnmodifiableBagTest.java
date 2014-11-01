@@ -107,7 +107,7 @@ public class UnmodifiableBagTest
     public void forEachWithOccurrences()
     {
         MutableList<Pair<Object, Integer>> list = Lists.mutable.of();
-        this.getCollection().forEachWithOccurrences((each, index) -> { list.add(Tuples.pair(each, index)); });
+        this.getCollection().forEachWithOccurrences((each, index) -> list.add(Tuples.pair(each, index)));
         Assert.assertEquals(FastList.newListWith(Tuples.pair("", 1)), list);
     }
 

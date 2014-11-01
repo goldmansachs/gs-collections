@@ -89,7 +89,7 @@ public abstract class AbstractMutableObjectBooleanMapTestCase extends AbstractOb
         super.getOrThrow();
         MutableObjectBooleanMap<String> map1 = this.classUnderTest();
         map1.removeKey("0");
-        Verify.assertThrows(IllegalStateException.class, () -> { map1.getOrThrow("0"); });
+        Verify.assertThrows(IllegalStateException.class, () -> map1.getOrThrow("0"));
         map1.put("0", false);
         Assert.assertFalse(map1.getOrThrow("0"));
 
@@ -501,7 +501,7 @@ public abstract class AbstractMutableObjectBooleanMapTestCase extends AbstractOb
         Verify.assertNotEmpty(map);
         MutableBooleanIterator booleanIterator = map.booleanIterator();
 
-        while(booleanIterator.hasNext())
+        while (booleanIterator.hasNext())
         {
             booleanIterator.next();
             booleanIterator.remove();

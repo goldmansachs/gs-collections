@@ -79,7 +79,7 @@ public class ImmutableBooleanEmptyStackTest extends AbstractImmutableBooleanStac
     public void peekWithCount()
     {
         Assert.assertEquals(BooleanArrayList.newListWith(), this.classUnderTest().peek(0));
-        Verify.assertThrows(EmptyStackException.class, () -> { this.classUnderTest().peek(1); });
+        Verify.assertThrows(EmptyStackException.class, () -> this.classUnderTest().peek(1));
     }
 
     @Override

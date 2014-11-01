@@ -52,6 +52,6 @@ public class SynchronizedStackTest extends MutableStackTestCase
     @Test
     public void testNullStack()
     {
-        Verify.assertThrows(IllegalArgumentException.class, () -> { SynchronizedStack.of(null); });
+        Verify.assertThrows(IllegalArgumentException.class, () -> SynchronizedStack.of(null));
     }
 }

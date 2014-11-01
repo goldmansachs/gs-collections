@@ -125,7 +125,7 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         super.forEachWith();
         MutableList<Integer> result = Lists.mutable.of();
         ImmutableMap<Integer, Integer> map = new ImmutableTripletonMap<Integer, Integer>(1, 1, 2, 2, 3, 3);
-        map.forEachWith((argument1, argument2) -> { result.add(argument1 + argument2); }, 10);
+        map.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 10);
         Assert.assertEquals(FastList.newListWith(11, 12, 13), result);
     }
 

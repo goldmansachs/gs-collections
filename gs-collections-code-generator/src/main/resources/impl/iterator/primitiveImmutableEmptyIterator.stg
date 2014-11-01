@@ -21,7 +21,7 @@ import com.gs.collections.api.iterator.<name>Iterator;
 /**
  * This file was automatically generated from template file primitiveImmutableEmptyIterator.stg.
  */
-public class ImmutableEmpty<name>Iterator implements <name>Iterator
+public final class ImmutableEmpty<name>Iterator implements <name>Iterator
 {
     public static final ImmutableEmpty<name>Iterator INSTANCE = new ImmutableEmpty<name>Iterator();
 

@@ -41,8 +41,8 @@ import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Assert;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.GenerateMicroBenchmark;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -81,7 +81,7 @@ public class AnagramBagTest
 
     @Warmup(iterations = 20)
     @Measurement(iterations = 10)
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_eager_gsc()
     {
         MutableListMultimap<Alphagram, String> groupBy = this.gscWords.groupBy(Alphagram::new, FastListMultimap.newMultimap());
@@ -93,7 +93,7 @@ public class AnagramBagTest
                 .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_eager_gsc()
     {
         MutableMultimap<Alphagram, String> groupBy = ParallelIterate.groupBy(this.gscWords, Alphagram::new);
@@ -105,7 +105,7 @@ public class AnagramBagTest
                 .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_gsc()
     {
         ParallelUnsortedBag<String> parallelUnsortedBag = this.gscWords.asParallel(this.executorService, BATCH_SIZE);
@@ -118,7 +118,7 @@ public class AnagramBagTest
                 .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_eager_forkjoin_gsc()
     {
         MutableMultimap<Alphagram, String> groupBy = FJIterate.groupBy(this.gscWords, Alphagram::new);
@@ -130,7 +130,7 @@ public class AnagramBagTest
                 .forEach(Procedures.cast(e -> Assert.assertFalse(e.isEmpty())));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void serial_lazy_jdk()
     {
         Map<Alphagram, List<String>> groupBy = this.guavaWords.stream().collect(Collectors.groupingBy(Alphagram::new));
@@ -143,7 +143,7 @@ public class AnagramBagTest
                 .forEach(e -> Assert.assertFalse(e.isEmpty()));
     }
 
-    @GenerateMicroBenchmark
+    @Benchmark
     public void parallel_lazy_jdk()
     {
         Map<Alphagram, List<String>> groupBy = this.guavaWords.parallelStream().collect(Collectors.groupingBy(Alphagram::new));

@@ -561,17 +561,13 @@ public abstract class ImmutableSortedMapTestCase
     @Test
     public void put()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            ((Map<Integer, String>) this.classUnderTest()).put(null, null);
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ((Map<Integer, String>) this.classUnderTest()).put(null, null));
     }
 
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> {
-            ((Map<Integer, String>) this.classUnderTest()).remove(null);
-        });
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ((Map<Integer, String>) this.classUnderTest()).remove(null));
     }
 
     @Test
