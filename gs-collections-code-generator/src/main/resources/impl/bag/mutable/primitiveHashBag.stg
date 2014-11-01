@@ -80,6 +80,12 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         this.addAll(iterable);
     }
 
+    public <name>HashBag(<type>... elements)
+    {
+        this();
+        this.addAll(elements);
+    }
+
     public <name>HashBag(<name>HashBag bag)
     {
         this.items = new <name>IntHashMap(bag.sizeDistinct());

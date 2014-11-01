@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,6 +86,12 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
         this.bitGroup2 = set.bitGroup2;
     }
 
+    public ByteHashSet(byte... elements)
+    {
+        this();
+        this.addAll(elements);
+    }
+
     public static ByteHashSet newSet(ByteIterable source)
     {
         if (source instanceof ByteHashSet)
@@ -98,9 +104,7 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
 
     public static ByteHashSet newSetWith(byte... source)
     {
-        ByteHashSet result = new ByteHashSet();
-        result.addAll(source);
-        return result;
+        return new ByteHashSet(source);
     }
 
     public boolean add(byte element)
@@ -443,7 +447,7 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
 
     public boolean retainAll(byte... source)
     {
-        return this.retainAll(newSetWith(source));
+        return this.retainAll(ByteHashSet.newSetWith(source));
     }
 
     public void clear()

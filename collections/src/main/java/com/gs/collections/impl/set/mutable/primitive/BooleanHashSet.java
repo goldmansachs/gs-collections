@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -187,11 +187,15 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         this.state = set.state;
     }
 
+    public BooleanHashSet(boolean... elements)
+    {
+        this();
+        this.addAll(elements);
+    }
+
     public static BooleanHashSet newSetWith(boolean... source)
     {
-        BooleanHashSet hashSet = new BooleanHashSet();
-        hashSet.addAll(source);
-        return hashSet;
+        return new BooleanHashSet(source);
     }
 
     public static BooleanHashSet newSet(BooleanIterable source)

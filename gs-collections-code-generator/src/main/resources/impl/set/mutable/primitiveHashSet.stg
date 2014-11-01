@@ -85,6 +85,12 @@ public final class <name>HashSet extends Abstract<name>Set implements Mutable<na
         this.allocateTable(capacity);
     }
 
+    public <name>HashSet(<type>... elements)
+    {
+        this();
+        this.addAll(elements);
+    }
+
     private int smallestPowerOfTwoGreaterThan(int n)
     {
         return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
@@ -123,9 +129,7 @@ public final class <name>HashSet extends Abstract<name>Set implements Mutable<na
 
     public static <name>HashSet newSetWith(<type>... source)
     {
-        <name>HashSet result = new <name>HashSet();
-        result.addAll(source);
-        return result;
+        return new <name>HashSet(source);
     }
 
     private static boolean isBetweenZeroAndThirtyOne(<type> value)
