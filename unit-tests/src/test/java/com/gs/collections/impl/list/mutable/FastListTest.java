@@ -689,11 +689,14 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void testBAOSSize()
     {
-        MutableList<MutableList<Object>> mutableArrayList =
-                FastList.<MutableList<Object>>newList().with(FastList.newList(),
+        MutableList<MutableList<Object>> mutableArrayList = FastList.<MutableList<Object>>newList()
+                .with(
                         FastList.newList(),
                         FastList.newList(),
-                        FastList.newList()).with(FastList.newList(),
+                        FastList.newList(),
+                        FastList.newList())
+                .with(
+                        FastList.newList(),
                         FastList.newList(),
                         FastList.newList(),
                         FastList.newList());
@@ -701,12 +704,10 @@ public class FastListTest extends AbstractListTestCase
         List<List<Object>> arrayList = new ArrayList<List<Object>>();
         Interval.oneTo(8).forEach(Procedures.cast(object -> { arrayList.add(new ArrayList<Object>()); }));
         ByteArrayOutputStream stream2 = SerializeTestHelper.getByteArrayOutputStream(arrayList);
-//        LOGGER.info("ArrayList size: " + stream2.size());
-//        LOGGER.info(stream2.toString());
+        Assert.assertEquals(194L, stream2.size());
 
         ByteArrayOutputStream stream1 = SerializeTestHelper.getByteArrayOutputStream(mutableArrayList);
-//        LOGGER.info("FastList size: " + stream1.size());
-//        LOGGER.info(stream1.toString());
+        Assert.assertEquals(177L, stream1.size());
     }
 
     @Override
