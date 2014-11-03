@@ -63,6 +63,7 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
@@ -670,6 +671,46 @@ public abstract class AbstractMutableList<T>
     public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
     {
         return this.sortThis(Comparators.byFunction(function));
+    }
+
+    public MutableList<T> sortThisByInt(IntFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toIntComparator(function));
+    }
+
+    public MutableList<T> sortThisByBoolean(BooleanFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toBooleanComparator(function));
+    }
+
+    public MutableList<T> sortThisByChar(CharFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toCharComparator(function));
+    }
+
+    public MutableList<T> sortThisByByte(ByteFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toByteComparator(function));
+    }
+
+    public MutableList<T> sortThisByShort(ShortFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toShortComparator(function));
+    }
+
+    public MutableList<T> sortThisByFloat(FloatFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toFloatComparator(function));
+    }
+
+    public MutableList<T> sortThisByLong(LongFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toLongComparator(function));
+    }
+
+    public MutableList<T> sortThisByDouble(DoubleFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toDoubleComparator(function));
     }
 
     public MutableList<T> newEmpty()

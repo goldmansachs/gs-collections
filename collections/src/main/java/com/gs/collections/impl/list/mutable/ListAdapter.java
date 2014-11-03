@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.RandomAccess;
 
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -204,11 +203,6 @@ public final class ListAdapter<T>
     public ListAdapter<T> sortThis()
     {
         return this.sortThis(Comparators.naturalOrder());
-    }
-
-    public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
-    {
-        return this.sortThis(Comparators.byFunction(function));
     }
 
     public ListAdapter<T> with(T element)

@@ -555,6 +555,118 @@ public final class MultiReaderFastList<T>
         }
     }
 
+    public MutableList<T> sortThisByInt(IntFunction<? super T> function)
+    {
+        this.acquireWriteLock();
+        try
+        {
+            this.delegate.sortThisByInt(function);
+            return this;
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
+
+    public MutableList<T> sortThisByBoolean(BooleanFunction<? super T> function)
+    {
+        this.acquireWriteLock();
+        try
+        {
+            this.delegate.sortThisByBoolean(function);
+            return this;
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
+
+    public MutableList<T> sortThisByChar(CharFunction<? super T> function)
+    {
+        this.acquireWriteLock();
+        try
+        {
+            this.delegate.sortThisByChar(function);
+            return this;
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
+
+    public MutableList<T> sortThisByByte(ByteFunction<? super T> function)
+    {
+        this.acquireWriteLock();
+        try
+        {
+            this.delegate.sortThisByByte(function);
+            return this;
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
+
+    public MutableList<T> sortThisByShort(ShortFunction<? super T> function)
+    {
+        this.acquireWriteLock();
+        try
+        {
+            this.delegate.sortThisByShort(function);
+            return this;
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
+
+    public MutableList<T> sortThisByFloat(FloatFunction<? super T> function)
+    {
+        this.acquireWriteLock();
+        try
+        {
+            this.delegate.sortThisByFloat(function);
+            return this;
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
+
+    public MutableList<T> sortThisByLong(LongFunction<? super T> function)
+    {
+        this.acquireWriteLock();
+        try
+        {
+            this.delegate.sortThisByLong(function);
+            return this;
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
+
+    public MutableList<T> sortThisByDouble(DoubleFunction<? super T> function)
+    {
+        this.acquireWriteLock();
+        try
+        {
+            this.delegate.sortThisByDouble(function);
+            return this;
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
+
     public MutableList<T> subList(int fromIndex, int toIndex)
     {
         this.acquireReadLock();
@@ -1105,6 +1217,54 @@ public final class MultiReaderFastList<T>
         public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
         {
             this.getDelegate().sortThisBy(function);
+            return this;
+        }
+
+        public MutableList<T> sortThisByInt(IntFunction<? super T> function)
+        {
+            this.getDelegate().sortThisByInt(function);
+            return this;
+        }
+
+        public MutableList<T> sortThisByBoolean(BooleanFunction<? super T> function)
+        {
+            this.getDelegate().sortThisByBoolean(function);
+            return this;
+        }
+
+        public MutableList<T> sortThisByChar(CharFunction<? super T> function)
+        {
+            this.getDelegate().sortThisByChar(function);
+            return this;
+        }
+
+        public MutableList<T> sortThisByByte(ByteFunction<? super T> function)
+        {
+            this.getDelegate().sortThisByByte(function);
+            return this;
+        }
+
+        public MutableList<T> sortThisByShort(ShortFunction<? super T> function)
+        {
+            this.getDelegate().sortThisByShort(function);
+            return this;
+        }
+
+        public MutableList<T> sortThisByFloat(FloatFunction<? super T> function)
+        {
+            this.getDelegate().sortThisByFloat(function);
+            return this;
+        }
+
+        public MutableList<T> sortThisByLong(LongFunction<? super T> function)
+        {
+            this.getDelegate().sortThisByLong(function);
+            return this;
+        }
+
+        public MutableList<T> sortThisByDouble(DoubleFunction<? super T> function)
+        {
+            this.getDelegate().sortThisByDouble(function);
             return this;
         }
 

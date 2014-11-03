@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,6 +117,46 @@ public interface MutableList<T>
      * function}.
      */
     <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function);
+
+    /**
+     * @since 6.0
+     */
+    MutableList<T> sortThisByInt(IntFunction<? super T> function);
+
+    /**
+     * @since 6.0
+     */
+    MutableList<T> sortThisByBoolean(BooleanFunction<? super T> function);
+
+    /**
+     * @since 6.0
+     */
+    MutableList<T> sortThisByChar(CharFunction<? super T> function);
+
+    /**
+     * @since 6.0
+     */
+    MutableList<T> sortThisByByte(ByteFunction<? super T> function);
+
+    /**
+     * @since 6.0
+     */
+    MutableList<T> sortThisByShort(ShortFunction<? super T> function);
+
+    /**
+     * @since 6.0
+     */
+    MutableList<T> sortThisByFloat(FloatFunction<? super T> function);
+
+    /**
+     * @since 6.0
+     */
+    MutableList<T> sortThisByLong(LongFunction<? super T> function);
+
+    /**
+     * @since 6.0
+     */
+    MutableList<T> sortThisByDouble(DoubleFunction<? super T> function);
 
     MutableList<T> subList(int fromIndex, int toIndex);
 

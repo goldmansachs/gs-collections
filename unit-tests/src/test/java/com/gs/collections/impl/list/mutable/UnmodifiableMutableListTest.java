@@ -121,6 +121,54 @@ public class UnmodifiableMutableListTest
     }
 
     @Test
+    public void sortThisByBoolean()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.sortThisByBoolean(null));
+    }
+
+    @Test
+    public void sortThisByChar()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.sortThisByChar(null));
+    }
+
+    @Test
+    public void sortThisByByte()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.sortThisByByte(null));
+    }
+
+    @Test
+    public void sortThisByShort()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.sortThisByShort(null));
+    }
+
+    @Test
+    public void sortThisByInt()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.sortThisByInt(null));
+    }
+
+    @Test
+    public void sortThisByFloat()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.sortThisByFloat(null));
+    }
+
+    @Test
+    public void sortThisByLong()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.sortThisByLong(null));
+    }
+
+    @Test
+    public void sortThisByDouble()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableList.sortThisByDouble(null));
+    }
+
+    @Test
     public void reverseThis()
     {
         Verify.assertThrows(

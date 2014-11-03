@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,14 @@ import java.io.ObjectOutput;
 import java.util.Comparator;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -110,6 +118,54 @@ final class SingletonList<T>
 
     @Override
     public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
+    {
+        return this;
+    }
+
+    @Override
+    public MutableList<T> sortThisByInt(IntFunction<? super T> function)
+    {
+        return this;
+    }
+
+    @Override
+    public MutableList<T> sortThisByBoolean(BooleanFunction<? super T> function)
+    {
+        return this;
+    }
+
+    @Override
+    public MutableList<T> sortThisByChar(CharFunction<? super T> function)
+    {
+        return this;
+    }
+
+    @Override
+    public MutableList<T> sortThisByByte(ByteFunction<? super T> function)
+    {
+        return this;
+    }
+
+    @Override
+    public MutableList<T> sortThisByShort(ShortFunction<? super T> function)
+    {
+        return this;
+    }
+
+    @Override
+    public MutableList<T> sortThisByFloat(FloatFunction<? super T> function)
+    {
+        return this;
+    }
+
+    @Override
+    public MutableList<T> sortThisByLong(LongFunction<? super T> function)
+    {
+        return this;
+    }
+
+    @Override
+    public MutableList<T> sortThisByDouble(DoubleFunction<? super T> function)
     {
         return this;
     }

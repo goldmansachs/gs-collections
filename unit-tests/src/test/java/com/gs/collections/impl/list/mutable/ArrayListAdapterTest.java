@@ -18,15 +18,13 @@ package com.gs.collections.impl.list.mutable;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
-import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.list.Interval;
@@ -38,12 +36,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.gs.collections.impl.factory.Iterables.*;
-
 /**
  * JUnit test for {@link ArrayListAdapter}.
  */
-public class ArrayListAdapterTest extends AbstractCollectionTestCase
+public class ArrayListAdapterTest extends AbstractListTestCase
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArrayListAdapterTest.class);
 
@@ -215,88 +211,11 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
         Verify.assertContainsAll(ArrayListAdapter.newList().with(1, 2, 3, 4), 1, 2, 3, 4);
     }
 
-    @Test
-    public void sortThis_small()
-    {
-        MutableList<Integer> actual = this.newWith(1, 2, 3);
-        Collections.shuffle(actual);
-        MutableList<Integer> sorted = actual.sortThis();
-        Assert.assertSame(actual, sorted);
-        Assert.assertEquals(FastList.newListWith(1, 2, 3), actual);
-    }
-
-    @Test
-    public void sortThis()
-    {
-        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        Collections.shuffle(actual);
-        MutableList<Integer> sorted = actual.sortThis();
-        Assert.assertSame(actual, sorted);
-        Assert.assertEquals(FastList.newListWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), actual);
-    }
-
-    @Test
-    public void sortThis_large()
-    {
-        MutableList<Integer> actual = this.newWith(Interval.oneTo(1000).toArray());
-        Collections.shuffle(actual);
-        MutableList<Integer> sorted = actual.sortThis();
-        Assert.assertSame(actual, sorted);
-        Assert.assertEquals(Interval.oneTo(1000), actual);
-    }
-
-    @Test
-    public void sortThis_with_comparator_small()
-    {
-        MutableList<Integer> actual = this.newWith(1, 2, 3);
-        Collections.shuffle(actual);
-        MutableList<Integer> sorted = actual.sortThis(Collections.<Integer>reverseOrder());
-        Assert.assertSame(actual, sorted);
-        Assert.assertEquals(FastList.newListWith(3, 2, 1), actual);
-    }
-
-    @Test
-    public void sortThis_with_comparator()
-    {
-        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        Collections.shuffle(actual);
-        MutableList<Integer> sorted = actual.sortThis(Collections.<Integer>reverseOrder());
-        Assert.assertSame(actual, sorted);
-        Assert.assertEquals(FastList.newListWith(10, 9, 8, 7, 6, 5, 4, 3, 2, 1), actual);
-    }
-
-    @Test
-    public void sortThis_with_comparator_large()
-    {
-        MutableList<Integer> actual = this.newWith(Interval.oneTo(1000).toArray());
-        Collections.shuffle(actual);
-        MutableList<Integer> sorted = actual.sortThis(Collections.<Integer>reverseOrder());
-        Assert.assertSame(actual, sorted);
-        Assert.assertEquals(Interval.fromToBy(1000, 1, -1), actual);
-    }
-
-    @Test
-    public void sortThisBy()
-    {
-        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        Collections.shuffle(actual);
-        MutableList<Integer> sorted = actual.sortThisBy(String::valueOf);
-        Assert.assertSame(actual, sorted);
-        Assert.assertEquals(FastList.newListWith(1, 10, 2, 3, 4, 5, 6, 7, 8, 9), actual);
-    }
-
     @Override
     @Test
     public void newEmpty()
     {
         Verify.assertInstanceOf(ArrayListAdapter.class, ArrayListAdapter.newList().newEmpty());
-    }
-
-    @Test
-    public void distinct()
-    {
-        ArrayListAdapter<Integer> arrayListAdapter = ArrayListAdapter.<Integer>newList().with(3, 2, 1, 1, 2, 3);
-        Verify.assertListsEqual(FastList.newListWith(3, 2, 1), arrayListAdapter.distinct());
     }
 
     @Test
@@ -334,38 +253,31 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     }
 
     @Test
-    public void takeWhile()
+    @Override
+    public void subList()
     {
-        Assert.assertEquals(
-                iList(1, 2, 3),
-                this.newWith(1, 2, 3, 4, 5).takeWhile(Predicates.lessThan(4)));
-    }
-
-    @Test
-    public void dropWhile()
-    {
-        Assert.assertEquals(
-                iList(4, 5),
-                this.newWith(1, 2, 3, 4, 5).dropWhile(Predicates.lessThan(4)));
-    }
-
-    @Test
-    public void partitionWhile()
-    {
-        PartitionMutableList<Integer> partition = this.newWith(1, 2, 3, 4, 5).partitionWhile(Predicates.lessThan(4));
-        MutableList<Integer> selected = partition.getSelected();
-        MutableList<Integer> rejected = partition.getRejected();
-
-        Assert.assertEquals(iList(1, 2, 3), selected);
-        Assert.assertEquals(iList(4, 5), rejected);
-    }
-
-    @Test
-    public void reverseForEach()
-    {
-        MutableList<Integer> result = Lists.mutable.of();
-        MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
-        collection.reverseForEach(CollectionAddProcedure.on(result));
-        Assert.assertEquals(FastList.newListWith(4, 3, 2, 1), result);
+        MutableList<String> list = this.newWith("A", "B", "C", "D");
+        MutableList<String> sublist = list.subList(1, 3);
+        Verify.assertSize(2, sublist);
+        Verify.assertContainsAll(sublist, "B", "C");
+        sublist.add("X");
+        Verify.assertSize(3, sublist);
+        Verify.assertContainsAll(sublist, "B", "C", "X");
+        Verify.assertSize(5, list);
+        Verify.assertContainsAll(list, "A", "B", "C", "X", "D");
+        sublist.remove("X");
+        Verify.assertContainsAll(sublist, "B", "C");
+        Verify.assertContainsAll(list, "A", "B", "C", "D");
+        Assert.assertEquals("C", sublist.set(1, "R"));
+        Verify.assertContainsAll(sublist, "B", "R");
+        Verify.assertContainsAll(list, "A", "B", "R", "D");
+        sublist.addAll(Arrays.asList("W", "G"));
+        Verify.assertContainsAll(sublist, "B", "R", "W", "G");
+        Verify.assertContainsAll(list, "A", "B", "R", "W", "G", "D");
+        sublist.clear();
+        Verify.assertEmpty(sublist);
+        Assert.assertFalse(sublist.remove("X"));
+        Verify.assertEmpty(sublist);
+        Verify.assertContainsAll(list, "A", "D");
     }
 }

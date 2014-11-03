@@ -420,6 +420,78 @@ public class SynchronizedMutableList<T>
         }
     }
 
+    public MutableList<T> sortThisByInt(IntFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutableList().sortThisByInt(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByBoolean(BooleanFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutableList().sortThisByBoolean(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByChar(CharFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutableList().sortThisByChar(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByByte(ByteFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutableList().sortThisByByte(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByShort(ShortFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutableList().sortThisByShort(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByFloat(FloatFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutableList().sortThisByFloat(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByLong(LongFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutableList().sortThisByLong(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByDouble(DoubleFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutableList().sortThisByDouble(function);
+            return this;
+        }
+    }
+
     public MutableList<T> subList(int fromIndex, int toIndex)
     {
         synchronized (this.getLock())

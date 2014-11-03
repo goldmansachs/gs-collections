@@ -55,7 +55,6 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.AbstractUnmodifiableMutableCollection;
 import com.gs.collections.impl.collection.mutable.UnmodifiableCollectionSerializationProxy;
-import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 
@@ -181,6 +180,46 @@ public class UnmodifiableMutableList<T>
     public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
     {
         throw new UnsupportedOperationException("Cannot call sortThisBy() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableList<T> sortThisByInt(IntFunction<? super T> function)
+    {
+        throw new UnsupportedOperationException("Cannot call sortThisByInt() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableList<T> sortThisByBoolean(BooleanFunction<? super T> function)
+    {
+        throw new UnsupportedOperationException("Cannot call sortThisByBoolean() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableList<T> sortThisByChar(CharFunction<? super T> function)
+    {
+        throw new UnsupportedOperationException("Cannot call sortThisByChar() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableList<T> sortThisByByte(ByteFunction<? super T> function)
+    {
+        throw new UnsupportedOperationException("Cannot call sortThisByByte() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableList<T> sortThisByShort(ShortFunction<? super T> function)
+    {
+        throw new UnsupportedOperationException("Cannot call sortThisByShort() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableList<T> sortThisByFloat(FloatFunction<? super T> function)
+    {
+        throw new UnsupportedOperationException("Cannot call sortThisByFloat() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableList<T> sortThisByLong(LongFunction<? super T> function)
+    {
+        throw new UnsupportedOperationException("Cannot call sortThisByLong() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableList<T> sortThisByDouble(DoubleFunction<? super T> function)
+    {
+        throw new UnsupportedOperationException("Cannot call sortThisByDouble() on " + this.getClass().getSimpleName());
     }
 
     public boolean addAll(int index, Collection<? extends T> collection)

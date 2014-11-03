@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,8 @@ import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionAdapter;
 import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
@@ -137,6 +139,51 @@ public abstract class AbstractListAdapter<T>
     public ListIterator<T> listIterator(int index)
     {
         return this.getDelegate().listIterator(index);
+    }
+
+    public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
+    {
+        return this.sortThis(Comparators.byFunction(function));
+    }
+
+    public MutableList<T> sortThisByInt(IntFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toIntComparator(function));
+    }
+
+    public MutableList<T> sortThisByBoolean(BooleanFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toBooleanComparator(function));
+    }
+
+    public MutableList<T> sortThisByChar(CharFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toCharComparator(function));
+    }
+
+    public MutableList<T> sortThisByByte(ByteFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toByteComparator(function));
+    }
+
+    public MutableList<T> sortThisByShort(ShortFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toShortComparator(function));
+    }
+
+    public MutableList<T> sortThisByFloat(FloatFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toFloatComparator(function));
+    }
+
+    public MutableList<T> sortThisByLong(LongFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toLongComparator(function));
+    }
+
+    public MutableList<T> sortThisByDouble(DoubleFunction<? super T> function)
+    {
+        return this.sortThis(Functions.toDoubleComparator(function));
     }
 
     public MutableList<T> subList(int fromIndex, int toIndex)

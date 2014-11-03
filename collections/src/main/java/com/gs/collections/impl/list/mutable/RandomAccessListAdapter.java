@@ -236,11 +236,6 @@ public final class RandomAccessListAdapter<T>
         return this.sortThis(Comparators.naturalOrder());
     }
 
-    public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
-    {
-        return this.sortThis(Comparators.byFunction(function));
-    }
-
     public RandomAccessListAdapter<T> with(T element)
     {
         this.add(element);

@@ -143,9 +143,57 @@ public abstract class UnmodifiableMutableListTestCase extends UnmodifiableMemory
     }
 
     @Test
+    public void sortThisByBoolean()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().sortThisByBoolean(null));
+    }
+
+    @Test
+    public void sortThisByChar()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().sortThisByChar(null));
+    }
+
+    @Test
+    public void sortThisByByte()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().sortThisByByte(null));
+    }
+
+    @Test
+    public void sortThisByShort()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().sortThisByShort(null));
+    }
+
+    @Test
+    public void sortThisByInt()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().sortThisByInt(null));
+    }
+
+    @Test
+    public void sortThisByFloat()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().sortThisByFloat(null));
+    }
+
+    @Test
+    public void sortThisByLong()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().sortThisByLong(null));
+    }
+
+    @Test
+    public void sortThisByDouble()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().sortThisByDouble(null));
+    }
+
+    @Test
     public void reverseThis()
-{
-    Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().reverseThis());
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> this.getCollection().reverseThis());
     }
 
     @Test

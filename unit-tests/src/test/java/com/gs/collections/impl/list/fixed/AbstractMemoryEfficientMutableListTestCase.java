@@ -24,6 +24,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.FixedSizeList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
+import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.block.factory.Functions;
@@ -84,6 +85,77 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
         Assert.assertEquals(
                 this.getNStrings(),
                 this.list.sortThisBy(Functions.getStringToInteger()));
+    }
+
+    @Test
+    public void sortThisByInt()
+    {
+        Collections.shuffle(this.list);
+        Assert.assertEquals(
+                this.getNStrings(),
+                this.list.sortThisByInt(Integer::parseInt));
+    }
+
+    @Test
+    public void sortThisByBoolean()
+    {
+        PartitionMutableList<String> partition = this.getNStrings().partition(s -> Integer.parseInt(s) % 2 == 0);
+        MutableList<String> expected = FastList.newList(partition.getRejected()).withAll(partition.getSelected());
+        Assert.assertEquals(expected, this.list.sortThisByBoolean(s -> Integer.parseInt(s) % 2 == 0));
+    }
+
+    @Test
+    public void sortThisByChar()
+    {
+        Collections.shuffle(this.list);
+        Assert.assertEquals(
+                this.getNStrings(),
+                this.list.sortThisByChar(string -> string.charAt(0)));
+    }
+
+    @Test
+    public void sortThisByByte()
+    {
+        Collections.shuffle(this.list);
+        Assert.assertEquals(
+                this.getNStrings(),
+                this.list.sortThisByByte(Byte::parseByte));
+    }
+
+    @Test
+    public void sortThisByShort()
+    {
+        Collections.shuffle(this.list);
+        Assert.assertEquals(
+                this.getNStrings(),
+                this.list.sortThisByShort(Short::parseShort));
+    }
+
+    @Test
+    public void sortThisByFloat()
+    {
+        Collections.shuffle(this.list);
+        Assert.assertEquals(
+                this.getNStrings(),
+                this.list.sortThisByFloat(Float::parseFloat));
+    }
+
+    @Test
+    public void sortThisByLong()
+    {
+        Collections.shuffle(this.list);
+        Assert.assertEquals(
+                this.getNStrings(),
+                this.list.sortThisByLong(Long::parseLong));
+    }
+
+    @Test
+    public void sortThisByDouble()
+    {
+        Collections.shuffle(this.list);
+        Assert.assertEquals(
+                this.getNStrings(),
+                this.list.sortThisByDouble(Double::parseDouble));
     }
 
     @Test
