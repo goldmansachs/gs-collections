@@ -710,4 +710,13 @@ public abstract class AbstractImmutableCollectionTestCase
         MapIterable<String, Integer> expected = this.classUnderTest().toBag().aggregateBy(String::valueOf, () -> 0, sumAggregator);
         Assert.assertEquals(expected, actual);
     }
+
+    @Test
+    public void tap()
+    {
+        MutableList<Integer> tapResult = Lists.mutable.of();
+        ImmutableCollection<Integer> collection = this.classUnderTest();
+        Assert.assertSame(collection, collection.tap(tapResult::add));
+        Assert.assertEquals(collection.toList(), tapResult);
+    }
 }

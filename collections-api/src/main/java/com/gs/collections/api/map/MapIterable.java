@@ -61,6 +61,24 @@ public interface MapIterable<K, V> extends RichIterable<V>
     void forEachValue(Procedure<? super V> procedure);
 
     /**
+     * Executes the Procedure for each value of the map and returns {@code this}.
+     * <p>
+     * <pre>e.g.
+     * return peopleByCity.<b>tap</b>(new Procedure<Person>()
+     * {
+     *     public void value(Person person)
+     *     {
+     *         LOGGER.info(person.getName());
+     *     }
+     * });
+     * </pre>
+     *
+     * @see #forEach(Procedure)
+     * @since 6.0
+     */
+    MapIterable<K, V> tap(Procedure<? super V> procedure);
+
+    /**
      * Calls the {@code procedure} with each <em>key</em> of the map.
      * <pre>
      *     final Collection&lt;Integer&gt; result = new ArrayList&lt;Integer&gt;();

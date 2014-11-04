@@ -287,6 +287,16 @@ public class SynchronizedMutableList<T>
         }
     }
 
+    @Override
+    public MutableList<T> tap(Procedure<? super T> procedure)
+    {
+        synchronized (this.getLock())
+        {
+            this.forEach(procedure);
+            return this;
+        }
+    }
+
     public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
     {
         synchronized (this.getLock())

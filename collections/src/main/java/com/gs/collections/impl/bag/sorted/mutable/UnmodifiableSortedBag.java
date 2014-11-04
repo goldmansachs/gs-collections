@@ -36,6 +36,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
@@ -137,6 +138,13 @@ public class UnmodifiableSortedBag<T>
     public boolean removeOccurrences(Object item, int occurrences)
     {
         throw new UnsupportedOperationException("Cannot call removeOccurences() on " + this.getClass().getSimpleName());
+    }
+
+    @Override
+    public MutableSortedBag<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
     }
 
     @Override

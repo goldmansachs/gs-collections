@@ -31,6 +31,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
@@ -355,5 +356,14 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     public void withoutAll()
     {
         this.getCollection().withoutAll(FastList.<T>newList());
+    }
+
+    @Test
+    public void tap()
+    {
+        MutableList<T> tapResult = Lists.mutable.of();
+        MutableCollection<T> collection = this.getCollection();
+        Assert.assertSame(collection, collection.tap(tapResult::add));
+        Assert.assertEquals(collection.toList(), tapResult);
     }
 }

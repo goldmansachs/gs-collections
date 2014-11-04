@@ -704,6 +704,18 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 
     @Override
     @Test
+    public void tap()
+    {
+        super.tap();
+
+        MutableList<Integer> tapResult = FastList.newList();
+        MutableSortedBag<Integer> bag = this.newWith(Collections.reverseOrder(), 1, 1, 2);
+        Assert.assertSame(bag, bag.tap(tapResult::add));
+        Assert.assertEquals(bag.toList(), tapResult);
+    }
+
+    @Override
+    @Test
     public void forEach()
     {
         super.forEach();

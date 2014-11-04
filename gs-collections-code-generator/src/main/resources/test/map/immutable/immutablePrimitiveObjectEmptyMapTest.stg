@@ -209,6 +209,14 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
 
     @Override
     @Test
+    public void tap()
+    {
+        Immutable<name>ObjectMap\<String> map = this.classUnderTest();
+        Assert.assertSame(map, map.tap(Procedures.cast(each -> Assert.fail())));
+    }
+
+    @Override
+    @Test
     public void forEach()
     {
         this.classUnderTest().forEach(Procedures.cast(each -> Assert.fail()));

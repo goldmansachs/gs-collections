@@ -718,6 +718,12 @@ public abstract class AbstractMutableList<T>
         return Lists.mutable.of();
     }
 
+    public MutableList<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
+    }
+
     public void forEach(int from, int to, Procedure<? super T> procedure)
     {
         ListIterate.forEach(this, from, to, procedure);

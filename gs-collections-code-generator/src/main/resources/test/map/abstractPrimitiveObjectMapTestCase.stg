@@ -1505,6 +1505,31 @@ public abstract class Abstract<name>ObjectMapTestCase
     }
 
     @Test
+    public void tap()
+    {
+        StringBuilder[] concat = new StringBuilder[4];
+        concat[0] = new StringBuilder();
+        concat[1] = new StringBuilder();
+        concat[2] = new StringBuilder();
+        concat[3] = new StringBuilder();
+
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("5")>, "five");
+        <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("0")>, "zero");
+        <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("2")>, "two", <(literal.(type))("5")>, "five");
+        <name>ObjectMap\<String> map4 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "five");
+
+        Assert.assertSame(map1, map1.tap(concat[0]::append));
+        Assert.assertSame(map2, map2.tap(concat[1]::append));
+        Assert.assertSame(map3, map3.tap(concat[2]::append));
+        Assert.assertSame(map4, map4.tap(concat[3]::append));
+
+        Assert.assertTrue(concat[0].toString(), "onefive".equals(concat[0].toString()) || "fiveone".equals(concat[0].toString()));
+        Assert.assertTrue(concat[1].toString(), "onezero".equals(concat[1].toString()) || "zeroone".equals(concat[1].toString()));
+        Assert.assertTrue(concat[2].toString(), "twofive".equals(concat[2].toString()) || "fivetwo".equals(concat[2].toString()));
+        Assert.assertTrue(concat[3].toString(), "zerofive".equals(concat[3].toString()) || "fivezero".equals(concat[3].toString()));
+    }
+
+    @Test
     public void forEach()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("5")>, "five");

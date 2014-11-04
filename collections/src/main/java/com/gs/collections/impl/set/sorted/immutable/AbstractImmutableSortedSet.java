@@ -33,6 +33,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
@@ -210,6 +211,12 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         ShortArrayList result = new ShortArrayList(this.size());
         this.forEach(new CollectShortProcedure<T>(shortFunction, result));
         return result.toImmutable();
+    }
+
+    public ImmutableSortedSet<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
     }
 
     public ImmutableSortedSet<T> select(Predicate<? super T> predicate)

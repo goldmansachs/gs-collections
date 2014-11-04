@@ -33,9 +33,9 @@ public class TapIterable<T>
         extends AbstractLazyIterable<T>
 {
     private final Iterable<T> adapted;
-    private final Procedure<T> procedure;
+    private final Procedure<? super T> procedure;
 
-    public TapIterable(Iterable<T> newAdapted, Procedure<T> procedure)
+    public TapIterable(Iterable<T> newAdapted, Procedure<? super T> procedure)
     {
         this.adapted = newAdapted;
         this.procedure = procedure;

@@ -21,6 +21,7 @@ import java.util.Map;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
 
@@ -55,6 +56,8 @@ public interface MutableBiMap<K, V> extends BiMap<K, V>, MutableMap<K, V>
     MutableBiMap<K, V> asUnmodifiable();
 
     MutableBiMap<K, V> clone();
+
+    MutableBiMap<K, V> tap(Procedure<? super V> procedure);
 
     MutableBiMap<K, V> select(Predicate2<? super K, ? super V> predicate);
 

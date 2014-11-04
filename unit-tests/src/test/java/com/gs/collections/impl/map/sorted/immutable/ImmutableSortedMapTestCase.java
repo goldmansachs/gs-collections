@@ -160,6 +160,20 @@ public abstract class ImmutableSortedMapTestCase
     }
 
     @Test
+    public void tap()
+    {
+        MutableList<String> tapResult = Lists.mutable.of();
+        ImmutableSortedMap<Integer, String> map = this.classUnderTest();
+        Assert.assertSame(map, map.tap(tapResult::add));
+        Assert.assertEquals(map.toList(), tapResult);
+
+        MutableList<String> revTapResult = Lists.mutable.of();
+        ImmutableSortedMap<Integer, String> revMap = this.classUnderTest(REV_INT_COMPARATOR);
+        Assert.assertSame(revMap, revMap.tap(revTapResult::add));
+        Assert.assertEquals(revMap.toList(), revTapResult);
+    }
+
+    @Test
     public void forEach()
     {
         MutableList<String> actualValues = Lists.mutable.of();

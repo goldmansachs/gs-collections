@@ -534,6 +534,12 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return true;
     }
 
+    public <name>ObjectHashMap\<V> tap(Procedure\<? super V> procedure)
+    {
+        this.forEachValue(procedure);
+        return this;
+    }
+
     public void forEach(Procedure\<? super V> procedure)
     {
         this.each(procedure);

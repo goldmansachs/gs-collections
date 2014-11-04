@@ -109,6 +109,15 @@ public abstract class ImmutableMapTestCase
     }
 
     @Test
+    public void tap()
+    {
+        MutableList<String> tapResult = Lists.mutable.of();
+        ImmutableMap<Integer, String> map = this.classUnderTest();
+        Assert.assertSame(map, map.tap(tapResult::add));
+        Assert.assertEquals(map.toList(), tapResult);
+    }
+
+    @Test
     public void forEach()
     {
         MutableSet<String> actualValues = UnifiedSet.newSet();

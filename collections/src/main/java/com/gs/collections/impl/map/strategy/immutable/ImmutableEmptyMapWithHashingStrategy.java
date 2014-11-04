@@ -168,6 +168,12 @@ final class ImmutableEmptyMapWithHashingStrategy<K, V>
     }
 
     @Override
+    public ImmutableMap<K, V> tap(Procedure<? super V> procedure)
+    {
+        return this;
+    }
+
+    @Override
     public void forEach(Procedure<? super V> procedure)
     {
     }

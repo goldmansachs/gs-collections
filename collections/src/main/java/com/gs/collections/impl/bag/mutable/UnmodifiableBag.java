@@ -45,6 +45,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
@@ -130,6 +131,13 @@ public class UnmodifiableBag<T>
     public MutableBag<T> selectByOccurrences(IntPredicate predicate)
     {
         return this.getMutableBag().selectByOccurrences(predicate);
+    }
+
+    @Override
+    public MutableBag<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
     }
 
     @Override

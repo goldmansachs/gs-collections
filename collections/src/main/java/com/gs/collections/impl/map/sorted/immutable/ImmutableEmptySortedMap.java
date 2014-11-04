@@ -123,6 +123,12 @@ final class ImmutableEmptySortedMap<K, V>
     }
 
     @Override
+    public ImmutableSortedMap<K, V> tap(Procedure<? super V> procedure)
+    {
+        return this;
+    }
+
+    @Override
     public void forEach(Procedure<? super V> procedure)
     {
     }

@@ -33,6 +33,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
@@ -176,6 +177,12 @@ public abstract class AbstractImmutableSortedMap<K, V>
     public ImmutableSortedSetMultimap<V, K> flip()
     {
         return MapIterate.flip(this).toImmutable();
+    }
+
+    public ImmutableSortedMap<K, V> tap(Procedure<? super V> procedure)
+    {
+        this.forEach(procedure);
+        return this;
     }
 
     public ImmutableList<V> select(Predicate<? super V> predicate)

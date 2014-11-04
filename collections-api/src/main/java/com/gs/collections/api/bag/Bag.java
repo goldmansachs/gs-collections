@@ -23,6 +23,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.bag.BagMultimap;
@@ -53,6 +54,8 @@ public interface Bag<T>
      * @see Map#hashCode()
      */
     int hashCode();
+
+    Bag<T> tap(Procedure<? super T> procedure);
 
     Bag<T> select(Predicate<? super T> predicate);
 

@@ -127,6 +127,15 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     }
 
     @Test
+    public void tap()
+    {
+        MutableList<Integer> tapResult = Lists.mutable.of();
+        ImmutableSet<Integer> set = this.newSetWith(1, 2, 3, 4);
+        Assert.assertSame(set, set.tap(tapResult::add));
+        Assert.assertEquals(set.toList(), tapResult);
+    }
+
+    @Test
     public void forEach()
     {
         MutableList<Integer> result = Lists.mutable.of();

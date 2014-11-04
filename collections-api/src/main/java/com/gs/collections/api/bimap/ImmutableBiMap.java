@@ -19,6 +19,7 @@ package com.gs.collections.api.bimap;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.tuple.Pair;
 
@@ -42,6 +43,8 @@ public interface ImmutableBiMap<K, V> extends BiMap<K, V>, ImmutableMap<K, V>
     ImmutableBiMap<V, K> inverse();
 
     ImmutableBiMap<V, K> flipUniqueValues();
+
+    ImmutableBiMap<K, V> tap(Procedure<? super V> procedure);
 
     ImmutableBiMap<K, V> select(Predicate2<? super K, ? super V> predicate);
 

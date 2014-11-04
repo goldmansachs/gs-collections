@@ -432,6 +432,20 @@ public final class MultiReaderFastList<T>
         }
     }
 
+    public MutableList<T> tap(Procedure<? super T> procedure)
+    {
+        this.acquireReadLock();
+        try
+        {
+            this.forEach(procedure);
+            return this;
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public MutableList<T> select(Predicate<? super T> predicate)
     {
         this.acquireReadLock();
@@ -1157,6 +1171,12 @@ public final class MultiReaderFastList<T>
                 P parameter)
         {
             return this.getDelegate().rejectWith(predicate, parameter);
+        }
+
+        public MutableList<T> tap(Procedure<? super T> procedure)
+        {
+            this.forEach(procedure);
+            return this;
         }
 
         public MutableList<T> select(Predicate<? super T> predicate)

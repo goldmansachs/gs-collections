@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
@@ -67,6 +68,12 @@ public abstract class AbstractImmutableBag<T>
     protected MutableCollection<T> newMutable(int size)
     {
         return Bags.mutable.of();
+    }
+
+    public ImmutableBag<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
     }
 
     public <P> ImmutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)

@@ -32,6 +32,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
@@ -233,6 +234,12 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
     public <R> MutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
     {
         return MapIterate.collectValues(this, function, TreeSortedMap.<K, R>newMap(this.comparator()));
+    }
+
+    public MutableSortedMap<K, V> tap(Procedure<? super V> procedure)
+    {
+        this.forEach(procedure);
+        return this;
     }
 
     public MutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate)

@@ -121,6 +121,12 @@ final class ImmutableEmptySortedSet<T>
         return false;
     }
 
+    @Override
+    public ImmutableSortedSet<T> tap(Procedure<? super T> procedure)
+    {
+        return this;
+    }
+
     public void forEach(Procedure<? super T> procedure)
     {
     }

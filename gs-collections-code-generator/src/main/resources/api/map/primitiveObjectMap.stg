@@ -43,6 +43,8 @@ public interface <name>ObjectMap\<V> extends RichIterable\<V>
 
     boolean containsValue(Object value);
 
+    <name>ObjectMap\<V> tap(Procedure\<? super V> procedure);
+
     void forEachValue(Procedure\<? super V> procedure);
 
     void forEachKey(<name>Procedure procedure);

@@ -33,6 +33,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
@@ -210,6 +211,13 @@ public final class SetAdapter<T>
     public MutableSet<T> newEmpty()
     {
         return UnifiedSet.newSet();
+    }
+
+    @Override
+    public MutableSet<T> tap(Procedure<? super T> procedure)
+    {
+        Iterate.forEach(this.delegate, procedure);
+        return this;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,7 +115,7 @@ public interface LazyIterable<T>
     /**
      * Creates a deferred tap iterable.
      */
-    LazyIterable<T> tap(Procedure<T> procedure);
+    LazyIterable<T> tap(Procedure<? super T> procedure);
 
     /**
      * Iterates over this iterable adding all elements into the target collection.

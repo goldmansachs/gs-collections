@@ -681,6 +681,12 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.chunk(size);
     }
 
+    public MutableStack<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
+    }
+
     public void forEach(Procedure<? super T> procedure)
     {
         this.each(procedure);

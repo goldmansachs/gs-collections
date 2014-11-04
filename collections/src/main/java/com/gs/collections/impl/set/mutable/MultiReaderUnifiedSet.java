@@ -430,6 +430,20 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
+    public MutableSet<T> tap(Procedure<? super T> procedure)
+    {
+        this.acquireReadLock();
+        try
+        {
+            this.forEach(procedure);
+            return this;
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public MutableSet<T> select(Predicate<? super T> predicate)
     {
         this.acquireReadLock();
@@ -774,6 +788,12 @@ public final class MultiReaderUnifiedSet<T>
                 P parameter)
         {
             return this.getDelegate().rejectWith(predicate, parameter);
+        }
+
+        public MutableSet<T> tap(Procedure<? super T> procedure)
+        {
+            this.forEach(procedure);
+            return this;
         }
 
         public MutableSet<T> select(Predicate<? super T> predicate)

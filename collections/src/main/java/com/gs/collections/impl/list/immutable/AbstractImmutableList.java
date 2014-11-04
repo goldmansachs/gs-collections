@@ -526,6 +526,12 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return ListIterate.sumOfDouble(this, function);
     }
 
+    public ImmutableList<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
+    }
+
     @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {

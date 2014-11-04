@@ -323,6 +323,12 @@ public class HashBag<T>
         this.size = (int) this.items.sum();
     }
 
+    public MutableBag<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
+    }
+
     public void forEach(Procedure<? super T> procedure)
     {
         this.each(procedure);

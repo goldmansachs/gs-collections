@@ -137,6 +137,13 @@ public class UnmodifiableMutableList<T>
         return this.getMutableList().newEmpty();
     }
 
+    @Override
+    public MutableList<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
+    }
+
     public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
     {
         this.getMutableList().forEach(fromIndex, toIndex, procedure);

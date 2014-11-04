@@ -178,6 +178,15 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
+    public void tap()
+    {
+        MutableList<Integer> tapResult = Lists.mutable.of();
+        ImmutableSortedSet<Integer> collection = this.classUnderTest();
+        Assert.assertSame(collection, collection.tap(tapResult::add));
+        Assert.assertEquals(collection.toList(), tapResult);
+    }
+
+    @Test
     public void forEach()
     {
         MutableSet<Integer> result = UnifiedSet.newSet();

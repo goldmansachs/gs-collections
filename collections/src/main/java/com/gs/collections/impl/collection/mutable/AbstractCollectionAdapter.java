@@ -108,6 +108,12 @@ public abstract class AbstractCollectionAdapter<T>
         return Iterate.getLast(this.getDelegate());
     }
 
+    public MutableCollection<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
+    }
+
     public void forEach(Procedure<? super T> procedure)
     {
         this.each(procedure);

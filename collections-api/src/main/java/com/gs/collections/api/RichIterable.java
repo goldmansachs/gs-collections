@@ -150,6 +150,24 @@ public interface
     boolean containsAllArguments(Object... elements);
 
     /**
+     * Executes the Procedure for each element in the iterable and returns {@code this}.
+     * <p>
+     * <pre>e.g.
+     * return people.<b>tap</b>(new Procedure<Person>()
+     * {
+     *     public void value(Person person)
+     *     {
+     *         LOGGER.info(person.getName());
+     *     }
+     * });
+     * </pre>
+     *
+     * @see #forEach(Procedure)
+     * @since 6.0
+     */
+    RichIterable<T> tap(Procedure<? super T> procedure);
+
+    /**
      * The procedure is executed for each element in the iterable.
      * <p>
      * <pre>e.g.

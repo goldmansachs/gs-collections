@@ -591,6 +591,12 @@ public class UnifiedSetWithHashingStrategy<K>
         }
     }
 
+    public UnifiedSetWithHashingStrategy<K> tap(Procedure<? super K> procedure)
+    {
+        this.forEach(procedure);
+        return this;
+    }
+
     public void forEach(Procedure<? super K> procedure)
     {
         this.each(procedure);

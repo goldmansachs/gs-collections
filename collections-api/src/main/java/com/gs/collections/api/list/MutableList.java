@@ -31,6 +31,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -61,6 +62,8 @@ public interface MutableList<T>
     MutableList<T> newEmpty();
 
     MutableList<T> clone();
+
+    MutableList<T> tap(Procedure<? super T> procedure);
 
     MutableList<T> select(Predicate<? super T> predicate);
 

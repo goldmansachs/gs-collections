@@ -251,6 +251,15 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
+    public Mutable<name>ObjectMap\<V> tap(Procedure\<? super V> procedure)
+    {
+        synchronized (this.lock)
+        {
+            this.map.forEach(procedure);
+            return this;
+        }
+    }
+
     public void forEachValue(Procedure\<? super V> procedure)
     {
         synchronized (this.lock)

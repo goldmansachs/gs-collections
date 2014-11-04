@@ -290,6 +290,12 @@ public class UnmodifiableMutableMap<K, V>
         return SynchronizedMutableMap.of(this);
     }
 
+    public MutableMap<K, V> tap(Procedure<? super V> procedure)
+    {
+        this.forEach(procedure);
+        return this;
+    }
+
     public void forEach(Procedure<? super V> procedure)
     {
         this.each(procedure);

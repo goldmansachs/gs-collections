@@ -32,9 +32,9 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionImmutableSet;
@@ -149,6 +149,12 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         MutableSet<T> result = UnifiedSet.newSet(this);
         this.removeAllFrom(elements, result);
         return result.toImmutable();
+    }
+
+    public ImmutableSet<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
     }
 
     public ImmutableSet<T> select(Predicate<? super T> predicate)

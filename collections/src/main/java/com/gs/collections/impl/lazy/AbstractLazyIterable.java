@@ -745,7 +745,7 @@ public abstract class AbstractLazyIterable<T>
         return LazyIterate.chunk(this, size);
     }
 
-    public LazyIterable<T> tap(Procedure<T> procedure)
+    public LazyIterable<T> tap(Procedure<? super T> procedure)
     {
         return LazyIterate.tap(this, procedure);
     }

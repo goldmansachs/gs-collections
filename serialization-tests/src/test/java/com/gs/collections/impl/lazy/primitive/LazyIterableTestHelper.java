@@ -544,7 +544,7 @@ public class LazyIterableTestHelper<T> implements LazyIterable<T>
         return null;
     }
 
-    public LazyIterable<T> tap(Procedure<T> procedure)
+    public LazyIterable<T> tap(Procedure<? super T> procedure)
     {
         return null;
     }

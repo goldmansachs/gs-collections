@@ -187,6 +187,15 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
+    public void tap()
+    {
+        MutableList<String> tapResult = Lists.mutable.of();
+        ImmutableBag<String> collection = this.newBag();
+        Assert.assertSame(collection, collection.tap(tapResult::add));
+        Assert.assertEquals(collection.toList(), tapResult);
+    }
+
+    @Test
     public void forEach()
     {
         MutableBag<String> result = Bags.mutable.of();

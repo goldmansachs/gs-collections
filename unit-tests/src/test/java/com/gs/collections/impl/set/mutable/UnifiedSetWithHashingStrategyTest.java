@@ -23,6 +23,7 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.Pool;
@@ -90,6 +91,18 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
     protected <T> MutableSet<T> newWith(T... littleElements)
     {
         return UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.nullSafeHashingStrategy(HashingStrategies.<T>defaultStrategy()), littleElements);
+    }
+
+    @Override
+    @Test
+    public void tap()
+    {
+        super.tap();
+
+        MutableList<Person> tapResult = Lists.mutable.of();
+        UnifiedSetWithHashingStrategy<Person> people = UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).withAll(PEOPLE.castToList());
+        Assert.assertSame(people, people.tap(tapResult::add));
+        Assert.assertEquals(people.toList(), tapResult);
     }
 
     @Override
@@ -404,7 +417,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Assert.assertNull(people.get(new Person("John", "NotHere")));
 
         //Testing get throws NullPointerException if the hashingStrategy is not null safe
-    Verify.assertThrows(NullPointerException.class, () -> UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).get(null));
+        Verify.assertThrows(NullPointerException.class, () -> UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).get(null));
     }
 
     @Test
@@ -485,7 +498,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Verify.assertSize(4, people);
 
         //Testing put throws NullPointerException if the hashingStrategy is not null safe
-    Verify.assertThrows(NullPointerException.class, () -> UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).put(null));
+        Verify.assertThrows(NullPointerException.class, () -> UnifiedSetWithHashingStrategy.newSet(LAST_NAME_HASHING_STRATEGY).put(null));
     }
 
     @Test

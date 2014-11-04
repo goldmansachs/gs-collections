@@ -31,6 +31,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
@@ -166,6 +167,8 @@ public interface MutableMap<K, V>
     <R> MutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
 
     <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
+
+    MutableMap<K, V> tap(Procedure<? super V> procedure);
 
     MutableCollection<V> select(Predicate<? super V> predicate);
 

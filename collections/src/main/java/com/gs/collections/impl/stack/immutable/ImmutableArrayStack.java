@@ -870,6 +870,12 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
         return this.delegate.notEmpty();
     }
 
+    public ImmutableStack<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
+    }
+
     public void forEach(Procedure<? super T> procedure)
     {
         this.each(procedure);

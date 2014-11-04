@@ -31,6 +31,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
@@ -97,6 +98,12 @@ public abstract class AbstractMutableSet<T>
     protected <K> MutableSet<K> newEmptySameSize()
     {
         return UnifiedSet.newSet(this.size());
+    }
+
+    public MutableSet<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
     }
 
     public MutableSet<T> select(Predicate<? super T> predicate)

@@ -147,6 +147,15 @@ public abstract class AbstractRichIterableTestCase
     }
 
     @Test
+    public void tap()
+    {
+        MutableList<Integer> tapResult = Lists.mutable.of();
+        RichIterable<Integer> collection = this.newWith(1, 2, 3, 4);
+        Assert.assertSame(collection, collection.tap(tapResult::add));
+        Assert.assertEquals(collection.toList(), tapResult);
+    }
+
+    @Test
     public void forEach()
     {
         MutableList<Integer> result = Lists.mutable.of();

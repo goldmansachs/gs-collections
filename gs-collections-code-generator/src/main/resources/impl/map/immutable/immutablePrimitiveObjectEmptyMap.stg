@@ -161,6 +161,11 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
         return false;
     }
 
+    public Immutable<name>ObjectMap\<V> tap(Procedure\<? super V> procedure)
+    {
+        return this;
+    }
+
     public void forEachValue(Procedure\<? super V> procedure)
     {
     }

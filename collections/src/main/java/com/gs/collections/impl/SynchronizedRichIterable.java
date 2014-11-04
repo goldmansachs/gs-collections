@@ -993,6 +993,15 @@ public class SynchronizedRichIterable<T>
         }
     }
 
+    public RichIterable<T> tap(Procedure<? super T> procedure)
+    {
+        synchronized (this.lock)
+        {
+            this.forEach(procedure);
+            return this;
+        }
+    }
+
     public void forEach(Procedure<? super T> procedure)
     {
         this.each(procedure);

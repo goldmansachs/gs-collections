@@ -30,6 +30,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
@@ -78,6 +79,8 @@ public interface MutableStack<T> extends StackIterable<T>
     MutableStack<T> asUnmodifiable();
 
     MutableStack<T> asSynchronized();
+
+    MutableStack<T> tap(Procedure<? super T> procedure);
 
     MutableStack<T> select(Predicate<? super T> predicate);
 

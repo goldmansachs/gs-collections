@@ -26,6 +26,7 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -174,6 +175,21 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         MutableSortedMap<Integer, String> revMap = this.newMapWithKeysValues(REV_INT_ORDER, 1, "1", 2, "2");
         Verify.assertMapsEqual(TreeSortedMap.newMap(REV_INT_ORDER).with(1, "1", 2, "2", 3, "3"), revMap.with(Tuples.pair(3, "3")));
         Verify.assertMapsEqual(TreeSortedMap.newMap(REV_INT_ORDER).with(1, "1", 2, "2", 3, "3", 4, "4"), revMap.with(Tuples.pair(3, "3"), Tuples.pair(4, "4")));
+    }
+
+    @Override
+    @Test
+    public void tap()
+    {
+        MutableList<String> tapResult = Lists.mutable.of();
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "One", 3, "Three", 2, "Two", 4, "Four");
+        Assert.assertSame(map, map.tap(tapResult::add));
+        Assert.assertEquals(map.toList(), tapResult);
+
+        MutableList<String> revTapResult = Lists.mutable.of();
+        MapIterable<Integer, String> revMap = this.newMapWithKeysValues(REV_INT_ORDER, 1, "One", 3, "Three", 2, "Two", 4, "Four");
+        Assert.assertSame(revMap, revMap.tap(revTapResult::add));
+        Assert.assertEquals(revMap.toList(), revTapResult);
     }
 
     @Override

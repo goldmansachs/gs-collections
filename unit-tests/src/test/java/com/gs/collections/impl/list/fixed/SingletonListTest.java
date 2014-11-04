@@ -121,6 +121,15 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     }
 
     @Test
+    public void tap()
+    {
+        MutableList<Integer> tapResult = Lists.mutable.of();
+        MutableList<Integer> collection = newWith(1);
+        Assert.assertSame(collection, collection.tap(tapResult::add));
+        Assert.assertEquals(collection.toList(), tapResult);
+    }
+
+    @Test
     public void forEach()
     {
         MutableList<Integer> result = Lists.mutable.of();
@@ -186,8 +195,8 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     {
         Verify.assertEmpty(newWith(1).rejectWith(Predicates2.<Integer>lessThan(), 3));
         Verify.assertContainsAll(newWith(1).rejectWith(Predicates2.<Integer>greaterThan(),
-                3,
-                UnifiedSet.<Integer>newSet()),
+                        3,
+                        UnifiedSet.<Integer>newSet()),
                 1);
     }
 
@@ -196,8 +205,8 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     {
         Verify.assertContainsAll(newWith(1).collect(String::valueOf), "1");
         Verify.assertContainsAll(newWith(1).collect(
-                String::valueOf,
-                UnifiedSet.<String>newSet()),
+                        String::valueOf,
+                        UnifiedSet.<String>newSet()),
                 "1");
     }
 

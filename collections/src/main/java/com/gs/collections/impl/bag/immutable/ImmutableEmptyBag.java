@@ -205,6 +205,11 @@ final class ImmutableEmptyBag<T>
         return ArrayIterate.isEmpty(elements);
     }
 
+    public ImmutableBag<T> tap(Procedure<? super T> procedure)
+    {
+        return this;
+    }
+
     public void forEach(Procedure<? super T> procedure)
     {
     }

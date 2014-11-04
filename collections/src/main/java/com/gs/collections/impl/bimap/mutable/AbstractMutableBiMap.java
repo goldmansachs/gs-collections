@@ -41,6 +41,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
@@ -487,6 +488,12 @@ abstract class AbstractMutableBiMap<K, V> extends AbstractBiMap<K, V> implements
     public <VV> MutableCollection<VV> flatCollect(Function<? super V, ? extends Iterable<VV>> function)
     {
         return this.delegate.flatCollect(function);
+    }
+
+    public MutableBiMap<K, V> tap(Procedure<? super V> procedure)
+    {
+        this.forEach(procedure);
+        return this;
     }
 
     public HashBiMap<K, V> select(final Predicate2<? super K, ? super V> predicate)

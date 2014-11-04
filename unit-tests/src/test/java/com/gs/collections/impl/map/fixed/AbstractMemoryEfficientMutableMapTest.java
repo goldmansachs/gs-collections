@@ -1285,6 +1285,15 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     public abstract void keySet();
 
     @Test
+    public void tap()
+    {
+        MutableList<String> tapResult = Lists.mutable.of();
+        MutableMap<String, String> map = this.classUnderTest();
+        Assert.assertSame(map, map.tap(tapResult::add));
+        Assert.assertEquals(map.toList(), tapResult);
+    }
+
+    @Test
     public abstract void forEach();
 
     @Test

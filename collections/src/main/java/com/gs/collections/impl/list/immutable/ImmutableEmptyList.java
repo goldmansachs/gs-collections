@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,6 +88,12 @@ final class ImmutableEmptyList<T>
     public T get(int index)
     {
         throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + this.size());
+    }
+
+    @Override
+    public ImmutableList<T> tap(Procedure<? super T> procedure)
+    {
+        return this;
     }
 
     public void forEach(Procedure<? super T> procedure)

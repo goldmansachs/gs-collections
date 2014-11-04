@@ -23,14 +23,14 @@ import com.gs.collections.api.block.procedure.Procedure;
 public class TapIterator<T> implements Iterator<T>
 {
     private final Iterator<T> iterator;
-    private final Procedure<T> procedure;
+    private final Procedure<? super T> procedure;
 
-    public TapIterator(Iterable<T> iterable, Procedure<T> procedure)
+    public TapIterator(Iterable<T> iterable, Procedure<? super T> procedure)
     {
         this(iterable.iterator(), procedure);
     }
 
-    public TapIterator(Iterator<T> iterator, Procedure<T> procedure)
+    public TapIterator(Iterator<T> iterator, Procedure<? super T> procedure)
     {
         this.iterator = iterator;
         this.procedure = procedure;

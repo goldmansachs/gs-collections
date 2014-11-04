@@ -40,6 +40,7 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -141,6 +142,18 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         MutableSortedSet<Integer> sortedSet = this.newWith(1, 2, 3, 4);
         MutableSet<Integer> hashSet = UnifiedSet.newSet(sortedSet);
         Verify.assertEqualsAndHashCode(hashSet, sortedSet);
+    }
+
+    @Override
+    @Test
+    public void tap()
+    {
+        super.tap();
+
+        MutableList<Integer> tapRevResult = Lists.mutable.of();
+        MutableSortedSet<Integer> revInt = this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 4, 3, 5);
+        Assert.assertSame(revInt, revInt.tap(tapRevResult::add));
+        Assert.assertEquals(revInt.toList(), tapRevResult);
     }
 
     @Override

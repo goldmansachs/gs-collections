@@ -193,6 +193,12 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
         return LazyIterate.adapt(this);
     }
 
+    public MutableCollection<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
+    }
+
     public void forEach(Procedure<? super T> procedure)
     {
         this.each(procedure);

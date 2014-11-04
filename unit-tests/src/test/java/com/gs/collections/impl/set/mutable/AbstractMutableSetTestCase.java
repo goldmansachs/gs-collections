@@ -464,6 +464,30 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
 
     @Override
     @Test
+    public void tap()
+    {
+        super.tap();
+
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i < size; i++)
+        {
+            MutableList<Integer> tapResult = Lists.mutable.of();
+            MutableSet<Integer> set = this.newWith();
+            set.addAll(MORE_COLLISIONS.subList(0, i));
+            Assert.assertSame(set, set.tap(tapResult::add));
+            Assert.assertEquals(set.toList(), tapResult);
+        }
+
+        // test iterating on a bucket with only one element
+        MutableSet<Integer> set = this.newWith(COLLISION_1, COLLISION_2);
+        set.remove(COLLISION_2);
+        Counter counter = new Counter();
+        Assert.assertSame(set, set.tap(x -> counter.increment()));
+        Assert.assertEquals(1, counter.getCount());
+    }
+
+    @Override
+    @Test
     public void forEach()
     {
         super.forEach();

@@ -883,6 +883,15 @@ public abstract class StackIterableTestCase
     }
 
     @Test
+    public void tap()
+    {
+        MutableList<String> tapResult = Lists.mutable.of();
+        StackIterable<String> stack = this.newStackWith("1", "2", "3", "4", "5");
+        Assert.assertSame(stack, stack.tap(tapResult::add));
+        Assert.assertEquals(stack.toList(), tapResult);
+    }
+
+    @Test
     public void forEach()
     {
         StackIterable<String> stack = this.newStackWith("1", "2", "3", "4", "5");

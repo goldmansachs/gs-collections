@@ -166,6 +166,14 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     }
 
     @Test
+    public void tap()
+    {
+        MutableList<Integer> tapResult = Lists.mutable.of();
+        Assert.assertSame(this.intSet, this.intSet.tap(tapResult::add));
+        Assert.assertEquals(this.intSet.toList(), tapResult);
+    }
+
+    @Test
     public void forEach()
     {
         MutableList<Integer> result = Lists.mutable.of();
@@ -210,8 +218,8 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     {
         Verify.assertEmpty(this.intSet.reject(Predicates.lessThan(3)));
         Verify.assertContainsAll(this.intSet.reject(
-                Predicates.greaterThan(3),
-                UnifiedSet.<Integer>newSet()),
+                        Predicates.greaterThan(3),
+                        UnifiedSet.<Integer>newSet()),
                 1);
     }
 

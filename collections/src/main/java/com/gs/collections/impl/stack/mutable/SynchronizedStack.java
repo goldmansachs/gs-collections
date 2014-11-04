@@ -1048,6 +1048,15 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public MutableStack<T> tap(Procedure<? super T> procedure)
+    {
+        synchronized (this.lock)
+        {
+            this.delegate.forEach(procedure);
+            return this;
+        }
+    }
+
     public void forEach(Procedure<? super T> procedure)
     {
         this.each(procedure);

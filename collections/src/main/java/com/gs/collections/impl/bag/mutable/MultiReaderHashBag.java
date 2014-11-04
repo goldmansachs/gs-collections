@@ -477,6 +477,20 @@ public final class MultiReaderHashBag<T>
         }
     }
 
+    public MutableBag<T> tap(Procedure<? super T> procedure)
+    {
+        this.acquireReadLock();
+        try
+        {
+            this.forEach(procedure);
+            return this;
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public MutableBag<T> select(Predicate<? super T> predicate)
     {
         this.acquireReadLock();
@@ -972,6 +986,12 @@ public final class MultiReaderHashBag<T>
                 P parameter)
         {
             return this.getDelegate().rejectWith(predicate, parameter);
+        }
+
+        public MutableBag<T> tap(Procedure<? super T> procedure)
+        {
+            this.forEach(procedure);
+            return this;
         }
 
         public MutableBag<T> select(Predicate<? super T> predicate)

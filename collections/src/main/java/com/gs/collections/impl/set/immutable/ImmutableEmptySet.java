@@ -108,6 +108,12 @@ final class ImmutableEmptySet<T>
         return false;
     }
 
+    @Override
+    public ImmutableSet<T> tap(Procedure<? super T> procedure)
+    {
+        return this;
+    }
+
     public void forEach(Procedure<? super T> procedure)
     {
     }

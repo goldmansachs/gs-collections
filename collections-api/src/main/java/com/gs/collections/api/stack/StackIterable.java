@@ -110,6 +110,8 @@ public interface StackIterable<T> extends RichIterable<T>
      */
     MutableStack<T> toStack();
 
+    StackIterable<T> tap(Procedure<? super T> procedure);
+
     StackIterable<T> select(Predicate<? super T> predicate);
 
     <P> StackIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);

@@ -195,6 +195,12 @@ public final class Unmodifiable<name>ObjectMap\<V>
         return this.map.containsValue(value);
     }
 
+    public Mutable<name>ObjectMap\<V> tap(Procedure\<? super V> procedure)
+    {
+        this.map.forEach(procedure);
+        return this;
+    }
+
     public void forEachValue(Procedure\<? super V> procedure)
     {
         this.map.forEachValue(procedure);

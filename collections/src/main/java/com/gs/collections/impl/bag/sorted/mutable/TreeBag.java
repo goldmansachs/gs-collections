@@ -419,6 +419,12 @@ public class TreeBag<T>
         }
     }
 
+    public MutableSortedBag<T> tap(Procedure<? super T> procedure)
+    {
+        this.forEach(procedure);
+        return this;
+    }
+
     public void forEach(Procedure<? super T> procedure)
     {
         this.each(procedure);

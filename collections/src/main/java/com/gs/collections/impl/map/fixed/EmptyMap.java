@@ -145,6 +145,12 @@ final class EmptyMap<K, V>
         return Maps.fixedSize.with();
     }
 
+    @Override
+    public FixedSizeMap<K, V> tap(Procedure<? super V> procedure)
+    {
+        return this;
+    }
+
     public void forEachKeyValue(Procedure2<? super K, ? super V> procedure)
     {
     }

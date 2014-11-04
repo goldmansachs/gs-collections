@@ -162,6 +162,15 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void tap()
+    {
+        MutableList<String> tapResult = Lists.mutable.of();
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three", 4, "Four");
+        Assert.assertSame(map, map.tap(tapResult::add));
+        Assert.assertEquals(tapResult.toList(), tapResult);
+    }
+
+    @Test
     public void forEach()
     {
         MutableBag<String> result = Bags.mutable.of();

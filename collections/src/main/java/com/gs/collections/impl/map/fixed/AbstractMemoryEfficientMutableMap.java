@@ -22,6 +22,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.FixedSizeMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
@@ -115,6 +116,13 @@ abstract class AbstractMemoryEfficientMutableMap<K, V>
             map = map.withoutKey(key);
         }
         return map;
+    }
+
+    @Override
+    public FixedSizeMap<K, V> tap(Procedure<? super V> procedure)
+    {
+        this.forEach(procedure);
+        return this;
     }
 
     @Override
