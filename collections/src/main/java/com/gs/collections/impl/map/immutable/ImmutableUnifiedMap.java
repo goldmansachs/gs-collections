@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -158,5 +160,32 @@ public class ImmutableUnifiedMap<K, V>
     protected Object writeReplace()
     {
         return new ImmutableMapSerializationProxy<K, V>(this);
+    }
+
+    @Override
+    public <A> A ifPresentApply(K key, Function<? super V, ? extends A> function)
+    {
+        return this.delegate.ifPresentApply(key, function);
+    }
+
+    @Override
+    public V getIfAbsent(K key, Function0<? extends V> function)
+    {
+        return this.delegate.getIfAbsent(key, function);
+    }
+
+    @Override
+    public V getIfAbsentValue(K key, V value)
+    {
+        return this.delegate.getIfAbsentValue(key, value);
+    }
+
+    @Override
+    public <P> V getIfAbsentWith(
+            K key,
+            Function<? super P, ? extends V> function,
+            P parameter)
+    {
+        return this.delegate.getIfAbsentWith(key, function, parameter);
     }
 }
