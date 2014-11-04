@@ -29,7 +29,6 @@ import org.junit.Test;
 
 /**
  * JUnit test for {@link ObjectBooleanHashMap#keysView()}.
- * This file was automatically generated from template file objectPrimitiveHashMapKeysViewTest.stg.
  */
 public class ObjectBooleanHashMapKeysViewTest extends AbstractLazyIterableTestCase
 {

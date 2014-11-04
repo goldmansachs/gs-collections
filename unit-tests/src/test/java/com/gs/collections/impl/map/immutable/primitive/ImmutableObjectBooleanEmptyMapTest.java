@@ -32,7 +32,6 @@ import org.junit.Test;
 
 /**
  * JUnit test for {@link ImmutableObjectBooleanEmptyMap}.
- * This file was automatically generated from template file immutableObjectPrimitiveEmptyMapTest.stg.
  */
 public class ImmutableObjectBooleanEmptyMapTest extends AbstractImmutableObjectBooleanMapTestCase
 {

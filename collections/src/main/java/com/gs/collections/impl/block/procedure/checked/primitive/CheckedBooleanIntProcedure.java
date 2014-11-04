@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package com.gs.collections.impl.block.procedure.checked.primitive;
 import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 
 /**
- * This file was automatically generated from template file checkedPrimitivePrimitiveProcedure.stg.
- *
  * @since 4.0.
  */
 public abstract class CheckedBooleanIntProcedure implements BooleanIntProcedure

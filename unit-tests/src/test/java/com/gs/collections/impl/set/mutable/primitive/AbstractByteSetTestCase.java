@@ -34,7 +34,6 @@ import org.junit.Test;
 
 /**
  * Abstract JUnit test for {@link MutableByteSet}.
- * This file was automatically generated from template file abstractPrimitiveSetTestCase.stg.
  */
 public abstract class AbstractByteSetTestCase extends AbstractMutableByteCollectionTestCase
 {
