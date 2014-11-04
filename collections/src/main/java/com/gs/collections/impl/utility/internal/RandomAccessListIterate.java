@@ -1296,17 +1296,17 @@ public final class RandomAccessListIterate
             throw new NoSuchElementException();
         }
 
-        T candidate = list.get(0);
+        T min = list.get(0);
         int size = list.size();
         for (int i = 1; i < size; i++)
         {
-            T next = list.get(i);
-            if (comparator.compare(next, candidate) < 0)
+            T item = list.get(i);
+            if (comparator.compare(item, min) < 0)
             {
-                candidate = next;
+                min = item;
             }
         }
-        return candidate;
+        return min;
     }
 
     public static <T> T max(List<T> list, Comparator<? super T> comparator)
@@ -1316,17 +1316,17 @@ public final class RandomAccessListIterate
             throw new NoSuchElementException();
         }
 
-        T candidate = list.get(0);
+        T max = list.get(0);
         int size = list.size();
         for (int i = 1; i < size; i++)
         {
-            T next = list.get(i);
-            if (comparator.compare(next, candidate) > 0)
+            T item = list.get(i);
+            if (comparator.compare(item, max) > 0)
             {
-                candidate = next;
+                max = item;
             }
         }
-        return candidate;
+        return max;
     }
 
     public static <T> T min(List<T> list)
@@ -1336,17 +1336,17 @@ public final class RandomAccessListIterate
             throw new NoSuchElementException();
         }
 
-        T candidate = list.get(0);
+        T min = list.get(0);
         int size = list.size();
         for (int i = 1; i < size; i++)
         {
-            T next = list.get(i);
-            if (((Comparable<? super T>) next).compareTo(candidate) < 0)
+            T item = list.get(i);
+            if (((Comparable<? super T>) item).compareTo(min) < 0)
             {
-                candidate = next;
+                min = item;
             }
         }
-        return candidate;
+        return min;
     }
 
     public static <T> T max(List<T> list)
@@ -1356,17 +1356,17 @@ public final class RandomAccessListIterate
             throw new NoSuchElementException();
         }
 
-        T candidate = list.get(0);
+        T max = list.get(0);
         int size = list.size();
         for (int i = 1; i < size; i++)
         {
-            T next = list.get(i);
-            if (((Comparable<T>) next).compareTo(candidate) > 0)
+            T item = list.get(i);
+            if (((Comparable<T>) item).compareTo(max) > 0)
             {
-                candidate = next;
+                max = item;
             }
         }
-        return candidate;
+        return max;
     }
 
     public static <X, Y> MutableList<Pair<X, Y>> zip(

@@ -1011,7 +1011,7 @@ public class FastListTest extends AbstractListTestCase
         Verify.assertEqualsAndHashCode(integers3, ArrayAdapter.newArrayWith(1, null, 3, 4, 5));
         Assert.assertNotEquals(integers3, ArrayAdapter.newArrayWith(1, null, 3, 4, 6));
         Verify.assertEqualsAndHashCode(integers3, ArrayListAdapter.<Integer>newList().with(1, null, 3, 4, 5));
-        Assert.assertTrue(integers.equals(integers2));
+        Assert.assertEquals(integers, integers2);
         Assert.assertNotEquals(integers, integers3);
     }
 

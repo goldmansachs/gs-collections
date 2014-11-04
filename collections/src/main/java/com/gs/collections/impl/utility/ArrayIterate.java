@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
@@ -62,17 +61,13 @@ import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
-import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
-import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
-import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -174,56 +169,12 @@ public final class ArrayIterate
 
     public static <T, V extends Comparable<? super V>> T minBy(T[] array, Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.minBy(array, array.length, function);
-    }
-
-    public static <T, V extends Comparable<? super V>> T minBy(T[] array, int size, Function<? super T, ? extends V> function)
-    {
-        if (ArrayIterate.isEmpty(array))
-        {
-            throw new NoSuchElementException();
-        }
-
-        T min = array[0];
-        V minValue = function.valueOf(min);
-        for (int i = 1; i < size; i++)
-        {
-            T next = array[i];
-            V nextValue = function.valueOf(next);
-            if (nextValue.compareTo(minValue) < 0)
-            {
-                min = next;
-                minValue = nextValue;
-            }
-        }
-        return min;
+        return InternalArrayIterate.minBy(array, array.length, function);
     }
 
     public static <T, V extends Comparable<? super V>> T maxBy(T[] array, Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.maxBy(array, array.length, function);
-    }
-
-    public static <T, V extends Comparable<? super V>> T maxBy(T[] array, int size, Function<? super T, ? extends V> function)
-    {
-        if (ArrayIterate.isEmpty(array))
-        {
-            throw new NoSuchElementException();
-        }
-
-        T max = array[0];
-        V maxValue = function.valueOf(max);
-        for (int i = 1; i < size; i++)
-        {
-            T next = array[i];
-            V nextValue = function.valueOf(next);
-            if (nextValue.compareTo(maxValue) > 0)
-            {
-                max = next;
-                maxValue = nextValue;
-            }
-        }
-        return max;
+        return InternalArrayIterate.maxBy(array, array.length, function);
     }
 
     /**
@@ -231,9 +182,7 @@ public final class ArrayIterate
      */
     public static <T> T min(T[] array, Comparator<? super T> comparator)
     {
-        MinComparatorProcedure<T> procedure = new MinComparatorProcedure<T>(comparator);
-        ArrayIterate.forEach(array, procedure);
-        return procedure.getResult();
+        return InternalArrayIterate.min(array, array.length, comparator);
     }
 
     /**
@@ -241,9 +190,7 @@ public final class ArrayIterate
      */
     public static <T> T max(T[] array, Comparator<? super T> comparator)
     {
-        MaxComparatorProcedure<T> procedure = new MaxComparatorProcedure<T>(comparator);
-        ArrayIterate.forEach(array, procedure);
-        return procedure.getResult();
+        return InternalArrayIterate.max(array, array.length, comparator);
     }
 
     /**
@@ -251,7 +198,7 @@ public final class ArrayIterate
      */
     public static <T> T min(T... array)
     {
-        return ArrayIterate.min(array, Comparators.naturalOrder());
+        return InternalArrayIterate.min(array, array.length);
     }
 
     /**
@@ -259,7 +206,7 @@ public final class ArrayIterate
      */
     public static <T> T max(T... array)
     {
-        return ArrayIterate.max(array, Comparators.naturalOrder());
+        return InternalArrayIterate.max(array, array.length);
     }
 
     /**
@@ -293,16 +240,22 @@ public final class ArrayIterate
     /**
      * @see Iterate#selectInstancesOf(Iterable, Class)
      */
-    public static <T> MutableList<T> selectInstancesOf(Object[] objectArray, Class<T> clazz)
+    public static <T> FastList<T> selectInstancesOf(Object[] objectArray, Class<T> clazz)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a selectInstancesOf on null");
         }
 
-        FastList<T> results = FastList.newList(objectArray.length);
-        for (Object each : objectArray)
+        return ArrayIterate.selectInstancesOf(objectArray, objectArray.length, clazz);
+    }
+
+    public static <T> FastList<T> selectInstancesOf(Object[] array, int size, Class<T> clazz)
+    {
+        FastList<T> results = FastList.newList(array.length);
+        for (int i = 0; i < size; i++)
         {
+            Object each = array[i];
             if (clazz.isInstance(each))
             {
                 results.add((T) each);
@@ -317,18 +270,11 @@ public final class ArrayIterate
      */
     public static <T> int count(T[] objectArray, Predicate<? super T> predicate)
     {
-        int count = 0;
-        if (ArrayIterate.notEmpty(objectArray))
+        if (objectArray == null)
         {
-            for (T each : objectArray)
-            {
-                if (predicate.accept(each))
-                {
-                    count++;
-                }
-            }
+            return 0;
         }
-        return count;
+        return InternalArrayIterate.count(objectArray, objectArray.length, predicate);
     }
 
     /**
@@ -339,18 +285,11 @@ public final class ArrayIterate
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        int count = 0;
-        if (ArrayIterate.notEmpty(objectArray))
+        if (objectArray == null)
         {
-            for (T each : objectArray)
-            {
-                if (predicate.accept(each, parameter))
-                {
-                    count++;
-                }
-            }
+            return 0;
         }
-        return count;
+        return InternalArrayIterate.countWith(objectArray, objectArray.length, predicate, parameter);
     }
 
     /**
@@ -377,25 +316,22 @@ public final class ArrayIterate
     /**
      * @see Iterate#partition(Iterable, Predicate)
      */
-    public static <T> PartitionMutableList<T> partition(
-            T[] objectArray,
-            Predicate<? super T> predicate)
+    public static <T> PartitionFastList<T> partition(T[] array, Predicate<? super T> predicate)
     {
-        if (objectArray == null)
+        if (array == null)
         {
             throw new IllegalArgumentException("Cannot perform a partition on null");
         }
+        return InternalArrayIterate.partition(array, array.length, predicate);
+    }
 
-        PartitionMutableList<T> partition = new PartitionFastList<T>();
-        MutableList<T> selected = partition.getSelected();
-        MutableList<T> rejected = partition.getRejected();
-
-        for (T each : objectArray)
+    public static <T, P> PartitionFastList<T> partitionWith(T[] array, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        if (array == null)
         {
-            MutableList<T> bucket = predicate.accept(each) ? selected : rejected;
-            bucket.add(each);
+            throw new IllegalArgumentException("Cannot perform a partitionWith on null");
         }
-        return partition;
+        return InternalArrayIterate.partitionWith(array, array.length, predicate, parameter);
     }
 
     /**
@@ -430,14 +366,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a select on null");
         }
-        for (T each : objectArray)
-        {
-            if (predicate.accept(each))
-            {
-                targetCollection.add(each);
-            }
-        }
-        return targetCollection;
+        return InternalArrayIterate.select(objectArray, objectArray.length, predicate, targetCollection);
     }
 
     /**
@@ -453,14 +382,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a selectWith on null");
         }
-        for (T each : objectArray)
-        {
-            if (predicate.accept(each, parameter))
-            {
-                targetCollection.add(each);
-            }
-        }
-        return targetCollection;
+        return InternalArrayIterate.selectWith(objectArray, objectArray.length, predicate, parameter, targetCollection);
     }
 
     /**
@@ -476,14 +398,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a collectIf on null");
         }
-        for (T each : objectArray)
-        {
-            if (predicate.accept(each))
-            {
-                targetCollection.add(function.valueOf(each));
-            }
-        }
-        return targetCollection;
+        return InternalArrayIterate.collectIf(objectArray, objectArray.length, predicate, function, targetCollection);
     }
 
     /**
@@ -525,14 +440,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a reject on null");
         }
-        for (T each : objectArray)
-        {
-            if (!predicate.accept(each))
-            {
-                targetCollection.add(each);
-            }
-        }
-        return targetCollection;
+        return InternalArrayIterate.reject(objectArray, objectArray.length, predicate, targetCollection);
     }
 
     /**
@@ -548,14 +456,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a rejectWith on null");
         }
-        for (T each : objectArray)
-        {
-            if (!predicate.accept(each, parameter))
-            {
-                targetCollection.add(each);
-            }
-        }
-        return targetCollection;
+        return InternalArrayIterate.rejectWith(objectArray, objectArray.length, predicate, parameter, targetCollection);
     }
 
     /**
@@ -593,30 +494,19 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a collect on null");
         }
-        for (T each : objectArray)
-        {
-            targetCollection.add(function.valueOf(each));
-        }
-        return targetCollection;
+        return InternalArrayIterate.collect(objectArray, objectArray.length, function, targetCollection);
     }
 
     /**
      * @see Iterate#collectBoolean(Iterable, BooleanFunction)
      */
-    public static <T> MutableBooleanList collectBoolean(
-            T[] objectArray,
-            BooleanFunction<? super T> booleanFunction)
+    public static <T> MutableBooleanList collectBoolean(T[] objectArray, BooleanFunction<? super T> booleanFunction)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a collectBoolean on null");
         }
-        MutableBooleanList result = new BooleanArrayList(objectArray.length);
-        for (T each : objectArray)
-        {
-            result.add(booleanFunction.booleanValueOf(each));
-        }
-        return result;
+        return ArrayIterate.collectBoolean(objectArray, booleanFunction, new BooleanArrayList(objectArray.length));
     }
 
     /**
@@ -641,20 +531,13 @@ public final class ArrayIterate
     /**
      * @see Iterate#collectByte(Iterable, ByteFunction)
      */
-    public static <T> MutableByteList collectByte(
-            T[] objectArray,
-            ByteFunction<? super T> byteFunction)
+    public static <T> MutableByteList collectByte(T[] objectArray, ByteFunction<? super T> byteFunction)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a collectByte on null");
         }
-        MutableByteList result = new ByteArrayList(objectArray.length);
-        for (T each : objectArray)
-        {
-            result.add(byteFunction.byteValueOf(each));
-        }
-        return result;
+        return ArrayIterate.collectByte(objectArray, byteFunction, new ByteArrayList(objectArray.length));
     }
 
     /**
@@ -679,20 +562,13 @@ public final class ArrayIterate
     /**
      * @see Iterate#collectChar(Iterable, CharFunction)
      */
-    public static <T> MutableCharList collectChar(
-            T[] objectArray,
-            CharFunction<? super T> charFunction)
+    public static <T> MutableCharList collectChar(T[] objectArray, CharFunction<? super T> charFunction)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a collectChar on null");
         }
-        MutableCharList result = new CharArrayList(objectArray.length);
-        for (T each : objectArray)
-        {
-            result.add(charFunction.charValueOf(each));
-        }
-        return result;
+        return ArrayIterate.collectChar(objectArray, charFunction, new CharArrayList(objectArray.length));
     }
 
     /**
@@ -717,20 +593,13 @@ public final class ArrayIterate
     /**
      * @see Iterate#collectDouble(Iterable, DoubleFunction)
      */
-    public static <T> MutableDoubleList collectDouble(
-            T[] objectArray,
-            DoubleFunction<? super T> doubleFunction)
+    public static <T> MutableDoubleList collectDouble(T[] objectArray, DoubleFunction<? super T> doubleFunction)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a collectDouble on null");
         }
-        MutableDoubleList result = new DoubleArrayList(objectArray.length);
-        for (T each : objectArray)
-        {
-            result.add(doubleFunction.doubleValueOf(each));
-        }
-        return result;
+        return ArrayIterate.collectDouble(objectArray, doubleFunction, new DoubleArrayList(objectArray.length));
     }
 
     /**
@@ -755,20 +624,13 @@ public final class ArrayIterate
     /**
      * @see Iterate#collectFloat(Iterable, FloatFunction)
      */
-    public static <T> MutableFloatList collectFloat(
-            T[] objectArray,
-            FloatFunction<? super T> floatFunction)
+    public static <T> MutableFloatList collectFloat(T[] objectArray, FloatFunction<? super T> floatFunction)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a collectFloat on null");
         }
-        MutableFloatList result = new FloatArrayList(objectArray.length);
-        for (T each : objectArray)
-        {
-            result.add(floatFunction.floatValueOf(each));
-        }
-        return result;
+        return ArrayIterate.collectFloat(objectArray, floatFunction, new FloatArrayList(objectArray.length));
     }
 
     /**
@@ -801,12 +663,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a collectInt on null");
         }
-        MutableIntList result = new IntArrayList(objectArray.length);
-        for (T each : objectArray)
-        {
-            result.add(intFunction.intValueOf(each));
-        }
-        return result;
+        return ArrayIterate.collectInt(objectArray, intFunction, new IntArrayList(objectArray.length));
     }
 
     /**
@@ -839,12 +696,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a collectLong on null");
         }
-        MutableLongList result = new LongArrayList(objectArray.length);
-        for (T each : objectArray)
-        {
-            result.add(longFunction.longValueOf(each));
-        }
-        return result;
+        return ArrayIterate.collectLong(objectArray, longFunction, new LongArrayList(objectArray.length));
     }
 
     /**
@@ -877,12 +729,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a collectShort on null");
         }
-        MutableShortList result = new ShortArrayList(objectArray.length);
-        for (T each : objectArray)
-        {
-            result.add(shortFunction.shortValueOf(each));
-        }
-        return result;
+        return ArrayIterate.collectShort(objectArray, shortFunction, new ShortArrayList(objectArray.length));
     }
 
     /**
@@ -1062,17 +909,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a detect on null");
         }
-        if (ArrayIterate.notEmpty(objectArray))
-        {
-            for (T each : objectArray)
-            {
-                if (predicate.accept(each))
-                {
-                    return each;
-                }
-            }
-        }
-        return null;
+        return InternalArrayIterate.detect(objectArray, objectArray.length, predicate);
     }
 
     /**
@@ -1087,18 +924,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a detectWith on null");
         }
-
-        if (ArrayIterate.notEmpty(objectArray))
-        {
-            for (T each : objectArray)
-            {
-                if (predicate.accept(each, parameter))
-                {
-                    return each;
-                }
-            }
-        }
-        return null;
+        return InternalArrayIterate.detectWith(objectArray, objectArray.length, predicate, parameter);
     }
 
     /**
@@ -1372,36 +1198,22 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a anySatisfy on null");
         }
-        for (T each : objectArray)
-        {
-            if (predicate.accept(each))
-            {
-                return true;
-            }
-        }
-        return false;
+        return InternalArrayIterate.anySatisfy(objectArray, objectArray.length, predicate);
     }
 
     /**
      * @see Iterate#anySatisfyWith(Iterable, Predicate2, Object)
      */
-    public static <T, IV> boolean anySatisfyWith(
+    public static <T, P> boolean anySatisfyWith(
             T[] objectArray,
-            Predicate2<? super T, ? super IV> predicate,
-            IV injectedValue)
+            Predicate2<? super T, ? super P> predicate,
+            P parameter)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a anySatisfyWith on null");
         }
-        for (T each : objectArray)
-        {
-            if (predicate.accept(each, injectedValue))
-            {
-                return true;
-            }
-        }
-        return false;
+        return InternalArrayIterate.anySatisfyWith(objectArray, objectArray.length, predicate, parameter);
     }
 
     /**
@@ -1413,36 +1225,22 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a allSatisfy on null");
         }
-        for (T each : objectArray)
-        {
-            if (!predicate.accept(each))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.allSatisfy(objectArray, objectArray.length, predicate);
     }
 
     /**
      * @see Iterate#allSatisfyWith(Iterable, Predicate2, Object)
      */
-    public static <T, IV> boolean allSatisfyWith(
+    public static <T, P> boolean allSatisfyWith(
             T[] objectArray,
-            Predicate2<? super T, ? super IV> predicate,
-            IV injectedValue)
+            Predicate2<? super T, ? super P> predicate,
+            P parameter)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a allSatisfyWith on null");
         }
-        for (T each : objectArray)
-        {
-            if (!predicate.accept(each, injectedValue))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.allSatisfyWith(objectArray, objectArray.length, predicate, parameter);
     }
 
     /**
@@ -1454,36 +1252,22 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a noneSatisfy on null");
         }
-        for (T each : objectArray)
-        {
-            if (predicate.accept(each))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.noneSatisfy(objectArray, objectArray.length, predicate);
     }
 
     /**
      * @see Iterate#noneSatisfyWith(Iterable, Predicate2, Object)
      */
-    public static <T, IV> boolean noneSatisfyWith(
+    public static <T, P> boolean noneSatisfyWith(
             T[] objectArray,
-            Predicate2<? super T, ? super IV> predicate,
-            IV injectedValue)
+            Predicate2<? super T, ? super P> predicate,
+            P parameter)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a noneSatisfyWith on null");
         }
-        for (T each : objectArray)
-        {
-            if (predicate.accept(each, injectedValue))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.noneSatisfyWith(objectArray, objectArray.length, predicate, parameter);
     }
 
     /**
@@ -1564,11 +1348,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a collectWith on null");
         }
-        for (T each : objectArray)
-        {
-            targetCollection.add(function.value(each, parameter));
-        }
-        return targetCollection;
+        return InternalArrayIterate.collectWith(objectArray, objectArray.length, function, parameter, targetCollection);
     }
 
     /**
@@ -1662,11 +1442,7 @@ public final class ArrayIterate
             Function<? super T, ? extends V> function,
             R target)
     {
-        for (int i = 0; i < array.length; i++)
-        {
-            target.put(function.valueOf(array[i]), array[i]);
-        }
-        return target;
+        return InternalArrayIterate.groupBy(array, array.length, function, target);
     }
 
     /**
@@ -1687,15 +1463,7 @@ public final class ArrayIterate
             Function<? super T, ? extends Iterable<V>> function,
             R target)
     {
-        for (int i = 0; i < array.length; i++)
-        {
-            Iterable<V> iterable = function.valueOf(array[i]);
-            for (V key : iterable)
-            {
-                target.put(key, array[i]);
-            }
-        }
-        return target;
+        return InternalArrayIterate.groupByEach(array, array.length, function, target);
     }
 
     /**

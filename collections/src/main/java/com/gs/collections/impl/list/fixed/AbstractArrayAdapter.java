@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.list.fixed;
 
-import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,14 +35,14 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.list.mutable.AbstractMutableList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.ListAdapter;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
-import com.gs.collections.impl.utility.internal.IterableIterate;
+import com.gs.collections.impl.utility.internal.InternalArrayIterate;
 
 public abstract class AbstractArrayAdapter<T>
         extends AbstractMutableList<T>
@@ -299,7 +298,7 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public boolean containsAll(Collection<?> collection)
     {
-        return Iterate.allSatisfy(collection, Predicates.in(this.items));
+        return Iterate.allSatisfyWith(collection, Predicates2.in(), this);
     }
 
     @Override
@@ -422,40 +421,12 @@ public abstract class AbstractArrayAdapter<T>
 
     private boolean regularListEquals(List<?> otherList)
     {
-        Iterator<?> iterator = otherList.iterator();
-        for (int i = 0; i < this.size(); i++)
-        {
-            T one = this.items[i];
-            if (!iterator.hasNext())
-            {
-                return false;
-            }
-            Object two = iterator.next();
-            if (!Comparators.nullSafeEquals(one, two))
-            {
-                return false;
-            }
-        }
-        return !iterator.hasNext();
+        return InternalArrayIterate.regularListEquals(this.items, this.items.length, otherList);
     }
 
     private boolean randomAccessListEquals(List<?> otherList)
     {
-        if (this.size() != otherList.size())
-        {
-            return false;
-        }
-        int n = this.items.length;
-        for (int i = 0; i < n; i++)
-        {
-            Object one = this.items[i];
-            Object two = otherList.get(i);
-            if (!Comparators.nullSafeEquals(one, two))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.randomAccessListEquals(this.items, this.items.length, otherList);
     }
 
     @Override
@@ -575,26 +546,6 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
-        try
-        {
-            appendable.append(start);
-
-            if (this.notEmpty())
-            {
-                appendable.append(IterableIterate.stringValueOfItem(this, this.items[0]));
-                int size = this.size();
-                for (int i = 1; i < size; i++)
-                {
-                    appendable.append(separator);
-                    appendable.append(IterableIterate.stringValueOfItem(this, this.items[i]));
-                }
-            }
-
-            appendable.append(end);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
+        InternalArrayIterate.appendString(this, this.items, this.items.length, appendable, start, separator, end);
     }
 }

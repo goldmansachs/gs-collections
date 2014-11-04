@@ -163,14 +163,14 @@ public class ImmutableArrayListTest extends AbstractImmutableListTestCase
         Verify.assertEqualsAndHashCode(collection, deserializedCollection);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void forEachWithIndexIllegalFrom()
     {
         MutableList<Integer> result = Lists.mutable.of();
         this.newList(1, 2).forEachWithIndex(-1, 2, new AddToList(result));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void forEachWithIndexIllegalTo()
     {
         MutableList<Integer> result = Lists.mutable.of();

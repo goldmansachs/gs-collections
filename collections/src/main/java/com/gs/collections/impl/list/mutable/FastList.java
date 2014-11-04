@@ -71,6 +71,7 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -80,12 +81,6 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.Procedures2;
-import com.gs.collections.impl.block.procedure.CountProcedure;
-import com.gs.collections.impl.block.procedure.FastListCollectIfProcedure;
-import com.gs.collections.impl.block.procedure.FastListCollectProcedure;
-import com.gs.collections.impl.block.procedure.FastListRejectProcedure;
-import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
-import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.list.AbstractParallelListIterable;
@@ -253,106 +248,7 @@ public class FastList<T>
 
     public void batchForEach(Procedure<? super T> procedure, int sectionIndex, int sectionCount)
     {
-        int sectionSize = this.size() / sectionCount;
-        int start = sectionSize * sectionIndex;
-        int end = sectionIndex == sectionCount - 1 ? this.size() : start + sectionSize;
-        if (procedure instanceof FastListSelectProcedure)
-        {
-            this.batchFastListSelect(start, end, (FastListSelectProcedure<T>) procedure);
-        }
-        else if (procedure instanceof FastListCollectProcedure)
-        {
-            this.batchFastListCollect(start, end, (FastListCollectProcedure<T, ?>) procedure);
-        }
-        else if (procedure instanceof FastListCollectIfProcedure)
-        {
-            this.batchFastListCollectIf(start, end, (FastListCollectIfProcedure<T, ?>) procedure);
-        }
-        else if (procedure instanceof CountProcedure)
-        {
-            this.batchCount(start, end, (CountProcedure<T>) procedure);
-        }
-        else if (procedure instanceof FastListRejectProcedure)
-        {
-            this.batchReject(start, end, (FastListRejectProcedure<T>) procedure);
-        }
-        else if (procedure instanceof MultimapPutProcedure)
-        {
-            this.batchGroupBy(start, end, (MultimapPutProcedure<?, T>) procedure);
-        }
-        else
-        {
-            for (int i = start; i < end; i++)
-            {
-                procedure.value(this.items[i]);
-            }
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure.
-     */
-    private void batchGroupBy(int start, int end, MultimapPutProcedure<?, T> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure.
-     */
-    private void batchReject(int start, int end, FastListRejectProcedure<T> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure.
-     */
-    private void batchCount(int start, int end, CountProcedure<T> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure.
-     */
-    private void batchFastListCollectIf(int start, int end, FastListCollectIfProcedure<T, ?> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure.
-     */
-    private void batchFastListCollect(int start, int end, FastListCollectProcedure<T, ?> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure.
-     */
-    private void batchFastListSelect(int start, int end, FastListSelectProcedure<T> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
+        InternalArrayIterate.batchForEach(procedure, this.items, this.size, sectionIndex, sectionCount);
     }
 
     public int getBatchCount(int batchSize)
@@ -495,27 +391,13 @@ public class FastList<T>
     @Override
     public int indexOf(Object object)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            if (Comparators.nullSafeEquals(this.items[i], object))
-            {
-                return i;
-            }
-        }
-        return -1;
+        return InternalArrayIterate.indexOf(this.items, this.size, object);
     }
 
     @Override
     public int lastIndexOf(Object object)
     {
-        for (int i = this.size - 1; i >= 0; i--)
-        {
-            if (Comparators.nullSafeEquals(this.items[i], object))
-            {
-                return i;
-            }
-        }
-        return -1;
+        return InternalArrayIterate.lastIndexOf(this.items, this.size, object);
     }
 
     public void trimToSize()
@@ -611,16 +493,49 @@ public class FastList<T>
     @Override
     public <V, R extends MutableMultimap<V, T>> R groupBy(Function<? super T, ? extends V> function, R target)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            target.put(function.valueOf(item), item);
-        }
-        return target;
+        return InternalArrayIterate.groupBy(this.items, this.size, function, target);
     }
 
     @Override
-    public void forEach(Procedure<? super T> procedure)
+    public <V> FastListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
+    {
+        return this.groupByEach(function, FastListMultimap.<V, T>newMultimap());
+    }
+
+    @Override
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        InternalArrayIterate.appendString(this, this.items, this.size, appendable, start, separator, end);
+    }
+
+    @Override
+    public <V, R extends MutableMultimap<V, T>> R groupByEach(
+            Function<? super T, ? extends Iterable<V>> function,
+            R target)
+    {
+        return InternalArrayIterate.groupByEach(this.items, this.size, function, target);
+    }
+
+    @Override
+    public <K> MutableMap<K, T> groupByUniqueKey(Function<? super T, ? extends K> function)
+    {
+        return InternalArrayIterate.groupByUniqueKey(this.items, this.size, function);
+    }
+
+    @Override
+    public PartitionFastList<T> partition(Predicate<? super T> predicate)
+    {
+        return InternalArrayIterate.partition(this.items, this.size, predicate);
+    }
+
+    @Override
+    public <P> PartitionFastList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return InternalArrayIterate.partitionWith(this.items, this.size, predicate, parameter);
+    }
+
+    @Override
+    public void each(Procedure<? super T> procedure)
     {
         for (int i = 0; i < this.size; i++)
         {
@@ -667,15 +582,7 @@ public class FastList<T>
     @Override
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            if (predicate.accept(item))
-            {
-                target.add(item);
-            }
-        }
-        return target;
+        return InternalArrayIterate.select(this.items, this.size, predicate, target);
     }
 
     @Override
@@ -690,15 +597,7 @@ public class FastList<T>
             P parameter,
             R targetCollection)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            if (predicate.accept(item, parameter))
-            {
-                targetCollection.add(item);
-            }
-        }
-        return targetCollection;
+        return InternalArrayIterate.selectWith(this.items, this.size, predicate, parameter, targetCollection);
     }
 
     @Override
@@ -710,15 +609,7 @@ public class FastList<T>
     @Override
     public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            if (!predicate.accept(item))
-            {
-                target.add(item);
-            }
-        }
-        return target;
+        return InternalArrayIterate.reject(this.items, this.size, predicate, target);
     }
 
     @Override
@@ -733,15 +624,7 @@ public class FastList<T>
             P parameter,
             R target)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            if (!predicate.accept(item, parameter))
-            {
-                target.add(item);
-            }
-        }
-        return target;
+        return InternalArrayIterate.rejectWith(this.items, this.size, predicate, parameter, target);
     }
 
     @Override
@@ -762,17 +645,7 @@ public class FastList<T>
     @Override
     public <S> FastList<S> selectInstancesOf(Class<S> clazz)
     {
-        FastList<S> result = FastList.newList(this.size);
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            if (clazz.isInstance(item))
-            {
-                result.add((S) item);
-            }
-        }
-        result.trimToSize();
-        return result;
+        return ArrayIterate.selectInstancesOf(this.items, this.size, clazz);
     }
 
     @Override
@@ -961,11 +834,7 @@ public class FastList<T>
     @Override
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            target.add(function.valueOf(this.items[i]));
-        }
-        return target;
+        return InternalArrayIterate.collect(this.items, this.size, function, target);
     }
 
     @Override
@@ -979,11 +848,7 @@ public class FastList<T>
             Function<? super T, ? extends Iterable<V>> function,
             R target)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            Iterate.addAllTo(function.valueOf(this.items[i]), target);
-        }
-        return target;
+        return InternalArrayIterate.flatCollect(this.items, this.size, function, target);
     }
 
     @Override
@@ -998,11 +863,7 @@ public class FastList<T>
             P parameter,
             R targetCollection)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            targetCollection.add(function.value(this.items[i], parameter));
-        }
-        return targetCollection;
+        return InternalArrayIterate.collectWith(this.items, this.size, function, parameter, targetCollection);
     }
 
     @Override
@@ -1019,29 +880,13 @@ public class FastList<T>
             Function<? super T, ? extends V> function,
             R target)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            if (predicate.accept(item))
-            {
-                target.add(function.valueOf(item));
-            }
-        }
-        return target;
+        return InternalArrayIterate.collectIf(this.items, this.size, predicate, function, target);
     }
 
     @Override
     public T detect(Predicate<? super T> predicate)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            if (predicate.accept(item))
-            {
-                return item;
-            }
-        }
-        return null;
+        return InternalArrayIterate.detect(this.items, this.size, predicate);
     }
 
     @Override
@@ -1052,29 +897,45 @@ public class FastList<T>
     }
 
     @Override
+    public T min(Comparator<? super T> comparator)
+    {
+        return InternalArrayIterate.min(this.items, this.size, comparator);
+    }
+
+    @Override
+    public T max(Comparator<? super T> comparator)
+    {
+        return InternalArrayIterate.max(this.items, this.size, comparator);
+    }
+
+    @Override
+    public T min()
+    {
+        return InternalArrayIterate.min(this.items, this.size);
+    }
+
+    @Override
+    public T max()
+    {
+        return InternalArrayIterate.max(this.items, this.size);
+    }
+
+    @Override
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.minBy(this.items, this.size, function);
+        return InternalArrayIterate.minBy(this.items, this.size, function);
     }
 
     @Override
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.maxBy(this.items, this.size, function);
+        return InternalArrayIterate.maxBy(this.items, this.size, function);
     }
 
     @Override
     public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            if (predicate.accept(item, parameter))
-            {
-                return item;
-            }
-        }
-        return null;
+        return InternalArrayIterate.detectWith(this.items, this.size, predicate, parameter);
     }
 
     @Override
@@ -1264,107 +1125,49 @@ public class FastList<T>
     @Override
     public int count(Predicate<? super T> predicate)
     {
-        int count = 0;
-        for (int i = 0; i < this.size; i++)
-        {
-            if (predicate.accept(this.items[i]))
-            {
-                count++;
-            }
-        }
-        return count;
+        return InternalArrayIterate.count(this.items, this.size, predicate);
     }
 
     @Override
     public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        int count = 0;
-        for (int i = 0; i < this.size; i++)
-        {
-            if (predicate.accept(this.items[i], parameter))
-            {
-                count++;
-            }
-        }
-        return count;
+        return InternalArrayIterate.countWith(this.items, this.size, predicate, parameter);
     }
 
     @Override
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            if (predicate.accept(this.items[i]))
-            {
-                return true;
-            }
-        }
-        return false;
+        return InternalArrayIterate.anySatisfy(this.items, this.size, predicate);
     }
 
     @Override
     public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            if (predicate.accept(this.items[i], parameter))
-            {
-                return true;
-            }
-        }
-        return false;
+        return InternalArrayIterate.anySatisfyWith(this.items, this.size, predicate, parameter);
     }
 
     @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            if (!predicate.accept(this.items[i]))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.allSatisfy(this.items, this.size, predicate);
     }
 
     @Override
     public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            if (!predicate.accept(this.items[i], parameter))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.allSatisfyWith(this.items, this.size, predicate, parameter);
     }
 
     @Override
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            if (predicate.accept(this.items[i]))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.noneSatisfy(this.items, this.size, predicate);
     }
 
     @Override
     public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            if (predicate.accept(this.items[i], parameter))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.noneSatisfyWith(this.items, this.size, predicate, parameter);
     }
 
     @Override
@@ -1646,50 +1449,14 @@ public class FastList<T>
         return true;
     }
 
-    /**
-     * @deprecated in 1.3
-     */
-    @Deprecated
-    public boolean equals(FastList<?> otherList)
-    {
-        return this.fastListEquals(otherList);
-    }
-
     private boolean regularListEquals(List<?> otherList)
     {
-        Iterator<?> iterator = otherList.iterator();
-        for (int i = 0; i < this.size; i++)
-        {
-            T one = this.items[i];
-            if (!iterator.hasNext())
-            {
-                return false;
-            }
-            Object two = iterator.next();
-            if (!Comparators.nullSafeEquals(one, two))
-            {
-                return false;
-            }
-        }
-        return !iterator.hasNext();
+        return InternalArrayIterate.regularListEquals(this.items, this.size, otherList);
     }
 
     private boolean randomAccessListEquals(List<?> otherList)
     {
-        if (this.size() != otherList.size())
-        {
-            return false;
-        }
-        for (int i = 0; i < this.size; i++)
-        {
-            T one = this.items[i];
-            Object two = otherList.get(i);
-            if (!Comparators.nullSafeEquals(one, two))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.randomAccessListEquals(this.items, this.size, otherList);
     }
 
     @Override

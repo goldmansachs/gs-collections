@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,22 +28,19 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
-import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.procedure.CountProcedure;
-import com.gs.collections.impl.block.procedure.FastListCollectIfProcedure;
-import com.gs.collections.impl.block.procedure.FastListCollectProcedure;
-import com.gs.collections.impl.block.procedure.FastListRejectProcedure;
-import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
-import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.partition.list.PartitionImmutableListImpl;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.ListIterate;
+import com.gs.collections.impl.utility.internal.InternalArrayIterate;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -75,14 +72,7 @@ final class ImmutableArrayList<T>
     @Override
     public int hashCode()
     {
-        int hashCode = 1;
-        int localSize = this.size();
-        for (int i = 0; i < localSize; i++)
-        {
-            T item = this.items[i];
-            hashCode = 31 * hashCode + (item == null ? 0 : item.hashCode());
-        }
-        return hashCode;
+        return Arrays.hashCode(this.items);
     }
 
     @Override
@@ -116,40 +106,13 @@ final class ImmutableArrayList<T>
     @Override
     protected boolean randomAccessListEquals(List<?> otherList)
     {
-        if (this.size() != otherList.size())
-        {
-            return false;
-        }
-        for (int i = 0; i < this.size(); i++)
-        {
-            T one = this.items[i];
-            Object two = otherList.get(i);
-            if (!Comparators.nullSafeEquals(one, two))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.randomAccessListEquals(this.items, this.items.length, otherList);
     }
 
     @Override
     protected boolean regularListEquals(List<?> otherList)
     {
-        Iterator<?> iterator = otherList.iterator();
-        for (int i = 0; i < this.size(); i++)
-        {
-            T one = this.items[i];
-            if (!iterator.hasNext())
-            {
-                return false;
-            }
-            Object two = iterator.next();
-            if (!Comparators.nullSafeEquals(one, two))
-            {
-                return false;
-            }
-        }
-        return !iterator.hasNext();
+        return InternalArrayIterate.regularListEquals(this.items, this.items.length, otherList);
     }
 
     @Override
@@ -188,106 +151,7 @@ final class ImmutableArrayList<T>
 
     public void batchForEach(Procedure<? super T> procedure, int sectionIndex, int sectionCount)
     {
-        int sectionSize = this.size() / sectionCount;
-        int start = sectionSize * sectionIndex;
-        int end = sectionIndex == sectionCount - 1 ? this.size() : start + sectionSize;
-        if (procedure instanceof FastListSelectProcedure)
-        {
-            this.batchFastListSelect(start, end, (FastListSelectProcedure<T>) procedure);
-        }
-        else if (procedure instanceof FastListCollectProcedure)
-        {
-            this.batchFastListCollect(start, end, (FastListCollectProcedure<T, ?>) procedure);
-        }
-        else if (procedure instanceof FastListCollectIfProcedure)
-        {
-            this.batchFastListCollectIf(start, end, (FastListCollectIfProcedure<T, ?>) procedure);
-        }
-        else if (procedure instanceof CountProcedure)
-        {
-            this.batchCount(start, end, (CountProcedure<T>) procedure);
-        }
-        else if (procedure instanceof FastListRejectProcedure)
-        {
-            this.batchReject(start, end, (FastListRejectProcedure<T>) procedure);
-        }
-        else if (procedure instanceof MultimapPutProcedure)
-        {
-            this.batchGroupBy(start, end, (MultimapPutProcedure<?, T>) procedure);
-        }
-        else
-        {
-            for (int i = start; i < end; i++)
-            {
-                procedure.value(this.items[i]);
-            }
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure
-     */
-    private void batchGroupBy(int start, int end, MultimapPutProcedure<?, T> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure
-     */
-    private void batchReject(int start, int end, FastListRejectProcedure<T> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure
-     */
-    private void batchCount(int start, int end, CountProcedure<T> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure
-     */
-    private void batchFastListCollectIf(int start, int end, FastListCollectIfProcedure<T, ?> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure
-     */
-    private void batchFastListCollect(int start, int end, FastListCollectProcedure<T, ?> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
-    }
-
-    /**
-     * Implemented to avoid megamorphic call on castProcedure
-     */
-    private void batchFastListSelect(int start, int end, FastListSelectProcedure<T> castProcedure)
-    {
-        for (int i = start; i < end; i++)
-        {
-            castProcedure.value(this.items[i]);
-        }
+        InternalArrayIterate.batchForEach(procedure, this.items, this.items.length, sectionIndex, sectionCount);
     }
 
     public int getBatchCount(int batchSize)
@@ -298,25 +162,99 @@ final class ImmutableArrayList<T>
     @Override
     public void forEachWithIndex(int from, int to, ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        if (from < 0 || to < 0)
-        {
-            throw new IllegalArgumentException("Neither from nor to may be negative.");
-        }
-        T[] localItems = this.items;
-        if (from <= to)
-        {
-            for (int i = from; i <= to; i++)
-            {
-                objectIntProcedure.value(localItems[i], i);
-            }
-        }
-        else
-        {
-            for (int i = from; i >= to; i--)
-            {
-                objectIntProcedure.value(localItems[i], i);
-            }
-        }
+        ListIterate.rangeCheck(from, to, this.items.length);
+        InternalArrayIterate.forEachWithIndexWithoutChecks(this.items, from, to, objectIntProcedure);
+    }
+
+    public ImmutableList<T> select(Predicate<? super T> predicate)
+    {
+        return ArrayIterate.select(this.items, predicate).toImmutable();
+    }
+
+    public <P> ImmutableList<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ArrayIterate.selectWith(this.items, predicate, parameter).toImmutable();
+    }
+
+    @Override
+    public <P, R extends Collection<T>> R selectWith(
+            Predicate2<? super T, ? super P> predicate,
+            P parameter,
+            R targetCollection)
+    {
+        return ArrayIterate.selectWith(this.items, predicate, parameter, targetCollection);
+    }
+
+    public ImmutableList<T> reject(Predicate<? super T> predicate)
+    {
+        return ArrayIterate.reject(this.items, predicate).toImmutable();
+    }
+
+    public <P> ImmutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ArrayIterate.rejectWith(this.items, predicate, parameter, FastList.<T>newList()).toImmutable();
+    }
+
+    @Override
+    public <P, R extends Collection<T>> R rejectWith(
+            Predicate2<? super T, ? super P> predicate,
+            P parameter,
+            R targetCollection)
+    {
+        return ArrayIterate.rejectWith(this.items, predicate, parameter, targetCollection);
+    }
+
+    public PartitionImmutableList<T> partition(Predicate<? super T> predicate)
+    {
+        return ArrayIterate.partition(this.items, predicate).toImmutable();
+    }
+
+    public <P> PartitionImmutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ArrayIterate.partitionWith(this.items, predicate, parameter).toImmutable();
+    }
+
+    public <S> ImmutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        return ArrayIterate.selectInstancesOf(this.items, clazz).toImmutable();
+    }
+
+    public <V> ImmutableList<V> collect(Function<? super T, ? extends V> function)
+    {
+        return ArrayIterate.collect(this.items, function).toImmutable();
+    }
+
+    public <P, V> ImmutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return ArrayIterate.collectWith(this.items, function, parameter).toImmutable();
+    }
+
+    public <V> ImmutableList<V> collectIf(
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function)
+    {
+        return ArrayIterate.collectIf(this.items, predicate, function).toImmutable();
+    }
+
+    @Override
+    public <P, V, R extends Collection<V>> R collectWith(
+            Function2<? super T, ? super P, ? extends V> function,
+            P parameter,
+            R targetCollection)
+    {
+        return ArrayIterate.collectWith(this.items, function, parameter, targetCollection);
+    }
+
+    public <V> ImmutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    {
+        return ArrayIterate.flatCollect(this.items, function).toImmutable();
+    }
+
+    @Override
+    public <V, R extends Collection<V>> R flatCollect(
+            Function<? super T, ? extends Iterable<V>> function, R target)
+    {
+        return ArrayIterate.flatCollect(this.items, function, target);
     }
 
     @Override
@@ -405,6 +343,12 @@ final class ImmutableArrayList<T>
             a[size] = null;
         }
         return a;
+    }
+
+    @Override
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        InternalArrayIterate.appendString(this, this.items, this.items.length, appendable, start, separator, end);
     }
 
     @Override
