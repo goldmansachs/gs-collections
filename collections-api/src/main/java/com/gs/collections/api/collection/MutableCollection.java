@@ -217,7 +217,10 @@ public interface MutableCollection<T>
      * <pre>e.g.
      * return lastNames.<b>selectAndRejectWith</b>(PredicatesLite.lessThan(), "Mason");
      * </pre>
+     *
+     * @deprecated since 6.0 use {@link RichIterable#partitionWith(Predicate2, Object)} instead.
      */
+    @Deprecated
     <P> Twin<MutableList<T>> selectAndRejectWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter);
