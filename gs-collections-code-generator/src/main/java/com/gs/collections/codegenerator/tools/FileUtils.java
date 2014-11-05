@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.jar.JarEntry;
@@ -38,46 +37,47 @@ public final class FileUtils
         throw new AssertionError("Suppress for noninstantiability");
     }
 
-    public static void writeToFile(String data, File outputFile)
+    public static void writeToFile(String data, File outputFile, boolean outputFileMustExist)
     {
-        if (!outputFile.exists() || (outputFile.exists() && !readFile(outputFile.getAbsolutePath()).equals(data)))
+        if (!outputFile.delete() && outputFileMustExist)
         {
-            FileWriter fileWriter = null;
-            BufferedWriter bufferedWriter = null;
-            try
+            throw new IllegalStateException(outputFile.getAbsolutePath());
+        }
+        FileWriter fileWriter = null;
+        BufferedWriter bufferedWriter = null;
+        try
+        {
+            fileWriter = new FileWriter(outputFile);
+            bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(data);
+            bufferedWriter.flush();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Could not write generated sources to file: " + e);
+        }
+        finally
+        {
+            if (fileWriter != null)
             {
-                fileWriter = new FileWriter(outputFile);
-                bufferedWriter = new BufferedWriter(fileWriter);
-                bufferedWriter.write(data);
-                bufferedWriter.flush();
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException("Could not write generated sources to file: " + e);
-            }
-            finally
-            {
-                if (fileWriter != null)
+                try
                 {
-                    try
-                    {
-                        fileWriter.close();
-                    }
-                    catch (IOException e)
-                    {
-                        throw new RuntimeException("Could not close filewriter: " + e);
-                    }
+                    fileWriter.close();
                 }
-                if (bufferedWriter != null)
+                catch (IOException e)
                 {
-                    try
-                    {
-                        bufferedWriter.close();
-                    }
-                    catch (IOException e)
-                    {
-                        throw new RuntimeException("Could not close bufferedwriter: " + e);
-                    }
+                    throw new RuntimeException("Could not close filewriter: " + e);
+                }
+            }
+            if (bufferedWriter != null)
+            {
+                try
+                {
+                    bufferedWriter.close();
+                }
+                catch (IOException e)
+                {
+                    throw new RuntimeException("Could not close bufferedwriter: " + e);
                 }
             }
         }
@@ -186,35 +186,15 @@ public final class FileUtils
         return filePath.endsWith(".stg");
     }
 
-    private static String readFile(String path)
+    public static String readFile(Path path)
     {
-        FileInputStream stream = null;
-        MappedByteBuffer bb = null;
         try
         {
-            stream = new FileInputStream(new File(path));
-            FileChannel fc = stream.getChannel();
-            bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
+            return new String(Files.readAllBytes(path));
         }
         catch (IOException e)
         {
             throw new RuntimeException(e);
         }
-        finally
-        {
-            try
-            {
-                if (stream != null)
-                {
-                    stream.close();
-                }
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
-        /* Instead of using default, pass in a decoder. */
-        return Charset.defaultCharset().decode(bb).toString();
     }
 }

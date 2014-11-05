@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,11 @@ package com.gs.collections.codegenerator;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.zip.CRC32;
 
 import com.gs.collections.codegenerator.model.Primitive;
 import com.gs.collections.codegenerator.tools.FileUtils;
@@ -84,10 +88,10 @@ public class GsCollectionsCodeGenerator
                             String sourceFileName = this.executeTemplate(primitive1, primitive2, "fileName");
                             File outputFile = new File(targetPath, sourceFileName + ".java");
 
-                            if (!sourceFileExists(outputFile))
+                            if (!GsCollectionsCodeGenerator.sourceFileExists(outputFile))
                             {
                                 String classContents = this.executeTemplate(primitive1, primitive2, "class");
-                                FileUtils.writeToFile(classContents, outputFile);
+                                GsCollectionsCodeGenerator.checkSumClassContentsAndWrite(classContents, targetPath, sourceFileName);
                             }
                         }
                     }
@@ -103,15 +107,49 @@ public class GsCollectionsCodeGenerator
                         String sourceFileName = this.executeTemplate(primitive, "fileName");
                         File outputFile = new File(targetPath, sourceFileName + ".java");
 
-                        if (!sourceFileExists(outputFile))
+                        if (!GsCollectionsCodeGenerator.sourceFileExists(outputFile))
                         {
                             String classContents = this.executeTemplate(primitive, "class");
-                            FileUtils.writeToFile(classContents, outputFile);
+                            GsCollectionsCodeGenerator.checkSumClassContentsAndWrite(classContents, targetPath, sourceFileName);
                         }
                     }
                 }
             }
         }
+    }
+
+    private static void checkSumClassContentsAndWrite(String classContents, File targetPath, String sourceFileName)
+    {
+        long checksumValue = GsCollectionsCodeGenerator.calculateChecksum(classContents);
+
+        File outputFile = new File(targetPath, sourceFileName + ".java");
+        Path outputChecksumPath = Paths.get(targetPath.getAbsolutePath(), sourceFileName + ".java.crc");
+        if (!outputChecksumPath.toFile().exists())
+        {
+            GsCollectionsCodeGenerator.writeFileAndChecksum(outputFile, classContents, checksumValue, outputChecksumPath, false);
+            return;
+        }
+
+        String existingChecksum = FileUtils.readFile(outputChecksumPath);
+        if (existingChecksum.equals(String.valueOf(checksumValue)))
+        {
+            return;
+        }
+
+        GsCollectionsCodeGenerator.writeFileAndChecksum(outputFile, classContents, checksumValue, outputChecksumPath, true);
+    }
+
+    private static long calculateChecksum(String string)
+    {
+        CRC32 checksum = new CRC32();
+        checksum.update(string.getBytes(StandardCharsets.UTF_8));
+        return checksum.getValue();
+    }
+
+    private static void writeFileAndChecksum(File outputFile, String output, long checksumValue, Path outputChecksumPath, boolean outputFileMustExist)
+    {
+        FileUtils.writeToFile(output, outputFile, outputFileMustExist);
+        FileUtils.writeToFile(String.valueOf(checksumValue), outputChecksumPath.toFile(), outputFileMustExist);
     }
 
     private String executeTemplate(Primitive primitive, String templateName)
