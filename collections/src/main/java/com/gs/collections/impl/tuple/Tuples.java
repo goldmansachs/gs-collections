@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,9 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 
 /**
- * A PairImpl is a container that holds two related objects.  It is the equivalent of an Association in Smalltalk, or an
- * implementation of Map.Entry in the JDK.
+ * A Pair is a container that holds two related objects.  It is the equivalent of an Association in Smalltalk, or an
+ * implementation of Map.Entry in the JDK.  A Twin is a Pair with the same types.  This class is a factory class
+ * for Pairs and Twins.
  */
 public final class Tuples
 {
