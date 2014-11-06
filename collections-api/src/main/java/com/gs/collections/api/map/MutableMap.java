@@ -60,10 +60,10 @@ public interface MutableMap<K, V>
     MutableMap<K, V> newEmpty();
 
     /**
-     * Adds all the entries derived from {@code collection} to {@code this}. The key and value for each entry
+     * Adds all the entries derived from {@code iterable} to {@code this}. The key and value for each entry
      * is determined by applying the {@code keyFunction} and {@code valueFunction} to each item in
      * {@code collection}. Any entry in {@code map} that has the same key as an entry in {@code this}
-     * will have it's value replaced by that in {@code map}.
+     * will have its value replaced by that in {@code map}.
      */
     <E> MutableMap<K, V> collectKeysAndValues(
             Iterable<E> iterable,
