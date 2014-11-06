@@ -94,10 +94,13 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures2;
+import com.gs.collections.impl.block.procedure.AppendStringProcedure;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
+import com.gs.collections.impl.block.procedure.MaxByProcedure;
+import com.gs.collections.impl.block.procedure.MinByProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
@@ -1091,12 +1094,16 @@ public class UnifiedSet<T>
 
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return IterableIterate.minBy(this, function);
+        MinByProcedure<T, V> minByProcedure = new MinByProcedure<T, V>(function);
+        this.forEach(minByProcedure);
+        return minByProcedure.getResult();
     }
 
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return IterableIterate.maxBy(this, function);
+        MaxByProcedure<T, V> maxByProcedure = new MaxByProcedure<T, V>(function);
+        this.forEach(maxByProcedure);
+        return maxByProcedure.getResult();
     }
 
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
@@ -1207,7 +1214,66 @@ public class UnifiedSet<T>
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return IterableIterate.anySatisfyWith(this, predicate, parameter);
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                if (this.chainedAnySatisfyWith((ChainedBucket) cur, predicate, parameter))
+                {
+                    return true;
+                }
+            }
+            else if (cur != null)
+            {
+                if (predicate.accept(this.nonSentinel(cur), parameter))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private <P> boolean chainedAnySatisfyWith(
+            ChainedBucket bucket,
+            Predicate2<? super T, ? super P> predicate,
+            P parameter)
+    {
+        do
+        {
+            if (predicate.accept(this.nonSentinel(bucket.zero), parameter))
+            {
+                return true;
+            }
+            if (bucket.one == null)
+            {
+                return false;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.one), parameter))
+            {
+                return true;
+            }
+            if (bucket.two == null)
+            {
+                return false;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.two), parameter))
+            {
+                return true;
+            }
+            if (bucket.three == null)
+            {
+                return false;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            return predicate.accept(this.nonSentinel(bucket.three), parameter);
+        }
+        while (true);
     }
 
     public boolean allSatisfy(Predicate<? super T> predicate)
@@ -1275,19 +1341,187 @@ public class UnifiedSet<T>
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return IterableIterate.allSatisfyWith(this, predicate, parameter);
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                if (!this.chainedAllSatisfyWith((ChainedBucket) cur, predicate, parameter))
+                {
+                    return false;
+                }
+            }
+            else if (cur != null)
+            {
+                if (!predicate.accept(this.nonSentinel(cur), parameter))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private <P> boolean chainedAllSatisfyWith(ChainedBucket bucket, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        do
+        {
+            if (!predicate.accept(this.nonSentinel(bucket.zero), parameter))
+            {
+                return false;
+            }
+            if (bucket.one == null)
+            {
+                return true;
+            }
+            if (!predicate.accept(this.nonSentinel(bucket.one), parameter))
+            {
+                return false;
+            }
+            if (bucket.two == null)
+            {
+                return true;
+            }
+            if (!predicate.accept(this.nonSentinel(bucket.two), parameter))
+            {
+                return false;
+            }
+            if (bucket.three == null)
+            {
+                return true;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            return predicate.accept(this.nonSentinel(bucket.three), parameter);
+        }
+        while (true);
     }
 
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
-        return IterableIterate.noneSatisfy(this, predicate);
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                if (!this.chainedNoneSatisfy((ChainedBucket) cur, predicate))
+                {
+                    return false;
+                }
+            }
+            else if (cur != null)
+            {
+                if (predicate.accept(this.nonSentinel(cur)))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean chainedNoneSatisfy(ChainedBucket bucket, Predicate<? super T> predicate)
+    {
+        do
+        {
+            if (predicate.accept(this.nonSentinel(bucket.zero)))
+            {
+                return false;
+            }
+            if (bucket.one == null)
+            {
+                return true;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.one)))
+            {
+                return false;
+            }
+            if (bucket.two == null)
+            {
+                return true;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.two)))
+            {
+                return false;
+            }
+            if (bucket.three == null)
+            {
+                return true;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            return !predicate.accept(this.nonSentinel(bucket.three));
+        }
+        while (true);
     }
 
     public <P> boolean noneSatisfyWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return IterableIterate.noneSatisfyWith(this, predicate, parameter);
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                if (!this.chainedNoneSatisfyWith((ChainedBucket) cur, predicate, parameter))
+                {
+                    return false;
+                }
+            }
+            else if (cur != null)
+            {
+                if (predicate.accept(this.nonSentinel(cur), parameter))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private <P> boolean chainedNoneSatisfyWith(ChainedBucket bucket, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        do
+        {
+            if (predicate.accept(this.nonSentinel(bucket.zero), parameter))
+            {
+                return false;
+            }
+            if (bucket.one == null)
+            {
+                return true;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.one), parameter))
+            {
+                return false;
+            }
+            if (bucket.two == null)
+            {
+                return true;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.two), parameter))
+            {
+                return false;
+            }
+            if (bucket.three == null)
+            {
+                return true;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            return !predicate.accept(this.nonSentinel(bucket.three), parameter);
+        }
+        while (true);
     }
 
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
@@ -2429,12 +2663,23 @@ public class UnifiedSet<T>
 
     public void appendString(Appendable appendable, String separator)
     {
-        this.appendString(appendable, "", separator, "");
+        AppendStringProcedure<T> appendStringProcedure = new AppendStringProcedure<T>(appendable, separator);
+        this.forEach(appendStringProcedure);
     }
 
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
-        IterableIterate.appendString(this, appendable, start, separator, end);
+        AppendStringProcedure<T> appendStringProcedure = new AppendStringProcedure<T>(appendable, separator);
+        try
+        {
+            appendable.append(start);
+            this.forEach(appendStringProcedure);
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public <V> UnifiedSetMultimap<V, T> groupBy(

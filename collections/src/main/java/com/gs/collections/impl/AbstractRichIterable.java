@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Comparator;
@@ -66,6 +67,7 @@ import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.block.procedure.AppendStringProcedure;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
@@ -511,16 +513,23 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public void appendString(Appendable appendable, String separator)
     {
-        this.appendString(appendable, "", separator, "");
+        AppendStringProcedure<T> appendStringProcedure = new AppendStringProcedure<T>(appendable, separator);
+        this.forEach(appendStringProcedure);
     }
 
-    public void appendString(
-            Appendable appendable,
-            String start,
-            String separator,
-            String end)
+    public void appendString(Appendable appendable, String start, String separator, String end)
     {
-        IterableIterate.appendString(this, appendable, start, separator, end);
+        AppendStringProcedure<T> appendStringProcedure = new AppendStringProcedure<T>(appendable, separator);
+        try
+        {
+            appendable.append(start);
+            this.forEach(appendStringProcedure);
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean containsAll(Collection<?> collection)

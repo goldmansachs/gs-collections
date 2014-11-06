@@ -801,38 +801,73 @@ public class HashBag<T>
             final P parameter,
             final R target)
     {
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        if (target instanceof MutableBag<?>)
         {
-            public void value(T each, int occurrences)
+            final MutableBag<T> targetBag = (MutableBag<T>) target;
+
+            this.forEachWithOccurrences(new ObjectIntProcedure<T>()
             {
-                if (predicate.accept(each, parameter))
+                public void value(T each, int occurrences)
                 {
-                    for (int i = 0; i < occurrences; i++)
+                    if (predicate.accept(each, parameter))
                     {
-                        target.add(each);
+                        targetBag.addOccurrences(each, occurrences);
                     }
                 }
-            }
-        });
+            });
+        }
+        else
+        {
+            this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+            {
+                public void value(T each, int occurrences)
+                {
+                    if (predicate.accept(each, parameter))
+                    {
+                        for (int i = 0; i < occurrences; i++)
+                        {
+                            target.add(each);
+                        }
+                    }
+                }
+            });
+        }
         return target;
     }
 
     @Override
     public <R extends Collection<T>> R reject(final Predicate<? super T> predicate, final R target)
     {
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        if (target instanceof MutableBag<?>)
         {
-            public void value(T each, int occurrences)
+            final MutableBag<T> targetBag = (MutableBag<T>) target;
+            this.forEachWithOccurrences(new ObjectIntProcedure<T>()
             {
-                if (!predicate.accept(each))
+                public void value(T each, int occurrences)
                 {
-                    for (int i = 0; i < occurrences; i++)
+                    if (!predicate.accept(each))
                     {
-                        target.add(each);
+                        targetBag.addOccurrences(each, occurrences);
                     }
                 }
-            }
-        });
+            });
+        }
+        else
+        {
+            this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+            {
+                public void value(T each, int occurrences)
+                {
+                    if (!predicate.accept(each))
+                    {
+                        for (int i = 0; i < occurrences; i++)
+                        {
+                            target.add(each);
+                        }
+                    }
+                }
+            });
+        }
         return target;
     }
 
@@ -885,6 +920,38 @@ public class HashBag<T>
             }
         });
         return result;
+    }
+
+    @Override
+    public <P, V, R extends Collection<V>> R collectWith(final Function2<? super T, ? super P, ? extends V> function, final P parameter, final R targetCollection)
+    {
+        if (targetCollection instanceof MutableBag<?>)
+        {
+            final MutableBag<V> targetBag = (MutableBag<V>) targetCollection;
+
+            this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+            {
+                public void value(T each, int occurrences)
+                {
+                    targetBag.addOccurrences(function.value(each, parameter), occurrences);
+                }
+            });
+        }
+        else
+        {
+            this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+            {
+                public void value(T each, int occurrences)
+                {
+                    V value = function.value(each, parameter);
+                    for (int i = 0; i < occurrences; i++)
+                    {
+                        targetCollection.add(value);
+                    }
+                }
+            });
+        }
+        return targetCollection;
     }
 
     public MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)

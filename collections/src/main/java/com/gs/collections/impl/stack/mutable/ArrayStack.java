@@ -260,7 +260,13 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         }
         this.checkEmptyStack();
         this.checkSizeLessThanCount(count);
-        return FastList.newList(this.asLazy().take(count));
+
+        FastList<T> result = FastList.newList(count);
+        for (int i = 0; i < count; i++)
+        {
+            result.add(this.delegate.get(this.delegate.size() - (i + 1)));
+        }
+        return result;
     }
 
     public T peekAt(int index)
@@ -978,8 +984,9 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
     public int hashCode()
     {
         int hashCode = 1;
-        for (T each : this)
+        for (int i = this.delegate.size() - 1; i >= 0; i--)
         {
+            T each = this.delegate.get(i);
             hashCode = 31 * hashCode + (each == null ? 0 : each.hashCode());
         }
         return hashCode;

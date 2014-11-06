@@ -1923,6 +1923,10 @@ public final class Verify extends Assert
 
             Verify.assertObjectNotNull(iterableName, actualIterable);
 
+            if (expectedIterable.equals(actualIterable))
+            {
+                return;
+            }
             Iterator<?> expectedIterator = expectedIterable.iterator();
             Iterator<?> actualIterator = actualIterable.iterator();
             int index = 0;

@@ -200,6 +200,18 @@ public abstract class AbstractMutableList<T>
         ListIterate.forEachWith(this, procedure, parameter);
     }
 
+    @Override
+    public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
+    {
+        return ListIterate.zip(this, that, target);
+    }
+
+    @Override
+    public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
+    {
+        return ListIterate.zipWithIndex(this, target);
+    }
+
     public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
     {
         ListIterate.forEachWithIndex(this, fromIndex, toIndex, objectIntProcedure);
@@ -1097,6 +1109,12 @@ public abstract class AbstractMutableList<T>
     public T getLast()
     {
         return ListIterate.getLast(this);
+    }
+
+    @Override
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.appendString(appendable, "", separator, "");
     }
 
     @Override

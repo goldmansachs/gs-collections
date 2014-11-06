@@ -1282,7 +1282,50 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         {
             return false;
         }
-        return Iterate.allSatisfy(other.entrySet(), Predicates.in(this.entrySet()));
+
+        for (int i = 0; i < this.table.length; i += 2)
+        {
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
+            {
+                if (!this.chainedEquals((Object[]) this.table[i + 1], other))
+                {
+                    return false;
+                }
+            }
+            else if (cur != null)
+            {
+                K key = this.nonSentinel(cur);
+                V value = (V) this.table[i + 1];
+                Object otherValue = other.get(key);
+                if (!nullSafeEquals(otherValue, value) || (value == null && otherValue == null && !other.containsKey(key)))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private boolean chainedEquals(Object[] chain, Map<?, ?> other)
+    {
+        for (int i = 0; i < chain.length; i += 2)
+        {
+            Object cur = chain[i];
+            if (cur == null)
+            {
+                return true;
+            }
+            K key = this.nonSentinel(cur);
+            V value = (V) chain[i + 1];
+            Object otherValue = other.get(key);
+            if (!nullSafeEquals(otherValue, value) || (value == null && otherValue == null && !other.containsKey(key)))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

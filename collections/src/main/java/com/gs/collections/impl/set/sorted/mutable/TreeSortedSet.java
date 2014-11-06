@@ -62,6 +62,7 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -101,8 +102,7 @@ import com.gs.collections.impl.utility.internal.SetIterables;
 import com.gs.collections.impl.utility.internal.SetIterate;
 import com.gs.collections.impl.utility.internal.SortedSetIterables;
 
-public final class TreeSortedSet<T>
-        extends AbstractMutableCollection<T>
+public class TreeSortedSet<T> extends AbstractMutableCollection<T>
         implements Externalizable, MutableSortedSet<T>
 {
     private static final long serialVersionUID = 1L;
@@ -232,7 +232,7 @@ public final class TreeSortedSet<T>
     @Override
     public boolean containsAll(Collection<?> collection)
     {
-        return this.treeSet.containsAll(collection);
+        return Iterate.allSatisfyWith(collection, Predicates2.in(), this.treeSet);
     }
 
     public void clear()
@@ -258,7 +258,18 @@ public final class TreeSortedSet<T>
     @Override
     public boolean equals(Object object)
     {
-        return this.treeSet.equals(object);
+        if (this == object)
+        {
+            return true;
+        }
+
+        if (!(object instanceof Set))
+        {
+            return false;
+        }
+
+        Set<?> other = (Set<?>) object;
+        return other.equals(this.treeSet);
     }
 
     @Override
