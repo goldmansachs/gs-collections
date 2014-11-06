@@ -20,6 +20,7 @@ import java.util.Comparator;
 
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -169,6 +170,12 @@ public interface ParallelIterable<T>
     <V extends Comparable<? super V>> MutableSortedSet<T> toSortedSetBy(Function<? super T, ? extends V> function);
 
     MutableBag<T> toBag();
+
+    MutableSortedBag<T> toSortedBag();
+
+    MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator);
+
+    <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function);
 
     <NK, NV> MutableMap<NK, NV> toMap(Function<? super T, ? extends NK> keyFunction, Function<? super T, ? extends NV> valueFunction);
 

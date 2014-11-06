@@ -19,9 +19,11 @@ body(type, name) ::= <<
 
 package com.gs.collections.impl.map.immutable.primitive;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -39,6 +41,7 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
 import com.gs.collections.api.partition.PartitionIterable;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
@@ -658,6 +661,50 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
         ShortArrayList target = new ShortArrayList();
         Assert.assertSame(target, this.classUnderTest().collectShort(Short::parseShort, target));
         Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void toSortedBag()
+    {
+        Immutable<name>ObjectMap\<String> map1 = this.classUnderTest();
+        Immutable<name>ObjectMap\<String> map2 = this.classUnderTest();
+
+        Verify.assertSortedBagsEqual(TreeBag.newBag(), map1.toSortedBag());
+        Verify.assertSortedBagsEqual(TreeBag.newBag(Comparator.\<String>reverseOrder()), map2.toSortedBag(Comparator.\<String>reverseOrder()));
+    }
+
+    @Override
+    @Test
+    public void toSortedBagBy()
+    {
+        Immutable<name>ObjectMap\<String> map1 = this.classUnderTest();
+
+        Verify.assertSortedBagsEqual(TreeBag.newBag(Comparators.byFunction(String::valueOf)), map1.toSortedBagBy(String::valueOf));
+    }
+
+    @Test
+    public void toSortedBag_empty()
+    {
+        Immutable<name>ObjectMap\<String> map1 = this.classUnderTest();
+
+        MutableSortedBag sortedBag = map1.toSortedBag(Comparator.reverseOrder());
+        sortedBag.addOccurrences("apple", 3);
+        sortedBag.addOccurrences("orange", 2);
+
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.reverseNaturalOrder(), "orange", "orange", "apple", "apple", "apple"), sortedBag);
+    }
+
+    @Test
+    public void toSortedBagBy_empty()
+    {
+        Immutable<name>ObjectMap\<Integer> map = new Immutable<name>ObjectEmptyMap\<Integer>();
+        Function\<Integer, Integer> function = object -> object * -1;
+        MutableSortedBag\<Integer> sortedBag = map.toSortedBagBy(function);
+        sortedBag.addOccurrences(1, 3);
+        sortedBag.addOccurrences(10, 2);
+
+        Verify.assertSortedBagsEqual(TreeBag.\<Integer>newBagWith(Comparators.byFunction(function), 10, 10, 1, 1, 1), sortedBag);
     }
 }
 

@@ -35,6 +35,7 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.ShortIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -60,6 +61,7 @@ import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -581,6 +583,27 @@ public abstract class MapIterableTestCase
 
         MutableBag<String> bag = map.toBag();
         Assert.assertEquals(Bags.mutable.of("One", "Two", "Three"), bag);
+    }
+
+    @Test
+    public void toSortedBag()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+
+        MutableSortedBag<Integer> sorted = map.toSortedBag();
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 2, 3, 4), sorted);
+
+        MutableSortedBag<Integer> reverse = map.toSortedBag(Collections.<Integer>reverseOrder());
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4), reverse);
+    }
+
+    @Test
+    public void toSortedBagBy()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+
+        MutableSortedBag<Integer> sorted = map.toSortedBagBy(String::valueOf);
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 2, 3, 4), sorted);
     }
 
     @Test

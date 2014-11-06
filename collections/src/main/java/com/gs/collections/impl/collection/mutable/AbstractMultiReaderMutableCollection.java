@@ -24,6 +24,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -340,6 +341,46 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         try
         {
             return this.getDelegate().toBag();
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableSortedBag<T> toSortedBag()
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().toSortedBag();
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().toSortedBag(comparator);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(
+            Function<? super T, ? extends V> function)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().toSortedBagBy(function);
         }
         finally
         {
@@ -1550,6 +1591,21 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         public MutableBag<T> toBag()
         {
             return this.delegate.toBag();
+        }
+
+        public MutableSortedBag<T> toSortedBag()
+        {
+            return this.delegate.toSortedBag();
+        }
+
+        public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+        {
+            return this.delegate.toSortedBag(comparator);
+        }
+
+        public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
+        {
+            return this.delegate.toSortedBagBy(function);
         }
 
         public MutableList<T> toSortedList()

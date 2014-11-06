@@ -16,10 +16,14 @@
 
 package com.gs.collections.impl.set.sorted.mutable;
 
+import java.util.Collections;
 import java.util.TreeSet;
 
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.collection.mutable.AbstractSynchronizedCollectionTestCase;
@@ -87,5 +91,39 @@ public class SynchronizedSortedSetTest extends AbstractSynchronizedCollectionTes
         Verify.assertPostSerializedEqualsAndHashCode(integers);
         Verify.assertInstanceOf(SynchronizedSortedSet.class, SerializeTestHelper.serializeDeserialize(integers));
         Verify.assertInstanceOf(SynchronizedSortedSet.class, SerializeTestHelper.serializeDeserialize(this.newWith(1, 2, 3)));
+    }
+
+    @Override
+    @Test
+    public void toSortedBag_natural_ordering()
+    {
+        RichIterable<Integer> integers = this.newWith(1, 2, 5, 3, 4);
+        MutableSortedBag<Integer> bag = integers.toSortedBag();
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 2, 3, 4, 5), bag);
+    }
+
+    @Override
+    @Test
+    public void toSortedBag_with_comparator()
+    {
+        RichIterable<Integer> integers = this.newWith(2, 4, 1, 3);
+        MutableSortedBag<Integer> bag = integers.toSortedBag(Collections.<Integer>reverseOrder());
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Collections.<Integer>reverseOrder(), 4, 3, 2, 1), bag);
+    }
+
+    @Override
+    @Test(expected = NullPointerException.class)
+    public void toSortedBag_with_null()
+    {
+        this.newWith(3, 4, null, 1, 2).toSortedBag();
+    }
+
+    @Override
+    @Test
+    public void toSortedBagBy()
+    {
+        RichIterable<Integer> integers = this.newWith(2, 4, 1, 3);
+        MutableSortedBag<Integer> bag = integers.toSortedBagBy(String::valueOf);
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 2, 3, 4), bag);
     }
 }

@@ -43,6 +43,7 @@ import com.gs.collections.api.bag.primitive.MutableFloatBag;
 import com.gs.collections.api.bag.primitive.MutableIntBag;
 import com.gs.collections.api.bag.primitive.MutableLongBag;
 import com.gs.collections.api.bag.primitive.MutableShortBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -78,6 +79,8 @@ import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
+import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.primitive.IntToIntFunctions;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -1080,6 +1083,40 @@ public class HashBag<T>
     public MutableBag<T> toBag()
     {
         return HashBag.newBag(this);
+    }
+
+    @Override
+    public MutableSortedBag<T> toSortedBag()
+    {
+        final TreeBag<T> treeBag = TreeBag.newBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T item, int occurrences)
+            {
+                treeBag.addOccurrences(item, occurrences);
+            }
+        });
+        return treeBag;
+    }
+
+    @Override
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        final TreeBag<T> treeBag = TreeBag.newBag(comparator);
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T item, int occurrences)
+            {
+                treeBag.addOccurrences(item, occurrences);
+            }
+        });
+        return treeBag;
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
+    {
+        return this.toSortedBag(Comparators.byFunction(function));
     }
 
     @Override

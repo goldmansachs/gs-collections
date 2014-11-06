@@ -25,6 +25,7 @@ import java.util.Iterator;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -789,6 +790,30 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         synchronized (this.lock)
         {
             return this.delegate.toBag();
+        }
+    }
+
+    public MutableSortedBag<T> toSortedBag()
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.toSortedBag();
+        }
+    }
+
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.toSortedBag(comparator);
+        }
+    }
+
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.toSortedBagBy(function);
         }
     }
 

@@ -36,6 +36,7 @@ import com.gs.collections.api.bag.primitive.ImmutableFloatBag;
 import com.gs.collections.api.bag.primitive.ImmutableIntBag;
 import com.gs.collections.api.bag.primitive.ImmutableLongBag;
 import com.gs.collections.api.bag.primitive.ImmutableShortBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -81,6 +82,7 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.EmptyIterator;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
@@ -648,6 +650,21 @@ final class ImmutableEmptyBag<T>
     public MutableBag<T> toBag()
     {
         return Bags.mutable.of();
+    }
+
+    public MutableSortedBag<T> toSortedBag()
+    {
+        return TreeBag.newBag();
+    }
+
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        return TreeBag.newBag(comparator);
+    }
+
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
+    {
+        return TreeBag.newBag(Comparators.byFunction(function));
     }
 
     public MutableStack<T> toStack()

@@ -31,6 +31,7 @@ import com.gs.collections.api.LazyLongIterable;
 import com.gs.collections.api.LazyShortIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -72,6 +73,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -625,6 +627,25 @@ public abstract class AbstractLazyIterable<T>
         MutableBag<T> bag = Bags.mutable.of();
         this.forEachWith(Procedures2.<T>addToCollection(), bag);
         return bag;
+    }
+
+    public MutableSortedBag<T> toSortedBag()
+    {
+        MutableSortedBag<T> sortedBag = TreeBag.newBag();
+        this.forEachWith(Procedures2.<T>addToCollection(), sortedBag);
+        return sortedBag;
+    }
+
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        MutableSortedBag<T> sortedBag = TreeBag.newBag(comparator);
+        this.forEachWith(Procedures2.<T>addToCollection(), sortedBag);
+        return sortedBag;
+    }
+
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
+    {
+        return this.toSortedBag(Comparators.byFunction(function));
     }
 
     public MutableStack<T> toStack()

@@ -32,6 +32,7 @@ import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.ShortIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -554,6 +555,21 @@ public class UnmodifiableRichIterable<T>
     public MutableBag<T> toBag()
     {
         return this.iterable.toBag();
+    }
+
+    public MutableSortedBag<T> toSortedBag()
+    {
+        return this.iterable.toSortedBag();
+    }
+
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        return this.iterable.toSortedBag(comparator);
+    }
+
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
+    {
+        return this.iterable.toSortedBagBy(function);
     }
 
     public <NK, NV> MutableMap<NK, NV> toMap(

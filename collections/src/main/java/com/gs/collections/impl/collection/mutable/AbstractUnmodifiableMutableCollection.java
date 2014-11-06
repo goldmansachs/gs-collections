@@ -23,6 +23,7 @@ import java.util.Iterator;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -668,6 +669,21 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
     public MutableBag<T> toBag()
     {
         return this.getMutableCollection().toBag();
+    }
+
+    public MutableSortedBag<T> toSortedBag()
+    {
+        return this.getMutableCollection().toSortedBag();
+    }
+
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        return this.getMutableCollection().toSortedBag(comparator);
+    }
+
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
+    {
+        return this.getMutableCollection().toSortedBag(Comparators.byFunction(function));
     }
 
     public <NK, NV> MutableMap<NK, NV> toMap(

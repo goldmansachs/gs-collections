@@ -61,6 +61,7 @@ import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
@@ -1645,6 +1646,24 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         Assert.assertEquals(this.classUnderTest(), this.classUnderTest().toImmutable());
         Verify.assertInstanceOf(Immutable<name>ObjectMap.class, this.classUnderTest().toImmutable());
+    }
+
+    @Test
+    public void toSortedBag()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "zero", <(literal.(type))("9")>, "nine");
+        <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("5")>, "one", <(literal.(type))("9")>, "nine");
+
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith("zero", "zero", "nine"), map1.toSortedBag());
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparator.reverseOrder(), "one", "one", "nine"), map2.toSortedBag(Comparator.\<String>reverseOrder()));
+    }
+
+    @Test
+    public void toSortedBagBy()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "zero", <(literal.(type))("9")>, "nine");
+
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.byFunction(String::valueOf), "zero", "zero", "nine"), map1.toSortedBagBy(String::valueOf));
     }
 }
 

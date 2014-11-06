@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -1089,6 +1090,29 @@ public interface
      * @since 1.0
      */
     MutableBag<T> toBag();
+
+    /**
+     * Converts the collection to a MutableSortedBag implementation and sorts it using the natural order of the
+     * elements.
+     *
+     * @since 6.0
+     */
+    MutableSortedBag<T> toSortedBag();
+
+    /**
+     * Converts the collection to the MutableSortedBag implementation and sorts it using the specified comparator.
+     *
+     * @since 6.0
+     */
+    MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator);
+
+    /**
+     * Converts the collection to a MutableSortedBag implementation and sorts it based on the natural order of the
+     * attribute returned by {@code function}.
+     *
+     * @since 6.0
+     */
+    <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function);
 
     /**
      * Converts the collection to a MutableMap implementation using the specified key and value functions.

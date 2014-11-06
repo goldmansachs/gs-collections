@@ -31,6 +31,7 @@ import com.gs.collections.api.LazyLongIterable;
 import com.gs.collections.api.LazyShortIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -358,6 +359,21 @@ public class LazyIterableTestHelper<T> implements LazyIterable<T>
     }
 
     public MutableBag<T> toBag()
+    {
+        return null;
+    }
+
+    public MutableSortedBag<T> toSortedBag()
+    {
+        return null;
+    }
+
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        return null;
+    }
+
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
     {
         return null;
     }

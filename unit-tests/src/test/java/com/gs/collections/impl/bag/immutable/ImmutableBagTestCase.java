@@ -17,6 +17,7 @@
 package com.gs.collections.impl.bag.immutable;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -32,6 +33,7 @@ import com.gs.collections.api.bag.primitive.ImmutableFloatBag;
 import com.gs.collections.api.bag.primitive.ImmutableIntBag;
 import com.gs.collections.api.bag.primitive.ImmutableLongBag;
 import com.gs.collections.api.bag.primitive.ImmutableShortBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -56,6 +58,7 @@ import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -1171,5 +1174,26 @@ public abstract class ImmutableBagTestCase
     public void groupByUniqueKey()
     {
         this.newBag().groupByUniqueKey(Functions.getPassThru());
+    }
+
+    @Test
+    public void toSortedBag()
+    {
+        ImmutableBag<String> immutableBag = this.newBag();
+        MutableSortedBag<String> sortedBag = immutableBag.toSortedBag();
+
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith("1", "2", "2", "3", "3", "3", "4", "4", "4", "4"), sortedBag);
+
+        MutableSortedBag<String> reverse = immutableBag.toSortedBag(Comparator.<String>reverseOrder());
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparator.reverseOrder(), "1", "2", "2", "3", "3", "3", "4", "4", "4", "4"), reverse);
+    }
+
+    @Test
+    public void toSortedBagBy()
+    {
+        ImmutableBag<String> immutableBag = this.newBag();
+        MutableSortedBag<String> sortedBag = immutableBag.toSortedBagBy(String::valueOf);
+
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith("1", "2", "2", "3", "3", "3", "4", "4", "4", "4"), sortedBag);
     }
 }

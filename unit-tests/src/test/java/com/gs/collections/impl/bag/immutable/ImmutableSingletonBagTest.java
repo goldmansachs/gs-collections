@@ -16,15 +16,18 @@
 
 package com.gs.collections.impl.bag.immutable;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.AddFunction;
@@ -585,5 +588,28 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
         Assert.assertEquals(1, result.sizeDistinct());
         Assert.assertEquals(0, result.occurrencesOf(true));
         Assert.assertEquals(1, result.occurrencesOf(false));
+    }
+
+    @Override
+    @Test
+    public void toSortedBag()
+    {
+        ImmutableBag<String> immutableBag = this.newBag();
+        MutableSortedBag<String> sortedBag = immutableBag.toSortedBag();
+
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith("1"), sortedBag);
+
+        MutableSortedBag<String> reverse = immutableBag.toSortedBag(Comparator.<String>reverseOrder());
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparator.reverseOrder(), "1"), reverse);
+    }
+
+    @Override
+    @Test
+    public void toSortedBagBy()
+    {
+        ImmutableBag<String> immutableBag = this.newBag();
+        MutableSortedBag<String> sortedBag = immutableBag.toSortedBagBy(String::valueOf);
+
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith("1"), sortedBag);
     }
 }

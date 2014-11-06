@@ -23,6 +23,7 @@ import java.util.Comparator;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -61,6 +62,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -193,6 +195,21 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
     public MutableBag<T> toBag()
     {
         return HashBag.newBag(this);
+    }
+
+    public MutableSortedBag<T> toSortedBag()
+    {
+        return TreeBag.newBag(null, this);
+    }
+
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        return TreeBag.newBag(comparator, this);
+    }
+
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
+    {
+        return this.toSortedBag(Comparators.byFunction(function));
     }
 
     public <K, V> MutableMap<K, V> toMap(

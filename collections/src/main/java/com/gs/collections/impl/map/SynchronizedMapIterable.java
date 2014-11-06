@@ -24,6 +24,7 @@ import java.util.Iterator;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -555,6 +556,30 @@ public abstract class SynchronizedMapIterable<K, V>
         synchronized (this.lock)
         {
             return this.mapIterable.toBag();
+        }
+    }
+
+    public MutableSortedBag<V> toSortedBag()
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.toSortedBag();
+        }
+    }
+
+    public MutableSortedBag<V> toSortedBag(Comparator<? super V> comparator)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.toSortedBag(comparator);
+        }
+    }
+
+    public <A extends Comparable<? super A>> MutableSortedBag<V> toSortedBagBy(Function<? super V, ? extends A> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.toSortedBagBy(function);
         }
     }
 

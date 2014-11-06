@@ -24,6 +24,7 @@ import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -186,6 +187,21 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
     public MutableBag<V> toBag()
     {
         return this.valuesView().toBag();
+    }
+
+    public MutableSortedBag<V> toSortedBag()
+    {
+        return this.valuesView().toSortedBag();
+    }
+
+    public MutableSortedBag<V> toSortedBag(Comparator<? super V> comparator)
+    {
+        return this.valuesView().toSortedBag(comparator);
+    }
+
+    public <R extends Comparable<? super R>> MutableSortedBag<V> toSortedBagBy(Function<? super V, ? extends R> function)
+    {
+        return this.valuesView().toSortedBagBy(function);
     }
 
     public LazyIterable<V> asLazy()

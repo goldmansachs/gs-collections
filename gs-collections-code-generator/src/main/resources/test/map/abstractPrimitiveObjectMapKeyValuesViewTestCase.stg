@@ -52,6 +52,8 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.api.map.primitive.<name>ObjectMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -746,6 +748,30 @@ public abstract class Abstract<name>ObjectMapKeyValuesViewTestCase
         RichIterable\<<name>ObjectPair\<Integer>\> pairs = this.newWith(<(literal.(type))("2")>, 3, <(literal.(type))("1")>, 2, <(literal.(type))("3")>, 4);
         MutableList\<<name>ObjectPair\<Integer>\> list = pairs.toSortedListBy(String::valueOf);
         Assert.assertEquals(Lists.mutable.of(PrimitiveTuples.pair(<(literal.(type))("1")>, Integer.valueOf(2)), PrimitiveTuples.pair(<(literal.(type))("2")>, Integer.valueOf(3)), PrimitiveTuples.pair(<(literal.(type))("3")>, Integer.valueOf(4))), list);
+    }
+
+    @Test
+    public void toSortedBag_natural_ordering()
+    {
+        RichIterable\<<name>ObjectPair\<Integer>\> pairs = this.newWith(<(literal.(type))("2")>, 3, <(literal.(type))("1")>, 2, <(literal.(type))("3")>, 4);
+        MutableSortedBag\<<name>ObjectPair\<Integer>\> bag = pairs.toSortedBag();
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(PrimitiveTuples.pair(<(literal.(type))("1")>, Integer.valueOf(2)), PrimitiveTuples.pair(<(literal.(type))("2")>, Integer.valueOf(3)), PrimitiveTuples.pair(<(literal.(type))("3")>, Integer.valueOf(4))), bag);
+    }
+
+    @Test
+    public void toSortedBag_with_comparator()
+    {
+        RichIterable\<<name>ObjectPair\<Integer>\> pairs = this.newWith(<(literal.(type))("2")>, 3, <(literal.(type))("1")>, 2, <(literal.(type))("3")>, 4);
+        MutableSortedBag\<<name>ObjectPair\<Integer>\> bag = pairs.toSortedBag(Comparators.reverseNaturalOrder());
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.reverseNaturalOrder(), PrimitiveTuples.pair(<(literal.(type))("3")>, Integer.valueOf(4)), PrimitiveTuples.pair(<(literal.(type))("2")>, Integer.valueOf(3)), PrimitiveTuples.pair(<(literal.(type))("1")>, Integer.valueOf(2))), bag);
+    }
+
+    @Test
+    public void toSortedBagBy()
+    {
+        RichIterable\<<name>ObjectPair\<Integer>\> pairs = this.newWith(<(literal.(type))("2")>, 3, <(literal.(type))("1")>, 2, <(literal.(type))("3")>, 4);
+        MutableSortedBag\<<name>ObjectPair\<Integer>\> bag = pairs.toSortedBagBy(String::valueOf);
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(PrimitiveTuples.pair(<(literal.(type))("1")>, Integer.valueOf(2)), PrimitiveTuples.pair(<(literal.(type))("2")>, Integer.valueOf(3)), PrimitiveTuples.pair(<(literal.(type))("3")>, Integer.valueOf(4))), bag);
     }
 
     @Test

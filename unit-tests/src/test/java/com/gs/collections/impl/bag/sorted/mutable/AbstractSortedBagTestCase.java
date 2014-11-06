@@ -1593,6 +1593,36 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Assert.assertEquals(3, aggregation.get("3").intValue());
     }
 
+    @Override
+    @Test
+    public void toSortedBag_natural_ordering()
+    {
+        super.toSortedBag_natural_ordering();
+        RichIterable<Integer> integers = this.newWith(Comparator.<Integer>reverseOrder(), 2, 2, 2, 1, 1);
+        MutableSortedBag<Integer> bag = integers.toSortedBag();
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 1, 2, 2, 2), bag);
+    }
+
+    @Override
+    @Test
+    public void toSortedBag_with_comparator()
+    {
+        super.toSortedList_with_comparator();
+        RichIterable<Integer> integers = this.newWith(2, 4, 4, 1);
+        MutableSortedBag<Integer> bag = integers.toSortedBag(Collections.<Integer>reverseOrder());
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Collections.<Integer>reverseOrder(), 4, 4, 2, 1), bag);
+    }
+
+    @Override
+    @Test
+    public void toSortedBagBy()
+    {
+        super.toSortedBagBy();
+        RichIterable<Integer> integers = this.newWith(2, 2, 1, 1);
+        MutableSortedBag<Integer> bag = integers.toSortedBagBy(String::valueOf);
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 2, 2, 1), bag);
+    }
+
     // Like Integer, but not Comparable
     public static final class Holder
     {

@@ -17,11 +17,13 @@
 package com.gs.collections.impl.bag.immutable;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.list.MutableList;
@@ -31,6 +33,7 @@ import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -469,5 +472,62 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     public void groupByUniqueKey()
     {
         Assert.assertEquals(UnifiedMap.newMap().toImmutable(), this.newBag().groupByUniqueKey(Functions.getPassThru()));
+    }
+
+    @Override
+    @Test
+    public void toSortedBag()
+    {
+        ImmutableBag<String> immutableBag = this.newBag();
+        MutableSortedBag<String> sortedBag = immutableBag.toSortedBag();
+
+        Verify.assertSortedBagsEqual(TreeBag.newBag(), sortedBag);
+
+        MutableSortedBag<String> reverse = immutableBag.toSortedBag(Comparator.<String>reverseOrder());
+        Verify.assertSortedBagsEqual(TreeBag.newBag(Comparator.<String>reverseOrder()), reverse);
+
+        ImmutableBag<String> immutableBag1 = this.newBag();
+        MutableSortedBag<String> sortedBag1 = immutableBag1.toSortedBag(Comparator.reverseOrder());
+        Verify.assertSortedBagsEqual(TreeBag.newBag(), sortedBag1.toSortedBag());
+
+        ImmutableBag<String> immutableBag2 = this.newBag();
+        MutableSortedBag<String> sortedBag2 = immutableBag2.toSortedBag(Comparator.reverseOrder());
+        Verify.assertSortedBagsEqual(TreeBag.newBag(Comparator.<String>reverseOrder()), sortedBag2);
+    }
+
+    @Test
+    public void toSortedBag_empty()
+    {
+        ImmutableBag<String> immutableBag = Bags.immutable.of();
+
+        MutableSortedBag<String> sortedBag = immutableBag.toSortedBag(Comparators.reverseNaturalOrder());
+        sortedBag.addOccurrences("apple", 3);
+        sortedBag.addOccurrences("orange", 2);
+
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.reverseNaturalOrder(), "orange", "orange", "apple", "apple", "apple"), sortedBag);
+    }
+
+    @Test
+    public void toSortedBagBy_empty()
+    {
+        ImmutableBag<Integer> immutableBag = Bags.immutable.of();
+
+        Function<Integer, Integer> function = object -> object * -1;
+        MutableSortedBag<Integer> sortedBag = immutableBag.toSortedBagBy(function);
+        sortedBag.addOccurrences(1, 3);
+        sortedBag.addOccurrences(10, 2);
+
+        Verify.assertSortedBagsEqual(TreeBag.<Integer>newBagWith(Comparators.byFunction(function), 10, 10, 1, 1, 1), sortedBag);
+    }
+
+    @Override
+    @Test
+    public void toSortedBagBy()
+    {
+        ImmutableBag<String> immutableBag = this.newBag();
+        MutableSortedBag<String> sortedBag = immutableBag.toSortedBagBy(String::valueOf);
+        TreeBag<Object> expectedBag = TreeBag.newBag(Comparators.byFunction(String::valueOf));
+
+        Verify.assertSortedBagsEqual(expectedBag, sortedBag);
     }
 }

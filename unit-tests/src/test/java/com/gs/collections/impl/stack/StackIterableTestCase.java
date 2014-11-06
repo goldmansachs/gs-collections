@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.sorted.SortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -37,8 +38,10 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.ListMultimap;
 import com.gs.collections.api.partition.stack.PartitionStack;
 import com.gs.collections.api.set.SetIterable;
+import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.StackIterable;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -964,13 +967,14 @@ public abstract class StackIterableTestCase
     @Test
     public void toSortedSet()
     {
-        SetIterable<Integer> expected = TreeSortedSet.newSetWith(1, 2, 4, 5);
+        MutableSortedSet<Integer> expected = TreeSortedSet.newSetWith(1, 2, 4, 5);
         StackIterable<Integer> stack = this.newStackWith(2, 1, 5, 4);
 
         Assert.assertEquals(expected, stack.toSortedSet());
         Assert.assertEquals(FastList.newListWith(1, 2, 4, 5), stack.toSortedSet().toList());
 
-        Assert.assertEquals(expected, stack.toSortedSet(Comparators.reverseNaturalOrder()));
+        MutableSortedSet<Integer> reversed = stack.toSortedSet(Comparators.reverseNaturalOrder());
+        Verify.assertSortedSetsEqual(reversed, stack.toSortedSet(Comparators.reverseNaturalOrder()));
         Assert.assertEquals(
                 FastList.newListWith(5, 4, 2, 1),
                 stack.toSortedSet(Comparators.reverseNaturalOrder()).toList());
@@ -995,6 +999,33 @@ public abstract class StackIterableTestCase
     {
         Assert.assertEquals(Bags.mutable.of("C", "B", "A"),
                 this.newStackFromTopToBottom("C", "B", "A").toBag());
+    }
+
+    @Test
+    public void toSortedBag()
+    {
+        SortedBag<Integer> expected = TreeBag.newBagWith(1, 2, 2, 4, 5);
+        StackIterable<Integer> stack = this.newStackWith(2, 2, 1, 5, 4);
+
+        Verify.assertSortedBagsEqual(expected, stack.toSortedBag());
+        Assert.assertEquals(FastList.newListWith(1, 2, 2, 4, 5), stack.toSortedBag().toList());
+
+        SortedBag<Integer> expected2 = TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 2, 2, 4, 5);
+        Verify.assertSortedBagsEqual(expected2, stack.toSortedBag(Comparators.reverseNaturalOrder()));
+        Assert.assertEquals(
+                FastList.newListWith(5, 4, 2, 2, 1),
+                stack.toSortedBag(Comparators.reverseNaturalOrder()).toList());
+    }
+
+    @Test
+    public void toSortedBagBy()
+    {
+        SortedBag<Integer> expected = TreeBag.newBagWith(1, 2, 3, 3, 4, 5);
+
+        StackIterable<Integer> stack = this.newStackWith(1, 2, 3, 3, 4, 5);
+        Verify.assertSortedBagsEqual(
+                expected,
+                stack.toSortedBagBy(String::valueOf));
     }
 
     @Test

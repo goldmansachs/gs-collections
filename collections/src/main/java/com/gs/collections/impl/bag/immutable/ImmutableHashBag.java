@@ -26,6 +26,7 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -463,6 +464,24 @@ public class ImmutableHashBag<T>
     public MutableBag<T> toBag()
     {
         return this.delegate.toBag();
+    }
+
+    @Override
+    public MutableSortedBag<T> toSortedBag()
+    {
+        return this.delegate.toSortedBag();
+    }
+
+    @Override
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        return this.delegate.toSortedBag(comparator);
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
+    {
+        return this.delegate.toSortedBagBy(function);
     }
 
     public ImmutableBag<T> toImmutable()

@@ -29,6 +29,7 @@ import java.util.Iterator;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -651,6 +652,21 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
     public MutableBag<T> toBag()
     {
         return this.delegate.asReversed().toBag();
+    }
+
+    public MutableSortedBag<T> toSortedBag()
+    {
+        return this.delegate.asReversed().toSortedBag();
+    }
+
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        return this.delegate.asReversed().toSortedBag(comparator);
+    }
+
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
+    {
+        return this.delegate.asReversed().toSortedBagBy(function);
     }
 
     public <NK, NV> MutableMap<NK, NV> toMap(Function<? super T, ? extends NK> keyFunction, Function<? super T, ? extends NV> valueFunction)

@@ -33,6 +33,7 @@ import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.ShortIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
@@ -64,6 +65,7 @@ import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -913,6 +915,36 @@ public abstract class AbstractRichIterableTestCase
     public void toSortedList_with_null()
     {
         this.newWith(2, 4, null, 1, 3).toSortedList();
+    }
+
+    @Test
+    public void toSortedBag_natural_ordering()
+    {
+        RichIterable<Integer> integers = this.newWith(2, 2, 5, 3, 4);
+        MutableSortedBag<Integer> bag = integers.toSortedBag();
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(2, 2, 3, 4, 5), bag);
+    }
+
+    @Test
+    public void toSortedBag_with_comparator()
+    {
+        RichIterable<Integer> integers = this.newWith(2, 4, 2, 3);
+        MutableSortedBag<Integer> bag = integers.toSortedBag(Collections.<Integer>reverseOrder());
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Collections.<Integer>reverseOrder(), 4, 3, 2, 2), bag);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void toSortedBag_with_null()
+    {
+        this.newWith(2, 4, null, 1, 2).toSortedBag();
+    }
+
+    @Test
+    public void toSortedBagBy()
+    {
+        RichIterable<Integer> integers = this.newWith(2, 4, 1, 3);
+        MutableSortedBag<Integer> bag = integers.toSortedBagBy(String::valueOf);
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 2, 3, 4), bag);
     }
 
     @Test

@@ -24,6 +24,7 @@ import java.util.Map;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -431,6 +432,21 @@ public class UnmodifiableMutableMap<K, V>
     public MutableBag<V> toBag()
     {
         return this.getMutableMap().toBag();
+    }
+
+    public MutableSortedBag<V> toSortedBag()
+    {
+        return this.getMutableMap().toSortedBag();
+    }
+
+    public MutableSortedBag<V> toSortedBag(Comparator<? super V> comparator)
+    {
+        return this.getMutableMap().toSortedBag(comparator);
+    }
+
+    public <R extends Comparable<? super R>> MutableSortedBag<V> toSortedBagBy(Function<? super V, ? extends R> function)
+    {
+        return this.getMutableMap().toSortedBagBy(function);
     }
 
     public LazyIterable<V> asLazy()

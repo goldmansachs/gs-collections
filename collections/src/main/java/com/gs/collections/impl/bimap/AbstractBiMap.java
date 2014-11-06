@@ -23,6 +23,7 @@ import java.util.Map;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.bimap.BiMap;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -230,6 +231,21 @@ public abstract class AbstractBiMap<K, V> implements BiMap<K, V>
     public MutableBag<V> toBag()
     {
         return this.getDelegate().toBag();
+    }
+
+    public MutableSortedBag<V> toSortedBag()
+    {
+        return this.getDelegate().toSortedBag();
+    }
+
+    public MutableSortedBag<V> toSortedBag(Comparator<? super V> comparator)
+    {
+        return this.getDelegate().toSortedBag(comparator);
+    }
+
+    public <VV extends Comparable<? super VV>> MutableSortedBag<V> toSortedBagBy(Function<? super V, ? extends VV> function)
+    {
+        return this.getDelegate().toSortedBagBy(function);
     }
 
     public <NK, NV> MutableMap<NK, NV> toMap(Function<? super V, ? extends NK> keyFunction, Function<? super V, ? extends NV> valueFunction)

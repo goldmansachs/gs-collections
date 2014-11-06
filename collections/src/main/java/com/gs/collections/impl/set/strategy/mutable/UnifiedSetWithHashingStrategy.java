@@ -31,6 +31,7 @@ import java.util.Set;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -86,6 +87,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -1282,6 +1284,22 @@ public class UnifiedSetWithHashingStrategy<K>
     public MutableBag<K> toBag()
     {
         return HashBag.newBag(this);
+    }
+
+    public MutableSortedBag<K> toSortedBag()
+    {
+        return TreeBag.newBag(this);
+    }
+
+    public MutableSortedBag<K> toSortedBag(Comparator<? super K> comparator)
+    {
+        return TreeBag.newBag(comparator, this);
+    }
+
+    public <V extends Comparable<? super V>> MutableSortedBag<K> toSortedBagBy(
+            Function<? super K, ? extends V> function)
+    {
+        return this.toSortedBag(Comparators.byFunction(function));
     }
 
     public <NK, NV> MutableMap<NK, NV> toMap(

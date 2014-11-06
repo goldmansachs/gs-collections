@@ -31,6 +31,7 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -50,6 +51,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
@@ -531,6 +533,25 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
         MutableBag<T> result = HashBag.<T>newBag().asSynchronized();
         this.forEach(CollectionAddProcedure.on(result));
         return result;
+    }
+
+    public MutableSortedBag<T> toSortedBag()
+    {
+        MutableSortedBag<T> result = TreeBag.<T>newBag().asSynchronized();
+        this.forEach(CollectionAddProcedure.on(result));
+        return result;
+    }
+
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        MutableSortedBag<T> result = TreeBag.newBag(comparator).asSynchronized();
+        this.forEach(CollectionAddProcedure.on(result));
+        return result;
+    }
+
+    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
+    {
+        return this.toSortedBag(Comparators.byFunction(function));
     }
 
     public MutableSortedSet<T> toSortedSet(Comparator<? super T> comparator)
