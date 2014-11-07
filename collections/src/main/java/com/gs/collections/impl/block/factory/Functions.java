@@ -192,9 +192,12 @@ public final class Functions
         return new ThrowingFunctionAdapter<T, V>(throwingFunction);
     }
 
+    /**
+     * @see #identity()
+     */
     public static <T> Function<T, T> getPassThru()
     {
-        return (Function<T, T>) PASS_THRU_FUNCTION;
+        return Functions.identity();
     }
 
     /**
