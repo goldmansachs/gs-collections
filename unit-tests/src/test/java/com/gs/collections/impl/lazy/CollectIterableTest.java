@@ -32,7 +32,7 @@ public class CollectIterableTest extends AbstractLazyIterableTestCase
     @Override
     protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return LazyIterate.collect(FastList.newListWith(elements), Functions.<T>getPassThru());
+        return LazyIterate.collect(FastList.newListWith(elements), Functions.<T>identity());
     }
 
     @Test

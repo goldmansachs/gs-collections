@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public final class MapCollectProcedure<T, K, V> implements Procedure<T>
 
     public MapCollectProcedure(Map<K, V> newMap, Function<? super T, ? extends K> newKeyFunction)
     {
-        this(newMap, newKeyFunction, (Function<T, V>) Functions.getPassThru());
+        this(newMap, newKeyFunction, (Function<T, V>) Functions.identity());
     }
 
     public MapCollectProcedure(Map<K, V> newMap, Function<? super T, ? extends K> newKeyFunction, Function<? super T, ? extends V> newValueFunction)

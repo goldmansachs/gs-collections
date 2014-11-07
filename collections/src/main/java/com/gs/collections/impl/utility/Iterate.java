@@ -1822,7 +1822,7 @@ public final class Iterate
      */
     public static <T> Collection<T> flatten(Iterable<? extends Iterable<T>> iterable)
     {
-        return Iterate.flatCollect(iterable, Functions.<Iterable<T>>getPassThru());
+        return Iterate.flatCollect(iterable, Functions.<Iterable<T>>identity());
     }
 
     /**
@@ -1830,7 +1830,7 @@ public final class Iterate
      */
     public static <T, R extends Collection<T>> R flatten(Iterable<? extends Iterable<T>> iterable, R targetCollection)
     {
-        return Iterate.flatCollect(iterable, Functions.<Iterable<T>>getPassThru(), targetCollection);
+        return Iterate.flatCollect(iterable, Functions.<Iterable<T>>identity(), targetCollection);
     }
 
     /**

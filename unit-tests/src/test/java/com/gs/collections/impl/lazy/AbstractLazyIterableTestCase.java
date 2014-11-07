@@ -840,6 +840,6 @@ public abstract class AbstractLazyIterableTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void groupByUniqueKey()
     {
-        this.newWith(1, 2, 3).groupByUniqueKey(Functions.getPassThru());
+        this.newWith(1, 2, 3).groupByUniqueKey(Functions.identity());
     }
 }

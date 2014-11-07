@@ -197,6 +197,14 @@ public final class Functions
         return (Function<T, T>) PASS_THRU_FUNCTION;
     }
 
+    /**
+     * @since 6.0
+     */
+    public static <T> Function<T, T> identity()
+    {
+        return (Function<T, T>) PASS_THRU_FUNCTION;
+    }
+
     public static <T, V> Function<T, V> getFixedValue(V value)
     {
         return new FixedValueFunction<T, V>(value);
