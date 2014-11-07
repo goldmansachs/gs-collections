@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -33,6 +34,8 @@ import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectIfProcedure;
@@ -40,8 +43,12 @@ import com.gs.collections.impl.block.procedure.FastListCollectProcedure;
 import com.gs.collections.impl.block.procedure.FastListRejectProcedure;
 import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 
@@ -239,7 +246,9 @@ public final class InternalArrayIterate
         return target;
     }
 
-    public static <T, V, R extends MutableMultimap<V, T>> R groupByEach(T[] array, int size,
+    public static <T, V, R extends MutableMultimap<V, T>> R groupByEach(
+            T[] array,
+            int size,
             Function<? super T, ? extends Iterable<V>> function,
             R target)
     {
@@ -294,6 +303,23 @@ public final class InternalArrayIterate
             bucket.add(each);
         }
         return partitionFastList;
+    }
+
+    /**
+     * @see Iterate#selectAndRejectWith(Iterable, Predicate2, Object)
+     * @deprecated since 6.0 use {@link RichIterable#partitionWith(Predicate2, Object)} instead.
+     */
+    @Deprecated
+    public static <T, P> Twin<MutableList<T>> selectAndRejectWith(T[] objectArray, int size, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        MutableList<T> positiveResult = Lists.mutable.of();
+        MutableList<T> negativeResult = Lists.mutable.of();
+        for (int i = 0; i < size; i++)
+        {
+            T each = objectArray[i];
+            (predicate.accept(each, parameter) ? positiveResult : negativeResult).add(each);
+        }
+        return Tuples.twin(positiveResult, negativeResult);
     }
 
     public static int indexOf(Object[] array, int size, Object object)
@@ -380,6 +406,20 @@ public final class InternalArrayIterate
             }
         }
         return target;
+    }
+
+    public static <T> FastList<T> selectInstancesOf(Object[] array, int size, Class<T> clazz)
+    {
+        FastList<T> results = FastList.newList(size);
+        for (int i = 0; i < size; i++)
+        {
+            Object each = array[i];
+            if (clazz.isInstance(each))
+            {
+                results.add((T) each);
+            }
+        }
+        return results;
     }
 
     public static <T, V, R extends Collection<V>> R collect(
@@ -714,5 +754,40 @@ public final class InternalArrayIterate
         {
             throw new RuntimeException(e);
         }
+    }
+
+    public static <T> int detectIndex(T[] objectArray, int size, Predicate<? super T> predicate)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            if (predicate.accept(objectArray[i]))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static <T> void forEachWithIndex(T[] objectArray, int size, ObjectIntProcedure<? super T> objectIntProcedure)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            objectIntProcedure.value(objectArray[i], i);
+        }
+    }
+
+    public static <T, R extends Collection<T>> R distinct(T[] objectArray, int size, R targetCollection)
+    {
+        MutableSet<T> seenSoFar = UnifiedSet.newSet();
+
+        for (int i = 0; i < size; i++)
+        {
+            T each = objectArray[i];
+            if (seenSoFar.add(each))
+            {
+                targetCollection.add(each);
+            }
+        }
+        return targetCollection;
     }
 }

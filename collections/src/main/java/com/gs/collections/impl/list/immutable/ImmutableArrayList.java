@@ -34,10 +34,10 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.partition.list.PartitionImmutableListImpl;
-import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
 import com.gs.collections.impl.utility.internal.InternalArrayIterate;
@@ -56,6 +56,10 @@ final class ImmutableArrayList<T>
 
     private ImmutableArrayList(T[] newElements)
     {
+        if (newElements == null)
+        {
+            throw new IllegalArgumentException("items cannot be null");
+        }
         this.items = newElements;
     }
 
@@ -67,6 +71,15 @@ final class ImmutableArrayList<T>
     public static <E> ImmutableArrayList<E> newListWith(E... elements)
     {
         return new ImmutableArrayList<E>(elements.clone());
+    }
+
+    public ImmutableList<T> newWith(T newItem)
+    {
+        int oldSize = this.size();
+        T[] array = (T[]) new Object[oldSize + 1];
+        this.toArray(array);
+        array[oldSize] = newItem;
+        return new ImmutableArrayList<T>(array);
     }
 
     @Override
@@ -118,19 +131,19 @@ final class ImmutableArrayList<T>
     @Override
     public boolean notEmpty()
     {
-        return ArrayIterate.notEmpty(this.items);
+        return this.items.length > 0;
     }
 
     @Override
     public T getFirst()
     {
-        return ArrayIterate.getFirst(this.items);
+        return this.isEmpty() ? null : this.items[0];
     }
 
     @Override
     public T getLast()
     {
-        return ArrayIterate.getLast(this.items);
+        return this.isEmpty() ? null : this.items[this.items.length - 1];
     }
 
     public void forEach(Procedure<? super T> procedure)
@@ -140,13 +153,16 @@ final class ImmutableArrayList<T>
 
     public void each(Procedure<? super T> procedure)
     {
-        ArrayIterate.forEach(this.items, procedure);
+        for (T each : this.items)
+        {
+            procedure.value(each);
+        }
     }
 
     @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        ArrayIterate.forEachWithIndex(this.items, objectIntProcedure);
+        InternalArrayIterate.forEachWithIndex(this.items, this.items.length, objectIntProcedure);
     }
 
     public void batchForEach(Procedure<? super T> procedure, int sectionIndex, int sectionCount)
@@ -166,14 +182,16 @@ final class ImmutableArrayList<T>
         InternalArrayIterate.forEachWithIndexWithoutChecks(this.items, from, to, objectIntProcedure);
     }
 
+    @Override
     public ImmutableList<T> select(Predicate<? super T> predicate)
     {
-        return ArrayIterate.select(this.items, predicate).toImmutable();
+        return InternalArrayIterate.select(this.items, this.items.length, predicate, FastList.<T>newList()).toImmutable();
     }
 
+    @Override
     public <P> ImmutableList<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return ArrayIterate.selectWith(this.items, predicate, parameter).toImmutable();
+        return InternalArrayIterate.selectWith(this.items, this.items.length, predicate, parameter, FastList.<T>newList()).toImmutable();
     }
 
     @Override
@@ -182,17 +200,19 @@ final class ImmutableArrayList<T>
             P parameter,
             R targetCollection)
     {
-        return ArrayIterate.selectWith(this.items, predicate, parameter, targetCollection);
+        return InternalArrayIterate.selectWith(this.items, this.items.length, predicate, parameter, targetCollection);
     }
 
+    @Override
     public ImmutableList<T> reject(Predicate<? super T> predicate)
     {
-        return ArrayIterate.reject(this.items, predicate).toImmutable();
+        return InternalArrayIterate.reject(this.items, this.items.length, predicate, FastList.<T>newList()).toImmutable();
     }
 
+    @Override
     public <P> ImmutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return ArrayIterate.rejectWith(this.items, predicate, parameter, FastList.<T>newList()).toImmutable();
+        return InternalArrayIterate.rejectWith(this.items, this.items.length, predicate, parameter, FastList.<T>newList()).toImmutable();
     }
 
     @Override
@@ -201,39 +221,45 @@ final class ImmutableArrayList<T>
             P parameter,
             R targetCollection)
     {
-        return ArrayIterate.rejectWith(this.items, predicate, parameter, targetCollection);
+        return InternalArrayIterate.rejectWith(this.items, this.items.length, predicate, parameter, targetCollection);
     }
 
+    @Override
     public PartitionImmutableList<T> partition(Predicate<? super T> predicate)
     {
-        return ArrayIterate.partition(this.items, predicate).toImmutable();
+        return InternalArrayIterate.partition(this.items, this.items.length, predicate).toImmutable();
     }
 
+    @Override
     public <P> PartitionImmutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return ArrayIterate.partitionWith(this.items, predicate, parameter).toImmutable();
+        return InternalArrayIterate.partitionWith(this.items, this.items.length, predicate, parameter).toImmutable();
     }
 
+    @Override
     public <S> ImmutableList<S> selectInstancesOf(Class<S> clazz)
     {
-        return ArrayIterate.selectInstancesOf(this.items, clazz).toImmutable();
+        return InternalArrayIterate.selectInstancesOf(this.items, this.items.length, clazz).toImmutable();
     }
 
+    @Override
     public <V> ImmutableList<V> collect(Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.collect(this.items, function).toImmutable();
+        return InternalArrayIterate.collect(this.items, this.items.length, function, FastList.<V>newList(this.items.length)).toImmutable();
     }
 
+    @Override
     public <P, V> ImmutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
-        return ArrayIterate.collectWith(this.items, function, parameter).toImmutable();
+        return InternalArrayIterate.collectWith(this.items, this.items.length, function, parameter, FastList.<V>newList(this.items.length)).toImmutable();
     }
 
+    @Override
     public <V> ImmutableList<V> collectIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.collectIf(this.items, predicate, function).toImmutable();
+        return InternalArrayIterate.collectIf(this.items, this.items.length, predicate, function, FastList.<V>newList(this.items.length)).toImmutable();
     }
 
     @Override
@@ -242,25 +268,25 @@ final class ImmutableArrayList<T>
             P parameter,
             R targetCollection)
     {
-        return ArrayIterate.collectWith(this.items, function, parameter, targetCollection);
-    }
-
-    public <V> ImmutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
-    {
-        return ArrayIterate.flatCollect(this.items, function).toImmutable();
+        return InternalArrayIterate.collectWith(this.items, this.items.length, function, parameter, targetCollection);
     }
 
     @Override
-    public <V, R extends Collection<V>> R flatCollect(
-            Function<? super T, ? extends Iterable<V>> function, R target)
+    public <V> ImmutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        return ArrayIterate.flatCollect(this.items, function, target);
+        return InternalArrayIterate.flatCollect(this.items, this.items.length, function, FastList.<V>newList(this.items.length)).toImmutable();
+    }
+
+    @Override
+    public <V, R extends Collection<V>> R flatCollect(Function<? super T, ? extends Iterable<V>> function, R target)
+    {
+        return InternalArrayIterate.flatCollect(this.items, this.items.length, function, target);
     }
 
     @Override
     public T detect(Predicate<? super T> predicate)
     {
-        return ArrayIterate.detect(this.items, predicate);
+        return InternalArrayIterate.detect(this.items, this.items.length, predicate);
     }
 
     @Override
@@ -273,31 +299,36 @@ final class ImmutableArrayList<T>
     @Override
     public int count(Predicate<? super T> predicate)
     {
-        return ArrayIterate.count(this.items, predicate);
+        return InternalArrayIterate.count(this.items, this.items.length, predicate);
     }
 
     @Override
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return ArrayIterate.anySatisfy(this.items, predicate);
+        return InternalArrayIterate.anySatisfy(this.items, this.items.length, predicate);
     }
 
     @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return ArrayIterate.allSatisfy(this.items, predicate);
+        return InternalArrayIterate.allSatisfy(this.items, this.items.length, predicate);
     }
 
     @Override
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
-        return ArrayIterate.noneSatisfy(this.items, predicate);
+        return InternalArrayIterate.noneSatisfy(this.items, this.items.length, predicate);
     }
 
     @Override
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return ArrayIterate.injectInto(injectedValue, this.items, function);
+        IV result = injectedValue;
+        for (T each : this.items)
+        {
+            result = function.value(result, each);
+        }
+        return result;
     }
 
     public int size()
@@ -308,13 +339,13 @@ final class ImmutableArrayList<T>
     @Override
     public boolean isEmpty()
     {
-        return ArrayIterate.isEmpty(this.items);
+        return this.items.length == 0;
     }
 
     @Override
     public boolean contains(Object o)
     {
-        return this.anySatisfy(Predicates.equal(o));
+        return InternalArrayIterate.anySatisfyWith(this.items, this.items.length, Predicates2.equal(), o);
     }
 
     @Override
@@ -387,34 +418,25 @@ final class ImmutableArrayList<T>
     @Override
     public int indexOf(Object item)
     {
-        return ArrayIterate.indexOf(this.items, item);
+        return InternalArrayIterate.indexOf(this.items, this.items.length, item);
     }
 
     @Override
     public int lastIndexOf(Object item)
     {
-        return Arrays.asList(this.items).lastIndexOf(item);
-    }
-
-    public ImmutableList<T> newWith(T newItem)
-    {
-        int oldSize = this.size();
-        T[] array = (T[]) new Object[oldSize + 1];
-        this.toArray(array);
-        array[oldSize] = newItem;
-        return new ImmutableArrayList<T>(array);
+        return InternalArrayIterate.lastIndexOf(this.items, this.items.length, item);
     }
 
     @Override
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.minBy(this.items, function);
+        return InternalArrayIterate.minBy(this.items, this.items.length, function);
     }
 
     @Override
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.maxBy(this.items, function);
+        return InternalArrayIterate.maxBy(this.items, this.items.length, function);
     }
 
     @Override

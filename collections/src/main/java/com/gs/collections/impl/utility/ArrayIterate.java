@@ -61,10 +61,8 @@ import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
-import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
@@ -81,7 +79,6 @@ import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.internal.InternalArrayIterate;
 
@@ -247,22 +244,7 @@ public final class ArrayIterate
             throw new IllegalArgumentException("Cannot perform a selectInstancesOf on null");
         }
 
-        return ArrayIterate.selectInstancesOf(objectArray, objectArray.length, clazz);
-    }
-
-    public static <T> FastList<T> selectInstancesOf(Object[] array, int size, Class<T> clazz)
-    {
-        FastList<T> results = FastList.newList(array.length);
-        for (int i = 0; i < size; i++)
-        {
-            Object each = array[i];
-            if (clazz.isInstance(each))
-            {
-                results.add((T) each);
-            }
-        }
-        results.trimToSize();
-        return results;
+        return InternalArrayIterate.selectInstancesOf(objectArray, objectArray.length, clazz);
     }
 
     /**
@@ -294,23 +276,20 @@ public final class ArrayIterate
 
     /**
      * @see Iterate#selectAndRejectWith(Iterable, Predicate2, Object)
+     * @deprecated since 6.0 use {@link RichIterable#partitionWith(Predicate2, Object)} instead.
      */
+    @Deprecated
     public static <T, P> Twin<MutableList<T>> selectAndRejectWith(
             T[] objectArray,
-            Predicate2<? super T, ? super P> predicate, P parameter)
+            Predicate2<? super T, ? super P> predicate,
+            P parameter)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a selectAndRejectWith on null");
         }
 
-        MutableList<T> positiveResult = Lists.mutable.of();
-        MutableList<T> negativeResult = Lists.mutable.of();
-        for (T each : objectArray)
-        {
-            (predicate.accept(each, parameter) ? positiveResult : negativeResult).add(each);
-        }
-        return Tuples.twin(positiveResult, negativeResult);
+        return InternalArrayIterate.selectAndRejectWith(objectArray, objectArray.length, predicate, parameter);
     }
 
     /**
@@ -775,11 +754,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a flatCollect on null");
         }
-        for (T each : objectArray)
-        {
-            Iterate.addAllIterable(function.valueOf(each), targetCollection);
-        }
-        return targetCollection;
+        return InternalArrayIterate.flatCollect(objectArray, objectArray.length, function, targetCollection);
     }
 
     /**
@@ -875,11 +850,7 @@ public final class ArrayIterate
             throw new IllegalArgumentException("Cannot perform a forEachWithIndex on null");
         }
 
-        int size = objectArray.length;
-        for (int i = 0; i < size; i++)
-        {
-            objectIntProcedure.value(objectArray[i], i);
-        }
+        InternalArrayIterate.forEachWithIndex(objectArray, objectArray.length, objectIntProcedure);
     }
 
     /**
@@ -965,12 +936,9 @@ public final class ArrayIterate
             throw new IllegalArgumentException("Cannot perform an injectInto on null");
         }
         IV result = injectValue;
-        if (ArrayIterate.notEmpty(objectArray))
+        for (T each : objectArray)
         {
-            for (T each : objectArray)
-            {
-                result = function.value(result, each);
-            }
+            result = function.value(result, each);
         }
         return result;
     }
@@ -1050,16 +1018,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a distinct on null");
         }
-        MutableSet<T> seenSoFar = UnifiedSet.newSet();
-
-        for (T each : objectArray)
-        {
-            if (seenSoFar.add(each))
-            {
-                targetCollection.add(each);
-            }
-        }
-        return targetCollection;
+        return InternalArrayIterate.distinct(objectArray, objectArray.length, targetCollection);
     }
 
     /**
@@ -1121,7 +1080,7 @@ public final class ArrayIterate
      */
     public static <T> int indexOf(T[] objectArray, T elem)
     {
-        return ArrayIterate.detectIndex(objectArray, Predicates.equal(elem));
+        return InternalArrayIterate.indexOf(objectArray, objectArray.length, elem);
     }
 
     /**
@@ -1133,14 +1092,7 @@ public final class ArrayIterate
         {
             throw new IllegalArgumentException("Cannot perform a detectIndex on null");
         }
-        for (int i = 0; i < objectArray.length; i++)
-        {
-            if (predicate.accept(objectArray[i]))
-            {
-                return i;
-            }
-        }
-        return -1;
+        return InternalArrayIterate.detectIndex(objectArray, objectArray.length, predicate);
     }
 
     /**

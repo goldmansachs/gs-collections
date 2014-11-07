@@ -76,7 +76,6 @@ import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
-import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -104,8 +103,6 @@ import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.partition.list.PartitionFastList;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
-import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.ArrayListIterate;
 import com.gs.collections.impl.utility.Iterate;
@@ -558,10 +555,7 @@ public class FastList<T>
     @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        for (int i = 0; i < this.size; i++)
-        {
-            objectIntProcedure.value(this.items[i], i);
-        }
+        InternalArrayIterate.forEachWithIndex(this.items, this.size, objectIntProcedure);
     }
 
     @Override
@@ -632,20 +626,13 @@ public class FastList<T>
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        MutableList<T> positiveResult = FastList.newList();
-        MutableList<T> negativeResult = FastList.newList();
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            (predicate.accept(item, parameter) ? positiveResult : negativeResult).add(item);
-        }
-        return Tuples.twin(positiveResult, negativeResult);
+        return InternalArrayIterate.selectAndRejectWith(this.items, this.size, predicate, parameter);
     }
 
     @Override
     public <S> FastList<S> selectInstancesOf(Class<S> clazz)
     {
-        return ArrayIterate.selectInstancesOf(this.items, this.size, clazz);
+        return InternalArrayIterate.selectInstancesOf(this.items, this.size, clazz);
     }
 
     @Override
@@ -1228,16 +1215,7 @@ public class FastList<T>
     @Override
     public FastList<T> distinct()
     {
-        MutableSet<T> seenSoFar = UnifiedSet.newSet();
-        FastList<T> targetCollection = FastList.newList();
-        for (int i = 0; i < this.size(); i++)
-        {
-            if (seenSoFar.add(this.items[i]))
-            {
-                targetCollection.add(this.items[i]);
-            }
-        }
-        return targetCollection;
+        return InternalArrayIterate.distinct(this.items, this.size, FastList.<T>newList());
     }
 
     @Override

@@ -35,19 +35,20 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.list.mutable.AbstractMutableList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.ListAdapter;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.ListIterate;
 import com.gs.collections.impl.utility.internal.InternalArrayIterate;
 
 public abstract class AbstractArrayAdapter<T>
         extends AbstractMutableList<T>
         implements RandomAccess
 {
+    private static final Object[] OBJECTS = {};
     protected T[] items;
 
     /**
@@ -55,29 +56,34 @@ public abstract class AbstractArrayAdapter<T>
      */
     protected AbstractArrayAdapter()
     {
+        this.items = (T[]) OBJECTS;
     }
 
     protected AbstractArrayAdapter(T[] newElements)
     {
+        if (newElements == null)
+        {
+            throw new IllegalArgumentException("items cannot be null");
+        }
         this.items = newElements;
     }
 
     @Override
     public boolean notEmpty()
     {
-        return ArrayIterate.notEmpty(this.items);
+        return this.items.length > 0;
     }
 
     @Override
     public T getFirst()
     {
-        return ArrayIterate.getFirst(this.items);
+        return this.isEmpty() ? null : this.items[0];
     }
 
     @Override
     public T getLast()
     {
-        return ArrayIterate.getLast(this.items);
+        return this.isEmpty() ? null : this.items[this.items.length - 1];
     }
 
     @Override
@@ -99,17 +105,14 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        int size = this.items.length;
-        for (int i = 0; i < size; i++)
-        {
-            objectIntProcedure.value(this.items[i], i);
-        }
+        InternalArrayIterate.forEachWithIndex(this.items, this.items.length, objectIntProcedure);
     }
 
     @Override
     public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        ArrayIterate.forEachWithIndex(this.items, fromIndex, toIndex, objectIntProcedure);
+        ListIterate.rangeCheck(fromIndex, toIndex, this.items.length);
+        InternalArrayIterate.forEachWithIndexWithoutChecks(this.items, fromIndex, toIndex, objectIntProcedure);
     }
 
     @Override
@@ -127,7 +130,7 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public T detect(Predicate<? super T> predicate)
     {
-        return ArrayIterate.detect(this.items, predicate);
+        return InternalArrayIterate.detect(this.items, this.items.length, predicate);
     }
 
     @Override
@@ -140,25 +143,25 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public int count(Predicate<? super T> predicate)
     {
-        return ArrayIterate.count(this.items, predicate);
+        return InternalArrayIterate.count(this.items, this.items.length, predicate);
     }
 
     @Override
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return ArrayIterate.anySatisfy(this.items, predicate);
+        return InternalArrayIterate.anySatisfy(this.items, this.items.length, predicate);
     }
 
     @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return ArrayIterate.allSatisfy(this.items, predicate);
+        return InternalArrayIterate.allSatisfy(this.items, this.items.length, predicate);
     }
 
     @Override
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
-        return ArrayIterate.noneSatisfy(this.items, predicate);
+        return InternalArrayIterate.noneSatisfy(this.items, this.items.length, predicate);
     }
 
     @Override
@@ -176,7 +179,7 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
     {
-        return ArrayIterate.select(this.items, predicate, target);
+        return InternalArrayIterate.select(this.items, this.items.length, predicate, target);
     }
 
     @Override
@@ -188,7 +191,7 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
     {
-        return ArrayIterate.reject(this.items, predicate, target);
+        return InternalArrayIterate.reject(this.items, this.items.length, predicate, target);
     }
 
     @Override
@@ -200,7 +203,7 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {
-        return ArrayIterate.collect(this.items, function, target);
+        return InternalArrayIterate.collect(this.items, this.items.length, function, target);
     }
 
     @Override
@@ -215,19 +218,19 @@ public abstract class AbstractArrayAdapter<T>
     public <V, R extends Collection<V>> R collectIf(
             Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
-        return ArrayIterate.collectIf(this.items, predicate, function, target);
+        return InternalArrayIterate.collectIf(this.items, this.items.length, predicate, function, target);
     }
 
     @Override
     public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        return ArrayIterate.flatCollect(this.items, function);
+        return InternalArrayIterate.flatCollect(this.items, this.items.length, function, FastList.<V>newList(this.items.length));
     }
 
     @Override
     public <V, R extends Collection<V>> R flatCollect(Function<? super T, ? extends Iterable<V>> function, R target)
     {
-        return ArrayIterate.flatCollect(this.items, function, target);
+        return InternalArrayIterate.flatCollect(this.items, this.items.length, function, target);
     }
 
     @Override
@@ -235,7 +238,7 @@ public abstract class AbstractArrayAdapter<T>
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return ArrayIterate.selectAndRejectWith(this.items, predicate, parameter);
+        return InternalArrayIterate.selectAndRejectWith(this.items, this.items.length, predicate, parameter);
     }
 
     public int size()
@@ -246,13 +249,13 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public boolean isEmpty()
     {
-        return ArrayIterate.isEmpty(this.items);
+        return this.items.length == 0;
     }
 
     @Override
     public boolean contains(Object o)
     {
-        return this.anySatisfy(Predicates.equal(o));
+        return InternalArrayIterate.anySatisfyWith(this.items, this.items.length, Predicates2.equal(), o);
     }
 
     @Override
@@ -370,13 +373,13 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public int indexOf(Object item)
     {
-        return ArrayIterate.indexOf(this.items, item);
+        return InternalArrayIterate.indexOf(this.items, this.items.length, item);
     }
 
     @Override
     public int lastIndexOf(Object item)
     {
-        return Arrays.asList(this.items).lastIndexOf(item);
+        return InternalArrayIterate.lastIndexOf(this.items, this.items.length, item);
     }
 
     @Override
@@ -438,7 +441,10 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
-        ArrayIterate.forEachWith(this.items, procedure, parameter);
+        for (T each : this.items)
+        {
+            procedure.value(each, parameter);
+        }
     }
 
     @Override
@@ -453,7 +459,7 @@ public abstract class AbstractArrayAdapter<T>
             P parameter,
             R targetCollection)
     {
-        return ArrayIterate.selectWith(this.items, predicate, parameter, targetCollection);
+        return InternalArrayIterate.selectWith(this.items, this.items.length, predicate, parameter, targetCollection);
     }
 
     @Override
@@ -468,7 +474,7 @@ public abstract class AbstractArrayAdapter<T>
             P parameter,
             R targetCollection)
     {
-        return ArrayIterate.rejectWith(this.items, predicate, parameter, targetCollection);
+        return InternalArrayIterate.rejectWith(this.items, this.items.length, predicate, parameter, targetCollection);
     }
 
     @Override
@@ -481,7 +487,7 @@ public abstract class AbstractArrayAdapter<T>
     public <P, A, R extends Collection<A>> R collectWith(
             Function2<? super T, ? super P, ? extends A> function, P parameter, R targetCollection)
     {
-        return ArrayIterate.collectWith(this.items, function, parameter, targetCollection);
+        return InternalArrayIterate.collectWith(this.items, this.items.length, function, parameter, targetCollection);
     }
 
     @Override
@@ -494,13 +500,14 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
     {
-        ArrayIterate.forEach(this.items, fromIndex, toIndex, procedure);
+        ListIterate.rangeCheck(fromIndex, toIndex, this.items.length);
+        InternalArrayIterate.forEachWithoutChecks(this.items, fromIndex, toIndex, procedure);
     }
 
     @Override
     public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return ArrayIterate.detectWith(this.items, predicate, parameter);
+        return InternalArrayIterate.detectWith(this.items, this.items.length, predicate, parameter);
     }
 
     @Override
@@ -516,31 +523,31 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return ArrayIterate.countWith(this.items, predicate, parameter);
+        return InternalArrayIterate.countWith(this.items, this.items.length, predicate, parameter);
     }
 
     @Override
     public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return ArrayIterate.anySatisfyWith(this.items, predicate, parameter);
+        return InternalArrayIterate.anySatisfyWith(this.items, this.items.length, predicate, parameter);
     }
 
     @Override
     public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return ArrayIterate.allSatisfyWith(this.items, predicate, parameter);
+        return InternalArrayIterate.allSatisfyWith(this.items, this.items.length, predicate, parameter);
     }
 
     @Override
     public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return ArrayIterate.noneSatisfyWith(this.items, predicate, parameter);
+        return InternalArrayIterate.noneSatisfyWith(this.items, this.items.length, predicate, parameter);
     }
 
     @Override
     public MutableList<T> distinct()
     {
-        return ArrayIterate.distinct(this.items, FastList.<T>newList());
+        return InternalArrayIterate.distinct(this.items, this.items.length, FastList.<T>newList());
     }
 
     @Override
