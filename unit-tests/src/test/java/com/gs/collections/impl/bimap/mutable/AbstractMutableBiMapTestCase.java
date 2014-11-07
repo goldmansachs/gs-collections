@@ -375,6 +375,8 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
     @Test
     public void equalsAndHashCode()
     {
+        super.equalsAndHashCode();
+
         MutableBiMap<Integer, Character> emptyMap = this.getEmptyMap();
         Verify.assertEqualsAndHashCode(UnifiedMap.newMap(), emptyMap);
         Assert.assertEquals(emptyMap, emptyMap);

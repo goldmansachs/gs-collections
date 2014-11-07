@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.map.sorted.immutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
@@ -37,6 +38,7 @@ import net.jcip.annotations.Immutable;
  */
 public class ImmutableTreeMap<K, V>
         extends AbstractImmutableSortedMap<K, V>
+        implements Serializable
 {
     private final TreeSortedMap<K, V> delegate;
 
@@ -141,5 +143,10 @@ public class ImmutableTreeMap<K, V>
     public Set<Entry<K, V>> entrySet()
     {
         return this.delegate.entrySet().asUnmodifiable();
+    }
+
+    protected Object writeReplace()
+    {
+        return new ImmutableSortedMapSerializationProxy<K, V>(this);
     }
 }

@@ -74,6 +74,7 @@ import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -85,6 +86,7 @@ import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
+import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
@@ -110,6 +112,28 @@ public abstract class MapIterableTestCase
             K key2, V value2,
             K key3, V value3,
             K key4, V value4);
+
+    @Test
+    public void equalsAndHashCode()
+    {
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        Verify.assertPostSerializedEqualsAndHashCode(map);
+        Verify.assertEqualsAndHashCode(Maps.mutable.of(1, "1", 2, "2", 3, "3"), map);
+        Verify.assertEqualsAndHashCode(Maps.immutable.of(1, "1", 2, "2", 3, "3"), map);
+
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2"));
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2", 4, "4"));
+    }
+
+    @Test
+    public void serialization()
+    {
+        MapIterable<Integer, String> original = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        MapIterable<Integer, String> copy = SerializeTestHelper.serializeDeserialize(original);
+        Verify.assertIterableSize(3, copy);
+        Assert.assertEquals(original, copy);
+    }
 
     @Test
     public void isEmpty()

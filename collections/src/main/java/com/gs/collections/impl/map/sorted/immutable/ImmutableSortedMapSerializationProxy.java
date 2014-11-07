@@ -14,40 +14,38 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.map.strategy.immutable;
+package com.gs.collections.impl.map.sorted.immutable;
 
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Comparator;
 
-import com.gs.collections.api.block.HashingStrategy;
-import com.gs.collections.api.map.ImmutableMap;
-import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.sorted.ImmutableSortedMap;
+import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
-import com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy;
+import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 
-class ImmutableMapWithHashingStrategySerializationProxy<K, V> implements Externalizable
+class ImmutableSortedMapSerializationProxy<K, V> implements Externalizable
 {
     private static final long serialVersionUID = 1L;
-    private ImmutableMap<K, V> map;
-    private HashingStrategy<? super K> hashingStrategy;
+    private ImmutableSortedMap<K, V> map;
 
     @SuppressWarnings("UnusedDeclaration")
-    public ImmutableMapWithHashingStrategySerializationProxy()
+    public ImmutableSortedMapSerializationProxy()
     {
         // Empty constructor for Externalizable class
     }
 
-    ImmutableMapWithHashingStrategySerializationProxy(ImmutableMap<K, V> map, HashingStrategy<? super K> hashingStrategy)
+    ImmutableSortedMapSerializationProxy(ImmutableSortedMap<K, V> map)
     {
         this.map = map;
-        this.hashingStrategy = hashingStrategy;
     }
 
     public void writeExternal(final ObjectOutput out) throws IOException
     {
-        out.writeObject(this.hashingStrategy);
+        out.writeObject(this.map.comparator());
         out.writeInt(this.map.size());
         try
         {
@@ -72,9 +70,9 @@ class ImmutableMapWithHashingStrategySerializationProxy<K, V> implements Externa
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
     {
-        HashingStrategy<? super K> strategy = (HashingStrategy<? super K>) in.readObject();
+        Comparator<? super K> comparator = (Comparator<? super K>) in.readObject();
         int size = in.readInt();
-        MutableMap<K, V> deserializedMap = UnifiedMapWithHashingStrategy.newMap(strategy);
+        MutableSortedMap<K, V> deserializedMap = TreeSortedMap.newMap(comparator);
 
         for (int i = 0; i < size; i++)
         {

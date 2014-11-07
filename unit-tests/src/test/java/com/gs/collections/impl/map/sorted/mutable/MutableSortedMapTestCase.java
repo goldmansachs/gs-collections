@@ -17,7 +17,6 @@
 package com.gs.collections.impl.map.sorted.mutable;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -42,6 +41,7 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.MapIterableTestCase;
@@ -799,18 +799,27 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
     @Test
     public void equalsAndHashCode()
     {
-        Map<Integer, String> hashMap = new HashMap<Integer, String>();
-        hashMap.put(1, "One");
-        hashMap.put(2, "Two");
+        super.equalsAndHashCode();
 
-        MutableSortedMap<Integer, String> mutableMap = this.newMapWithKeysValues(1, "One", 2, "Two");
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(Comparators.reverseNaturalOrder(), 1, "1", 2, "2", 3, "3");
+        Verify.assertPostSerializedEqualsAndHashCode(map);
+        Verify.assertEqualsAndHashCode(Maps.mutable.of(1, "1", 2, "2", 3, "3"), map);
+        Verify.assertEqualsAndHashCode(Maps.immutable.of(1, "1", 2, "2", 3, "3"), map);
 
-        Verify.assertEqualsAndHashCode(hashMap, mutableMap);
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2"));
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2", 4, "4"));
+
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(Comparators.reverseNaturalOrder(), 1, "1", 2, "2"));
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(Comparators.reverseNaturalOrder(), 1, "1", 2, "2", 3, "3", 4, "4"));
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(Comparators.reverseNaturalOrder(), 1, "1", 2, "2", 4, "4"));
     }
 
     @Test
     public void serialization()
     {
+        super.serialization();
+
         MutableSortedMap<Integer, String> original = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         MutableSortedMap<Integer, String> copy = SerializeTestHelper.serializeDeserialize(original);
         Verify.assertMapsEqual(original, copy);

@@ -19,7 +19,6 @@ package com.gs.collections.impl.map.mutable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
@@ -42,7 +41,6 @@ import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.MapIterableTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
-import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.test.domain.Key;
 import com.gs.collections.impl.tuple.ImmutableEntry;
@@ -59,33 +57,18 @@ import static com.gs.collections.impl.factory.Iterables.*;
 public abstract class MutableMapTestCase extends MapIterableTestCase
 {
     @Override
-    protected <K, V> MutableMap<K, V> newMap()
-    {
-        return null;
-    }
+    protected abstract <K, V> MutableMap<K, V> newMap();
+
+    protected abstract <K, V> MutableMap<K, V> newMapWithKeyValue(K key, V value);
 
     @Override
-    protected <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
-    {
-        return null;
-    }
+    protected abstract <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2);
 
     @Override
-    protected <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
-    {
-        return null;
-    }
+    protected abstract <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3);
 
     @Override
-    protected <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
-    {
-        return null;
-    }
-
-    protected <K, V> MutableMap<K, V> newMapWithKeyValue(K key, V value)
-    {
-        return null;
-    }
+    protected abstract <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
 
     @Test
     public void testNewMap()
@@ -498,45 +481,6 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     }
 
     @Test
-    public void testEquals()
-    {
-        MutableMap<Integer, String> map1 = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        MutableMap<Integer, String> map2 = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        MutableMap<Integer, String> map3 = this.newMapWithKeysValues(2, "2", 3, "3", 4, "4");
-        Verify.assertMapsEqual(map1, map2);
-        Assert.assertNotEquals(map2, map3);
-    }
-
-    @Test
-    public void testHashCode()
-    {
-        MutableMap<Integer, String> map1 = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        MutableMap<Integer, String> map2 = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        Verify.assertEqualsAndHashCode(map1, map2);
-    }
-
-    @Test
-    public void equalsAndHashCode()
-    {
-        Map<Integer, String> hashMap = new HashMap<Integer, String>();
-        hashMap.put(1, "One");
-        hashMap.put(2, "Two");
-
-        MutableMap<Integer, String> mutableMap = this.newMapWithKeysValues(1, "One", 2, "Two");
-
-        Verify.assertEqualsAndHashCode(hashMap, mutableMap);
-    }
-
-    @Test
-    public void serialization()
-    {
-        MutableMap<Integer, String> original = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        MutableMap<Integer, String> copy = SerializeTestHelper.serializeDeserialize(original);
-        Verify.assertSize(3, copy);
-        Verify.assertMapsEqual(original, copy);
-    }
-
-    @Test
     public void containsValue()
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
@@ -780,7 +724,7 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     public void updateValue()
     {
         MutableMap<Integer, Integer> map = this.newMap();
-    Iterate.forEach(Interval.oneTo(1000), each -> map.updateValue(each % 10, () -> 0, integer -> integer + 1));
+        Iterate.forEach(Interval.oneTo(1000), each -> map.updateValue(each % 10, () -> 0, integer -> integer + 1));
         Assert.assertEquals(Interval.zeroTo(9).toSet(), map.keySet());
         Assert.assertEquals(FastList.newList(Collections.nCopies(10, 100)), FastList.newList(map.values()));
     }
@@ -790,8 +734,8 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     {
         MutableMap<Integer, Integer> map = this.newMap();
         MutableList<Integer> list = Interval.oneTo(2000).toList();
-    Collections.shuffle(list);
-    Iterate.forEach(list, each -> map.updateValue(each % 1000, () -> 0, integer -> integer + 1));
+        Collections.shuffle(list);
+        Iterate.forEach(list, each -> map.updateValue(each % 1000, () -> 0, integer -> integer + 1));
         Assert.assertEquals(Interval.zeroTo(999).toSet(), map.keySet());
         Assert.assertEquals(
                 HashBag.newBag(map.values()).toStringOfItemToCount(),
@@ -801,9 +745,9 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
 
     @Test
     public void updateValueWith()
-{
-MutableMap<Integer, Integer> map = this.newMap();
-Iterate.forEach(Interval.oneTo(1000), each -> map.updateValueWith(each % 10, () -> 0, (integer, parameter) -> {
+    {
+        MutableMap<Integer, Integer> map = this.newMap();
+        Iterate.forEach(Interval.oneTo(1000), each -> map.updateValueWith(each % 10, () -> 0, (integer, parameter) -> {
             Assert.assertEquals("test", parameter);
             return integer + 1;
         }, "test"));
@@ -815,9 +759,9 @@ Iterate.forEach(Interval.oneTo(1000), each -> map.updateValueWith(each % 10, () 
     public void updateValueWith_collisions()
     {
         MutableMap<Integer, Integer> map = this.newMap();
-    MutableList<Integer> list = Interval.oneTo(2000).toList();
-    Collections.shuffle(list);
-    Iterate.forEach(list, each -> map.updateValueWith(each % 1000, () -> 0, (integer, parameter) -> {
+        MutableList<Integer> list = Interval.oneTo(2000).toList();
+        Collections.shuffle(list);
+        Iterate.forEach(list, each -> map.updateValueWith(each % 1000, () -> 0, (integer, parameter) -> {
             Assert.assertEquals("test", parameter);
             return integer + 1;
         }, "test"));

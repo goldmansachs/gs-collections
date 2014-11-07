@@ -16,21 +16,18 @@
 
 package com.gs.collections.impl.map.sorted.immutable;
 
+import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
-public class ImmutableEmptySortedMapSerializationTest
+public class ImmutableTreeMapSerializationTest
 {
-    static final String EXPECTED_BASE_64_FORM =
-            "rO0ABXNyAFFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuc29ydGVkLmltbXV0YWJsZS5JbW11\n"
-                    + "dGFibGVTb3J0ZWRNYXBTZXJpYWxpemF0aW9uUHJveHkAAAAAAAAAAQwAAHhwcHcEAAAAAHg=";
-
     @Test
     public void serializedForm()
     {
         Verify.assertSerializedForm(
                 2L,
-                EXPECTED_BASE_64_FORM,
-                ImmutableEmptySortedMap.INSTANCE);
+                ImmutableEmptySortedMapSerializationTest.EXPECTED_BASE_64_FORM,
+                ImmutableTreeMap.newMap(new TreeSortedMap<Object, Object>()));
     }
 }

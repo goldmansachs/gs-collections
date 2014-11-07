@@ -50,7 +50,7 @@ final class ImmutableEmptySortedMap<K, V>
         implements Serializable
 {
     static final ImmutableSortedMap<?, ?> INSTANCE = new ImmutableEmptySortedMap<Object, Object>();
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private final Comparator<? super K> comparator;
 
@@ -261,12 +261,8 @@ final class ImmutableEmptySortedMap<K, V>
         throw new NoSuchElementException();
     }
 
-    private Object readResolve()
+    private Object writeReplace()
     {
-        if (this.comparator == null)
-        {
-            return INSTANCE;
-        }
-        return this;
+        return new ImmutableSortedMapSerializationProxy<K, V>(this);
     }
 }
