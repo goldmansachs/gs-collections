@@ -90,20 +90,6 @@ public abstract class AbstractImmutableMap<K, V>
         extends AbstractMapIterable<K, V>
         implements ImmutableMap<K, V>, Map<K, V>
 {
-    /**
-     * Returns a string representation of this map.  The string representation consists of a list of key-value mappings
-     * in the order returned by the map's <tt>entrySet</tt> view's iterator, enclosed in braces (<tt>"{}"</tt>).
-     * Adjacent mappings are separated by the characters <tt>", "</tt> (comma and space).  Each key-value mapping is
-     * rendered as the key followed by an equals sign (<tt>"="</tt>) followed by the associated value.  Keys and values
-     * are converted to strings as by <tt>String.valueOf(Object)</tt>.<p>
-     * <p>
-     * This implementation creates an empty string buffer, appends a left brace, and iterates over the map's
-     * <tt>entrySet</tt> view, appending the string representation of each <tt>map.entry</tt> in turn.  After appending
-     * each entry except the last, the string <tt>", "</tt> is appended.  Finally a right brace is appended.  A string
-     * is obtained from the stringbuffer, and returned.
-     *
-     * @return a String representation of this map.
-     */
     public Map<K, V> castToMap()
     {
         return this;
