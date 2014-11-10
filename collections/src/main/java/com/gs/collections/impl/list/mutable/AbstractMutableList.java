@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -48,6 +49,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
 import com.gs.collections.api.list.primitive.MutableCharList;
@@ -77,6 +79,7 @@ import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.lazy.ReverseIterable;
+import com.gs.collections.impl.lazy.parallel.list.ListIterableParallelIterable;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
 import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
@@ -1176,6 +1179,11 @@ public abstract class AbstractMutableList<T>
     public ReverseIterable<T> asReversed()
     {
         return ReverseIterable.adapt(this);
+    }
+
+    public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        return new ListIterableParallelIterable<T>(this, executorService, batchSize);
     }
 
     public int binarySearch(T key, Comparator<? super T> comparator)

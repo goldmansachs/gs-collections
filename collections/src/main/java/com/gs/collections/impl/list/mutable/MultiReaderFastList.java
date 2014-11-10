@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.RandomAccess;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -56,6 +57,7 @@ import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
 import com.gs.collections.api.list.primitive.MutableCharList;
@@ -72,6 +74,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.AbstractMultiReaderMutableCollection;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ReverseIterable;
+import com.gs.collections.impl.lazy.parallel.list.ListIterableParallelIterable;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.LazyIterate;
 
@@ -1382,6 +1385,11 @@ public final class MultiReaderFastList<T>
             return ReverseIterable.adapt(this);
         }
 
+        public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
+        {
+            return new ListIterableParallelIterable<T>(this, executorService, batchSize);
+        }
+
         public int binarySearch(T key, Comparator<? super T> comparator)
         {
             return Collections.binarySearch(this, key, comparator);
@@ -1646,5 +1654,10 @@ public final class MultiReaderFastList<T>
         {
             this.unlockReadLock();
         }
+    }
+
+    public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        throw new UnsupportedOperationException("asParallel() method is not supported for " + this.getClass().getSimpleName() + '.');
     }
 }

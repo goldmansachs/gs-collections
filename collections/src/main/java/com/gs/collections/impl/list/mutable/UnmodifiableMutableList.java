@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.RandomAccess;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
@@ -41,6 +42,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
 import com.gs.collections.api.list.primitive.MutableCharList;
@@ -443,6 +445,11 @@ public class UnmodifiableMutableList<T>
     public LazyIterable<T> asReversed()
     {
         return ReverseIterable.adapt(this);
+    }
+
+    public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        return this.getMutableList().asParallel(executorService, batchSize);
     }
 
     public int binarySearch(T key, Comparator<? super T> comparator)

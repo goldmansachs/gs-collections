@@ -19,8 +19,10 @@ package com.gs.collections.api.list;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -234,6 +236,14 @@ public interface ListIterable<T>
      * @since 3.0
      */
     LazyIterable<T> asReversed();
+
+    /**
+     * Returns a parallel iterable of this ListIterable.
+     *
+     * @since 6.0
+     */
+    @Beta
+    ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize);
 
     /**
      * Searches for the specified object using the binary search algorithm. The list must be sorted into ascending

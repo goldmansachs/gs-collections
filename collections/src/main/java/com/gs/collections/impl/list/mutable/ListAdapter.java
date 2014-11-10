@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.RandomAccess;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -29,6 +30,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -280,5 +282,11 @@ public final class ListAdapter<T>
     public MutableStack<T> toStack()
     {
         return ArrayStack.newStack(this.delegate);
+    }
+
+    @Override
+    public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        throw new UnsupportedOperationException("asParallel() method is not supported for " + this.getClass().getSimpleName() + '.');
     }
 }

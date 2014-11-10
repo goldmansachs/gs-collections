@@ -25,13 +25,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.RandomAccess;
-import java.util.concurrent.ExecutorService;
 
-import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -62,7 +58,6 @@ import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
 import com.gs.collections.api.list.primitive.MutableCharList;
@@ -80,15 +75,6 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.Procedures2;
-import com.gs.collections.impl.lazy.AbstractLazyIterable;
-import com.gs.collections.impl.lazy.parallel.AbstractBatch;
-import com.gs.collections.impl.lazy.parallel.list.AbstractParallelListIterable;
-import com.gs.collections.impl.lazy.parallel.list.CollectListBatch;
-import com.gs.collections.impl.lazy.parallel.list.DistinctBatch;
-import com.gs.collections.impl.lazy.parallel.list.ListBatch;
-import com.gs.collections.impl.lazy.parallel.list.RootListBatch;
-import com.gs.collections.impl.lazy.parallel.list.SelectListBatch;
-import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
 import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
@@ -97,7 +83,6 @@ import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
-import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -1465,208 +1450,6 @@ public class FastList<T>
         for (int i = 0; i < this.size; i++)
         {
             this.items[i] = (T) in.readObject();
-        }
-    }
-
-    @Beta
-    public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
-    {
-        if (executorService == null)
-        {
-            throw new NullPointerException();
-        }
-        if (batchSize < 1)
-        {
-            throw new IllegalArgumentException();
-        }
-        return new FastListParallelIterable(executorService, batchSize);
-    }
-
-    private final class FastListBatch extends AbstractBatch<T> implements RootListBatch<T>
-    {
-        private final int chunkStartIndex;
-        private final int chunkEndIndex;
-
-        private FastListBatch(int chunkStartIndex, int chunkEndIndex)
-        {
-            this.chunkStartIndex = chunkStartIndex;
-            this.chunkEndIndex = chunkEndIndex;
-        }
-
-        public void forEach(Procedure<? super T> procedure)
-        {
-            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
-            {
-                procedure.value(FastList.this.items[i]);
-            }
-        }
-
-        @Override
-        public int count(Predicate<? super T> predicate)
-        {
-            int count = 0;
-            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
-            {
-                if (predicate.accept(FastList.this.items[i]))
-                {
-                    count++;
-                }
-            }
-            return count;
-        }
-
-        public boolean anySatisfy(Predicate<? super T> predicate)
-        {
-            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
-            {
-                if (predicate.accept(FastList.this.items[i]))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public boolean allSatisfy(Predicate<? super T> predicate)
-        {
-            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
-            {
-                if (!predicate.accept(FastList.this.items[i]))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public T detect(Predicate<? super T> predicate)
-        {
-            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
-            {
-                if (predicate.accept(FastList.this.items[i]))
-                {
-                    return FastList.this.items[i];
-                }
-            }
-            return null;
-        }
-
-        public ListBatch<T> select(Predicate<? super T> predicate)
-        {
-            return new SelectListBatch<T>(this, predicate);
-        }
-
-        public <V> ListBatch<V> collect(Function<? super T, ? extends V> function)
-        {
-            return new CollectListBatch<T, V>(this, function);
-        }
-
-        public UnsortedSetBatch<T> distinct(ConcurrentHashMap<T, Boolean> distinct)
-        {
-            return new DistinctBatch<T>(this, distinct);
-        }
-    }
-
-    private final class FastListParallelIterable extends AbstractParallelListIterable<T, RootListBatch<T>>
-    {
-        private final ExecutorService executorService;
-        private final int batchSize;
-
-        private FastListParallelIterable(ExecutorService executorService, int batchSize)
-        {
-            this.executorService = executorService;
-            this.batchSize = batchSize;
-        }
-
-        @Override
-        public ExecutorService getExecutorService()
-        {
-            return this.executorService;
-        }
-
-        @Override
-        public LazyIterable<RootListBatch<T>> split()
-        {
-            return new FastListParallelBatchLazyIterable();
-        }
-
-        public void forEach(Procedure<? super T> procedure)
-        {
-            forEach(this, procedure);
-        }
-
-        public boolean anySatisfy(Predicate<? super T> predicate)
-        {
-            return anySatisfy(this, predicate);
-        }
-
-        public boolean allSatisfy(Predicate<? super T> predicate)
-        {
-            return allSatisfy(this, predicate);
-        }
-
-        public T detect(Predicate<? super T> predicate)
-        {
-            return detect(this, predicate);
-        }
-
-        private class FastListParallelBatchIterator implements Iterator<RootListBatch<T>>
-        {
-            protected int chunkIndex;
-
-            public boolean hasNext()
-            {
-                return this.chunkIndex * FastListParallelIterable.this.batchSize < FastList.this.size;
-            }
-
-            public RootListBatch<T> next()
-            {
-                int chunkStartIndex = this.chunkIndex * FastListParallelIterable.this.batchSize;
-                int chunkEndIndex = (this.chunkIndex + 1) * FastListParallelIterable.this.batchSize;
-                int truncatedChunkEndIndex = Math.min(chunkEndIndex, FastList.this.size);
-                this.chunkIndex++;
-                return new FastListBatch(chunkStartIndex, truncatedChunkEndIndex);
-            }
-
-            public void remove()
-            {
-                throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
-            }
-        }
-
-        private class FastListParallelBatchLazyIterable
-                extends AbstractLazyIterable<RootListBatch<T>>
-        {
-            public void forEach(Procedure<? super RootListBatch<T>> procedure)
-            {
-                this.each(procedure);
-            }
-
-            public void each(Procedure<? super RootListBatch<T>> procedure)
-            {
-                for (RootListBatch<T> chunk : this)
-                {
-                    procedure.value(chunk);
-                }
-            }
-
-            public <P> void forEachWith(Procedure2<? super RootListBatch<T>, ? super P> procedure, P parameter)
-            {
-                for (RootListBatch<T> chunk : this)
-                {
-                    procedure.value(chunk, parameter);
-                }
-            }
-
-            public void forEachWithIndex(ObjectIntProcedure<? super RootListBatch<T>> objectIntProcedure)
-            {
-                throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEachWithIndex() not implemented yet");
-            }
-
-            public Iterator<RootListBatch<T>> iterator()
-            {
-                return new FastListParallelBatchIterator();
-            }
         }
     }
 }
