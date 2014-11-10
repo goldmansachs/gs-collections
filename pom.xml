@@ -552,6 +552,7 @@
                                 <exclude>**/GsCollectionsCodeGeneratorTask.java</exclude>
                                 <exclude>**/Primitive.java</exclude>
                                 <exclude>**/IntegerOrStringRenderer.java</exclude>
+                                <exclude>**/jmh/**/*.java</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
