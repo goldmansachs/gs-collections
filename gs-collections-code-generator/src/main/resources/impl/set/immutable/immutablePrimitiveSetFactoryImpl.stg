@@ -26,14 +26,19 @@ import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
  */
 public class Immutable<name>SetFactoryImpl implements Immutable<name>SetFactory
 {
+    public Immutable<name>Set empty()
+    {
+        return Immutable<name>EmptySet.INSTANCE;
+    }
+
     public Immutable<name>Set of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public Immutable<name>Set with()
     {
-        return Immutable<name>EmptySet.INSTANCE;
+        return this.empty();
     }
 
     public Immutable<name>Set of(<type> one)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,18 @@ import com.gs.collections.api.stack.ImmutableStack;
 public interface ImmutableStackFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    <T> ImmutableStack<T> empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     <T> ImmutableStack<T> of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     <T> ImmutableStack<T> with();
 
     /**

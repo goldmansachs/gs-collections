@@ -23,14 +23,19 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public final class MutableBagFactoryImpl implements MutableBagFactory
 {
+    public <T> MutableBag<T> empty()
+    {
+        return HashBag.newBag();
+    }
+
     public <T> MutableBag<T> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <T> MutableBag<T> with()
     {
-        return HashBag.newBag();
+        return this.empty();
     }
 
     public <T> MutableBag<T> of(T... elements)

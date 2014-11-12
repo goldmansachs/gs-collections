@@ -25,14 +25,19 @@ import com.gs.collections.api.list.primitive.Immutable<name>List;
  */
 public class Immutable<name>ListFactoryImpl implements Immutable<name>ListFactory
 {
+    public Immutable<name>List empty()
+    {
+        return Immutable<name>EmptyList.INSTANCE;
+    }
+
     public Immutable<name>List of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public Immutable<name>List with()
     {
-        return Immutable<name>EmptyList.INSTANCE;
+        return this.empty();
     }
 
     public Immutable<name>List of(<type> one)

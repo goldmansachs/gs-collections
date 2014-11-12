@@ -24,10 +24,18 @@ import com.gs.collections.api.bag.MutableBag;
 public interface MutableBagFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    <T> MutableBag<T> empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     <T> MutableBag<T> of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     <T> MutableBag<T> with();
 
     /**

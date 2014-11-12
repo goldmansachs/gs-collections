@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,14 +28,19 @@ public class FixedSizeSetFactoryImpl implements FixedSizeSetFactory
 {
     private static final FixedSizeSet<?> EMPTY_SET = new EmptySet<Object>();
 
+    public <T> FixedSizeSet<T> empty()
+    {
+        return (FixedSizeSet<T>) FixedSizeSetFactoryImpl.EMPTY_SET;
+    }
+
     public <T> FixedSizeSet<T> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <T> FixedSizeSet<T> with()
     {
-        return (FixedSizeSet<T>) FixedSizeSetFactoryImpl.EMPTY_SET;
+        return this.empty();
     }
 
     public <T> FixedSizeSet<T> of(T one)

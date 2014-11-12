@@ -27,14 +27,19 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public final class ImmutableListFactoryImpl implements ImmutableListFactory
 {
+    public <T> ImmutableList<T> empty()
+    {
+        return (ImmutableList<T>) ImmutableEmptyList.INSTANCE;
+    }
+
     public <T> ImmutableList<T> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <T> ImmutableList<T> with()
     {
-        return (ImmutableList<T>) ImmutableEmptyList.INSTANCE;
+        return this.empty();
     }
 
     public <T> ImmutableList<T> of(T one)

@@ -25,10 +25,18 @@ import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
 public interface Immutable<name>StackFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    Immutable<name>Stack empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     Immutable<name>Stack of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     Immutable<name>Stack with();
 
     /**

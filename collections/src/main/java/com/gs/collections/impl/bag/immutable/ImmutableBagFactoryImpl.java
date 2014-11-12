@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,14 +25,19 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public final class ImmutableBagFactoryImpl implements ImmutableBagFactory
 {
+    public <T> ImmutableBag<T> empty()
+    {
+        return (ImmutableBag<T>) ImmutableEmptyBag.INSTANCE;
+    }
+
     public <T> ImmutableBag<T> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <T> ImmutableBag<T> with()
     {
-        return (ImmutableBag<T>) ImmutableEmptyBag.INSTANCE;
+        return this.empty();
     }
 
     public <T> ImmutableBag<T> of(T element)

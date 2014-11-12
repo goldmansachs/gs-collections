@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,19 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public final class MutableSetFactoryImpl implements MutableSetFactory
 {
+    public <T> MutableSet<T> empty()
+    {
+        return UnifiedSet.newSet();
+    }
+
     public <T> MutableSet<T> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <T> MutableSet<T> with()
     {
-        return UnifiedSet.newSet();
+        return this.empty();
     }
 
     public <T> MutableSet<T> of(T... items)

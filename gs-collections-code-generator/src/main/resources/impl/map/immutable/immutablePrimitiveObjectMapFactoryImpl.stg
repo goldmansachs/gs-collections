@@ -28,14 +28,19 @@ import com.gs.collections.api.map.primitive.<name>ObjectMap;
  */
 public class Immutable<name>ObjectMapFactoryImpl implements Immutable<name>ObjectMapFactory
 {
+    public \<V> Immutable<name>ObjectMap\<V> empty()
+    {
+        return (Immutable<name>ObjectMap\<V>) Immutable<name>ObjectEmptyMap.INSTANCE;
+    }
+
     public \<V> Immutable<name>ObjectMap\<V> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public \<V> Immutable<name>ObjectMap\<V> with()
     {
-        return (Immutable<name>ObjectMap\<V>) Immutable<name>ObjectEmptyMap.INSTANCE;
+        return this.empty();
     }
 
     public \<V> Immutable<name>ObjectMap\<V> of(<type> key, V value)

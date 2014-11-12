@@ -25,10 +25,18 @@ import com.gs.collections.api.list.primitive.Immutable<name>List;
 public interface Immutable<name>ListFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    Immutable<name>List empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     Immutable<name>List of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     Immutable<name>List with();
 
     /**

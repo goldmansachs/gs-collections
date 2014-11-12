@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,19 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public final class ImmutableSortedSetFactoryImpl implements ImmutableSortedSetFactory
 {
+    public <T> ImmutableSortedSet<T> empty()
+    {
+        return (ImmutableSortedSet<T>) ImmutableEmptySortedSet.INSTANCE;
+    }
+
     public <T> ImmutableSortedSet<T> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <T> ImmutableSortedSet<T> with()
     {
-        return (ImmutableSortedSet<T>) ImmutableEmptySortedSet.INSTANCE;
+        return this.empty();
     }
 
     public <T> ImmutableSortedSet<T> of(T... items)

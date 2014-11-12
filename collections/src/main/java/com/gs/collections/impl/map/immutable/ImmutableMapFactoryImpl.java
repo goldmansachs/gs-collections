@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,19 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public final class ImmutableMapFactoryImpl implements ImmutableMapFactory
 {
+    public <K, V> ImmutableMap<K, V> empty()
+    {
+        return (ImmutableMap<K, V>) ImmutableEmptyMap.INSTANCE;
+    }
+
     public <K, V> ImmutableMap<K, V> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <K, V> ImmutableMap<K, V> with()
     {
-        return (ImmutableMap<K, V>) ImmutableEmptyMap.INSTANCE;
+        return this.empty();
     }
 
     public <K, V> ImmutableMap<K, V> of(K key, V value)

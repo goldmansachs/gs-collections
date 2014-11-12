@@ -27,10 +27,18 @@ import com.gs.collections.api.map.primitive.<name>ObjectMap;
 public interface Immutable<name>ObjectMapFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    \<V> Immutable<name>ObjectMap\<V> empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     \<V> Immutable<name>ObjectMap\<V> of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     \<V> Immutable<name>ObjectMap\<V> with();
 
     /**

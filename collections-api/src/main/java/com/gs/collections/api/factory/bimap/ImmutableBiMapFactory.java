@@ -25,10 +25,18 @@ import com.gs.collections.api.map.ImmutableMap;
 public interface ImmutableBiMapFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    <K, V> ImmutableBiMap<K, V> empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     <K, V> ImmutableBiMap<K, V> of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     <K, V> ImmutableBiMap<K, V> with();
 
     /**

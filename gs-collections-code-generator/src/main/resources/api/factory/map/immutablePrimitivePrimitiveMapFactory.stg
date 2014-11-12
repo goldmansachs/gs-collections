@@ -29,10 +29,18 @@ import com.gs.collections.api.map.primitive.<name1><name2>Map;
 public interface Immutable<name1><name2>MapFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    Immutable<name1><name2>Map empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     Immutable<name1><name2>Map of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     Immutable<name1><name2>Map with();
 
     /**

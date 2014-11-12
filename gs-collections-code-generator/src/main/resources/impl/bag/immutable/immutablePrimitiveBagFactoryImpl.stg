@@ -25,14 +25,19 @@ import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
  */
 public class Immutable<name>BagFactoryImpl implements Immutable<name>BagFactory
 {
+    public Immutable<name>Bag empty()
+    {
+        return Immutable<name>EmptyBag.INSTANCE;
+    }
+
     public Immutable<name>Bag of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public Immutable<name>Bag with()
     {
-        return Immutable<name>EmptyBag.INSTANCE;
+        return this.empty();
     }
 
     public Immutable<name>Bag of(<type> one)

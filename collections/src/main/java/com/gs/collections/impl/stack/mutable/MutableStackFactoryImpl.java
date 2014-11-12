@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,19 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public final class MutableStackFactoryImpl implements MutableStackFactory
 {
+    public <T> MutableStack<T> empty()
+    {
+        return ArrayStack.newStack();
+    }
+
     public <T> MutableStack<T> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <T> MutableStack<T> with()
     {
-        return ArrayStack.newStack();
+        return this.empty();
     }
 
     public <T> MutableStack<T> of(T... elements)

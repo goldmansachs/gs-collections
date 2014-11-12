@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,18 @@ import com.gs.collections.api.map.sorted.MutableSortedMap;
 public interface MutableSortedMapFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    <K, V> MutableSortedMap<K, V> empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     <K, V> MutableSortedMap<K, V> of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     <K, V> MutableSortedMap<K, V> with();
 
     /**

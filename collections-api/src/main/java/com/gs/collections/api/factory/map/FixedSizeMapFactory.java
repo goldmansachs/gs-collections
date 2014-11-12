@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,18 @@ import com.gs.collections.api.map.FixedSizeMap;
 public interface FixedSizeMapFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    <K, V> FixedSizeMap<K, V> empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     <K, V> FixedSizeMap<K, V> of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     <K, V> FixedSizeMap<K, V> with();
 
     /**

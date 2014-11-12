@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,19 @@ import com.gs.collections.api.stack.ImmutableStack;
 
 public class ImmutableStackFactoryImpl implements ImmutableStackFactory
 {
+    public <T> ImmutableStack<T> empty()
+    {
+        return ImmutableArrayStack.newStack();
+    }
+
     public <T> ImmutableStack<T> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <T> ImmutableStack<T> with()
     {
-        return ImmutableArrayStack.newStack();
+        return this.empty();
     }
 
     public <T> ImmutableStack<T> of(T element)

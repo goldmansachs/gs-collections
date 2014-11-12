@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,19 @@ public class FixedSizeMapFactoryImpl implements FixedSizeMapFactory
 {
     private static final FixedSizeMap<?, ?> EMPTY_MAP = new EmptyMap<Object, Object>();
 
+    public <K, V> FixedSizeMap<K, V> empty()
+    {
+        return (FixedSizeMap<K, V>) EMPTY_MAP;
+    }
+
     public <K, V> FixedSizeMap<K, V> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <K, V> FixedSizeMap<K, V> with()
     {
-        return (FixedSizeMap<K, V>) EMPTY_MAP;
+        return this.empty();
     }
 
     public <K, V> FixedSizeMap<K, V> of(K key, V value)

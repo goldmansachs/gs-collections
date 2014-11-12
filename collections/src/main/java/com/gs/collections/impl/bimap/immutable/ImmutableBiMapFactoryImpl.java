@@ -27,14 +27,21 @@ import com.gs.collections.impl.factory.Maps;
 
 public class ImmutableBiMapFactoryImpl implements ImmutableBiMapFactory
 {
+    public static final ImmutableHashBiMap<?, ?> EMPTY_INSTANCE = new ImmutableHashBiMap();
+
+    public <K, V> ImmutableBiMap<K, V> empty()
+    {
+        return (ImmutableBiMap<K, V>) EMPTY_INSTANCE;
+    }
+
     public <K, V> ImmutableBiMap<K, V> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <K, V> ImmutableBiMap<K, V> with()
     {
-        return new ImmutableHashBiMap<K, V>();
+        return this.empty();
     }
 
     public <K, V> ImmutableBiMap<K, V> of(K key, V value)

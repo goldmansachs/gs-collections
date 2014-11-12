@@ -25,10 +25,18 @@ import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
 public interface Immutable<name>BagFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    Immutable<name>Bag empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     Immutable<name>Bag of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     Immutable<name>Bag with();
 
     /**

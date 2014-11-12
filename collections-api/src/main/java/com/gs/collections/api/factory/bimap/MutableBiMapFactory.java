@@ -21,10 +21,18 @@ import com.gs.collections.api.bimap.MutableBiMap;
 public interface MutableBiMapFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    <K, V> MutableBiMap<K, V> empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     <K, V> MutableBiMap<K, V> of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     <K, V> MutableBiMap<K, V> with();
 
     /**

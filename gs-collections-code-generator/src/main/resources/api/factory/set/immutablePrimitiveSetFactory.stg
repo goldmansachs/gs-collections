@@ -25,10 +25,18 @@ import com.gs.collections.api.set.primitive.Immutable<name>Set;
 public interface Immutable<name>SetFactory
 {
     /**
-     * Same as {@link #with()}.
+     * @since 6.0
+     */
+    Immutable<name>Set empty();
+
+    /**
+     * Same as {@link #empty()}.
      */
     Immutable<name>Set of();
 
+    /**
+     * Same as {@link #empty()}.
+     */
     Immutable<name>Set with();
 
     /**

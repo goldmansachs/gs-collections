@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,19 @@ public class FixedSizeListFactoryImpl implements FixedSizeListFactory
 {
     private static final FixedSizeList<?> EMPTY_LIST = new EmptyList<Object>();
 
+    public <T> FixedSizeList<T> empty()
+    {
+        return (FixedSizeList<T>) FixedSizeListFactoryImpl.EMPTY_LIST;
+    }
+
     public <T> FixedSizeList<T> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <T> FixedSizeList<T> with()
     {
-        return (FixedSizeList<T>) FixedSizeListFactoryImpl.EMPTY_LIST;
+        return this.empty();
     }
 
     public <T> FixedSizeList<T> of(T one)

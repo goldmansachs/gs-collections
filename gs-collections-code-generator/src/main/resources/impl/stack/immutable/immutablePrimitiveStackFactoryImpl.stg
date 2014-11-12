@@ -25,14 +25,19 @@ import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
  */
 public class Immutable<name>StackFactoryImpl implements Immutable<name>StackFactory
 {
+    public Immutable<name>Stack empty()
+    {
+        return Immutable<name>EmptyStack.INSTANCE;
+    }
+
     public Immutable<name>Stack of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public Immutable<name>Stack with()
     {
-        return Immutable<name>EmptyStack.INSTANCE;
+        return this.empty();
     }
 
     public Immutable<name>Stack of(<type> one)

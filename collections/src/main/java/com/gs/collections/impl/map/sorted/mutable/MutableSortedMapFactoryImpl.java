@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,14 +26,19 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public final class MutableSortedMapFactoryImpl implements MutableSortedMapFactory
 {
+    public <K, V> MutableSortedMap<K, V> empty()
+    {
+        return TreeSortedMap.newMap();
+    }
+
     public <K, V> MutableSortedMap<K, V> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <K, V> MutableSortedMap<K, V> with()
     {
-        return TreeSortedMap.newMap();
+        return this.empty();
     }
 
     public <K, V> MutableSortedMap<K, V> of(K key, V value)

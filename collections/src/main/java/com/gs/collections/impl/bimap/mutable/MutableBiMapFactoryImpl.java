@@ -21,14 +21,19 @@ import com.gs.collections.api.factory.bimap.MutableBiMapFactory;
 
 public class MutableBiMapFactoryImpl implements MutableBiMapFactory
 {
+    public <K, V> MutableBiMap<K, V> empty()
+    {
+        return HashBiMap.newMap();
+    }
+
     public <K, V> MutableBiMap<K, V> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <K, V> MutableBiMap<K, V> with()
     {
-        return HashBiMap.newMap();
+        return this.empty();
     }
 
     public <K, V> MutableBiMap<K, V> of(K key, V value)

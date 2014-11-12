@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,9 +70,14 @@ public final class Multimaps
             {
             }
 
-            public <K, V> ImmutableListMultimap<K, V> with()
+            public <K, V> ImmutableListMultimap<K, V> empty()
             {
                 return (ImmutableListMultimap<K, V>) EMPTY;
+            }
+
+            public <K, V> ImmutableListMultimap<K, V> with()
+            {
+                return this.empty();
             }
 
             public <K, V> ImmutableListMultimap<K, V> with(K key, V value)
@@ -106,9 +111,14 @@ public final class Multimaps
             {
             }
 
-            public <K, V> ImmutableSetMultimap<K, V> with()
+            public <K, V> ImmutableSetMultimap<K, V> empty()
             {
                 return (ImmutableSetMultimap<K, V>) EMPTY;
+            }
+
+            public <K, V> ImmutableSetMultimap<K, V> with()
+            {
+                return this.empty();
             }
 
             public <K, V> ImmutableSetMultimap<K, V> with(K key, V value)
@@ -176,9 +186,14 @@ public final class Multimaps
             {
             }
 
-            public <K, V> ImmutableBagMultimap<K, V> with()
+            public <K, V> ImmutableBagMultimap<K, V> empty()
             {
                 return (ImmutableBagMultimap<K, V>) EMPTY;
+            }
+
+            public <K, V> ImmutableBagMultimap<K, V> with()
+            {
+                return this.empty();
             }
 
             public <K, V> ImmutableBagMultimap<K, V> with(K key, V value)
@@ -223,9 +238,14 @@ public final class Multimaps
             {
             }
 
-            public <K, V> MutableListMultimap<K, V> with()
+            public <K, V> MutableListMultimap<K, V> empty()
             {
                 return FastListMultimap.newMultimap();
+            }
+
+            public <K, V> MutableListMultimap<K, V> with()
+            {
+                return this.empty();
             }
 
             public <K, V> MutableListMultimap<K, V> with(K key, V value)
@@ -259,9 +279,14 @@ public final class Multimaps
             {
             }
 
-            public <K, V> MutableSetMultimap<K, V> with()
+            public <K, V> MutableSetMultimap<K, V> empty()
             {
                 return UnifiedSetMultimap.newMultimap();
+            }
+
+            public <K, V> MutableSetMultimap<K, V> with()
+            {
+                return this.empty();
             }
 
             public <K, V> MutableSetMultimap<K, V> with(K key, V value)
@@ -331,9 +356,14 @@ public final class Multimaps
             {
             }
 
-            public <K, V> MutableBagMultimap<K, V> with()
+            public <K, V> MutableBagMultimap<K, V> empty()
             {
                 return HashBagMultimap.newMultimap();
+            }
+
+            public <K, V> MutableBagMultimap<K, V> with()
+            {
+                return this.empty();
             }
 
             public <K, V> MutableBagMultimap<K, V> with(K key, V value)

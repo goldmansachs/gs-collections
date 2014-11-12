@@ -27,14 +27,19 @@ import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
  */
 public class ImmutableBooleanSetFactoryImpl implements ImmutableBooleanSetFactory
 {
+    public ImmutableBooleanSet empty()
+    {
+        return ImmutableBooleanEmptySet.INSTANCE;
+    }
+
     public ImmutableBooleanSet of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public ImmutableBooleanSet with()
     {
-        return ImmutableBooleanEmptySet.INSTANCE;
+        return this.empty();
     }
 
     public ImmutableBooleanSet of(boolean one)

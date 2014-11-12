@@ -29,14 +29,19 @@ import com.gs.collections.api.map.primitive.<name1><name2>Map;
  */
 public class Immutable<name1><name2>MapFactoryImpl implements Immutable<name1><name2>MapFactory
 {
+    public Immutable<name1><name2>Map empty()
+    {
+        return Immutable<name1><name2>EmptyMap.INSTANCE;
+    }
+
     public Immutable<name1><name2>Map of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public Immutable<name1><name2>Map with()
     {
-        return Immutable<name1><name2>EmptyMap.INSTANCE;
+        return this.empty();
     }
 
     public Immutable<name1><name2>Map of(<type1> key, <type2> value)

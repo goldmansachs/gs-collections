@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,14 +25,19 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public final class MutableSortedSetFactoryImpl implements MutableSortedSetFactory
 {
+    public <T> MutableSortedSet<T> empty()
+    {
+        return TreeSortedSet.newSet();
+    }
+
     public <T> MutableSortedSet<T> of()
     {
-        return this.with();
+        return this.empty();
     }
 
     public <T> MutableSortedSet<T> with()
     {
-        return TreeSortedSet.newSet();
+        return this.empty();
     }
 
     public <T> MutableSortedSet<T> of(T... items)
