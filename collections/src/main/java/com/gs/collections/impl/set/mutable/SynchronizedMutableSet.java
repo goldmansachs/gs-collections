@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
@@ -39,6 +40,7 @@ import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
@@ -528,5 +530,10 @@ public class SynchronizedMutableSet<T>
     protected Object writeReplace()
     {
         return new SynchronizedCollectionSerializationProxy<T>(this.getMutableSet());
+    }
+
+    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        throw new UnsupportedOperationException("asParallel() method is not supported for " + this.getClass().getSimpleName() + '.');
     }
 }

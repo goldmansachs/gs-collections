@@ -18,9 +18,11 @@ package com.gs.collections.impl.set.immutable;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.set.ImmutableSet;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -111,5 +113,11 @@ final class ImmutableUnifiedSet<T>
     private Object writeReplace()
     {
         return new ImmutableSetSerializationProxy<T>(this);
+    }
+
+    @Override
+    public ParallelUnsortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        return this.delegate.asParallel(executorService, batchSize);
     }
 }

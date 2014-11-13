@@ -18,11 +18,13 @@ package com.gs.collections.impl.set.fixed;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.set.FixedSizeSet;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.set.mutable.AbstractMutableSet;
 import com.gs.collections.impl.utility.Iterate;
@@ -134,5 +136,10 @@ abstract class AbstractMemoryEfficientMutableSet<T>
         {
             throw new UnsupportedOperationException("Cannot remove from a fixed size set: " + this.getClass());
         }
+    }
+
+    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        return this.toSet().asParallel(executorService, batchSize);
     }
 }

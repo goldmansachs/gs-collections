@@ -19,6 +19,7 @@ package com.gs.collections.impl.set.mutable;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
@@ -38,6 +39,7 @@ import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
@@ -374,5 +376,10 @@ public class UnmodifiableMutableSet<T>
     protected Object writeReplace()
     {
         return new UnmodifiableCollectionSerializationProxy<T>(this.getMutableSet());
+    }
+
+    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        return this.getMutableSet().asParallel(executorService, batchSize);
     }
 }

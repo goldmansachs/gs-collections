@@ -654,7 +654,7 @@ public abstract class AbstractParallelIterableTestCase
         }
     }
 
-    private void assertStringsEqual(String regex, String expectedString, String actualString)
+    protected void assertStringsEqual(String regex, String expectedString, String actualString)
     {
         if (this.isOrdered())
         {

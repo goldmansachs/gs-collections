@@ -17,9 +17,11 @@
 package com.gs.collections.api.set;
 
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.partition.set.PartitionSet;
@@ -109,6 +111,14 @@ public interface SetIterable<T> extends RichIterable<T>
     <S> SetIterable<S> selectInstancesOf(Class<S> clazz);
 
     SetIterable<Pair<T, Integer>> zipWithIndex();
+
+    /**
+     * Returns a parallel iterable of this SetIterable.
+     *
+     * @since 6.0
+     */
+    @Beta
+    ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize);
 
     /**
      * Follows the same general contract as {@link Set#equals(Object)}.

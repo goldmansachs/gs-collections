@@ -19,6 +19,7 @@ package com.gs.collections.impl.set.sorted.immutable;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
@@ -48,6 +49,7 @@ import com.gs.collections.api.list.primitive.ImmutableShortList;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
+import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
@@ -422,5 +424,10 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
     public ImmutableSortedSet<T> toImmutable()
     {
         return this;
+    }
+
+    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asParallel() not implemented yet");
     }
 }

@@ -18,10 +18,12 @@ package com.gs.collections.impl.set.strategy.immutable;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.set.ImmutableSet;
+import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.set.immutable.AbstractImmutableSet;
@@ -113,5 +115,11 @@ final class ImmutableUnifiedSetWithHashingStrategy<T>
     private Object writeReplace()
     {
         return new ImmutableSetWithHashingStrategySerializationProxy<T>(this, this.delegate.hashingStrategy());
+    }
+
+    @Override
+    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        return this.delegate.asParallel(executorService, batchSize);
     }
 }

@@ -27,9 +27,11 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.HashingStrategy;
@@ -71,6 +73,7 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.api.set.Pool;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
@@ -114,6 +117,13 @@ import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.HashingStrategySets;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.AbstractBatch;
+import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
+import com.gs.collections.impl.lazy.parallel.set.CollectUnsortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.RootUnsortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.SelectUnsortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
@@ -1024,7 +1034,69 @@ public class UnifiedSetWithHashingStrategy<K>
 
     public K detect(Predicate<? super K> predicate)
     {
-        return IterableIterate.detect(this, predicate);
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                Object chainedDetect = this.chainedDetect((ChainedBucket) cur, predicate);
+                if (chainedDetect != null)
+                {
+                    return this.nonSentinel(chainedDetect);
+                }
+            }
+            else if (cur != null)
+            {
+                K each = this.nonSentinel(cur);
+                if (predicate.accept(each))
+                {
+                    return each;
+                }
+            }
+        }
+        return null;
+    }
+
+    private Object chainedDetect(ChainedBucket bucket, Predicate<? super K> predicate)
+    {
+        do
+        {
+            if (predicate.accept(this.nonSentinel(bucket.zero)))
+            {
+                return bucket.zero;
+            }
+            if (bucket.one == null)
+            {
+                return null;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.one)))
+            {
+                return bucket.one;
+            }
+            if (bucket.two == null)
+            {
+                return null;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.two)))
+            {
+                return bucket.two;
+            }
+            if (bucket.three == null)
+            {
+                return null;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.three)))
+            {
+                return bucket.three;
+            }
+            return null;
+        }
+        while (true);
     }
 
     public K min(Comparator<? super K> comparator)
@@ -1102,19 +1174,190 @@ public class UnifiedSetWithHashingStrategy<K>
 
     public boolean anySatisfy(Predicate<? super K> predicate)
     {
-        return IterableIterate.anySatisfy(this, predicate);
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                if (this.chainedAnySatisfy((ChainedBucket) cur, predicate))
+                {
+                    return true;
+                }
+            }
+            else if (cur != null)
+            {
+                if (predicate.accept(this.nonSentinel(cur)))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean chainedAnySatisfy(ChainedBucket bucket, Predicate<? super K> predicate)
+    {
+        do
+        {
+            if (predicate.accept(this.nonSentinel(bucket.zero)))
+            {
+                return true;
+            }
+            if (bucket.one == null)
+            {
+                return false;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.one)))
+            {
+                return true;
+            }
+            if (bucket.two == null)
+            {
+                return false;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.two)))
+            {
+                return true;
+            }
+            if (bucket.three == null)
+            {
+                return false;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            return predicate.accept(this.nonSentinel(bucket.three));
+        }
+        while (true);
     }
 
     public <P> boolean anySatisfyWith(
             Predicate2<? super K, ? super P> predicate,
             P parameter)
     {
-        return IterableIterate.anySatisfyWith(this, predicate, parameter);
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                if (this.chainedAnySatisfyWith((ChainedBucket) cur, predicate, parameter))
+                {
+                    return true;
+                }
+            }
+            else if (cur != null)
+            {
+                if (predicate.accept(this.nonSentinel(cur), parameter))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private <P> boolean chainedAnySatisfyWith(
+            ChainedBucket bucket,
+            Predicate2<? super K, ? super P> predicate,
+            P parameter)
+    {
+        do
+        {
+            if (predicate.accept(this.nonSentinel(bucket.zero), parameter))
+            {
+                return true;
+            }
+            if (bucket.one == null)
+            {
+                return false;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.one), parameter))
+            {
+                return true;
+            }
+            if (bucket.two == null)
+            {
+                return false;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.two), parameter))
+            {
+                return true;
+            }
+            if (bucket.three == null)
+            {
+                return false;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            return predicate.accept(this.nonSentinel(bucket.three), parameter);
+        }
+        while (true);
     }
 
     public boolean allSatisfy(Predicate<? super K> predicate)
     {
-        return IterableIterate.allSatisfy(this, predicate);
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                if (!this.chainedAllSatisfy((ChainedBucket) cur, predicate))
+                {
+                    return false;
+                }
+            }
+            else if (cur != null)
+            {
+                if (!predicate.accept(this.nonSentinel(cur)))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean chainedAllSatisfy(ChainedBucket bucket, Predicate<? super K> predicate)
+    {
+        do
+        {
+            if (!predicate.accept(this.nonSentinel(bucket.zero)))
+            {
+                return false;
+            }
+            if (bucket.one == null)
+            {
+                return true;
+            }
+            if (!predicate.accept(this.nonSentinel(bucket.one)))
+            {
+                return false;
+            }
+            if (bucket.two == null)
+            {
+                return true;
+            }
+            if (!predicate.accept(this.nonSentinel(bucket.two)))
+            {
+                return false;
+            }
+            if (bucket.three == null)
+            {
+                return true;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            return predicate.accept(this.nonSentinel(bucket.three));
+        }
+        while (true);
     }
 
     public <P> boolean allSatisfyWith(
@@ -2774,5 +3017,225 @@ public class UnifiedSetWithHashingStrategy<K>
             }
         });
         return map;
+    }
+
+    @Beta
+    public ParallelUnsortedSetIterable<K> asParallel(ExecutorService executorService, int batchSize)
+    {
+        if (executorService == null)
+        {
+            throw new NullPointerException();
+        }
+        if (batchSize < 1)
+        {
+            throw new IllegalArgumentException();
+        }
+        return new UnifiedSetParallelUnsortedIterable(executorService, batchSize);
+    }
+
+    private final class UnifiedUnsortedSetBatch extends AbstractBatch<K> implements RootUnsortedSetBatch<K>
+    {
+        private final int chunkStartIndex;
+        private final int chunkEndIndex;
+
+        private UnifiedUnsortedSetBatch(int chunkStartIndex, int chunkEndIndex)
+        {
+            this.chunkStartIndex = chunkStartIndex;
+            this.chunkEndIndex = chunkEndIndex;
+        }
+
+        public void forEach(Procedure<? super K> procedure)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                Object cur = UnifiedSetWithHashingStrategy.this.table[i];
+                if (cur instanceof ChainedBucket)
+                {
+                    UnifiedSetWithHashingStrategy.this.chainedForEach((ChainedBucket) cur, procedure);
+                }
+                else if (cur != null)
+                {
+                    procedure.value(UnifiedSetWithHashingStrategy.this.nonSentinel(cur));
+                }
+            }
+        }
+
+        public boolean anySatisfy(Predicate<? super K> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                Object cur = UnifiedSetWithHashingStrategy.this.table[i];
+                if (cur instanceof ChainedBucket)
+                {
+                    UnifiedSetWithHashingStrategy.this.chainedAnySatisfy((ChainedBucket) cur, predicate);
+                }
+                else if (cur != null)
+                {
+                    if (predicate.accept(UnifiedSetWithHashingStrategy.this.nonSentinel(cur)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public boolean allSatisfy(Predicate<? super K> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                Object cur = UnifiedSetWithHashingStrategy.this.table[i];
+                if (cur instanceof ChainedBucket)
+                {
+                    UnifiedSetWithHashingStrategy.this.chainedAllSatisfy((ChainedBucket) cur, predicate);
+                }
+                else if (cur != null)
+                {
+                    if (!predicate.accept(UnifiedSetWithHashingStrategy.this.nonSentinel(cur)))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public K detect(Predicate<? super K> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                Object cur = UnifiedSetWithHashingStrategy.this.table[i];
+                if (cur instanceof ChainedBucket)
+                {
+                    Object chainedDetect = UnifiedSetWithHashingStrategy.this.chainedDetect((ChainedBucket) cur, predicate);
+                    if (chainedDetect != null)
+                    {
+                        return UnifiedSetWithHashingStrategy.this.nonSentinel(chainedDetect);
+                    }
+                }
+                else if (cur != null)
+                {
+                    K each = UnifiedSetWithHashingStrategy.this.nonSentinel(cur);
+                    if (predicate.accept(each))
+                    {
+                        return each;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public UnsortedSetBatch<K> select(Predicate<? super K> predicate)
+        {
+            return new SelectUnsortedSetBatch<K>(this, predicate);
+        }
+
+        public <V> UnsortedSetBatch<V> collect(Function<? super K, ? extends V> function)
+        {
+            return new CollectUnsortedSetBatch<K, V>(this, function);
+        }
+    }
+
+    private final class UnifiedSetParallelUnsortedIterable extends AbstractParallelUnsortedSetIterable<K, RootUnsortedSetBatch<K>>
+    {
+        private final ExecutorService executorService;
+        private final int batchSize;
+
+        private UnifiedSetParallelUnsortedIterable(ExecutorService executorService, int batchSize)
+        {
+            this.executorService = executorService;
+            this.batchSize = batchSize;
+        }
+
+        @Override
+        public ExecutorService getExecutorService()
+        {
+            return this.executorService;
+        }
+
+        @Override
+        public LazyIterable<RootUnsortedSetBatch<K>> split()
+        {
+            return new UnifiedSetParallelSplitLazyIterable();
+        }
+
+        public void forEach(Procedure<? super K> procedure)
+        {
+            forEach(this, procedure);
+        }
+
+        public boolean anySatisfy(Predicate<? super K> predicate)
+        {
+            return anySatisfy(this, predicate);
+        }
+
+        public boolean allSatisfy(Predicate<? super K> predicate)
+        {
+            return allSatisfy(this, predicate);
+        }
+
+        public K detect(Predicate<? super K> predicate)
+        {
+            return detect(this, predicate);
+        }
+
+        private class UnifiedSetParallelSplitIterator implements Iterator<RootUnsortedSetBatch<K>>
+        {
+            protected int chunkIndex;
+
+            public boolean hasNext()
+            {
+                return this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize < UnifiedSetWithHashingStrategy.this.table.length;
+            }
+
+            public RootUnsortedSetBatch<K> next()
+            {
+                int chunkStartIndex = this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize;
+                int chunkEndIndex = (this.chunkIndex + 1) * UnifiedSetParallelUnsortedIterable.this.batchSize;
+                int truncatedChunkEndIndex = Math.min(chunkEndIndex, UnifiedSetWithHashingStrategy.this.table.length);
+                this.chunkIndex++;
+                return new UnifiedUnsortedSetBatch(chunkStartIndex, truncatedChunkEndIndex);
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
+            }
+        }
+
+        private class UnifiedSetParallelSplitLazyIterable
+                extends AbstractLazyIterable<RootUnsortedSetBatch<K>>
+        {
+            public void forEach(Procedure<? super RootUnsortedSetBatch<K>> procedure)
+            {
+                this.each(procedure);
+            }
+
+            public void each(Procedure<? super RootUnsortedSetBatch<K>> procedure)
+            {
+                for (RootUnsortedSetBatch<K> chunk : this)
+                {
+                    procedure.value(chunk);
+                }
+            }
+
+            public <P> void forEachWith(Procedure2<? super RootUnsortedSetBatch<K>, ? super P> procedure, P parameter)
+            {
+                for (RootUnsortedSetBatch<K> chunk : this)
+                {
+                    procedure.value(chunk, parameter);
+                }
+            }
+
+            public void forEachWithIndex(ObjectIntProcedure<? super RootUnsortedSetBatch<K>> objectIntProcedure)
+            {
+                throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEachWithIndex() not implemented yet");
+            }
+
+            public Iterator<RootUnsortedSetBatch<K>> iterator()
+            {
+                return new UnifiedSetParallelSplitIterator();
+            }
+        }
     }
 }

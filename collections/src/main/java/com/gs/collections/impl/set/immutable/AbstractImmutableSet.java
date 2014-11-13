@@ -18,6 +18,7 @@ package com.gs.collections.impl.set.immutable;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
@@ -41,6 +42,7 @@ import com.gs.collections.api.partition.set.PartitionImmutableSet;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
@@ -410,5 +412,10 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
     public <B> LazyIterable<Pair<T, B>> cartesianProduct(SetIterable<B> set)
     {
         return SetIterables.cartesianProduct(this, set);
+    }
+
+    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        return this.toSet().asParallel(executorService, batchSize);
     }
 }
