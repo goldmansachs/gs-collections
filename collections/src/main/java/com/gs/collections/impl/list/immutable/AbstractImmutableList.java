@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.list.immutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -102,7 +103,8 @@ import net.jcip.annotations.Immutable;
  * interface so anArrayList.equals(anImmutableList) can return true when the contents and order are the same.
  */
 @Immutable
-abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
+abstract class AbstractImmutableList<T>
+        extends AbstractImmutableCollection<T>
         implements ImmutableList<T>, List<T>
 {
     public List<T> castToList()
@@ -703,9 +705,9 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return new ImmutableListIterator<T>(this, index);
     }
 
-    public List<T> subList(int fromIndex, int toIndex)
+    public ImmutableSubList<T> subList(int fromIndex, int toIndex)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".subList() not implemented yet");
+        return new ImmutableSubList<T>(this, fromIndex, toIndex);
     }
 
     public ImmutableList<T> distinct()
@@ -842,5 +844,134 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     public ImmutableList<T> toImmutable()
     {
         return this;
+    }
+
+    protected static class ImmutableSubList<T>
+            extends AbstractImmutableList<T>
+            implements Serializable, RandomAccess
+    {
+        // Not important since it uses writeReplace()
+        private static final long serialVersionUID = 1L;
+
+        private final ImmutableList<T> original;
+        private final int offset;
+        private final int size;
+
+        protected ImmutableSubList(ImmutableList<T> list, int fromIndex, int toIndex)
+        {
+            if (fromIndex < 0)
+            {
+                throw new IndexOutOfBoundsException("fromIndex = " + fromIndex);
+            }
+            if (toIndex > list.size())
+            {
+                throw new IndexOutOfBoundsException("toIndex = " + toIndex);
+            }
+            if (fromIndex > toIndex)
+            {
+                throw new IllegalArgumentException("fromIndex(" + fromIndex + ") > toIndex(" + toIndex + ')');
+            }
+            this.original = list;
+            this.offset = fromIndex;
+            this.size = toIndex - fromIndex;
+        }
+
+        public T get(int index)
+        {
+            this.checkIfOutOfBounds(index);
+            return this.original.get(index + this.offset);
+        }
+
+        public int size()
+        {
+            return this.size;
+        }
+
+        public ImmutableList<T> newWith(T newItem)
+        {
+            int oldSize = this.size();
+            T[] array = (T[]) new Object[oldSize + 1];
+            this.toArray(array);
+            array[oldSize] = newItem;
+            return Lists.immutable.of(array);
+        }
+
+        protected Object writeReplace()
+        {
+            return Lists.immutable.ofAll(this);
+        }
+
+        @Override
+        public Iterator<T> iterator()
+        {
+            return this.listIterator(0);
+        }
+
+        @Override
+        public ImmutableSubList<T> subList(int fromIndex, int toIndex)
+        {
+            if (fromIndex < 0)
+            {
+                throw new IndexOutOfBoundsException("fromIndex = " + fromIndex);
+            }
+            if (toIndex > this.size())
+            {
+                throw new IndexOutOfBoundsException("toIndex = " + toIndex);
+            }
+            if (fromIndex > toIndex)
+            {
+                throw new IllegalArgumentException("fromIndex(" + fromIndex + ") > toIndex(" + toIndex + ')');
+            }
+
+            return new ImmutableSubList<T>(this.original, this.offset + fromIndex, this.offset + toIndex);
+        }
+
+        private void checkIfOutOfBounds(int index)
+        {
+            if (index >= this.size || index < 0)
+            {
+                throw new IndexOutOfBoundsException("Index: " + index + " Size: " + this.size);
+            }
+        }
+
+        @Override
+        public T getFirst()
+        {
+            return this.isEmpty() ? null : this.original.get(this.offset);
+        }
+
+        @Override
+        public T getLast()
+        {
+            return this.isEmpty() ? null : this.original.get(this.offset + this.size - 1);
+        }
+
+        @Override
+        public MutableStack<T> toStack()
+        {
+            return ArrayStack.newStack(this);
+        }
+
+        public void each(Procedure<? super T> procedure)
+        {
+            this.forEach(procedure);
+        }
+
+        public void forEach(Procedure<? super T> procedure)
+        {
+            ListIterate.forEach(this, procedure);
+        }
+
+        @Override
+        public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
+        {
+            ListIterate.forEachWithIndex(this, objectIntProcedure);
+        }
+
+        @Override
+        public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
+        {
+            ListIterate.forEachWith(this, procedure, parameter);
+        }
     }
 }

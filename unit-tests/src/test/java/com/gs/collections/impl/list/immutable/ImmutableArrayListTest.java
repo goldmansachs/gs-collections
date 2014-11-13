@@ -73,6 +73,12 @@ public class ImmutableArrayListTest extends AbstractImmutableListTestCase
         ImmutableList<Integer> without1 = list.newWithout(1);
         Assert.assertNotEquals(list, without1);
         Assert.assertEquals(FastList.newListWith(2, 3, 4), without1);
+
+        ImmutableList<Integer> without0 = list.newWithout(0);
+        Assert.assertSame(list, without0);
+
+        ImmutableList<Integer> without5 = list.newWithout(5);
+        Assert.assertSame(list, without5);
     }
 
     @Test

@@ -284,6 +284,13 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
     }
 
     @Override
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subList()
+    {
+        this.classUnderTest().subList(0, 1);
+    }
+
+    @Override
     @Test
     public void zip()
     {

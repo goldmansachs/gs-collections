@@ -181,11 +181,20 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     }
 
     @Test
+    public void each()
+    {
+        MutableList<Integer> result = Lists.mutable.of();
+        ImmutableList<Integer> collection = this.classUnderTest();
+        collection.each(result::add);
+        Assert.assertEquals(collection, result);
+    }
+
+    @Test
     public void reverseForEach()
     {
         MutableList<Integer> result = Lists.mutable.of();
         ImmutableList<Integer> list = this.classUnderTest();
-        list.reverseForEach(CollectionAddProcedure.on(result));
+        list.reverseForEach(result::add);
         Assert.assertEquals(ListIterate.reverseThis(FastList.newList(list)), result);
     }
 
@@ -359,7 +368,26 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     @Test
     public void subList()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> this.classUnderTest().castToList().subList(0, 1));
+        Verify.assertListsEqual(Lists.immutable.of(1).castToList(),
+                this.classUnderTest().castToList().subList(0, 1));
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subListFromNegative()
+    {
+        this.classUnderTest().castToList().subList(-1, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void subListFromGreaterThanTO()
+    {
+        this.classUnderTest().castToList().subList(1, 0);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subListToGreaterThanSize()
+    {
+        this.classUnderTest().castToList().subList(0, 100);
     }
 
     @Test
@@ -380,6 +408,18 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         Verify.assertThrows(UnsupportedOperationException.class, () -> it.add(null));
 
         Verify.assertThrows(UnsupportedOperationException.class, () -> it.set(null));
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void listIterator_throwsNegative()
+    {
+        this.classUnderTest().listIterator(-1);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void listIterator_throwsGreaterThanSize()
+    {
+        this.classUnderTest().listIterator(100);
     }
 
     @Test

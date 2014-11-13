@@ -120,4 +120,10 @@ public interface ImmutableList<T>
     PartitionImmutableList<T> partitionWhile(Predicate<? super T> predicate);
 
     List<T> castToList();
+
+    /**
+     * @see List#subList(int, int)
+     * @since 6.0
+     */
+    ImmutableList<T> subList(int fromIndex, int toIndex);
 }
