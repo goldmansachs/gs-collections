@@ -430,7 +430,7 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
 
     public <V1> MutableMap<V1, V> groupByUniqueKey(Function<? super V, ? extends V1> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return this.groupByUniqueKey(function, UnifiedMap.<V1, V>newMap());
     }
 
     public <K2, V2> MutableMap<K2, V2> aggregateInPlaceBy(

@@ -1128,6 +1128,14 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
+    public \<VV, R extends MutableMap\<VV, V>\> R groupByUniqueKey(Function\<? super V, ? extends VV> function, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.groupByUniqueKey(function, target);
+        }
+    }
+
     public \<S> MutableCollection\<Pair\<V, S>\> zip(Iterable\<S> that)
     {
         synchronized (this.lock)

@@ -530,6 +530,11 @@ public class LazyIterableTestHelper<T> implements LazyIterable<T>
         return null;
     }
 
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(Function<? super T, ? extends V> function, R target)
+    {
+        return null;
+    }
+
     public LazyIterable<T> concatenate(Iterable<T> iterable)
     {
         return null;

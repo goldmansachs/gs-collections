@@ -1470,6 +1470,21 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            Function<? super T, ? extends V> function,
+            R target)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().groupByUniqueKey(function, target);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
     {
         this.acquireReadLock();
@@ -1680,6 +1695,13 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
                 R target)
         {
             return this.delegate.groupByEach(function, target);
+        }
+
+        public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
+                Function<? super T, ? extends V> function,
+                R target)
+        {
+            return this.delegate.groupByUniqueKey(function, target);
         }
 
         public int count(Predicate<? super T> predicate)

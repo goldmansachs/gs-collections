@@ -65,6 +65,7 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -919,9 +920,25 @@ public final class IterableIterate
         return IteratorIterate.groupByEach(iterable.iterator(), function, target);
     }
 
-    public static <K, T> MutableMap<K, T> groupByUniqueKey(Iterable<T> iterable, Function<? super T, ? extends K> function)
+    /**
+     * @see Iterate#groupByUniqueKey(Iterable, Function)
+     */
+    public static <K, T> MutableMap<K, T> groupByUniqueKey(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> function)
     {
-        return IteratorIterate.groupByUniqueKey(iterable.iterator(), function);
+        return IterableIterate.groupByUniqueKey(iterable, function, UnifiedMap.<K, T>newMap());
+    }
+
+    /**
+     * @see Iterate#groupByUniqueKey(Iterable, Function, MutableMap)
+     */
+    public static <K, T, R extends MutableMap<K, T>> R groupByUniqueKey(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> function,
+            R target)
+    {
+        return IteratorIterate.groupByUniqueKey(iterable.iterator(), function, target);
     }
 
     public static <T> T getOnly(Iterable<T> iterable)

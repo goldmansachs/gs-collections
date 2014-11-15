@@ -50,6 +50,7 @@ import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.set.sorted.TreeSortedSetMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
@@ -797,6 +798,32 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
+    public void groupByUniqueKey()
+    {
+        Assert.assertEquals(
+                this.classUnderTest().toBag().groupByUniqueKey(id -> id),
+                this.classUnderTest().groupByUniqueKey(id -> id));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_throws()
+    {
+        this.classUnderTest(Collections.<Integer>reverseOrder()).groupByUniqueKey(Functions.getFixedValue(1));
+    }
+
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        Assert.assertEquals(this.classUnderTest().groupByUniqueKey(id -> id), this.classUnderTest().groupByUniqueKey(id -> id, UnifiedMap.<Integer, Integer>newMap()));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_target_throws()
+    {
+        this.classUnderTest(Collections.<Integer>reverseOrder()).groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(2, 2));
+    }
+
+    @Test
     public void union()
     {
         ImmutableSortedSet<Integer> set = this.classUnderTest();
@@ -923,14 +950,6 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         ImmutableSortedSet<Integer> set = this.classUnderTest(Comparators.reverseNaturalOrder());
         Assert.assertEquals(ArrayStack.newStackWith(4, 3, 2, 1), set.toStack());
-    }
-
-    @Test
-    public void groupByUniqueKey()
-    {
-        Assert.assertEquals(
-                this.classUnderTest().toBag().groupByUniqueKey(Functions.getPassThru()),
-                this.classUnderTest().groupByUniqueKey(Functions.getPassThru()));
     }
 
     @Test

@@ -2861,7 +2861,12 @@ public final class Iterate
         throw new IllegalArgumentException("Cannot perform a groupByEach on null");
     }
 
-    public static <V, T> MutableMap<V, T> groupByUniqueKey(Iterable<T> iterable, Function<? super T, ? extends V> function)
+    /**
+     * @see RichIterable#groupByUniqueKey(Function)
+     */
+    public static <V, T> MutableMap<V, T> groupByUniqueKey(
+            Iterable<T> iterable,
+            Function<? super T, ? extends V> function)
     {
         if (iterable instanceof List)
         {
@@ -2870,6 +2875,25 @@ public final class Iterate
         if (iterable != null)
         {
             return IterableIterate.groupByUniqueKey(iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform a groupByUniqueKey on null");
+    }
+
+    /**
+     * @see RichIterable#groupByUniqueKey(Function, MutableMap)
+     */
+    public static <V, T, R extends MutableMap<V, T>> R groupByUniqueKey(
+            Iterable<T> iterable,
+            Function<? super T, ? extends V> function,
+            R target)
+    {
+        if (iterable instanceof List)
+        {
+            return ListIterate.groupByUniqueKey((List<T>) iterable, function, target);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.groupByUniqueKey(iterable, function, target);
         }
         throw new IllegalArgumentException("Cannot perform a groupByUniqueKey on null");
     }

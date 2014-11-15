@@ -17,13 +17,19 @@
 package com.gs.collections.impl.set.fixed;
 
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.Procedures2;
+import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -203,5 +209,23 @@ public class DoubletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
         MutableSet<String> source = Sets.fixedSize.of("1", "2");
         Assert.assertEquals("1", source.getFirst());
         Assert.assertEquals("2", source.getLast());
+    }
+
+    @Override
+    @Test
+    public void groupByEach()
+    {
+        super.groupByEach();
+
+        MutableSet<Integer> set = Sets.fixedSize.of(1, 2);
+        MutableMultimap<Integer, Integer> expected = UnifiedSetMultimap.newMultimap();
+        set.forEach(Procedures.cast(value -> expected.putAll(-value, Interval.fromTo(value, set.size()))));
+        Multimap<Integer, Integer> actual =
+                set.groupByEach(new NegativeIntervalFunction());
+        Assert.assertEquals(expected, actual);
+
+        Multimap<Integer, Integer> actualWithTarget =
+                set.groupByEach(new NegativeIntervalFunction(), UnifiedSetMultimap.<Integer, Integer>newMultimap());
+        Assert.assertEquals(expected, actualWithTarget);
     }
 }

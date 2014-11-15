@@ -20,6 +20,7 @@ import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.test.Verify;
@@ -125,5 +126,23 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
         ImmutableBag<Number> numbers = ImmutableArrayBag.<Number>newBagWith(1, 2.0, 2.0, 3, 3, 3, 4.0, 4.0, 4.0, 4.0);
         Assert.assertEquals(iBag(1, 3, 3, 3), numbers.selectInstancesOf(Integer.class));
         Assert.assertEquals(iBag(2.0, 2.0, 4.0, 4.0, 4.0, 4.0), numbers.selectInstancesOf(Double.class));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey()
+    {
+        // Only works on bags without duplicates
+        ImmutableBag<Integer> immutableBag = ImmutableArrayBag.newBagWith(1, 2, 3);
+        Assert.assertEquals(Maps.immutable.of(1, 1, 2, 2, 3, 3), immutableBag.groupByUniqueKey(id -> id));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        // Only works on bags without duplicates
+        ImmutableBag<Integer> immutableBag = ImmutableArrayBag.newBagWith(1, 2, 3);
+        Assert.assertEquals(Maps.immutable.of(0, 0, 1, 1, 2, 2, 3, 3), immutableBag.groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(0, 0)));
     }
 }

@@ -74,6 +74,7 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -1061,6 +1062,24 @@ public abstract class ImmutableBagTestCase
         }
     }
 
+    @Test(expected = IllegalStateException.class)
+    public abstract void groupByUniqueKey();
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_throws()
+    {
+        this.newBag().groupByUniqueKey(id -> id);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public abstract void groupByUniqueKey_target();
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_target_throws()
+    {
+        this.newBag().groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues("1", "1"));
+    }
+
     @Test
     public void toSet()
     {
@@ -1168,12 +1187,6 @@ public abstract class ImmutableBagTestCase
     {
         ImmutableBag<String> bag = this.newBag();
         Verify.assertPostSerializedEqualsAndHashCode(bag);
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void groupByUniqueKey()
-    {
-        this.newBag().groupByUniqueKey(Functions.getPassThru());
     }
 
     @Test

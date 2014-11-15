@@ -1065,6 +1065,14 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(Function<? super T, ? extends V> function, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.groupByUniqueKey(function, target);
+        }
+    }
+
     public RichIterable<RichIterable<T>> chunk(int size)
     {
         synchronized (this.lock)

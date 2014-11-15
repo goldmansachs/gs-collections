@@ -821,7 +821,12 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
 
     public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        return this.delegate.groupByUniqueKey(function).toImmutable();
+        return this.groupByUniqueKey(function, UnifiedMap.<V, T>newMap()).toImmutable();
+    }
+
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(Function<? super T, ? extends V> function, R target)
+    {
+        return this.delegate.asReversed().groupByUniqueKey(function, target);
     }
 
     public <S> ImmutableStack<Pair<T, S>> zip(Iterable<S> that)

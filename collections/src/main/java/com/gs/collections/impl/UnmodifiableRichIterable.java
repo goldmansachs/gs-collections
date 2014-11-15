@@ -668,6 +668,13 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.groupByUniqueKey(function);
     }
 
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            Function<? super T, ? extends V> function,
+            R target)
+    {
+        return this.iterable.groupByUniqueKey(function, target);
+    }
+
     public <S> RichIterable<Pair<T, S>> zip(Iterable<S> that)
     {
         return this.iterable.zip(that);

@@ -1040,19 +1040,24 @@ public final class IteratorIterate
         return target;
     }
 
-    public static <K, T> MutableMap<K, T> groupByUniqueKey(Iterator<T> iterator, Function<? super T, ? extends K> function)
+    /**
+     * @see Iterate#groupByUniqueKey(Iterable, Function, MutableMap)
+     */
+    public static <K, T, R extends MutableMap<K, T>> R groupByUniqueKey(
+            Iterator<T> iterator,
+            Function<? super T, ? extends K> function,
+            R target)
     {
-        MutableMap<K, T> result = UnifiedMap.newMap();
         while (iterator.hasNext())
         {
             T value = iterator.next();
             K key = function.valueOf(value);
-            if (result.put(key, value) != null)
+            if (target.put(key, value) != null)
             {
-                throw new IllegalStateException("Attempt to put duplicate keys using groupByUniqueKey");
+                throw new IllegalStateException("Key " + key + " already exists in map!");
             }
         }
-        return result;
+        return target;
     }
 
     public static <T, R extends Collection<T>> R distinct(

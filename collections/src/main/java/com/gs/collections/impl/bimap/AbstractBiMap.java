@@ -549,6 +549,11 @@ public abstract class AbstractBiMap<K, V> implements BiMap<K, V>
         return this.getDelegate().groupByEach(function, target);
     }
 
+    public <VV, R extends MutableMap<VV, V>> R groupByUniqueKey(Function<? super V, ? extends VV> function, R target)
+    {
+        return this.getDelegate().groupByUniqueKey(function, target);
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super V, ? extends IV> function)
     {
         return this.getDelegate().injectInto(injectedValue, function);

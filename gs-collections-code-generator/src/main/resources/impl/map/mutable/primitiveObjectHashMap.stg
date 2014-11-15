@@ -1503,12 +1503,76 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             Function\<? super V, ? extends Iterable\<VV>\> function,
             R target)
     {
-        return IterableIterate.groupByEach(this, function, target);
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                Iterable\<VV> iterable  = function.valueOf(this.sentinelValues.zeroValue);
+                for (VV key : iterable)
+                {
+                    target.put(key, this.sentinelValues.zeroValue);
+                }
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                Iterable\<VV> iterable  = function.valueOf(this.sentinelValues.oneValue);
+                for (VV key : iterable)
+                {
+                    target.put(key, this.sentinelValues.oneValue);
+                }
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                Iterable\<VV> iterable  = function.valueOf(this.values[i]);
+                for (VV key : iterable)
+                {
+                    target.put(key, this.values[i]);
+                }
+            }
+        }
+        return target;
     }
 
     public \<VV> MutableMap\<VV, V> groupByUniqueKey(Function\<? super V, ? extends VV> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return this.groupByUniqueKey(function, UnifiedMap.\<VV, V>newMap());
+    }
+
+    public \<VV, R extends MutableMap\<VV, V>\> R groupByUniqueKey(
+                Function\<? super V, ? extends VV> function,
+                R target)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                if (target.put(function.valueOf(this.sentinelValues.zeroValue), this.sentinelValues.zeroValue) != null)
+                {
+                    throw new IllegalStateException("Key " + function.valueOf(this.sentinelValues.zeroValue) + " already exists in map!");
+                }
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                if (target.put(function.valueOf(this.sentinelValues.oneValue), this.sentinelValues.oneValue) != null)
+                {
+                    throw new IllegalStateException("Key " + function.valueOf(this.sentinelValues.oneValue) + " already exists in map!");
+                }
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                if (target.put(function.valueOf(this.values[i]), this.values[i]) != null)
+                {
+                    throw new IllegalStateException("Key " + function.valueOf(this.values[i]) + " already exists in map!");
+                }
+            }
+        }
+        return target;
     }
 
     public V getFirst()

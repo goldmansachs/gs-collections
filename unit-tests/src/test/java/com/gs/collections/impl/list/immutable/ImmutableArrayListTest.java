@@ -202,6 +202,25 @@ public class ImmutableArrayListTest extends AbstractImmutableListTestCase
     @Test
     public void groupByUniqueKey()
     {
-        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), this.newList(1, 2, 3).groupByUniqueKey(Functions.getPassThru()));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), this.classUnderTest().groupByUniqueKey(id -> id));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_throws()
+    {
+        this.classUnderTest().groupByUniqueKey(Functions.getFixedValue(1));
+    }
+
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        MutableMap<Integer, Integer> integers = this.classUnderTest().groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(0, 0));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(0, 0, 1, 1, 2, 2, 3, 3), integers);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_target_throws()
+    {
+        this.classUnderTest().groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(2, 2));
     }
 }

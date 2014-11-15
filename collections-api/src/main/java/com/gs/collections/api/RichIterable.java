@@ -1398,6 +1398,18 @@ public interface
     <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function);
 
     /**
+     * Same as {@link #groupByUniqueKey(Function)}, except that the results are gathered into the specified {@code target}
+     * map.
+     *
+     * @throws IllegalStateException if the keys returned by the function are not unique
+     * @see #groupByUniqueKey(Function)
+     * @since 6.0
+     */
+    <V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            Function<? super T, ? extends V> function,
+            R target);
+
+    /**
      * Returns a string representation of this RichIterable.  The string representation consists of a list of the
      * RichIterable's elements in the order they are returned by its iterator, enclosed in square brackets
      * (<tt>"[]"</tt>).  Adjacent elements are separated by the characters <tt>", "</tt> (comma and space).  Elements

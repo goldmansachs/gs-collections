@@ -42,6 +42,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -996,6 +997,33 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void groupByUniqueKey()
+    {
+        MapIterable<Integer, Integer> map = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), map.groupByUniqueKey(id -> id));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_throws()
+    {
+        this.newMapWithKeysValues(1, 1, 2, 2, 3, 3).groupByUniqueKey(Functions.getFixedValue(1));
+    }
+
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        MapIterable<Integer, Integer> map = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);
+        MutableMap<Integer, Integer> integers = map.groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(0, 0));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(0, 0, 1, 1, 2, 2, 3, 3), integers);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_target_throws()
+    {
+        this.newMapWithKeysValues(1, 1, 2, 2, 3, 3).groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(2, 2));
+    }
+
+    @Test
     public void injectInto()
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
@@ -1350,11 +1378,5 @@ public abstract class MapIterableTestCase
                 mutableMap);
         Assert.assertEquals("Test 3", mutableMap.get(new IntegerWithCast(0)));
         Assert.assertEquals("Test 1", mutableMap.get(null));
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void groupByUniqueKey()
-    {
-        this.newMap().groupByUniqueKey(Functions.getPassThru());
     }
 }

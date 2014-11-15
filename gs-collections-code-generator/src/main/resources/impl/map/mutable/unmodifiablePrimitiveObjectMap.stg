@@ -749,7 +749,12 @@ public final class Unmodifiable<name>ObjectMap\<V>
 
     public \<V1> MutableMap\<V1, V> groupByUniqueKey(Function\<? super V, ? extends V1> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return this.map.groupByUniqueKey(function);
+    }
+
+    public \<V1, R extends MutableMap\<V1, V>\> R groupByUniqueKey(Function\<? super V, ? extends V1> function, R target)
+    {
+        return this.map.groupByUniqueKey(function, target);
     }
 
     public \<S> MutableCollection\<Pair\<V, S>\> zip(Iterable\<S> that)

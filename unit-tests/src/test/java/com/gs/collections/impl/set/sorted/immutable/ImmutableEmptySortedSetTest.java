@@ -45,6 +45,7 @@ import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
@@ -689,5 +690,21 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
         Assert.assertEquals(ShortArrayList.newListWith(), integers.collectShort(PrimitiveFunctions.unboxIntegerToShort()));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey_throws()
+    {
+        super.groupByUniqueKey_throws();
+        Assert.assertEquals(UnifiedMap.newMap().toImmutable(), this.classUnderTest().groupByUniqueKey(id -> id));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey_target_throws()
+    {
+        super.groupByUniqueKey_target_throws();
+        Assert.assertEquals(UnifiedMap.newMap(), this.classUnderTest().groupByUniqueKey(id -> id, UnifiedMap.<Integer, Integer>newMap()));
     }
 }

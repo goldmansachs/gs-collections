@@ -772,6 +772,13 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
         return this.getMutableCollection().groupByUniqueKey(function);
     }
 
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            Function<? super T, ? extends V> function,
+            R target)
+    {
+        return this.getMutableCollection().groupByUniqueKey(function, target);
+    }
+
     public <S> MutableCollection<Pair<T, S>> zip(Iterable<S> that)
     {
         return this.getMutableCollection().zip(that);

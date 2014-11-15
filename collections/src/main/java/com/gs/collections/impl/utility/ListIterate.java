@@ -1315,13 +1315,33 @@ public final class ListIterate
         return IterableIterate.groupByEach(list, function, target);
     }
 
-    public static <K, T> MutableMap<K, T> groupByUniqueKey(List<T> list, Function<? super T, ? extends K> function)
+    /**
+     * @see Iterate#groupByUniqueKey(Iterable, Function)
+     */
+    public static <K, T> MutableMap<K, T> groupByUniqueKey(
+            List<T> list,
+            Function<? super T, ? extends K> function)
     {
         if (list instanceof RandomAccess)
         {
             return RandomAccessListIterate.groupByUniqueKey(list, function);
         }
         return IterableIterate.groupByUniqueKey(list, function);
+    }
+
+    /**
+     * @see Iterate#groupByUniqueKey(Iterable, Function, MutableMap)
+     */
+    public static <K, T, R extends MutableMap<K, T>> R groupByUniqueKey(
+            List<T> list,
+            Function<? super T, ? extends K> function,
+            R target)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.groupByUniqueKey(list, function, target);
+        }
+        return IterableIterate.groupByUniqueKey(list, function, target);
     }
 
     /**

@@ -53,7 +53,6 @@ import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
@@ -70,6 +69,7 @@ import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.procedure.AppendStringProcedure;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
+import com.gs.collections.impl.block.procedure.GroupByUniqueKeyProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
@@ -601,8 +601,11 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return target;
     }
 
-    public <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            Function<? super T, ? extends V> function,
+            R target)
     {
-        return Iterate.groupByUniqueKey(this, function);
+        this.forEach(new GroupByUniqueKeyProcedure<T, V>(target, function));
+        return target;
     }
 }

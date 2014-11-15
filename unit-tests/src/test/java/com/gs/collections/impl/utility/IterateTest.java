@@ -2114,4 +2114,28 @@ public class IterateTest
     {
         Verify.assertClassNonInstantiable(Iterate.class);
     }
+
+    @Test
+    public void groupByUniqueKey()
+    {
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), Iterate.groupByUniqueKey(FastList.newListWith(1, 2, 3), id -> id));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void groupByUniqueKey_throws_for_null()
+    {
+        Iterate.groupByUniqueKey(null, id -> id);
+    }
+
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(0, 0, 1, 1, 2, 2, 3, 3), Iterate.groupByUniqueKey(FastList.newListWith(1, 2, 3), id -> id, UnifiedMap.newWithKeysValues(0, 0)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void groupByUniqueKey_target_throws_for_null()
+    {
+        Iterate.groupByUniqueKey(null, id -> id, UnifiedMap.newMap());
+    }
 }

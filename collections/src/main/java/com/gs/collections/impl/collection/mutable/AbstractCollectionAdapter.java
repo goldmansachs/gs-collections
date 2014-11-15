@@ -768,16 +768,23 @@ public abstract class AbstractCollectionAdapter<T>
         return Iterate.groupByEach(this.getDelegate(), function);
     }
 
-    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
-    {
-        return Iterate.groupByUniqueKey(this.getDelegate(), function);
-    }
-
     public <V, R extends MutableMultimap<V, T>> R groupByEach(
             Function<? super T, ? extends Iterable<V>> function,
             R target)
     {
         return Iterate.groupByEach(this.getDelegate(), function, target);
+    }
+
+    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        return Iterate.groupByUniqueKey(this.getDelegate(), function);
+    }
+
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            Function<? super T, ? extends V> function,
+            R target)
+    {
+        return Iterate.groupByUniqueKey(this.getDelegate(), function, target);
     }
 
     public <S> MutableCollection<Pair<T, S>> zip(Iterable<S> that)

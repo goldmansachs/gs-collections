@@ -22,8 +22,10 @@ import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -107,5 +109,21 @@ public class ImmutableHashBagTest extends ImmutableBagTestCase
         Multimap<Integer, Integer> actualWithTarget =
                 immutableBag.groupByEach(new NegativeIntervalFunction(), HashBagMultimap.<Integer, Integer>newMultimap());
         Assert.assertEquals(expected, actualWithTarget);
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey()
+    {
+        ImmutableBag<Integer> immutableBag = ImmutableHashBag.newBagWith(1, 2, 3);
+        Assert.assertEquals(Maps.immutable.of(1, 1, 2, 2, 3, 3), immutableBag.groupByUniqueKey(id -> id));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        ImmutableBag<Integer> immutableBag = ImmutableHashBag.newBagWith(1, 2, 3);
+        Assert.assertEquals(Maps.immutable.of(0, 0, 1, 1, 2, 2, 3, 3), immutableBag.groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(0, 0)));
     }
 }

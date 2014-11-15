@@ -692,14 +692,39 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
         return new FastListMultimap\<VV, V>(Tuples.pair(function.valueOf(this.value1), this.value1));
     }
 
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupBy(Function\<? super V, ? extends VV> function, R target)
+    {
+        target.put(function.valueOf(this.value1), this.value1);
+        return target;
+    }
+
     public \<VV> Multimap\<VV, V> groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
         return this.groupByEach(function, FastListMultimap.\<VV, V>newMultimap());
     }
 
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
+    {
+        Iterable\<VV> iterable  = function.valueOf(this.value1);
+        for (VV key : iterable)
+        {
+            target.put(key, this.value1);
+        }
+        return target;
+    }
+
     public \<VV> MapIterable\<VV, V> groupByUniqueKey(Function\<? super V, ? extends VV> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return new UnifiedMap(Tuples.pair(function.valueOf(this.value1), this.value1));
+    }
+
+    public \<VV, R extends MutableMap\<VV, V>\> R groupByUniqueKey(Function\<? super V, ? extends VV> function, R target)
+    {
+        if (target.put(function.valueOf(this.value1), this.value1) != null)
+        {
+            throw new IllegalStateException("Key " + function.valueOf(this.value1) + " already exists in map!");
+        }
+        return target;
     }
 
     public \<S> RichIterable\<Pair\<V, S>\> zip(Iterable\<S> that)
@@ -745,17 +770,6 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
         MutableMap\<K, VV> map = UnifiedMap.newMap();
         this.forEach(new NonMutatingAggregationProcedure\<V, K, VV>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map;
-    }
-
-    public \<VV, R extends MutableMultimap\<VV, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
-    {
-        return IterableIterate.groupByEach(this, function, target);
-    }
-
-    public \<VV, R extends MutableMultimap\<VV, V>\> R groupBy(Function\<? super V, ? extends VV> function, R target)
-    {
-        target.put(function.valueOf(this.value1), this.value1);
-        return target;
     }
 
     public \<VV extends Comparable\<? super VV>\> V maxBy(Function\<? super V, ? extends VV> function)

@@ -381,7 +381,7 @@ public abstract class AbstractImmutableSortedMap<K, V>
 
     public <V1> ImmutableMap<V1, V> groupByUniqueKey(Function<? super V, ? extends V1> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return this.groupByUniqueKey(function, UnifiedMap.<V1, V>newMap()).toImmutable();
     }
 
     public <K2, V2> ImmutableMap<K2, V2> aggregateInPlaceBy(

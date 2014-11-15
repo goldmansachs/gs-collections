@@ -80,6 +80,7 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.CountProcedure;
+import com.gs.collections.impl.block.procedure.GroupByUniqueKeyProcedure;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
@@ -738,7 +739,17 @@ public abstract class AbstractLazyIterable<T>
 
     public <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        MutableMap<V, T> result = UnifiedMap.newMap();
+        this.forEach(new GroupByUniqueKeyProcedure<T, V>(result, function));
+        return result;
+    }
+
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            Function<? super T, ? extends V> function,
+            R target)
+    {
+        this.forEach(new GroupByUniqueKeyProcedure<T, V>(target, function));
+        return target;
     }
 
     public <S> LazyIterable<Pair<T, S>> zip(Iterable<S> that)

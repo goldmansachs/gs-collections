@@ -108,6 +108,7 @@ import com.gs.collections.impl.factory.primitive.IntLists;
 import com.gs.collections.impl.factory.primitive.LongLists;
 import com.gs.collections.impl.factory.primitive.ShortLists;
 import com.gs.collections.impl.lazy.LazyIterableAdapter;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
@@ -644,14 +645,29 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
         return FastListMultimap.newMultimap();
     }
 
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupBy(Function\<? super V, ? extends VV> function, R target)
+    {
+        return target;
+    }
+
     public \<VV> Multimap\<VV, V> groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
         return FastListMultimap.newMultimap();
     }
 
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
+    {
+        return target;
+    }
+
     public \<VV> MapIterable\<VV, V> groupByUniqueKey(Function\<? super V, ? extends VV> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        return UnifiedMap.newMap();
+    }
+
+    public \<VV, R extends MutableMap\<VV, V>\> R groupByUniqueKey(Function\<? super V, ? extends VV> function, R target)
+    {
+        return target;
     }
 
     public \<S> RichIterable\<Pair\<V, S>\> zip(Iterable\<S> that)
@@ -687,16 +703,6 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
     public \<K, VV> MapIterable\<K, VV> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Function2\<? super VV, ? super V, ? extends VV> nonMutatingAggregator)
     {
         return Maps.immutable.with();
-    }
-
-    public \<VV, R extends MutableMultimap\<VV, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
-    {
-        return target;
-    }
-
-    public \<VV, R extends MutableMultimap\<VV, V>\> R groupBy(Function\<? super V, ? extends VV> function, R target)
-    {
-        return target;
     }
 
     public \<VV extends Comparable\<? super VV>\> V maxBy(Function\<? super V, ? extends VV> function)

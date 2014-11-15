@@ -459,16 +459,16 @@ final class ImmutableEmptyBag<T>
         return HashBagMultimap.<V, T>newMultimap().toImmutable();
     }
 
-    public <V> ImmutableBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
-    {
-        // TODO: Create a Singleton ImmutableEmptyBagMultimap for efficiency
-        return HashBagMultimap.<V, T>newMultimap().toImmutable();
-    }
-
     public <V, R extends MutableMultimap<V, T>> R groupBy(
             Function<? super T, ? extends V> function, R target)
     {
         return target;
+    }
+
+    public <V> ImmutableBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
+    {
+        // TODO: Create a Singleton ImmutableEmptyBagMultimap for efficiency
+        return HashBagMultimap.<V, T>newMultimap().toImmutable();
     }
 
     public <V, R extends MutableMultimap<V, T>> R groupByEach(
@@ -480,6 +480,13 @@ final class ImmutableEmptyBag<T>
     public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
         return Maps.immutable.of();
+    }
+
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            Function<? super T, ? extends V> function,
+            R target)
+    {
+        return target;
     }
 
     public T detect(Predicate<? super T> predicate)

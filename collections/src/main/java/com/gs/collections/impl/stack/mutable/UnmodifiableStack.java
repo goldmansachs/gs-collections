@@ -682,6 +682,11 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.groupByUniqueKey(function);
     }
 
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(Function<? super T, ? extends V> function, R target)
+    {
+        return this.mutableStack.groupByUniqueKey(function, target);
+    }
+
     public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
     {
         return this.mutableStack.zip(that, target);

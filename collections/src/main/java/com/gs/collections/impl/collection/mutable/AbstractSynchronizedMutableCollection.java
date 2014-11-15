@@ -1084,14 +1084,6 @@ public class AbstractSynchronizedMutableCollection<T>
         }
     }
 
-    public <V> MutableMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
-    {
-        synchronized (this.lock)
-        {
-            return this.collection.groupByEach(function);
-        }
-    }
-
     public <V, R extends MutableMultimap<V, T>> R groupBy(
             Function<? super T, ? extends V> function,
             R target)
@@ -1099,6 +1091,14 @@ public class AbstractSynchronizedMutableCollection<T>
         synchronized (this.lock)
         {
             return this.collection.groupBy(function, target);
+        }
+    }
+
+    public <V> MutableMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.groupByEach(function);
         }
     }
 
@@ -1117,6 +1117,16 @@ public class AbstractSynchronizedMutableCollection<T>
         synchronized (this.lock)
         {
             return this.collection.groupByUniqueKey(function);
+        }
+    }
+
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            Function<? super T, ? extends V> function,
+            R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.groupByUniqueKey(function, target);
         }
     }
 

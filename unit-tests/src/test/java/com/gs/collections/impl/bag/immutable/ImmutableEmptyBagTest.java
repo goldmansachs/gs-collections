@@ -471,7 +471,30 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     @Test
     public void groupByUniqueKey()
     {
-        Assert.assertEquals(UnifiedMap.newMap().toImmutable(), this.newBag().groupByUniqueKey(Functions.getPassThru()));
+        Assert.assertEquals(UnifiedMap.newMap().toImmutable(), this.newBag().groupByUniqueKey(id -> id));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey_throws()
+    {
+        super.groupByUniqueKey_throws();
+        Assert.assertEquals(UnifiedMap.newMap().toImmutable(), this.newBag().groupByUniqueKey(id -> id));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        Assert.assertEquals(UnifiedMap.newMap(), this.newBag().groupByUniqueKey(id -> id, UnifiedMap.<String, String>newMap()));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey_target_throws()
+    {
+        super.groupByUniqueKey_target_throws();
+        Assert.assertEquals(UnifiedMap.newMap(), this.newBag().groupByUniqueKey(id -> id, UnifiedMap.<String, String>newMap()));
     }
 
     @Override

@@ -31,6 +31,7 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -874,6 +875,31 @@ public abstract class StackIterableTestCase
     }
 
     @Test
+    public void groupByUniqueKey()
+    {
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), this.newStackWith(1, 2, 3).groupByUniqueKey(id -> id));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_throws()
+    {
+        this.newStackWith(1, 2, 3).groupByUniqueKey(Functions.getFixedValue(1));
+    }
+
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        MutableMap<Integer, Integer> integers = this.newStackWith(1, 2, 3).groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(0, 0));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(0, 0, 1, 1, 2, 2, 3, 3), integers);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_target_throws()
+    {
+        this.newStackWith(1, 2, 3).groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(2, 2));
+    }
+
+    @Test
     public void chunk()
     {
         Verify.assertIterablesEqual(
@@ -1205,11 +1231,5 @@ public abstract class StackIterableTestCase
             this.count++;
             return this.function.valueOf(object);
         }
-    }
-
-    @Test
-    public void groupByUniqueKey()
-    {
-        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), this.newStackWith(1, 2, 3).groupByUniqueKey(Functions.getPassThru()));
     }
 }

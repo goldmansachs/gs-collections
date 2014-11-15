@@ -758,6 +758,14 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
+    public <VV, R extends MutableMap<VV, V>> R groupByUniqueKey(Function<? super V, ? extends VV> function, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.groupByUniqueKey(function, target);
+        }
+    }
+
     public <A extends Comparable<? super A>> V minBy(Function<? super V, ? extends A> function)
     {
         synchronized (this.lock)

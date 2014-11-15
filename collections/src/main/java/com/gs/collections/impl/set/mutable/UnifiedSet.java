@@ -99,6 +99,7 @@ import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
+import com.gs.collections.impl.block.procedure.GroupByUniqueKeyProcedure;
 import com.gs.collections.impl.block.procedure.MaxByProcedure;
 import com.gs.collections.impl.block.procedure.MinByProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
@@ -2710,9 +2711,18 @@ public class UnifiedSet<T>
         return target;
     }
 
-    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    public <V> MutableMap<V, T> groupByUniqueKey(
+            Function<? super T, ? extends V> function)
     {
-        return IterableIterate.groupByUniqueKey(this, function);
+        return this.groupByUniqueKey(function, UnifiedMap.<V, T>newMap());
+    }
+
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            Function<? super T, ? extends V> function,
+            R target)
+    {
+        this.forEach(new GroupByUniqueKeyProcedure<T, V>(target, function));
+        return target;
     }
 
     public <S> MutableSet<Pair<T, S>> zip(Iterable<S> that)

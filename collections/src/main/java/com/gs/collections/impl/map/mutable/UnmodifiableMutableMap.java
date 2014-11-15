@@ -631,6 +631,11 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().groupByUniqueKey(function);
     }
 
+    public <VV, R extends MutableMap<VV, V>> R groupByUniqueKey(Function<? super V, ? extends VV> function, R target)
+    {
+        return this.getMutableMap().groupByUniqueKey(function, target);
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super V, ? extends IV> function)
     {
         return this.getMutableMap().injectInto(injectedValue, function);

@@ -953,6 +953,14 @@ public class SynchronizedRichIterable<T>
         }
     }
 
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(Function<? super T, ? extends V> function, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.groupByUniqueKey(function, target);
+        }
+    }
+
     @Override
     public String toString()
     {

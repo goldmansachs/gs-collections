@@ -99,7 +99,6 @@ import com.gs.collections.impl.stack.mutable.primitive.IntArrayStack;
 import com.gs.collections.impl.stack.mutable.primitive.LongArrayStack;
 import com.gs.collections.impl.stack.mutable.primitive.ShortArrayStack;
 import com.gs.collections.impl.utility.LazyIterate;
-import com.gs.collections.impl.utility.internal.IterableIterate;
 
 /**
  * ArrayStack is a MutableStack which contains a FastList of data. ArrayStack iterates from top to bottom (LIFO order).
@@ -795,7 +794,12 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        return IterableIterate.groupByUniqueKey(this, function);
+        return this.groupByUniqueKey(function, UnifiedMap.<V, T>newMap());
+    }
+
+    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(Function<? super T, ? extends V> function, R target)
+    {
+        return this.delegate.asReversed().groupByUniqueKey(function, target);
     }
 
     public RichIterable<RichIterable<T>> chunk(int size)

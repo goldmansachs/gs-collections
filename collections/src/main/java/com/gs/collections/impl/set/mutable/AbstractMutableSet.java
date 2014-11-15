@@ -32,7 +32,6 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
@@ -231,12 +230,6 @@ public abstract class AbstractMutableSet<T>
     public <V> UnifiedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, UnifiedSetMultimap.<V, T>newMultimap());
-    }
-
-    @Override
-    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public MutableSet<T> asUnmodifiable()

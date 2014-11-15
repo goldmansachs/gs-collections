@@ -451,6 +451,11 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().groupByEach(function, target);
     }
 
+    public <R, C extends MutableMap<R, V>> C groupByUniqueKey(Function<? super V, ? extends R> function, C target)
+    {
+        return this.valuesView().groupByUniqueKey(function, target);
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super V, ? extends IV> function)
     {
         return this.valuesView().injectInto(injectedValue, function);

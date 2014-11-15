@@ -552,9 +552,29 @@ final class Immutable<name>ObjectHashMap\<V> extends AbstractImmutable<name>Obje
         return this.delegate.groupBy(function);
     }
 
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupBy(Function\<? super V, ? extends VV> function, R target)
+    {
+        return this.delegate.groupBy(function, target);
+    }
+
     public \<VV> Multimap\<VV, V> groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
         return this.delegate.groupByEach(function);
+    }
+
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
+    {
+        return this.delegate.groupByEach(function, target);
+    }
+
+    public \<VV> MapIterable\<VV, V> groupByUniqueKey(Function\<? super V, ? extends VV> function)
+    {
+        return this.delegate.groupByUniqueKey(function);
+    }
+
+    public \<VV, R extends MutableMap\<VV, V>\> R groupByUniqueKey(Function\<? super V, ? extends VV> function, R target)
+    {
+        return this.delegate.groupByUniqueKey(function, target);
     }
 
     public \<S> RichIterable\<Pair\<V, S>\> zip(Iterable\<S> that)
@@ -590,21 +610,6 @@ final class Immutable<name>ObjectHashMap\<V> extends AbstractImmutable<name>Obje
     public \<K, VV> MapIterable\<K, VV> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Function2\<? super VV, ? super V, ? extends VV> nonMutatingAggregator)
     {
         return this.delegate.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
-    }
-
-    public \<VV, R extends MutableMultimap\<VV, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
-    {
-        return this.delegate.groupByEach(function, target);
-    }
-
-    public \<VV, R extends MutableMultimap\<VV, V>\> R groupBy(Function\<? super V, ? extends VV> function, R target)
-    {
-        return this.delegate.groupBy(function, target);
-    }
-
-    public \<VV> MapIterable\<VV, V> groupByUniqueKey(Function\<? super V, ? extends VV> function)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public \<VV extends Comparable\<? super VV>\> V maxBy(Function\<? super V, ? extends VV> function)

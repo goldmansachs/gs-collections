@@ -1376,15 +1376,19 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three");
+        <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("4")>, "four");
 
         FastListMultimap\<Character, String> expected1 = FastListMultimap.newMultimap(Tuples.pair('z', "zero"), Tuples.pair('o', "one"));
         FastListMultimap\<Character, String> expected2 = FastListMultimap.newMultimap(Tuples.pair('t', "two"), Tuples.pair('t', "three"));
+        FastListMultimap\<Character, String> expected4 = FastListMultimap.newMultimap(Tuples.pair('f', "four"));
 
         Function\<String, Character> firstChar = (String object) -> object.charAt(0);
 
         Multimap\<Character, String> actual1 = map1.groupBy(firstChar);
         Multimap\<Character, String> actual2 = map2.groupBy(firstChar);
         Multimap\<Character, String> actual3 = map2.groupBy(firstChar, FastListMultimap.\<Character, String>newMultimap());
+        Multimap\<Character, String> actual4 = map3.groupBy(firstChar);
+        Multimap\<Character, String> actual5 = map3.groupBy(firstChar, FastListMultimap.\<Character, String>newMultimap());
 
         Verify.assertSize(expected1.size(), actual1);
         expected1.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual1.containsKeyAndValue(argument1, argument2)));
@@ -1394,12 +1398,19 @@ public abstract class Abstract<name>ObjectMapTestCase
 
         Verify.assertSize(expected2.size(), actual3);
         expected2.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual3.containsKeyAndValue(argument1, argument2)));
+
+        Verify.assertSize(expected4.size(), actual4);
+        expected4.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual4.containsKeyAndValue(argument1, argument2)));
+
+        Verify.assertSize(expected4.size(), actual5);
+        expected4.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual5.containsKeyAndValue(argument1, argument2)));
     }
 
     @Test
     public void groupByEach()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("9")>, "nine");
+        <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "one");
 
         Function\<String, UnifiedSet\<Character>\> toChars = (String object) ->
             {
@@ -1413,12 +1424,73 @@ public abstract class Abstract<name>ObjectMapTestCase
             };
 
         FastListMultimap\<Character, String> expected = FastListMultimap.newMultimap(Tuples.pair('z', "zero"), Tuples.pair('e', "zero"), Tuples.pair('r', "zero"), Tuples.pair('o', "zero"), Tuples.pair('n', "nine"), Tuples.pair('i', "nine"), Tuples.pair('e', "nine"));
+        FastListMultimap\<Character, String> expected2 = FastListMultimap.newMultimap(Tuples.pair('o', "one"), Tuples.pair('n', "one"), Tuples.pair('e', "one"));
+
         Multimap\<Character, String> actual = map1.groupByEach(toChars);
         Multimap\<Character, String> actual1 = map1.groupByEach(toChars, FastListMultimap.\<Character, String>newMultimap());
+        Multimap\<Character, String> actual2 = map2.groupByEach(toChars);
+        Multimap\<Character, String> actual3 = map2.groupByEach(toChars, FastListMultimap.\<Character, String>newMultimap());
 
         expected.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual.containsKeyAndValue(argument1, argument2)));
 
         expected.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual1.containsKeyAndValue(argument1, argument2)));
+
+        expected2.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual2.containsKeyAndValue(argument1, argument2)));
+
+        expected2.forEachKeyValue((Character argument1, String argument2) -> Assert.assertTrue(actual3.containsKeyAndValue(argument1, argument2)));
+    }
+
+    @Test
+    public void groupByUniqueKey()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two");
+        <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("2")>, "two");
+
+        Function\<String, Character> firstChar = (String object) -> object.charAt(0);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues('z', "zero", 'o', "one", 't', "two"), map1.groupByUniqueKey(firstChar));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues('t', "two"), map2.groupByUniqueKey(firstChar));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_throws()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
+        Function\<String, Character> firstChar = (String object) -> 'a';
+        map1.groupByUniqueKey(firstChar);
+    }
+
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
+        <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("0")>, "zero");
+        Function\<String, Character> firstChar = (String object) -> object.charAt(0);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues('z', "zero", 'o', "one", 't', "two"), map1.groupByUniqueKey(firstChar, UnifiedMap.newWithKeysValues('t', "two")));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues('z', "zero", 't', "two"), map2.groupByUniqueKey(firstChar, UnifiedMap.newWithKeysValues('t', "two")));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_target_throws_1()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
+        Function\<String, Character> firstChar = (String object) -> object.charAt(0);
+        map1.groupByUniqueKey(firstChar, UnifiedMap.newWithKeysValues('z', "zero"));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_target_throws_2()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero");
+        Function\<String, Character> firstChar = (String object) -> object.charAt(0);
+        map1.groupByUniqueKey(firstChar, UnifiedMap.newWithKeysValues('z', "zero"));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_target_throws_3()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("2")>, "two");
+        Function\<String, Character> firstChar = (String object) -> object.charAt(0);
+        map1.groupByUniqueKey(firstChar, UnifiedMap.newWithKeysValues('t', "two"));
     }
 
     @Test

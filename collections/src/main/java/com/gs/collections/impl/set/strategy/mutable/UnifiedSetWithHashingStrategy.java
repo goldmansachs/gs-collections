@@ -99,6 +99,7 @@ import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
+import com.gs.collections.impl.block.procedure.GroupByUniqueKeyProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
@@ -2583,9 +2584,18 @@ public class UnifiedSetWithHashingStrategy<K>
         return target;
     }
 
-    public <V> MutableMap<V, K> groupByUniqueKey(Function<? super K, ? extends V> function)
+    public <V> MutableMap<V, K> groupByUniqueKey(
+            Function<? super K, ? extends V> function)
     {
-        return IterableIterate.groupByUniqueKey(this, function);
+        return this.groupByUniqueKey(function, UnifiedMap.<V, K>newMap());
+    }
+
+    public <V, R extends MutableMap<V, K>> R groupByUniqueKey(
+            Function<? super K, ? extends V> function,
+            R target)
+    {
+        this.forEach(new GroupByUniqueKeyProcedure<K, V>(target, function));
+        return target;
     }
 
     public <S> MutableSet<Pair<K, S>> zip(Iterable<S> that)

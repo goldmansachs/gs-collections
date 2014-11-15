@@ -730,6 +730,31 @@ public abstract class AbstractLazyIterableTestCase
     }
 
     @Test
+    public void groupByUniqueKey()
+    {
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), this.newWith(1, 2, 3).groupByUniqueKey(id -> id));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_throws()
+    {
+        this.newWith(1, 2, 3).groupByUniqueKey(Functions.getFixedValue(1));
+    }
+
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        MutableMap<Integer, Integer> integers = this.newWith(1, 2, 3).groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(0, 0));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(0, 0, 1, 1, 2, 2, 3, 3), integers);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_target_throws()
+    {
+        this.newWith(1, 2, 3).groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(2, 2));
+    }
+
+    @Test
     public void zip()
     {
         List<Object> nulls = Collections.nCopies(this.lazyIterable.size(), null);
@@ -835,11 +860,5 @@ public abstract class AbstractLazyIterableTestCase
         Assert.assertEquals(
                 HashBag.newBagWith(1, 2, 3, 4, 5),
                 integers.distinct().toBag());
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void groupByUniqueKey()
-    {
-        this.newWith(1, 2, 3).groupByUniqueKey(Functions.identity());
     }
 }

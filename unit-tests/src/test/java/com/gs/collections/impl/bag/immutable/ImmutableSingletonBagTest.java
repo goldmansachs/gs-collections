@@ -28,7 +28,6 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -162,13 +161,6 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
         Assert.assertEquals(
                 Maps.fixedSize.of(String.class, VAL),
                 this.newBag().toMap(Object::getClass, String::valueOf));
-    }
-
-    @Override
-    @Test
-    public void groupByUniqueKey()
-    {
-        Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1").toImmutable(), this.newBag().groupByUniqueKey(Functions.getPassThru()));
     }
 
     @Test
@@ -465,6 +457,31 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
         HashBagMultimap<Class<?>, String> target = HashBagMultimap.newMultimap();
         this.newBag().groupBy(Object::getClass, target);
         Assert.assertEquals(VAL, target.get(String.class).getFirst());
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey()
+    {
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1").toImmutable(), this.newBag().groupByUniqueKey(id -> id));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey_throws()
+    {
+        super.groupByUniqueKey_throws();
+
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1").toImmutable(), this.newBag().groupByUniqueKey(id -> id));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues("0", "0", "1", "1"),
+                this.newBag().groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues("0", "0")));
     }
 
     @Test
