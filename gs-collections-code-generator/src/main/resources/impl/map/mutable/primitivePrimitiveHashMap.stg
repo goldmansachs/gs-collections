@@ -50,67 +50,42 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name1>Iterable;
 import com.gs.collections.api.Lazy<name1>Iterable;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name2>Iterable;<endif>
 <if(!sameTwoPrimitives)>import com.gs.collections.api.<name2>Iterable;<endif>
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.bag.primitive.Mutable<name1>Bag;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;<endif>
-<if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>ToObjectFunction;<endif>
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
+<if(sameTwoPrimitives)>import com.gs.collections.api.block.predicate.primitive.<name1>Predicate;<endif>
 import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
-import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
+<if(sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;<endif>
 import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.Object<name1>ToObjectFunction;<endif>
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
-import com.gs.collections.api.block.predicate.primitive.<name1>Predicate;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;<endif>
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.collection.primitive.Immutable<name2>Collection;
+<if(sameTwoPrimitives)>import com.gs.collections.api.collection.MutableCollection;<endif>
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
 import com.gs.collections.api.iterator.<name1>Iterator;
 import com.gs.collections.api.iterator.Mutable<name1>Iterator;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.iterator.<name2>Iterator;<endif>
 <if(!sameTwoPrimitives)>import com.gs.collections.api.iterator.Mutable<name2>Iterator;<endif>
-import com.gs.collections.api.list.primitive.Mutable<name1>List;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.list.primitive.Mutable<name2>List;<endif>
 import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
-import com.gs.collections.api.set.MutableSet;
+<if(sameTwoPrimitives)>import com.gs.collections.api.set.MutableSet;<endif>
 import com.gs.collections.api.set.primitive.<name1>Set;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.<name2>Set;<endif>
-import com.gs.collections.api.set.primitive.Immutable<name1>Set;
 import com.gs.collections.api.set.primitive.Mutable<name1>Set;
 import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name2>Set;<endif>
-import com.gs.collections.impl.bag.mutable.primitive.<name1>HashBag;
-<if(!sameTwoPrimitives)>import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;<endif>
-import com.gs.collections.impl.collection.mutable.primitive.Synchronized<name2>Collection;
-import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name2>Collection;
-import com.gs.collections.impl.factory.Sets;
-import com.gs.collections.impl.factory.primitive.<name2>Lists;
+<if(sameTwoPrimitives)>import com.gs.collections.impl.factory.Sets;<endif>
 import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
-import com.gs.collections.impl.factory.primitive.<name1>Sets;
 import com.gs.collections.impl.iterator.Unmodifiable<name1>Iterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.primitive.AbstractLazy<name1>Iterable;
-import com.gs.collections.impl.lazy.primitive.Lazy<name2>IterableAdapter;
-<if(!sameTwoPrimitives)>import com.gs.collections.impl.lazy.primitive.Lazy<name1>IterableAdapter;<endif>
-import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
-<if(!sameTwoPrimitives)>import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;<endif>
+<if(sameTwoPrimitives)>import com.gs.collections.impl.list.mutable.FastList;<endif>
+<if(sameTwoPrimitives)>import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;<endif>
 import com.gs.collections.impl.set.mutable.primitive.<name1>HashSet;
-import com.gs.collections.impl.set.mutable.primitive.Synchronized<name1>Set;
-import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name1>Set;
-<if(!sameTwoPrimitives)>import com.gs.collections.impl.set.mutable.primitive.<name2>HashSet;<endif>
 import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 
 /**
@@ -118,9 +93,9 @@ import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
  *
  * @since 3.0.
  */
-public class <name1><name2>HashMap implements Mutable<name1><name2>Map, Externalizable
+public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap implements Mutable<name1><name2>Map, Externalizable, Mutable<name1>KeysMap
 {
-    static final <type2> EMPTY_VALUE = <(literal.(type2))("0")>;
+    private static final <type2> EMPTY_VALUE = <(literal.(type2))("0")>;
     private static final long serialVersionUID = 1L;
     private static final <type1> EMPTY_KEY = <(literal.(type1))("0")>;
     private static final <type1> REMOVED_KEY = <(literal.(type1))("1")>;
@@ -139,7 +114,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     private SentinelValues sentinelValues;
 
-    private boolean copyKeysOnWrite = false;
+    private boolean copyKeysOnWrite;
 
     public <name1><name2>HashMap()
     {
@@ -176,6 +151,36 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     private int smallestPowerOfTwoGreaterThan(int n)
     {
         return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
+    }
+
+    @Override
+    protected int getOccupiedWithData()
+    {
+        return this.occupiedWithData;
+    }
+
+    @Override
+    protected SentinelValues getSentinelValues()
+    {
+        return this.sentinelValues;
+    }
+
+    @Override
+    protected void setSentinelValuesNull()
+    {
+        this.sentinelValues = null;
+    }
+
+    @Override
+    protected <type2> getEmptyValue()
+    {
+        return EMPTY_VALUE;
+    }
+
+    @Override
+    protected <type2>[] getValues()
+    {
+        return this.<valueArray>;
     }
 
     @Override
@@ -251,7 +256,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         {
             if (this.sentinelValues.containsZeroKey)
             {
-                appendable.append(String.valueOf(EMPTY_KEY)).append("=").append(String.valueOf(this.sentinelValues.zeroValue));
+                appendable.append(EMPTY_KEY).append("=").append(this.sentinelValues.zeroValue);
                 first = false;
             }
             if (this.sentinelValues.containsOneKey)
@@ -260,7 +265,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 {
                     appendable.append(", ");
                 }
-                appendable.append(String.valueOf(REMOVED_KEY)).append("=").append(String.valueOf(this.sentinelValues.oneValue));
+                appendable.append(REMOVED_KEY).append("=").append(this.sentinelValues.oneValue);
                 first = false;
             }
         }
@@ -273,7 +278,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 {
                     appendable.append(", ");
                 }
-                appendable.append(String.valueOf(key)).append("=").append(String.valueOf(this.<valueArray>[i<valueIndex>]));
+                appendable.append(key).append("=").append(this.<valueArray>[i<valueIndex>]);
                 first = false;
             }
         }
@@ -282,48 +287,8 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return appendable.toString();
     }
 
-    public int size()
-    {
-        return this.occupiedWithData + (this.sentinelValues == null ? 0 : this.sentinelValues.size());
-    }
-
-    public boolean isEmpty()
-    {
-        return this.occupiedWithData == 0 && (this.sentinelValues == null || this.sentinelValues.size() == 0);
-    }
-
-    public boolean notEmpty()
-    {
-        return this.occupiedWithData != 0 || (this.sentinelValues != null && this.sentinelValues.size() != 0);
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
-    }
-
+<if(sameTwoPrimitives)>
+    @Override
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
         try
@@ -370,11 +335,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         }
     }
 
-    public Mutable<name2>Iterator <type2>Iterator()
-    {
-        return new Internal<name2>Iterator();
-    }
-
+    @Override
     public <type2>[] toArray()
     {
         <type2>[] array = new <type2>[this.size()];
@@ -385,39 +346,13 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return array;
     }
 
-    public boolean contains(<type2> value)
+<endif>
+    public Mutable<name2>Iterator <type2>Iterator()
     {
-        return this.containsValue(value);
+        return new Internal<name2>Iterator();
     }
 
-    public boolean containsAll(<type2>... source)
-    {
-        for (<type2> each : source)
-        {
-            if (!this.contains(each))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean containsAll(<name2>Iterable source)
-    {
-        return source.allSatisfy(new <name2>Predicate()
-        {
-            public boolean accept(<type2> value)
-            {
-                return <name1><name2>HashMap.this.contains(value);
-            }
-        });
-    }
-
-    public void forEach(<name2>Procedure procedure)
-    {
-        this.forEachValue(procedure);
-    }
-
+<if(sameTwoPrimitives)>
     public Mutable<name2>Collection select(<name2>Predicate predicate)
     {
         <name2>ArrayList result = new <name2>ArrayList();
@@ -540,6 +475,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return true;
     }
 
+<endif>
     public \<V> V injectInto(V injectedValue, Object<name2>ToObjectFunction\<? super V, ? extends V> function)
     {
         V result = injectedValue;
@@ -547,26 +483,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         <forEachKeyValue(template = {result = function.valueOf(result, <value>)})>
 
         return result;
-    }
-
-    public Mutable<name2>List toList()
-    {
-        return <name2>ArrayList.newList(this);
-    }
-
-    public Mutable<name2>Set toSet()
-    {
-        return <name2>HashSet.newSet(this);
-    }
-
-    public Mutable<name2>Bag toBag()
-    {
-        return <name2>HashBag.newBag(this);
-    }
-
-    public Lazy<name2>Iterable asLazy()
-    {
-        return new Lazy<name2>IterableAdapter(this);
     }
 
     public void clear()
@@ -601,14 +517,14 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         }
 
         int index = this.probe(key);
-        <type1> keyAtindex = this.<keyArray>[index];
-        if (keyAtindex != key)
+        <type1> keyAtIndex = this.<keyArray>[index];
+        if (<(equals.(type1))("keyAtIndex", "key")>)
         {
-            this.addKeyValueAtIndex(key, value, index);
+            this.<valueArray>[index<valueIndex>] = value;
         }
         else
         {
-            this.<valueArray>[index<valueIndex>] = value;
+            this.addKeyValueAtIndex(key, value, index);
         }
     }
 
@@ -619,7 +535,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             this.sentinelValues = new SentinelValues();
         }
         this.addRemovedKeyValue(value);
-        return;
     }
 
     private void putForEmptySentinel(<type2> value)
@@ -629,7 +544,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             this.sentinelValues = new SentinelValues();
         }
         this.addEmptyKeyValue(value);
-        return;
     }
 
     public void putAll(<name1><name2>Map map)
@@ -816,44 +730,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         this.copyKeysOnWrite = false;
     }
 
-    private void addEmptyKeyValue(<type2> value)
-    {
-        this.sentinelValues.containsZeroKey = true;
-        this.sentinelValues.zeroValue = value;
-    }
-
-    private void removeEmptyKey()
-    {
-        if (this.sentinelValues.containsOneKey)
-        {
-            this.sentinelValues.containsZeroKey = false;
-            this.sentinelValues.zeroValue = EMPTY_VALUE;
-        }
-        else
-        {
-            this.sentinelValues = null;
-        }
-    }
-
-    private void addRemovedKeyValue(<type2> value)
-    {
-        this.sentinelValues.containsOneKey = true;
-        this.sentinelValues.oneValue = value;
-    }
-
-    private void removeRemovedKey()
-    {
-        if (this.sentinelValues.containsZeroKey)
-        {
-            this.sentinelValues.containsOneKey = false;
-            this.sentinelValues.oneValue = EMPTY_VALUE;
-        }
-        else
-        {
-            this.sentinelValues = null;
-        }
-    }
-
     public <type2> updateValue(<type1> key, <type2> initialValueIfAbsent, <name2>To<name2>Function function)
     {
         if (isEmptyKey(key))
@@ -1016,6 +892,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return <(equals.(type1))({this.<keyArray>[this.probe(key)]}, "key")>;
     }
 
+<if(sameTwoPrimitives)>
     public boolean containsValue(<type2> value)
     {
         if (this.sentinelValues != null && this.sentinelValues.containsValue(value))
@@ -1037,6 +914,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         <forEachValue(template = {procedure.value(<value>)})>
     }
 
+<endif>
     public void forEachKey(<name1>Procedure procedure)
     {
         <forEachKey(template = {procedure.value(<key>)})>
@@ -1091,6 +969,8 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return result;
     }
 
+<if(sameTwoPrimitives)>
+    @Override
     public <wideType.(type2)> sum()
     {
         <wideType.(type2)> result = <wideZero.(type2)>;
@@ -1100,99 +980,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return result;
     }
 
-    public <type2> max()
-    {
-        if (this.isEmpty())
-        {
-            throw new NoSuchElementException();
-        }
-        <name2>Iterator iterator = this.<type2>Iterator();
-        <type2> max = iterator.next();
-        while (iterator.hasNext())
-        {
-            <type2> value = iterator.next();
-            if (<(lessThan.(type2))("max", "value")>)
-            {
-                max = value;
-            }
-        }
-        return max;
-    }
-
-    public <type2> maxIfEmpty(<type2> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.max();
-    }
-
-    public <type2> min()
-    {
-        if (this.isEmpty())
-        {
-            throw new NoSuchElementException();
-        }
-        <name2>Iterator iterator = this.<type2>Iterator();
-        <type2> min = iterator.next();
-        while (iterator.hasNext())
-        {
-            <type2> value = iterator.next();
-            if (<(lessThan.(type2))("value", "min")>)
-            {
-                min = value;
-            }
-        }
-        return min;
-    }
-
-    public <type2> minIfEmpty(<type2> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.min();
-    }
-
-    public double average()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        return <castSum.(type2)>this.sum() / (double) this.size();
-    }
-
-    public double median()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        <type2>[] sortedArray = this.toSortedArray();
-        int middleIndex = sortedArray.length >\> 1;
-        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-        {
-            <type2> first = sortedArray[middleIndex];
-            <type2> second = sortedArray[middleIndex - 1];
-            return (<castDouble.(type2)>first + <castDouble.(type2)>second) / 2.0;
-        }
-        return <castDouble.(type2)>sortedArray[middleIndex];
-    }
-
-    public <type2>[] toSortedArray()
-    {
-        <type2>[] array = this.toArray();
-        Arrays.sort(array);
-        return array;
-    }
-
-    public Mutable<name2>List toSortedList()
-    {
-        return <name2>ArrayList.newList(this).sortThis();
-    }
+<endif>
 
     public void writeExternal(ObjectOutput out) throws IOException
     {
@@ -1339,6 +1127,12 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return !isEmptyKey(key) && !isRemovedKey(key);
     }
 
+    @Override
+    protected boolean isNonSentinelAtIndex(int index)
+    {
+        return !isEmptyKey(this.<keyArray>[index]) && !isRemovedKey(this.<keyArray>[index]);
+    }
+
     private int maxOccupiedWithData()
     {
         return this.<keyArray>.length >\> <if(!sameTwoPrimitives)>1<else>2<endif>;
@@ -1347,26 +1141,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     private int maxOccupiedWithSentinels()
     {
         return this.<keyArray>.length >\> <if(!sameTwoPrimitives)>2<else>3<endif>;
-    }
-
-    private static final class SentinelValues
-    {
-        private boolean containsZeroKey;
-        private boolean containsOneKey;
-        private <type2> zeroValue;
-        private <type2> oneValue;
-
-        public int size()
-        {
-            return (this.containsZeroKey ? 1 : 0) + (this.containsOneKey ? 1 : 0);
-        }
-
-        public boolean containsValue(<type2> value)
-        {
-            boolean valueEqualsZeroValue = this.containsZeroKey && <(equals.(type2))("this.zeroValue", "value")>;
-            boolean valueEqualsOneValue = this.containsOneKey && <(equals.(type2))("this.oneValue", "value")>;
-            return valueEqualsZeroValue || valueEqualsOneValue;
-        }
     }
 
     private class Internal<name2>Iterator implements Mutable<name2>Iterator
@@ -1517,13 +1291,36 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return new KeySet();
     }
 
-    private class KeySet implements Mutable<name1>Set
+    private class KeySet extends AbstractMutable<name1>KeySet
     {
+        @Override
+        protected <type1>[] getKeys()
+        {
+        <if(sameTwoPrimitives)>
+            return null;
+        <else>
+            return <name1><name2>HashMap.this.keys;
+        <endif>
+        }
+
+        @Override
+        protected Mutable<name1>KeysMap getOuter()
+        {
+            return <name1><name2>HashMap.this;
+        }
+
+        @Override
+        protected SentinelValues getSentinelValues()
+        {
+            return <name1><name2>HashMap.this.sentinelValues;
+        }
+
         public Mutable<name1>Iterator <type1>Iterator()
         {
             return new KeySetIterator();
         }
 
+<if(sameTwoPrimitives)>
         public void forEach(<name1>Procedure procedure)
         {
             <name1><name2>HashMap.this.forEachKey(procedure);
@@ -1604,53 +1401,11 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             }
             return true;
         }
-
-        public boolean add(<type1> element)
-        {
-            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
-        }
-
-        public boolean addAll(<type1>... source)
-        {
-            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
-        }
-
-        public boolean addAll(<name1>Iterable source)
-        {
-            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
-        }
-
-        public boolean remove(<type1> key)
-        {
-            int oldSize = <name1><name2>HashMap.this.size();
-            <name1><name2>HashMap.this.removeKey(key);
-            return oldSize != <name1><name2>HashMap.this.size();
-        }
-
-        public boolean removeAll(<name1>Iterable source)
-        {
-            int oldSize = <name1><name2>HashMap.this.size();
-            <name1>Iterator iterator = source.<type1>Iterator();
-            while (iterator.hasNext())
-            {
-                <name1><name2>HashMap.this.removeKey(iterator.next());
-            }
-            return oldSize != <name1><name2>HashMap.this.size();
-        }
-
-        public boolean removeAll(<type1>... source)
-        {
-            int oldSize = <name1><name2>HashMap.this.size();
-            for (<type1> item : source)
-            {
-                <name1><name2>HashMap.this.removeKey(item);
-            }
-            return oldSize != <name1><name2>HashMap.this.size();
-        }
+<endif>
 
         public boolean retainAll(<name1>Iterable source)
         {
-            int oldSize = this.size();
+            int oldSize = <name1><name2>HashMap.this.size();
             final <name1>Set sourceSet = source instanceof <name1>Set ? (<name1>Set) source : source.toSet();
             <name1><name2>HashMap retained = <name1><name2>HashMap.this.select(new <name1><name2>Predicate()
             {
@@ -1678,11 +1433,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return this.retainAll(<name1>HashSet.newSetWith(source));
         }
 
-        public void clear()
-        {
-            <name1><name2>HashMap.this.clear();
-        }
-
+<if(sameTwoPrimitives)>
         public Mutable<name1>Set select(<name1>Predicate predicate)
         {
             Mutable<name1>Set result = new <name1>HashSet();
@@ -1731,26 +1482,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return result;
         }
 
-        public Mutable<name1>Set with(<type1> element)
-        {
-            throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
-        }
-
-        public Mutable<name1>Set without(<type1> element)
-        {
-            throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
-        }
-
-        public Mutable<name1>Set withAll(<name1>Iterable elements)
-        {
-            throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
-        }
-
-        public Mutable<name1>Set withoutAll(<name1>Iterable elements)
-        {
-            throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
-        }
-
         public <type1> detectIfNone(<name1>Predicate predicate, <type1> ifNone)
         {
             if (<name1><name2>HashMap.this.sentinelValues != null)
@@ -1796,16 +1527,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 }
             }
             return result;
-        }
-
-        public Mutable<name1>Set asUnmodifiable()
-        {
-            return Unmodifiable<name1>Set.of(this);
-        }
-
-        public Mutable<name1>Set asSynchronized()
-        {
-            return Synchronized<name1>Set.of(this);
         }
 
         public <wideType.(type1)> sum()
@@ -1866,16 +1587,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return max;
         }
 
-        public <type1> maxIfEmpty(<type1> defaultValue)
-        {
-            if (<name1><name2>HashMap.this.isEmpty())
-            {
-                return defaultValue;
-            }
-
-            return this.max();
-        }
-
         public <type1> min()
         {
             if (<name1><name2>HashMap.this.isEmpty())
@@ -1910,121 +1621,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return min;
         }
 
-        public <type1> minIfEmpty(<type1> defaultValue)
-        {
-            if (<name1><name2>HashMap.this.isEmpty())
-            {
-                return defaultValue;
-            }
-
-            return this.min();
-        }
-
-        public double average()
-        {
-            if (this.isEmpty())
-            {
-                throw new ArithmeticException();
-            }
-            return <castSum.(type1)>this.sum() / (double) this.size();
-        }
-
-        public double median()
-        {
-            if (this.isEmpty())
-            {
-                throw new ArithmeticException();
-            }
-            <type1>[] sortedArray = this.toSortedArray();
-            int middleIndex = sortedArray.length >\> 1;
-            if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-            {
-                <type1> first = sortedArray[middleIndex];
-                <type1> second = sortedArray[middleIndex - 1];
-                return (<castDouble.(type1)>first + <castDouble.(type1)>second) / 2.0;
-            }
-            return <castDouble.(type1)>sortedArray[middleIndex];
-        }
-
-        public <type1>[] toSortedArray()
-        {
-            <type1>[] array = this.toArray();
-            Arrays.sort(array);
-            return array;
-        }
-
-        public Mutable<name1>List toSortedList()
-        {
-            return <name1>ArrayList.newList(this).sortThis();
-        }
-
-        public <type1>[] toArray()
-        {
-            int size = <name1><name2>HashMap.this.size();
-            final <type1>[] result = new <type1>[size];
-            <name1><name2>HashMap.this.forEachKey(new <name1>Procedure()
-            {
-                private int index;
-
-                public void value(<type1> each)
-                {
-                    result[this.index] = each;
-                    this.index++;
-                }
-            });
-            return result;
-        }
-
-        public boolean contains(<type1> value)
-        {
-            return <name1><name2>HashMap.this.containsKey(value);
-        }
-
-        public boolean containsAll(<type1>... source)
-        {
-            for (<type1> item : source)
-            {
-                if (!<name1><name2>HashMap.this.containsKey(item))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public boolean containsAll(<name1>Iterable source)
-        {
-            <name1>Iterator iterator = source.<type1>Iterator();
-            while (iterator.hasNext())
-            {
-                if (!<name1><name2>HashMap.this.containsKey(iterator.next()))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public Mutable<name1>List toList()
-        {
-            return <name1>ArrayList.newList(this);
-        }
-
-        public Mutable<name1>Set toSet()
-        {
-            return <name1>HashSet.newSet(this);
-        }
-
-        public Mutable<name1>Bag toBag()
-        {
-            return <name1>HashBag.newBag(this);
-        }
-
-        public Lazy<name1>Iterable asLazy()
-        {
-            return new Lazy<name1>IterableAdapter(this);
-        }
-
         public \<T> T injectInto(T injectedValue, Object<name1>ToObjectFunction\<? super T, ? extends T> function)
         {
             T result = injectedValue;
@@ -2049,6 +1645,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return result;
         }
 
+<endif>
         public <name1>Set freeze()
         {
             <name1><name2>HashMap.this.copyKeysOnWrite = true;
@@ -2065,43 +1662,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return new Immutable<name1>MapKeySet(<name1><name2>HashMap.this.<keyArray>, <name1><name2>HashMap.this.occupiedWithData, containsZeroKey, containsOneKey);
             <endif>
         }
-
-        public Immutable<name1>Set toImmutable()
-        {
-            return <name1>Sets.immutable.withAll(this);
-        }
-
-        public int size()
-        {
-            return <name1><name2>HashMap.this.size();
-        }
-
-        public boolean isEmpty()
-        {
-            return <name1><name2>HashMap.this.isEmpty();
-        }
-
-        public boolean notEmpty()
-        {
-            return <name1><name2>HashMap.this.notEmpty();
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (this == obj)
-            {
-                return true;
-            }
-
-            if (!(obj instanceof <name1>Set))
-            {
-                return false;
-            }
-
-            <name1>Set other = (<name1>Set) obj;
-            return this.size() == other.size() && this.containsAll(other.toArray());
-        }
+<if(sameTwoPrimitives)>
 
         @Override
         public int hashCode()
@@ -2128,39 +1689,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             }
 
             return result;
-        }
-
-        @Override
-        public String toString()
-        {
-            return this.makeString("[", ", ", "]");
-        }
-
-        public String makeString()
-        {
-            return this.makeString(", ");
-        }
-
-        public String makeString(String separator)
-        {
-            return this.makeString("", separator, "");
-        }
-
-        public String makeString(String start, String separator, String end)
-        {
-            Appendable stringBuilder = new StringBuilder();
-            this.appendString(stringBuilder, start, separator, end);
-            return stringBuilder.toString();
-        }
-
-        public void appendString(Appendable appendable)
-        {
-            this.appendString(appendable, ", ");
-        }
-
-        public void appendString(Appendable appendable, String separator)
-        {
-            this.appendString(appendable, "", separator, "");
         }
 
         public void appendString(Appendable appendable, String start, String separator, String end)
@@ -2205,6 +1733,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 throw new RuntimeException(e);
             }
         }
+        <endif>
     }
 
     public Mutable<name2>Collection values()
@@ -2212,279 +1741,11 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return new ValuesCollection();
     }
 
-    private class ValuesCollection implements Mutable<name2>Collection
+    private class ValuesCollection extends Abstract<name2>ValuesCollection
     {
-        public void clear()
-        {
-            <name1><name2>HashMap.this.clear();
-        }
-
-        public Mutable<name2>Collection select(<name2>Predicate predicate)
-        {
-            return <name1><name2>HashMap.this.select(predicate);
-        }
-
-        public Mutable<name2>Collection reject(<name2>Predicate predicate)
-        {
-            return <name1><name2>HashMap.this.reject(predicate);
-        }
-
-        public <type2> detectIfNone(<name2>Predicate predicate, <type2> ifNone)
-        {
-            return <name1><name2>HashMap.this.detectIfNone(predicate, ifNone);
-        }
-
-        public \<V> MutableCollection\<V> collect(<name2>ToObjectFunction\<? extends V> function)
-        {
-            return <name1><name2>HashMap.this.collect(function);
-        }
-
-        public \<T> T injectInto(T injectedValue, Object<name2>ToObjectFunction\<? super T, ? extends T> function)
-        {
-            return <name1><name2>HashMap.this.injectInto(injectedValue, function);
-        }
-
-        public <wideType.(type2)> sum()
-        {
-            return <name1><name2>HashMap.this.sum();
-        }
-
-        public <type2> max()
-        {
-            return <name1><name2>HashMap.this.max();
-        }
-
-        public <type2> maxIfEmpty(<type2> defaultValue)
-        {
-            return <name1><name2>HashMap.this.maxIfEmpty(defaultValue);
-        }
-
-        public <type2> min()
-        {
-            return <name1><name2>HashMap.this.min();
-        }
-
-        public <type2> minIfEmpty(<type2> defaultValue)
-        {
-            return <name1><name2>HashMap.this.minIfEmpty(defaultValue);
-        }
-
-        public double average()
-        {
-            return <name1><name2>HashMap.this.average();
-        }
-
-        public double median()
-        {
-            return <name1><name2>HashMap.this.median();
-        }
-
-        public <type2>[] toSortedArray()
-        {
-            return <name1><name2>HashMap.this.toSortedArray();
-        }
-
-        public Mutable<name2>List toSortedList()
-        {
-            return <name1><name2>HashMap.this.toSortedList();
-        }
-
-        public Mutable<name2>Collection with(<type2> element)
-        {
-            throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
-        }
-
-        public Mutable<name2>Collection without(<type2> element)
-        {
-            throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
-        }
-
-        public Mutable<name2>Collection withAll(<name2>Iterable elements)
-        {
-            throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
-        }
-
-        public Mutable<name2>Collection withoutAll(<name2>Iterable elements)
-        {
-            throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
-        }
-
-        public Mutable<name2>Collection asUnmodifiable()
-        {
-            return Unmodifiable<name2>Collection.of(this);
-        }
-
-        public Mutable<name2>Collection asSynchronized()
-        {
-            return Synchronized<name2>Collection.of(this);
-        }
-
-        public Immutable<name2>Collection toImmutable()
-        {
-            return <name2>Lists.immutable.withAll(this);
-        }
-
-        public boolean contains(<type2> value)
-        {
-            return <name1><name2>HashMap.this.containsValue(value);
-        }
-
-        public boolean containsAll(<type2>... source)
-        {
-            return <name1><name2>HashMap.this.containsAll(source);
-        }
-
-        public boolean containsAll(<name2>Iterable source)
-        {
-            return <name1><name2>HashMap.this.containsAll(source);
-        }
-
-        public Mutable<name2>List toList()
-        {
-            return <name1><name2>HashMap.this.toList();
-        }
-
-        public Mutable<name2>Set toSet()
-        {
-            return <name1><name2>HashMap.this.toSet();
-        }
-
-        public Mutable<name2>Bag toBag()
-        {
-            return <name1><name2>HashMap.this.toBag();
-        }
-
-        public Lazy<name2>Iterable asLazy()
-        {
-            return new Lazy<name2>IterableAdapter(this);
-        }
-
-        public boolean isEmpty()
-        {
-            return <name1><name2>HashMap.this.isEmpty();
-        }
-
-        public boolean notEmpty()
-        {
-            return <name1><name2>HashMap.this.notEmpty();
-        }
-
-        public String makeString()
-        {
-            return this.makeString(", ");
-        }
-
-        public String makeString(String separator)
-        {
-            return this.makeString("", separator, "");
-        }
-
-        public String makeString(String start, String separator, String end)
-        {
-            Appendable stringBuilder = new StringBuilder();
-            this.appendString(stringBuilder, start, separator, end);
-            return stringBuilder.toString();
-        }
-
-        public void appendString(Appendable appendable)
-        {
-            this.appendString(appendable, ", ");
-        }
-
-        public void appendString(Appendable appendable, String separator)
-        {
-            this.appendString(appendable, "", separator, "");
-        }
-
-        public void appendString(Appendable appendable, String start, String separator, String end)
-        {
-            try
-            {
-                appendable.append(start);
-
-                boolean first = true;
-
-                if (<name1><name2>HashMap.this.sentinelValues != null)
-                {
-                    if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey)
-                    {
-                        appendable.append(String.valueOf(<name1><name2>HashMap.this.sentinelValues.zeroValue));
-                        first = false;
-                    }
-                    if (<name1><name2>HashMap.this.sentinelValues.containsOneKey)
-                    {
-                        if (!first)
-                        {
-                            appendable.append(separator);
-                        }
-                        appendable.append(String.valueOf(<name1><name2>HashMap.this.sentinelValues.oneValue));
-                        first = false;
-                    }
-                }
-                for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-                {
-                    <type1> key = <name1><name2>HashMap.this.<keyArray>[i];
-                    if (isNonSentinel(key))
-                    {
-                        if (!first)
-                        {
-                            appendable.append(separator);
-                        }
-                        appendable.append(String.valueOf(<name1><name2>HashMap.this.<valueArray>[i<valueIndex>]));
-                        first = false;
-                    }
-                }
-                appendable.append(end);
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
-
         public Mutable<name2>Iterator <type2>Iterator()
         {
             return <name1><name2>HashMap.this.<type2>Iterator();
-        }
-
-        public void forEach(<name2>Procedure procedure)
-        {
-            <name1><name2>HashMap.this.forEach(procedure);
-        }
-
-        public int count(<name2>Predicate predicate)
-        {
-            return <name1><name2>HashMap.this.count(predicate);
-        }
-
-        public boolean anySatisfy(<name2>Predicate predicate)
-        {
-            return <name1><name2>HashMap.this.anySatisfy(predicate);
-        }
-
-        public boolean allSatisfy(<name2>Predicate predicate)
-        {
-            return <name1><name2>HashMap.this.allSatisfy(predicate);
-        }
-
-        public boolean noneSatisfy(<name2>Predicate predicate)
-        {
-            return <name1><name2>HashMap.this.noneSatisfy(predicate);
-        }
-
-        public boolean add(<type2> element)
-        {
-            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
-        }
-
-        public boolean addAll(<type2>... source)
-        {
-            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
-        }
-
-        public boolean addAll(<name2>Iterable source)
-        {
-            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean remove(<type2> item)
@@ -2512,32 +1773,9 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return oldSize != <name1><name2>HashMap.this.size();
         }
 
-        public boolean removeAll(<name2>Iterable source)
-        {
-            int oldSize = <name1><name2>HashMap.this.size();
-
-            <name2>Iterator iterator = source.<type2>Iterator();
-            while (iterator.hasNext())
-            {
-                this.remove(iterator.next());
-            }
-            return oldSize != <name1><name2>HashMap.this.size();
-        }
-
-        public boolean removeAll(<type2>... source)
-        {
-            int oldSize = <name1><name2>HashMap.this.size();
-
-            for (<type2> item : source)
-            {
-                this.remove(item);
-            }
-            return oldSize != <name1><name2>HashMap.this.size();
-        }
-
         public boolean retainAll(<name2>Iterable source)
         {
-            int oldSize = this.size();
+            int oldSize = <name1><name2>HashMap.this.size();
             final <name2>Set sourceSet = source instanceof <name2>Set ? (<name2>Set) source : source.toSet();
             <name1><name2>HashMap retained = <name1><name2>HashMap.this.select(new <name1><name2>Predicate()
             {
@@ -2558,21 +1796,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 return true;
             }
             return false;
-        }
-
-        public boolean retainAll(<type2>... source)
-        {
-            return this.retainAll(<name2>HashSet.newSetWith(source));
-        }
-
-        public int size()
-        {
-            return <name1><name2>HashMap.this.size();
-        }
-
-        public <type2>[] toArray()
-        {
-            return <name1><name2>HashMap.this.toArray();
         }
     }
 
@@ -2717,9 +1940,9 @@ if (<if(innerClass)><name1><name2>HashMap.<endif>this.sentinelValues != null)
 }
 for (int i = 0; i \< <if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>.length; i<increment>)
 {
-    if (isNonSentinel(<keyArray>[i]))
+    if (isNonSentinel(this.<keyArray>[i]))
     {
-        <{<keyArray>[i]}:{key | <template>}>;
+        <{this.<keyArray>[i]}:{key | <template>}>;
     }
 }
 >>

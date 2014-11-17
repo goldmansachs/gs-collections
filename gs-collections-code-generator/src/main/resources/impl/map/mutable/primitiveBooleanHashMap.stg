@@ -29,11 +29,9 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.<name>Iterable;
-import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.BooleanFunction0;
@@ -53,46 +51,29 @@ import com.gs.collections.api.block.procedure.primitive.<name>BooleanProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
-import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.api.iterator.Mutable<name>Iterator;
-import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.primitive.<name>BooleanMap;
 import com.gs.collections.api.map.primitive.Immutable<name>BooleanMap;
 import com.gs.collections.api.map.primitive.Mutable<name>BooleanMap;
-import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.<name>Set;
-import com.gs.collections.api.set.primitive.Immutable<name>Set;
-import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.tuple.primitive.<name>BooleanPair;
-import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
-import com.gs.collections.impl.collection.mutable.primitive.SynchronizedBooleanCollection;
-import com.gs.collections.impl.collection.mutable.primitive.UnmodifiableBooleanCollection;
-import com.gs.collections.impl.factory.Sets;
-import com.gs.collections.impl.factory.primitive.BooleanLists;
 import com.gs.collections.impl.factory.primitive.<name>BooleanMaps;
-import com.gs.collections.impl.factory.primitive.<name>Sets;
 import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.primitive.Collect<name>ToObjectIterable;
-import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
-import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.lazy.primitive.Select<name>Iterable;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
-import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
-import com.gs.collections.impl.set.mutable.primitive.Synchronized<name>Set;
-import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name>Set;
 import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 
 /**
@@ -100,7 +81,7 @@ import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
  *
  * @since 3.0.
  */
-public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externalizable
+public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implements Mutable<name>BooleanMap, Mutable<name>KeysMap, Externalizable
 {
     static final boolean EMPTY_VALUE = false;
     private static final long serialVersionUID = 1L;
@@ -151,6 +132,30 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     public <name>BooleanHashMap(int initialCapacity, float loadFactor)
     {
         this(initialCapacity);
+    }
+
+    @Override
+    protected int getOccupiedWithData()
+    {
+        return this.occupiedWithData;
+    }
+
+    @Override
+    protected SentinelValues getSentinelValues()
+    {
+        return this.sentinelValues;
+    }
+
+    @Override
+    protected void setSentinelValuesNull()
+    {
+        this.sentinelValues = null;
+    }
+
+    @Override
+    protected boolean getEmptyValue()
+    {
+        return EMPTY_VALUE;
     }
 
     private int smallestPowerOfTwoGreaterThan(int n)
@@ -270,21 +275,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     {
         this.keys = new <type>[sizeToAllocate];
         this.values = new BitSet(sizeToAllocate);
-    }
-
-    public int size()
-    {
-        return this.occupiedWithData + (this.sentinelValues == null ? 0 : this.sentinelValues.size());
-    }
-
-    public boolean isEmpty()
-    {
-        return this.occupiedWithData == 0 && (this.sentinelValues == null || this.sentinelValues.size() == 0);
-    }
-
-    public boolean notEmpty()
-    {
-        return this.occupiedWithData != 0 || (this.sentinelValues != null && this.sentinelValues.size() != 0);
     }
 
     /**
@@ -455,34 +445,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             }
         }
         return false;
-    }
-
-    public boolean contains(boolean value)
-    {
-        return this.containsValue(value);
-    }
-
-    public boolean containsAll(boolean... source)
-    {
-        for (boolean each : source)
-        {
-            if (!this.contains(each))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean containsAll(BooleanIterable source)
-    {
-        return source.allSatisfy(new BooleanPredicate()
-        {
-            public boolean accept(boolean value)
-            {
-                return <name>BooleanHashMap.this.contains(value);
-            }
-        });
     }
 
     public boolean get(<type> key)
@@ -1005,7 +967,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         {
             if (this.sentinelValues.containsZeroKey)
             {
-                appendable.append(String.valueOf(EMPTY_KEY)).append("=").append(String.valueOf(this.sentinelValues.zeroValue));
+                appendable.append(EMPTY_KEY).append("=").append(this.sentinelValues.zeroValue);
                 first = false;
             }
             if (this.sentinelValues.containsOneKey)
@@ -1014,7 +976,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
                 {
                     appendable.append(", ");
                 }
-                appendable.append(String.valueOf(REMOVED_KEY)).append("=").append(String.valueOf(this.sentinelValues.oneValue));
+                appendable.append(REMOVED_KEY).append("=").append(this.sentinelValues.oneValue);
                 first = false;
             }
         }
@@ -1027,7 +989,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
                 {
                     appendable.append(", ");
                 }
-                appendable.append(String.valueOf(key)).append("=").append(String.valueOf(this.values.get(i)));
+                appendable.append(key).append("=").append(this.values.get(i));
                 first = false;
             }
         }
@@ -1039,11 +1001,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     public MutableBooleanIterator booleanIterator()
     {
         return new InternalBooleanIterator();
-    }
-
-    public void forEach(BooleanProcedure procedure)
-    {
-        this.forEachValue(procedure);
     }
 
     public void forEachValue(BooleanProcedure procedure)
@@ -1188,33 +1145,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         }
 
         return result;
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
     }
 
     public void appendString(Appendable appendable, String start, String separator, String end)
@@ -1465,26 +1395,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         return array;
     }
 
-    public MutableBooleanList toList()
-    {
-        return BooleanArrayList.newList(this);
-    }
-
-    public MutableBooleanSet toSet()
-    {
-        return BooleanHashSet.newSet(this);
-    }
-
-    public MutableBooleanBag toBag()
-    {
-        return BooleanHashBag.newBag(this);
-    }
-
-    public LazyBooleanIterable asLazy()
-    {
-        return new LazyBooleanIterableAdapter(this);
-    }
-
     public Lazy<name>Iterable keysView()
     {
         return new KeysView();
@@ -1548,26 +1458,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     private int maxOccupiedWithSentinels()
     {
         return this.keys.length / OCCUPIED_SENTINEL_RATIO;
-    }
-
-    private static final class SentinelValues
-    {
-        private boolean containsZeroKey;
-        private boolean containsOneKey;
-        private boolean zeroValue;
-        private boolean oneValue;
-
-        public int size()
-        {
-            return (this.containsZeroKey ? 1 : 0) + (this.containsOneKey ? 1 : 0);
-        }
-
-        public boolean containsValue(boolean value)
-        {
-            boolean valueEqualsZeroValue = this.containsZeroKey && this.zeroValue == value;
-            boolean valueEqualsOneValue = this.containsOneKey && this.oneValue == value;
-            return valueEqualsZeroValue || valueEqualsOneValue;
-        }
     }
 
     private class InternalBooleanIterator implements MutableBooleanIterator
@@ -2066,152 +1956,29 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         return new KeySet();
     }
 
-    private class KeySet implements Mutable<name>Set
+    private class KeySet extends AbstractMutable<name>KeySet
     {
+        @Override
+        protected <type>[] getKeys()
+        {
+            return <name>BooleanHashMap.this.keys;
+        }
+
+        @Override
+        protected Mutable<name>KeysMap getOuter()
+        {
+            return <name>BooleanHashMap.this;
+        }
+
+        @Override
+        protected SentinelValues getSentinelValues()
+        {
+            return <name>BooleanHashMap.this.sentinelValues;
+        }
+
         public Mutable<name>Iterator <type>Iterator()
         {
             return new KeySetIterator();
-        }
-
-        public void forEach(<name>Procedure procedure)
-        {
-            <name>BooleanHashMap.this.forEachKey(procedure);
-        }
-
-        public int count(<name>Predicate predicate)
-        {
-            int count = 0;
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
-                {
-                    count++;
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
-                {
-                    count++;
-                }
-            }
-            for (<type> key : <name>BooleanHashMap.this.keys)
-            {
-                if (isNonSentinel(key) && predicate.accept(key))
-                {
-                    count++;
-                }
-            }
-            return count;
-        }
-
-        public boolean anySatisfy(<name>Predicate predicate)
-        {
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
-                {
-                    return true;
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
-                {
-                    return true;
-                }
-            }
-            for (<type> key : <name>BooleanHashMap.this.keys)
-            {
-                if (isNonSentinel(key) && predicate.accept(key))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public boolean allSatisfy(<name>Predicate predicate)
-        {
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY_KEY))
-                {
-                    return false;
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && !predicate.accept(REMOVED_KEY))
-                {
-                    return false;
-                }
-            }
-            for (<type> key : <name>BooleanHashMap.this.keys)
-            {
-                if (isNonSentinel(key) && !predicate.accept(key))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public boolean noneSatisfy(<name>Predicate predicate)
-        {
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
-                {
-                    return false;
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
-                {
-                    return false;
-                }
-            }
-            for (<type> key : <name>BooleanHashMap.this.keys)
-            {
-                if (isNonSentinel(key) && predicate.accept(key))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public boolean add(<type> element)
-        {
-            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
-        }
-
-        public boolean addAll(<type>... source)
-        {
-            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
-        }
-
-        public boolean addAll(<name>Iterable source)
-        {
-            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
-        }
-
-        public boolean remove(<type> key)
-        {
-            int oldSize = <name>BooleanHashMap.this.size();
-            <name>BooleanHashMap.this.removeKey(key);
-            return oldSize != <name>BooleanHashMap.this.size();
-        }
-
-        public boolean removeAll(<name>Iterable source)
-        {
-            int oldSize = <name>BooleanHashMap.this.size();
-            <name>Iterator iterator = source.<type>Iterator();
-            while (iterator.hasNext())
-            {
-                <name>BooleanHashMap.this.removeKey(iterator.next());
-            }
-            return oldSize != <name>BooleanHashMap.this.size();
-        }
-
-        public boolean removeAll(<type>... source)
-        {
-            int oldSize = <name>BooleanHashMap.this.size();
-            for (<type> item : source)
-            {
-                <name>BooleanHashMap.this.removeKey(item);
-            }
-            return oldSize != <name>BooleanHashMap.this.size();
         }
 
         public boolean retainAll(<name>Iterable source)
@@ -2242,520 +2009,9 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             return this.retainAll(<name>HashSet.newSetWith(source));
         }
 
-        public void clear()
-        {
-            <name>BooleanHashMap.this.clear();
-        }
-
-        public Mutable<name>Set select(<name>Predicate predicate)
-        {
-            Mutable<name>Set result = new <name>HashSet();
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
-                {
-                    result.add(EMPTY_KEY);
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
-                {
-                    result.add(REMOVED_KEY);
-                }
-            }
-            for (<type> key : <name>BooleanHashMap.this.keys)
-            {
-                if (isNonSentinel(key) && predicate.accept(key))
-                {
-                    result.add(key);
-                }
-            }
-            return result;
-        }
-
-        public Mutable<name>Set reject(<name>Predicate predicate)
-        {
-            Mutable<name>Set result = new <name>HashSet();
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY_KEY))
-                {
-                    result.add(EMPTY_KEY);
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && !predicate.accept(REMOVED_KEY))
-                {
-                    result.add(REMOVED_KEY);
-                }
-            }
-            for (<type> key : <name>BooleanHashMap.this.keys)
-            {
-                if (isNonSentinel(key) && !predicate.accept(key))
-                {
-                    result.add(key);
-                }
-            }
-            return result;
-        }
-
-        public Mutable<name>Set with(<type> element)
-        {
-            throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
-        }
-
-        public Mutable<name>Set without(<type> element)
-        {
-            throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
-        }
-
-        public Mutable<name>Set withAll(<name>Iterable elements)
-        {
-            throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
-        }
-
-        public Mutable<name>Set withoutAll(<name>Iterable elements)
-        {
-            throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
-        }
-
-        public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
-        {
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
-                {
-                    return EMPTY_KEY;
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
-                {
-                    return REMOVED_KEY;
-                }
-            }
-            for (<type> key : <name>BooleanHashMap.this.keys)
-            {
-                if (isNonSentinel(key) && predicate.accept(key))
-                {
-                    return key;
-                }
-            }
-            return ifNone;
-        }
-
-        public \<V> MutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
-        {
-            MutableSet\<V> result = Sets.mutable.with();
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
-                {
-                    result.add(function.valueOf(EMPTY_KEY));
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
-                {
-                    result.add(function.valueOf(REMOVED_KEY));
-                }
-            }
-            for (<type> key : <name>BooleanHashMap.this.keys)
-            {
-                if (isNonSentinel(key))
-                {
-                    result.add(function.valueOf(key));
-                }
-            }
-            return result;
-        }
-
-        public Mutable<name>Set asUnmodifiable()
-        {
-            return Unmodifiable<name>Set.of(this);
-        }
-
-        public Mutable<name>Set asSynchronized()
-        {
-            return Synchronized<name>Set.of(this);
-        }
-
-        public <wideType.(type)> sum()
-        {
-            <wideType.(type)> sum = <wideZero.(type)>;
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
-                {
-                    sum += EMPTY_KEY;
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
-                {
-                    sum += REMOVED_KEY;
-                }
-            }
-            for (<type> key : <name>BooleanHashMap.this.keys)
-            {
-                if (isNonSentinel(key))
-                {
-                    sum += key;
-                }
-            }
-            return sum;
-        }
-
-        public <type> max()
-        {
-            if (<name>BooleanHashMap.this.isEmpty())
-            {
-                throw new NoSuchElementException();
-            }
-
-            <type> max = 0;
-            boolean isMaxSet = false;
-
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
-                {
-                    max = EMPTY_KEY;
-                    isMaxSet = true;
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && (!isMaxSet || <(lessThan.(type))("max", "REMOVED_KEY")>))
-                {
-                    max = REMOVED_KEY;
-                    isMaxSet = true;
-                }
-            }
-            for (int i = 0; i \< <name>BooleanHashMap.this.keys.length; i++)
-            {
-                if (isNonSentinel(<name>BooleanHashMap.this.keys[i]) && (!isMaxSet || <(lessThan.(type))({max}, {<name>BooleanHashMap.this.keys[i]})>))
-                {
-                    max = <name>BooleanHashMap.this.keys[i];
-                    isMaxSet = true;
-                }
-            }
-            return max;
-        }
-
-        public <type> maxIfEmpty(<type> defaultValue)
-        {
-            if (<name>BooleanHashMap.this.isEmpty())
-            {
-                return defaultValue;
-            }
-
-            return this.max();
-        }
-
-        public <type> min()
-        {
-            if (<name>BooleanHashMap.this.isEmpty())
-            {
-                throw new NoSuchElementException();
-            }
-
-            <type> min = 0;
-            boolean isMinSet = false;
-
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
-                {
-                    min = EMPTY_KEY;
-                    isMinSet = true;
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && (!isMinSet || <(lessThan.(type))("REMOVED_KEY", "min")>))
-                {
-                    min = REMOVED_KEY;
-                    isMinSet = true;
-                }
-            }
-            for (int i = 0; i \< <name>BooleanHashMap.this.keys.length; i++)
-            {
-                if (isNonSentinel(<name>BooleanHashMap.this.keys[i]) && (!isMinSet || <(lessThan.(type))({<name>BooleanHashMap.this.keys[i]}, {min})>))
-                {
-                    min = <name>BooleanHashMap.this.keys[i];
-                    isMinSet = true;
-                }
-            }
-            return min;
-        }
-
-        public <type> minIfEmpty(<type> defaultValue)
-        {
-            if (<name>BooleanHashMap.this.isEmpty())
-            {
-                return defaultValue;
-            }
-
-            return this.min();
-        }
-
-        public double average()
-        {
-            if (this.isEmpty())
-            {
-                throw new ArithmeticException();
-            }
-            return <castSum.(type)>this.sum() / (double) this.size();
-        }
-
-        public double median()
-        {
-            if (this.isEmpty())
-            {
-                throw new ArithmeticException();
-            }
-            <type>[] sortedArray = this.toSortedArray();
-            int middleIndex = sortedArray.length >\> 1;
-            if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-            {
-                <type> first = sortedArray[middleIndex];
-                <type> second = sortedArray[middleIndex - 1];
-                return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
-            }
-            return <castDouble.(type)>sortedArray[middleIndex];
-        }
-
-        public <type>[] toSortedArray()
-        {
-            <type>[] array = this.toArray();
-            Arrays.sort(array);
-            return array;
-        }
-
-        public Mutable<name>List toSortedList()
-        {
-            return <name>ArrayList.newList(this).sortThis();
-        }
-
-        public <type>[] toArray()
-        {
-            int size = <name>BooleanHashMap.this.size();
-            final <type>[] result = new <type>[size];
-            <name>BooleanHashMap.this.forEachKey(new <name>Procedure()
-            {
-                private int index;
-
-                public void value(<type> each)
-                {
-                    result[this.index] = each;
-                    this.index++;
-                }
-            });
-            return result;
-        }
-
-        public boolean contains(<type> value)
-        {
-            return <name>BooleanHashMap.this.containsKey(value);
-        }
-
-        public boolean containsAll(<type>... source)
-        {
-            for (<type> item : source)
-            {
-                if (!<name>BooleanHashMap.this.containsKey(item))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public boolean containsAll(<name>Iterable source)
-        {
-            <name>Iterator iterator = source.<type>Iterator();
-            while (iterator.hasNext())
-            {
-                if (!<name>BooleanHashMap.this.containsKey(iterator.next()))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public Mutable<name>List toList()
-        {
-            return <name>ArrayList.newList(this);
-        }
-
-        public Mutable<name>Set toSet()
-        {
-            return <name>HashSet.newSet(this);
-        }
-
-        public Mutable<name>Bag toBag()
-        {
-            return <name>HashBag.newBag(this);
-        }
-
-        public Lazy<name>Iterable asLazy()
-        {
-            return new Lazy<name>IterableAdapter(this);
-        }
-
-        public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
-        {
-            T result = injectedValue;
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
-                {
-                    result = function.valueOf(result, EMPTY_KEY);
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
-                {
-                    result = function.valueOf(result, REMOVED_KEY);
-                }
-            }
-            for (int i = 0; i \< <name>BooleanHashMap.this.keys.length; i++)
-            {
-                if (isNonSentinel(<name>BooleanHashMap.this.keys[i]))
-                {
-                    result = function.valueOf(result, <name>BooleanHashMap.this.keys[i]);
-                }
-            }
-            return result;
-        }
-
         public <name>Set freeze()
         {
             throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".freeze() not implemented yet");
-        }
-
-        public Immutable<name>Set toImmutable()
-        {
-            return <name>Sets.immutable.withAll(this);
-        }
-
-        public int size()
-        {
-            return <name>BooleanHashMap.this.size();
-        }
-
-        public boolean isEmpty()
-        {
-            return <name>BooleanHashMap.this.isEmpty();
-        }
-
-        public boolean notEmpty()
-        {
-            return <name>BooleanHashMap.this.notEmpty();
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (this == obj)
-            {
-                return true;
-            }
-
-            if (!(obj instanceof <name>Set))
-            {
-                return false;
-            }
-
-            <name>Set other = (<name>Set) obj;
-            return this.size() == other.size() && this.containsAll(other.toArray());
-        }
-
-        @Override
-        public int hashCode()
-        {
-            int result = 0;
-
-            if (<name>BooleanHashMap.this.sentinelValues != null)
-            {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
-                {
-                    result += <(hashCode.(type))("EMPTY_KEY")>;
-                }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
-                {
-                    result += <(hashCode.(type))("REMOVED_KEY")>;
-                }
-            }
-            for (int i = 0; i \< <name>BooleanHashMap.this.keys.length; i++)
-            {
-                if (isNonSentinel(<name>BooleanHashMap.this.keys[i]))
-                {
-                    result += <(hashCode.(type))({<name>BooleanHashMap.this.keys[i]})>;
-                }
-            }
-
-            return result;
-        }
-
-        @Override
-        public String toString()
-        {
-            return this.makeString("[", ", ", "]");
-        }
-
-        public String makeString()
-        {
-            return this.makeString(", ");
-        }
-
-        public String makeString(String separator)
-        {
-            return this.makeString("", separator, "");
-        }
-
-        public String makeString(String start, String separator, String end)
-        {
-            Appendable stringBuilder = new StringBuilder();
-            this.appendString(stringBuilder, start, separator, end);
-            return stringBuilder.toString();
-        }
-
-        public void appendString(Appendable appendable)
-        {
-            this.appendString(appendable, ", ");
-        }
-
-        public void appendString(Appendable appendable, String separator)
-        {
-            this.appendString(appendable, "", separator, "");
-        }
-
-        public void appendString(Appendable appendable, String start, String separator, String end)
-        {
-            try
-            {
-                appendable.append(start);
-                boolean first = true;
-                if (<name>BooleanHashMap.this.sentinelValues != null)
-                {
-                    if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
-                    {
-                        appendable.append(String.valueOf(EMPTY_KEY));
-                        first = false;
-                    }
-                    if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
-                    {
-                        if (!first)
-                        {
-                            appendable.append(separator);
-                        }
-                        appendable.append(String.valueOf(REMOVED_KEY));
-                        first = false;
-                    }
-                }
-                for (<type> key : <name>BooleanHashMap.this.keys)
-                {
-                    if (isNonSentinel(key))
-                    {
-                        if (!first)
-                        {
-                            appendable.append(separator);
-                        }
-                        appendable.append(String.valueOf(key));
-                        first = false;
-                    }
-                }
-                appendable.append(end);
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
         }
     }
 
@@ -2764,145 +2020,8 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         return new ValuesCollection();
     }
 
-    private class ValuesCollection implements MutableBooleanCollection
+    private class ValuesCollection extends AbstractBooleanValuesCollection
     {
-        public void clear()
-        {
-            <name>BooleanHashMap.this.clear();
-        }
-
-        public MutableBooleanCollection select(BooleanPredicate predicate)
-        {
-            return <name>BooleanHashMap.this.select(predicate);
-        }
-
-        public MutableBooleanCollection reject(BooleanPredicate predicate)
-        {
-            return <name>BooleanHashMap.this.reject(predicate);
-        }
-
-        public boolean detectIfNone(BooleanPredicate predicate, boolean ifNone)
-        {
-            return <name>BooleanHashMap.this.detectIfNone(predicate, ifNone);
-        }
-
-        public \<V> MutableCollection\<V> collect(BooleanToObjectFunction\<? extends V> function)
-        {
-            return <name>BooleanHashMap.this.collect(function);
-        }
-
-        public MutableBooleanCollection with(boolean element)
-        {
-            throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
-        }
-
-        public MutableBooleanCollection without(boolean element)
-        {
-            throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
-        }
-
-        public MutableBooleanCollection withAll(BooleanIterable elements)
-        {
-            throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
-        }
-
-        public MutableBooleanCollection withoutAll(BooleanIterable elements)
-        {
-            throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
-        }
-
-        public MutableBooleanCollection asSynchronized()
-        {
-            return SynchronizedBooleanCollection.of(this);
-        }
-
-        public MutableBooleanCollection asUnmodifiable()
-        {
-            return UnmodifiableBooleanCollection.of(this);
-        }
-
-        public ImmutableBooleanCollection toImmutable()
-        {
-            return BooleanLists.immutable.withAll(this);
-        }
-
-        public boolean contains(boolean value)
-        {
-            return <name>BooleanHashMap.this.containsValue(value);
-        }
-
-        public boolean containsAll(boolean... source)
-        {
-            return <name>BooleanHashMap.this.containsAll(source);
-        }
-
-        public boolean containsAll(BooleanIterable source)
-        {
-            return <name>BooleanHashMap.this.containsAll(source);
-        }
-
-        public MutableBooleanList toList()
-        {
-            return <name>BooleanHashMap.this.toList();
-        }
-
-        public MutableBooleanSet toSet()
-        {
-            return <name>BooleanHashMap.this.toSet();
-        }
-
-        public MutableBooleanBag toBag()
-        {
-            return <name>BooleanHashMap.this.toBag();
-        }
-
-        public LazyBooleanIterable asLazy()
-        {
-            return new LazyBooleanIterableAdapter(this);
-        }
-
-        public \<V> V injectInto(V injectedValue, ObjectBooleanToObjectFunction\<? super V, ? extends V> function)
-        {
-            return <name>BooleanHashMap.this.injectInto(injectedValue, function);
-        }
-
-        public boolean isEmpty()
-        {
-            return <name>BooleanHashMap.this.isEmpty();
-        }
-
-        public boolean notEmpty()
-        {
-            return <name>BooleanHashMap.this.notEmpty();
-        }
-
-        public String makeString()
-        {
-            return this.makeString(", ");
-        }
-
-        public String makeString(String separator)
-        {
-            return this.makeString("", separator, "");
-        }
-
-        public String makeString(String start, String separator, String end)
-        {
-            Appendable stringBuilder = new StringBuilder();
-            this.appendString(stringBuilder, start, separator, end);
-            return stringBuilder.toString();
-        }
-
-        public void appendString(Appendable appendable)
-        {
-            this.appendString(appendable, ", ");
-        }
-
-        public void appendString(Appendable appendable, String separator)
-        {
-            this.appendString(appendable, "", separator, "");
-        }
-
         public void appendString(Appendable appendable, String start, String separator, String end)
         {
             try
@@ -2954,46 +2073,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             return <name>BooleanHashMap.this.booleanIterator();
         }
 
-        public void forEach(BooleanProcedure procedure)
-        {
-            <name>BooleanHashMap.this.forEach(procedure);
-        }
-
-        public int count(BooleanPredicate predicate)
-        {
-            return <name>BooleanHashMap.this.count(predicate);
-        }
-
-        public boolean anySatisfy(BooleanPredicate predicate)
-        {
-            return <name>BooleanHashMap.this.anySatisfy(predicate);
-        }
-
-        public boolean allSatisfy(BooleanPredicate predicate)
-        {
-            return <name>BooleanHashMap.this.allSatisfy(predicate);
-        }
-
-        public boolean noneSatisfy(BooleanPredicate predicate)
-        {
-            return <name>BooleanHashMap.this.noneSatisfy(predicate);
-        }
-
-        public boolean add(boolean element)
-        {
-            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
-        }
-
-        public boolean addAll(boolean... source)
-        {
-            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
-        }
-
-        public boolean addAll(BooleanIterable source)
-        {
-            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
-        }
-
         public boolean remove(boolean item)
         {
             int oldSize = <name>BooleanHashMap.this.size();
@@ -3019,29 +2098,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             return oldSize != <name>BooleanHashMap.this.size();
         }
 
-        public boolean removeAll(BooleanIterable source)
-        {
-            int oldSize = <name>BooleanHashMap.this.size();
-
-            BooleanIterator iterator = source.booleanIterator();
-            while (iterator.hasNext())
-            {
-                this.remove(iterator.next());
-            }
-            return oldSize != <name>BooleanHashMap.this.size();
-        }
-
-        public boolean removeAll(boolean... source)
-        {
-            int oldSize = <name>BooleanHashMap.this.size();
-
-            for (boolean item : source)
-            {
-                this.remove(item);
-            }
-            return oldSize != <name>BooleanHashMap.this.size();
-        }
-
         public boolean retainAll(BooleanIterable source)
         {
             int oldSize = <name>BooleanHashMap.this.size();
@@ -3063,21 +2119,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
                 return true;
             }
             return false;
-        }
-
-        public boolean retainAll(boolean... source)
-        {
-            return this.retainAll(BooleanHashSet.newSetWith(source));
-        }
-
-        public int size()
-        {
-            return <name>BooleanHashMap.this.size();
-        }
-
-        public boolean[] toArray()
-        {
-            return <name>BooleanHashMap.this.toArray();
         }
     }
 

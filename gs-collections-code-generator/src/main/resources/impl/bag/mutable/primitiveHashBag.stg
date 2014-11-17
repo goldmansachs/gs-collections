@@ -26,6 +26,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.impl.primitive.Abstract<name>Iterable;
 import com.gs.collections.api.bag.primitive.<name>Bag;
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
@@ -57,7 +58,7 @@ import net.jcip.annotations.NotThreadSafe;
  * @since 3.0.
  */
 @NotThreadSafe
-public final class <name>HashBag implements Mutable<name>Bag, Externalizable
+public final class <name>HashBag extends Abstract<name>Iterable implements Mutable<name>Bag, Externalizable
 {
     private static final long serialVersionUID = 1L;
 
@@ -133,16 +134,19 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         return result;
     }
 
+    @Override
     public boolean isEmpty()
     {
         return this.items.isEmpty();
     }
 
+    @Override
     public boolean notEmpty()
     {
         return this.items.notEmpty();
     }
 
+    @Override
     public int size()
     {
         return this.size;
@@ -213,17 +217,6 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
             }
         }
         return true;
-    }
-
-    public boolean containsAll(<name>Iterable source)
-    {
-        return source.allSatisfy(new <name>Predicate()
-        {
-            public boolean accept(<type> each)
-            {
-                return <name>HashBag.this.contains(each);
-            }
-        });
     }
 
     public int occurrencesOf(<type> item)
@@ -521,39 +514,6 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         return result.getCount();
     }
 
-    @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
-    }
-
     public void appendString(
             final Appendable appendable,
             String start,
@@ -674,50 +634,6 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         return result[0];
     }
 
-    public <type> minIfEmpty(<type> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.min();
-    }
-
-    public <type> maxIfEmpty(<type> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.max();
-    }
-
-    public double average()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        return <castSum.(type)>this.sum() / (double) this.size();
-    }
-
-    public double median()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        <type>[] sortedArray = this.toSortedArray();
-        int middleIndex = sortedArray.length >\> 1;
-        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-        {
-            <type> first = sortedArray[middleIndex];
-            <type> second = sortedArray[middleIndex - 1];
-            return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
-        }
-        return <castDouble.(type)>sortedArray[middleIndex];
-    }
-
     public <type>[] toArray()
     {
         final <type>[] array = new <type>[this.size()];
@@ -735,38 +651,6 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
             }
         });
         return array;
-    }
-
-    public <type>[] toSortedArray()
-    {
-        <type>[] array = this.toArray();
-        Arrays.sort(array);
-        return array;
-    }
-
-    public Mutable<name>List toList()
-    {
-        return <name>ArrayList.newList(this);
-    }
-
-    public Mutable<name>List toSortedList()
-    {
-        return <name>ArrayList.newList(this).sortThis();
-    }
-
-    public Mutable<name>Set toSet()
-    {
-        return <name>HashSet.newSet(this.items.keysView());
-    }
-
-    public Mutable<name>Bag toBag()
-    {
-        return <name>HashBag.newBag(this);
-    }
-
-    public Lazy<name>Iterable asLazy()
-    {
-        return new Lazy<name>IterableAdapter(this);
     }
 
     public Mutable<name>Bag asUnmodifiable()

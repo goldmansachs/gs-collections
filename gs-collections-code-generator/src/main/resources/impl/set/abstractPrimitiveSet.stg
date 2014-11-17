@@ -33,13 +33,14 @@ import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
+import com.gs.collections.impl.primitive.Abstract<name>Iterable;
 
 /**
  * This file was automatically generated from template file abstractPrimitiveSet.stg.
  *
  * @since 6.0.
  */
-public abstract class Abstract<name>Set implements <name>Set
+public abstract class Abstract<name>Set extends Abstract<name>Iterable implements <name>Set
 {
     @Override
     public boolean equals(Object obj)
@@ -61,12 +62,6 @@ public abstract class Abstract<name>Set implements <name>Set
     @Override
     public abstract int hashCode();
 
-    @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
     public boolean isEmpty()
     {
         return this.size() == 0;
@@ -75,133 +70,6 @@ public abstract class Abstract<name>Set implements <name>Set
     public boolean notEmpty()
     {
         return this.size() != 0;
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
-    }
-
-    public boolean containsAll(<type>... source)
-    {
-        for (<type> item : source)
-        {
-            if (!this.contains(item))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean containsAll(<name>Iterable source)
-    {
-        for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext(); )
-        {
-            if (!this.contains(iterator.next()))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public Mutable<name>List toList()
-    {
-        return <name>ArrayList.newList(this);
-    }
-
-    public Mutable<name>Set toSet()
-    {
-        return <name>HashSet.newSet(this);
-    }
-
-    public Mutable<name>Bag toBag()
-    {
-        return <name>HashBag.newBag(this);
-    }
-
-    public Lazy<name>Iterable asLazy()
-    {
-        return new Lazy<name>IterableAdapter(this);
-    }
-
-    public <type> maxIfEmpty(<type> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.max();
-    }
-
-    public <type> minIfEmpty(<type> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.min();
-    }
-
-    public double average()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        return <castSum.(type)>this.sum() / (double) this.size();
-    }
-
-    public double median()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        <type>[] sortedArray = this.toSortedArray();
-        int middleIndex = sortedArray.length >\> 1;
-        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-        {
-            <type> first = sortedArray[middleIndex];
-            <type> second = sortedArray[middleIndex - 1];
-            return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
-        }
-        return <castDouble.(type)>sortedArray[middleIndex];
-    }
-
-    public <type>[] toSortedArray()
-    {
-        <type>[] array = this.toArray();
-        Arrays.sort(array);
-        return array;
-    }
-
-    public Mutable<name>List toSortedList()
-    {
-        return <name>ArrayList.newList(this).sortThis();
     }
 }
 

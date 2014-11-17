@@ -28,18 +28,15 @@ import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
 import com.gs.collections.api.iterator.Mutable<name2>Iterator;
+import com.gs.collections.impl.map.mutable.primitive.Mutable<name2>ValuesMap;
 
 /**
  * This file was automatically generated from template file mutablePrimitivePrimitiveMap.stg.
  *
  * @since 3.0.
  */
-public interface Mutable<name1><name2>Map extends <name1><name2>Map
+public interface Mutable<name1><name2>Map extends <name1><name2>Map, Mutable<name2>ValuesMap
 {
-    Mutable<name2>Iterator <type2>Iterator();
-
-    void clear();
-
     void put(<type1> key, <type2> value);
 
     void putAll(<name1><name2>Map map);
@@ -63,12 +60,6 @@ public interface Mutable<name1><name2>Map extends <name1><name2>Map
     Mutable<name1><name2>Map select(<name1><name2>Predicate predicate);
 
     Mutable<name1><name2>Map reject(<name1><name2>Predicate predicate);
-
-    Mutable<name2>Collection select(<name2>Predicate predicate);
-
-    Mutable<name2>Collection reject(<name2>Predicate predicate);
-
-    \<V> MutableCollection\<V> collect(<name2>ToObjectFunction\<? extends V> function);
 
     Mutable<name1><name2>Map withKeyValue(<type1> key, <type2> value);
 

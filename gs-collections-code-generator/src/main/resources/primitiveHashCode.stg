@@ -64,7 +64,7 @@ spread8(type, table) ::= <<
 int spread(<type> element)
 {
     // No spreading necessary for 8-bit types
-    return mask(element);
+    return this.mask(element);
 }
 >>
 
@@ -77,7 +77,7 @@ int spread(<type> element)
     code ^= code >\>> 13;
     code *= -75769267;
     code ^= code >\>> 11;
-    return mask(code);
+    return this.mask(code);
 }
 >>
 
@@ -90,6 +90,6 @@ int spread(<type> element)
     code ^= code >\>> 39;
     code *= 2747051607443084853L;
     code ^= code >\>> 37;
-    return mask((int) code);
+    return this.mask((int) code);
 }
 >>

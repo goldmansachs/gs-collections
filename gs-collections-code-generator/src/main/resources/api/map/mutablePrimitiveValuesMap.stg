@@ -1,0 +1,44 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
+
+fileName(primitive) ::= "Mutable<primitive.name>ValuesMap"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.mutable.primitive;
+
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
+import com.gs.collections.impl.map.primitive.<name>ValuesMap;
+
+/**
+ * This file was automatically generated from template file mutablePrimitiveValuesMap.stg.
+ *
+ * @since 6.0.
+ */
+public interface Mutable<name>ValuesMap extends <name>ValuesMap
+{
+    Mutable<name>Collection select(<name>Predicate predicate);
+
+    Mutable<name>Collection reject(<name>Predicate predicate);
+
+    \<V> MutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function);
+
+    void clear();
+
+    Mutable<name>Iterator <type>Iterator();
+}
+
+>>

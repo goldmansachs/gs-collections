@@ -26,6 +26,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.impl.primitive.Abstract<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
@@ -56,7 +57,7 @@ import net.jcip.annotations.NotThreadSafe;
  * @since 3.0.
  */
 @NotThreadSafe
-public final class <name>ArrayList
+public final class <name>ArrayList extends Abstract<name>Iterable
         implements Mutable<name>List, Externalizable
 {
     private static final long serialVersionUID = 1L;
@@ -112,16 +113,6 @@ public final class <name>ArrayList
         return this.size;
     }
 
-    public boolean isEmpty()
-    {
-        return this.size == 0;
-    }
-
-    public boolean notEmpty()
-    {
-        return this.size > 0;
-    }
-
     public void clear()
     {
         Arrays.fill(this.items, <(zero.(type))>);
@@ -138,30 +129,6 @@ public final class <name>ArrayList
             }
         }
         return false;
-    }
-
-    public boolean containsAll(<type>... source)
-    {
-        for (<type> value : source)
-        {
-            if (!this.contains(value))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean containsAll(<name>Iterable source)
-    {
-        for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext(); )
-        {
-            if (!this.contains(iterator.next()))
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     public <type> get(int index)
@@ -693,24 +660,6 @@ public final class <name>ArrayList
         return min;
     }
 
-    public <type> minIfEmpty(<type> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.min();
-    }
-
-    public <type> maxIfEmpty(<type> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.max();
-    }
-
     public <wideType.(type)> sum()
     {
         <wideType.(type)> result = <wideZero.(type)>;
@@ -735,44 +684,11 @@ public final class <name>ArrayList
         return sum;
     }
 
-    public double average()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        return <castSum.(type)>this.sum() / (double) this.size();
-    }
-
-    public double median()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        <type>[] sortedArray = this.toSortedArray();
-        int middleIndex = sortedArray.length >\> 1;
-        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-        {
-            <type> first = sortedArray[middleIndex];
-            <type> second = sortedArray[middleIndex - 1];
-            return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
-        }
-        return <castDouble.(type)>sortedArray[middleIndex];
-    }
-
     public <type>[] toArray()
     {
         <type>[] newItems = new <type>[this.size];
         System.arraycopy(this.items, 0, newItems, 0, this.size);
         return newItems;
-    }
-
-    public <type>[] toSortedArray()
-    {
-        <type>[] array = this.toArray();
-        Arrays.sort(array);
-        return array;
     }
 
     @Override
@@ -813,39 +729,6 @@ public final class <name>ArrayList
         return hashCode;
     }
 
-    @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
-    }
-
     public void appendString(
             Appendable appendable,
             String start,
@@ -870,31 +753,6 @@ public final class <name>ArrayList
         {
             throw new RuntimeException(e);
         }
-    }
-
-    public Mutable<name>List toList()
-    {
-        return <name>ArrayList.newList(this);
-    }
-
-    public Mutable<name>List toSortedList()
-    {
-        return <name>ArrayList.newList(this).sortThis();
-    }
-
-    public Mutable<name>Set toSet()
-    {
-        return <name>HashSet.newSet(this);
-    }
-
-    public Mutable<name>Bag toBag()
-    {
-        return <name>HashBag.newBag(this);
-    }
-
-    public Lazy<name>Iterable asLazy()
-    {
-        return new Lazy<name>IterableAdapter(this);
     }
 
     public Mutable<name>List asUnmodifiable()

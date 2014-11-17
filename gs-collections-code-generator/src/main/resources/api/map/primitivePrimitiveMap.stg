@@ -29,13 +29,14 @@ import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
 import com.gs.collections.api.set.primitive.Mutable<name1>Set;
 import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
+import com.gs.collections.impl.map.primitive.<name2>ValuesMap;
 
 /**
  * This file was automatically generated from template file primitivePrimitiveMap.stg.
  *
  * @since 3.0.
  */
-public interface <name1><name2>Map extends <name2>Iterable
+public interface <name1><name2>Map extends <name2>ValuesMap
 {
     <type2> get(<type1> key);
 
@@ -44,10 +45,6 @@ public interface <name1><name2>Map extends <name2>Iterable
     <type2> getOrThrow(<type1> key);
 
     boolean containsKey(<type1> key);
-
-    boolean containsValue(<type2> value);
-
-    void forEachValue(<name2>Procedure procedure);
 
     void forEachKey(<name1>Procedure procedure);
 
@@ -90,8 +87,6 @@ public interface <name1><name2>Map extends <name2>Iterable
     Immutable<name1><name2>Map toImmutable();
 
     Mutable<name1>Set keySet();
-
-    Mutable<name2>Collection values();
 }
 
 >>
