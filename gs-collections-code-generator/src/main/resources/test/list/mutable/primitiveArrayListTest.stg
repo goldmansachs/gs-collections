@@ -22,6 +22,7 @@ import java.lang.reflect.Field;
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
+import com.gs.collections.impl.factory.primitive.<name>Lists;
 import com.gs.collections.impl.math.Mutable<wrapperName>;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.internal.primitive.<name>IterableIterate;
@@ -95,7 +96,7 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
     {
         super.size();
         Verify.assertSize(0, new <name>ArrayList());
-        Verify.assertSize(3, <name>ArrayList.newList(this.list));
+        Verify.assertSize(3, <name>Lists.mutable.ofAll(this.list));
         Verify.assertSize(3, this.list);
     }
 

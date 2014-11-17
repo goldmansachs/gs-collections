@@ -14,7 +14,9 @@ body(type, name) ::= <<
 package com.gs.collections.impl.factory.primitive;
 
 import com.gs.collections.api.factory.list.primitive.Immutable<name>ListFactory;
+import com.gs.collections.api.factory.list.primitive.Mutable<name>ListFactory;
 import com.gs.collections.impl.list.immutable.primitive.Immutable<name>ListFactoryImpl;
+import com.gs.collections.impl.list.mutable.primitive.Mutable<name>ListFactoryImpl;
 
 /**
  * <name>Lists is a static utility for creating {@link Immutable<name>ListFactory}.
@@ -26,6 +28,7 @@ import com.gs.collections.impl.list.immutable.primitive.Immutable<name>ListFacto
 public final class <name>Lists
 {
     public static final Immutable<name>ListFactory immutable = new Immutable<name>ListFactoryImpl();
+    public static final Mutable<name>ListFactory mutable = new Mutable<name>ListFactoryImpl();
 
     private <name>Lists()
     {

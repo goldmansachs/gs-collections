@@ -46,16 +46,17 @@ import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Stacks;
+import com.gs.collections.impl.factory.primitive.BooleanLists;
+import com.gs.collections.impl.factory.primitive.ByteLists;
+import com.gs.collections.impl.factory.primitive.CharLists;
+import com.gs.collections.impl.factory.primitive.DoubleLists;
+import com.gs.collections.impl.factory.primitive.FloatLists;
+import com.gs.collections.impl.factory.primitive.IntLists;
+import com.gs.collections.impl.factory.primitive.LongLists;
+import com.gs.collections.impl.factory.primitive.ShortLists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
-import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
-import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
-import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
-import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
-import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
@@ -84,7 +85,7 @@ public abstract class AbstractListTestCase
     {
         super.collectBoolean();
         MutableBooleanList result = this.newWith(-1, 0, 1, 4).collectBoolean(PrimitiveFunctions.integerIsPositive());
-        Assert.assertEquals(BooleanArrayList.newListWith(false, false, true, true), result);
+        Assert.assertEquals(BooleanLists.mutable.of(false, false, true, true), result);
     }
 
     @Override
@@ -92,7 +93,7 @@ public abstract class AbstractListTestCase
     {
         super.collectByte();
         MutableByteList result = this.newWith(1, 2, 3, 4).collectByte(PrimitiveFunctions.unboxIntegerToByte());
-        Assert.assertEquals(ByteArrayList.newListWith((byte) 1, (byte) 2, (byte) 3, (byte) 4), result);
+        Assert.assertEquals(ByteLists.mutable.of((byte) 1, (byte) 2, (byte) 3, (byte) 4), result);
     }
 
     @Override
@@ -100,7 +101,7 @@ public abstract class AbstractListTestCase
     {
         super.collectChar();
         MutableCharList result = this.newWith(1, 2, 3, 4).collectChar(PrimitiveFunctions.unboxIntegerToChar());
-        Assert.assertEquals(CharArrayList.newListWith((char) 1, (char) 2, (char) 3, (char) 4), result);
+        Assert.assertEquals(CharLists.mutable.of((char) 1, (char) 2, (char) 3, (char) 4), result);
     }
 
     @Override
@@ -108,7 +109,7 @@ public abstract class AbstractListTestCase
     {
         super.collectDouble();
         MutableDoubleList result = this.newWith(1, 2, 3, 4).collectDouble(PrimitiveFunctions.unboxIntegerToDouble());
-        Assert.assertEquals(DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d, 4.0d), result);
+        Assert.assertEquals(DoubleLists.mutable.of(1.0d, 2.0d, 3.0d, 4.0d), result);
     }
 
     @Override
@@ -116,7 +117,7 @@ public abstract class AbstractListTestCase
     {
         super.collectFloat();
         MutableFloatList result = this.newWith(1, 2, 3, 4).collectFloat(PrimitiveFunctions.unboxIntegerToFloat());
-        Assert.assertEquals(FloatArrayList.newListWith(1.0f, 2.0f, 3.0f, 4.0f), result);
+        Assert.assertEquals(FloatLists.mutable.of(1.0f, 2.0f, 3.0f, 4.0f), result);
     }
 
     @Override
@@ -124,7 +125,7 @@ public abstract class AbstractListTestCase
     {
         super.collectInt();
         MutableIntList result = this.newWith(1, 2, 3, 4).collectInt(PrimitiveFunctions.unboxIntegerToInt());
-        Assert.assertEquals(IntArrayList.newListWith(1, 2, 3, 4), result);
+        Assert.assertEquals(IntLists.mutable.of(1, 2, 3, 4), result);
     }
 
     @Override
@@ -132,7 +133,7 @@ public abstract class AbstractListTestCase
     {
         super.collectLong();
         MutableLongList result = this.newWith(1, 2, 3, 4).collectLong(PrimitiveFunctions.unboxIntegerToLong());
-        Assert.assertEquals(LongArrayList.newListWith(1L, 2L, 3L, 4L), result);
+        Assert.assertEquals(LongLists.mutable.of(1L, 2L, 3L, 4L), result);
     }
 
     @Override
@@ -140,7 +141,7 @@ public abstract class AbstractListTestCase
     {
         super.collectShort();
         MutableShortList result = this.newWith(1, 2, 3, 4).collectShort(PrimitiveFunctions.unboxIntegerToShort());
-        Assert.assertEquals(ShortArrayList.newListWith((short) 1, (short) 2, (short) 3, (short) 4), result);
+        Assert.assertEquals(ShortLists.mutable.of((short) 1, (short) 2, (short) 3, (short) 4), result);
     }
 
     @Override
