@@ -1119,6 +1119,38 @@ public abstract class AbstractRichIterableTestCase
     }
 
     @Test
+    public void groupByUniqueKey()
+    {
+        RichIterable<Integer> collection = this.newWith(1, 2, 3);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), collection.groupByUniqueKey(id -> id));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_throws_for_duplicate()
+    {
+        RichIterable<Integer> collection = this.newWith(1, 2, 3);
+        collection.groupByUniqueKey(id -> 2);
+    }
+
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        RichIterable<Integer> collection = this.newWith(1, 2, 3);
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(0, 0, 1, 1, 2, 2, 3, 3),
+                collection.groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(0, 0)));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_target_throws_for_duplicate()
+    {
+        RichIterable<Integer> collection = this.newWith(1, 2, 3);
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(0, 0, 1, 1, 2, 2, 3, 3),
+                collection.groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(2, 2)));
+    }
+
+    @Test
     public void zip()
     {
         RichIterable<String> collection = this.newWith("1", "2", "3", "4", "5", "6", "7");

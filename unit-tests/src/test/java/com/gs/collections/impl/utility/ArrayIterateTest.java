@@ -918,6 +918,46 @@ public class ArrayIterateTest
     }
 
     @Test
+    public void groupByUniqueKey()
+    {
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3),
+                ArrayIterate.groupByUniqueKey(new Integer[]{1, 2, 3}, id -> id));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void groupByUniqueKey_throws_for_null()
+    {
+        ArrayIterate.groupByUniqueKey(null, id -> id);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_throws_for_duplicate()
+    {
+        ArrayIterate.groupByUniqueKey(new Integer[]{1, 2, 3, 2}, id -> id);
+    }
+
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(0, 0, 1, 1, 2, 2, 3, 3),
+                ArrayIterate.groupByUniqueKey(new Integer[]{1, 2, 3}, id -> id, UnifiedMap.newWithKeysValues(0, 0)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void groupByUniqueKey_target_throws_for_null()
+    {
+        ArrayIterate.groupByUniqueKey(null, id -> id, UnifiedMap.newMap());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKey_target_throws_for_duplicate()
+    {
+        ArrayIterate.groupByUniqueKey(new Integer[]{1, 2, 3}, id -> id, UnifiedMap.newWithKeysValues(2, 2));
+    }
+
+    @Test
     public void zip()
     {
         String[] array = {"1", "2", "3", "4", "5", "6", "7"};

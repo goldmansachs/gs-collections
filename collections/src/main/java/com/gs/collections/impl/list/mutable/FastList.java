@@ -83,6 +83,7 @@ import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -485,12 +486,6 @@ public class FastList<T>
     }
 
     @Override
-    public void appendString(Appendable appendable, String start, String separator, String end)
-    {
-        InternalArrayIterate.appendString(this, this.items, this.size, appendable, start, separator, end);
-    }
-
-    @Override
     public <V, R extends MutableMultimap<V, T>> R groupByEach(
             Function<? super T, ? extends Iterable<V>> function,
             R target)
@@ -501,7 +496,19 @@ public class FastList<T>
     @Override
     public <K> MutableMap<K, T> groupByUniqueKey(Function<? super T, ? extends K> function)
     {
-        return InternalArrayIterate.groupByUniqueKey(this.items, this.size, function);
+        return this.groupByUniqueKey(function, UnifiedMap.<K, T>newMap());
+    }
+
+    @Override
+    public <K, R extends MutableMap<K, T>> R groupByUniqueKey(Function<? super T, ? extends K> function, R target)
+    {
+        return InternalArrayIterate.groupByUniqueKey(this.items, this.size, function, target);
+    }
+
+    @Override
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        InternalArrayIterate.appendString(this, this.items, this.size, appendable, start, separator, end);
     }
 
     @Override

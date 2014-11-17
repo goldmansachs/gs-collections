@@ -1655,6 +1655,46 @@ public final class ArrayListIterate
     }
 
     /**
+     * @see Iterate#groupByUniqueKey(Iterable, Function)
+     */
+    public static <T, V> MutableMap<V, T> groupByUniqueKey(
+            ArrayList<T> list,
+            Function<? super T, ? extends V> function)
+    {
+        return ArrayListIterate.groupByUniqueKey(list, function, UnifiedMap.<V, T>newMap());
+    }
+
+    /**
+     * @see Iterate#groupByUniqueKey(Iterable, Function, MutableMap)
+     */
+    public static <T, V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            ArrayList<T> list,
+            Function<? super T, ? extends V> function,
+            R target)
+    {
+        if (list == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a groupByUniqueKey on null");
+        }
+
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                V key = function.valueOf(elements[i]);
+                if (target.put(key, elements[i]) != null)
+                {
+                    throw new IllegalStateException("Key " + key + " already exists in map!");
+                }
+            }
+            return target;
+        }
+        return RandomAccessListIterate.groupByUniqueKey(list, function, target);
+    }
+
+    /**
      * @see Iterate#zip(Iterable, Iterable)
      */
     public static <X, Y> MutableList<Pair<X, Y>> zip(ArrayList<X> xs, Iterable<Y> ys)

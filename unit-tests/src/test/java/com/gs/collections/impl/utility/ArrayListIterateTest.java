@@ -58,6 +58,7 @@ import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -1433,6 +1434,60 @@ public class ArrayListIterateTest
         MutableMultimap<String, Integer> result = ArrayListIterate.groupByEach(list, function, target);
         Assert.assertEquals(result.get("105"), FastList.newListWith(105));
         Assert.assertEquals(result.get("105*"), FastList.newListWith(105));
+    }
+
+    @Test
+    public void groupByUniqueKeyWithOptimisedList()
+    {
+        ArrayList<Integer> list1 = new ArrayList<Integer>(Interval.toReverseList(1, 3));
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3),
+                ArrayListIterate.groupByUniqueKey(list1, id -> id));
+        ArrayList<Integer> list2 = new ArrayList<Integer>(Interval.toReverseList(1, 105));
+        Assert.assertEquals(
+                Lists.mutable.ofAll(list2).groupByUniqueKey(id -> id),
+                ArrayListIterate.groupByUniqueKey(list2, id -> id));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void groupByUniqueKey_throws_for_null()
+    {
+        ArrayListIterate.groupByUniqueKey(null, id -> id);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKeyUniqueKey_throws_for_duplicate()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.toReverseList(1, 105));
+        list.add(2);
+        ArrayListIterate.groupByUniqueKey(list, id -> id);
+    }
+
+    @Test
+    public void groupByUniqueKeyWithOptimisedList_target()
+    {
+        ArrayList<Integer> list1 = new ArrayList<Integer>(Interval.toReverseList(1, 3));
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(0, 0, 1, 1, 2, 2, 3, 3),
+                ArrayListIterate.groupByUniqueKey(list1, id -> id, UnifiedMap.newWithKeysValues(0, 0)));
+
+        ArrayList<Integer> list2 = new ArrayList<Integer>(Interval.toReverseList(1, 105));
+        Assert.assertEquals(
+                Lists.mutable.ofAll(list2).groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(0, 0)),
+                ArrayListIterate.groupByUniqueKey(list2, id -> id, UnifiedMap.newWithKeysValues(0, 0)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void groupByUniqueKey_target_throws_for_null()
+    {
+        ArrayListIterate.groupByUniqueKey(null, id -> id, UnifiedMap.newWithKeysValues(0, 0));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void groupByUniqueKeyUniqueKey_target_throws_for_duplicate()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.toReverseList(1, 105));
+        ArrayListIterate.groupByUniqueKey(list, id -> id, UnifiedMap.newWithKeysValues(2, 2));
     }
 
     @Test

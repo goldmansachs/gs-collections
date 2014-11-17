@@ -1419,6 +1419,31 @@ public final class ArrayIterate
     }
 
     /**
+     * @see Iterate#groupByUniqueKey(Iterable, Function)
+     */
+    public static <T, V> MutableMap<V, T> groupByUniqueKey(
+            T[] array,
+            Function<? super T, ? extends V> function)
+    {
+        return ArrayIterate.groupByUniqueKey(array, function, UnifiedMap.<V, T>newMap());
+    }
+
+    /**
+     * @see Iterate#groupByUniqueKey(Iterable, Function, MutableMap)
+     */
+    public static <T, V, R extends MutableMap<V, T>> R groupByUniqueKey(
+            T[] array,
+            Function<? super T, ? extends V> function,
+            R target)
+    {
+        if (array == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a groupByUniqueKey on null");
+        }
+        return InternalArrayIterate.groupByUniqueKey(array, array.length, function, target);
+    }
+
+    /**
      * @see Iterate#chunk(Iterable, int)
      */
     public static <T> RichIterable<RichIterable<T>> chunk(T[] array, int size)

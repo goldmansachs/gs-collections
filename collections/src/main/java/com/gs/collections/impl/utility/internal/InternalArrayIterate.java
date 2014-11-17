@@ -45,7 +45,6 @@ import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
@@ -264,19 +263,22 @@ public final class InternalArrayIterate
         return target;
     }
 
-    public static <T, K> MutableMap<K, T> groupByUniqueKey(T[] array, int size, Function<? super T, ? extends K> function)
+    public static <T, K, R extends MutableMap<K, T>> R groupByUniqueKey(
+            T[] array,
+            int size,
+            Function<? super T, ? extends K> function,
+            R target)
     {
-        MutableMap<K, T> result = UnifiedMap.newMap();
         for (int i = 0; i < size; i++)
         {
             T value = array[i];
             K key = function.valueOf(value);
-            if (result.put(key, value) != null)
+            if (target.put(key, value) != null)
             {
-                throw new IllegalStateException("Attempt to put duplicate keys using groupByUniqueKey");
+                throw new IllegalStateException("Key " + key + " already exists in map!");
             }
         }
-        return result;
+        return target;
     }
 
     public static <T> PartitionFastList<T> partition(T[] array, int size, Predicate<? super T> predicate)
