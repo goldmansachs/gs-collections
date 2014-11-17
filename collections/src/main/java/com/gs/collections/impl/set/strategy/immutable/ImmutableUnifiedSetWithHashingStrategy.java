@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutorService;
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.set.ImmutableSet;
-import com.gs.collections.api.set.ParallelSetIterable;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.set.immutable.AbstractImmutableSet;
@@ -118,7 +118,7 @@ final class ImmutableUnifiedSetWithHashingStrategy<T>
     }
 
     @Override
-    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    public ParallelUnsortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
         return this.delegate.asParallel(executorService, batchSize);
     }

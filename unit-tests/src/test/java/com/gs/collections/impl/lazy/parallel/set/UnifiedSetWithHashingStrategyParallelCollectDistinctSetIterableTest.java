@@ -59,6 +59,12 @@ public class UnifiedSetWithHashingStrategyParallelCollectDistinctSetIterableTest
         return false;
     }
 
+    @Override
+    protected boolean isUnique()
+    {
+        return true;
+    }
+
     @Test
     @Override
     public void groupBy()

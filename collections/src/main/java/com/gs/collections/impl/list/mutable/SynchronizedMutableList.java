@@ -57,6 +57,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.AbstractSynchronizedMutableCollection;
 import com.gs.collections.impl.collection.mutable.SynchronizedCollectionSerializationProxy;
 import com.gs.collections.impl.lazy.ReverseIterable;
+import com.gs.collections.impl.lazy.parallel.list.SynchronizedParallelListIterable;
 import net.jcip.annotations.GuardedBy;
 
 /**
@@ -157,7 +158,7 @@ public class SynchronizedMutableList<T>
     {
         synchronized (this.getLock())
         {
-            return of(this.getMutableList().clone());
+            return SynchronizedMutableList.of(this.getMutableList().clone());
         }
     }
 
@@ -508,7 +509,7 @@ public class SynchronizedMutableList<T>
     {
         synchronized (this.getLock())
         {
-            return of(this.getMutableList().subList(fromIndex, toIndex), this.getLock());
+            return SynchronizedMutableList.of(this.getMutableList().subList(fromIndex, toIndex), this.getLock());
         }
     }
 
@@ -673,7 +674,7 @@ public class SynchronizedMutableList<T>
 
     public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
-        throw new UnsupportedOperationException("asParallel() method is not supported for " + this.getClass().getSimpleName() + '.');
+        return new SynchronizedParallelListIterable<T>(this.getMutableList().asParallel(executorService, batchSize), this.getLock());
     }
 
     public int binarySearch(T key, Comparator<? super T> comparator)

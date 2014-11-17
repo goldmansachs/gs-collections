@@ -41,4 +41,10 @@ public abstract class AbstractParallelUnsortedSetIterableTestCase extends Abstra
     {
         return false;
     }
+
+    @Override
+    protected boolean isUnique()
+    {
+        return true;
+    }
 }

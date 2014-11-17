@@ -23,7 +23,6 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.bag.UnsortedBagMultimap;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
@@ -88,7 +87,7 @@ public abstract class AbstractParallelIterableImpl<T, B extends Batch<T>> extend
 
     public <V> ParallelIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".flatCollect() not implemented yet");
     }
 
     public <V> UnsortedBagMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)
@@ -120,10 +119,5 @@ public abstract class AbstractParallelIterableImpl<T, B extends Batch<T>> extend
             }
         });
         return result;
-    }
-
-    public <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 }

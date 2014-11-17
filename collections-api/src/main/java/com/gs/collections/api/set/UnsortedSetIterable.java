@@ -16,6 +16,8 @@
 
 package com.gs.collections.api.set;
 
+import java.util.concurrent.ExecutorService;
+
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -28,7 +30,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.multimap.set.SetMultimap;
+import com.gs.collections.api.multimap.set.UnsortedSetMultimap;
 import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.ByteSet;
 import com.gs.collections.api.set.primitive.CharSet;
@@ -75,9 +77,9 @@ public interface UnsortedSetIterable<T>
 
     <V> UnsortedSetIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
-    <V> SetMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
+    <V> UnsortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
-    <V> SetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
+    <V> UnsortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
     UnsortedSetIterable<T> union(SetIterable<? extends T> set);
 
@@ -107,4 +109,6 @@ public interface UnsortedSetIterable<T>
      * @since 5.0
      */
     ImmutableSet<T> toImmutable();
+
+    ParallelUnsortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize);
 }

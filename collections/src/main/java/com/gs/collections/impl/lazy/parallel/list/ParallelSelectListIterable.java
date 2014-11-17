@@ -45,6 +45,12 @@ class ParallelSelectListIterable<T> extends AbstractParallelListIterable<T, List
     }
 
     @Override
+    public int getBatchSize()
+    {
+        return this.parallelIterable.getBatchSize();
+    }
+
+    @Override
     public LazyIterable<ListBatch<T>> split()
     {
         return this.parallelIterable.split().collect(new Function<ListBatch<T>, ListBatch<T>>()

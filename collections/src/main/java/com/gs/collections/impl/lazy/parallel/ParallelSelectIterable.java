@@ -16,11 +16,17 @@
 
 package com.gs.collections.impl.lazy.parallel;
 
+import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -42,6 +48,12 @@ public class ParallelSelectIterable<T> extends AbstractParallelIterableImpl<T, B
     public ExecutorService getExecutorService()
     {
         return this.parallelIterable.getExecutorService();
+    }
+
+    @Override
+    public int getBatchSize()
+    {
+        return this.parallelIterable.getBatchSize();
     }
 
     @Override
@@ -74,6 +86,97 @@ public class ParallelSelectIterable<T> extends AbstractParallelIterableImpl<T, B
     public T detect(Predicate<? super T> predicate)
     {
         return this.parallelIterable.detect(Predicates.and(this.predicate, predicate));
+    }
+
+    @Override
+    public <V> ParallelIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).flatCollect(function).asParallel(this.getExecutorService(), this.getBatchSize());
+    }
+
+    @Override
+    public T min(Comparator<? super T> comparator)
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).min(comparator);
+    }
+
+    @Override
+    public T max(Comparator<? super T> comparator)
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).max(comparator);
+    }
+
+    @Override
+    public T min()
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).min();
+    }
+
+    @Override
+    public T max()
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).max();
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).minBy(function);
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).maxBy(function);
+    }
+
+    @Override
+    public long sumOfInt(IntFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).sumOfInt(function);
+    }
+
+    @Override
+    public double sumOfFloat(FloatFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).sumOfFloat(function);
+    }
+
+    @Override
+    public long sumOfLong(LongFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).sumOfLong(function);
+    }
+
+    @Override
+    public double sumOfDouble(DoubleFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).sumOfDouble(function);
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).toArray();
+    }
+
+    @Override
+    public <E> E[] toArray(E[] array)
+    {
+        // TODO: Implement in parallel
+        return this.parallelIterable.toList().select(this.predicate).toArray(array);
     }
 
     private static final class SelectAllSatisfyPredicate<T> implements Predicate<T>

@@ -17,6 +17,7 @@
 package com.gs.collections.impl.lazy.parallel;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -87,20 +88,22 @@ public abstract class AbstractParallelIterableTestCase
 
     protected abstract boolean isOrdered();
 
-    @Test(expected = UnsupportedOperationException.class)
+    protected abstract boolean isUnique();
+
+    @Test
     public void toArray()
     {
-        Assert.assertArrayEquals(
-                this.getExpected().toArray(),
-                this.classUnderTest().toArray());
+        Assert.assertEquals(
+                HashBag.newBagWith(this.getExpected().toArray()),
+                HashBag.newBagWith(this.classUnderTest().toArray()));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void toArray_array()
     {
-        Assert.assertArrayEquals(
-                this.getExpected().toArray(new Object[10]),
-                this.classUnderTest().toArray(new Object[10]));
+        Assert.assertEquals(
+                HashBag.newBagWith(this.getExpected().toArray(new Object[10])),
+                HashBag.newBagWith(this.classUnderTest().toArray(new Object[10])));
     }
 
     @Test
@@ -227,12 +230,17 @@ public abstract class AbstractParallelIterableTestCase
                 this.getActual(this.classUnderTest().collect(String::valueOf)));
 
         Assert.assertEquals(
-                this.getExpected().collect(String::valueOf).toList().toBag(),
+                this.getExpected().collect(String::valueOf, HashBag.newBag()),
                 this.classUnderTest().collect(String::valueOf).toList().toBag());
 
         Assert.assertEquals(
                 this.getExpected().collect(String::valueOf).toBag(),
                 this.classUnderTest().collect(String::valueOf).toBag());
+
+        Object constant = new Object();
+        Assert.assertEquals(
+                this.getExpected().collect(ignored -> constant, HashBag.newBag()),
+                this.classUnderTest().collect(ignored -> constant).toList().toBag());
     }
 
     @Test
@@ -245,12 +253,17 @@ public abstract class AbstractParallelIterableTestCase
                 this.getActual(this.classUnderTest().collectWith(appendFunction, "!")));
 
         Assert.assertEquals(
-                this.getExpected().collectWith(appendFunction, "!").toList().toBag(),
+                this.getExpected().collectWith(appendFunction, "!", HashBag.newBag()),
                 this.classUnderTest().collectWith(appendFunction, "!").toList().toBag());
 
         Assert.assertEquals(
                 this.getExpected().collectWith(appendFunction, "!").toBag(),
                 this.classUnderTest().collectWith(appendFunction, "!").toBag());
+
+        Object constant = new Object();
+        Assert.assertEquals(
+                this.getExpected().collectWith((ignored1, ignored2) -> constant, "!", HashBag.newBag()),
+                this.classUnderTest().collectWith((ignored1, ignored2) -> constant, "!").toList().toBag());
     }
 
     @Test
@@ -263,15 +276,20 @@ public abstract class AbstractParallelIterableTestCase
                 this.getActual(this.classUnderTest().collectIf(predicate, String::valueOf)));
 
         Assert.assertEquals(
-                this.getExpected().collectIf(predicate, String::valueOf).toList().toBag(),
+                this.getExpected().collectIf(predicate, String::valueOf, HashBag.newBag()),
                 this.classUnderTest().collectIf(predicate, String::valueOf).toList().toBag());
 
         Assert.assertEquals(
                 this.getExpected().collectIf(predicate, String::valueOf).toBag(),
                 this.classUnderTest().collectIf(predicate, String::valueOf).toBag());
+
+        Object constant = new Object();
+        Assert.assertEquals(
+                this.getExpected().collectIf(predicate, ignored -> constant, HashBag.newBag()),
+                this.classUnderTest().collectIf(predicate, ignored -> constant).toList().toBag());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void flatCollect()
     {
         Function<Integer, Iterable<Integer>> intervalFunction = Interval::oneTo;
@@ -280,11 +298,11 @@ public abstract class AbstractParallelIterableTestCase
                 this.getActual(this.classUnderTest().flatCollect(intervalFunction)));
 
         Assert.assertEquals(
-                this.getExpected().flatCollect(intervalFunction).toList().toBag(),
+                this.getExpected().flatCollect(intervalFunction, HashBag.newBag()),
                 this.classUnderTest().flatCollect(intervalFunction).toList().toBag());
 
         Assert.assertEquals(
-                this.getExpected().flatCollect(intervalFunction).toBag(),
+                this.getExpected().flatCollect(intervalFunction, HashBag.newBag()),
                 this.classUnderTest().flatCollect(intervalFunction).toBag());
     }
 
@@ -317,65 +335,61 @@ public abstract class AbstractParallelIterableTestCase
         Assert.assertEquals(Integer.valueOf(1000), this.classUnderTest().detectWithIfNone(Object::equals, Integer.valueOf(8), function));
     }
 
-    // @Test(expected = NoSuchElementException.class)
-    @Test(expected = UnsupportedOperationException.class)
+    @Test(expected = NoSuchElementException.class)
     public void min_empty_throws()
     {
         this.classUnderTest().select(ignored -> false).min(Integer::compareTo);
     }
 
-    // @Test(expected = NoSuchElementException.class)
-    @Test(expected = UnsupportedOperationException.class)
+    @Test(expected = NoSuchElementException.class)
     public void max_empty_throws()
     {
         this.classUnderTest().select(ignored -> false).max(Integer::compareTo);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void min()
     {
         Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().min(Integer::compareTo));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void max()
     {
         Assert.assertEquals(Integer.valueOf(4), this.classUnderTest().max(Integer::compareTo));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void minBy()
     {
         Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().minBy(String::valueOf));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void maxBy()
     {
         Assert.assertEquals(Integer.valueOf(4), this.classUnderTest().maxBy(String::valueOf));
     }
 
-    // @Test(expected = NoSuchElementException.class)
-    @Test(expected = UnsupportedOperationException.class)
+    @Test(expected = NoSuchElementException.class)
     public void min_empty_throws_without_comparator()
     {
         this.classUnderTest().select(ignored -> false).min();
     }
 
-    // @Test(expected = NoSuchElementException.class)
-    @Test(expected = UnsupportedOperationException.class)
+    @Test(expected = NoSuchElementException.class)
     public void max_empty_throws_without_comparator()
     {
         this.classUnderTest().select(ignored -> false).max();
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void min_without_comparator()
     {
         Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().min());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void max_without_comparator()
     {
         Assert.assertEquals(Integer.valueOf(4), this.classUnderTest().max());
@@ -520,6 +534,30 @@ public abstract class AbstractParallelIterableTestCase
         Verify.assertSortedSetsEqual(
                 TreeSortedSet.newSetWith(1, 2, 3, 4),
                 this.classUnderTest().toSortedSetBy(String::valueOf));
+    }
+
+    @Test
+    public void toSortedBag()
+    {
+        Assert.assertEquals(
+                this.getExpected().toSortedBag(),
+                this.classUnderTest().toSortedBag());
+    }
+
+    @Test
+    public void toSortedBag_comparator()
+    {
+        Assert.assertEquals(
+                this.getExpected().toSortedBag(Comparators.reverseNaturalOrder()),
+                this.classUnderTest().toSortedBag(Comparators.reverseNaturalOrder()));
+    }
+
+    @Test
+    public void toSortedBagBy()
+    {
+        Assert.assertEquals(
+                this.getExpected().toSortedBagBy(String::valueOf),
+                this.classUnderTest().toSortedBagBy(String::valueOf));
     }
 
     @Test
@@ -688,6 +726,30 @@ public abstract class AbstractParallelIterableTestCase
     }
 
     @Test
+    public void groupByUniqueKey()
+    {
+        if (this.isUnique())
+        {
+            Assert.assertEquals(
+                    this.getExpected().groupByUniqueKey(id -> id),
+                    this.classUnderTest().groupByUniqueKey(id -> id));
+        }
+        else
+        {
+            // IllegalStateException in serial, RuntimeException with IllegalStateException cause in parallel
+            try
+            {
+                this.classUnderTest().groupByUniqueKey(id -> id);
+            }
+            catch (RuntimeException ignored)
+            {
+                return;
+            }
+            Assert.fail();
+        }
+    }
+
+    @Test
     public void aggregateBy()
     {
         Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
@@ -709,7 +771,7 @@ public abstract class AbstractParallelIterableTestCase
                 this.classUnderTest().aggregateInPlaceBy(isOddFunction, AtomicInteger::new, AtomicInteger::addAndGet).collect(atomicIntToInt));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void sumOfInt()
     {
         Assert.assertEquals(
@@ -717,7 +779,7 @@ public abstract class AbstractParallelIterableTestCase
                 this.classUnderTest().sumOfInt(Integer::intValue));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void sumOfLong()
     {
         Assert.assertEquals(
@@ -725,7 +787,7 @@ public abstract class AbstractParallelIterableTestCase
                 this.classUnderTest().sumOfLong(Integer::longValue));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void sumOfFloat()
     {
         Assert.assertEquals(
@@ -734,7 +796,7 @@ public abstract class AbstractParallelIterableTestCase
                 0.0);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void sumOfDouble()
     {
         Assert.assertEquals(
@@ -836,22 +898,15 @@ public abstract class AbstractParallelIterableTestCase
         Verify.assertThrowsWithCause(
                 RuntimeException.class,
                 InterruptedException.class,
-                new Runnable()
+                () -> this.classUnderTest().forEach(new CheckedProcedure<Integer>()
                 {
                     @Override
-                    public void run()
+                    public void safeValue(Integer each) throws InterruptedException
                     {
-                        AbstractParallelIterableTestCase.this.classUnderTest().forEach(new CheckedProcedure<Integer>()
-                        {
-                            @Override
-                            public void safeValue(Integer each) throws InterruptedException
-                            {
-                                Thread.sleep(1000);
-                                actual1.add(each);
-                            }
-                        });
+                        Thread.sleep(1000);
+                        actual1.add(each);
                     }
-                });
+                }));
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
 

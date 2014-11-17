@@ -25,14 +25,16 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
+import com.gs.collections.impl.lazy.parallel.OrderedBatch;
 
 @Beta
-class ParallelCollectListIterable<T, V> extends AbstractParallelListIterable<V, ListBatch<V>>
+public class ParallelCollectListIterable<T, V> extends AbstractParallelListIterable<V, ListBatch<V>>
 {
-    private final AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelIterable;
+    private final AbstractParallelIterable<T, ? extends OrderedBatch<T>> parallelIterable;
     private final Function<? super T, ? extends V> function;
 
-    ParallelCollectListIterable(AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelIterable, Function<? super T, ? extends V> function)
+    public ParallelCollectListIterable(AbstractParallelIterable<T, ? extends OrderedBatch<T>> parallelIterable, Function<? super T, ? extends V> function)
     {
         this.parallelIterable = parallelIterable;
         this.function = function;
@@ -45,11 +47,17 @@ class ParallelCollectListIterable<T, V> extends AbstractParallelListIterable<V, 
     }
 
     @Override
+    public int getBatchSize()
+    {
+        return this.parallelIterable.getBatchSize();
+    }
+
+    @Override
     public LazyIterable<ListBatch<V>> split()
     {
-        return this.parallelIterable.split().collect(new Function<ListBatch<T>, ListBatch<V>>()
+        return this.parallelIterable.split().collect(new Function<OrderedBatch<T>, ListBatch<V>>()
         {
-            public ListBatch<V> valueOf(ListBatch<T> eachBatch)
+            public ListBatch<V> valueOf(OrderedBatch<T> eachBatch)
             {
                 return eachBatch.collect(ParallelCollectListIterable.this.function);
             }

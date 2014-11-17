@@ -17,10 +17,9 @@
 package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.set.ParallelSetIterable;
-import com.gs.collections.impl.lazy.parallel.AbstractUnsupportedParallelIterableTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
-public class SynchronizedMutableSetParallelSetIterableTest extends AbstractUnsupportedParallelIterableTestCase
+public class SynchronizedMutableSetParallelSetIterableTest extends AbstractParallelUnsortedSetIterableTestCase
 {
     @Override
     protected ParallelSetIterable<Integer> classUnderTest()

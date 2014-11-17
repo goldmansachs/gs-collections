@@ -62,6 +62,7 @@ import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.list.mutable.CompositeFastList;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMapUnsafe;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
@@ -243,6 +244,8 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
     }
 
     public abstract ExecutorService getExecutorService();
+
+    public abstract int getBatchSize();
 
     public abstract LazyIterable<B> split();
 
@@ -684,5 +687,22 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
     public double sumOfDouble(DoubleFunction<? super T> function)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".sumOfDouble() not implemented yet");
+    }
+
+    public <V> MapIterable<V, T> groupByUniqueKey(final Function<? super T, ? extends V> function)
+    {
+        final MutableMap<V, T> result = ConcurrentHashMap.newMap();
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T value)
+            {
+                V key = function.valueOf(value);
+                if (result.put(key, value) != null)
+                {
+                    throw new IllegalStateException("Key " + key + " already exists in map!");
+                }
+            }
+        });
+        return result;
     }
 }

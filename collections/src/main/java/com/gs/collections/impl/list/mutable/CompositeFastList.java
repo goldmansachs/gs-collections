@@ -38,6 +38,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.parallel.list.NonParallelListIterable;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
@@ -537,7 +538,7 @@ public final class CompositeFastList<E>
     {
         private final Iterator<E>[] iterators;
         private Iterator<E> currentIterator;
-        private int currentIndex = 0;
+        private int currentIndex;
 
         private CompositeIterator(FastList<FastList<E>> newLists)
         {
@@ -654,6 +655,6 @@ public final class CompositeFastList<E>
     @Override
     public ParallelListIterable<E> asParallel(ExecutorService executorService, int batchSize)
     {
-        throw new UnsupportedOperationException("asParallel() method is not supported for " + this.getClass().getSimpleName() + '.');
+        return new NonParallelListIterable<E>(this);
     }
 }

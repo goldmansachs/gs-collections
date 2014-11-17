@@ -21,18 +21,12 @@ import java.util.LinkedList;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.ListAdapter;
-import org.junit.Test;
 
-public class ListAdapterParallelListIterableTest
+public class ListAdapterParallelListIterableTest extends AbstractNonParallelListIterableTest
 {
-    private ParallelListIterable<Integer> classUnderTest()
+    @Override
+    protected ParallelListIterable<Integer> classUnderTest()
     {
         return ListAdapter.adapt(new LinkedList<Integer>(Lists.mutable.of(1, 2, 2, 3, 3, 3, 4, 4, 4, 4))).asParallel(null, 2);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void forEach()
-    {
-        this.classUnderTest().forEach(x -> { });
     }
 }

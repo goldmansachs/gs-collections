@@ -17,11 +17,10 @@
 package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.set.ParallelSetIterable;
-import com.gs.collections.impl.lazy.parallel.AbstractUnsupportedParallelIterableTestCase;
 import com.gs.collections.impl.set.mutable.MultiReaderUnifiedSet;
 import com.gs.collections.impl.set.mutable.SetAdapter;
 
-public class MultiReaderUnifiedSetParallelSetIterableTest extends AbstractUnsupportedParallelIterableTestCase
+public class MultiReaderUnifiedSetParallelSetIterableTest extends AbstractParallelUnsortedSetIterableTestCase
 {
     @Override
     protected ParallelSetIterable<Integer> classUnderTest()

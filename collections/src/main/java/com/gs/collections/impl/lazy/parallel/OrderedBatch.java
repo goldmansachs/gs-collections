@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.list;
+package com.gs.collections.impl.lazy.parallel;
 
-import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.impl.lazy.parallel.OrderedBatch;
-import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.list.ListBatch;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
-@Beta
-public interface ListBatch<T> extends OrderedBatch<T>
+public interface OrderedBatch<T> extends Batch<T>
 {
-    ListBatch<T> select(Predicate<? super T> predicate);
+    OrderedBatch<T> select(Predicate<? super T> predicate);
 
     <V> ListBatch<V> collect(Function<? super T, ? extends V> function);
 
-    UnsortedSetBatch<T> distinct(ConcurrentHashMap<T, Boolean> distinct);
+    Batch<T> distinct(ConcurrentHashMap<T, Boolean> distinct);
 }

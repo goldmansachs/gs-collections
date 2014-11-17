@@ -382,7 +382,7 @@ public class UnifiedSetWithHashingStrategy<K>
         Object cur = this.table[index];
         if (cur == null)
         {
-            this.table[index] = toSentinelIfNull(key);
+            this.table[index] = UnifiedSetWithHashingStrategy.toSentinelIfNull(key);
             if (++this.occupied > this.maxSize)
             {
                 this.rehash();
@@ -409,7 +409,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 }
                 if (bucket.one == null)
                 {
-                    bucket.one = toSentinelIfNull(key);
+                    bucket.one = UnifiedSetWithHashingStrategy.toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
@@ -422,7 +422,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 }
                 if (bucket.two == null)
                 {
-                    bucket.two = toSentinelIfNull(key);
+                    bucket.two = UnifiedSetWithHashingStrategy.toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
@@ -440,7 +440,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 }
                 if (bucket.three == null)
                 {
-                    bucket.three = toSentinelIfNull(key);
+                    bucket.three = UnifiedSetWithHashingStrategy.toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
@@ -451,7 +451,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 {
                     return false;
                 }
-                bucket.three = new ChainedBucket(bucket.three, toSentinelIfNull(key));
+                bucket.three = new ChainedBucket(bucket.three, UnifiedSetWithHashingStrategy.toSentinelIfNull(key));
                 if (++this.occupied > this.maxSize)
                 {
                     this.rehash();
@@ -460,7 +460,7 @@ public class UnifiedSetWithHashingStrategy<K>
             }
             while (true);
         }
-        ChainedBucket newBucket = new ChainedBucket(this.table[index], toSentinelIfNull(key));
+        ChainedBucket newBucket = new ChainedBucket(this.table[index], UnifiedSetWithHashingStrategy.toSentinelIfNull(key));
         this.table[index] = newBucket;
         if (++this.occupied > this.maxSize)
         {
@@ -2753,7 +2753,7 @@ public class UnifiedSetWithHashingStrategy<K>
 
         if (cur == null)
         {
-            this.table[index] = toSentinelIfNull(key);
+            this.table[index] = UnifiedSetWithHashingStrategy.toSentinelIfNull(key);
             if (++this.occupied > this.maxSize)
             {
                 this.rehash();
@@ -2781,7 +2781,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 }
                 if (bucket.one == null)
                 {
-                    bucket.one = toSentinelIfNull(key);
+                    bucket.one = UnifiedSetWithHashingStrategy.toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
@@ -2794,7 +2794,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 }
                 if (bucket.two == null)
                 {
-                    bucket.two = toSentinelIfNull(key);
+                    bucket.two = UnifiedSetWithHashingStrategy.toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
@@ -2812,7 +2812,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 }
                 if (bucket.three == null)
                 {
-                    bucket.three = toSentinelIfNull(key);
+                    bucket.three = UnifiedSetWithHashingStrategy.toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
@@ -3164,6 +3164,12 @@ public class UnifiedSetWithHashingStrategy<K>
         }
 
         @Override
+        public int getBatchSize()
+        {
+            return this.batchSize;
+        }
+
+        @Override
         public LazyIterable<RootUnsortedSetBatch<K>> split()
         {
             return new UnifiedSetParallelSplitLazyIterable();
@@ -3187,6 +3193,90 @@ public class UnifiedSetWithHashingStrategy<K>
         public K detect(Predicate<? super K> predicate)
         {
             return detect(this, predicate);
+        }
+
+        @Override
+        public K min(Comparator<? super K> comparator)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.min(comparator);
+        }
+
+        @Override
+        public K max(Comparator<? super K> comparator)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.max(comparator);
+        }
+
+        @Override
+        public K min()
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.min();
+        }
+
+        @Override
+        public K max()
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.max();
+        }
+
+        @Override
+        public <V extends Comparable<? super V>> K minBy(Function<? super K, ? extends V> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.minBy(function);
+        }
+
+        @Override
+        public <V extends Comparable<? super V>> K maxBy(Function<? super K, ? extends V> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.maxBy(function);
+        }
+
+        @Override
+        public long sumOfInt(IntFunction<? super K> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.sumOfInt(function);
+        }
+
+        @Override
+        public double sumOfFloat(FloatFunction<? super K> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.sumOfFloat(function);
+        }
+
+        @Override
+        public long sumOfLong(LongFunction<? super K> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.sumOfLong(function);
+        }
+
+        @Override
+        public double sumOfDouble(DoubleFunction<? super K> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.sumOfDouble(function);
+        }
+
+        @Override
+        public Object[] toArray()
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.toArray();
+        }
+
+        @Override
+        public <E> E[] toArray(E[] array)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSetWithHashingStrategy.this.toArray(array);
         }
 
         private class UnifiedSetParallelSplitIterator implements Iterator<RootUnsortedSetBatch<K>>

@@ -16,11 +16,16 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
+import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -29,25 +34,31 @@ import com.gs.collections.impl.block.procedure.IfProcedure;
 @Beta
 class ParallelSelectUnsortedSetIterable<T> extends AbstractParallelUnsortedSetIterable<T, UnsortedSetBatch<T>>
 {
-    private final AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> parallelIterable;
+    private final AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> delegate;
     private final Predicate<? super T> predicate;
 
-    ParallelSelectUnsortedSetIterable(AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> parallelIterable, Predicate<? super T> predicate)
+    ParallelSelectUnsortedSetIterable(AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> delegate, Predicate<? super T> predicate)
     {
-        this.parallelIterable = parallelIterable;
+        this.delegate = delegate;
         this.predicate = predicate;
     }
 
     @Override
     public ExecutorService getExecutorService()
     {
-        return this.parallelIterable.getExecutorService();
+        return this.delegate.getExecutorService();
+    }
+
+    @Override
+    public int getBatchSize()
+    {
+        return this.delegate.getBatchSize();
     }
 
     @Override
     public LazyIterable<UnsortedSetBatch<T>> split()
     {
-        return this.parallelIterable.split().collect(new Function<UnsortedSetBatch<T>, UnsortedSetBatch<T>>()
+        return this.delegate.split().collect(new Function<UnsortedSetBatch<T>, UnsortedSetBatch<T>>()
         {
             public UnsortedSetBatch<T> valueOf(UnsortedSetBatch<T> eachBatch)
             {
@@ -58,22 +69,105 @@ class ParallelSelectUnsortedSetIterable<T> extends AbstractParallelUnsortedSetIt
 
     public void forEach(Procedure<? super T> procedure)
     {
-        this.parallelIterable.forEach(new IfProcedure<T>(this.predicate, procedure));
+        this.delegate.forEach(new IfProcedure<T>(this.predicate, procedure));
     }
 
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return this.parallelIterable.anySatisfy(Predicates.and(this.predicate, predicate));
+        return this.delegate.anySatisfy(Predicates.and(this.predicate, predicate));
     }
 
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return this.parallelIterable.allSatisfy(new SelectAllSatisfyPredicate<T>(this.predicate, predicate));
+        return this.delegate.allSatisfy(new SelectAllSatisfyPredicate<T>(this.predicate, predicate));
     }
 
     public T detect(Predicate<? super T> predicate)
     {
-        return this.parallelIterable.detect(Predicates.and(this.predicate, predicate));
+        return this.delegate.detect(Predicates.and(this.predicate, predicate));
+    }
+
+    @Override
+    public T min(Comparator<? super T> comparator)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toSet().select(this.predicate).min(comparator);
+    }
+
+    @Override
+    public T max(Comparator<? super T> comparator)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toSet().select(this.predicate).max(comparator);
+    }
+
+    @Override
+    public T min()
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toSet().select(this.predicate).min();
+    }
+
+    @Override
+    public T max()
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toSet().select(this.predicate).max();
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toSet().select(this.predicate).minBy(function);
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toSet().select(this.predicate).maxBy(function);
+    }
+
+    @Override
+    public long sumOfInt(IntFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toSet().select(this.predicate).sumOfInt(function);
+    }
+
+    @Override
+    public double sumOfFloat(FloatFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toSet().select(this.predicate).sumOfFloat(function);
+    }
+
+    @Override
+    public long sumOfLong(LongFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toSet().select(this.predicate).sumOfLong(function);
+    }
+
+    @Override
+    public double sumOfDouble(DoubleFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toSet().select(this.predicate).sumOfDouble(function);
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().select(this.predicate).toArray();
+    }
+
+    @Override
+    public <E> E[] toArray(E[] array)
+    {
+        return this.delegate.toList().select(this.predicate).toArray(array);
     }
 
     private static final class SelectAllSatisfyPredicate<T> implements Predicate<T>

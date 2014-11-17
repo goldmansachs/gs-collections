@@ -16,9 +16,15 @@
 
 package com.gs.collections.impl.lazy.parallel.list;
 
+import java.util.Comparator;
+
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ParallelListIterable;
@@ -40,7 +46,7 @@ public abstract class AbstractParallelListIterable<T, B extends ListBatch<T>> ex
 
     public ParallelUnsortedSetIterable<T> asUnique()
     {
-        return new ParallelListDistinctIterable<T>(this);
+        return new ParallelDistinctListIterable<T>(this);
     }
 
     public ParallelListIterable<T> select(Predicate<? super T> predicate)
@@ -85,21 +91,109 @@ public abstract class AbstractParallelListIterable<T, B extends ListBatch<T>> ex
 
     public <V> ParallelListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".flatCollect() not implemented yet");
+        // TODO: Implement in parallel
+        return this.toList().flatCollect(function).asParallel(this.getExecutorService(), this.getBatchSize());
     }
 
     public <V> ListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupBy() not implemented yet");
+        // TODO: Implement in parallel
+        return this.toList().groupBy(function);
     }
 
     public <V> ListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByEach() not implemented yet");
+        // TODO: Implement in parallel
+        return this.toList().groupByEach(function);
     }
 
     public <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+        // TODO: Implement in parallel
+        return this.toList().groupByUniqueKey(function);
+    }
+
+    @Override
+    public T min(Comparator<? super T> comparator)
+    {
+        // TODO: Implement in parallel
+        return this.toList().min(comparator);
+    }
+
+    @Override
+    public T max(Comparator<? super T> comparator)
+    {
+        // TODO: Implement in parallel
+        return this.toList().max(comparator);
+    }
+
+    @Override
+    public T min()
+    {
+        // TODO: Implement in parallel
+        return this.toList().min();
+    }
+
+    @Override
+    public T max()
+    {
+        // TODO: Implement in parallel
+        return this.toList().max();
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
+    {
+        // TODO: Implement in parallel
+        return this.toList().minBy(function);
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
+    {
+        // TODO: Implement in parallel
+        return this.toList().maxBy(function);
+    }
+
+    @Override
+    public long sumOfInt(IntFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.toList().sumOfInt(function);
+    }
+
+    @Override
+    public double sumOfFloat(FloatFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.toList().sumOfFloat(function);
+    }
+
+    @Override
+    public long sumOfLong(LongFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.toList().sumOfLong(function);
+    }
+
+    @Override
+    public double sumOfDouble(DoubleFunction<? super T> function)
+    {
+        // TODO: Implement in parallel
+        return this.toList().sumOfDouble(function);
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        // TODO: Implement in parallel
+        return this.toList().toArray();
+    }
+
+    @Override
+    public <E> E[] toArray(E[] array)
+    {
+        // TODO: Implement in parallel
+        return this.toList().toArray(array);
     }
 }

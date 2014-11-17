@@ -56,7 +56,7 @@ import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.api.set.ParallelSetIterable;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
@@ -70,6 +70,7 @@ import com.gs.collections.api.set.primitive.MutableShortSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.AbstractMultiReaderMutableCollection;
 import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.lazy.parallel.set.MultiReaderParallelUnsortedSetIterable;
 import com.gs.collections.impl.utility.LazyIterate;
 
 import static com.gs.collections.impl.factory.Iterables.*;
@@ -902,7 +903,7 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().cartesianProduct(set);
         }
 
-        public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+        public ParallelUnsortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
         {
             return this.getDelegate().asParallel(executorService, batchSize);
         }
@@ -1178,8 +1179,8 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    public ParallelUnsortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
-        throw new UnsupportedOperationException("asParallel() method is not supported for " + this.getClass().getSimpleName() + '.');
+        return new MultiReaderParallelUnsortedSetIterable<T>(this.delegate.asParallel(executorService, batchSize), this.lock);
     }
 }

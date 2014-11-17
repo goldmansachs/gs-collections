@@ -91,6 +91,7 @@ import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.bag.AbstractParallelUnsortedBag;
 import com.gs.collections.impl.lazy.parallel.bag.CollectUnsortedBagBatch;
+import com.gs.collections.impl.lazy.parallel.bag.NonParallelUnsortedBag;
 import com.gs.collections.impl.lazy.parallel.bag.RootUnsortedBagBatch;
 import com.gs.collections.impl.lazy.parallel.bag.SelectUnsortedBagBatch;
 import com.gs.collections.impl.lazy.parallel.bag.UnsortedBagBatch;
@@ -1389,7 +1390,7 @@ public class HashBag<T>
         {
             throw new IllegalArgumentException();
         }
-        return new HashBagParallelIterable(executorService, batchSize);
+        return new NonParallelUnsortedBag<T>(this);
     }
 
     private final class HashUnsortedBagBatch extends AbstractBatch<T> implements UnsortedBagBatch<T>
@@ -1479,6 +1480,12 @@ public class HashBag<T>
         public ExecutorService getExecutorService()
         {
             return this.executorService;
+        }
+
+        @Override
+        public int getBatchSize()
+        {
+            return this.batchSize;
         }
 
         @Override

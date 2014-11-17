@@ -75,6 +75,7 @@ import com.gs.collections.impl.collection.mutable.AbstractMultiReaderMutableColl
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.lazy.parallel.list.ListIterableParallelIterable;
+import com.gs.collections.impl.lazy.parallel.list.MultiReaderParallelListIterable;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.LazyIterate;
 
@@ -1658,6 +1659,6 @@ public final class MultiReaderFastList<T>
 
     public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
-        throw new UnsupportedOperationException("asParallel() method is not supported for " + this.getClass().getSimpleName() + '.');
+        return new MultiReaderParallelListIterable<T>(this.delegate.asParallel(executorService, batchSize), this.lock);
     }
 }

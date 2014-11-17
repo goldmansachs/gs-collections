@@ -39,7 +39,7 @@ import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.api.set.ParallelSetIterable;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
@@ -378,7 +378,7 @@ public class UnmodifiableMutableSet<T>
         return new UnmodifiableCollectionSerializationProxy<T>(this.getMutableSet());
     }
 
-    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    public ParallelUnsortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
         return this.getMutableSet().asParallel(executorService, batchSize);
     }

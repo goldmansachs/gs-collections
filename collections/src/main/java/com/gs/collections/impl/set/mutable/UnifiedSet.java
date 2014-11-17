@@ -354,7 +354,7 @@ public class UnifiedSet<T>
         Object cur = this.table[index];
         if (cur == null)
         {
-            this.table[index] = toSentinelIfNull(key);
+            this.table[index] = UnifiedSet.toSentinelIfNull(key);
             if (++this.occupied > this.maxSize)
             {
                 this.rehash();
@@ -370,7 +370,7 @@ public class UnifiedSet<T>
 
     private boolean chainedAdd(T key, int index)
     {
-        Object realKey = toSentinelIfNull(key);
+        Object realKey = UnifiedSet.toSentinelIfNull(key);
         if (this.table[index] instanceof ChainedBucket)
         {
             ChainedBucket bucket = (ChainedBucket) this.table[index];
@@ -2880,7 +2880,7 @@ public class UnifiedSet<T>
 
         if (cur == null)
         {
-            this.table[index] = toSentinelIfNull(key);
+            this.table[index] = UnifiedSet.toSentinelIfNull(key);
             if (++this.occupied > this.maxSize)
             {
                 this.rehash();
@@ -2908,7 +2908,7 @@ public class UnifiedSet<T>
                 }
                 if (bucket.one == null)
                 {
-                    bucket.one = toSentinelIfNull(key);
+                    bucket.one = UnifiedSet.toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
@@ -2921,7 +2921,7 @@ public class UnifiedSet<T>
                 }
                 if (bucket.two == null)
                 {
-                    bucket.two = toSentinelIfNull(key);
+                    bucket.two = UnifiedSet.toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
@@ -2939,7 +2939,7 @@ public class UnifiedSet<T>
                 }
                 if (bucket.three == null)
                 {
-                    bucket.three = toSentinelIfNull(key);
+                    bucket.three = UnifiedSet.toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
@@ -3275,6 +3275,12 @@ public class UnifiedSet<T>
         }
 
         @Override
+        public int getBatchSize()
+        {
+            return this.batchSize;
+        }
+
+        @Override
         public LazyIterable<RootUnsortedSetBatch<T>> split()
         {
             return new UnifiedSetParallelSplitLazyIterable();
@@ -3298,6 +3304,90 @@ public class UnifiedSet<T>
         public T detect(Predicate<? super T> predicate)
         {
             return detect(this, predicate);
+        }
+
+        @Override
+        public T min(Comparator<? super T> comparator)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.min(comparator);
+        }
+
+        @Override
+        public T max(Comparator<? super T> comparator)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.max(comparator);
+        }
+
+        @Override
+        public T min()
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.min();
+        }
+
+        @Override
+        public T max()
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.max();
+        }
+
+        @Override
+        public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.minBy(function);
+        }
+
+        @Override
+        public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.maxBy(function);
+        }
+
+        @Override
+        public long sumOfInt(IntFunction<? super T> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.sumOfInt(function);
+        }
+
+        @Override
+        public double sumOfFloat(FloatFunction<? super T> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.sumOfFloat(function);
+        }
+
+        @Override
+        public long sumOfLong(LongFunction<? super T> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.sumOfLong(function);
+        }
+
+        @Override
+        public double sumOfDouble(DoubleFunction<? super T> function)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.sumOfDouble(function);
+        }
+
+        @Override
+        public Object[] toArray()
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.toArray();
+        }
+
+        @Override
+        public <E> E[] toArray(E[] array)
+        {
+            // TODO: Implement in parallel
+            return UnifiedSet.this.toArray(array);
         }
 
         private class UnifiedSetParallelSplitIterator implements Iterator<RootUnsortedSetBatch<T>>

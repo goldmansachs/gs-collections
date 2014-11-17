@@ -22,24 +22,25 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
+import com.gs.collections.impl.lazy.parallel.Batch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
 @Beta
 public class CollectListBatch<T, V> extends AbstractBatch<V> implements ListBatch<V>
 {
-    private final ListBatch<T> listBatch;
+    private final Batch<T> batch;
     private final Function<? super T, ? extends V> function;
 
-    public CollectListBatch(ListBatch<T> listBatch, Function<? super T, ? extends V> function)
+    public CollectListBatch(Batch<T> batch, Function<? super T, ? extends V> function)
     {
-        this.listBatch = listBatch;
+        this.batch = batch;
         this.function = function;
     }
 
     public void forEach(Procedure<? super V> procedure)
     {
-        this.listBatch.forEach(Functions.bind(procedure, this.function));
+        this.batch.forEach(Functions.bind(procedure, this.function));
     }
 
     public ListBatch<V> select(Predicate<? super V> predicate)

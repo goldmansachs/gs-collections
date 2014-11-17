@@ -18,37 +18,36 @@ package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableTestCase;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.set.mutable.MultiReaderUnifiedSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ParallelCollectDistinctSetIterableTest extends AbstractParallelIterableTestCase
+public class ParallelCollectMultiReaderSetIterableTest extends AbstractParallelIterableTestCase
 {
     @Override
     protected ParallelIterable<Integer> classUnderTest()
     {
-        Function<Double, Integer> function = Double::intValue;
-        return UnifiedSet.newSetWith(1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4)
+        return MultiReaderUnifiedSet.newSetWith(1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4)
                 .asParallel(this.executorService, 2)
-                .collect(function)
-                .asUnique();
+                .collect(Double::intValue);
     }
 
     @Override
-    protected MutableSet<Integer> getExpected()
+    protected MutableBag<Integer> getExpected()
     {
-        return UnifiedSet.newSetWith(1, 2, 3, 4);
+        return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
     }
 
     @Override
     protected <T> RichIterable<T> getActual(ParallelIterable<T> actual)
     {
-        return actual.toSet();
+        return actual.toBag();
     }
 
     @Override
@@ -60,7 +59,7 @@ public class ParallelCollectDistinctSetIterableTest extends AbstractParallelIter
     @Override
     protected boolean isUnique()
     {
-        return true;
+        return false;
     }
 
     @Test
@@ -70,7 +69,7 @@ public class ParallelCollectDistinctSetIterableTest extends AbstractParallelIter
         Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
 
         Assert.assertEquals(
-                this.getExpected().toSet().groupBy(isOddFunction),
+                this.getExpected().toBag().groupBy(isOddFunction),
                 this.classUnderTest().groupBy(isOddFunction));
     }
 
@@ -79,7 +78,7 @@ public class ParallelCollectDistinctSetIterableTest extends AbstractParallelIter
     public void groupByEach()
     {
         Assert.assertEquals(
-                this.getExpected().toSet().groupByEach(new NegativeIntervalFunction()),
+                this.getExpected().toBag().groupByEach(new NegativeIntervalFunction()),
                 this.classUnderTest().groupByEach(new NegativeIntervalFunction()));
     }
 }

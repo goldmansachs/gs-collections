@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel;
+package com.gs.collections.impl.lazy.parallel.list;
 
 import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
@@ -31,18 +31,17 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.set.UnsortedSetMultimap;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
-import com.gs.collections.impl.lazy.parallel.list.DistinctBatch;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 
 @Beta
-public class ParallelDistinctIterable<T> extends AbstractParallelUnsortedSetIterable<T, UnsortedSetBatch<T>>
+class ParallelDistinctListIterable<T> extends AbstractParallelUnsortedSetIterable<T, UnsortedSetBatch<T>>
 {
-    private final AbstractParallelIterable<T, ? extends Batch<T>> delegate;
+    private final AbstractParallelListIterable<T, ? extends ListBatch<T>> delegate;
 
-    public ParallelDistinctIterable(AbstractParallelIterable<T, ? extends Batch<T>> delegate)
+    ParallelDistinctListIterable(AbstractParallelListIterable<T, ? extends ListBatch<T>> delegate)
     {
         this.delegate = delegate;
     }
@@ -64,11 +63,11 @@ public class ParallelDistinctIterable<T> extends AbstractParallelUnsortedSetIter
     {
         // TODO: Replace the map with a concurrent set once it's implemented
         final ConcurrentHashMap<T, Boolean> distinct = new ConcurrentHashMap<T, Boolean>();
-        return this.delegate.split().collect(new Function<Batch<T>, UnsortedSetBatch<T>>()
+        return this.delegate.split().collect(new Function<ListBatch<T>, UnsortedSetBatch<T>>()
         {
-            public UnsortedSetBatch<T> valueOf(Batch<T> batch)
+            public UnsortedSetBatch<T> valueOf(ListBatch<T> listBatch)
             {
-                return new DistinctBatch<T>(batch, distinct);
+                return listBatch.distinct(distinct);
             }
         });
     }
@@ -114,42 +113,42 @@ public class ParallelDistinctIterable<T> extends AbstractParallelUnsortedSetIter
     public T min(Comparator<? super T> comparator)
     {
         // TODO: Implement in parallel
-        return this.delegate.toSet().min(comparator);
+        return this.delegate.min(comparator);
     }
 
     @Override
     public T max(Comparator<? super T> comparator)
     {
         // TODO: Implement in parallel
-        return this.delegate.toSet().max(comparator);
+        return this.delegate.max(comparator);
     }
 
     @Override
     public T min()
     {
         // TODO: Implement in parallel
-        return this.delegate.toSet().min();
+        return this.delegate.min();
     }
 
     @Override
     public T max()
     {
         // TODO: Implement in parallel
-        return this.delegate.toSet().max();
+        return this.delegate.max();
     }
 
     @Override
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
         // TODO: Implement in parallel
-        return this.delegate.toSet().minBy(function);
+        return this.delegate.minBy(function);
     }
 
     @Override
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
         // TODO: Implement in parallel
-        return this.delegate.toSet().maxBy(function);
+        return this.delegate.maxBy(function);
     }
 
     @Override
@@ -245,7 +244,7 @@ public class ParallelDistinctIterable<T> extends AbstractParallelUnsortedSetIter
 
         public boolean accept(T each)
         {
-            return this.distinct.put(each, true) != null || this.predicate.accept(each);
+            return this.distinct.put(each, true) == null || this.predicate.accept(each);
         }
     }
 }

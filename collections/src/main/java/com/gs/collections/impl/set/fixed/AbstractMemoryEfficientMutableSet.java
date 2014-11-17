@@ -24,7 +24,7 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.set.FixedSizeSet;
 import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.api.set.ParallelSetIterable;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.set.mutable.AbstractMutableSet;
 import com.gs.collections.impl.utility.Iterate;
@@ -138,7 +138,7 @@ abstract class AbstractMemoryEfficientMutableSet<T>
         }
     }
 
-    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    public ParallelUnsortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
         return this.toSet().asParallel(executorService, batchSize);
     }

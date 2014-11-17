@@ -56,6 +56,12 @@ public class ParallelCollectSetIterableTest extends AbstractParallelIterableTest
         return false;
     }
 
+    @Override
+    protected boolean isUnique()
+    {
+        return false;
+    }
+
     @Test
     @Override
     public void groupBy()

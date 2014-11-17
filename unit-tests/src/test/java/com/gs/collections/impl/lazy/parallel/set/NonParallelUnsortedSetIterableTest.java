@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.list;
+package com.gs.collections.impl.lazy.parallel.set;
 
-import com.gs.collections.api.list.ParallelListIterable;
+import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.CompositeFastList;
 
-public class CompositeListParallelListIterableTest extends AbstractNonParallelListIterableTest
+public class NonParallelUnsortedSetIterableTest extends AbstractNonParallelSetIterableTest
 {
     @Override
-    protected ParallelListIterable<Integer> classUnderTest()
+    protected ParallelSetIterable<Integer> classUnderTest()
     {
-        return new CompositeFastList<Integer>().withAll(Lists.mutable.of(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)).asParallel(null, 2);
+        return new CompositeFastList<Integer>().withAll(Lists.mutable.of(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)).asParallel(null, 2).asUnique();
     }
 }

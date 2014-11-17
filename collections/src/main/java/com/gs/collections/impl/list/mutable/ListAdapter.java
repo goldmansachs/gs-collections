@@ -36,6 +36,7 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.parallel.list.NonParallelListIterable;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
@@ -287,6 +288,6 @@ public final class ListAdapter<T>
     @Override
     public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
-        throw new UnsupportedOperationException("asParallel() method is not supported for " + this.getClass().getSimpleName() + '.');
+        return new NonParallelListIterable<T>(this);
     }
 }

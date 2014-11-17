@@ -21,16 +21,23 @@ import com.gs.collections.impl.list.mutable.ListAdapter;
 import com.gs.collections.impl.list.mutable.MultiReaderFastList;
 import org.junit.Test;
 
-public class MultiReaderFastListParallelListIterableTest
+public class MultiReaderFastListParallelListIterableTest extends AbstractParallelListIterableTestCase
 {
+    @Override
     protected ParallelListIterable<Integer> classUnderTest()
     {
-        return ListAdapter.adapt(MultiReaderFastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)).asParallel(null, 2);
+        return ListAdapter.adapt(MultiReaderFastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)).asParallel(this.executorService, 2);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void forEach()
+    @Test(expected = IllegalArgumentException.class)
+    public void asParallel_small_batch()
     {
-        this.classUnderTest().forEach(x -> { });
+        ListAdapter.adapt(MultiReaderFastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)).asParallel(this.executorService, 0);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void asParallel_null_executorService()
+    {
+        ListAdapter.adapt(MultiReaderFastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)).asParallel(null, 2);
     }
 }

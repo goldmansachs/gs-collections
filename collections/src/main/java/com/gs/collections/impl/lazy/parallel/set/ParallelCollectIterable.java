@@ -16,13 +16,21 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
+import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.map.MapIterable;
+import com.gs.collections.api.multimap.bag.UnsortedBagMultimap;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
@@ -32,25 +40,31 @@ import com.gs.collections.impl.lazy.parallel.Batch;
 @Beta
 public class ParallelCollectIterable<T, V> extends AbstractParallelIterableImpl<V, Batch<V>>
 {
-    private final AbstractParallelIterable<T, ? extends Batch<T>> parallelIterable;
+    private final AbstractParallelIterable<T, ? extends Batch<T>> delegate;
     private final Function<? super T, ? extends V> function;
 
-    public ParallelCollectIterable(AbstractParallelIterable<T, ? extends Batch<T>> parallelIterable, Function<? super T, ? extends V> function)
+    public ParallelCollectIterable(AbstractParallelIterable<T, ? extends Batch<T>> delegate, Function<? super T, ? extends V> function)
     {
-        this.parallelIterable = parallelIterable;
+        this.delegate = delegate;
         this.function = function;
     }
 
     @Override
     public ExecutorService getExecutorService()
     {
-        return this.parallelIterable.getExecutorService();
+        return this.delegate.getExecutorService();
+    }
+
+    @Override
+    public int getBatchSize()
+    {
+        return this.delegate.getBatchSize();
     }
 
     @Override
     public LazyIterable<Batch<V>> split()
     {
-        return this.parallelIterable.split().collect(new Function<Batch<T>, Batch<V>>()
+        return this.delegate.split().collect(new Function<Batch<T>, Batch<V>>()
         {
             public Batch<V> valueOf(Batch<T> eachBatch)
             {
@@ -61,22 +75,134 @@ public class ParallelCollectIterable<T, V> extends AbstractParallelIterableImpl<
 
     public void forEach(Procedure<? super V> procedure)
     {
-        this.parallelIterable.forEach(Functions.bind(procedure, this.function));
+        this.delegate.forEach(Functions.bind(procedure, this.function));
     }
 
     public boolean anySatisfy(Predicate<? super V> predicate)
     {
-        return this.parallelIterable.anySatisfy(Predicates.attributePredicate(this.function, predicate));
+        return this.delegate.anySatisfy(Predicates.attributePredicate(this.function, predicate));
     }
 
     public boolean allSatisfy(Predicate<? super V> predicate)
     {
-        return this.parallelIterable.allSatisfy(Predicates.attributePredicate(this.function, predicate));
+        return this.delegate.allSatisfy(Predicates.attributePredicate(this.function, predicate));
     }
 
     public V detect(Predicate<? super V> predicate)
     {
-        T resultItem = this.parallelIterable.detect(Predicates.attributePredicate(this.function, predicate));
+        T resultItem = this.delegate.detect(Predicates.attributePredicate(this.function, predicate));
         return resultItem == null ? null : this.function.valueOf(resultItem);
+    }
+
+    @Override
+    public <V1> ParallelIterable<V1> flatCollect(Function<? super V, ? extends Iterable<V1>> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).flatCollect(function).asParallel(this.getExecutorService(), this.getBatchSize());
+    }
+
+    @Override
+    public V min(Comparator<? super V> comparator)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).min(comparator);
+    }
+
+    @Override
+    public V max(Comparator<? super V> comparator)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).max(comparator);
+    }
+
+    @Override
+    public V min()
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).min();
+    }
+
+    @Override
+    public V max()
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).max();
+    }
+
+    @Override
+    public <V1 extends Comparable<? super V1>> V minBy(Function<? super V, ? extends V1> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).minBy(function);
+    }
+
+    @Override
+    public <V1 extends Comparable<? super V1>> V maxBy(Function<? super V, ? extends V1> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).maxBy(function);
+    }
+
+    @Override
+    public long sumOfInt(IntFunction<? super V> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).sumOfInt(function);
+    }
+
+    @Override
+    public double sumOfFloat(FloatFunction<? super V> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).sumOfFloat(function);
+    }
+
+    @Override
+    public long sumOfLong(LongFunction<? super V> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).sumOfLong(function);
+    }
+
+    @Override
+    public double sumOfDouble(DoubleFunction<? super V> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).sumOfDouble(function);
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).toArray();
+    }
+
+    @Override
+    public <E> E[] toArray(E[] array)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toList().collect(this.function).toArray(array);
+    }
+
+    @Override
+    public <V1> UnsortedBagMultimap<V1, V> groupBy(Function<? super V, ? extends V1> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toBag().collect(this.function).groupBy(function);
+    }
+
+    @Override
+    public <V1> UnsortedBagMultimap<V1, V> groupByEach(Function<? super V, ? extends Iterable<V1>> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toBag().collect(this.function).groupByEach(function);
+    }
+
+    @Override
+    public <V1> MapIterable<V1, V> groupByUniqueKey(Function<? super V, ? extends V1> function)
+    {
+        // TODO: Implement in parallel
+        return this.delegate.toBag().collect(this.function).groupByUniqueKey(function);
     }
 }

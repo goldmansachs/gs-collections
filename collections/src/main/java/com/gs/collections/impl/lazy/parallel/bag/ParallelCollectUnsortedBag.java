@@ -28,12 +28,12 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 
 @Beta
-class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V, UnsortedBagBatch<V>>
+public class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V, UnsortedBagBatch<V>>
 {
     private final AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelIterable;
     private final Function<? super T, ? extends V> function;
 
-    ParallelCollectUnsortedBag(AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelIterable, Function<? super T, ? extends V> function)
+    public ParallelCollectUnsortedBag(AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelIterable, Function<? super T, ? extends V> function)
     {
         this.parallelIterable = parallelIterable;
         this.function = function;
@@ -43,6 +43,12 @@ class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V, Un
     public ExecutorService getExecutorService()
     {
         return this.parallelIterable.getExecutorService();
+    }
+
+    @Override
+    public int getBatchSize()
+    {
+        return this.parallelIterable.getBatchSize();
     }
 
     @Override
