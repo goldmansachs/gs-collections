@@ -94,10 +94,10 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
     }
 
     @Override
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void asSynchronized()
     {
-        this.newWith().asSynchronized();
+        Verify.assertInstanceOf(SynchronizedSortedBag.class, this.newWith().asSynchronized());
     }
 
     @Override

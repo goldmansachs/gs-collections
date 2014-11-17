@@ -41,6 +41,7 @@
             <Class name="com.gs.collections.impl.set.mutable.UnmodifiableMutableSet" />
             <Class name="com.gs.collections.impl.set.sorted.mutable.SynchronizedSortedSet" />
             <Class name="com.gs.collections.impl.set.sorted.mutable.UnmodifiableSortedSet" />
+            <Class name="com.gs.collections.impl.bag.sorted.mutable.SynchronizedSortedBag" />
             <Class name="com.gs.collections.impl.bag.sorted.mutable.UnmodifiableSortedBag" />
         </Or>
     </Match>
@@ -223,6 +224,7 @@
             <Class name="com.gs.collections.impl.bimap.immutable.AbstractImmutableBiMap$Inverse" />
             <Class name="com.gs.collections.impl.bag.mutable.SynchronizedBag" />
             <Class name="com.gs.collections.impl.bag.mutable.UnmodifiableBag" />
+            <Class name="com.gs.collections.impl.bag.sorted.mutable.SynchronizedSortedBag" />
             <Class name="com.gs.collections.impl.bag.sorted.mutable.UnmodifiableSortedBag" />
             <Class name="com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection" />
             <Class name="com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection" />

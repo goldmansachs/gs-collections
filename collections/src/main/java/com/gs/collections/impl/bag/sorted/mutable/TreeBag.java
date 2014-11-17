@@ -727,7 +727,7 @@ public class TreeBag<T>
 
     public MutableSortedBag<T> asSynchronized()
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asSynchronized() not implemented yet");
+        return SynchronizedSortedBag.of(this);
     }
 
     @Beta

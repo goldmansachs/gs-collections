@@ -47,11 +47,10 @@ public class TreeBagTest extends AbstractSortedBagTestCase
     }
 
     @Override
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void asSynchronized()
     {
-        //not yet supported
-        this.newWith().asSynchronized();
+        Verify.assertInstanceOf(SynchronizedSortedBag.class, this.newWith().asSynchronized());
     }
 
     @Test
