@@ -430,11 +430,58 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     }
 
     @Test
+    public void take()
+    {
+        ImmutableList<Integer> immutableList = this.classUnderTest();
+        Assert.assertEquals(Lists.immutable.of(), immutableList.take(0));
+        Assert.assertEquals(iList(1), immutableList.take(1));
+        Assert.assertEquals(immutableList, immutableList.take(10));
+        MutableList<Integer> mutableList = Lists.mutable.ofAll(immutableList);
+        Assert.assertEquals(
+                mutableList.take(mutableList.size() - 1),
+                immutableList.take(immutableList.size() - 1));
+
+        Assert.assertSame(immutableList, immutableList.take(immutableList.size()));
+        Assert.assertSame(immutableList, immutableList.take(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void take_throws()
+    {
+        this.classUnderTest().take(-1);
+    }
+
+    @Test
     public void takeWhile()
     {
         Assert.assertEquals(
                 iList(1),
                 this.classUnderTest().takeWhile(Predicates.lessThan(2)));
+    }
+
+    @Test
+    public void drop()
+    {
+        ImmutableList<Integer> immutableList = this.classUnderTest();
+        Assert.assertSame(immutableList, immutableList.drop(0));
+        MutableList<Integer> mutableList = Lists.mutable.ofAll(immutableList);
+        Assert.assertEquals(mutableList.drop(1), immutableList.drop(1));
+
+        if (mutableList.size() > 0)
+        {
+            Assert.assertEquals(
+                    mutableList.drop(mutableList.size() - 1),
+                    immutableList.drop(immutableList.size() - 1));
+        }
+        Assert.assertEquals(Lists.immutable.of(), immutableList.drop(10));
+        Assert.assertEquals(Lists.immutable.of(), immutableList.drop(immutableList.size()));
+        Assert.assertEquals(Lists.immutable.of(), immutableList.drop(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_throws()
+    {
+        this.classUnderTest().drop(-1);
     }
 
     @Test

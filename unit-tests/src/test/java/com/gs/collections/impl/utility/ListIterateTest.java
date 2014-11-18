@@ -17,7 +17,6 @@
 package com.gs.collections.impl.utility;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -527,19 +526,21 @@ public class ListIterateTest
 
         Verify.assertSize(0, ListIterate.take(Lists.fixedSize.of(), 2));
         Verify.assertSize(0, ListIterate.take(new LinkedList<Object>(), 2));
+        Verify.assertSize(0, ListIterate.take(new LinkedList<Object>(), Integer.MAX_VALUE));
     }
 
     private void assertTake(List<Integer> integers)
     {
-        Collection<Integer> results = ListIterate.take(integers, 2);
-        Assert.assertEquals(FastList.newListWith(5, 4), results);
+        Verify.assertEmpty(ListIterate.take(integers, 0));
+        Verify.assertListsEqual(FastList.newListWith(5), ListIterate.take(integers, 1));
+        Verify.assertListsEqual(FastList.newListWith(5, 4), ListIterate.take(integers, 2));
+        Verify.assertListsEqual(FastList.newListWith(5, 4, 3, 2, 1), ListIterate.take(integers, 5));
+        Verify.assertListsEqual(FastList.newListWith(5, 4, 3, 2, 1), ListIterate.take(integers, 10));
+        Verify.assertListsEqual(FastList.newListWith(5, 4, 3, 2), ListIterate.take(integers, integers.size() - 1));
+        Verify.assertListsEqual(FastList.newListWith(5, 4, 3, 2, 1), ListIterate.take(integers, integers.size()));
+        Assert.assertNotSame(integers, ListIterate.take(integers, integers.size()));
 
-        Verify.assertSize(0, ListIterate.take(integers, 0));
-        Verify.assertSize(5, ListIterate.take(integers, 5));
-        Verify.assertSize(5, ListIterate.take(integers, 10));
-
-        MutableList<Integer> integers2 = Lists.fixedSize.of();
-        Verify.assertSize(0, ListIterate.take(integers2, 2));
+        Verify.assertEmpty(ListIterate.take(Lists.fixedSize.of(), 2));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -556,6 +557,7 @@ public class ListIterateTest
 
         Verify.assertSize(0, ListIterate.drop(Lists.fixedSize.<Integer>of(), 2));
         Verify.assertSize(0, ListIterate.drop(new LinkedList<Integer>(), 2));
+        Verify.assertSize(0, ListIterate.drop(new LinkedList<Object>(), Integer.MAX_VALUE));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -566,15 +568,15 @@ public class ListIterateTest
 
     private void assertDrop(MutableList<Integer> integers)
     {
-        MutableList<Integer> results = ListIterate.drop(integers, 2);
-        Assert.assertEquals(FastList.newListWith(3, 2, 1), results);
+        Verify.assertListsEqual(FastList.newListWith(5, 4, 3, 2, 1), ListIterate.drop(integers, 0));
+        Assert.assertNotSame(integers, ListIterate.drop(integers, 0));
+        Verify.assertListsEqual(FastList.newListWith(3, 2, 1), ListIterate.drop(integers, 2));
+        Verify.assertListsEqual(FastList.newListWith(1), ListIterate.drop(integers, integers.size() - 1));
+        Verify.assertEmpty(ListIterate.drop(integers, 5));
+        Verify.assertEmpty(ListIterate.drop(integers, 6));
+        Verify.assertEmpty(ListIterate.drop(integers, integers.size()));
 
-        Verify.assertSize(0, ListIterate.drop(integers, 5));
-        Verify.assertSize(0, ListIterate.drop(integers, 6));
-        Verify.assertSize(5, ListIterate.drop(integers, 0));
-
-        MutableList<Integer> integers2 = Lists.fixedSize.of();
-        Verify.assertSize(0, ListIterate.drop(integers2, 2));
+        Verify.assertSize(0, ListIterate.drop(Lists.fixedSize.of(), 2));
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -1332,7 +1332,11 @@ public final class ArrayIterate
      */
     public static <T> MutableList<T> take(T[] array, int count)
     {
-        return ArrayIterate.take(array, count, FastList.<T>newList(Math.max(0, count)));
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        return ArrayIterate.take(array, count, FastList.<T>newList(Math.min(array.length, count)));
     }
 
     /**
@@ -1357,6 +1361,10 @@ public final class ArrayIterate
      */
     public static <T> MutableList<T> drop(T[] array, int count)
     {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
         return ArrayIterate.drop(array, count, FastList.<T>newList(array.length - Math.min(array.length, count)));
     }
 

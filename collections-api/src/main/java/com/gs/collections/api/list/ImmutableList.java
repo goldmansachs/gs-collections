@@ -113,7 +113,11 @@ public interface ImmutableList<T>
 
     ImmutableList<Pair<T, Integer>> zipWithIndex();
 
+    ImmutableList<T> take(int count);
+
     ImmutableList<T> takeWhile(Predicate<? super T> predicate);
+
+    ImmutableList<T> drop(int count);
 
     ImmutableList<T> dropWhile(Predicate<? super T> predicate);
 

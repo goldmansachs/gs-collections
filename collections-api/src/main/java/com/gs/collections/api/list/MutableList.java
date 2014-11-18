@@ -187,7 +187,11 @@ public interface MutableList<T>
 
     MutableList<Pair<T, Integer>> zipWithIndex();
 
+    MutableList<T> take(int count);
+
     MutableList<T> takeWhile(Predicate<? super T> predicate);
+
+    MutableList<T> drop(int count);
 
     MutableList<T> dropWhile(Predicate<? super T> predicate);
 

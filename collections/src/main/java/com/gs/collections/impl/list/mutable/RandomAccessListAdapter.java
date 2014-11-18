@@ -442,9 +442,19 @@ public final class RandomAccessListAdapter<T>
         return RandomAccessListIterate.zipWithIndex(this.delegate, FastList.<Pair<T, Integer>>newList(this.delegate.size()));
     }
 
+    public MutableList<T> take(int count)
+    {
+        return RandomAccessListIterate.take(this.delegate, count);
+    }
+
     public MutableList<T> takeWhile(Predicate<? super T> predicate)
     {
         return RandomAccessListIterate.takeWhile(this.delegate, predicate);
+    }
+
+    public MutableList<T> drop(int count)
+    {
+        return RandomAccessListIterate.drop(this.delegate, count);
     }
 
     public MutableList<T> dropWhile(Predicate<? super T> predicate)

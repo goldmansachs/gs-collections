@@ -546,13 +546,13 @@ public class IterableIterateTest
     {
         List<Integer> list = this.getIntegerList();
         Iterable<Integer> iterable = new IterableAdapter<Integer>(list);
-
-        Collection<Integer> results = Iterate.take(iterable, 2);
-        Assert.assertEquals(FastList.newListWith(5, 4), results);
-
         Verify.assertEmpty(Iterate.take(iterable, 0));
-        Verify.assertSize(5, Iterate.take(iterable, 5));
-        Verify.assertSize(5, Iterate.take(iterable, 10));
+        Assert.assertEquals(FastList.newListWith(5), Iterate.take(iterable, 1));
+        Assert.assertEquals(FastList.newListWith(5, 4), Iterate.take(iterable, 2));
+        Assert.assertEquals(list, Iterate.take(iterable, 5));
+        Assert.assertEquals(list, Iterate.take(iterable, 6));
+        Assert.assertEquals(list, Iterate.take(iterable, Integer.MAX_VALUE));
+        Assert.assertNotSame(iterable, Iterate.take(iterable, Integer.MAX_VALUE));
     }
 
     @Test
@@ -567,18 +567,24 @@ public class IterableIterateTest
         Iterate.take(new IterableAdapter<Integer>(FastList.<Integer>newList()), -1);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void take_target_negative_throws()
+    {
+        IterableIterate.take(new IterableAdapter<Integer>(FastList.<Integer>newList()), -1, FastList.<Integer>newList());
+    }
+
     @Test
     public void drop()
     {
         List<Integer> list = this.getIntegerList();
         Iterable<Integer> iterable = new IterableAdapter<Integer>(list);
-
-        Collection<Integer> results = Iterate.drop(iterable, 2);
-        Assert.assertEquals(FastList.newListWith(3, 2, 1), results);
-
+        Assert.assertEquals(FastList.newListWith(5, 4, 3, 2, 1), Iterate.drop(iterable, 0));
+        Assert.assertEquals(FastList.newListWith(4, 3, 2, 1), Iterate.drop(iterable, 1));
+        Assert.assertEquals(FastList.newListWith(3, 2, 1), Iterate.drop(iterable, 2));
+        Assert.assertEquals(FastList.newListWith(1), Iterate.drop(iterable, 4));
         Verify.assertEmpty(Iterate.drop(iterable, 5));
         Verify.assertEmpty(Iterate.drop(iterable, 6));
-        Verify.assertSize(5, Iterate.drop(iterable, 0));
+        Verify.assertEmpty(Iterate.drop(iterable, Integer.MAX_VALUE));
     }
 
     @Test
@@ -591,6 +597,12 @@ public class IterableIterateTest
     public void drop_negative_throws()
     {
         Iterate.drop(new IterableAdapter<Integer>(FastList.<Integer>newList()), -1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_target_negative_throws()
+    {
+        IterableIterate.drop(new IterableAdapter<Integer>(FastList.<Integer>newList()), -1, FastList.<Integer>newList());
     }
 
     private static final class IterableAdapter<E>

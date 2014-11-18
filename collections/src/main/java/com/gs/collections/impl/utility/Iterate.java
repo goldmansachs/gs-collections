@@ -620,12 +620,14 @@ public final class Iterate
     }
 
     /**
-     * Returns the first count elements of the iterable or the iterable itself if count is greater than the length of
+     * Returns the first {@code count} elements of the iterable
+     * or all the elements in the iterable if {@code count} is greater than the length of
      * the iterable.
      *
      * @param iterable the collection to take from.
      * @param count    the number of items to take.
      * @return a new list with the items take from the given collection.
+     * @throws IllegalArgumentException if {@code count} is less than zero
      */
     public static <T> Collection<T> take(Iterable<T> iterable, int count)
     {
@@ -652,18 +654,30 @@ public final class Iterate
     }
 
     /**
-     * Returns a collection without the first count elements of the iterable or the iterable itself if count is
-     * non-positive.
+     * Returns a collection without the first {@code count} elements of the iterable
+     * or an empty iterable if the {@code count} is greater than the length of the iterable.
      *
      * @param iterable the collection to drop from.
      * @param count    the number of items to drop.
      * @return a new list with the items dropped from the given collection.
+     * @throws IllegalArgumentException if {@code count} is less than zero
      */
     public static <T> Collection<T> drop(Iterable<T> iterable, int count)
     {
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.drop((ArrayList<T>) iterable, count);
+        }
         if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.drop((List<T>) iterable, count);
+        }
+        if (iterable instanceof Collection)
+        {
+            return IterableIterate.drop(
+                    iterable,
+                    count,
+                    DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable, count));
         }
         if (iterable != null)
         {

@@ -1720,11 +1720,13 @@ public class IterateTest
     public void take()
     {
         MutableSet<Integer> set = this.getIntegerSet();
-        Verify.assertSize(2, Iterate.take(set, 2));
-
         Verify.assertEmpty(Iterate.take(set, 0));
+        Verify.assertSize(1, Iterate.take(set, 1));
+        Verify.assertSize(2, Iterate.take(set, 2));
+        Verify.assertSize(4, Iterate.take(set, 4));
         Verify.assertSize(5, Iterate.take(set, 5));
         Verify.assertSize(5, Iterate.take(set, 10));
+        Verify.assertSize(5, Iterate.take(set, Integer.MAX_VALUE));
 
         MutableSet<Integer> set2 = UnifiedSet.newSet();
         Verify.assertEmpty(Iterate.take(set2, 2));
@@ -1751,11 +1753,13 @@ public class IterateTest
     public void drop()
     {
         MutableSet<Integer> set = this.getIntegerSet();
+        Verify.assertSize(5, Iterate.drop(set, 0));
+        Verify.assertSize(4, Iterate.drop(set, 1));
         Verify.assertSize(3, Iterate.drop(set, 2));
-
+        Verify.assertSize(1, Iterate.drop(set, 4));
         Verify.assertEmpty(Iterate.drop(set, 5));
         Verify.assertEmpty(Iterate.drop(set, 6));
-        Verify.assertSize(5, Iterate.drop(set, 0));
+        Verify.assertEmpty(Iterate.drop(set, Integer.MAX_VALUE));
 
         MutableSet<Integer> set2 = UnifiedSet.newSet();
         Verify.assertEmpty(Iterate.drop(set2, 2));

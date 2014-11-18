@@ -798,6 +798,27 @@ public abstract class AbstractListTestCase
     }
 
     @Test
+    public void take()
+    {
+        MutableList<Integer> mutableList = this.newWith(1, 2, 3, 4, 5);
+        Assert.assertEquals(iList(), mutableList.take(0));
+        Assert.assertEquals(iList(1, 2, 3), mutableList.take(3));
+        Assert.assertEquals(iList(1, 2, 3, 4), mutableList.take(mutableList.size() - 1));
+
+        ImmutableList<Integer> expectedList = iList(1, 2, 3, 4, 5);
+        Assert.assertEquals(expectedList, mutableList.take(mutableList.size()));
+        Assert.assertEquals(expectedList, mutableList.take(10));
+        Assert.assertEquals(expectedList, mutableList.take(Integer.MAX_VALUE));
+        Assert.assertNotSame(mutableList, mutableList.take(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void take_throws()
+    {
+        this.newWith(1, 2, 3, 4, 5).take(-1);
+    }
+
+    @Test
     public void takeWhile()
     {
         Assert.assertEquals(
@@ -811,6 +832,25 @@ public abstract class AbstractListTestCase
         Assert.assertEquals(
                 iList(),
                 this.newWith(1, 2, 3, 4, 5).takeWhile(Predicates.lessThan(0)));
+    }
+
+    @Test
+    public void drop()
+    {
+        MutableList<Integer> mutableList = this.newWith(1, 2, 3, 4, 5);
+        Assert.assertEquals(iList(1, 2, 3, 4, 5), mutableList.drop(0));
+        Assert.assertNotSame(mutableList, mutableList.drop(0));
+        Assert.assertEquals(iList(4, 5), mutableList.drop(3));
+        Assert.assertEquals(iList(5), mutableList.drop(mutableList.size() - 1));
+        Assert.assertEquals(iList(), mutableList.drop(mutableList.size()));
+        Assert.assertEquals(iList(), mutableList.drop(10));
+        Assert.assertEquals(iList(), mutableList.drop(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_throws()
+    {
+        this.newWith(1, 2, 3, 4, 5).drop(-1);
     }
 
     @Test

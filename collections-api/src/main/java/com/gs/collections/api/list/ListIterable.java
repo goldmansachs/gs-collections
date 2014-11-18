@@ -206,6 +206,8 @@ public interface ListIterable<T>
 
     ListIterable<Pair<T, Integer>> zipWithIndex();
 
+    ListIterable<T> take(int count);
+
     /**
      * Returns the initial elements that satisfy the Predicate. Short circuits at the first element which does not
      * satisfy the Predicate.
@@ -213,6 +215,8 @@ public interface ListIterable<T>
      * @since 3.0
      */
     ListIterable<T> takeWhile(Predicate<? super T> predicate);
+
+    ListIterable<T> drop(int count);
 
     /**
      * Returns the final elements that do not satisfy the Predicate. Short circuits at the first element which does

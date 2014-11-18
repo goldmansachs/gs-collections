@@ -1124,6 +1124,10 @@ public final class RandomAccessListIterate
      */
     public static <T> MutableList<T> drop(List<T> list, int count)
     {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
         return RandomAccessListIterate.drop(list, count, FastList.<T>newList(list.size() - Math.min(list.size(), count)));
     }
 
@@ -1135,6 +1139,10 @@ public final class RandomAccessListIterate
         if (count < 0)
         {
             throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        if (count >= list.size())
+        {
+            return targetList;
         }
         int start = Math.min(list.size(), count);
         targetList.addAll(list.subList(start, list.size()));

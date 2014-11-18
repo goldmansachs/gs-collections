@@ -264,9 +264,19 @@ public final class ListAdapter<T>
         return ListIterate.distinct(this.delegate, FastList.<T>newList());
     }
 
+    public MutableList<T> take(int count)
+    {
+        return ListIterate.take(this, count);
+    }
+
     public MutableList<T> takeWhile(Predicate<? super T> predicate)
     {
         return ListIterate.takeWhile(this.delegate, predicate);
+    }
+
+    public MutableList<T> drop(int count)
+    {
+        return ListIterate.drop(this, count);
     }
 
     public MutableList<T> dropWhile(Predicate<? super T> predicate)

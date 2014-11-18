@@ -792,7 +792,7 @@ public final class IterableIterate
         {
             throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
         }
-        return IterableIterate.take(iterable, count, FastList.<T>newList(count));
+        return IterableIterate.take(iterable, count, FastList.<T>newList());
     }
 
     /**
@@ -804,8 +804,10 @@ public final class IterableIterate
         {
             throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
         }
+
+        int countCopy = count;
         Iterator<T> iterator = iterable.iterator();
-        while (iterator.hasNext() && count-- > 0)
+        while (iterator.hasNext() && countCopy-- > 0)
         {
             targetCollection.add(iterator.next());
         }

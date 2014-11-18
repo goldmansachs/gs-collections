@@ -80,10 +80,31 @@ public interface ReversibleIterable<T> extends RichIterable<T>
     int indexOf(Object o);
 
     /**
+     * Returns the first {@code count} elements of the iterable
+     * or all the elements in the iterable if {@code count} is greater than the length of
+     * the iterable.
+     *
+     * @param count the number of items to take.
+     * @throws IllegalArgumentException if {@code count} is less than zero
+     * @since 6.0
+     */
+    ReversibleIterable<T> take(int count);
+
+    /**
      * Returns the initial elements that satisfy the Predicate. Short circuits at the first element which does not
      * satisfy the Predicate.
      */
     ReversibleIterable<T> takeWhile(Predicate<? super T> predicate);
+
+    /**
+     * Returns an iterable after skipping the first {@code count} elements
+     * or an empty iterable if the {@code count} is greater than the length of the iterable.
+     *
+     * @param count the number of items to drop.
+     * @throws IllegalArgumentException if {@code count} is less than zero
+     * @since 6.0
+     */
+    ReversibleIterable<T> drop(int count);
 
     /**
      * Returns the final elements that do not satisfy the Predicate. Short circuits at the first element which does

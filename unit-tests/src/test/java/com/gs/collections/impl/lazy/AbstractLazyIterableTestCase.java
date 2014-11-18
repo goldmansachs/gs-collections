@@ -348,7 +348,14 @@ public abstract class AbstractLazyIterableTestCase
     @Test
     public void take()
     {
-        Assert.assertEquals(FastList.newListWith(1, 2), this.lazyIterable.take(2).toList());
+        LazyIterable<Integer> lazyIterable = this.lazyIterable;
+        Assert.assertEquals(FastList.newList(), lazyIterable.take(0).toList());
+        Assert.assertEquals(FastList.newListWith(1), lazyIterable.take(1).toList());
+        Assert.assertEquals(FastList.newListWith(1, 2), lazyIterable.take(2).toList());
+        Assert.assertEquals(FastList.newListWith(1, 2, 3, 4, 5, 6), lazyIterable.take(lazyIterable.size() - 1).toList());
+        Assert.assertEquals(FastList.newListWith(1, 2, 3, 4, 5, 6, 7), lazyIterable.take(lazyIterable.size()).toList());
+        Assert.assertEquals(FastList.newListWith(1, 2, 3, 4, 5, 6, 7), lazyIterable.take(10).toList());
+        Assert.assertEquals(FastList.newListWith(1, 2, 3, 4, 5, 6, 7), lazyIterable.take(Integer.MAX_VALUE).toList());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -360,7 +367,13 @@ public abstract class AbstractLazyIterableTestCase
     @Test
     public void drop()
     {
-        Assert.assertEquals(FastList.newListWith(3, 4, 5, 6, 7), this.lazyIterable.drop(2).toList());
+        LazyIterable<Integer> lazyIterable = this.lazyIterable;
+        Assert.assertEquals(FastList.newListWith(1, 2, 3, 4, 5, 6, 7), lazyIterable.drop(0).toList());
+        Assert.assertEquals(FastList.newListWith(3, 4, 5, 6, 7), lazyIterable.drop(2).toList());
+        Assert.assertEquals(FastList.newListWith(7), lazyIterable.drop(lazyIterable.size() - 1).toList());
+        Assert.assertEquals(FastList.newList(), lazyIterable.drop(lazyIterable.size()).toList());
+        Assert.assertEquals(FastList.newList(), lazyIterable.drop(10).toList());
+        Assert.assertEquals(FastList.newList(), lazyIterable.drop(Integer.MAX_VALUE).toList());
     }
 
     @Test(expected = IllegalArgumentException.class)

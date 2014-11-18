@@ -427,9 +427,19 @@ public class UnmodifiableMutableList<T>
         return this.getMutableList().zipWithIndex();
     }
 
+    public MutableList<T> take(int count)
+    {
+        return this.getMutableList().take(count);
+    }
+
     public MutableList<T> takeWhile(Predicate<? super T> predicate)
     {
         return this.getMutableList().takeWhile(predicate);
+    }
+
+    public MutableList<T> drop(int count)
+    {
+        return this.getMutableList().drop(count);
     }
 
     public MutableList<T> dropWhile(Predicate<? super T> predicate)

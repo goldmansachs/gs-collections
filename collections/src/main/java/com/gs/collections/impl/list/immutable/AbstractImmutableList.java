@@ -795,9 +795,27 @@ abstract class AbstractImmutableList<T>
         return this.zipWithIndex(FastList.<Pair<T, Integer>>newList()).toImmutable();
     }
 
+    public ImmutableList<T> take(int count)
+    {
+        if (count >= this.size())
+        {
+            return this;
+        }
+        return ListIterate.take(this, count).toImmutable();
+    }
+
     public ImmutableList<T> takeWhile(Predicate<? super T> predicate)
     {
         return ListIterate.takeWhile(this, predicate).toImmutable();
+    }
+
+    public ImmutableList<T> drop(int count)
+    {
+        if (count == 0)
+        {
+            return this;
+        }
+        return ListIterate.drop(this, count).toImmutable();
     }
 
     public ImmutableList<T> dropWhile(Predicate<? super T> predicate)

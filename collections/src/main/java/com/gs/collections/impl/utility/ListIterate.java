@@ -1200,8 +1200,11 @@ public final class ListIterate
         {
             throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
         }
-
-        return ListIterate.take(list, count, FastList.<T>newList(count));
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.take(list, count, FastList.<T>newList(Math.min(list.size(), count)));
+        }
+        return ListIterate.take(list, count, FastList.<T>newList());
     }
 
     /**
@@ -1209,6 +1212,10 @@ public final class ListIterate
      */
     public static <T, R extends Collection<T>> R take(List<T> list, int count, R targetList)
     {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
         if (list instanceof RandomAccess)
         {
             return RandomAccessListIterate.take(list, count, targetList);
@@ -1225,8 +1232,11 @@ public final class ListIterate
         {
             throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
         }
-
-        return ListIterate.drop(list, count, FastList.<T>newList(list.size() - Math.min(list.size(), count)));
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.drop(list, count, FastList.<T>newList(list.size() - Math.min(list.size(), count)));
+        }
+        return ListIterate.drop(list, count, FastList.<T>newList());
     }
 
     /**

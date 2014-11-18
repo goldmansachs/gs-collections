@@ -276,11 +276,49 @@ public class UnmodifiableMutableListTest
     }
 
     @Test
+    public void take()
+    {
+        UnmodifiableMutableList<Integer> unmodifiableList = UnmodifiableMutableList.of(FastList.newListWith(1, 2, 3, 4, 5));
+        Assert.assertEquals(iList(), unmodifiableList.take(0));
+        Assert.assertEquals(iList(1, 2, 3), unmodifiableList.take(3));
+        Assert.assertEquals(iList(1, 2, 3, 4), unmodifiableList.take(unmodifiableList.size() - 1));
+        Assert.assertEquals(iList(1, 2, 3, 4, 5), unmodifiableList.take(unmodifiableList.size()));
+        Assert.assertEquals(iList(1, 2, 3, 4, 5), unmodifiableList.take(10));
+        Assert.assertEquals(iList(1, 2, 3, 4, 5), unmodifiableList.take(Integer.MAX_VALUE));
+        Assert.assertNotSame(unmodifiableList, unmodifiableList.take(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void take_throws()
+    {
+        UnmodifiableMutableList.of(FastList.newListWith(1, 2, 3, 4, 5)).take(-1);
+    }
+
+    @Test
     public void takeWhile()
     {
         Assert.assertEquals(
                 iList(1, 2, 3),
                 UnmodifiableMutableList.of(FastList.newListWith(1, 2, 3, 4, 5)).takeWhile(Predicates.lessThan(4)));
+    }
+
+    @Test
+    public void drop()
+    {
+        UnmodifiableMutableList<Integer> unmodifiableList = UnmodifiableMutableList.of(FastList.newListWith(1, 2, 3, 4, 5));
+        Assert.assertEquals(iList(1, 2, 3, 4, 5), unmodifiableList.drop(0));
+        Assert.assertNotSame(unmodifiableList, unmodifiableList.drop(0));
+        Assert.assertEquals(iList(4, 5), unmodifiableList.drop(3));
+        Assert.assertEquals(iList(5), unmodifiableList.drop(unmodifiableList.size() - 1));
+        Assert.assertEquals(iList(), unmodifiableList.drop(unmodifiableList.size()));
+        Assert.assertEquals(iList(), unmodifiableList.drop(10));
+        Assert.assertEquals(iList(), unmodifiableList.drop(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_throws()
+    {
+        UnmodifiableMutableList.of(FastList.newListWith(1, 2, 3, 4, 5)).drop(-1);
     }
 
     @Test

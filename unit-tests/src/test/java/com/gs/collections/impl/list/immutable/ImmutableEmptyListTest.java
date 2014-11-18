@@ -356,10 +356,32 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
 
     @Override
     @Test
+    public void take()
+    {
+        ImmutableList<Integer> immutableList = this.classUnderTest();
+        Assert.assertSame(immutableList, immutableList.take(0));
+        Assert.assertSame(immutableList, immutableList.take(10));
+        Assert.assertSame(immutableList, immutableList.take(Integer.MAX_VALUE));
+    }
+
+    @Override
+    @Test
     public void takeWhile()
     {
         Assert.assertEquals(Lists.immutable.of(), this.classUnderTest().takeWhile(ignored -> true));
         Assert.assertEquals(Lists.immutable.of(), this.classUnderTest().takeWhile(ignored -> false));
+    }
+
+    @Override
+    @Test
+    public void drop()
+    {
+        super.drop();
+
+        ImmutableList<Integer> immutableList = this.classUnderTest();
+        Assert.assertSame(immutableList, immutableList.drop(10));
+        Assert.assertSame(immutableList, immutableList.drop(0));
+        Assert.assertSame(immutableList, immutableList.drop(Integer.MAX_VALUE));
     }
 
     @Override

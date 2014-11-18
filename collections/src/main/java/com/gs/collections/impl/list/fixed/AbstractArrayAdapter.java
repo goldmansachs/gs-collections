@@ -43,6 +43,7 @@ import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
 import com.gs.collections.impl.utility.internal.InternalArrayIterate;
+import com.gs.collections.impl.utility.internal.RandomAccessListIterate;
 
 public abstract class AbstractArrayAdapter<T>
         extends AbstractMutableList<T>
@@ -554,5 +555,17 @@ public abstract class AbstractArrayAdapter<T>
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
         InternalArrayIterate.appendString(this, this.items, this.items.length, appendable, start, separator, end);
+    }
+
+    @Override
+    public MutableList<T> take(int count)
+    {
+        return RandomAccessListIterate.take(this, count);
+    }
+
+    @Override
+    public MutableList<T> drop(int count)
+    {
+        return RandomAccessListIterate.drop(this, count);
     }
 }

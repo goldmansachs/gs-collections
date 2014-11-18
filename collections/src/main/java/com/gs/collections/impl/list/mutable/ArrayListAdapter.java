@@ -479,9 +479,27 @@ public final class ArrayListAdapter<T>
         return ArrayListIterate.zipWithIndex(this.delegate);
     }
 
+    public MutableList<T> take(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        return ArrayListIterate.take(this.delegate, count, FastList.<T>newList(Math.min(this.size(), count)));
+    }
+
     public MutableList<T> takeWhile(Predicate<? super T> predicate)
     {
         return ArrayListIterate.takeWhile(this.delegate, predicate);
+    }
+
+    public MutableList<T> drop(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        return ArrayListIterate.drop(this.delegate, count, FastList.<T>newList(this.size() - Math.min(this.size(), count)));
     }
 
     public MutableList<T> dropWhile(Predicate<? super T> predicate)

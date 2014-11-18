@@ -41,6 +41,7 @@ import com.gs.collections.impl.partition.list.PartitionImmutableListImpl;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
 import com.gs.collections.impl.utility.internal.InternalArrayIterate;
+import com.gs.collections.impl.utility.internal.RandomAccessListIterate;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -440,12 +441,32 @@ final class ImmutableArrayList<T>
     }
 
     @Override
+    public ImmutableList<T> take(int count)
+    {
+        if (count >= this.size())
+        {
+            return this;
+        }
+        return RandomAccessListIterate.take(this, count).toImmutable();
+    }
+
+    @Override
     public ImmutableList<T> takeWhile(Predicate<? super T> predicate)
     {
         int endIndex = this.detectNotIndex(predicate);
         T[] result = (T[]) new Object[endIndex];
         System.arraycopy(this.items, 0, result, 0, endIndex);
         return new ImmutableArrayList<T>(result);
+    }
+
+    @Override
+    public ImmutableList<T> drop(int count)
+    {
+        if (count == 0)
+        {
+            return this;
+        }
+        return RandomAccessListIterate.drop(this, count).toImmutable();
     }
 
     @Override

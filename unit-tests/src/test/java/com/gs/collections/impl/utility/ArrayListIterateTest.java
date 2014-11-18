@@ -1259,17 +1259,17 @@ public class ArrayListIterateTest
     public void take()
     {
         ArrayList<Integer> list = this.getIntegerList();
-
-        Assert.assertEquals(FastList.newListWith(5, 4), ArrayListIterate.take(list, 2));
-
-        Verify.assertSize(0, ArrayListIterate.take(list, 0));
-        Verify.assertSize(5, ArrayListIterate.take(list, 5));
-
-        Verify.assertSize(0, ArrayListIterate.take(new ArrayList<Integer>(), 2));
-
-        ArrayList<Integer> list1 = new ArrayList<Integer>(130);
+        Verify.assertListsEqual(FastList.newList(list).take(0), ArrayListIterate.take(list, 0));
+        Verify.assertListsEqual(FastList.newList(list).take(1), ArrayListIterate.take(list, 1));
+        Verify.assertListsEqual(FastList.newList(list).take(2), ArrayListIterate.take(list, 2));
+        Verify.assertListsEqual(FastList.newList(list).take(5), ArrayListIterate.take(list, 5));
+        Verify.assertListsEqual(FastList.newList(list).take(list.size() - 1), ArrayListIterate.take(list, list.size() - 1));
+        Verify.assertListsEqual(FastList.newList(list).take(list.size()), ArrayListIterate.take(list, list.size()));
+        Verify.assertListsEqual(FastList.newList().take(2), ArrayListIterate.take(new ArrayList<Integer>(), 2));
+        ArrayList<Integer> list1 = new ArrayList<Integer>();
         list1.addAll(Interval.oneTo(120));
-        Verify.assertListsEqual(Interval.oneTo(120), ArrayListIterate.take(list1, 125));
+        Verify.assertListsEqual(FastList.newList(list1).take(125), ArrayListIterate.take(list1, 125));
+        Verify.assertListsEqual(FastList.newList(list1).take(Integer.MAX_VALUE), ArrayListIterate.take(list1, Integer.MAX_VALUE));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -1279,23 +1279,41 @@ public class ArrayListIterateTest
     }
 
     @Test
-    public void drop()
+    public void take_target()
     {
-        ArrayList<Integer> list = this.getIntegerList();
-        ArrayList<Integer> results = ArrayListIterate.drop(list, 2);
-        Assert.assertEquals(FastList.newListWith(3, 2, 1), results);
+        ArrayList<Integer> list1 = this.getIntegerList();
 
-        Verify.assertSize(0, ArrayListIterate.drop(list, 5));
-        Verify.assertSize(0, ArrayListIterate.drop(list, 6));
-        Verify.assertSize(5, ArrayListIterate.drop(list, 0));
+        MutableList<Integer> expected1 = FastList.newListWith(-1);
+        expected1.addAll(FastList.newList(list1).take(2));
+        Verify.assertListsEqual(expected1, ArrayListIterate.take(list1, 2, FastList.newListWith(-1)));
 
-        Verify.assertSize(0, ArrayListIterate.drop(new ArrayList<Integer>(), 2));
+        MutableList<Integer> expected2 = FastList.newListWith(-1);
+        expected2.addAll(FastList.newList(list1).take(0));
+        Verify.assertListsEqual(expected2, ArrayListIterate.take(list1, 0, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected3 = FastList.newListWith(-1);
+        expected3.addAll(FastList.newList(list1).take(5));
+        Verify.assertListsEqual(expected3, ArrayListIterate.take(list1, 5, FastList.newListWith(-1)));
+
+        Verify.assertListsEqual(FastList.newListWith(-1), ArrayListIterate.take(new ArrayList<Integer>(), 2, FastList.newListWith(-1)));
+
+        ArrayList<Integer> list2 = new ArrayList<Integer>();
+        list2.addAll(Interval.oneTo(120));
+        FastList<Integer> integers = FastList.newList(list2);
+
+        MutableList<Integer> expected4 = FastList.newListWith(-1);
+        expected4.addAll(integers.take(125));
+        Verify.assertListsEqual(expected4, ArrayListIterate.take(list2, 125, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected5 = FastList.newListWith(-1);
+        expected5.addAll(integers.take(Integer.MAX_VALUE));
+        Verify.assertListsEqual(expected5, ArrayListIterate.take(list2, Integer.MAX_VALUE, FastList.newListWith(-1)));
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void drop_throws()
+    public void take_target_throws()
     {
-        ArrayListIterate.drop(this.getIntegerList(), -1);
+        ArrayListIterate.take(this.getIntegerList(), -1, FastList.newList());
     }
 
     @Test
@@ -1314,6 +1332,82 @@ public class ArrayListIterateTest
         Assert.assertEquals(
                 iList(),
                 ArrayListIterate.takeWhile(arrayList, Predicates.lessThan(0)));
+    }
+
+    @Test
+    public void drop()
+    {
+        ArrayList<Integer> list = this.getIntegerList();
+        MutableList<Integer> expected = FastList.newList(list);
+        Verify.assertListsEqual(expected.drop(0), ArrayListIterate.drop(list, 0));
+        Verify.assertListsEqual(expected.drop(1), ArrayListIterate.drop(list, 1));
+        Verify.assertListsEqual(expected.drop(2), ArrayListIterate.drop(list, 2));
+        Verify.assertListsEqual(expected.drop(5), ArrayListIterate.drop(list, 5));
+        Verify.assertListsEqual(expected.drop(6), ArrayListIterate.drop(list, 6));
+        Verify.assertListsEqual(expected.drop(list.size() - 1), ArrayListIterate.drop(list, list.size() - 1));
+        Verify.assertListsEqual(expected.drop(list.size()), ArrayListIterate.drop(list, list.size()));
+        Verify.assertListsEqual(FastList.newList(), ArrayListIterate.drop(new ArrayList<Integer>(), 2));
+        Verify.assertListsEqual(expected.drop(Integer.MAX_VALUE), ArrayListIterate.drop(list, Integer.MAX_VALUE));
+
+        ArrayList<Integer> list1 = new ArrayList<Integer>();
+        list1.addAll(Interval.oneTo(120));
+        Verify.assertListsEqual(FastList.newList(list1).drop(100), ArrayListIterate.drop(list1, 100));
+        Verify.assertListsEqual(FastList.newList(list1).drop(125), ArrayListIterate.drop(list1, 125));
+        Verify.assertListsEqual(FastList.newList(list1).drop(Integer.MAX_VALUE), ArrayListIterate.drop(list1, Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_throws()
+    {
+        ArrayListIterate.drop(this.getIntegerList(), -1);
+    }
+
+    @Test
+    public void drop_target()
+    {
+        ArrayList<Integer> list = this.getIntegerList();
+        MutableList<Integer> integers1 = FastList.newList(list);
+
+        MutableList<Integer> expected1 = FastList.newListWith(-1);
+        expected1.addAll(integers1.drop(2));
+        Verify.assertListsEqual(expected1, ArrayListIterate.drop(list, 2, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected2 = FastList.newListWith(-1);
+        expected2.addAll(integers1.drop(5));
+        Verify.assertListsEqual(expected2, ArrayListIterate.drop(list, 5, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected3 = FastList.newListWith(-1);
+        expected3.addAll(integers1.drop(6));
+        Verify.assertListsEqual(expected3, ArrayListIterate.drop(list, 6, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected4 = FastList.newListWith(-1);
+        expected4.addAll(integers1.drop(0));
+        Verify.assertListsEqual(expected4, ArrayListIterate.drop(list, 0, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected5 = FastList.newListWith(-1);
+        expected5.addAll(integers1.drop(Integer.MAX_VALUE));
+        Verify.assertListsEqual(expected5, ArrayListIterate.drop(list, Integer.MAX_VALUE, FastList.newListWith(-1)));
+
+        Verify.assertListsEqual(FastList.newListWith(-1), ArrayListIterate.drop(new ArrayList<Integer>(), 2, FastList.newListWith(-1)));
+
+        ArrayList<Integer> list2 = new ArrayList<Integer>();
+        list2.addAll(Interval.oneTo(125));
+        FastList<Integer> integers2 = FastList.newList(list2);
+
+        MutableList<Integer> expected6 = FastList.newListWith(-1);
+        expected6.addAll(integers2.drop(120));
+        Verify.assertListsEqual(expected6, ArrayListIterate.drop(list2, 120, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected7 = FastList.newListWith(-1);
+        expected7.addAll(integers2.drop(125));
+        Verify.assertListsEqual(expected7, ArrayListIterate.drop(list2, 125, FastList.newListWith(-1)));
+        Verify.assertListsEqual(FastList.newListWith(-1), ArrayListIterate.drop(list2, Integer.MAX_VALUE, FastList.newListWith(-1)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_target_throws()
+    {
+        ArrayListIterate.drop(this.getIntegerList(), -1, FastList.newList());
     }
 
     @Test

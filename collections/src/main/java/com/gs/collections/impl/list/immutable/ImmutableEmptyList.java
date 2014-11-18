@@ -458,8 +458,28 @@ final class ImmutableEmptyList<T>
     }
 
     @Override
+    public ImmutableList<T> take(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        return this;
+    }
+
+    @Override
     public ImmutableList<T> takeWhile(Predicate<? super T> predicate)
     {
+        return this;
+    }
+
+    @Override
+    public ImmutableList<T> drop(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
         return this;
     }
 

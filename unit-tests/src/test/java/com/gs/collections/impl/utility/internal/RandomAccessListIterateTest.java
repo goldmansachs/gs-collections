@@ -17,7 +17,6 @@
 package com.gs.collections.impl.utility.internal;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function2;
@@ -83,12 +82,6 @@ public class RandomAccessListIterateTest
     {
         List<Integer> result = RandomAccessListIterate.removeIf(FastList.newListWith(1, 2, 3), Predicates.greaterThan(1));
         Verify.assertSize(1, result);
-    }
-
-    @Test
-    public void dropWithLargeCount()
-    {
-        Verify.assertEmpty(RandomAccessListIterate.drop(FastList.newListWith(1, 2, 3), 5));
     }
 
     @Test
@@ -359,17 +352,17 @@ public class RandomAccessListIterateTest
     public void take()
     {
         MutableList<Integer> integers = this.getIntegerList();
-        Collection<Integer> results = RandomAccessListIterate.take(integers, 2);
-        Assert.assertEquals(FastList.newListWith(5, 4), results);
-
-        Verify.assertSize(0, RandomAccessListIterate.take(integers, 0));
-        Verify.assertSize(5, RandomAccessListIterate.take(integers, 5));
-        Verify.assertSize(5, RandomAccessListIterate.take(integers, 10));
-
-        MutableList<Integer> integers2 = Lists.fixedSize.of();
-        Verify.assertSize(0, RandomAccessListIterate.take(integers2, 2));
-
-        Verify.assertSize(0, RandomAccessListIterate.take(Lists.fixedSize.of(), 2));
+        Verify.assertListsEqual(integers.take(0), RandomAccessListIterate.take(integers, 0));
+        Verify.assertListsEqual(integers.take(1), RandomAccessListIterate.take(integers, 1));
+        Verify.assertListsEqual(integers.take(2), RandomAccessListIterate.take(integers, 2));
+        Verify.assertListsEqual(integers.take(5), RandomAccessListIterate.take(integers, 5));
+        Verify.assertListsEqual(
+                integers.take(integers.size() - 1),
+                RandomAccessListIterate.take(integers, integers.size() - 1));
+        Verify.assertListsEqual(integers.take(integers.size()), RandomAccessListIterate.take(integers, integers.size()));
+        Verify.assertListsEqual(integers.take(10), RandomAccessListIterate.take(integers, 10));
+        Verify.assertListsEqual(integers.take(Integer.MAX_VALUE), RandomAccessListIterate.take(integers, Integer.MAX_VALUE));
+        Verify.assertListsEqual(FastList.newList(), RandomAccessListIterate.take(Lists.fixedSize.of(), 2));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -379,26 +372,95 @@ public class RandomAccessListIterateTest
     }
 
     @Test
+    public void take_target()
+    {
+        MutableList<Integer> integers = this.getIntegerList();
+
+        MutableList<Integer> expected1 = FastList.newListWith(-1);
+        expected1.addAll(integers.take(2));
+        Verify.assertListsEqual(expected1, RandomAccessListIterate.take(integers, 2, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected2 = FastList.newListWith(-1);
+        expected2.addAll(integers.take(0));
+        Verify.assertListsEqual(expected2, RandomAccessListIterate.take(integers, 0, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected3 = FastList.newListWith(-1);
+        expected3.addAll(integers.take(5));
+        Verify.assertListsEqual(expected3, RandomAccessListIterate.take(integers, 5, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected4 = FastList.newListWith(-1);
+        expected4.addAll(integers.take(10));
+        Verify.assertListsEqual(expected4, RandomAccessListIterate.take(integers, 10, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected5 = FastList.newListWith(-1);
+        expected5.addAll(integers.take(Integer.MAX_VALUE));
+        Verify.assertListsEqual(expected5, RandomAccessListIterate.take(integers, Integer.MAX_VALUE, FastList.newListWith(-1)));
+        Verify.assertListsEqual(FastList.newListWith(-1), RandomAccessListIterate.take(Lists.fixedSize.of(), 2, FastList.newListWith(-1)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void take__target_throws()
+    {
+        RandomAccessListIterate.take(this.getIntegerList(), -1, FastList.newList());
+    }
+
+    @Test
     public void drop()
     {
         MutableList<Integer> integers = this.getIntegerList();
-        MutableList<Integer> results = RandomAccessListIterate.drop(integers, 2);
-        Assert.assertEquals(FastList.newListWith(3, 2, 1), results);
-
-        Verify.assertSize(0, RandomAccessListIterate.drop(integers, 5));
-        Verify.assertSize(0, RandomAccessListIterate.drop(integers, 6));
-        Verify.assertSize(5, RandomAccessListIterate.drop(integers, 0));
-
-        MutableList<Integer> integers2 = Lists.fixedSize.of();
-        Verify.assertSize(0, RandomAccessListIterate.drop(integers2, 2));
-
-        Verify.assertSize(0, RandomAccessListIterate.drop(Lists.fixedSize.<Integer>of(), 2));
+        Verify.assertListsEqual(integers.drop(0), RandomAccessListIterate.drop(integers, 0));
+        Verify.assertListsEqual(integers.drop(1), RandomAccessListIterate.drop(integers, 1));
+        Verify.assertListsEqual(integers.drop(2), RandomAccessListIterate.drop(integers, 2));
+        Verify.assertListsEqual(integers.drop(5), RandomAccessListIterate.drop(integers, 5));
+        Verify.assertListsEqual(integers.drop(6), RandomAccessListIterate.drop(integers, 6));
+        Verify.assertListsEqual(
+                integers.drop(integers.size() - 1),
+                RandomAccessListIterate.drop(integers, integers.size() - 1));
+        Verify.assertListsEqual(integers.drop(integers.size()), RandomAccessListIterate.drop(integers, integers.size()));
+        Verify.assertListsEqual(FastList.newList(), RandomAccessListIterate.drop(Lists.fixedSize.of(), 0));
+        Verify.assertListsEqual(FastList.newList(), RandomAccessListIterate.drop(Lists.fixedSize.of(), 2));
+        Verify.assertListsEqual(integers.drop(Integer.MAX_VALUE), RandomAccessListIterate.drop(integers, Integer.MAX_VALUE));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void drop_throws()
     {
         RandomAccessListIterate.drop(this.getIntegerList(), -1);
+    }
+
+    @Test
+    public void drop_target()
+    {
+        MutableList<Integer> integers = this.getIntegerList();
+
+        MutableList<Integer> expected1 = FastList.newListWith(-1);
+        expected1.addAll(integers.drop(2));
+        Verify.assertListsEqual(expected1, RandomAccessListIterate.drop(integers, 2, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected2 = FastList.newListWith(-1);
+        expected2.addAll(integers.drop(5));
+        Verify.assertListsEqual(expected2, RandomAccessListIterate.drop(integers, 5, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected3 = FastList.newListWith(-1);
+        expected3.addAll(integers.drop(6));
+        Verify.assertListsEqual(expected3, RandomAccessListIterate.drop(integers, 6, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected4 = FastList.newListWith(-1);
+        expected4.addAll(integers.drop(Integer.MAX_VALUE));
+        Verify.assertListsEqual(expected4, RandomAccessListIterate.drop(integers, Integer.MAX_VALUE, FastList.newListWith(-1)));
+
+        MutableList<Integer> expected5 = FastList.newListWith(-1);
+        expected5.addAll(integers.drop(0));
+        Verify.assertListsEqual(expected5, RandomAccessListIterate.drop(integers, 0, FastList.newListWith(-1)));
+
+        Verify.assertListsEqual(FastList.newListWith(-1), RandomAccessListIterate.drop(Lists.fixedSize.of(), 0, FastList.newListWith(-1)));
+        Verify.assertListsEqual(FastList.newListWith(-1), RandomAccessListIterate.drop(Lists.fixedSize.of(), 2, FastList.newListWith(-1)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_target_throws()
+    {
+        RandomAccessListIterate.drop(this.getIntegerList(), -1, FastList.newList());
     }
 
     private static class FailProcedure2 implements Procedure2<Object, Integer>

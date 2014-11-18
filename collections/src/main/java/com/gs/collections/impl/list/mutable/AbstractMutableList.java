@@ -1196,9 +1196,19 @@ public abstract class AbstractMutableList<T>
         return Collections.binarySearch((List<? extends Comparable<? super T>>) this, key);
     }
 
+    public MutableList<T> take(int count)
+    {
+        return ListIterate.take(this, count);
+    }
+
     public MutableList<T> takeWhile(Predicate<? super T> predicate)
     {
         return ListIterate.takeWhile(this, predicate);
+    }
+
+    public MutableList<T> drop(int count)
+    {
+        return ListIterate.drop(this, count);
     }
 
     public MutableList<T> dropWhile(Predicate<? super T> predicate)

@@ -1292,9 +1292,19 @@ public final class MultiReaderFastList<T>
             return this;
         }
 
+        public MutableList<T> take(int count)
+        {
+            return this.getDelegate().take(count);
+        }
+
         public MutableList<T> takeWhile(Predicate<? super T> predicate)
         {
             return this.getDelegate().takeWhile(predicate);
+        }
+
+        public MutableList<T> drop(int count)
+        {
+            return this.getDelegate().drop(count);
         }
 
         public MutableList<T> dropWhile(Predicate<? super T> predicate)
@@ -1605,12 +1615,38 @@ public final class MultiReaderFastList<T>
         }
     }
 
+    public MutableList<T> take(int count)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.take(count);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public MutableList<T> takeWhile(Predicate<? super T> predicate)
     {
         this.acquireReadLock();
         try
         {
             return this.delegate.takeWhile(predicate);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableList<T> drop(int count)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.drop(count);
         }
         finally
         {

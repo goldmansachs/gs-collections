@@ -864,9 +864,28 @@ public class ArrayIterateTest
     @Test
     public void take()
     {
-        Assert.assertEquals(ListIterate.take(Interval.zeroTo(0), 5), ArrayIterate.take(Interval.zeroTo(0).toArray(), 5));
-        Assert.assertEquals(ListIterate.take(Interval.zeroTo(5), 5), ArrayIterate.take(Interval.zeroTo(5).toArray(), 5));
-        Assert.assertEquals(ListIterate.take(Interval.zeroTo(10), 5), ArrayIterate.take(Interval.zeroTo(10).toArray(), 5));
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(0), 0),
+                ArrayIterate.take(Interval.zeroTo(0).toArray(), 0));
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(5), 1),
+                ArrayIterate.take(Interval.zeroTo(5).toArray(), 1));
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(5), 2),
+                ArrayIterate.take(Interval.zeroTo(5).toArray(), 2));
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(0), 5),
+                ArrayIterate.take(Interval.zeroTo(0).toArray(), 5));
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(5), 5),
+                ArrayIterate.take(Interval.zeroTo(5).toArray(), 5));
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(10), 5),
+                ArrayIterate.take(Interval.zeroTo(10).toArray(), 5));
+        Assert.assertEquals(ListIterate.take(Interval.zeroTo(10), 15),
+                ArrayIterate.take(Interval.zeroTo(10).toArray(), 15));
+        Assert.assertEquals(ListIterate.take(Interval.zeroTo(10), Integer.MAX_VALUE),
+                ArrayIterate.take(Interval.zeroTo(10).toArray(), Integer.MAX_VALUE));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -876,17 +895,90 @@ public class ArrayIterateTest
     }
 
     @Test
+    public void take_target()
+    {
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(0), 0, FastList.newListWith(-1)),
+                ArrayIterate.take(Interval.zeroTo(0).toArray(), 0, FastList.newListWith(-1)));
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(0), 5, FastList.newListWith(-1)),
+                ArrayIterate.take(Interval.zeroTo(0).toArray(), 5, FastList.newListWith(-1)));
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(5), 5, FastList.newListWith(-1)),
+                ArrayIterate.take(Interval.zeroTo(5).toArray(), 5, FastList.newListWith(-1)));
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(10), 5, FastList.newListWith(-1)),
+                ArrayIterate.take(Interval.zeroTo(10).toArray(), 5, FastList.newListWith(-1)));
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(10), 15, FastList.newListWith(-1)),
+                ArrayIterate.take(Interval.zeroTo(10).toArray(), 15, FastList.newListWith(-1)));
+        Assert.assertEquals(
+                ListIterate.take(Interval.zeroTo(10), Integer.MAX_VALUE, FastList.newListWith(-1)),
+                ArrayIterate.take(Interval.zeroTo(10).toArray(), Integer.MAX_VALUE, FastList.newListWith(-1)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void take_target_negative_throws()
+    {
+        ArrayIterate.take(Interval.zeroTo(0).toArray(), -1, FastList.newList());
+    }
+
+    @Test
     public void drop()
     {
-        Assert.assertEquals(ListIterate.drop(Interval.zeroTo(0).toList(), 5), ArrayIterate.drop(Interval.zeroTo(0).toList().toArray(), 5));
-        Assert.assertEquals(ListIterate.drop(Interval.zeroTo(5), 5), ArrayIterate.drop(Interval.zeroTo(5).toArray(), 5));
-        Assert.assertEquals(ListIterate.drop(Interval.zeroTo(10), 5), ArrayIterate.drop(Interval.zeroTo(10).toArray(), 5));
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(5).toList(), 0),
+                ArrayIterate.drop(Interval.zeroTo(5).toList().toArray(), 0));
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(5).toList(), 1),
+                ArrayIterate.drop(Interval.zeroTo(5).toList().toArray(), 1));
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(0).toList(), 5),
+                ArrayIterate.drop(Interval.zeroTo(0).toList().toArray(), 5));
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(5), 5),
+                ArrayIterate.drop(Interval.zeroTo(5).toArray(), 5));
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(10), 5),
+                ArrayIterate.drop(Interval.zeroTo(10).toArray(), 5));
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(10), 15),
+                ArrayIterate.drop(Interval.zeroTo(10).toArray(), 15));
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(10), Integer.MAX_VALUE),
+                ArrayIterate.drop(Interval.zeroTo(10).toArray(), Integer.MAX_VALUE));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void drop_negative_throws()
     {
         ArrayIterate.drop(Interval.zeroTo(0).toArray(), -1);
+    }
+
+    @Test
+    public void drop_target()
+    {
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(0).toList(), 5, FastList.newListWith(-1)),
+                ArrayIterate.drop(Interval.zeroTo(0).toList().toArray(), 5, FastList.newListWith(-1)));
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(5), 5, FastList.newListWith(-1)),
+                ArrayIterate.drop(Interval.zeroTo(5).toArray(), 5, FastList.newListWith(-1)));
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(10), 5, FastList.newListWith(-1)),
+                ArrayIterate.drop(Interval.zeroTo(10).toArray(), 5, FastList.newListWith(-1)));
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(10), 15, FastList.newListWith(-1)),
+                ArrayIterate.drop(Interval.zeroTo(10).toArray(), 15, FastList.newListWith(-1)));
+        Assert.assertEquals(
+                ListIterate.drop(Interval.zeroTo(10), Integer.MAX_VALUE, FastList.newListWith(-1)),
+                ArrayIterate.drop(Interval.zeroTo(10).toArray(), Integer.MAX_VALUE, FastList.newListWith(-1)));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_target_negative_throws()
+    {
+        ArrayIterate.drop(Interval.zeroTo(0).toArray(), -1, FastList.newListWith(-1));
     }
 
     @Test

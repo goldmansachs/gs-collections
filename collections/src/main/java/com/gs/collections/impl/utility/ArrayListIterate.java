@@ -1549,7 +1549,11 @@ public final class ArrayListIterate
      */
     public static <T> ArrayList<T> take(ArrayList<T> list, int count)
     {
-        return ArrayListIterate.take(list, count, new ArrayList<T>(count));
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        return ArrayListIterate.take(list, count, new ArrayList<T>(Math.min(list.size(), count)));
     }
 
     /**
@@ -1557,6 +1561,11 @@ public final class ArrayListIterate
      */
     public static <T, R extends Collection<T>> R take(ArrayList<T> list, int count, R targetList)
     {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+
         int size = list.size();
         if (ArrayListIterate.isOptimizableArrayList(list, size))
         {
@@ -1577,6 +1586,10 @@ public final class ArrayListIterate
      */
     public static <T> ArrayList<T> drop(ArrayList<T> list, int count)
     {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
         return ArrayListIterate.drop(list, count, new ArrayList<T>(list.size() - Math.min(list.size(), count)));
     }
 
@@ -1585,6 +1598,25 @@ public final class ArrayListIterate
      */
     public static <T, R extends Collection<T>> R drop(ArrayList<T> list, int count, R targetList)
     {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        int size = list.size();
+        if (count >= size)
+        {
+            return targetList;
+        }
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            T[] elements = ArrayListIterate.getInternalArray(list);
+
+            for (int i = count; i < size; i++)
+            {
+                targetList.add(elements[i]);
+            }
+            return targetList;
+        }
         return RandomAccessListIterate.drop(list, count, targetList);
     }
 

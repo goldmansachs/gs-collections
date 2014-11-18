@@ -640,11 +640,27 @@ public class SynchronizedMutableList<T>
         }
     }
 
+    public MutableList<T> take(int count)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().take(count);
+        }
+    }
+
     public MutableList<T> takeWhile(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
             return this.getMutableList().takeWhile(predicate);
+        }
+    }
+
+    public MutableList<T> drop(int count)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().drop(count);
         }
     }
 
