@@ -28,7 +28,6 @@ import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
 import com.gs.collections.api.iterator.Mutable<name2>Iterator;
-import com.gs.collections.impl.map.mutable.primitive.Mutable<name2>ValuesMap;
 
 /**
  * This file was automatically generated from template file mutablePrimitivePrimitiveMap.stg.

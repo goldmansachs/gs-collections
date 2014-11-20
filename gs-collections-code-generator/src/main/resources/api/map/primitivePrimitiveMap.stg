@@ -29,7 +29,6 @@ import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
 import com.gs.collections.api.set.primitive.Mutable<name1>Set;
 import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
-import com.gs.collections.impl.map.primitive.<name2>ValuesMap;
 
 /**
  * This file was automatically generated from template file primitivePrimitiveMap.stg.

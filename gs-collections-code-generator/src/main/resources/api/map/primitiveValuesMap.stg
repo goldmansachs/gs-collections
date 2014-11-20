@@ -3,7 +3,7 @@ import "primitiveEquals.stg"
 import "primitiveHashCode.stg"
 import "primitiveLiteral.stg"
 
-targetPath() ::= "com/gs/collections/impl/map/primitive"
+targetPath() ::= "com/gs/collections/api/map/primitive"
 
 fileName(primitive) ::= "<primitive.name>ValuesMap"
 
@@ -14,7 +14,7 @@ class(primitive) ::= <<
 body(type, name) ::= <<
 <copyright()>
 
-package com.gs.collections.impl.map.primitive;
+package com.gs.collections.api.map.primitive;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;

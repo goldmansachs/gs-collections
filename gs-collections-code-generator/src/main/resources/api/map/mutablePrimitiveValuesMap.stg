@@ -3,7 +3,7 @@ import "primitiveEquals.stg"
 import "primitiveHashCode.stg"
 import "primitiveLiteral.stg"
 
-targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
+targetPath() ::= "com/gs/collections/api/map/primitive"
 
 fileName(primitive) ::= "Mutable<primitive.name>ValuesMap"
 
@@ -14,14 +14,13 @@ class(primitive) ::= <<
 body(type, name) ::= <<
 <copyright()>
 
-package com.gs.collections.impl.map.mutable.primitive;
+package com.gs.collections.api.map.primitive;
 
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.iterator.Mutable<name>Iterator;
-import com.gs.collections.impl.map.primitive.<name>ValuesMap;
 
 /**
  * This file was automatically generated from template file mutablePrimitiveValuesMap.stg.

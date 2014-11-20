@@ -28,6 +28,7 @@ import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.map.primitive.MutableBooleanValuesMap;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.collection.mutable.primitive.SynchronizedBooleanCollection;
 import com.gs.collections.impl.collection.mutable.primitive.UnmodifiableBooleanCollection;

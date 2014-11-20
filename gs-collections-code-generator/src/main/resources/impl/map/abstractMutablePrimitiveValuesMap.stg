@@ -33,6 +33,7 @@ import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.map.primitive.Mutable<name>ValuesMap;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.collection.mutable.primitive.Synchronized<name>Collection;
 import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name>Collection;
