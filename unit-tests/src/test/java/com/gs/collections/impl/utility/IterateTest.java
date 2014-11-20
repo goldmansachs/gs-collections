@@ -1325,7 +1325,7 @@ public class IterateTest
     public void collectWith()
     {
         this.iterables.forEach(Procedures.cast(each -> {
-            Collection<String> result = Iterate.collectWith(each, (each1, parm) -> each1.toString() + parm, " ");
+            Collection<String> result = Iterate.collectWith(each, (each1, parm) -> each1 + parm, " ");
             Assert.assertTrue(result.containsAll(FastList.newListWith("1 ", "2 ", "3 ", "4 ", "5 ")));
         }));
         Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.collectWith(null, null, null));
@@ -1335,7 +1335,7 @@ public class IterateTest
     public void collectWithWithTarget()
     {
         this.iterables.forEach(Procedures.cast(each -> {
-            Collection<String> result = Iterate.collectWith(each, (each1, parm) -> each1.toString() + parm, " ", UnifiedSet.newSet());
+            Collection<String> result = Iterate.collectWith(each, (each1, parm) -> each1 + parm, " ", UnifiedSet.newSet());
             Assert.assertTrue(result.containsAll(FastList.newListWith("1 ", "2 ", "3 ", "4 ", "5 ")));
         }));
         Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.collectWith(null, null, null, null));

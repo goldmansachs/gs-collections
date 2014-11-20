@@ -716,14 +716,14 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
 
         // map with a chain and no empty slots
         MutableMap<Integer, Integer> map = this.mapWithCollisionsOfSize(2);
-        map.forEachWithIndex((each, index) -> set.add(index + ":" + each.toString()));
+        map.forEachWithIndex((each, index) -> set.add(index + ":" + each));
         Assert.assertEquals(UnifiedSet.newSetWith("0:0", "1:17"), set);
 
         set.clear();
 
         // map with a chain and empty slots
         MutableMap<Integer, Integer> map2 = this.mapWithCollisionsOfSize(5);
-        map2.forEachWithIndex((each, index) -> set.add(index + ":" + each.toString()));
+        map2.forEachWithIndex((each, index) -> set.add(index + ":" + each));
         Assert.assertEquals(UnifiedSet.newSetWith("0:0", "1:17", "2:34", "3:51", "4:68"), set);
     }
 

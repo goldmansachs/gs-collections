@@ -203,7 +203,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         MutableSortedBag<Integer> bag = this.newWith(Comparators.reverseNaturalOrder(), 5, 5, 1, 2, 3);
         Appendable builder = new StringBuilder();
         bag.appendString(builder);
-        Assert.assertEquals(bag.toString(), "[" + builder.toString() + "]");
+        Assert.assertEquals(bag.toString(), "[" + builder + "]");
         Assert.assertEquals("5, 5, 3, 2, 1", builder.toString());
     }
 
@@ -215,7 +215,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         MutableSortedBag<Integer> bag = this.newWith(Comparators.reverseNaturalOrder(), 5, 5, 1, 2, 3);
         Appendable builder = new StringBuilder();
         bag.appendString(builder, ", ");
-        Assert.assertEquals(bag.toString(), "[" + builder.toString() + "]");
+        Assert.assertEquals(bag.toString(), "[" + builder + "]");
         Assert.assertEquals("5, 5, 3, 2, 1", builder.toString());
     }
 

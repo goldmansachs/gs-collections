@@ -273,7 +273,7 @@ public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTes
         Integer total = hashMap0.injectInto(Integer.valueOf(0), (result, value) -> {
             if (value)
             {
-                return result += 2;
+                return result + 2;
             }
 
             return result;

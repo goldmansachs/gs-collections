@@ -149,14 +149,14 @@ public class ImmutableSetMultimapTest extends AbstractImmutableMultimapTestCase
         mutableMultimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 1));
         mutableMultimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 2));
         ImmutableSetMultimap<String, Integer> immutableMap = mutableMultimap.toImmutable();
-        ImmutableSetMultimap<Integer, String> collectedMultimap = immutableMap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value.toString() + "Value"));
+        ImmutableSetMultimap<Integer, String> collectedMultimap = immutableMap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value + "Value"));
         UnifiedSetMultimap<Integer, String> expectedMultimap = UnifiedSetMultimap.newMultimap();
         expectedMultimap.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "1Value"));
         expectedMultimap.putAll(2, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "2Value"));
         ImmutableSetMultimap<Integer, String> expectedImmutableMultimap = expectedMultimap.toImmutable();
         Assert.assertEquals(expectedImmutableMultimap, collectedMultimap);
 
-        ImmutableSetMultimap<Integer, String> collectedMultimap2 = immutableMap.collectKeysValues((key, value) -> Tuples.pair(1, value.toString() + "Value"));
+        ImmutableSetMultimap<Integer, String> collectedMultimap2 = immutableMap.collectKeysValues((key, value) -> Tuples.pair(1, value + "Value"));
         UnifiedSetMultimap<Integer, String> expectedMultimap2 = UnifiedSetMultimap.newMultimap();
         expectedMultimap2.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
         expectedMultimap2.putAll(1, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
@@ -172,7 +172,7 @@ public class ImmutableSetMultimapTest extends AbstractImmutableMultimapTestCase
         mutableMultimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 1));
         mutableMultimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 2));
         ImmutableSetMultimap<String, Integer> immutableMap = mutableMultimap.toImmutable();
-        ImmutableSetMultimap<String, String> collectedMultimap = immutableMap.collectValues(value -> value.toString() + "Value");
+        ImmutableSetMultimap<String, String> collectedMultimap = immutableMap.collectValues(value -> value + "Value");
         UnifiedSetMultimap<String, String> expectedMultimap = UnifiedSetMultimap.newMultimap();
         expectedMultimap.putAll("1", FastList.newListWith("1Value", "2Value", "3Value", "4Value", "1Value"));
         expectedMultimap.putAll("2", FastList.newListWith("2Value", "3Value", "4Value", "5Value", "2Value"));

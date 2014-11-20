@@ -45,7 +45,7 @@ public class CompositeIterableTest extends AbstractLazyIterableTestCase
         StringBuilder builder = new StringBuilder("");
         for (Integer each : select)
         {
-            builder.append(each.toString());
+            builder.append(each);
         }
         Assert.assertEquals("12345", builder.toString());
     }

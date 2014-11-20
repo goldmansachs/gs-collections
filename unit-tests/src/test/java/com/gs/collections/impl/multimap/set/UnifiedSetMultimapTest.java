@@ -198,7 +198,7 @@ public class UnifiedSetMultimapTest extends AbstractMutableSetMultimapTestCase
         UnifiedSetMultimap<String, Integer> multimap = UnifiedSetMultimap.newMultimap();
         multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
         multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
-        UnifiedSetMultimap<Integer, String> collectedMultimap1 = multimap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value.toString() + "Value"));
+        UnifiedSetMultimap<Integer, String> collectedMultimap1 = multimap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value + "Value"));
         UnifiedSetMultimap<Integer, String> expectedMultimap1 = UnifiedSetMultimap.newMultimap();
         expectedMultimap1.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
         expectedMultimap1.putAll(2, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
@@ -206,7 +206,7 @@ public class UnifiedSetMultimapTest extends AbstractMutableSetMultimapTestCase
         Verify.assertSetsEqual(expectedMultimap1.get(1), collectedMultimap1.get(1));
         Verify.assertSetsEqual(expectedMultimap1.get(2), collectedMultimap1.get(2));
 
-        UnifiedSetMultimap<Integer, String> collectedMultimap2 = multimap.collectKeysValues((key, value) -> Tuples.pair(1, value.toString() + "Value"));
+        UnifiedSetMultimap<Integer, String> collectedMultimap2 = multimap.collectKeysValues((key, value) -> Tuples.pair(1, value + "Value"));
         UnifiedSetMultimap<Integer, String> expectedMultimap2 = UnifiedSetMultimap.newMultimap();
         expectedMultimap2.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
         expectedMultimap2.putAll(1, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
@@ -221,7 +221,7 @@ public class UnifiedSetMultimapTest extends AbstractMutableSetMultimapTestCase
         UnifiedSetMultimap<String, Integer> multimap = UnifiedSetMultimap.newMultimap();
         multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
         multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
-        UnifiedSetMultimap<String, String> collectedMultimap = multimap.collectValues(value -> value.toString() + "Value");
+        UnifiedSetMultimap<String, String> collectedMultimap = multimap.collectValues(value -> value + "Value");
         UnifiedSetMultimap<String, String> expectedMultimap = UnifiedSetMultimap.newMultimap();
         expectedMultimap.putAll("1", FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
         expectedMultimap.putAll("2", FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));

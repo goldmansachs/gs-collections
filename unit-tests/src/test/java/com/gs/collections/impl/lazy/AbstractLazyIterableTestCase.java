@@ -334,7 +334,7 @@ public abstract class AbstractLazyIterableTestCase
     {
         Assert.assertEquals(
                 FastList.newListWith("1 ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 "),
-                this.lazyIterable.collectWith((argument1, argument2) -> argument1.toString() + argument2, " ", FastList.<String>newList()));
+                this.lazyIterable.collectWith((argument1, argument2) -> argument1 + argument2, " ", FastList.<String>newList()));
     }
 
     @Test

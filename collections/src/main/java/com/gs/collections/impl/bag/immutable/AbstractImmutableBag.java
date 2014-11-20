@@ -220,7 +220,7 @@ public abstract class AbstractImmutableBag<T>
         {
             public void value(T each, int occurrences)
             {
-                builder.append(each.toString());
+                builder.append(each);
                 builder.append('=');
                 builder.append(occurrences);
                 builder.append(", ");

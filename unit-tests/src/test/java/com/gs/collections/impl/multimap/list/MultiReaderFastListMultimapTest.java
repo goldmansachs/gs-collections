@@ -199,13 +199,13 @@ public class MultiReaderFastListMultimapTest extends AbstractMutableListMultimap
         MultiReaderFastListMultimap<String, Integer> multimap = MultiReaderFastListMultimap.newMultimap();
         multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
         multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
-        HashBagMultimap<Integer, String> collectedMultimap1 = multimap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value.toString() + "Value"));
+        HashBagMultimap<Integer, String> collectedMultimap1 = multimap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value + "Value"));
         HashBagMultimap<Integer, String> expectedMultimap1 = HashBagMultimap.newMultimap();
         expectedMultimap1.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
         expectedMultimap1.putAll(2, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
         Assert.assertEquals(expectedMultimap1, collectedMultimap1);
 
-        HashBagMultimap<Integer, String> collectedMultimap2 = multimap.collectKeysValues((key, value) -> Tuples.pair(1, value.toString() + "Value"));
+        HashBagMultimap<Integer, String> collectedMultimap2 = multimap.collectKeysValues((key, value) -> Tuples.pair(1, value + "Value"));
         HashBagMultimap<Integer, String> expectedMultimap2 = HashBagMultimap.newMultimap();
         expectedMultimap2.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
         expectedMultimap2.putAll(1, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
@@ -219,7 +219,7 @@ public class MultiReaderFastListMultimapTest extends AbstractMutableListMultimap
         MultiReaderFastListMultimap<String, Integer> multimap = MultiReaderFastListMultimap.newMultimap();
         multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
         multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
-        FastListMultimap<String, String> collectedMultimap = multimap.collectValues(value -> value.toString() + "Value");
+        FastListMultimap<String, String> collectedMultimap = multimap.collectValues(value -> value + "Value");
         FastListMultimap<String, String> expectedMultimap = FastListMultimap.newMultimap();
         expectedMultimap.putAll("1", FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
         expectedMultimap.putAll("2", FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));

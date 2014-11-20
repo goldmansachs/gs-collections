@@ -325,7 +325,7 @@ public abstract class AbstractMultimapTestCase
     public void collectKeysValues()
     {
         Multimap<String, Integer> multimap = this.newMultimapWithKeysValues("1", 1, "1", 12, "2", 2, "3", 3);
-        Multimap<Integer, String> collectedMultimap = multimap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value.toString() + "Value"));
+        Multimap<Integer, String> collectedMultimap = multimap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value + "Value"));
         Multimap<Integer, String> expectedMultimap = this.newMultimapWithKeysValues(1, "1Value", 1, "12Value", 2, "2Value", 3, "3Value");
         Assert.assertEquals(expectedMultimap, collectedMultimap);
     }
@@ -334,7 +334,7 @@ public abstract class AbstractMultimapTestCase
     public void collectValues()
     {
         Multimap<String, Integer> multimap = this.newMultimapWithKeysValues("1", 1, "1", 12, "2", 2, "3", 3);
-        Multimap<String, String> collectedMultimap = multimap.collectValues(value -> value.toString() + "Value");
+        Multimap<String, String> collectedMultimap = multimap.collectValues(value -> value + "Value");
         Multimap<String, String> expectedMultimap = this.newMultimapWithKeysValues("1", "1Value", "1", "12Value", "2", "2Value", "3", "3Value");
         Assert.assertEquals(expectedMultimap, collectedMultimap);
     }

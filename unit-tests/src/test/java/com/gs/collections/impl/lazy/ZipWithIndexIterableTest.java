@@ -43,7 +43,7 @@ public class ZipWithIndexIterableTest
     {
         this.iterableUnderTest.forEach(Procedures.cast(argument1 -> {
             this.buffer.append("(");
-            this.buffer.append(argument1.toString());
+            this.buffer.append(argument1);
             this.buffer.append(")");
         }));
         this.assertBufferContains("(1:0)(2:1)(3:2)(4:3)");
@@ -54,7 +54,7 @@ public class ZipWithIndexIterableTest
     {
         this.iterableUnderTest.forEachWithIndex((each, index) -> {
             this.buffer.append("|(");
-            this.buffer.append(each.toString());
+            this.buffer.append(each);
             this.buffer.append("),");
             this.buffer.append(index);
         });
@@ -66,7 +66,7 @@ public class ZipWithIndexIterableTest
     {
         this.iterableUnderTest.forEachWith((argument1, argument2) -> {
             this.buffer.append("|(");
-            this.buffer.append(argument1.toString());
+            this.buffer.append(argument1);
             this.buffer.append("),");
             this.buffer.append(argument2);
         }, "A");
