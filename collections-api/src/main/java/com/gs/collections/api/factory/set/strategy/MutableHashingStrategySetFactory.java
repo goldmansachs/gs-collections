@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public interface MutableHashingStrategySetFactory
     <T> MutableSet<T> with(HashingStrategy<? super T> hashingStrategy);
 
     /**
-     * Same as {@link #with(com.gs.collections.api.block.HashingStrategy, Object[])}.
+     * Same as {@link #with(HashingStrategy, Object[])}.
      */
     <T> MutableSet<T> of(HashingStrategy<? super T> hashingStrategy, T... items);
 

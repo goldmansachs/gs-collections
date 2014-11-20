@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,21 +31,21 @@ public interface ImmutableHashingStrategyMapFactory
     <K, V> ImmutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy);
 
     /**
-     * Same as {@link #with(com.gs.collections.api.block.HashingStrategy, Object, Object)}.
+     * Same as {@link #with(HashingStrategy, Object, Object)}.
      */
     <K, V> ImmutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy, K key, V value);
 
     <K, V> ImmutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy, K key, V value);
 
     /**
-     * Same as {@link #with(com.gs.collections.api.block.HashingStrategy, Object, Object, Object, Object)}.
+     * Same as {@link #with(HashingStrategy, Object, Object, Object, Object)}.
      */
     <K, V> ImmutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy, K key1, V value1, K key2, V value2);
 
     <K, V> ImmutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy, K key1, V value1, K key2, V value2);
 
     /**
-     * Same as {@link #with(com.gs.collections.api.block.HashingStrategy, Object, Object, Object, Object, Object, Object)}.
+     * Same as {@link #with(HashingStrategy, Object, Object, Object, Object, Object, Object)}.
      */
     <K, V> ImmutableMap<K, V> of(
             HashingStrategy<? super K> hashingStrategy,
@@ -60,7 +60,7 @@ public interface ImmutableHashingStrategyMapFactory
             K key3, V value3);
 
     /**
-     * Same as {@link #with(com.gs.collections.api.block.HashingStrategy, Object, Object, Object, Object, Object, Object, Object, Object)}.
+     * Same as {@link #with(HashingStrategy, Object, Object, Object, Object, Object, Object, Object, Object)}.
      */
     <K, V> ImmutableMap<K, V> of(
             HashingStrategy<? super K> hashingStrategy,

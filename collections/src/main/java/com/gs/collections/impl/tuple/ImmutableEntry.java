@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.tuple;
 
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.gs.collections.impl.block.factory.Comparators;
@@ -35,7 +36,7 @@ public final class ImmutableEntry<K, V> extends AbstractImmutableEntry<K, V>
     }
 
     /**
-     * Indicates whether an object equals this entry, following the behavior specified in {@link java.util.Map.Entry#equals(Object)}.
+     * Indicates whether an object equals this entry, following the behavior specified in {@link Map.Entry#equals(Object)}.
      */
     @Override
     public boolean equals(Object object)
@@ -50,7 +51,7 @@ public final class ImmutableEntry<K, V> extends AbstractImmutableEntry<K, V>
     }
 
     /**
-     * Return this entry's hash code, following the behavior specified in {@link java.util.Map.Entry#hashCode()}.
+     * Return this entry's hash code, following the behavior specified in {@link Map.Entry#hashCode()}.
      */
     @Override
     public int hashCode()

@@ -45,6 +45,7 @@ public interface InternalIterable<T>
      * @see RichIterable#each(Procedure)
      * @see Iterable#forEach(java.util.function.Consumer)
      */
+    @SuppressWarnings("UnnecessaryFullyQualifiedName")
     void forEach(Procedure<? super T> procedure);
 
     /**

@@ -68,7 +68,7 @@ public interface ImmutableBiMapFactory
     <K, V> ImmutableBiMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
 
     /**
-     * Same as {@link #withAll(java.util.Map)}.
+     * Same as {@link #withAll(Map)}.
      */
     <K, V> ImmutableBiMap<K, V> ofAll(Map<K, V> map);
 

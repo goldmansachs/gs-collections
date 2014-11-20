@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.bag;
 
+import java.util.AbstractMap;
 import java.util.Map;
 
 import com.gs.collections.api.RichIterable;
@@ -112,7 +113,7 @@ public interface Bag<T>
      * followed by an equals sign (<tt>"="</tt>) followed by the number of ooccurrences. Elements and are converted to
      * strings as by {@link String#valueOf(Object)}.
      * <p>
-     * The string representation is similar to {@link java.util.AbstractMap#toString()}, not {@link RichIterable#toString()}.
+     * The string representation is similar to {@link AbstractMap#toString()}, not {@link RichIterable#toString()}.
      *
      * @return a string representation of this bag
      * @since 3.0

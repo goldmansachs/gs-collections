@@ -716,7 +716,7 @@ public final class Functions
     }
 
     /**
-     * @return A function that gets the key out of a {@link java.util.Map.Entry}
+     * @return A function that gets the key out of a {@link Map.Entry}
      */
     public static <K> Function<Map.Entry<K, ?>, K> getKeyFunction()
     {
@@ -724,7 +724,7 @@ public final class Functions
     }
 
     /**
-     * @return A function that gets the value out of a {@link java.util.Map.Entry}
+     * @return A function that gets the value out of a {@link Map.Entry}
      */
     public static <V> Function<Map.Entry<?, V>, V> getValueFunction()
     {

@@ -17,6 +17,7 @@
 package com.gs.collections.api.ordered;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
@@ -81,8 +82,8 @@ public interface SortedIterable<T> extends RichIterable<T>
      * Returns the minimum element out of this container based on the natural order, not the order of this container.
      * If you want the minimum element based on the order of this container, use {@link #getFirst()}.
      *
-     * @throws ClassCastException               if the elements are not {@link Comparable}
-     * @throws java.util.NoSuchElementException if the SortedIterable is empty
+     * @throws ClassCastException     if the elements are not {@link Comparable}
+     * @throws NoSuchElementException if the SortedIterable is empty
      */
     T min();
 
@@ -90,8 +91,8 @@ public interface SortedIterable<T> extends RichIterable<T>
      * Returns the maximum element out of this container based on the natural order, not the order of this container.
      * If you want the maximum element based on the order of this container, use {@link #getLast()}.
      *
-     * @throws ClassCastException               if the elements are not {@link Comparable}
-     * @throws java.util.NoSuchElementException if the SortedIterable is empty
+     * @throws ClassCastException     if the elements are not {@link Comparable}
+     * @throws NoSuchElementException if the SortedIterable is empty
      */
     T max();
 

@@ -18,6 +18,7 @@ package com.gs.collections.impl.bag.sorted.mutable;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 
@@ -62,8 +63,8 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * A synchronized view of a {@link com.gs.collections.api.bag.sorted.MutableSortedBag}. It is imperative that the user manually synchronize on the collection when iterating over it using the
- * standard JDK iterator or JDK 5 for loop, as per {@link java.util.Collections#synchronizedCollection(java.util.Collection)}.
+ * A synchronized view of a {@link MutableSortedBag}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * standard JDK iterator or JDK 5 for loop, as per {@link Collections#synchronizedCollection(Collection)}.
  *
  * @see MutableSortedBag#asSynchronized()
  */
@@ -199,7 +200,7 @@ public class SynchronizedSortedBag<T>
     {
         synchronized (this.getLock())
         {
-            return of(this.getSortedBag().clone());
+            return SynchronizedSortedBag.of(this.getSortedBag().clone());
         }
     }
 

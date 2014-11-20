@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.list;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
@@ -253,7 +254,7 @@ public interface ListIterable<T>
      * Searches for the specified object using the binary search algorithm. The list must be sorted into ascending
      * order according to the specified comparator.
      *
-     * @see java.util.Collections#binarySearch(java.util.List, Object, java.util.Comparator)
+     * @see Collections#binarySearch(List, Object, Comparator)
      */
     int binarySearch(T key, Comparator<? super T> comparator);
 
@@ -261,7 +262,7 @@ public interface ListIterable<T>
      * Searches for the specified object using the binary search algorithm. The elements in this list must implement
      * Comparable and the list must be sorted into ascending order.
      *
-     * @see java.util.Collections#binarySearch(java.util.List, Object)
+     * @see Collections#binarySearch(List, Object)
      */
     int binarySearch(T key);
 

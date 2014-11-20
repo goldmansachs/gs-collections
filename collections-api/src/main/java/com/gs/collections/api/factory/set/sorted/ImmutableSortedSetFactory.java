@@ -60,7 +60,7 @@ public interface ImmutableSortedSetFactory
     <T> ImmutableSortedSet<T> with(Comparator<? super T> comparator);
 
     /**
-     * Same as {@link #with(java.util.Comparator, Object[])}.
+     * Same as {@link #with(Comparator, Object[])}.
      */
     <T> ImmutableSortedSet<T> of(Comparator<? super T> comparator, T... items);
 

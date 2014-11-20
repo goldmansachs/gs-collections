@@ -68,7 +68,7 @@ public interface ImmutableMapFactory
     <K, V> ImmutableMap<K, V> ofMap(Map<K, V> map);
 
     /**
-     * Same as {@link #withAll(java.util.Map)}.
+     * Same as {@link #withAll(Map)}.
      */
     <K, V> ImmutableMap<K, V> ofAll(Map<K, V> map);
 

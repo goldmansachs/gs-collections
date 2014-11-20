@@ -40,6 +40,7 @@
     <inspection_tool class="AssignmentToForLoopParameter" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_checkForeachParameters" value="false" />
     </inspection_tool>
+    <inspection_tool class="AssignmentToLambdaParameter" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="AssignmentToMethodParameter" enabled="true" level="INSPECTION" enabled_by_default="true">
       <option name="ignoreTransformationOfOriginalParameter" value="false" />
     </inspection_tool>
@@ -72,6 +73,7 @@
     <inspection_tool class="BeforeClassOrAfterClassIsPublicStaticVoidNoArg" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="BeforeOrAfterIsPublicVoidNoArg" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="BigDecimalEquals" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="BigDecimalLegacyMethod" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="BooleanConstructor" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="BooleanMethodIsAlwaysInverted" enabled="true" level="INFO" enabled_by_default="true" />
     <inspection_tool class="BoundFieldAssignment" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -122,6 +124,7 @@
     <inspection_tool class="ClassWithMultipleLoggers" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="loggerNamesString" value="java.util.logging.Logger,org.slf4j.Logger,org.apache.commons.logging.Log,org.apache.log4j.Logger" />
     </inspection_tool>
+    <inspection_tool class="ClassWithOnlyPrivateConstructors" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="ClassWithoutToString" level="INFO" enabled="false" />
     <inspection_tool class="CloneCallsConstructors" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CloneDeclaresCloneNotSupported" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -213,6 +216,7 @@
     <inspection_tool class="Deprecation" enabled="true" level="INFO" enabled_by_default="true" />
     <inspection_tool class="DisjointPackage" enabled="true" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="DollarSignInName" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="DoubleBraceInitialization" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DoubleCheckedLocking" enabled="true" level="INSPECTION" enabled_by_default="true">
       <option name="ignoreOnVolatileVariables" value="false" />
     </inspection_tool>
@@ -300,7 +304,6 @@
     <inspection_tool class="ForLoopWithMissingComponent" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreCollectionLoops" value="false" />
     </inspection_tool>
-    <inspection_tool class="FunctionWithInconsistentReturnsJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="GWTRemoteServiceAsyncCheck" enabled="false" level="INSPECTION" enabled_by_default="false" />
     <inspection_tool class="GWTStyleCheck" enabled="false" level="INSPECTION" enabled_by_default="false" />
     <inspection_tool class="GroovyUnnecessaryContinue" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -444,6 +447,11 @@
     <inspection_tool class="JSValidateTypes" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="JUnit3StyleTestMethodInJUnit4Class" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="JUnit4AnnotatedMethodInJUnit3TestCase" enabled="true" level="INSPECTION" enabled_by_default="true" />
+    <inspection_tool class="JUnit4MethodNamingConvention" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="m_regex" value="(?!test)[a-z][A-Za-z_\d]*" />
+      <option name="m_minLength" value="3" />
+      <option name="m_maxLength" value="99" />
+    </inspection_tool>
     <inspection_tool class="JUnitAbstractTestClassNamingConvention" enabled="true" level="INSPECTION" enabled_by_default="true">
       <option name="m_regex" value="[A-Z][A-Za-z\d]*TestCase" />
       <option name="m_minLength" value="9" />
@@ -488,7 +496,7 @@
       <option name="IGNORE_POINT_TO_ITSELF" value="true" />
       <option name="myAdditionalJavadocTags" value="ant.task" />
     </inspection_tool>
-    <inspection_tool class="JavaLangImport" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JavaLangImport" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="JavaLangReflect" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="JavaeeApplicationDomInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="JpaDataSourceORMDomInspection" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -691,6 +699,7 @@
       <option name="m_minLength" value="1" />
       <option name="m_maxLength" value="64" />
     </inspection_tool>
+    <inspection_tool class="ParameterTypePreventsOverriding" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ParameterizedParametersStaticCollection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PointlessArithmeticExpressionJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="PointlessBitwiseExpressionJS" enabled="false" level="WARNING" enabled_by_default="false">
@@ -702,6 +711,7 @@
     <inspection_tool class="PointlessBooleanExpressionJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="PointlessIndexOfComparison" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="PointlessNullCheck" enabled="true" level="INSPECTION" enabled_by_default="true" />
+    <inspection_tool class="PropertyValueSetToItself" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ProtectedMemberInFinalClass" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="PublicConstructorInNonPublicClass" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="PublicField" enabled="true" level="INSPECTION" enabled_by_default="true">
@@ -1289,6 +1299,8 @@
     <inspection_tool class="SamePackageImport" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="SameParameterValue" enabled="false" level="INFO" enabled_by_default="false" />
     <inspection_tool class="SameReturnValue" enabled="true" level="INFO" enabled_by_default="true" />
+    <inspection_tool class="ScalaUnusedSymbol" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ScalaUselessExpression" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SelfIncludingJspFiles" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="SerialPersistentFieldsWithWrongSignature" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="SerialVersionUIDNotStaticFinal" enabled="true" level="INSPECTION" enabled_by_default="true" />
@@ -1395,6 +1407,7 @@
     <inspection_tool class="SuppressionAnnotation" enabled="false" level="INFO" enabled_by_default="false" />
     <inspection_tool class="Suspicious Inferred Type" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="Suspicious New Line in Method Call" enabled="true" level="INSPECTION" enabled_by_default="true" />
+    <inspection_tool class="SuspiciousGetterSetter" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SuspiciousIndentAfterControlStatement" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="SuspiciousInferredType" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SuspiciousMethodCalls" enabled="true" level="INSPECTION" enabled_by_default="true">
@@ -1507,6 +1520,7 @@
     <inspection_tool class="UnconstructableTestCase" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UnitMethodDefinedLikeProcedure" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UnknownGuard" enabled="true" level="INSPECTION" enabled_by_default="true" />
+    <inspection_tool class="UnnecessarilyQualifiedStaticallyImportedElement" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryAnnotationParentheses" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryBlockStatement" enabled="true" level="INSPECTION" enabled_by_default="true">
       <option name="ignoreSwitchBranches" value="false" />
@@ -1525,7 +1539,10 @@
     <inspection_tool class="UnnecessaryFinalOnParameter" enabled="true" level="INSPECTION" enabled_by_default="true">
       <option name="onlyWarnOnAbstractMethods" value="false" />
     </inspection_tool>
-    <inspection_tool class="UnnecessaryFullyQualifiedName" enabled="true" level="INSPECTION" enabled_by_default="true">
+    <inspection_tool class="UnnecessaryFullyQualifiedName" enabled="true" level="INSPECTION" enabled_by_default="false">
+      <scope name="No package-info.java" level="INSPECTION" enabled="true">
+        <option name="m_ignoreJavadoc" value="false" />
+      </scope>
       <option name="m_ignoreJavadoc" value="false" />
     </inspection_tool>
     <inspection_tool class="UnnecessaryInheritDoc" enabled="true" level="INSPECTION" enabled_by_default="true" />
@@ -1562,6 +1579,7 @@
     <inspection_tool class="UnnecessarySuperQualifier" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryTemporaryOnConversionFromString" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnnecessaryTemporaryOnConversionToString" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UnnecessaryToStringCall" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryUnaryMinus" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UnnecessaryUnboxing" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnpredictableBigDecimalConstructorCall" enabled="true" level="INSPECTION" enabled_by_default="true">
@@ -1602,6 +1620,7 @@
     <inspection_tool class="UseOfAWTPeerClass" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UseOfJDBCDriverClass" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UseOfObsoleteAssert" enabled="true" level="INSPECTION" enabled_by_default="true" />
+    <inspection_tool class="UseOfObsoleteDateTimeApi" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UseOfProcessBuilder" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UseOfPropertiesAsHashtable" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UseOfSunClasses" enabled="true" level="INSPECTION" enabled_by_default="true" />
@@ -1614,6 +1633,7 @@
       <option name="ignoreClassesWithOnlyMain" value="false" />
     </inspection_tool>
     <inspection_tool class="ValidExternallyBoundObject" enabled="false" level="INSPECTION" enabled_by_default="false" />
+    <inspection_tool class="VarCouldBeVal" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="VolatileArrayField" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="VolatileLongOrDoubleField" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="VtlDirectiveArgsInspection" enabled="false" level="WARNING" enabled_by_default="false" />

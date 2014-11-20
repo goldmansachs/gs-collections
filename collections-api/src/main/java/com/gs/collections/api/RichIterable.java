@@ -181,12 +181,13 @@ public interface
      * });
      * </pre>
      * This method is a variant of {@link InternalIterable#forEach(Procedure)}
-     * that have a signature conflict with {@link Iterable#forEach(java.util.function.Consumer)}.
+     * that has a signature conflict with {@link Iterable#forEach(java.util.function.Consumer)}.
      *
      * @see InternalIterable#forEach(Procedure)
      * @see Iterable#forEach(java.util.function.Consumer)
      * @since 6.0
      */
+    @SuppressWarnings("UnnecessaryFullyQualifiedName")
     void each(Procedure<? super T> procedure);
 
     /**
