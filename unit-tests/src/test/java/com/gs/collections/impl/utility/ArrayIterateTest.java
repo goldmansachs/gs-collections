@@ -19,6 +19,7 @@ package com.gs.collections.impl.utility;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.gs.collections.api.RichIterable;
@@ -759,6 +760,22 @@ public class ArrayIterateTest
     {
         Assert.assertEquals(5, ArrayIterate.size(new Integer[]{5, 4, 3, 2, 1}));
         Assert.assertEquals(0, ArrayIterate.size(null));
+    }
+
+    @Test
+    public void sort()
+    {
+        for (int i = 1; i < 20; i++)
+        {
+            MutableList<Integer> integers = Interval.oneTo(i).toList();
+            Collections.shuffle(integers);
+            Integer[] array = integers.toArray(new Integer[i]);
+            ArrayIterate.sort(array, array.length, null);
+            Assert.assertArrayEquals(array, Interval.oneTo(i).toArray());
+            ArrayIterate.sort(array, array.length, Comparator.<Integer>reverseOrder());
+            Integer[] expected = Interval.oneTo(i).reverseThis().toArray();
+            Assert.assertArrayEquals(array, expected);
+        }
     }
 
     @Test

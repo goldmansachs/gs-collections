@@ -89,7 +89,7 @@ import com.gs.collections.impl.utility.internal.InternalArrayIterate;
  */
 public final class ArrayIterate
 {
-    private static final int INSERTIONSORT_THRESHOLD = 10;
+    private static final int INSERTIONSORT_THRESHOLD = 11;
 
     private ArrayIterate()
     {
@@ -159,9 +159,10 @@ public final class ArrayIterate
 
     private static <T> void swapWithPrevious(T[] array, int index)
     {
-        T t = array[index];
-        array[index] = array[index - 1];
-        array[index - 1] = t;
+        T item = array[index];
+        int previousIndex = index - 1;
+        array[index] = array[previousIndex];
+        array[previousIndex] = item;
     }
 
     public static <T, V extends Comparable<? super V>> T minBy(T[] array, Function<? super T, ? extends V> function)

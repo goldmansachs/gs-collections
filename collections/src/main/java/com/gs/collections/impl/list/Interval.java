@@ -382,7 +382,7 @@ public final class Interval
     public void forEachWithIndex(IntIntProcedure procedure)
     {
         int index = 0;
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             for (int i = this.from; i <= this.to; i += this.step)
             {
@@ -411,7 +411,7 @@ public final class Interval
 
     public <P> void forEachWith(IntObjectProcedure<? super P> procedure, P parameter)
     {
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             for (int i = this.from; i <= this.to; i += this.step)
             {
@@ -427,6 +427,11 @@ public final class Interval
         }
     }
 
+    public boolean goForward()
+    {
+        return this.from <= this.to && this.step > 0;
+    }
+
     public <P> void forEachWith(final Procedure2<? super Integer, ? super P> procedure, P parameter)
     {
         this.forEachWith(new IntObjectProcedure<P>()
@@ -440,7 +445,7 @@ public final class Interval
 
     public void forEach(IntProcedure procedure)
     {
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             for (int i = this.from; i <= this.to; i += this.step)
             {
@@ -479,7 +484,7 @@ public final class Interval
     public void forEach(Procedure<? super Integer> procedure, Executor executor)
     {
         CountDownLatch latch = new CountDownLatch(this.size());
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             // Iterates in forward direction because step value is negative
             for (int i = this.from; i <= this.to; i += this.step)
@@ -532,7 +537,7 @@ public final class Interval
      */
     public void run(Runnable runnable)
     {
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             for (int i = this.from; i <= this.to; i += this.step)
             {
@@ -554,7 +559,7 @@ public final class Interval
      */
     public void run(Runnable runnable, Executor executor)
     {
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             for (int i = this.from; i <= this.to; i += this.step)
             {
@@ -574,7 +579,7 @@ public final class Interval
     public <R> R injectInto(R injectValue, Function2<? super R, ? super Integer, ? extends R> function)
     {
         R result = injectValue;
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             for (int i = this.from; i <= this.to; i += this.step)
             {
@@ -595,7 +600,7 @@ public final class Interval
     public int injectInto(int injectedValue, IntObjectToIntFunction<? super Integer> function)
     {
         int result = injectedValue;
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             for (int i = this.from; i <= this.to; i += this.step)
             {
@@ -616,7 +621,7 @@ public final class Interval
     public long injectInto(long injectedValue, LongObjectToLongFunction<? super Integer> function)
     {
         long result = injectedValue;
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             for (int i = this.from; i <= this.to; i += this.step)
             {
@@ -637,7 +642,7 @@ public final class Interval
     public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super Integer> function)
     {
         double result = injectedValue;
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             for (int i = this.from; i <= this.to; i += this.step)
             {
@@ -717,7 +722,7 @@ public final class Interval
             }
         }
         ListIterator<?> listIterator = ((List<?>) otherList).listIterator();
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             for (int i = this.from; i <= this.to && listIterator.hasNext(); i += this.step)
             {
@@ -752,7 +757,7 @@ public final class Interval
     public int hashCode()
     {
         int hashCode = 1;
-        if (this.from <= this.to)
+        if (this.goForward())
         {
             for (int i = this.from; i <= this.to; i += this.step)
             {

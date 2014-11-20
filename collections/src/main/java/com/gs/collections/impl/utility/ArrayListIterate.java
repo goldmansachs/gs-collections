@@ -1518,16 +1518,13 @@ public final class ArrayListIterate
     public static <T> ArrayList<T> sortThis(ArrayList<T> list, Comparator<? super T> comparator)
     {
         int size = list.size();
-        if (size > 1)
+        if (ArrayListIterate.canAccessInternalArray(list))
         {
-            if (ArrayListIterate.canAccessInternalArray(list))
-            {
-                ArrayIterate.sort(ArrayListIterate.getInternalArray(list), size, comparator);
-            }
-            else
-            {
-                Collections.sort(list, comparator);
-            }
+            ArrayIterate.sort(ArrayListIterate.getInternalArray(list), size, comparator);
+        }
+        else
+        {
+            Collections.sort(list, comparator);
         }
         return list;
     }
