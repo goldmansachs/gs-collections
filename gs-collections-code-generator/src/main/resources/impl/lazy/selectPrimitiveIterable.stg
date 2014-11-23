@@ -21,26 +21,22 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
-import com.gs.collections.api.Lazy<name>Iterable;
-import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
-import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
-import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 
 /**
  * This file was automatically generated from template file selectPrimitiveIterable.stg.
  */
 public class Select<name>Iterable
-    extends AbstractLazy<name>Iterable
+        extends AbstractLazy<name>Iterable
 {
     private final <name>Iterable delegate;
     private final <name>Predicate predicate;
@@ -105,7 +101,6 @@ public class Select<name>Iterable
         return !this.anySatisfy(predicate);
     }
 
-    <(arithmeticMethods.(type))(name, type)>
     @Override
     public <type>[] toArray()
     {
@@ -261,114 +256,3 @@ public class Select<name>Iterable
 }
 
 >>
-
-arithmeticMethods ::= [
-    "byte": "allMethods",
-    "short": "allMethods",
-    "char": "allMethods",
-    "int": "allMethods",
-    "long": "allMethods",
-    "float": "allMethods",
-    "double": "allMethods",
-    "boolean": "noMethods"
-    ]
-
-
-allMethods(name, type) ::=<<
-    public <wideType.(type)> sum()
-    {
-        <wideType.(type)> sum = <wideZero.(type)>;
-        for (<name>Iterator <type>Iterator = this.<type>Iterator(); <type>Iterator.hasNext(); )
-        {
-            sum += <type>Iterator.next();
-        }
-        return sum;
-    }
-
-    public <type> max()
-    {
-        <name>Iterator <type>Iterator = this.<type>Iterator();
-        <type> max = <type>Iterator.next();
-        while (<type>Iterator.hasNext())
-        {
-            max = (<type>) Math.max(max, <type>Iterator.next());
-        }
-        return max;
-    }
-
-    public <type> min()
-    {
-        <name>Iterator <type>Iterator = this.<type>Iterator();
-        <type> min = <type>Iterator.next();
-        while (<type>Iterator.hasNext())
-        {
-            min = (<type>) Math.min(min, <type>Iterator.next());
-        }
-        return min;
-    }
-
-    public <type> minIfEmpty(<type> defaultValue)
-    {
-        try
-        {
-            return this.min();
-        }
-        catch (NoSuchElementException ex)
-        {
-        }
-        return defaultValue;
-    }
-
-    public <type> maxIfEmpty(<type> defaultValue)
-    {
-        try
-        {
-            return this.max();
-        }
-        catch (NoSuchElementException ex)
-        {
-        }
-        return defaultValue;
-    }
-
-    public double average()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        return <castSum.(type)>this.sum() / (double) this.size();
-    }
-
-    public double median()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        <type>[] sortedArray = this.toSortedArray();
-        int middleIndex = sortedArray.length >\> 1;
-        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-        {
-            <type> first = sortedArray[middleIndex];
-            <type> second = sortedArray[middleIndex - 1];
-            return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
-        }
-        return <castDouble.(type)>sortedArray[middleIndex];
-    }
-
-    public <type>[] toSortedArray()
-    {
-        <type>[] array = this.toArray();
-        Arrays.sort(array);
-        return array;
-    }
-
-    public Mutable<name>List toSortedList()
-    {
-        return <name>ArrayList.newList(this).sortThis();
-    }
-
->>
-
-noMethods(name, type) ::= ""

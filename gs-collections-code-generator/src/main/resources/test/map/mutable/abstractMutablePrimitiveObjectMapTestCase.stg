@@ -546,14 +546,14 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
     @Test
     public void freeze()
     {
-        Mutable<name>ObjectMap mutable<name>ObjectMap = this.classUnderTest();
+        Mutable<name>ObjectMap\<String> mutable<name>ObjectMap = this.classUnderTest();
         <name>Set frozenSet = mutable<name>ObjectMap.keySet().freeze();
         <name>Set frozenSetCopy = <name>HashSet.newSetWith(mutable<name>ObjectMap.keySet().toArray());
         Assert.assertEquals(frozenSet, frozenSetCopy);
         Assert.assertEquals(frozenSetCopy, mutable<name>ObjectMap.keySet().freeze());
         for (int i = 0; i \< 32; i++)
         {
-            mutable<name>ObjectMap.put((<type>) i, new Object());
+            mutable<name>ObjectMap.put((<type>) i, "!");
             Assert.assertEquals(frozenSet, frozenSetCopy);
         }
 
@@ -567,7 +567,7 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
             Assert.assertEquals(frozenSetForRemove, frozenSetCopyForRemove);
         }
 
-        Mutable<name>ObjectMap mutable<name>ObjectMapForClear = this.classUnderTest();
+        Mutable<name>ObjectMap\<String> mutable<name>ObjectMapForClear = this.classUnderTest();
         <name>Set frozenSetForClear = mutable<name>ObjectMapForClear.keySet().freeze();
         <name>Set frozenSetCopyForClear = <name>HashSet.newSetWith(mutable<name>ObjectMapForClear.keySet().toArray());
         mutable<name>ObjectMapForClear.clear();

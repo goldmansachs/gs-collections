@@ -154,14 +154,13 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> integers = Interval.oneTo(5).addAllTo(new ArrayList<Integer>());
         ArrayList<Integer> results = new ArrayList<Integer>();
-        ArrayListIterate.forEach(integers, 0, 4, CollectionAddProcedure.on(results));
+        ArrayListIterate.forEach(integers, 0, 4, results::add);
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
-        ArrayListIterate.forEach(integers, 4, 0, procedure);
+        ArrayListIterate.forEach(integers, 4, 0, reverseResults::add);
         Assert.assertEquals(ListIterate.reverseThis(integers), reverseResults);
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(integers, 4, -1, procedure));
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(integers, -1, 4, procedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(integers, 4, -1, reverseResults::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(integers, -1, 4, reverseResults::add));
     }
 
     @Test
@@ -170,14 +169,13 @@ public class ArrayListIterateTest
         ArrayList<Integer> expected = Interval.oneTo(5).addAllTo(new ArrayList<Integer>());
         ArrayList<Integer> optimisableList = Interval.oneTo(105).addAllTo(new ArrayList<Integer>());
         ArrayList<Integer> results = new ArrayList<Integer>();
-        ArrayListIterate.forEach(optimisableList, 0, 4, CollectionAddProcedure.on(results));
+        ArrayListIterate.forEach(optimisableList, 0, 4, results::add);
         Assert.assertEquals(expected, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
-        ArrayListIterate.forEach(optimisableList, 4, 0, procedure);
+        ArrayListIterate.forEach(optimisableList, 4, 0, reverseResults::add);
         Assert.assertEquals(ListIterate.reverseThis(expected), reverseResults);
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(optimisableList, 104, -1, procedure));
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(optimisableList, -1, 4, procedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(optimisableList, 104, -1, reverseResults::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEach(optimisableList, -1, 4, reverseResults::add));
     }
 
     @Test
@@ -185,10 +183,10 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> integers = Interval.oneTo(5).addAllTo(new ArrayList<Integer>());
         ArrayList<Integer> results = new ArrayList<Integer>();
-        ArrayListIterate.forEachWithIndex(integers, 0, 4, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(results)));
+        ArrayListIterate.forEachWithIndex(integers, 0, 4, ObjectIntProcedures.fromProcedure(results::add));
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
+        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(reverseResults::add);
         ArrayListIterate.forEachWithIndex(integers, 4, 0, objectIntProcedure);
         Assert.assertEquals(ListIterate.reverseThis(integers), reverseResults);
         Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEachWithIndex(integers, 4, -1, objectIntProcedure));
@@ -201,10 +199,10 @@ public class ArrayListIterateTest
         ArrayList<Integer> optimisableList = Interval.oneTo(105).addAllTo(new ArrayList<Integer>());
         ArrayList<Integer> expected = Interval.oneTo(105).addAllTo(new ArrayList<Integer>());
         ArrayList<Integer> results = new ArrayList<Integer>();
-        ArrayListIterate.forEachWithIndex(optimisableList, 0, 104, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(results)));
+        ArrayListIterate.forEachWithIndex(optimisableList, 0, 104, ObjectIntProcedures.fromProcedure(results::add));
         Assert.assertEquals(expected, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
+        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(reverseResults::add);
         ArrayListIterate.forEachWithIndex(expected, 104, 0, objectIntProcedure);
         Assert.assertEquals(ListIterate.reverseThis(expected), reverseResults);
         Verify.assertThrows(IndexOutOfBoundsException.class, () -> ArrayListIterate.forEachWithIndex(expected, 104, -1, objectIntProcedure));
@@ -216,7 +214,7 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> integers = Interval.oneTo(5).addAllTo(new ArrayList<Integer>());
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        ArrayListIterate.reverseForEach(integers, CollectionAddProcedure.on(reverseResults));
+        ArrayListIterate.reverseForEach(integers, reverseResults::add);
         Assert.assertEquals(ListIterate.reverseThis(integers), reverseResults);
     }
 
@@ -225,7 +223,7 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> integers = new ArrayList<Integer>();
         MutableList<Integer> results = Lists.mutable.of();
-        ArrayListIterate.reverseForEach(integers, CollectionAddProcedure.on(results));
+        ArrayListIterate.reverseForEach(integers, results::add);
         Assert.assertEquals(integers, results);
     }
 

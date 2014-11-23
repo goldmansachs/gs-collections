@@ -460,10 +460,10 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Verify.assertEquals(2, map1.countWith(StringPredicates2.endsWith(), "ne"));
-        Verify.assertEquals(1, map1.countWith(StringPredicates2.endsWith(), "o"));
-        Verify.assertEquals(1, map1.countWith(Object::equals, "nine"));
-        Verify.assertNotEquals(1, map1.countWith(Object::equals, "ten"));
+        Assert.assertEquals(2, map1.countWith(StringPredicates2.endsWith(), "ne"));
+        Assert.assertEquals(1, map1.countWith(StringPredicates2.endsWith(), "o"));
+        Assert.assertEquals(1, map1.countWith(Object::equals, "nine"));
+        Assert.assertNotEquals(1, map1.countWith(Object::equals, "ten"));
     }
 
     @Test
@@ -778,7 +778,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         Assert.assertEquals(<name>ObjectHashMapTest.class, map2.maxBy(classNameLength));
         Assert.assertEquals(<name>ObjectHashMapTest.class, map3.maxBy(classNameLength));
 
-        Verify.assertThrows(NoSuchElementException.class, () -> { <name>ObjectHashMap.\<Class\<?>\>newMap().maxBy(classNameLength); });
+        Verify.assertThrows(NoSuchElementException.class, () -> <name>ObjectHashMap.\<Class\<?>\>newMap().maxBy(classNameLength));
     }
 
     @Test
@@ -812,7 +812,7 @@ public abstract class Abstract<name>ObjectMapTestCase
         Assert.assertEquals(<name>ObjectHashMap.class, map2.minBy(classNameLength));
         Assert.assertEquals(<name>ObjectHashMap.class, map3.minBy(classNameLength));
 
-        Verify.assertThrows(NoSuchElementException.class, () -> { <name>ObjectHashMap.\<Class\<?>\>newMap().minBy(classNameLength); });
+        Verify.assertThrows(NoSuchElementException.class, () -> <name>ObjectHashMap.\<Class\<?>\>newMap().minBy(classNameLength));
     }
 
     @Test
@@ -871,7 +871,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     public void sumByInt()
     {
         RichIterable\<String> values = this.newWithKeysValues(<(literal.(type))("1")>, "1", <(literal.(type))("2")>, "2", <(literal.(type))("3")>, "3");
-        ObjectLongMap result = values.sumByInt(s -> Integer.parseInt(s) % 2, Integer::parseInt);
+        ObjectLongMap\<Integer> result = values.sumByInt(s -> Integer.parseInt(s) % 2, Integer::parseInt);
         Assert.assertEquals(4, result.get(1));
         Assert.assertEquals(2, result.get(0));
     }
@@ -880,7 +880,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     public void sumByFloat()
     {
         RichIterable\<String> values = this.newWithKeysValues(<(literal.(type))("1")>, "1", <(literal.(type))("2")>, "2", <(literal.(type))("3")>, "3");
-        ObjectDoubleMap result = values.sumByFloat(s -> Integer.parseInt(s) % 2, Float::parseFloat);
+        ObjectDoubleMap\<Integer> result = values.sumByFloat(s -> Integer.parseInt(s) % 2, Float::parseFloat);
         Assert.assertEquals(4.0f, result.get(1), 0.0);
         Assert.assertEquals(2.0f, result.get(0), 0.0);
     }
@@ -889,7 +889,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     public void sumByLong()
     {
         RichIterable\<String> values = this.newWithKeysValues(<(literal.(type))("1")>, "1", <(literal.(type))("2")>, "2", <(literal.(type))("3")>, "3");
-        ObjectLongMap result = values.sumByLong(s -> Integer.parseInt(s) % 2, Long::parseLong);
+        ObjectLongMap\<Integer> result = values.sumByLong(s -> Integer.parseInt(s) % 2, Long::parseLong);
         Assert.assertEquals(4, result.get(1));
         Assert.assertEquals(2, result.get(0));
     }
@@ -898,7 +898,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     public void sumByDouble()
     {
         RichIterable\<String> values = this.newWithKeysValues(<(literal.(type))("1")>, "1", <(literal.(type))("2")>, "2", <(literal.(type))("3")>, "3");
-        ObjectDoubleMap result = values.sumByDouble(s -> Integer.parseInt(s) % 2, Double::parseDouble);
+        ObjectDoubleMap\<Integer> result = values.sumByDouble(s -> Integer.parseInt(s) % 2, Double::parseDouble);
         Assert.assertEquals(4.0d, result.get(1), 0.0);
         Assert.assertEquals(2.0d, result.get(0), 0.0);
     }

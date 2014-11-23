@@ -24,8 +24,6 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.Lazy<name>Iterable;
-import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;

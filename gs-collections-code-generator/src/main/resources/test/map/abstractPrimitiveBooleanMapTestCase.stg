@@ -28,11 +28,6 @@ import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
-import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
-import com.gs.collections.api.block.predicate.primitive.<name>BooleanPredicate;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
-import com.gs.collections.api.block.procedure.primitive.<name>BooleanProcedure;
-import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.primitive.<name>BooleanMap;
@@ -51,7 +46,6 @@ import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 /**
  * This file was automatically generated from template file abstractPrimitiveBooleanMapTestCase.stg.
@@ -97,8 +91,8 @@ public abstract class Abstract<name>BooleanMapTestCase
         Assert.assertTrue(this.classUnderTest().getOrThrow(<(literal.(type))("32")>));
 
 
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow(<(literal.(type))("1")>); });
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow(<(literal.(type))("33")>); });
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow(<(literal.(type))("1")>));
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow(<(literal.(type))("33")>));
     }
 
     @Test
@@ -589,7 +583,7 @@ public abstract class Abstract<name>BooleanMapTestCase
 
         Assert.assertEquals(expected, actual);
         Verify.assertThrows(NoSuchElementException.class, iterator::next);
-        Verify.assertThrows(NoSuchElementException.class, () -> { this.getEmptyMap().booleanIterator().next(); });
+        Verify.assertThrows(NoSuchElementException.class, () -> this.getEmptyMap().booleanIterator().next());
     }
 
     @Test

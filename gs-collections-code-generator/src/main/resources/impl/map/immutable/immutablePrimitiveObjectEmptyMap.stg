@@ -535,26 +535,22 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
 
     public \<V1> ObjectLongMap\<V1> sumByInt(Function\<V, V1> groupBy, IntFunction\<? super V> function)
     {
-        ObjectLongHashMap\<V1> result = ObjectLongHashMap.newMap();
-        return result;
+        return ObjectLongHashMap.newMap();
     }
 
     public \<V1> ObjectDoubleMap\<V1> sumByFloat(Function\<V, V1> groupBy, FloatFunction\<? super V> function)
     {
-        ObjectDoubleHashMap\<V1> result = ObjectDoubleHashMap.newMap();
-        return result;
+        return ObjectDoubleHashMap.newMap();
     }
 
     public \<V1> ObjectLongMap\<V1> sumByLong(Function\<V, V1> groupBy, LongFunction\<? super V> function)
     {
-        ObjectLongHashMap\<V1> result = ObjectLongHashMap.newMap();
-        return result;
+        return ObjectLongHashMap.newMap();
     }
 
     public \<V1> ObjectDoubleMap\<V1> sumByDouble(Function\<V, V1> groupBy, DoubleFunction\<? super V> function)
     {
-        ObjectDoubleHashMap\<V1> result = ObjectDoubleHashMap.newMap();
-        return result;
+        return ObjectDoubleHashMap.newMap();
     }
 
     public Mutable<name>Set keySet()

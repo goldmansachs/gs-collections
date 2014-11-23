@@ -520,7 +520,7 @@ public abstract class AbstractMemoryEfficientMutableMapTest
 
         RichIterable<RichIterable<String>> chunks = map.chunk(2).toList();
 
-        RichIterable<Integer> sizes = chunks.collect(object -> object.size());
+        RichIterable<Integer> sizes = chunks.collect(RichIterable::size);
 
         switch (map.size())
         {

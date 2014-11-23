@@ -752,7 +752,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
     private void addKeyValueAtIndex(<type> key, boolean value, int index)
     {
-        if (this.keys[index] == REMOVED_KEY)
+        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
         {
             this.occupiedWithSentinels--;
         }

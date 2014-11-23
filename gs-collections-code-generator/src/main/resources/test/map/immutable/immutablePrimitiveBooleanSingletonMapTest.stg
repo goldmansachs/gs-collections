@@ -134,8 +134,8 @@ public class Immutable<name>BooleanSingletonMapTest extends AbstractImmutable<na
     {
         Assert.assertTrue(this.classUnderTest().getOrThrow(<(literal.(type))("0")>));
 
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow(<(literal.(type))("31")>); });
-        Verify.assertThrows(IllegalStateException.class, () -> { this.classUnderTest().getOrThrow(<(literal.(type))("32")>); });
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow(<(literal.(type))("31")>));
+        Verify.assertThrows(IllegalStateException.class, () -> this.classUnderTest().getOrThrow(<(literal.(type))("32")>));
     }
 
     @Override

@@ -242,7 +242,7 @@ public class <name>BooleanHashMapTest extends AbstractMutable<name>BooleanMapTes
     @Test
     public void getIfAbsentPutWith_every_slot()
     {
-        BooleanFunction\<String> functionLength = (String string) -> string.isEmpty();
+        BooleanFunction\<String> functionLength = String::isEmpty;
 
         Mutable<name>BooleanMap hashMap = this.getEmptyMap();
 

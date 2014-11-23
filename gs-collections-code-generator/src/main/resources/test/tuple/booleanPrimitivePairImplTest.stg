@@ -20,7 +20,6 @@ body(type, name) ::= <<
 
 package com.gs.collections.impl.tuple.primitive;
 
-import com.gs.collections.api.tuple.primitive.Boolean<name>Pair;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;

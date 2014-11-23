@@ -692,7 +692,7 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     public void collectLong()
     {
         Assert.assertEquals(
-                LongArrayList.newListWith((long) 0),
+                LongArrayList.newListWith(0L),
                 this.newWithKeysValues(<(literal.(type))("0")>, "0").collectLong(Long::parseLong));
     }
 
@@ -702,7 +702,7 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     {
         LongArrayList target = new LongArrayList();
         Assert.assertSame(target, this.newWithKeysValues(<(literal.(type))("0")>, "0").collectLong(Long::parseLong, target));
-        Assert.assertEquals(LongArrayList.newListWith((long) 0), target);
+        Assert.assertEquals(LongArrayList.newListWith(0L), target);
     }
 
     @Override

@@ -188,8 +188,8 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
         Assert.assertEquals(<(wideLiteral.(type2))("31")>, this.map.getOrThrow(<(literal.(type1))("31")>)<(wideDelta.(type2))>);
         Assert.assertEquals(<(wideLiteral.(type2))("32")>, this.map.getOrThrow(<(literal.(type1))("32")>)<(wideDelta.(type2))>);
 
-        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(<(literal.(type1))("1")>); });
-        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(<(literal.(type1))("33")>); });
+        Verify.assertThrows(IllegalStateException.class, () -> this.map.getOrThrow(<(literal.(type1))("1")>));
+        Verify.assertThrows(IllegalStateException.class, () -> this.map.getOrThrow(<(literal.(type1))("33")>));
     }
 
     @Override
@@ -247,6 +247,7 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
         Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getIfAbsentPutWithKey(<(literal.(type1))("0")>, function)<(wideDelta.(type2))>);
     }
 
+    @Override
     @Test
     public void freeze()
     {

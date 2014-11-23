@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.gs.collections.impl.block.procedure;
 
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
@@ -28,10 +29,10 @@ public class ObjectIntProceduresTest
     @Test
     public void fromObjectIntProcedure()
     {
-        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(FastList.<Integer>newList());
-        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(procedure);
+        MutableList<Integer> result = FastList.<Integer>newList();
+        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(result::add);
         objectIntProcedure.value(1, 0);
-        Assert.assertEquals(FastList.newListWith(1), procedure.getResult());
+        Assert.assertEquals(FastList.newListWith(1), result);
     }
 
     @Test

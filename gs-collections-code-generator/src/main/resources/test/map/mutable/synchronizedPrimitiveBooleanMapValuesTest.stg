@@ -20,12 +20,9 @@ body(type, name) ::= <<
 
 package com.gs.collections.impl.map.mutable.primitive;
 
-import java.util.NoSuchElementException;
-
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
-import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableBooleanCollectionTestCase;
@@ -340,7 +337,6 @@ public class Synchronized<name>BooleanMapValuesTest extends AbstractMutableBoole
         Assert.assertFalse(emptyCollection.contains(true));
         Assert.assertFalse(emptyCollection.contains(false));
         BooleanIterable booleanIterable = this.classUnderTest();
-        int size = booleanIterable.size();
         Assert.assertTrue(booleanIterable.contains(true));
         Assert.assertTrue(booleanIterable.contains(false));
         Assert.assertFalse(this.newWith(true, true, true).contains(false));

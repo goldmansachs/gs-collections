@@ -20,7 +20,6 @@ import java.util.Collections;
 
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -58,7 +57,7 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
         {
             return each % 10;
         }
-    }).toMap((Function0<MutableBag<Integer>>) () -> Bags.mutable.of());
+    }).toMap(Bags.mutable::of);
 
     @Override
     public <K, V> ConcurrentMutableMap<K, V> newMap()

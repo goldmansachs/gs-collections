@@ -222,7 +222,7 @@ public abstract class ImmutableBagTestCase
     {
         MutableBag<String> result = Bags.mutable.of();
         ImmutableBag<String> strings = this.newBag();
-        strings.forEachWithIndex(ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(result)));
+        strings.forEachWithIndex(ObjectIntProcedures.fromProcedure(result::add));
         Assert.assertEquals(strings, result);
     }
 

@@ -23,6 +23,7 @@ import java.util.List;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
@@ -187,12 +188,12 @@ public class ListIterateTest
 
     private void assertFlatten(List<MutableList<Boolean>> list)
     {
-        MutableList<Boolean> newList = ListIterate.flatCollect(list, aList -> aList.toList());
+        MutableList<Boolean> newList = ListIterate.flatCollect(list, RichIterable::toList);
         Verify.assertListsEqual(
                 FastList.newListWith(true, false, true, null),
                 newList);
 
-        MutableSet<Boolean> newSet = ListIterate.flatCollect(list, aList -> aList.toSet(), UnifiedSet.<Boolean>newSet());
+        MutableSet<Boolean> newSet = ListIterate.flatCollect(list, RichIterable::toSet, UnifiedSet.<Boolean>newSet());
         Verify.assertSetsEqual(
                 UnifiedSet.newSetWith(true, false, null),
                 newSet);
@@ -263,25 +264,23 @@ public class ListIterateTest
 
         this.assertForEachUsingFromTo(integers);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
-        this.assertReverseForEachUsingFromTo(integers, reverseResults, procedure);
+        this.assertReverseForEachUsingFromTo(integers, reverseResults, reverseResults::add);
         this.assertForEachUsingFromTo(new LinkedList<Integer>(integers));
     }
 
     private void assertForEachUsingFromTo(List<Integer> integers)
     {
         MutableList<Integer> results = Lists.mutable.of();
-        ListIterate.forEach(integers, 0, 4, CollectionAddProcedure.on(results));
+        ListIterate.forEach(integers, 0, 4, results::add);
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, 4, -1, procedure));
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, -1, 4, procedure));
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, 0, 5, procedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, 4, -1, reverseResults::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, -1, 4, reverseResults::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, 0, 5, reverseResults::add));
     }
 
-    private void assertReverseForEachUsingFromTo(List<Integer> integers, MutableList<Integer> reverseResults, CollectionAddProcedure<Integer> procedure)
+    private void assertReverseForEachUsingFromTo(List<Integer> integers, MutableList<Integer> reverseResults, Procedure<Integer> procedure)
     {
         ListIterate.forEach(integers, 4, 0, procedure);
         Assert.assertEquals(ListIterate.reverseThis(integers), reverseResults);

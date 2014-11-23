@@ -305,7 +305,7 @@ public final class Unmodifiable<name>ObjectMap\<V>
 
     public \<S> MutableCollection\<S> selectInstancesOf(Class\<S> clazz)
     {
-        return (MutableCollection\<S>) this.map.selectInstancesOf(clazz);
+        return this.map.selectInstancesOf(clazz);
     }
 
     public MutableList\<Pair\<V, Integer>\> zipWithIndex()
@@ -325,12 +325,12 @@ public final class Unmodifiable<name>ObjectMap\<V>
 
     public \<K, VV> MutableMap\<K, VV> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Procedure2\<? super VV, ? super V> mutatingAggregator)
     {
-        return (MutableMap\<K, VV>) this.map.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
+        return this.map.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
     }
 
     public \<K, VV> MutableMap\<K, VV> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Function2\<? super VV, ? super V, ? extends VV> nonMutatingAggregator)
     {
-        return (MutableMap\<K, VV>) this.map.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
+        return this.map.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
     }
 
     public MutableCollection\<V> reject(Predicate\<? super V> predicate)
@@ -396,7 +396,7 @@ public final class Unmodifiable<name>ObjectMap\<V>
 
     public \<VV> MutableCollection\<VV> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function)
     {
-        return (MutableCollection\<VV>) this.map.collectIf(predicate, function);
+        return this.map.collectIf(predicate, function);
     }
 
     public \<VV, R extends Collection\<VV>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function, R target)
@@ -759,7 +759,7 @@ public final class Unmodifiable<name>ObjectMap\<V>
 
     public \<S> MutableCollection\<Pair\<V, S>\> zip(Iterable\<S> that)
     {
-        return (MutableCollection\<Pair\<V, S>\>) this.map.zip(that);
+        return this.map.zip(that);
     }
 
     public \<S, R extends Collection\<Pair\<V, S>\>> R zip(Iterable\<S> that, R target)

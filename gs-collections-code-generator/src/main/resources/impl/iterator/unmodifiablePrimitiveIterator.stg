@@ -14,8 +14,6 @@ body(type, name) ::= <<
 
 package com.gs.collections.impl.iterator;
 
-import java.util.NoSuchElementException;
-
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.iterator.Mutable<name>Iterator;
 
@@ -25,7 +23,7 @@ import com.gs.collections.api.iterator.Mutable<name>Iterator;
  */
 public class Unmodifiable<name>Iterator implements Mutable<name>Iterator
 {
-    private <name>Iterator <type>Iterator;
+    private final <name>Iterator <type>Iterator;
 
     public Unmodifiable<name>Iterator(<name>Iterator <type>Iterator)
     {

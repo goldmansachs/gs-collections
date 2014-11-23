@@ -264,7 +264,7 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
         super.getOrThrow();
 
         this.map.removeKey("0");
-        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow("0"); });
+        Verify.assertThrows(IllegalStateException.class, () -> this.map.getOrThrow("0"));
 
         this.map.put("0", <(literal.(type))("1")>);
         Assert.assertEquals(<(literal.(type))("1")>, this.map.getOrThrow("0")<delta.(type)>);

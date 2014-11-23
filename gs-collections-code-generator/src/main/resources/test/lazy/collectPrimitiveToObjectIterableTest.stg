@@ -22,8 +22,6 @@ package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
@@ -84,7 +82,7 @@ public class Collect<name>ToObjectIterableTest
         InternalIterable\<<wrapperName>\> collect = this.newPrimitiveWith(<["1", "2", "3", "4", "5", "5"]:(literal.(type))(); separator=", ">);
         MutableList\<<wrapperName>\> result = Lists.mutable.of();
 
-        collect.forEachWith((argument1, argument2) -> { result.add((<type>) (argument1 + argument2)); }, 1);
+        collect.forEachWith((argument1, argument2) -> result.add((<type>) (argument1 + argument2)), 1);
         Assert.assertEquals(FastList.newListWith(<["2", "3", "4", "5", "6", "6"]:(literal.(type))(); separator=", ">), result);
     }
 

@@ -330,7 +330,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         {
             if (this.sentinelValues.containsZeroKey)
             {
-                appendable.append(String.valueOf(EMPTY_KEY)).append("=").append(String.valueOf(this.sentinelValues.zeroValue));
+                appendable.append(EMPTY_KEY).append("=").append(this.sentinelValues.zeroValue);
                 first = false;
             }
             if (this.sentinelValues.containsOneKey)
@@ -339,7 +339,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                 {
                     appendable.append(", ");
                 }
-                appendable.append(String.valueOf(REMOVED_KEY)).append("=").append(String.valueOf(this.sentinelValues.oneValue));
+                appendable.append(REMOVED_KEY).append("=").append(this.sentinelValues.oneValue);
                 first = false;
             }
         }
@@ -352,7 +352,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                 {
                     appendable.append(", ");
                 }
-                appendable.append(String.valueOf(key)).append("=").append(String.valueOf(this.values[i]));
+                appendable.append(key).append("=").append(this.values[i]);
                 first = false;
             }
         }
@@ -2632,7 +2632,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         this.copyKeysOnWrite = false;
     }
 
-    private class SentinelValues\<V>
+    private static final class SentinelValues\<V>
     {
         private boolean containsZeroKey;
         private boolean containsOneKey;
@@ -3238,7 +3238,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                     max = EMPTY_KEY;
                     isMaxSet = true;
                 }
-                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && (!isMaxSet || <(lessThan.(type))("max", "REMOVED_KEY")>))
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
                 {
                     max = REMOVED_KEY;
                     isMaxSet = true;
@@ -3282,7 +3282,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                     min = EMPTY_KEY;
                     isMinSet = true;
                 }
-                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && (!isMinSet || <(lessThan.(type))("REMOVED_KEY", "min")>))
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && !isMinSet)
                 {
                     min = REMOVED_KEY;
                     isMinSet = true;

@@ -58,6 +58,7 @@ import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("Convert2MethodRef")
 public class SerialParallelLazyPerformanceTest
 {
     public static final MutableList<Predicate<Integer>> PREDICATES_LAMBDA = FastList.newListWith(

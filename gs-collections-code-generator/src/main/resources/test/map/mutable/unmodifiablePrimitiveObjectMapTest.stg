@@ -231,10 +231,11 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
         this.map.getIfAbsentPutWithKey(<(literal.(type))("1")>, toString);
     }
 
+    @Override
     @Test
     public void freeze()
     {
-        Mutable<name>ObjectMap mutable<name>ObjectMap = this.classUnderTest();
+        Mutable<name>ObjectMap\<String> mutable<name>ObjectMap = this.classUnderTest();
         <name>Set frozenSet = mutable<name>ObjectMap.keySet().freeze();
         <name>Set frozenSetCopy = <name>HashSet.newSetWith(mutable<name>ObjectMap.keySet().toArray());
         Assert.assertEquals(frozenSet, frozenSetCopy);
@@ -339,9 +340,9 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
 
         Unmodifiable<name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
         Iterator\<String> iterator1 = map1.iterator();
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) iterator1::remove);
+        Verify.assertThrows(UnsupportedOperationException.class, iterator1::remove);
         iterator1.next();
-        Verify.assertThrows(UnsupportedOperationException.class, (Runnable) iterator1::remove);
+        Verify.assertThrows(UnsupportedOperationException.class, iterator1::remove);
     }
 }
 

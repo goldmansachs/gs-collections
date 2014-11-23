@@ -228,7 +228,7 @@ Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiable
     @Test
     public void clear()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiableCollection.clear());
+        Verify.assertThrows(UnsupportedOperationException.class, this.unmodifiableCollection::clear);
     }
 
     @Test

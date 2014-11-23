@@ -134,7 +134,7 @@ final class Immutable<name1><name2>HashMap implements Immutable<name1><name2>Map
 
     public \<T> T injectInto(T injectedValue, Object<name2>ToObjectFunction\<? super T, ? extends T> function)
     {
-        return ((<name1><name2>HashMap) this.delegate).injectInto(injectedValue, function);
+        return this.delegate.injectInto(injectedValue, function);
     }
 
     public Immutable<name1><name2>Map toImmutable()

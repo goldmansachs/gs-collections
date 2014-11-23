@@ -20,17 +20,9 @@ body(type, name, wrapperName) ::= <<
 
 package com.gs.collections.impl.map.mutable.primitive;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.map.primitive.MutableObject<name>Map;
-import com.gs.collections.api.map.primitive.Object<name>Map;
 import com.gs.collections.impl.map.primitive.AbstractObject<name>MapKeysViewTestCase;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
-import com.gs.collections.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * JUnit test for {@link UnmodifiableObject<name>Map#keysView()}.

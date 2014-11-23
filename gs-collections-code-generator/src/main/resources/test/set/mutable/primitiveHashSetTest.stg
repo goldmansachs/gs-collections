@@ -46,18 +46,18 @@ public class <name>HashSetTest extends Abstract<name>SetTestCase
     @Test
     public void defaultInitialCapacity() throws NoSuchFieldException, IllegalAccessException
     {
-        <name>HashSet hashSet = new <name>HashSet();
         Field table = <name>HashSet.class.getDeclaredField("table");
         table.setAccessible(true);
+        <name>HashSet hashSet = new <name>HashSet();
         Assert.assertEquals(16L, ((<type>[]) table.get(hashSet)).length);
     }
 
     @Test
     public void newWithInitialCapacity() throws NoSuchFieldException, IllegalAccessException
     {
-        <name>HashSet hashSet = new <name>HashSet(3);
         Field table = <name>HashSet.class.getDeclaredField("table");
         table.setAccessible(true);
+        <name>HashSet hashSet = new <name>HashSet(3);
         Assert.assertEquals(8L, ((<type>[]) table.get(hashSet)).length);
 
         <name>HashSet hashSet2 = new <name>HashSet(10);

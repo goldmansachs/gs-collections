@@ -425,7 +425,7 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
 
     public boolean anySatisfy(<name2>Predicate predicate)
     {
-        <forEachValueSatisfying(template = {return true})>
+        <forEachValueSatisfying(template = {return true}, innerClass=true)>
         return false;
     }
 
@@ -1352,7 +1352,7 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
 
         public boolean anySatisfy(<name1>Predicate predicate)
         {
-            <forEachKeySatisfying(template = {return true})>
+            <forEachKeySatisfying(template = {return true}, innerClass = true)>
             return false;
         }
 
@@ -1942,12 +1942,12 @@ for (int i = 0; i \< <if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray
 {
     if (isNonSentinel(this.<keyArray>[i]))
     {
-        <{this.<keyArray>[i]}:{key | <template>}>;
+        <{<if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>[i]}:{key | <template>}>;
     }
 }
 >>
 
-forEachKeySatisfying(template) ::= <<
+forEachKeySatisfying(template, innerClass=false) ::= <<
 if (<name1><name2>HashMap.this.sentinelValues != null)
 {
     if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
@@ -1959,16 +1959,16 @@ if (<name1><name2>HashMap.this.sentinelValues != null)
         <"REMOVED_KEY":{key | <template>}>;
     }
 }
-for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
+for (int i = 0; i \< <if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>.length; i<increment>)
 {
-    if (isNonSentinel(<keyArray>[i]) && predicate.accept(<keyArray>[i]))
+    if (isNonSentinel(<if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>[i]) && predicate.accept(<if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>[i]))
     {
-        <{this.<keyArray>[i]}:{key | <template>}>;
+        <{<if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>[i]}:{key | <template>}>;
     }
 }
 >>
 
-forEachValue(template) ::= <<
+forEachValue(template, innerClass=false) ::= <<
 if (this.sentinelValues != null)
 {
     if (this.sentinelValues.containsZeroKey)
@@ -1980,16 +1980,16 @@ if (this.sentinelValues != null)
         <"this.sentinelValues.oneValue":{value | <template>}>;
     }
 }
-for (int i = 0; i \< this.<keyArray>.length; i<increment>)
+for (int i = 0; i \< <if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>.length; i<increment>)
 {
-    if (isNonSentinel(this.<keyArray>[i]))
+    if (isNonSentinel(<if(innerClass)><name1><name2>HashMap.<endif>this.<keyArray>[i]))
     {
-        <{this.<valueArray>[i<valueIndex>]}:{value | <template>}>;
+        <{<if(innerClass)><name1><name2>HashMap.<endif>this.<valueArray>[i<valueIndex>]}:{value | <template>}>;
     }
 }
 >>
 
-forEachValueSatisfying(template) ::= <<
+forEachValueSatisfying(template, innerClass=false) ::= <<
 if (this.sentinelValues != null)
 {
     if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))

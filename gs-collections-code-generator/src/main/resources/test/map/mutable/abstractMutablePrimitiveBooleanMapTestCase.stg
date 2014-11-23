@@ -278,7 +278,7 @@ public abstract class AbstractMutable<name>BooleanMapTestCase extends Abstract<n
         super.getOrThrow();
 
         this.map.removeKey(<(literal.(type))("0")>);
-        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(<(literal.(type))("0")>); });
+        Verify.assertThrows(IllegalStateException.class, () -> this.map.getOrThrow(<(literal.(type))("0")>));
 
         this.map.put(<(literal.(type))("0")>, false);
         Assert.assertFalse(this.map.getOrThrow(<(literal.(type))("0")>));

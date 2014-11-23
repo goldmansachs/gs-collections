@@ -140,7 +140,6 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
     @Test
     public void equalsAndHashCode()
     {
-        Object same = this.newWith(1, 2, 3);
         Verify.assertEqualsAndHashCode(this.newWith(1, 2, 3), this.newWith(1, 2, 3));
         Assert.assertNotEquals(this.newWith(1, 2, 3), this.newWith(1, 2));
     }
@@ -268,7 +267,7 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
         {
             Map.Entry<Integer, Integer> entry = iterator.next();
             Assert.assertEquals(ImmutableEntry.of(3 - i, 3 - i), entry);
-            Verify.assertThrows(UnsupportedOperationException.class, () -> { entry.setValue(0); });
+            Verify.assertThrows(UnsupportedOperationException.class, () -> entry.setValue(0));
         }
     }
 

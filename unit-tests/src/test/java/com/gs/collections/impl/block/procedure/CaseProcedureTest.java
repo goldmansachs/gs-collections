@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.block.procedure;
 
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -31,10 +30,8 @@ public class CaseProcedureTest
     {
         MutableList<String> ifOneList = Lists.mutable.of();
         MutableList<String> defaultList = Lists.mutable.of();
-        Procedure<String> ifOneProcedure = CollectionAddProcedure.on(ifOneList);
-        Procedure<String> defaultProcedure = CollectionAddProcedure.on(defaultList);
         MutableList<String> list = FastList.newListWith("1", "2");
-        Iterate.forEach(list, new CaseProcedure<String>(defaultProcedure).addCase("1"::equals, ifOneProcedure));
+        Iterate.forEach(list, new CaseProcedure<String>(defaultList::add).addCase("1"::equals, ifOneList::add));
         Assert.assertEquals(FastList.newListWith("1"), ifOneList);
         Assert.assertEquals(FastList.newListWith("2"), defaultList);
     }

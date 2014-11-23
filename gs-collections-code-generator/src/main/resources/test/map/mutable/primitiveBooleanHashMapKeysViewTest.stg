@@ -163,7 +163,7 @@ public class <name>BooleanHashMapKeysViewTest
     public void forEach()
     {
         <type>[] sum = new <type>[1];
-        this.iterable.forEach(each -> { sum[0] += each; });
+        this.iterable.forEach(each -> sum[0] += each);
         Assert.assertEquals(32L + generateCollisions1().getFirst() + generateCollisions1().get(1), sum[0]<delta.(type)>);
     }
 

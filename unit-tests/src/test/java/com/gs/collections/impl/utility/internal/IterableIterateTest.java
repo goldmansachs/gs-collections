@@ -36,7 +36,6 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.MaxSizeFunction;
 import com.gs.collections.impl.block.function.MinSizeFunction;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -655,21 +654,18 @@ public class IterableIterateTest
         MutableList<Integer> integers = Interval.oneTo(5).toList();
 
         this.assertForEachUsingFromTo(integers);
-        MutableList<Integer> reverseResults = Lists.mutable.of();
-        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
         this.assertForEachUsingFromTo(new LinkedList<Integer>(integers));
     }
 
     private void assertForEachUsingFromTo(List<Integer> integers)
     {
         MutableList<Integer> results = Lists.mutable.of();
-        IterableIterate.forEach(integers, 0, 4, CollectionAddProcedure.on(results));
+        IterableIterate.forEach(integers, 0, 4, results::add);
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, 4, -1, procedure));
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, -1, 4, procedure));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, 4, -1, reverseResults::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> ListIterate.forEach(integers, -1, 4, reverseResults::add));
     }
 
     @Test
@@ -683,10 +679,10 @@ public class IterableIterateTest
     private void assertForEachWithIndexUsingFromTo(List<Integer> integers)
     {
         MutableList<Integer> results = Lists.mutable.of();
-        IterableIterate.forEachWithIndex(integers, 0, 4, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(results)));
+        IterableIterate.forEachWithIndex(integers, 0, 4, ObjectIntProcedures.fromProcedure(results::add));
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
+        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(reverseResults::add);
         Verify.assertThrows(IllegalArgumentException.class, () -> IterableIterate.forEachWithIndex(integers, 4, -1, objectIntProcedure));
         Verify.assertThrows(IllegalArgumentException.class, () -> IterableIterate.forEachWithIndex(integers, -1, 4, objectIntProcedure));
     }

@@ -327,7 +327,7 @@ public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTes
     @Test
     public void getIfAbsentPutWith_every_slot()
     {
-        BooleanFunction<String> functionLength = (String string) -> string.isEmpty();
+        BooleanFunction<String> functionLength = String::isEmpty;
 
         MutableObjectBooleanMap<String> hashMap = this.getEmptyMap();
 

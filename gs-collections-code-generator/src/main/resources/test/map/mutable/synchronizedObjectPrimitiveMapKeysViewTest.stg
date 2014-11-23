@@ -22,10 +22,7 @@ package com.gs.collections.impl.map.mutable.primitive;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.map.primitive.MutableObject<name>Map;
-import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.map.primitive.AbstractObject<name>MapKeysViewTestCase;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * JUnit test for {@link SynchronizedObject<name>Map#keysView()}.

@@ -17,6 +17,7 @@
 package com.gs.collections.impl.jmh;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -46,7 +47,7 @@ public class FlatCollectTest
     @Benchmark
     public void serial_lazy_jdk()
     {
-        List<Integer> flatMap = this.integersJDK.stream().flatMap(e -> e.stream()).collect(Collectors.toList());
+        List<Integer> flatMap = this.integersJDK.stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 
     @Warmup(iterations = 20)

@@ -26,7 +26,6 @@ import java.lang.reflect.Field;
 
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
-import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
 import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
@@ -478,7 +477,6 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
     @Test
     public void testPutAll()
     {
-        Mutable<name1><name2>Map hashMap = new <name1><name2>HashMap();
         Mutable<name1><name2>Map copyMap = new <name1><name2>HashMap();
 
         for (int i = 2; i \< 10; i++)
@@ -488,6 +486,7 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
         }
 
         Verify.assertSize(8, copyMap);
+        Mutable<name1><name2>Map hashMap = new <name1><name2>HashMap();
         Verify.assertSize(0, hashMap);
         hashMap.putAll(copyMap);
         Verify.assertSize(8, hashMap);

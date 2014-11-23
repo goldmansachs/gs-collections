@@ -256,7 +256,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
                 {
                     appendable.append(", ");
                 }
-                appendable.append(String.valueOf(this.toNonSentinel(key))).append("=").append(String.valueOf(this.values[i]));
+                appendable.append(this.toNonSentinel(key)).append("=").append(this.values[i]);
                 first = false;
             }
         }
@@ -1816,10 +1816,10 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
         public Iterator\<K> iterator()
         {
-            return new InternalKeysViewIterator\<K>();
+            return new InternalKeysViewIterator();
         }
 
-        public class InternalKeysViewIterator\<K> implements Iterator\<K>
+        public class InternalKeysViewIterator implements Iterator\<K>
         {
             private int count;
             private int position;

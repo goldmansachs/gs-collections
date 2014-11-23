@@ -19,11 +19,7 @@ package com.gs.collections.impl.list.mutable.primitive;
 
 import java.lang.reflect.Field;
 
-import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
-import com.gs.collections.impl.math.Mutable<wrapperName>;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.internal.primitive.<name>IterableIterate;
 import com.gs.collections.impl.utility.internal.primitive.<name>IteratorIterate;
@@ -116,15 +112,6 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
         <name>ArrayList list1 = <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
         <name>ArrayList list2 = <name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">);
         list1.dotProduct(list2);
-    }
-
-    @Test
-    public void forEachWithIndex()
-    {
-        <wideType.(type)>[] sum = new <wideType.(type)>[1];
-        this.classUnderTest().forEachWithIndex((<type> each, int index) -> sum[0] += each + index);
-
-        Assert.assertEquals(<(wideLiteral.(type))("9")>, sum[0]<wideDelta.(type)>);
     }
 
     @Override

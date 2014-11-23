@@ -19,8 +19,10 @@ package com.gs.collections.impl.utility.internal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
@@ -161,12 +163,12 @@ public class RandomAccessListIterateTest
         MutableList<MutableList<Boolean>> list = Lists.fixedSize.<MutableList<Boolean>>of(
                 Lists.fixedSize.of(true, false),
                 Lists.fixedSize.of(true, null));
-        MutableList<Boolean> newList = RandomAccessListIterate.flatCollect(list, mutableList -> mutableList.toList());
+        MutableList<Boolean> newList = RandomAccessListIterate.flatCollect(list, RichIterable::toList);
         Verify.assertListsEqual(
                 FastList.newListWith(true, false, true, null),
                 newList);
 
-        MutableSet<Boolean> newSet = RandomAccessListIterate.flatCollect(list, mutableList -> mutableList.toSet(), UnifiedSet.<Boolean>newSet());
+        MutableSet<Boolean> newSet = RandomAccessListIterate.flatCollect(list, RichIterable::toSet, UnifiedSet.<Boolean>newSet());
         Verify.assertSetsEqual(
                 UnifiedSet.newSetWith(true, false, null),
                 newSet);
@@ -216,23 +218,21 @@ public class RandomAccessListIterateTest
 
         this.assertForEachUsingFromTo(integers);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
-        this.assertReverseForEachUsingFromTo(integers, reverseResults, procedure);
+        this.assertReverseForEachUsingFromTo(integers, reverseResults, reverseResults::add);
     }
 
     private void assertForEachUsingFromTo(List<Integer> integers)
     {
         MutableList<Integer> results = Lists.mutable.of();
-        RandomAccessListIterate.forEach(integers, 0, 4, CollectionAddProcedure.on(results));
+        RandomAccessListIterate.forEach(integers, 0, 4, results::add);
         Assert.assertEquals(integers, results);
         MutableList<Integer> reverseResults = Lists.mutable.of();
-        CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(reverseResults);
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEach(integers, 4, -1, procedure));
-        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEach(integers, -1, 4, procedure));
+        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEach(integers, 4, -1, reverseResults::add));
+        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEach(integers, -1, 4, reverseResults::add));
     }
 
-    private void assertReverseForEachUsingFromTo(List<Integer> integers, MutableList<Integer> reverseResults, CollectionAddProcedure<Integer> procedure)
+    private void assertReverseForEachUsingFromTo(List<Integer> integers, MutableList<Integer> reverseResults, Procedure<Integer> procedure)
     {
         RandomAccessListIterate.forEach(integers, 4, 0, procedure);
         Assert.assertEquals(ListIterate.reverseThis(integers), reverseResults);

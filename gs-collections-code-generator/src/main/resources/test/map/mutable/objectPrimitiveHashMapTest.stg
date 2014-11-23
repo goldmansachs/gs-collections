@@ -26,7 +26,6 @@ import java.util.Iterator;
 import com.gs.collections.api.block.function.primitive.<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>Function0;
 import com.gs.collections.api.block.function.primitive.<name>To<name>Function;
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.map.primitive.MutableObject<name>Map;
 import com.gs.collections.impl.factory.primitive.Object<name>Maps;
 import com.gs.collections.impl.test.Verify;

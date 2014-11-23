@@ -102,8 +102,8 @@ public abstract class AbstractObject<name>MapTestCase
         Assert.assertEquals(<(literal.(type))("0")>, this.map.getOrThrow("0")<delta.(type)>);
         Assert.assertEquals(<(literal.(type))("1")>, this.map.getOrThrow("1")<delta.(type)>);
         Assert.assertEquals(<(literal.(type))("2")>, this.map.getOrThrow("2")<delta.(type)>);
-        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow("5"); });
-        Verify.assertThrows(IllegalStateException.class, () -> { this.map.getOrThrow(null); });
+        Verify.assertThrows(IllegalStateException.class, () -> this.map.getOrThrow("5"));
+        Verify.assertThrows(IllegalStateException.class, () -> this.map.getOrThrow(null));
     }
 
     @Test

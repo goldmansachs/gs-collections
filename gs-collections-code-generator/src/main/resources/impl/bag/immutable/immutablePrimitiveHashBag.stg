@@ -193,7 +193,7 @@ final class Immutable<name>HashBag implements Immutable<name>Bag, Serializable
 
     public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
     {
-        return ((<name>HashBag) this.delegate).injectInto(injectedValue, function);
+        return this.delegate.injectInto(injectedValue, function);
     }
 
     @Override

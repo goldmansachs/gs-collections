@@ -25,7 +25,6 @@ package com.gs.collections.impl.map.immutable.primitive;
 import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
 import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
-import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
 import com.gs.collections.impl.map.primitive.Abstract<name1><name2>MapTestCase;
 import com.gs.collections.impl.test.Verify;
@@ -106,7 +105,7 @@ public abstract class AbstractImmutable<name1><name2>MapTestCase extends Abstrac
         super.keySet();
         Verify.assertThrows(
                 UnsupportedOperationException.class,
-                () -> { this.classUnderTest().keySet().remove(<(literal.(type1))("0")>); });
+                () -> this.classUnderTest().keySet().remove(<(literal.(type1))("0")>));
     }
 
     @Override
@@ -115,7 +114,7 @@ public abstract class AbstractImmutable<name1><name2>MapTestCase extends Abstrac
         super.values();
         Verify.assertThrows(
                 UnsupportedOperationException.class,
-                () -> { this.classUnderTest().values().remove(<(literal.(type2))("0")>); });
+                () -> this.classUnderTest().values().remove(<(literal.(type2))("0")>));
     }
 }
 

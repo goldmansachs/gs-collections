@@ -428,48 +428,48 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void min_withComparator()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().min(Comparators.naturalOrder()); });
+        Verify.assertThrows(NoSuchElementException.class, () -> this.classUnderTest().min(Comparators.naturalOrder()));
     }
 
     @Test
     public void max_withComparator()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().max(Comparators.naturalOrder()); });
+        Verify.assertThrows(NoSuchElementException.class, () -> this.classUnderTest().max(Comparators.naturalOrder()));
     }
 
     @Override
     @Test
     public void minBy()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().minBy(String::valueOf); });
+        Verify.assertThrows(NoSuchElementException.class, () -> this.classUnderTest().minBy(String::valueOf));
     }
 
     @Override
     @Test
     public void maxBy()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().maxBy(String::valueOf); });
+        Verify.assertThrows(NoSuchElementException.class, () -> this.classUnderTest().maxBy(String::valueOf));
     }
 
     @Override
     @Test
     public void min()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().min(); });
+        Verify.assertThrows(NoSuchElementException.class, () -> this.classUnderTest().min());
     }
 
     @Override
     @Test
     public void max()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> { this.classUnderTest().max(); });
+        Verify.assertThrows(NoSuchElementException.class, () -> this.classUnderTest().max());
     }
 
     @Override
     @Test
     public void sumOfInt()
     {
-        Assert.assertEquals(0L, this.classUnderTest().sumOfInt((String value) -> value.length()));
+        Assert.assertEquals(0L, this.classUnderTest().sumOfInt(String::length));
     }
 
     @Override
@@ -505,10 +505,9 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void flatCollect()
     {
-        Function\<String, Iterable\<Character>\> function = (String value) -> StringIterate.toSet(value);
-        Verify.assertIterableEmpty(this.classUnderTest().flatCollect(function));
+        Verify.assertIterableEmpty(this.classUnderTest().flatCollect(StringIterate::toSet));
         UnifiedSet\<Character> target = UnifiedSet.newSet();
-        Assert.assertSame(target, this.classUnderTest().flatCollect(function, target));
+        Assert.assertSame(target, this.classUnderTest().flatCollect(StringIterate::toSet, target));
         Verify.assertIterableEmpty(target);
     }
 
@@ -688,7 +687,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     {
         Immutable<name>ObjectMap\<String> map1 = this.classUnderTest();
 
-        MutableSortedBag sortedBag = map1.toSortedBag(Comparator.reverseOrder());
+        MutableSortedBag\<String> sortedBag = map1.toSortedBag(Comparator.reverseOrder());
         sortedBag.addOccurrences("apple", 3);
         sortedBag.addOccurrences("orange", 2);
 
@@ -704,7 +703,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
         sortedBag.addOccurrences(1, 3);
         sortedBag.addOccurrences(10, 2);
 
-        Verify.assertSortedBagsEqual(TreeBag.\<Integer>newBagWith(Comparators.byFunction(function), 10, 10, 1, 1, 1), sortedBag);
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.byFunction(function), 10, 10, 1, 1, 1), sortedBag);
     }
 }
 
