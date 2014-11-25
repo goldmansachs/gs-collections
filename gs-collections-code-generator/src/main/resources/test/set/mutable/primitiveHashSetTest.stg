@@ -40,7 +40,7 @@ public class <name>HashSetTest extends Abstract<name>SetTestCase
     @Override
     protected <name>HashSet newWith(<type>... elements)
     {
-        return <name>HashSet.newSetWith(elements);
+        return (<name>HashSet) <name>Sets.mutable.of(elements);
     }
 
     @Test

@@ -14,7 +14,9 @@ body(type, name) ::= <<
 package com.gs.collections.impl.factory.primitive;
 
 import com.gs.collections.api.factory.set.primitive.Immutable<name>SetFactory;
+import com.gs.collections.api.factory.set.primitive.Mutable<name>SetFactory;
 import com.gs.collections.impl.set.immutable.primitive.Immutable<name>SetFactoryImpl;
+import com.gs.collections.impl.set.mutable.primitive.Mutable<name>SetFactoryImpl;
 
 /**
  * <name>Sets is a static utility for creating {@link Immutable<name>SetFactory}.
@@ -26,6 +28,7 @@ import com.gs.collections.impl.set.immutable.primitive.Immutable<name>SetFactory
 public final class <name>Sets
 {
     public static final Immutable<name>SetFactory immutable = new Immutable<name>SetFactoryImpl();
+    public static final Mutable<name>SetFactory mutable = new Mutable<name>SetFactoryImpl();
 
     private <name>Sets()
     {
