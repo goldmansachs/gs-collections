@@ -47,6 +47,12 @@ public abstract class AbstractMutableBooleanValuesMap extends AbstractBooleanIte
 
     protected abstract boolean getEmptyValue();
 
+    protected abstract boolean getValueAtIndex(int index);
+
+    protected abstract int getTableSize();
+
+    protected abstract boolean isNonSentinelAtIndex(int index);
+
     protected void addEmptyKeyValue(boolean value)
     {
         this.getSentinelValues().containsZeroKey = true;
@@ -122,11 +128,6 @@ public abstract class AbstractMutableBooleanValuesMap extends AbstractBooleanIte
     public void forEach(BooleanProcedure procedure)
     {
         this.forEachValue(procedure);
-    }
-
-    protected SentinelValues createNewSentinelValues()
-    {
-        return new SentinelValues();
     }
 
     protected static class SentinelValues extends AbstractSentinelValues

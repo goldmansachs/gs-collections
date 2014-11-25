@@ -59,7 +59,9 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
 
     protected abstract <type> getEmptyValue();
 
-    protected abstract <type>[] getValues();
+    protected abstract <type> getValueAtIndex(int index);
+
+    protected abstract int getTableSize();
 
     protected abstract boolean isNonSentinelAtIndex(int index);
 
@@ -203,7 +205,7 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
                     first = false;
                 }
             }
-            for (int i = 0; i \< this.getValues().length; i++)
+            for (int i = 0; i \< this.getTableSize(); i++)
             {
                 if (this.isNonSentinelAtIndex(i))
                 {
@@ -211,7 +213,7 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
                     {
                         appendable.append(separator);
                     }
-                    appendable.append(String.valueOf(this.getValues()[i]));
+                    appendable.append(String.valueOf(this.getValueAtIndex(i)));
                     first = false;
                 }
             }
@@ -256,11 +258,11 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
                 result.add(this.getSentinelValues().oneValue);
             }
         }
-        for (int i = 0; i \< this.getValues().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (this.isNonSentinelAtIndex(i) && !predicate.accept(this.getValues()[i]))
+            if (this.isNonSentinelAtIndex(i) && !predicate.accept(this.getValueAtIndex(i)))
             {
-                result.add(this.getValues()[i]);
+                result.add(this.getValueAtIndex(i));
             }
         }
         return result;
@@ -280,11 +282,11 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
                 target.add(function.valueOf(this.getSentinelValues().oneValue));
             }
         }
-        for (int i = 0; i \< this.getValues().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
             if (this.isNonSentinelAtIndex(i))
             {
-                target.add(function.valueOf(this.getValues()[i]));
+                target.add(function.valueOf(this.getValueAtIndex(i)));
             }
         }
         return target;
@@ -322,9 +324,9 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
                 return false;
             }
         }
-        for (int i = 0; i \< this.getValues().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (this.isNonSentinelAtIndex(i) && !predicate.accept(this.getValues()[i]))
+            if (this.isNonSentinelAtIndex(i) && !predicate.accept(this.getValueAtIndex(i)))
             {
                 return false;
             }
@@ -345,9 +347,9 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
                 return false;
             }
         }
-        for (int i = 0; i \< this.getValues().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (this.isNonSentinelAtIndex(i) && predicate.accept(this.getValues()[i]))
+            if (this.isNonSentinelAtIndex(i) && predicate.accept(this.getValueAtIndex(i)))
             {
                 return false;
             }
@@ -370,9 +372,9 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
         {
             return true;
         }
-        for (int i = 0; i \< this.getValues().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (this.isNonSentinelAtIndex(i) && <(equals.(type))({this.getValues()[i]}, "value")>)
+            if (this.isNonSentinelAtIndex(i) && <(equals.(type))({this.getValueAtIndex(i)}, "value")>)
             {
                 return true;
             }
@@ -678,11 +680,11 @@ if (this.getSentinelValues() != null)
         <"this.getSentinelValues().oneValue":{value | <template>}>;
     }
 }
-for (int i = 0; i \< this.getValues().length; i++)
+for (int i = 0; i \< this.getTableSize(); i++)
 {
     if (this.isNonSentinelAtIndex(i))
     {
-        <{this.getValues()[i]}:{value | <template>}>;
+        <{this.getValueAtIndex(i)}:{value | <template>}>;
     }
 }
 >>
@@ -699,11 +701,11 @@ if (this.getSentinelValues() != null)
         <"this.getSentinelValues().oneValue":{ value | <template>}>;
     }
 }
-for (int i = 0; i \< this.getValues().length; i++)
+for (int i = 0; i \< this.getTableSize(); i++)
 {
-    if (this.isNonSentinelAtIndex(i) && predicate.accept(this.getValues()[i]))
+    if (this.isNonSentinelAtIndex(i) && predicate.accept(this.getValueAtIndex(i)))
     {
-        <{this.getValues()[i]}:{ value | <template>}>;
+        <{this.getValueAtIndex(i)}:{ value | <template>}>;
     }
 }
 >>

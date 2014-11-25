@@ -178,9 +178,15 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
     }
 
     @Override
-    protected <type2>[] getValues()
+    protected int getTableSize()
     {
-        return this.<valueArray>;
+        return this.<valueArray>.length<if(sameTwoPrimitives)> / 2<endif>;
+    }
+
+    @Override
+    protected <type2> getValueAtIndex(int index)
+    {
+        return this.<valueArray>[index<if(sameTwoPrimitives)> * 2 + 1<endif>];
     }
 
     @Override
@@ -287,66 +293,6 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
         return appendable.toString();
     }
 
-<if(sameTwoPrimitives)>
-    @Override
-    public void appendString(Appendable appendable, String start, String separator, String end)
-    {
-        try
-        {
-            appendable.append(start);
-
-            boolean first = true;
-
-            if (this.sentinelValues != null)
-            {
-                if (this.sentinelValues.containsZeroKey)
-                {
-                    appendable.append(String.valueOf(this.sentinelValues.zeroValue));
-                    first = false;
-                }
-                if (this.sentinelValues.containsOneKey)
-                {
-                    if (!first)
-                    {
-                        appendable.append(separator);
-                    }
-                    appendable.append(String.valueOf(this.sentinelValues.oneValue));
-                    first = false;
-                }
-            }
-            for (int i = 0; i \< this.<keyArray>.length; i<increment>)
-            {
-                <type1> key = this.<keyArray>[i];
-                if (isNonSentinel(key))
-                {
-                    if (!first)
-                    {
-                        appendable.append(separator);
-                    }
-                    appendable.append(String.valueOf(this.<valueArray>[i<valueIndex>]));
-                    first = false;
-                }
-            }
-            appendable.append(end);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public <type2>[] toArray()
-    {
-        <type2>[] array = new <type2>[this.size()];
-        int index = 0;
-
-        <forEachValue(template = {array[index] = <value>;<\n>index++})>
-
-        return array;
-    }
-
-<endif>
     public Mutable<name2>Iterator <type2>Iterator()
     {
         return new Internal<name2>Iterator();
@@ -969,19 +915,6 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
         return result;
     }
 
-<if(sameTwoPrimitives)>
-    @Override
-    public <wideType.(type2)> sum()
-    {
-        <wideType.(type2)> result = <wideZero.(type2)>;
-
-        <forEachValue(template = {result += <value>})>
-
-        return result;
-    }
-
-<endif>
-
     public void writeExternal(ObjectOutput out) throws IOException
     {
         out.writeInt(this.size());
@@ -1130,7 +1063,7 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
     @Override
     protected boolean isNonSentinelAtIndex(int index)
     {
-        return !isEmptyKey(this.<keyArray>[index]) && !isRemovedKey(this.<keyArray>[index]);
+        return !isEmptyKey(this.<keyArray>[index<if(sameTwoPrimitives)> * 2<endif>]) && !isRemovedKey(this.<keyArray>[index<if(sameTwoPrimitives)> * 2<endif>]);
     }
 
     private int maxOccupiedWithData()

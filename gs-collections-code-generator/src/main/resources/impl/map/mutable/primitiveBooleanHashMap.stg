@@ -158,6 +158,24 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         return EMPTY_VALUE;
     }
 
+    @Override
+    protected int getTableSize()
+    {
+        return this.values.length();
+    }
+
+    @Override
+    protected boolean getValueAtIndex(int index)
+    {
+        return this.values.get(index);
+    }
+
+    @Override
+    protected boolean isNonSentinelAtIndex(int index)
+    {
+        return !isEmptyKey(this.keys[index]) && !isRemovedKey(this.keys[index]);
+    }
+
     private int smallestPowerOfTwoGreaterThan(int n)
     {
         return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
