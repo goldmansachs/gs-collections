@@ -16,28 +16,27 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
-import com.gs.collections.api.set.ParallelSetIterable;
-import com.gs.collections.impl.block.factory.HashingStrategies;
-import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Test;
 
-public class UnifiedSetWithHashingStrategyDefaultParallelSetIterableTest extends AbstractParallelUnsortedSetIterableTestCase
+public class UnmodifiableUnsortedSetParallelTest extends ParallelUnsortedSetIterableTestCase
 {
     @Override
-    protected ParallelSetIterable<Integer> classUnderTest()
+    protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
-        return UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.defaultStrategy(), 1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 2);
+        return UnifiedSet.newSetWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asUnmodifiable().asParallel(this.executorService, 2);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void asParallel_small_batch()
     {
-        UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.defaultStrategy(), 1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 0);
+        UnifiedSet.newSetWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asUnmodifiable().asParallel(this.executorService, 0);
     }
 
     @Test(expected = NullPointerException.class)
     public void asParallel_null_executorService()
     {
-        UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.defaultStrategy(), 1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(null, 2);
+        UnifiedSet.newSetWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asUnmodifiable().asParallel(null, 2);
     }
 }

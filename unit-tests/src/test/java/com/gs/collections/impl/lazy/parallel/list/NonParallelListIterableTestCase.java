@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.set;
+package com.gs.collections.impl.lazy.parallel.list;
 
 import org.junit.Test;
 
-public abstract class AbstractNonParallelSetIterableTest extends AbstractParallelSetIterableTestCase
+public abstract class NonParallelListIterableTestCase extends ParallelListIterableTestCase
 {
     @Override
     @Test

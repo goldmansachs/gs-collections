@@ -20,7 +20,7 @@ import com.gs.collections.api.bag.ParallelBag;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import org.junit.Test;
 
-public class ParallelBagTest extends AbstractParallelBagTestCase
+public class ParallelBagTest extends ParallelBagTestCase
 {
     @Override
     protected ParallelBag<Integer> classUnderTest()

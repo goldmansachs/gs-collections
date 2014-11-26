@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.set;
+package com.gs.collections.impl.lazy.parallel.set.sorted;
+
+import java.util.TreeSet;
 
 import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.factory.SortedSets;
-import com.gs.collections.impl.lazy.parallel.set.sorted.ParallelSortedSetIterableTestCase;
+import com.gs.collections.impl.set.sorted.mutable.SortedSetAdapter;
+import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 
-public class ImmutableTreeSetParallelSetIterableTest extends ParallelSortedSetIterableTestCase
+public class SortedSetAdapterParallelSetIterableTest extends NonParallelSortedSetIterableTestCase
 {
     @Override
     protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
-        return SortedSets.immutable.<Integer>with(Comparators.reverseNaturalOrder(), 4, 3, 2, 1).asParallel(this.executorService, 2);
+        return SortedSetAdapter.adapt(new TreeSet<Integer>(TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1))).asParallel(this.executorService, 2);
     }
 }

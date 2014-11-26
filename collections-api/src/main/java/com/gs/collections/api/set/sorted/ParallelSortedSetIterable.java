@@ -16,6 +16,8 @@
 
 package com.gs.collections.api.set.sorted;
 
+import java.util.Comparator;
+
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
@@ -31,6 +33,10 @@ import com.gs.collections.api.set.ParallelSetIterable;
 @Beta
 public interface ParallelSortedSetIterable<T> extends ParallelSetIterable<T>
 {
+    Comparator<? super T> comparator();
+
+    ParallelSortedSetIterable<T> asUnique();
+
     /**
      * Creates a parallel iterable for selecting elements from the current iterable.
      */

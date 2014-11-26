@@ -22,11 +22,35 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.concurrent.ExecutorService;
 
+import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.list.ParallelListIterable;
+import com.gs.collections.api.map.MapIterable;
+import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
+import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.AbstractBatch;
+import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
+import com.gs.collections.impl.lazy.parallel.list.ListBatch;
+import com.gs.collections.impl.lazy.parallel.set.sorted.AbstractParallelSortedSetIterable;
+import com.gs.collections.impl.lazy.parallel.set.sorted.CollectSortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.sorted.RootSortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.sorted.SelectSortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.sorted.SortedSetBatch;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import net.jcip.annotations.Immutable;
 
@@ -176,5 +200,330 @@ final class ImmutableTreeSet<T>
         return this.comparator == null
                 ? ((Comparable<T>) o1).compareTo(o2)
                 : this.comparator.compare(o1, o2);
+    }
+
+    @Override
+    public ParallelSortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        return new SortedSetIterableParallelIterable(executorService, batchSize);
+    }
+
+    private final class SortedSetIterableParallelIterable extends AbstractParallelSortedSetIterable<T, RootSortedSetBatch<T>>
+    {
+        private final ExecutorService executorService;
+        private final int batchSize;
+
+        private SortedSetIterableParallelIterable(ExecutorService executorService, int batchSize)
+        {
+            if (executorService == null)
+            {
+                throw new NullPointerException();
+            }
+            if (batchSize < 1)
+            {
+                throw new IllegalArgumentException();
+            }
+            this.executorService = executorService;
+            this.batchSize = batchSize;
+        }
+
+        public Comparator<? super T> comparator()
+        {
+            return ImmutableTreeSet.this.comparator;
+        }
+
+        @Override
+        public ExecutorService getExecutorService()
+        {
+            return this.executorService;
+        }
+
+        @Override
+        public LazyIterable<RootSortedSetBatch<T>> split()
+        {
+            return new SortedSetIterableParallelBatchLazyIterable();
+        }
+
+        public void forEach(Procedure<? super T> procedure)
+        {
+            AbstractParallelIterable.forEach(this, procedure);
+        }
+
+        public boolean anySatisfy(Predicate<? super T> predicate)
+        {
+            return AbstractParallelIterable.anySatisfy(this, predicate);
+        }
+
+        public boolean allSatisfy(Predicate<? super T> predicate)
+        {
+            return AbstractParallelIterable.allSatisfy(this, predicate);
+        }
+
+        public T detect(Predicate<? super T> predicate)
+        {
+            return AbstractParallelIterable.detect(this, predicate);
+        }
+
+        @Override
+        public <V> ParallelListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.flatCollect(function).asParallel(this.executorService, this.batchSize);
+        }
+
+        @Override
+        public T min(Comparator<? super T> comparator)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.min(comparator);
+        }
+
+        @Override
+        public T max(Comparator<? super T> comparator)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.max(comparator);
+        }
+
+        @Override
+        public T min()
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.min();
+        }
+
+        @Override
+        public T max()
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.max();
+        }
+
+        @Override
+        public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.minBy(function);
+        }
+
+        @Override
+        public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.maxBy(function);
+        }
+
+        @Override
+        public long sumOfInt(IntFunction<? super T> function)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.sumOfInt(function);
+        }
+
+        @Override
+        public double sumOfFloat(FloatFunction<? super T> function)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.sumOfFloat(function);
+        }
+
+        @Override
+        public long sumOfLong(LongFunction<? super T> function)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.sumOfLong(function);
+        }
+
+        @Override
+        public double sumOfDouble(DoubleFunction<? super T> function)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.sumOfDouble(function);
+        }
+
+        @Override
+        public Object[] toArray()
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.toArray();
+        }
+
+        @Override
+        public <E> E[] toArray(E[] array)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.toArray(array);
+        }
+
+        @Override
+        public <V> ImmutableSortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.groupBy(function);
+        }
+
+        @Override
+        public <V> ImmutableSortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.groupByEach(function);
+        }
+
+        @Override
+        public <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+        {
+            // TODO: Implement in parallel
+            return ImmutableTreeSet.this.groupByUniqueKey(function);
+        }
+
+        @Override
+        public int getBatchSize()
+        {
+            return this.batchSize;
+        }
+
+        private class SortedSetIterableParallelBatchIterator implements Iterator<RootSortedSetBatch<T>>
+        {
+            protected int chunkIndex;
+
+            public boolean hasNext()
+            {
+                return this.chunkIndex * SortedSetIterableParallelIterable.this.getBatchSize() < ImmutableTreeSet.this.size();
+            }
+
+            public RootSortedSetBatch<T> next()
+            {
+                int chunkStartIndex = this.chunkIndex * SortedSetIterableParallelIterable.this.getBatchSize();
+                int chunkEndIndex = (this.chunkIndex + 1) * SortedSetIterableParallelIterable.this.getBatchSize();
+                int truncatedChunkEndIndex = Math.min(chunkEndIndex, ImmutableTreeSet.this.size());
+                this.chunkIndex++;
+                return new ImmutableTreeSetBatch(chunkStartIndex, truncatedChunkEndIndex);
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException("Cannot call remove() on " + ImmutableTreeSet.this.getClass().getSimpleName());
+            }
+        }
+
+        private class SortedSetIterableParallelBatchLazyIterable
+                extends AbstractLazyIterable<RootSortedSetBatch<T>>
+        {
+            public void forEach(Procedure<? super RootSortedSetBatch<T>> procedure)
+            {
+                this.each(procedure);
+            }
+
+            public void each(Procedure<? super RootSortedSetBatch<T>> procedure)
+            {
+                for (RootSortedSetBatch<T> chunk : this)
+                {
+                    procedure.value(chunk);
+                }
+            }
+
+            public <P> void forEachWith(Procedure2<? super RootSortedSetBatch<T>, ? super P> procedure, P parameter)
+            {
+                for (RootSortedSetBatch<T> chunk : this)
+                {
+                    procedure.value(chunk, parameter);
+                }
+            }
+
+            public void forEachWithIndex(ObjectIntProcedure<? super RootSortedSetBatch<T>> objectIntProcedure)
+            {
+                throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEachWithIndex() not implemented yet");
+            }
+
+            public Iterator<RootSortedSetBatch<T>> iterator()
+            {
+                return new SortedSetIterableParallelBatchIterator();
+            }
+        }
+    }
+
+    public class ImmutableTreeSetBatch extends AbstractBatch<T> implements RootSortedSetBatch<T>
+    {
+        private final int chunkStartIndex;
+        private final int chunkEndIndex;
+
+        public ImmutableTreeSetBatch(int chunkStartIndex, int chunkEndIndex)
+        {
+            this.chunkStartIndex = chunkStartIndex;
+            this.chunkEndIndex = chunkEndIndex;
+        }
+
+        public void forEach(Procedure<? super T> procedure)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                procedure.value(ImmutableTreeSet.this.delegate[i]);
+            }
+        }
+
+        @Override
+        public int count(Predicate<? super T> predicate)
+        {
+            int count = 0;
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                if (predicate.accept(ImmutableTreeSet.this.delegate[i]))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public boolean anySatisfy(Predicate<? super T> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                if (predicate.accept(ImmutableTreeSet.this.delegate[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean allSatisfy(Predicate<? super T> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                if (!predicate.accept(ImmutableTreeSet.this.delegate[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public T detect(Predicate<? super T> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                if (predicate.accept(ImmutableTreeSet.this.delegate[i]))
+                {
+                    return ImmutableTreeSet.this.delegate[i];
+                }
+            }
+            return null;
+        }
+
+        public SortedSetBatch<T> select(Predicate<? super T> predicate)
+        {
+            return new SelectSortedSetBatch<T>(this, predicate);
+        }
+
+        public <V> ListBatch<V> collect(Function<? super T, ? extends V> function)
+        {
+            return new CollectSortedSetBatch<T, V>(this, function);
+        }
+
+        public SortedSetBatch<T> distinct(ConcurrentHashMap<T, Boolean> distinct)
+        {
+            return this;
+        }
     }
 }

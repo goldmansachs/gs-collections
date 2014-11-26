@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.list;
+package com.gs.collections.impl.lazy.parallel.set.sorted;
 
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.ParallelListIterable;
+import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.factory.SortedSets;
+import com.gs.collections.impl.lazy.parallel.list.ParallelListIterableTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
 
-public class ParallelCollectListIterableTest extends ParallelListIterableTestCase
+public class ParallelCollectSortedSetIterableTest extends ParallelListIterableTestCase
 {
     @Override
     protected ParallelListIterable<Integer> classUnderTest()
     {
-        return FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
+        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), 4.4, 4.3, 4.2, 4.1, 3.3, 3.2, 3.1, 2.2, 2.1, 1.0)
                 .asParallel(this.executorService, 2)
-                .collect(String::valueOf)
-                .collect(Integer::valueOf);
+                .collect(Double::intValue);
+    }
+
+    @Override
+    protected MutableList<Integer> getExpected()
+    {
+        return FastList.newListWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
     }
 }

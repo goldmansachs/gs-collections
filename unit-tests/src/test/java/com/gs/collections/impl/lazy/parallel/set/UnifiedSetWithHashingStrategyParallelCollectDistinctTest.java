@@ -16,47 +16,25 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
-import com.gs.collections.api.ParallelIterable;
-import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
-import com.gs.collections.impl.lazy.parallel.ParallelIterableTestCase;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ParallelCollectSelectSetIterableTest extends ParallelIterableTestCase
+public class UnifiedSetWithHashingStrategyParallelCollectDistinctTest extends ParallelUnsortedSetIterableTestCase
 {
     @Override
-    protected ParallelIterable<Integer> classUnderTest()
+    protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
-        Function<Double, Integer> intValue = Double::intValue;
-        return UnifiedSet.newSetWith(0.0, 1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4, 5.0)
+        Function<Double, Integer> function = Double::intValue;
+        return (ParallelUnsortedSetIterable<Integer>) UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.defaultStrategy(), 1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4)
                 .asParallel(this.executorService, 2)
-                .collect(intValue)
-                .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
-    }
-
-    @Override
-    protected MutableBag<Integer> getExpected()
-    {
-        return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
-    }
-
-
-    @Override
-    protected boolean isOrdered()
-    {
-        return false;
-    }
-
-    @Override
-    protected boolean isUnique()
-    {
-        return false;
+                .collect(function)
+                .asUnique();
     }
 
     @Test
@@ -66,7 +44,7 @@ public class ParallelCollectSelectSetIterableTest extends ParallelIterableTestCa
         Function<Integer, Boolean> isOddFunction = object -> IntegerPredicates.isOdd().accept(object);
 
         Assert.assertEquals(
-                this.getExpected().toBag().groupBy(isOddFunction),
+                this.getExpected().toSet().groupBy(isOddFunction),
                 this.classUnderTest().groupBy(isOddFunction));
     }
 
@@ -75,7 +53,7 @@ public class ParallelCollectSelectSetIterableTest extends ParallelIterableTestCa
     public void groupByEach()
     {
         Assert.assertEquals(
-                this.getExpected().toBag().groupByEach(new NegativeIntervalFunction()),
+                this.getExpected().toSet().groupByEach(new NegativeIntervalFunction()),
                 this.classUnderTest().groupByEach(new NegativeIntervalFunction()));
     }
 }

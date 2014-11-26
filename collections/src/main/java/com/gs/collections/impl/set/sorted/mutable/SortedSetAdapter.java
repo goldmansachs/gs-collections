@@ -48,10 +48,10 @@ import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
-import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
@@ -71,6 +71,7 @@ import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionAdapter;
 import com.gs.collections.impl.factory.SortedSets;
+import com.gs.collections.impl.lazy.parallel.set.sorted.NonParallelSortedSetIterable;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
@@ -550,8 +551,16 @@ public final class SortedSetAdapter<T>
         return SortedSetIterables.compare(this, o);
     }
 
-    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    public ParallelSortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
-        throw new UnsupportedOperationException("asParallel() method is not supported for " + this.getClass().getSimpleName() + '.');
+        if (executorService == null)
+        {
+            throw new NullPointerException();
+        }
+        if (batchSize < 1)
+        {
+            throw new IllegalArgumentException();
+        }
+        return new NonParallelSortedSetIterable<T>(this);
     }
 }

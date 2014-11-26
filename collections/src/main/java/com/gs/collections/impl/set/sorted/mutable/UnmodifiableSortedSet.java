@@ -48,10 +48,10 @@ import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
-import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
@@ -442,7 +442,7 @@ public class UnmodifiableSortedSet<T>
         return new UnmodifiableCollectionSerializationProxy<T>(this.getSortedSet());
     }
 
-    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    public ParallelSortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
         return this.getSortedSet().asParallel(executorService, batchSize);
     }

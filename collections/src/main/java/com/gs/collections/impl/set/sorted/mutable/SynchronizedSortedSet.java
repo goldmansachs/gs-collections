@@ -49,16 +49,17 @@ import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
-import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.AbstractSynchronizedMutableCollection;
 import com.gs.collections.impl.collection.mutable.SynchronizedCollectionSerializationProxy;
 import com.gs.collections.impl.factory.SortedSets;
+import com.gs.collections.impl.lazy.parallel.set.sorted.SynchronizedParallelSortedSetIterable;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
@@ -633,8 +634,8 @@ public class SynchronizedSortedSet<T>
         return new SynchronizedCollectionSerializationProxy<T>(this.getSortedSet());
     }
 
-    public ParallelSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    public ParallelSortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
-        throw new UnsupportedOperationException("asParallel() method is not supported for " + this.getClass().getSimpleName() + '.');
+        return new SynchronizedParallelSortedSetIterable<T>(this.getSortedSet().asParallel(executorService, batchSize), this);
     }
 }

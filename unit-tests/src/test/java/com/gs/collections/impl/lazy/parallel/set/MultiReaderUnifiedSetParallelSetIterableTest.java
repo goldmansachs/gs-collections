@@ -16,14 +16,14 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
-import com.gs.collections.api.set.ParallelSetIterable;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.set.mutable.MultiReaderUnifiedSet;
 import com.gs.collections.impl.set.mutable.SetAdapter;
 
-public class MultiReaderUnifiedSetParallelSetIterableTest extends AbstractParallelUnsortedSetIterableTestCase
+public class MultiReaderUnifiedSetParallelSetIterableTest extends ParallelUnsortedSetIterableTestCase
 {
     @Override
-    protected ParallelSetIterable<Integer> classUnderTest()
+    protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
         return SetAdapter.adapt(MultiReaderUnifiedSet.newSetWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)).asParallel(this.executorService, 2);
     }

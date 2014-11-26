@@ -64,6 +64,7 @@ import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionAdapter;
 import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.lazy.parallel.set.NonParallelUnsortedSetIterable;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.partition.set.PartitionUnifiedSet;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
@@ -452,6 +453,6 @@ public final class SetAdapter<T>
 
     public ParallelUnsortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
-        throw new UnsupportedOperationException("asParallel() method is not supported for " + this.getClass().getSimpleName() + '.');
+        return new NonParallelUnsortedSetIterable<T>(this);
     }
 }

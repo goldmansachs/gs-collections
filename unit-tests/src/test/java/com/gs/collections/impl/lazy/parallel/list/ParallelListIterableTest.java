@@ -20,7 +20,7 @@ import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Test;
 
-public class ParallelListIterableTest extends AbstractParallelListIterableTestCase
+public class ParallelListIterableTest extends ParallelListIterableTestCase
 {
     @Override
     protected ParallelListIterable<Integer> classUnderTest()

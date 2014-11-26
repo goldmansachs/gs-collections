@@ -14,55 +14,28 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.set;
+package com.gs.collections.impl.lazy.parallel.set.sorted;
 
-import com.gs.collections.api.ParallelIterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.impl.block.factory.HashingStrategies;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
+import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
-import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableTestCase;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
-import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
+import com.gs.collections.impl.factory.SortedSets;
+import com.gs.collections.impl.lazy.parallel.set.ParallelUnsortedSetIterableTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class UnifiedSetWithHashingStrategyParallelCollectDistinctSetIterableTest extends AbstractParallelIterableTestCase
+public class ParallelCollectDistinctSortedSetIterableTest extends ParallelUnsortedSetIterableTestCase
 {
     @Override
-    protected ParallelIterable<Integer> classUnderTest()
+    protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
         Function<Double, Integer> function = Double::intValue;
-        return UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.defaultStrategy(), 1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4)
+        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), 4.4, 4.3, 4.2, 4.1, 3.3, 3.2, 3.1, 2.2, 2.1, 1.1)
                 .asParallel(this.executorService, 2)
                 .collect(function)
                 .asUnique();
-    }
-
-    @Override
-    protected MutableSet<Integer> getExpected()
-    {
-        return UnifiedSet.newSetWith(1, 2, 3, 4);
-    }
-
-    @Override
-    protected <T> RichIterable<T> getActual(ParallelIterable<T> actual)
-    {
-        return actual.toSet();
-    }
-
-    @Override
-    protected boolean isOrdered()
-    {
-        return false;
-    }
-
-    @Override
-    protected boolean isUnique()
-    {
-        return true;
     }
 
     @Test

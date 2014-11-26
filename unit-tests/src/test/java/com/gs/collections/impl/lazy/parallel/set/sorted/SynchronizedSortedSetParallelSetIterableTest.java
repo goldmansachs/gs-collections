@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.set;
+package com.gs.collections.impl.lazy.parallel.set.sorted;
 
-import com.gs.collections.api.set.ParallelSetIterable;
-import com.gs.collections.impl.lazy.parallel.AbstractUnsupportedParallelIterableTestCase;
+import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
+import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 
-public class UnmodifiableSortedSetParallelSetIterableTest extends AbstractUnsupportedParallelIterableTestCase
+public class SynchronizedSortedSetParallelSetIterableTest extends NonParallelSortedSetIterableTestCase
 {
     @Override
-    protected ParallelSetIterable<Integer> classUnderTest()
+    protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
-        return TreeSortedSet.newSetWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asUnmodifiable().asParallel(this.executorService, 2);
+        return TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1).asSynchronized().asParallel(this.executorService, 2);
     }
 }

@@ -85,11 +85,6 @@ public abstract class AbstractParallelIterableImpl<T, B extends Batch<T>> extend
         return this.select(predicate).collect(function);
     }
 
-    public <V> ParallelIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".flatCollect() not implemented yet");
-    }
-
     public <V> UnsortedBagMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)
     {
         final MutableBagMultimap<V, T> result = SynchronizedPutHashBagMultimap.newMultimap();

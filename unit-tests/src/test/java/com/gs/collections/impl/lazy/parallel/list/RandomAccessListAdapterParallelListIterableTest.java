@@ -22,7 +22,7 @@ import com.gs.collections.impl.list.mutable.ListAdapter;
 import com.gs.collections.impl.list.mutable.RandomAccessListAdapter;
 import org.junit.Test;
 
-public class RandomAccessListAdapterParallelListIterableTest extends AbstractParallelListIterableTestCase
+public class RandomAccessListAdapterParallelListIterableTest extends ParallelListIterableTestCase
 {
     @Override
     protected ParallelListIterable<Integer> classUnderTest()

@@ -23,7 +23,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.ArrayListAdapter;
 import org.junit.Test;
 
-public class UnmodifiableMutableListParallelListIterableTest extends AbstractParallelListIterableTestCase
+public class UnmodifiableMutableListParallelListIterableTest extends ParallelListIterableTestCase
 {
     @Override
     protected ParallelListIterable<Integer> classUnderTest()

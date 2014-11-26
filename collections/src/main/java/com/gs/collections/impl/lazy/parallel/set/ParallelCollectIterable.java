@@ -36,6 +36,7 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableImpl;
 import com.gs.collections.impl.lazy.parallel.Batch;
+import com.gs.collections.impl.lazy.parallel.bag.NonParallelUnsortedBag;
 
 @Beta
 public class ParallelCollectIterable<T, V> extends AbstractParallelIterableImpl<V, Batch<V>>
@@ -94,11 +95,10 @@ public class ParallelCollectIterable<T, V> extends AbstractParallelIterableImpl<
         return resultItem == null ? null : this.function.valueOf(resultItem);
     }
 
-    @Override
     public <V1> ParallelIterable<V1> flatCollect(Function<? super V, ? extends Iterable<V1>> function)
     {
         // TODO: Implement in parallel
-        return this.delegate.toList().collect(this.function).flatCollect(function).asParallel(this.getExecutorService(), this.getBatchSize());
+        return new NonParallelUnsortedBag<V1>(this.delegate.toBag().collect(this.function).flatCollect(function));
     }
 
     @Override

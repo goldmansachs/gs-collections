@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.set;
+package com.gs.collections.impl.lazy.parallel.set.sorted;
 
-import com.gs.collections.api.set.ParallelSetIterable;
+import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
+import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.SortedSets;
-import com.gs.collections.impl.lazy.parallel.AbstractUnsupportedParallelIterableTestCase;
 
-public class ImmutableEmptySortedSetParallelSetIterableTest extends AbstractUnsupportedParallelIterableTestCase
+public class ParallelSelectSortedSetIterableTest extends ParallelSortedSetIterableTestCase
 {
     @Override
-    protected ParallelSetIterable<Integer> classUnderTest()
+    protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
-        return SortedSets.immutable.<Integer>with().asParallel(this.executorService, 2);
+        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), -1, 1, -1, 2, -1, 2, -1, 3, -1, 3, -1, 3, 5, 4, 5, 4, 5, 4, 5, 4, 5)
+                .asParallel(this.executorService, 2)
+                .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
     }
 }

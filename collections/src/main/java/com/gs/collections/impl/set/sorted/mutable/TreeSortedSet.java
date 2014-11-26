@@ -83,6 +83,7 @@ import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.factory.SortedSets;
+import com.gs.collections.impl.lazy.parallel.set.sorted.NonParallelSortedSetIterable;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
@@ -192,7 +193,7 @@ public class TreeSortedSet<T> extends AbstractMutableCollection<T>
         {
             throw new IllegalArgumentException();
         }
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asParallel() not implemented yet");
+        return new NonParallelSortedSetIterable<T>(this);
     }
 
     public ImmutableSortedSet<T> toImmutable()

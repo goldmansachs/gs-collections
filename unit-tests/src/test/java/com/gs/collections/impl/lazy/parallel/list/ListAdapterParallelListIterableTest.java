@@ -22,7 +22,7 @@ import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.ListAdapter;
 
-public class ListAdapterParallelListIterableTest extends AbstractNonParallelListIterableTest
+public class ListAdapterParallelListIterableTest extends NonParallelListIterableTestCase
 {
     @Override
     protected ParallelListIterable<Integer> classUnderTest()

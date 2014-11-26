@@ -17,7 +17,9 @@
 package com.gs.collections.api.set.sorted;
 
 import java.util.Comparator;
+import java.util.concurrent.ExecutorService;
 
+import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -147,4 +149,12 @@ public interface SortedSetIterable<T>
      * @since 5.0
      */
     ImmutableSortedSet<T> toImmutable();
+
+    /**
+     * Returns a parallel iterable of this SortedSetIterable.
+     *
+     * @since 6.0
+     */
+    @Beta
+    ParallelSortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize);
 }

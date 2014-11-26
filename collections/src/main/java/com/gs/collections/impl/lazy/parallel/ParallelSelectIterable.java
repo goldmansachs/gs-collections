@@ -31,6 +31,7 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
+import com.gs.collections.impl.lazy.parallel.bag.NonParallelUnsortedBag;
 
 @Beta
 public class ParallelSelectIterable<T> extends AbstractParallelIterableImpl<T, Batch<T>>
@@ -88,11 +89,10 @@ public class ParallelSelectIterable<T> extends AbstractParallelIterableImpl<T, B
         return this.parallelIterable.detect(Predicates.and(this.predicate, predicate));
     }
 
-    @Override
     public <V> ParallelIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         // TODO: Implement in parallel
-        return this.parallelIterable.toList().select(this.predicate).flatCollect(function).asParallel(this.getExecutorService(), this.getBatchSize());
+        return new NonParallelUnsortedBag<V>(this.parallelIterable.toBag().select(this.predicate).flatCollect(function));
     }
 
     @Override

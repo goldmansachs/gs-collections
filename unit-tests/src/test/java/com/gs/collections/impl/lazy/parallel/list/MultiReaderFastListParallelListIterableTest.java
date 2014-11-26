@@ -21,7 +21,7 @@ import com.gs.collections.impl.list.mutable.ListAdapter;
 import com.gs.collections.impl.list.mutable.MultiReaderFastList;
 import org.junit.Test;
 
-public class MultiReaderFastListParallelListIterableTest extends AbstractParallelListIterableTestCase
+public class MultiReaderFastListParallelListIterableTest extends ParallelListIterableTestCase
 {
     @Override
     protected ParallelListIterable<Integer> classUnderTest()

@@ -16,51 +16,24 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
-import com.gs.collections.api.ParallelIterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
-import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ParallelCollectDistinctSetIterableTest extends AbstractParallelIterableTestCase
+public class ParallelCollectDistinctSetIterableTest extends ParallelUnsortedSetIterableTestCase
 {
     @Override
-    protected ParallelIterable<Integer> classUnderTest()
+    protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
         Function<Double, Integer> function = Double::intValue;
-        return UnifiedSet.newSetWith(1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4)
+        return (ParallelUnsortedSetIterable<Integer>) UnifiedSet.newSetWith(1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4)
                 .asParallel(this.executorService, 2)
                 .collect(function)
                 .asUnique();
-    }
-
-    @Override
-    protected MutableSet<Integer> getExpected()
-    {
-        return UnifiedSet.newSetWith(1, 2, 3, 4);
-    }
-
-    @Override
-    protected <T> RichIterable<T> getActual(ParallelIterable<T> actual)
-    {
-        return actual.toSet();
-    }
-
-    @Override
-    protected boolean isOrdered()
-    {
-        return false;
-    }
-
-    @Override
-    protected boolean isUnique()
-    {
-        return true;
     }
 
     @Test

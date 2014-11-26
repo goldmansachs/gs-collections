@@ -17,18 +17,17 @@
 package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.ParallelIterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
-import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableTestCase;
+import com.gs.collections.impl.lazy.parallel.ParallelIterableTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ParallelCollectSetIterableTest extends AbstractParallelIterableTestCase
+public class ParallelCollectSetIterableTest extends ParallelIterableTestCase
 {
     @Override
     protected ParallelIterable<Integer> classUnderTest()
@@ -42,12 +41,6 @@ public class ParallelCollectSetIterableTest extends AbstractParallelIterableTest
     protected MutableBag<Integer> getExpected()
     {
         return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
-    }
-
-    @Override
-    protected <T> RichIterable<T> getActual(ParallelIterable<T> actual)
-    {
-        return actual.toBag();
     }
 
     @Override

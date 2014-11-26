@@ -16,14 +16,14 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
-import com.gs.collections.api.set.ParallelSetIterable;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Test;
 
-public class ParallelUnsortedSetIterableTest extends AbstractParallelUnsortedSetIterableTestCase
+public class ParallelUnsortedSetIterableTest extends ParallelUnsortedSetIterableTestCase
 {
     @Override
-    protected ParallelSetIterable<Integer> classUnderTest()
+    protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
         return UnifiedSet.newSetWith(1, 2, 3, 4).asParallel(this.executorService, 2);
     }

@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.set;
+package com.gs.collections.impl.lazy.parallel.set.sorted;
 
-import java.util.HashSet;
+import com.gs.collections.api.annotation.Beta;
+import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.impl.lazy.parallel.OrderedBatch;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
-import com.gs.collections.api.set.ParallelUnsortedSetIterable;
-import com.gs.collections.impl.set.mutable.SetAdapter;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
-
-public class SetAdapterParallelSetIterableTest extends NonParallelUnsortedSetIterableTestCase
+@Beta
+public interface SortedSetBatch<T> extends OrderedBatch<T>
 {
-    @Override
-    protected ParallelUnsortedSetIterable<Integer> classUnderTest()
-    {
-        return SetAdapter.adapt(new HashSet<Integer>(UnifiedSet.newSetWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4))).asParallel(this.executorService, 2);
-    }
+    SortedSetBatch<T> select(Predicate<? super T> predicate);
+
+    SortedSetBatch<T> distinct(ConcurrentHashMap<T, Boolean> distinct);
 }

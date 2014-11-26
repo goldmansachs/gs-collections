@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.list;
+package com.gs.collections.impl.lazy.parallel.set.sorted;
 
-import com.gs.collections.api.list.ParallelListIterable;
-import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
+import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import org.junit.Test;
 
-public class ImmutableListParallelListIterableTest extends ParallelListIterableTestCase
+public class ParallelSortedSetIterableTest extends NonParallelSortedSetIterableTestCase
 {
     @Override
-    protected ParallelListIterable<Integer> classUnderTest()
+    protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
-        return Lists.immutable.with(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 2);
+        return TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1).asParallel(this.executorService, 2);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void asParallel_small_batch()
     {
-        Lists.immutable.with(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 0);
+        TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1).asParallel(this.executorService, 0);
     }
 
     @Test(expected = NullPointerException.class)
     public void asParallel_null_executorService()
     {
-        Lists.immutable.with(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(null, 2);
+        TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1).asParallel(null, 2);
     }
 }

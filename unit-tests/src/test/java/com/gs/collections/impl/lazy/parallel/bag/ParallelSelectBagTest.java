@@ -20,7 +20,7 @@ import com.gs.collections.api.bag.ParallelBag;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Predicates;
 
-public class ParallelSelectBagTest extends AbstractParallelBagTestCase
+public class ParallelSelectBagTest extends ParallelBagTestCase
 {
     @Override
     protected ParallelBag<Integer> classUnderTest()

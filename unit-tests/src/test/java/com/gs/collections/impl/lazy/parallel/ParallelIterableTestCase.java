@@ -31,12 +31,13 @@ import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.map.sorted.MutableSortedMap;
+import com.gs.collections.api.list.ParallelListIterable;
+import com.gs.collections.api.set.ParallelSetIterable;
+import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -48,11 +49,6 @@ import com.gs.collections.impl.block.predicate.checked.CheckedPredicate;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure;
 import com.gs.collections.impl.list.Interval;
-import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
-import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.After;
@@ -60,7 +56,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public abstract class AbstractParallelIterableTestCase
+public abstract class ParallelIterableTestCase
 {
     protected ExecutorService executorService;
 
@@ -84,7 +80,27 @@ public abstract class AbstractParallelIterableTestCase
     // 1, 2, 2, 3, 3, 3, 4, 4, 4, 4
     protected abstract RichIterable<Integer> getExpected();
 
-    protected abstract <T> RichIterable<T> getActual(ParallelIterable<T> actual);
+    protected RichIterable<Integer> getExpectedCollect()
+    {
+        return this.getExpected();
+    }
+
+    protected final <T> RichIterable<T> getActual(ParallelIterable<T> actual)
+    {
+        if (actual instanceof ParallelListIterable<?>)
+        {
+            return actual.toList();
+        }
+        if (actual instanceof ParallelSortedSetIterable<?>)
+        {
+            return actual.toSortedSet(((ParallelSortedSetIterable<T>) actual).comparator());
+        }
+        if (actual instanceof ParallelSetIterable<?>)
+        {
+            return actual.toSet();
+        }
+        return actual.toBag();
+    }
 
     protected abstract boolean isOrdered();
 
@@ -218,7 +234,7 @@ public abstract class AbstractParallelIterableTestCase
         };
 
         Assert.assertEquals(
-                this.getExpected().collect(numberFunction).selectInstancesOf(Integer.class),
+                this.getExpectedCollect().collect(numberFunction).selectInstancesOf(Integer.class),
                 this.getActual(this.classUnderTest().collect(numberFunction).selectInstancesOf(Integer.class)));
     }
 
@@ -226,20 +242,20 @@ public abstract class AbstractParallelIterableTestCase
     public void collect()
     {
         Assert.assertEquals(
-                this.getExpected().collect(String::valueOf),
+                this.getExpectedCollect().collect(String::valueOf),
                 this.getActual(this.classUnderTest().collect(String::valueOf)));
 
         Assert.assertEquals(
-                this.getExpected().collect(String::valueOf, HashBag.newBag()),
+                this.getExpectedCollect().collect(String::valueOf, HashBag.newBag()),
                 this.classUnderTest().collect(String::valueOf).toList().toBag());
 
         Assert.assertEquals(
-                this.getExpected().collect(String::valueOf).toBag(),
+                this.getExpectedCollect().collect(String::valueOf).toBag(),
                 this.classUnderTest().collect(String::valueOf).toBag());
 
         Object constant = new Object();
         Assert.assertEquals(
-                this.getExpected().collect(ignored -> constant, HashBag.newBag()),
+                this.getExpectedCollect().collect(ignored -> constant, HashBag.newBag()),
                 this.classUnderTest().collect(ignored -> constant).toList().toBag());
     }
 
@@ -249,20 +265,20 @@ public abstract class AbstractParallelIterableTestCase
         Function2<Integer, String, String> appendFunction = (argument1, argument2) -> argument1 + argument2;
 
         Assert.assertEquals(
-                this.getExpected().collectWith(appendFunction, "!"),
+                this.getExpectedCollect().collectWith(appendFunction, "!"),
                 this.getActual(this.classUnderTest().collectWith(appendFunction, "!")));
 
         Assert.assertEquals(
-                this.getExpected().collectWith(appendFunction, "!", HashBag.newBag()),
+                this.getExpectedCollect().collectWith(appendFunction, "!", HashBag.newBag()),
                 this.classUnderTest().collectWith(appendFunction, "!").toList().toBag());
 
         Assert.assertEquals(
-                this.getExpected().collectWith(appendFunction, "!").toBag(),
+                this.getExpectedCollect().collectWith(appendFunction, "!").toBag(),
                 this.classUnderTest().collectWith(appendFunction, "!").toBag());
 
         Object constant = new Object();
         Assert.assertEquals(
-                this.getExpected().collectWith((ignored1, ignored2) -> constant, "!", HashBag.newBag()),
+                this.getExpectedCollect().collectWith((ignored1, ignored2) -> constant, "!", HashBag.newBag()),
                 this.classUnderTest().collectWith((ignored1, ignored2) -> constant, "!").toList().toBag());
     }
 
@@ -272,20 +288,20 @@ public abstract class AbstractParallelIterableTestCase
         Predicate<Integer> predicate = Predicates.greaterThan(1).and(Predicates.lessThan(4));
 
         Assert.assertEquals(
-                this.getExpected().collectIf(predicate, String::valueOf),
+                this.getExpectedCollect().collectIf(predicate, String::valueOf),
                 this.getActual(this.classUnderTest().collectIf(predicate, String::valueOf)));
 
         Assert.assertEquals(
-                this.getExpected().collectIf(predicate, String::valueOf, HashBag.newBag()),
+                this.getExpectedCollect().collectIf(predicate, String::valueOf, HashBag.newBag()),
                 this.classUnderTest().collectIf(predicate, String::valueOf).toList().toBag());
 
         Assert.assertEquals(
-                this.getExpected().collectIf(predicate, String::valueOf).toBag(),
+                this.getExpectedCollect().collectIf(predicate, String::valueOf).toBag(),
                 this.classUnderTest().collectIf(predicate, String::valueOf).toBag());
 
         Object constant = new Object();
         Assert.assertEquals(
-                this.getExpected().collectIf(predicate, ignored -> constant, HashBag.newBag()),
+                this.getExpectedCollect().collectIf(predicate, ignored -> constant, HashBag.newBag()),
                 this.classUnderTest().collectIf(predicate, ignored -> constant).toList().toBag());
     }
 
@@ -294,15 +310,15 @@ public abstract class AbstractParallelIterableTestCase
     {
         Function<Integer, Iterable<Integer>> intervalFunction = Interval::oneTo;
         Assert.assertEquals(
-                this.getExpected().flatCollect(intervalFunction),
+                this.getExpectedCollect().flatCollect(intervalFunction),
                 this.getActual(this.classUnderTest().flatCollect(intervalFunction)));
 
         Assert.assertEquals(
-                this.getExpected().flatCollect(intervalFunction, HashBag.newBag()),
+                this.getExpectedCollect().flatCollect(intervalFunction, HashBag.newBag()),
                 this.classUnderTest().flatCollect(intervalFunction).toList().toBag());
 
         Assert.assertEquals(
-                this.getExpected().flatCollect(intervalFunction, HashBag.newBag()),
+                this.getExpectedCollect().flatCollect(intervalFunction, HashBag.newBag()),
                 this.classUnderTest().flatCollect(intervalFunction).toBag());
     }
 
@@ -509,14 +525,16 @@ public abstract class AbstractParallelIterableTestCase
     @Test
     public void toSet()
     {
-        Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), this.classUnderTest().toSet());
+        Assert.assertEquals(
+                this.getExpected().toSet(),
+                this.classUnderTest().toSet());
     }
 
     @Test
     public void toSortedSet()
     {
         Verify.assertSortedSetsEqual(
-                TreeSortedSet.newSetWith(1, 2, 3, 4),
+                this.getExpected().toSortedSet(),
                 this.classUnderTest().toSortedSet());
     }
 
@@ -524,7 +542,7 @@ public abstract class AbstractParallelIterableTestCase
     public void toSortedSet_comparator()
     {
         Verify.assertSortedSetsEqual(
-                TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 1, 2, 3, 4),
+                this.getExpected().toSortedSet(Comparators.reverseNaturalOrder()),
                 this.classUnderTest().toSortedSet(Comparators.reverseNaturalOrder()));
     }
 
@@ -532,7 +550,7 @@ public abstract class AbstractParallelIterableTestCase
     public void toSortedSetBy()
     {
         Verify.assertSortedSetsEqual(
-                TreeSortedSet.newSetWith(1, 2, 3, 4),
+                this.getExpected().toSortedSetBy(String::valueOf),
                 this.classUnderTest().toSortedSetBy(String::valueOf));
     }
 
@@ -564,27 +582,30 @@ public abstract class AbstractParallelIterableTestCase
     public void toMap()
     {
         Assert.assertEquals(
-                UnifiedMap.newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"),
+                this.getExpected().toMap(String::valueOf, String::valueOf),
                 this.classUnderTest().toMap(String::valueOf, String::valueOf));
     }
 
     @Test
     public void toSortedMap()
     {
-        MutableSortedMap<Integer, String> map = this.classUnderTest().toSortedMap(Functions.getIntegerPassThru(), String::valueOf);
-        Verify.assertSortedMapsEqual(TreeSortedMap.newMapWith(1, "1", 2, "2", 3, "3", 4, "4"), map);
-        Verify.assertListsEqual(FastList.newListWith(1, 2, 3, 4), map.keySet().toList());
+        Verify.assertSortedMapsEqual(
+                this.getExpected().toSortedMap(id -> id, String::valueOf),
+                this.classUnderTest().toSortedMap(id -> id, String::valueOf));
+        Verify.assertListsEqual(
+                this.getExpected().toSortedMap(id -> id, String::valueOf).keySet().toList(),
+                this.classUnderTest().toSortedMap(id -> id, String::valueOf).keySet().toList());
     }
 
     @Test
     public void toSortedMap_comparator()
     {
-        MutableSortedMap<Integer, String> map = this.classUnderTest().toSortedMap(
-                Comparators.<Integer>reverseNaturalOrder(),
-                Functions.getIntegerPassThru(),
-                String::valueOf);
-        Verify.assertSortedMapsEqual(TreeSortedMap.newMapWith(Comparators.<Integer>reverseNaturalOrder(), 1, "1", 2, "2", 3, "3", 4, "4"), map);
-        Verify.assertListsEqual(FastList.newListWith(4, 3, 2, 1), map.keySet().toList());
+        Verify.assertSortedMapsEqual(
+                this.getExpected().toSortedMap(Comparators.<Integer>reverseNaturalOrder(), id -> id, String::valueOf),
+                this.classUnderTest().toSortedMap(Comparators.<Integer>reverseNaturalOrder(), id -> id, String::valueOf));
+        Verify.assertListsEqual(
+                this.getExpected().toSortedMap(Comparators.<Integer>reverseNaturalOrder(), id -> id, String::valueOf).keySet().toList(),
+                this.classUnderTest().toSortedMap(Comparators.<Integer>reverseNaturalOrder(), id -> id, String::valueOf).keySet().toList());
     }
 
     @Test
@@ -808,10 +829,10 @@ public abstract class AbstractParallelIterableTestCase
     @Test
     public void asUnique()
     {
-        Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), this.classUnderTest().asUnique().toSet());
-        Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), this.classUnderTest().asUnique().toList().toSet());
+        Assert.assertEquals(this.getExpected().toSet(), this.classUnderTest().asUnique().toSet());
+        Assert.assertEquals(this.getExpected().toList().toSet(), this.classUnderTest().asUnique().toList().toSet());
 
-        Assert.assertEquals(FastList.newListWith("!"), this.classUnderTest().collect(each -> "!").asUnique().toList());
+        Assert.assertEquals(this.getExpected().collect(each -> "!").toSet().toList(), this.classUnderTest().collect(each -> "!").asUnique().toList());
     }
 
     @Test

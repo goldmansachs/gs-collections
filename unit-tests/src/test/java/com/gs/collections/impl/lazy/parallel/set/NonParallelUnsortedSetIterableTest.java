@@ -16,14 +16,14 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
-import com.gs.collections.api.set.ParallelSetIterable;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.CompositeFastList;
 
-public class NonParallelUnsortedSetIterableTest extends AbstractNonParallelSetIterableTest
+public class NonParallelUnsortedSetIterableTest extends NonParallelUnsortedSetIterableTestCase
 {
     @Override
-    protected ParallelSetIterable<Integer> classUnderTest()
+    protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
         return new CompositeFastList<Integer>().withAll(Lists.mutable.of(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)).asParallel(null, 2).asUnique();
     }

@@ -14,12 +14,47 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.list;
+package com.gs.collections.impl.lazy.parallel.bag;
 
+import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.ParallelBag;
+import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.lazy.parallel.ParallelIterableTestCase;
+import org.junit.Assert;
 import org.junit.Test;
 
-public abstract class AbstractNonParallelListIterableTest extends AbstractParallelListIterableTestCase
+public abstract class ParallelBagTestCase extends ParallelIterableTestCase
 {
+    @Override
+    protected abstract ParallelBag<Integer> classUnderTest();
+
+    @Override
+    protected MutableBag<Integer> getExpected()
+    {
+        return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+
+    @Override
+    protected boolean isOrdered()
+    {
+        return false;
+    }
+
+    @Override
+    protected boolean isUnique()
+    {
+        return false;
+    }
+
+    @Test
+    public void forEachWithOccurrences()
+    {
+        MutableBag<Integer> actual = HashBag.<Integer>newBag().asSynchronized();
+        this.classUnderTest().forEachWithOccurrences(actual::addOccurrences);
+        Assert.assertEquals(this.getExpected().toBag(), actual);
+    }
+
     @Override
     @Test
     public void forEach_executionException()

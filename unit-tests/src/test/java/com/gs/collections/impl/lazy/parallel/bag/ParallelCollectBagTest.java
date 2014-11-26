@@ -19,7 +19,7 @@ package com.gs.collections.impl.lazy.parallel.bag;
 import com.gs.collections.api.bag.ParallelBag;
 import com.gs.collections.impl.bag.mutable.HashBag;
 
-public class ParallelCollectBagTest extends AbstractParallelBagTestCase
+public class ParallelCollectBagTest extends ParallelBagTestCase
 {
     @Override
     protected ParallelBag<Integer> classUnderTest()

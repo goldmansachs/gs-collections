@@ -88,7 +88,7 @@ public abstract class AbstractParallelUnsortedSetIterable<T, B extends UnsortedS
     public <V> ParallelIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         // TODO: Implement in parallel
-        return this.toList().flatCollect(function).asParallel(this.getExecutorService(), this.getBatchSize());
+        return this.toSet().asParallel(this.getExecutorService(), this.getBatchSize()).flatCollect(function);
     }
 
     public <V> UnsortedSetMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)

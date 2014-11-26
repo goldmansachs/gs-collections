@@ -14,37 +14,33 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.set;
+package com.gs.collections.impl.lazy.parallel.list;
 
-import com.gs.collections.api.ParallelIterable;
-import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableTestCase;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.ParallelListIterable;
+import com.gs.collections.impl.lazy.parallel.ParallelIterableTestCase;
+import com.gs.collections.impl.list.mutable.FastList;
 
-public abstract class AbstractParallelUnsortedSetIterableTestCase extends AbstractParallelIterableTestCase
+public abstract class ParallelListIterableTestCase extends ParallelIterableTestCase
 {
     @Override
-    protected MutableSet<Integer> getExpected()
-    {
-        return UnifiedSet.newSetWith(1, 2, 3, 4);
-    }
+    protected abstract ParallelListIterable<Integer> classUnderTest();
 
     @Override
-    protected <T> RichIterable<T> getActual(ParallelIterable<T> actual)
+    protected MutableList<Integer> getExpected()
     {
-        return actual.toSet();
+        return FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
     }
 
     @Override
     protected boolean isOrdered()
     {
-        return false;
+        return true;
     }
 
     @Override
     protected boolean isUnique()
     {
-        return true;
+        return false;
     }
 }

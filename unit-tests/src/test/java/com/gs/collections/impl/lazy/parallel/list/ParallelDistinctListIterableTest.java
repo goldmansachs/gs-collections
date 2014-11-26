@@ -16,14 +16,14 @@
 
 package com.gs.collections.impl.lazy.parallel.list;
 
-import com.gs.collections.api.set.ParallelSetIterable;
-import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterableTestCase;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
+import com.gs.collections.impl.lazy.parallel.set.ParallelUnsortedSetIterableTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
 
-public class ParallelDistinctListIterableTest extends AbstractParallelUnsortedSetIterableTestCase
+public class ParallelDistinctListIterableTest extends ParallelUnsortedSetIterableTestCase
 {
     @Override
-    protected ParallelSetIterable<Integer> classUnderTest()
+    protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
         return FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
                 .asParallel(this.executorService, 2)

@@ -32,7 +32,7 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SynchronizedMutableListParallelListIterableTest extends AbstractParallelListIterableTestCase
+public class SynchronizedMutableListParallelListIterableTest extends ParallelListIterableTestCase
 {
     @Override
     protected ParallelListIterable<Integer> classUnderTest()

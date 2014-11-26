@@ -20,7 +20,7 @@ import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.CompositeFastList;
 
-public class CompositeListParallelListIterableTest extends AbstractNonParallelListIterableTest
+public class CompositeListParallelListIterableTest extends NonParallelListIterableTestCase
 {
     @Override
     protected ParallelListIterable<Integer> classUnderTest()

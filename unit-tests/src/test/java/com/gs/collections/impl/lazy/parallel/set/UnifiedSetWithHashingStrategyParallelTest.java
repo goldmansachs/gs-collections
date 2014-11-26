@@ -18,17 +18,17 @@ package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.api.set.ParallelSetIterable;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 import org.junit.Test;
 
-public class UnifiedSetWithHashingStrategyParallelSetIterableTest extends AbstractParallelUnsortedSetIterableTestCase
+public class UnifiedSetWithHashingStrategyParallelTest extends ParallelUnsortedSetIterableTestCase
 {
     private static final HashingStrategy<Integer> INTEGER_TO_STRING_HASHING_STRATEGY = HashingStrategies.fromFunction(Integer::valueOf);
 
     @Override
-    protected ParallelSetIterable<Integer> classUnderTest()
+    protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
         return UnifiedSetWithHashingStrategy.newSetWith(INTEGER_TO_STRING_HASHING_STRATEGY, 1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 2);
     }

@@ -40,8 +40,10 @@ import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.list.SynchronizedParallelListIterable;
 import com.gs.collections.impl.lazy.parallel.set.SynchronizedParallelUnsortedSetIterable;
+import com.gs.collections.impl.lazy.parallel.set.sorted.SynchronizedParallelSortedSetIterable;
 
 public abstract class AbstractSynchronizedParallelIterable<T, PI extends ParallelIterable<T>> implements ParallelIterable<T>
 {
@@ -62,6 +64,11 @@ public abstract class AbstractSynchronizedParallelIterable<T, PI extends Paralle
     protected <A> ParallelUnsortedSetIterable<A> wrap(ParallelUnsortedSetIterable<A> wrapped)
     {
         return new SynchronizedParallelUnsortedSetIterable<A>(wrapped, this.lock);
+    }
+
+    protected <A> ParallelSortedSetIterable<A> wrap(ParallelSortedSetIterable<A> wrapped)
+    {
+        return new SynchronizedParallelSortedSetIterable<A>(wrapped, this.lock);
     }
 
     protected <A> ParallelIterable<A> wrap(ParallelIterable<A> wrapped)
