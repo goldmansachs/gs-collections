@@ -359,6 +359,7 @@ public void put_<key>()
 >>
 
 ZeroTests() ::= <<
+@Override
 @Test(expected = UnsupportedOperationException.class)
 public void put_zero()
 {

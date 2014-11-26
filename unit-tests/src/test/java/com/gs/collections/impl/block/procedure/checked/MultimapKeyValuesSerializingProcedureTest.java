@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,86 +48,103 @@ public class MultimapKeyValuesSerializingProcedureTest
             this.iterator = expectedWrites.iterator();
         }
 
+        @Override
         public void writeObject(Object obj)
         {
             Assert.assertEquals(this.iterator.next(), obj);
         }
 
+        @Override
         public void writeInt(int v)
         {
             Assert.assertEquals(this.iterator.next(), v);
         }
 
+        @Override
         public void write(int i)
         {
             throw new RuntimeException("write not implemented");
         }
 
+        @Override
         public void write(byte[] bs)
         {
             throw new RuntimeException("write not implemented");
         }
 
+        @Override
         public void write(byte[] bs, int off, int len)
         {
             throw new RuntimeException("write not implemented");
         }
 
+        @Override
         public void writeBoolean(boolean v)
         {
             throw new RuntimeException("writeBoolean not implemented");
         }
 
+        @Override
         public void writeByte(int v)
         {
             throw new RuntimeException("writeByte not implemented");
         }
 
+        @Override
         public void writeShort(int v)
         {
             throw new RuntimeException("writeShort not implemented");
         }
 
+        @Override
         public void writeChar(int v)
         {
             throw new RuntimeException("writeChar not implemented");
         }
 
+        @Override
         public void writeLong(long v)
         {
             throw new RuntimeException("writeLong not implemented");
         }
 
+        @Override
         public void writeFloat(float v)
         {
             throw new RuntimeException("writeFloat not implemented");
         }
 
+        @Override
         public void writeDouble(double v)
         {
             throw new RuntimeException("writeDouble not implemented");
         }
 
+        @Override
         public void writeBytes(String s)
         {
             throw new RuntimeException("writeBytes not implemented");
         }
 
+        @Override
         public void writeChars(String s)
         {
             throw new RuntimeException("writeChars not implemented");
         }
 
+        @Override
         public void writeUTF(String s)
         {
             throw new RuntimeException("writeUTF not implemented");
         }
 
+        @Override
         public void flush()
         {
             throw new RuntimeException("flush not implemented");
         }
 
+        @Override
         public void close()
         {
             throw new RuntimeException("close not implemented");

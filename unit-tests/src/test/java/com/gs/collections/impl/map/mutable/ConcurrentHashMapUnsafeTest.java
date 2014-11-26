@@ -411,6 +411,7 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
     {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public Integer value(Integer key, Integer value)
         {
             return key;
@@ -421,6 +422,7 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
     {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public Integer value(Object argument1, Object argument2, Integer key)
         {
             return key;

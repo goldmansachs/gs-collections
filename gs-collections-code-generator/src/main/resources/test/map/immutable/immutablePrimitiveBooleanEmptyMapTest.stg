@@ -22,8 +22,6 @@ package com.gs.collections.impl.map.immutable.primitive;
 
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
-import com.gs.collections.api.block.predicate.primitive.<name>BooleanPredicate;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.map.primitive.Immutable<name>BooleanMap;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;

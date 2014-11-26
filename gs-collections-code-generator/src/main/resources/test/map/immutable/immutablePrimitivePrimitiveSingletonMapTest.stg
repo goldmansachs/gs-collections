@@ -25,9 +25,7 @@ package com.gs.collections.impl.map.immutable.primitive;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
 import com.gs.collections.api.<name2>Iterable;
-import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.iterator.<name2>Iterator;
 import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;

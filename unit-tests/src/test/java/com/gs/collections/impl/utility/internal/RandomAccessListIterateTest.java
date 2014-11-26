@@ -467,6 +467,7 @@ public class RandomAccessListIterateTest
     {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public void value(Object argument1, Integer argument2)
         {
             Assert.fail();

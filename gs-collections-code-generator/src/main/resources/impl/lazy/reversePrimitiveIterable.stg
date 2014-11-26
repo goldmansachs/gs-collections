@@ -16,24 +16,18 @@ body(type, name) ::= <<
 
 package com.gs.collections.impl.lazy.primitive;
 
-import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
-import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
-import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.list.primitive.<name>List;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.lazy.ReverseIterable;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 
@@ -72,7 +66,6 @@ public class Reverse<name>Iterable extends AbstractLazy<name>Iterable
     }
 
     <(arithmeticMethods.(type))(name, type)>
-
     @Override
     public <type>[] toArray()
     {
@@ -186,21 +179,25 @@ arithmeticMethods ::= [
 ]
 
 allMethods(name, type) ::=<<
+@Override
 public <wideType.(type)> sum()
 {
     return this.adapted.sum();
 }
 
+@Override
 public <type> max()
 {
     return this.adapted.max();
 }
 
+@Override
 public <type> min()
 {
     return this.adapted.min();
 }
 
+@Override
 public <type> minIfEmpty(<type> defaultValue)
 {
     if (this.adapted.isEmpty())
@@ -210,6 +207,7 @@ public <type> minIfEmpty(<type> defaultValue)
     return this.adapted.min();
 }
 
+@Override
 public <type> maxIfEmpty(<type> defaultValue)
 {
     if (this.adapted.isEmpty())
@@ -219,21 +217,25 @@ public <type> maxIfEmpty(<type> defaultValue)
     return this.adapted.max();
 }
 
+@Override
 public double average()
 {
     return this.adapted.average();
 }
 
+@Override
 public double median()
 {
     return this.adapted.median();
 }
 
+@Override
 public <type>[] toSortedArray()
 {
     return this.adapted.toSortedArray();
 }
 
+@Override
 public Mutable<name>List toSortedList()
 {
     return <name>ArrayList.newList(this).sortThis();

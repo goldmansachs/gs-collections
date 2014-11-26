@@ -1893,6 +1893,7 @@ public class IterateTest
     {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public Set<Character> valueOf(String name)
         {
             return StringIterate.asUppercaseSet(name);

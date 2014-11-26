@@ -22,15 +22,10 @@ body(type1, type2, name1, name2) ::= <<
 
 package com.gs.collections.impl.map.immutable.primitive;
 
-import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
-import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
-import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
 import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
-import com.gs.collections.impl.map.primitive.Abstract<name1><name2>MapTestCase;
 import com.gs.collections.impl.math.Mutable<primitive2.wrapperName>;
-import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 

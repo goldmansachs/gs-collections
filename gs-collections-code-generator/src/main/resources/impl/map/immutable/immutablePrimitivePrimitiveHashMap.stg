@@ -26,31 +26,31 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.Serializable;
 
-import com.gs.collections.api.<name2>Iterable;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.<name1>Iterable;<endif>
-import com.gs.collections.api.Lazy<name2>Iterable;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name1>Iterable;<endif>
+import com.gs.collections.api.<name1>Iterable;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.<name2>Iterable;<endif>
+import com.gs.collections.api.Lazy<name1>Iterable;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name2>Iterable;<endif>
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
-import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
-import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;
+import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;<endif>
+import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.primitive.Immutable<name2>Collection;
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
-import com.gs.collections.api.iterator.<name2>Iterator;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.iterator.<name1>Iterator;<endif>
+import com.gs.collections.api.iterator.<name1>Iterator;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.iterator.<name2>Iterator;<endif>
 import com.gs.collections.api.list.primitive.Mutable<name2>List;
 import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
-import com.gs.collections.api.set.primitive.Mutable<name2>Set;
+import com.gs.collections.api.set.primitive.Mutable<name1>Set;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name2>Set;<endif>
 import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name1>Set;<endif>
 import com.gs.collections.impl.block.procedure.checked.primitive.Checked<name1><name2>Procedure;
 import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name2>Collection;
 import com.gs.collections.impl.iterator.Unmodifiable<name2>Iterator;
@@ -60,6 +60,7 @@ import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name1>Set;
 /**
  * Immutable<name1><name2>HashMap is the non-modifiable equivalent of {@link <name1><name2>HashMap}.
  * This file was automatically generated from template file immutablePrimitivePrimitiveHashMap.stg.
+ *
  * @since 4.0.
  */
 final class Immutable<name1><name2>HashMap implements Immutable<name1><name2>Map, Serializable

@@ -34,6 +34,7 @@ import com.gs.collections.impl.utility.primitive.Lazy<name>Iterate;
 
 /**
  * This file was automatically generated from template file abstractLazyPrimitiveIterable.stg.
+ *
  * @since 5.0
  */
 public abstract class AbstractLazy<name>Iterable implements Lazy<name>Iterable
@@ -158,7 +159,6 @@ public abstract class AbstractLazy<name>Iterable implements Lazy<name>Iterable
     }
 
     <(arithmeticMethods.(type))()>
-
     public <type>[] toArray()
     {
         return this.toList().toArray();
@@ -277,6 +277,7 @@ public Mutable<name>List toSortedList()
 {
     return <name>ArrayList.newList(this).sortThis();
 }
+
 >>
 
 noMethods() ::= ""

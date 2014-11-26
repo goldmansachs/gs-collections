@@ -20,7 +20,6 @@ body(type, name, wrapperName) ::= <<
 
 package com.gs.collections.impl.map.immutable.primitive;
 
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.primitive.Object<name>HashMap;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ public class NegativeIntervalFunction implements Function<Integer, Iterable<Inte
 {
     private static final long serialVersionUID = 1L;
 
+    @Override
     public Iterable<Integer> valueOf(Integer object)
     {
         return Interval.fromTo(-1, -object);

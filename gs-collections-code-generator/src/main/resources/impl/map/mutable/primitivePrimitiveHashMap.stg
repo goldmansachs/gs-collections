@@ -65,7 +65,6 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-<if(sameTwoPrimitives)>import com.gs.collections.api.collection.MutableCollection;<endif>
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
 import com.gs.collections.api.iterator.<name1>Iterator;
 import com.gs.collections.api.iterator.Mutable<name1>Iterator;
@@ -83,8 +82,6 @@ import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
 import com.gs.collections.impl.iterator.Unmodifiable<name1>Iterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.primitive.AbstractLazy<name1>Iterable;
-<if(sameTwoPrimitives)>import com.gs.collections.impl.list.mutable.FastList;<endif>
-<if(sameTwoPrimitives)>import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;<endif>
 import com.gs.collections.impl.set.mutable.primitive.<name1>HashSet;
 import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 
@@ -298,130 +295,6 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
         return new Internal<name2>Iterator();
     }
 
-<if(sameTwoPrimitives)>
-    public Mutable<name2>Collection select(<name2>Predicate predicate)
-    {
-        <name2>ArrayList result = new <name2>ArrayList();
-
-        <forEachValueSatisfying(template = {result.add(<value>)})>
-
-        return result;
-    }
-
-    public Mutable<name2>Collection reject(<name2>Predicate predicate)
-    {
-        <name2>ArrayList result = new <name2>ArrayList();
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey && !predicate.accept(this.sentinelValues.zeroValue))
-            {
-                result.add(this.sentinelValues.zeroValue);
-            }
-            if (this.sentinelValues.containsOneKey && !predicate.accept(this.sentinelValues.oneValue))
-            {
-                result.add(this.sentinelValues.oneValue);
-            }
-        }
-        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
-        {
-            if (isNonSentinel(this.<keyArray>[i]) && !predicate.accept(this.<valueArray>[i<valueIndex>]))
-            {
-                result.add(this.<valueArray>[i<valueIndex>]);
-            }
-        }
-        return result;
-    }
-
-    public \<V> MutableCollection\<V> collect(<name2>ToObjectFunction\<? extends V> function)
-    {
-        FastList\<V> target = FastList.newList(this.size());
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey)
-            {
-                target.add(function.valueOf(this.sentinelValues.zeroValue));
-            }
-            if (this.sentinelValues.containsOneKey)
-            {
-                target.add(function.valueOf(this.sentinelValues.oneValue));
-            }
-        }
-        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
-        {
-            if (isNonSentinel(this.<keyArray>[i]))
-            {
-                target.add(function.valueOf(this.<valueArray>[i<valueIndex>]));
-            }
-        }
-        return target;
-    }
-
-    public <type2> detectIfNone(<name2>Predicate predicate, <type2> value)
-    {
-        <forEachValueSatisfying(template = {return <value>})>
-        return value;
-    }
-
-    public int count(<name2>Predicate predicate)
-    {
-        int count = 0;
-        <forEachValueSatisfying(template = {count++})>
-        return count;
-    }
-
-    public boolean anySatisfy(<name2>Predicate predicate)
-    {
-        <forEachValueSatisfying(template = {return true}, innerClass=true)>
-        return false;
-    }
-
-    public boolean allSatisfy(<name2>Predicate predicate)
-    {
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey && !predicate.accept(this.sentinelValues.zeroValue))
-            {
-                return false;
-            }
-            if (this.sentinelValues.containsOneKey && !predicate.accept(this.sentinelValues.oneValue))
-            {
-                return false;
-            }
-        }
-        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
-        {
-            if (isNonSentinel(this.<keyArray>[i]) && !predicate.accept(this.<valueArray>[i<valueIndex>]))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean noneSatisfy(<name2>Predicate predicate)
-    {
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
-            {
-                return false;
-            }
-            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
-            {
-                return false;
-            }
-        }
-        for (int i = 0; i \< this.<keyArray>.length; i<increment>)
-        {
-            if (isNonSentinel(this.<keyArray>[i]) && predicate.accept(this.<valueArray>[i<valueIndex>]))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-<endif>
     public \<V> V injectInto(V injectedValue, Object<name2>ToObjectFunction\<? super V, ? extends V> function)
     {
         V result = injectedValue;
@@ -838,29 +711,6 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
         return <(equals.(type1))({this.<keyArray>[this.probe(key)]}, "key")>;
     }
 
-<if(sameTwoPrimitives)>
-    public boolean containsValue(<type2> value)
-    {
-        if (this.sentinelValues != null && this.sentinelValues.containsValue(value))
-        {
-            return true;
-        }
-        for (int i = 0; i \< this.<valueArray>.length; i<increment>)
-        {
-            if (isNonSentinel(this.<keyArray>[i]) && <(equals.(type2))({this.<valueArray>[i<valueIndex>]}, "value")>)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void forEachValue(<name2>Procedure procedure)
-    {
-        <forEachValue(template = {procedure.value(<value>)})>
-    }
-
-<endif>
     public void forEachKey(<name1>Procedure procedure)
     {
         <forEachKey(template = {procedure.value(<key>)})>

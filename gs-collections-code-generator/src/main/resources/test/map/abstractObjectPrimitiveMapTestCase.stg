@@ -24,11 +24,6 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
-import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
-import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.api.map.primitive.Object<name>Map;

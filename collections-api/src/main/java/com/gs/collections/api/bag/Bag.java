@@ -47,6 +47,7 @@ public interface Bag<T>
      *
      * @see Map#equals(Object)
      */
+    @Override
     boolean equals(Object object);
 
     /**
@@ -54,6 +55,7 @@ public interface Bag<T>
      *
      * @see Map#hashCode()
      */
+    @Override
     int hashCode();
 
     Bag<T> tap(Procedure<? super T> procedure);

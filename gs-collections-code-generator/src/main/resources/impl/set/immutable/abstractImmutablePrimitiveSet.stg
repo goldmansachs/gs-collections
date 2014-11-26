@@ -15,22 +15,9 @@ body(type, name)::= <<
 
 package com.gs.collections.impl.set.immutable.primitive;
 
-import java.io.Serializable;
-import java.util.Arrays;
-import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.<name>Iterable;
-import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
-import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
-import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.list.primitive.Mutable<name>List;
-import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.primitive.Immutable<name>Set;
-import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.set.primitive.<name>Set;
-import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
-import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
-import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.set.primitive.Abstract<name>Set;
 

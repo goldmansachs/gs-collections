@@ -20,13 +20,10 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
-import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.impl.primitive.Abstract<name>Iterable;
 import com.gs.collections.api.bag.primitive.<name>Bag;
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
@@ -38,16 +35,13 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.iterator.Mutable<name>Iterator;
-import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.<name>Set;
-import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.primitive.IntToIntFunctions;
 import com.gs.collections.impl.factory.primitive.<name>Bags;
-import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
-import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.map.mutable.primitive.<name>IntHashMap;
+import com.gs.collections.impl.primitive.Abstract<name>Iterable;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import net.jcip.annotations.NotThreadSafe;
 
@@ -205,18 +199,6 @@ public final class <name>HashBag extends Abstract<name>Iterable implements Mutab
     public boolean contains(<type> value)
     {
         return this.items.containsKey(value);
-    }
-
-    public boolean containsAll(<type>... source)
-    {
-        for (<type> each : source)
-        {
-            if (!this.items.containsKey(each))
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     public int occurrencesOf(<type> item)

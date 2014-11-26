@@ -21,8 +21,6 @@ package com.gs.collections.impl.stack.immutable.primitive;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
-import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
 import com.gs.collections.api.stack.primitive.Mutable<name>Stack;
 import com.gs.collections.impl.factory.primitive.<name>Stacks;

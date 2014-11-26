@@ -18,8 +18,6 @@ body(type, name, wrapperName) ::= <<
 package com.gs.collections.impl.bag.immutable.primitive;
 
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.impl.factory.primitive.<name>Bags;
 import com.gs.collections.impl.math.Mutable<wrapperName>;
 import org.junit.Assert;
@@ -47,11 +45,14 @@ public class Immutable<name>SingletonBagTest extends AbstractImmutable<name>BagT
         Assert.assertEquals("<(toStringLiteral.(type))("1")>1", string);
     }
 
+    @Override
     @Test
     public void injectInto()
     {
+        super.injectInto();
+
         Immutable<name>SingletonBag iterable = new Immutable<name>SingletonBag(<(literal.(type))("1")>);
-        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("1")>), (Mutable<wrapperName> object, <type> value) -> object.add(value));
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("1")>), Mutable<wrapperName>::add);
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("2")>), result);
     }
 }

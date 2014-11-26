@@ -22,7 +22,6 @@ import java.util.Collections;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
@@ -300,14 +299,6 @@ public final class Synchronized<name>List
         synchronized (this.getLock())
         {
             this.getMutable<name>List().forEachWithIndex(procedure);
-        }
-    }
-
-    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutable<name>List().injectInto(injectedValue, function);
         }
     }
 

@@ -343,9 +343,12 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
         Assert.assertEquals(UnifiedMap.newWithKeysValues("One", 1, "Three", 3), map);
     }
 
+    @Override
     @Test
     public void forEachKeyValue()
     {
+        super.forEachKeyValue();
+
         MutableBag<String> result = Bags.mutable.of();
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three");
         map.forEachKeyValue((key, value) -> result.add(key + value));

@@ -107,6 +107,7 @@ public abstract class AbstractParallelListIterable<T, B extends ListBatch<T>> ex
         return this.toList().groupByEach(function);
     }
 
+    @Override
     public <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
         // TODO: Implement in parallel

@@ -24,8 +24,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
-import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
-import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;

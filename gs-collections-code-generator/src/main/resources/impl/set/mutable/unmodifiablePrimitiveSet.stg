@@ -19,7 +19,6 @@ package com.gs.collections.impl.set.mutable.primitive;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Immutable<name>Set;
@@ -144,11 +143,6 @@ public final class Unmodifiable<name>Set
     public Immutable<name>Set toImmutable()
     {
         return this.getMutable<name>Set().toImmutable();
-    }
-
-    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
-    {
-        return this.getMutable<name>Set().injectInto(injectedValue, function);
     }
 }
 

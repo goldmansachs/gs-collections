@@ -17,11 +17,9 @@ body(type, wrapperName, name) ::= <<
 
 package com.gs.collections.impl.list.immutable.primitive;
 
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
-import com.gs.collections.impl.math.Mutable<wrapperName>;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;

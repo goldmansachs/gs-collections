@@ -61,10 +61,12 @@ public class ByteHashSetTest extends AbstractByteSetTestCase
         Assert.assertEquals(set, hashSetFromSet);
     }
 
+    @Override
     @Test
     public void injectInto()
     {
         super.injectInto();
+
         ByteHashSet set = ByteHashSet.newSetWith((byte) 0, (byte) 1, (byte) 31, (byte) -1, (byte) -2, (byte) -64, (byte) -128, (byte) 64);
         Byte sum = set.injectInto(Byte.valueOf((byte) 0), (result, value) -> Byte.valueOf((byte) (result + value)));
         Assert.assertEquals(Byte.valueOf((byte) -99), sum);

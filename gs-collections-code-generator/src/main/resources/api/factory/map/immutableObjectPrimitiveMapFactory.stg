@@ -49,9 +49,9 @@ public interface ImmutableObject<name>MapFactory
     /**
      * Same as {@link #withAll(Object<name>Map)}.
      */
-    \<K> ImmutableObject<name>Map\<K> ofAll(Object<name>Map\<? extends K>  map);
+    \<K> ImmutableObject<name>Map\<K> ofAll(Object<name>Map\<? extends K> map);
 
-    \<K> ImmutableObject<name>Map\<K> withAll(Object<name>Map\<? extends K>  map);
+    \<K> ImmutableObject<name>Map\<K> withAll(Object<name>Map\<? extends K> map);
 }
 
 >>

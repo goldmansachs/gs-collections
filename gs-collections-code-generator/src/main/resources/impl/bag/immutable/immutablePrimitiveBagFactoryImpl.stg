@@ -14,8 +14,8 @@ body(type, name) ::= <<
 package com.gs.collections.impl.bag.immutable.primitive;
 
 import com.gs.collections.api.<name>Iterable;
-import com.gs.collections.api.factory.bag.primitive.Immutable<name>BagFactory;
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
+import com.gs.collections.api.factory.bag.primitive.Immutable<name>BagFactory;
 
 /**
  * Immutable<name>BagFactoryImpl is a factory implementation which creates instances of type {@link Immutable<name>Bag}.

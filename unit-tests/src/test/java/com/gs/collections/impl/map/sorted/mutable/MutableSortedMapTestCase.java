@@ -91,6 +91,18 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
     @Override
     protected abstract <K, V> MutableSortedMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
 
+    protected <T> MutableSortedMap<?, T> newWith(T... littleElements)
+    {
+        int i = 0;
+        MutableSortedMap<Integer, T> result = this.newMap();
+        for (T each : littleElements)
+        {
+            result.put(i, each);
+            i++;
+        }
+        return result;
+    }
+
     @Test
     public void testNewEmpty()
     {
@@ -256,9 +268,12 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         Verify.assertListsEqual(FastList.newListWith("Four", "0", "Three", "1", "Two", "2", "One", "3"), list2);
     }
 
+    @Override
     @Test
     public void forEachKeyValue()
     {
+        super.forEachKeyValue();
+
         MutableList<String> result = Lists.mutable.of();
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(REV_INT_ORDER, 1, "One", 2, "Two", 3, "Three");
         map.forEachKeyValue((key, value) -> result.add(key + value));
@@ -796,6 +811,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         Verify.assertEqualsAndHashCode(map1, map2);
     }
 
+    @Override
     @Test
     public void equalsAndHashCode()
     {
@@ -815,6 +831,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         Assert.assertNotEquals(map, this.newMapWithKeysValues(Comparators.reverseNaturalOrder(), 1, "1", 2, "2", 4, "4"));
     }
 
+    @Override
     @Test
     public void serialization()
     {

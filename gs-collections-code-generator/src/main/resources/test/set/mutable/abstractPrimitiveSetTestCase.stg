@@ -16,14 +16,11 @@ body(type, wrapperName, name) ::= <<
 
 package com.gs.collections.impl.set.mutable.primitive;
 
-import java.util.HashSet;
+<if(primitive.floatingPoint)>import java.util.HashSet;<endif>
 import java.util.NoSuchElementException;
-import java.util.Set;
+<if(primitive.floatingPoint)>import java.util.Set;<endif>
 
 import com.gs.collections.api.Lazy<name>Iterable;
-import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
@@ -312,9 +309,12 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
         iterator.next();
     }
 
+    @Override
     @Test
     public void injectInto()
     {
+        super.injectInto();
+
         Mutable<name>Set set = this.newWith(<["0", "2", "31"]:(literal.(type))(); separator=", ">);
         <wrapperName> sum = set.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, <type> value) -> <wrapperName>.valueOf((<type>) (result + value)));
         Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("33")>), sum);

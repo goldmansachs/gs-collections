@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ public final class MutableFloat extends Number implements Comparable<MutableFloa
         this(0.0f);
     }
 
+    @Override
     public int compareTo(MutableFloat other)
     {
         return Float.compare(this.value, other.value);

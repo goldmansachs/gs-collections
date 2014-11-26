@@ -831,7 +831,6 @@ public class IntervalTest
 
     private static final class AddParametersProcedure implements ObjectIntProcedure<Integer>
     {
-        private static final long serialVersionUID = 1L;
         private final MutableList<Integer> forwardResult;
 
         private AddParametersProcedure(MutableList<Integer> forwardResult)
@@ -839,6 +838,7 @@ public class IntervalTest
             this.forwardResult = forwardResult;
         }
 
+        @Override
         public void value(Integer each, int index)
         {
             this.forwardResult.add(each + index);

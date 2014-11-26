@@ -548,6 +548,7 @@ public class FunctionsTest
 
     private static class ThrowsFunction implements Function<Object, Object>
     {
+        @Override
         public Object valueOf(Object object)
         {
             throw new RuntimeException();

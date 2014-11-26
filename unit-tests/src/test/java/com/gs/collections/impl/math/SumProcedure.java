@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,16 +60,19 @@ public class SumProcedure<T>
         return (SumProcedure<T>) NUMBER;
     }
 
+    @Override
     public SumProcedure<T> create()
     {
         return new SumProcedure<T>(this.sum.speciesNew(), this.function);
     }
 
+    @Override
     public Sum value(Sum argument1, T argument2)
     {
         return argument1.add(argument2);
     }
 
+    @Override
     public void value(T object)
     {
         this.sum.add(object);

@@ -19,17 +19,14 @@ body(type, wrapperName, name) ::= <<
 package com.gs.collections.impl.collection.mutable.primitive;
 
 import java.util.Arrays;
-import java.util.HashSet;
+<if(primitive.floatingPoint)>import java.util.HashSet;<endif>
 import java.util.NoSuchElementException;
-import java.util.Set;
+<if(primitive.floatingPoint)>import java.util.Set;<endif>
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
-import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
-import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
@@ -862,7 +859,7 @@ NaNTests(key) ::= <<
 public void contains_<key>()
 {
     <name>Iterable primitiveIterable = this.newWith(<wrapperName>.<key>);
-    HashSet\<<wrapperName>\> hashSet = new HashSet\<<wrapperName>\>();
+    Set\<<wrapperName>\> hashSet = new HashSet\<<wrapperName>\>();
     Assert.assertTrue(hashSet.add(<wrapperName>.<key>));
     Assert.assertTrue(hashSet.contains(<wrapperName>.<key>));
     Assert.assertTrue(primitiveIterable.contains(<wrapperName>.<key>));

@@ -21,8 +21,6 @@ package com.gs.collections.impl.set.mutable.primitive;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.Lazy<name>Iterable;
-import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Immutable<name>Set;

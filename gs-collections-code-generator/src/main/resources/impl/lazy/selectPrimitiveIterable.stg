@@ -16,8 +16,6 @@ body(type, name) ::= <<
 
 package com.gs.collections.impl.lazy.primitive;
 
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;

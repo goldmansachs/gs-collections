@@ -21,8 +21,6 @@ body(type, name, wrapperName) ::= <<
 package com.gs.collections.impl.utility.internal.primitive;
 
 import com.gs.collections.api.<name>Iterable;
-import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;

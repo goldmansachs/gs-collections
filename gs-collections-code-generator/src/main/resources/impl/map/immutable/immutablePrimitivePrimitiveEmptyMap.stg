@@ -24,19 +24,19 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.<name2>Iterable;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.<name1>Iterable;<endif>
-import com.gs.collections.api.Lazy<name2>Iterable;
+import com.gs.collections.api.<name1>Iterable;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.<name2>Iterable;<endif>
+import com.gs.collections.api.Lazy<name1>Iterable;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name2>Iterable;<endif>
 import com.gs.collections.api.RichIterable;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name1>Iterable;<endif>
 import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
-import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
-import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;
+import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.primitive.Immutable<name2>Collection;
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
@@ -50,8 +50,7 @@ import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
 import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;
 import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name2>Collection;
 import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.factory.primitive.<name1>Lists;
-<if(!sameTwoPrimitives)>import com.gs.collections.impl.factory.primitive.<name2>Lists;<endif>
+import com.gs.collections.impl.factory.primitive.<name2>Lists;
 import com.gs.collections.impl.iterator.ImmutableEmpty<name2>Iterator;
 import com.gs.collections.impl.lazy.primitive.Lazy<name2>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;

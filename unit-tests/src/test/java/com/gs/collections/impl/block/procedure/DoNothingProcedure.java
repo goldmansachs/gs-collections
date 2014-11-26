@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ public class DoNothingProcedure implements Procedure<Object>
 
     private static final long serialVersionUID = 1L;
 
+    @Override
     public void value(Object each)
     {
         // Do nothing.

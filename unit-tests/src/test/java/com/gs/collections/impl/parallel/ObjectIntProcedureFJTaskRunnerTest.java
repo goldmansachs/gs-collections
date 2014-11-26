@@ -62,14 +62,17 @@ public class ObjectIntProcedureFJTaskRunnerTest
     {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public void combineAll(Iterable<ObjectIntProcedure<Integer>> thingsToCombine)
         {
         }
 
+        @Override
         public void combineOne(ObjectIntProcedure<Integer> thingToCombine)
         {
         }
 
+        @Override
         public boolean useCombineOne()
         {
             return false;
@@ -108,6 +111,7 @@ public class ObjectIntProcedureFJTaskRunnerTest
 
     private static class DoNothingExecutor implements Executor
     {
+        @Override
         public void execute(Runnable command)
         {
         }
@@ -115,6 +119,7 @@ public class ObjectIntProcedureFJTaskRunnerTest
 
     private static class PassThroughObjectIntProcedureFactory implements ObjectIntProcedureFactory<ObjectIntProcedure<Integer>>
     {
+        @Override
         public ObjectIntProcedure<Integer> create()
         {
             return this.getPassThroughObjectIntProcedure();

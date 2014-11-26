@@ -18,7 +18,6 @@ body(type, name, wrapperName) ::= <<
 
 package com.gs.collections.impl.bag.mutable.primitive;
 
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -73,10 +72,12 @@ public class <name>HashBagTest extends AbstractMutable<name>BagTestCase
         Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), hashBag3);
     }
 
-
+    @Override
     @Test
     public void injectInto()
     {
+        super.injectInto();
+
         <name>HashBag hashBag = <name>HashBag.newBagWith(<["1", "1", "2", "2", "2", "2", "3"]:(literal.(type))(); separator=", ">);
         <wrapperName> sum = hashBag.injectInto(<wrapperName>.valueOf(<(literal.(type))("4")>), (<wrapperName> result, <type> value) -> <wrapperName>.valueOf((<type>) (result + value)));
         Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("17")>), sum);

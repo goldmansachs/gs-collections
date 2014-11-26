@@ -19,10 +19,7 @@ package com.gs.collections.impl.list.immutable.primitive;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
-import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
-import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.math.Mutable<wrapperName>;
@@ -165,6 +162,8 @@ public class Immutable<name>EmptyListTest extends AbstractImmutable<name>ListTes
     @Test
     public void injectInto()
     {
+        super.injectInto();
+
         Immutable<name>EmptyList iterable = new Immutable<name>EmptyList();
         Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), Mutable<wrapperName>::add);
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("0")>), result);

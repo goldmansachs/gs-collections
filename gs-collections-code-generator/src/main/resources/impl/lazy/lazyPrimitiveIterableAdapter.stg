@@ -17,17 +17,13 @@ body(type, name) ::= <<
 package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.<name>Iterable;
-import com.gs.collections.api.Lazy<name>Iterable;
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
-import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
-import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 
 /**
  * This file was automatically generated from template file lazyPrimitiveIterableAdapter.stg.
@@ -60,55 +56,46 @@ public class Lazy<name>IterableAdapter
         return this.delegate.size();
     }
 
+    @Override
     public boolean isEmpty()
     {
         return this.delegate.isEmpty();
     }
 
+    @Override
     public boolean notEmpty()
     {
         return this.delegate.notEmpty();
     }
 
+    @Override
     public int count(<name>Predicate predicate)
     {
         return this.delegate.count(predicate);
     }
 
+    @Override
     public boolean anySatisfy(<name>Predicate predicate)
     {
         return this.delegate.anySatisfy(predicate);
     }
 
+    @Override
     public boolean allSatisfy(<name>Predicate predicate)
     {
         return this.delegate.allSatisfy(predicate);
     }
 
+    @Override
     public boolean noneSatisfy(<name>Predicate predicate)
     {
         return this.delegate.noneSatisfy(predicate);
     }
 
-    public Lazy<name>Iterable select(<name>Predicate predicate)
-    {
-        return new Select<name>Iterable(this.delegate, predicate);
-    }
-
     @Override
-    public Lazy<name>Iterable reject(<name>Predicate predicate)
-    {
-        return new Select<name>Iterable(this.delegate, <name>Predicates.not(predicate));
-    }
-
     public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
     {
         return this.delegate.detectIfNone(predicate, ifNone);
-    }
-
-    public \<V> LazyIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
-    {
-        return new Collect<name>ToObjectIterable\<V>(this.delegate, function);
     }
 
     <(arithmeticMethods.(type))(name, type)>

@@ -22,7 +22,7 @@ import java.io.Serializable;
  * @since 3.0.
  */
 public interface <name>ObjectProcedure\<T>
-    extends Serializable
+        extends Serializable
 {
     void value(<type> each, T parameter);
 }

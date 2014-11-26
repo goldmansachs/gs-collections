@@ -18,9 +18,9 @@ import java.util.Collection;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.iterator.Mutable<name>Iterator;
+import com.gs.collections.api.collection.MutableCollection;
 
 /**
  * This file was automatically generated from template file mutablePrimitiveCollection.stg.

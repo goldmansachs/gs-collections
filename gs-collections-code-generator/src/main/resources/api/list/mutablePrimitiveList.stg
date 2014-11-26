@@ -16,8 +16,8 @@ package com.gs.collections.api.list.primitive;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.list.MutableList;
 
 /**

@@ -335,6 +335,7 @@ public class ComparatorsTest
 
         private final DateFormat formatter = new SimpleDateFormat(FANCY_DATE_FORMAT);
 
+        @Override
         public int compare(Date o1, Date o2)
         {
             String date1 = this.formatter.format(o1);

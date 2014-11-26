@@ -101,6 +101,7 @@ public class CaseFunctionTest
             return result;
         }
 
+        @Override
         public int compareTo(Foo o)
         {
             throw new RuntimeException("compareTo not implemented");

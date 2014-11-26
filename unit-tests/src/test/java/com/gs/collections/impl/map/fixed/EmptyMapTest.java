@@ -245,16 +245,19 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
         private static final long serialVersionUID = 1L;
         private boolean called = false;
 
+        @Override
         public void value(T each)
         {
             this.called = true;
         }
 
+        @Override
         public void value(T argument1, T argument2)
         {
             this.called = true;
         }
 
+        @Override
         public void value(T each, int index)
         {
             this.called = true;

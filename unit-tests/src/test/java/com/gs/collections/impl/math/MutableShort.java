@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@ public class MutableShort extends Number implements Comparable<MutableShort>
         return this.intValue();
     }
 
+    @Override
     @SuppressWarnings("CompareToUsesNonFinalVariable")
     public int compareTo(MutableShort other)
     {

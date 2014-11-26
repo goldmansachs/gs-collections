@@ -23,7 +23,6 @@ package com.gs.collections.impl.map.immutable.primitive;
 import com.gs.collections.api.map.primitive.<name>BooleanMap;
 import com.gs.collections.api.map.primitive.Immutable<name>BooleanMap;
 import com.gs.collections.impl.factory.primitive.<name>BooleanMaps;
-import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.map.mutable.primitive.<name>BooleanHashMap;
 import com.gs.collections.impl.map.primitive.Abstract<name>BooleanMapTestCase;
 import com.gs.collections.impl.test.Verify;

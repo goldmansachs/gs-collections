@@ -19,9 +19,9 @@ body(type, name, wrapperName) ::= <<
 
 package com.gs.collections.impl.map.mutable.primitive;
 
-import java.util.HashMap;
+<if(primitive.floatingPoint)>import java.util.HashMap;<endif>
 import java.util.Iterator;
-import java.util.Map;
+<if(primitive.floatingPoint)>import java.util.Map;<endif>
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;

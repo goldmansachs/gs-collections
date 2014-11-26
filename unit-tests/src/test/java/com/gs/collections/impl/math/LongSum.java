@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,28 +34,33 @@ public final class LongSum
         this.sum = newSum;
     }
 
+    @Override
     public Sum speciesNew()
     {
         return new LongSum(0);
     }
 
+    @Override
     public Sum add(Object number)
     {
         this.add((Number) number);
         return this;
     }
 
+    @Override
     public Sum add(int value)
     {
         this.add((long) value);
         return this;
     }
 
+    @Override
     public Sum add(Sum otherSum)
     {
         return this.add(otherSum.getValue());
     }
 
+    @Override
     public Sum add(Number number)
     {
         this.add(number.longValue());
@@ -68,6 +73,7 @@ public final class LongSum
         return this;
     }
 
+    @Override
     public Number getValue()
     {
         return this.sum;

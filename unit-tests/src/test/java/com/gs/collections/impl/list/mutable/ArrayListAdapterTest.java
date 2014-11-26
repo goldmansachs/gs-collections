@@ -55,9 +55,12 @@ public class ArrayListAdapterTest extends AbstractListTestCase
         Verify.assertInstanceOf(SynchronizedMutableList.class, ArrayListAdapter.newList().asSynchronized());
     }
 
+    @Override
     @Test
     public void testClone()
     {
+        super.testClone();
+
         MutableList<Integer> list = this.newWith(1, 2, 3);
         MutableList<Integer> list2 = list.clone();
         Verify.assertListsEqual(list, list2);
@@ -104,9 +107,12 @@ public class ArrayListAdapterTest extends AbstractListTestCase
         Verify.assertInstanceOf(UnmodifiableMutableList.class, this.newWith().asUnmodifiable());
     }
 
+    @Override
     @Test
     public void asReversed()
     {
+        super.asReversed();
+
         Verify.assertInstanceOf(ReverseIterable.class, this.newWith().asReversed());
     }
 

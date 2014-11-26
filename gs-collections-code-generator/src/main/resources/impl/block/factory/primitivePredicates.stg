@@ -53,7 +53,6 @@ public final class <name>Predicates
 
     <(intPredicateMethods.(type))()>
     <(charPredicateMethods.(type))()>
-
     public static <name>Predicate alwaysTrue()
     {
         return ALWAYS_TRUE;

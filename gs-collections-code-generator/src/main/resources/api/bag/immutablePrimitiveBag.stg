@@ -15,10 +15,10 @@ body(type, name) ::= <<
 package com.gs.collections.api.bag.primitive;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
-import com.gs.collections.api.bag.ImmutableBag;
 
 /**
  * This file was automatically generated from template file immutablePrimitiveBag.stg.

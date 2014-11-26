@@ -51,9 +51,9 @@ public interface Immutable<name>ObjectMapFactory
     /**
      * Same as {@link #withAll(<name>ObjectMap)}.
      */
-    \<V> Immutable<name>ObjectMap\<V> ofAll(<name>ObjectMap\<? extends V>  map);
+    \<V> Immutable<name>ObjectMap\<V> ofAll(<name>ObjectMap\<? extends V> map);
 
-    \<V> Immutable<name>ObjectMap\<V> withAll(<name>ObjectMap\<? extends V>  map);
+    \<V> Immutable<name>ObjectMap\<V> withAll(<name>ObjectMap\<? extends V> map);
 }
 
 >>

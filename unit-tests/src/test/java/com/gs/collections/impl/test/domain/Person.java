@@ -102,6 +102,7 @@ public final class Person implements Comparable<Person>, Serializable
         return result;
     }
 
+    @Override
     public int compareTo(Person other)
     {
         return this.lastName.compareTo(other.lastName);

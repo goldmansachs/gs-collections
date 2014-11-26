@@ -491,6 +491,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
             this.sum = sum;
         }
 
+        @Override
         public void value(Map.Entry<Integer, Integer> each)
         {
             this.sum.add(each.getKey());

@@ -77,6 +77,14 @@ import com.gs.collections.api.collection.primitive.ImmutableFloatCollection;
 import com.gs.collections.api.collection.primitive.ImmutableIntCollection;
 import com.gs.collections.api.collection.primitive.ImmutableLongCollection;
 import com.gs.collections.api.collection.primitive.ImmutableShortCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
@@ -124,14 +132,6 @@ import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
-import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
-import com.gs.collections.api.collection.primitive.MutableByteCollection;
-import com.gs.collections.api.collection.primitive.MutableCharCollection;
-import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
-import com.gs.collections.api.collection.primitive.MutableFloatCollection;
-import com.gs.collections.api.collection.primitive.MutableIntCollection;
-import com.gs.collections.api.collection.primitive.MutableLongCollection;
-import com.gs.collections.api.collection.primitive.MutableShortCollection;
 
 /**
  * Immutable<name>ObjectSingletonMap is an optimization for {@link Immutable<name>ObjectMap} of size 1.
@@ -416,21 +416,13 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
     }
 
     <collectPrimitive("Boolean", "boolean")>
-
     <collectPrimitive("Byte", "byte")>
-
     <collectPrimitive("Char", "char")>
-
     <collectPrimitive("Double", "double")>
-
     <collectPrimitive("Float", "float")>
-
     <collectPrimitive("Int", "int")>
-
     <collectPrimitive("Long", "long")>
-
     <collectPrimitive("Short", "short")>
-
     public \<VV> RichIterable\<VV> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function)
     {
         return predicate.accept(this.value1) ? Lists.immutable.with(function.valueOf(this.value1)) : Lists.immutable.\<VV>with();
