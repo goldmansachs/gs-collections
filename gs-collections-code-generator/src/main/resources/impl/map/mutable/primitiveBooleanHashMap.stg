@@ -159,12 +159,6 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     }
 
     @Override
-    protected int getTableSize()
-    {
-        return this.values.length();
-    }
-
-    @Override
     protected boolean getValueAtIndex(int index)
     {
         return this.values.get(index);
@@ -393,12 +387,12 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     {
         if (isEmptyKey(key))
         {
-            if (this.sentinelValues == null)
+            if (this.getSentinelValues() == null)
             {
                 this.sentinelValues = new SentinelValues();
             }
-            this.sentinelValues.containsZeroKey = true;
-            this.sentinelValues.zeroValue = value;
+            this.getSentinelValues().containsZeroKey = true;
+            this.getSentinelValues().zeroValue = value;
             return;
         }
 
@@ -408,8 +402,8 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 this.sentinelValues = new SentinelValues();
             }
-            this.sentinelValues.containsOneKey = true;
-            this.sentinelValues.oneValue = value;
+            this.getSentinelValues().containsOneKey = true;
+            this.getSentinelValues().oneValue = value;
             return;
         }
 
@@ -440,24 +434,24 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     {
         if (isEmptyKey(key))
         {
-            return this.sentinelValues != null && this.sentinelValues.containsZeroKey;
+            return this.getSentinelValues() != null && this.getSentinelValues().containsZeroKey;
         }
         if (isRemovedKey(key))
         {
-            return this.sentinelValues != null && this.sentinelValues.containsOneKey;
+            return this.getSentinelValues() != null && this.getSentinelValues().containsOneKey;
         }
         return <(equals.(type))("this.keys[this.probe(key)]", "key")>;
     }
 
     public boolean containsValue(boolean value)
     {
-        if (this.sentinelValues != null && this.sentinelValues.containsValue(value))
+        if (this.getSentinelValues() != null && this.getSentinelValues().containsValue(value))
         {
             return true;
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && this.values.get(i) == value)
+            if (isNonSentinel(this.keys[i]) && this.getValueAtIndex(i) == value)
             {
                 return true;
             }
@@ -467,29 +461,29 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
     public boolean get(<type> key)
     {
-        return this.getIfAbsent(key, EMPTY_VALUE);
+        return this.getIfAbsent(key, this.getEmptyValue());
     }
 
     public boolean getIfAbsent(<type> key, boolean ifAbsent)
     {
         if (isEmptyKey(key))
         {
-            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            if (this.sentinelValues == null || !this.getSentinelValues().containsZeroKey)
             {
                 return ifAbsent;
             }
-            return this.sentinelValues.zeroValue;
+            return this.getSentinelValues().zeroValue;
         }
         if (isRemovedKey(key))
         {
-            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            if (this.sentinelValues == null || !this.getSentinelValues().containsOneKey)
             {
                 return ifAbsent;
             }
-            return this.sentinelValues.oneValue;
+            return this.getSentinelValues().oneValue;
         }
         int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]))
+        if (this.isNonSentinelAtIndex(index))
         {
             return this.values.get(index);
         }
@@ -500,22 +494,22 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     {
         if (isEmptyKey(key))
         {
-            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            if (this.sentinelValues == null || !this.getSentinelValues().containsZeroKey)
             {
                 throw new IllegalStateException("Key " + key + " not present.");
             }
-            return this.sentinelValues.zeroValue;
+            return this.getSentinelValues().zeroValue;
         }
         if (isRemovedKey(key))
         {
-            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            if (this.sentinelValues == null || !this.getSentinelValues().containsOneKey)
             {
                 throw new IllegalStateException("Key " + key + " not present.");
             }
-            return this.sentinelValues.oneValue;
+            return this.getSentinelValues().oneValue;
         }
         int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]))
+        if (this.isNonSentinelAtIndex(index))
         {
             return this.values.get(index);
         }
@@ -529,16 +523,16 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             if (this.sentinelValues == null)
             {
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsZeroKey = true;
-                this.sentinelValues.zeroValue = value;
+                this.getSentinelValues().containsZeroKey = true;
+                this.getSentinelValues().zeroValue = value;
                 return value;
             }
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                return this.sentinelValues.zeroValue;
+                return this.getSentinelValues().zeroValue;
             }
-            this.sentinelValues.containsZeroKey = true;
-            this.sentinelValues.zeroValue = value;
+            this.getSentinelValues().containsZeroKey = true;
+            this.getSentinelValues().zeroValue = value;
             return value;
         }
         if (isRemovedKey(key))
@@ -546,16 +540,16 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             if (this.sentinelValues == null)
             {
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsOneKey = true;
-                this.sentinelValues.oneValue = value;
+                this.getSentinelValues().containsOneKey = true;
+                this.getSentinelValues().oneValue = value;
                 return value;
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
-                return this.sentinelValues.oneValue;
+                return this.getSentinelValues().oneValue;
             }
-            this.sentinelValues.containsOneKey = true;
-            this.sentinelValues.oneValue = value;
+            this.getSentinelValues().containsOneKey = true;
+            this.getSentinelValues().oneValue = value;
             return value;
         }
         int index = this.probe(key);
@@ -575,17 +569,17 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.value();
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsZeroKey = true;
-                this.sentinelValues.zeroValue = value;
+                this.getSentinelValues().containsZeroKey = true;
+                this.getSentinelValues().zeroValue = value;
                 return value;
             }
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                return this.sentinelValues.zeroValue;
+                return this.getSentinelValues().zeroValue;
             }
             boolean value = function.value();
-            this.sentinelValues.containsZeroKey = true;
-            this.sentinelValues.zeroValue = value;
+            this.getSentinelValues().containsZeroKey = true;
+            this.getSentinelValues().zeroValue = value;
             return value;
         }
         if (isRemovedKey(key))
@@ -594,17 +588,17 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.value();
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsOneKey = true;
-                this.sentinelValues.oneValue = value;
+                this.getSentinelValues().containsOneKey = true;
+                this.getSentinelValues().oneValue = value;
                 return value;
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
-                return this.sentinelValues.oneValue;
+                return this.getSentinelValues().oneValue;
             }
             boolean value = function.value();
-            this.sentinelValues.containsOneKey = true;
-            this.sentinelValues.oneValue = value;
+            this.getSentinelValues().containsOneKey = true;
+            this.getSentinelValues().oneValue = value;
             return value;
         }
         int index = this.probe(key);
@@ -625,17 +619,17 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.booleanValueOf(parameter);
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsZeroKey = true;
-                this.sentinelValues.zeroValue = value;
+                this.getSentinelValues().containsZeroKey = true;
+                this.getSentinelValues().zeroValue = value;
                 return value;
             }
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                return this.sentinelValues.zeroValue;
+                return this.getSentinelValues().zeroValue;
             }
             boolean value = function.booleanValueOf(parameter);
-            this.sentinelValues.containsZeroKey = true;
-            this.sentinelValues.zeroValue = value;
+            this.getSentinelValues().containsZeroKey = true;
+            this.getSentinelValues().zeroValue = value;
             return value;
         }
         if (isRemovedKey(key))
@@ -644,17 +638,17 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.booleanValueOf(parameter);
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsOneKey = true;
-                this.sentinelValues.oneValue = value;
+                this.getSentinelValues().containsOneKey = true;
+                this.getSentinelValues().oneValue = value;
                 return value;
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
-                return this.sentinelValues.oneValue;
+                return this.getSentinelValues().oneValue;
             }
             boolean value = function.booleanValueOf(parameter);
-            this.sentinelValues.containsOneKey = true;
-            this.sentinelValues.oneValue = value;
+            this.getSentinelValues().containsOneKey = true;
+            this.getSentinelValues().oneValue = value;
             return value;
         }
         int index = this.probe(key);
@@ -675,17 +669,17 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.valueOf(key);
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsZeroKey = true;
-                this.sentinelValues.zeroValue = value;
+                this.getSentinelValues().containsZeroKey = true;
+                this.getSentinelValues().zeroValue = value;
                 return value;
             }
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                return this.sentinelValues.zeroValue;
+                return this.getSentinelValues().zeroValue;
             }
             boolean value = function.valueOf(key);
-            this.sentinelValues.containsZeroKey = true;
-            this.sentinelValues.zeroValue = value;
+            this.getSentinelValues().containsZeroKey = true;
+            this.getSentinelValues().zeroValue = value;
             return value;
         }
         if (isRemovedKey(key))
@@ -694,17 +688,17 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.valueOf(key);
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsOneKey = true;
-                this.sentinelValues.oneValue = value;
+                this.getSentinelValues().containsOneKey = true;
+                this.getSentinelValues().oneValue = value;
                 return value;
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
-                return this.sentinelValues.oneValue;
+                return this.getSentinelValues().oneValue;
             }
             boolean value = function.valueOf(key);
-            this.sentinelValues.containsOneKey = true;
-            this.sentinelValues.oneValue = value;
+            this.getSentinelValues().containsOneKey = true;
+            this.getSentinelValues().oneValue = value;
             return value;
         }
         int index = this.probe(key);
@@ -724,38 +718,38 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             if (this.sentinelValues == null)
             {
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsZeroKey = true;
-                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
+                this.getSentinelValues().containsZeroKey = true;
+                this.getSentinelValues().zeroValue = function.valueOf(initialValueIfAbsent);
             }
-            else if (this.sentinelValues.containsZeroKey)
+            else if (this.getSentinelValues().containsZeroKey)
             {
-                this.sentinelValues.zeroValue = function.valueOf(this.sentinelValues.zeroValue);
+                this.getSentinelValues().zeroValue = function.valueOf(this.getSentinelValues().zeroValue);
             }
             else
             {
-                this.sentinelValues.containsZeroKey = true;
-                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
+                this.getSentinelValues().containsZeroKey = true;
+                this.getSentinelValues().zeroValue = function.valueOf(initialValueIfAbsent);
             }
-            return this.sentinelValues.zeroValue;
+            return this.getSentinelValues().zeroValue;
         }
         if (isRemovedKey(key))
         {
             if (this.sentinelValues == null)
             {
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsOneKey = true;
-                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
+                this.getSentinelValues().containsOneKey = true;
+                this.getSentinelValues().oneValue = function.valueOf(initialValueIfAbsent);
             }
-            else if (this.sentinelValues.containsOneKey)
+            else if (this.getSentinelValues().containsOneKey)
             {
-                this.sentinelValues.oneValue = function.valueOf(this.sentinelValues.oneValue);
+                this.getSentinelValues().oneValue = function.valueOf(this.getSentinelValues().oneValue);
             }
             else
             {
-                this.sentinelValues.containsOneKey = true;
-                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
+                this.getSentinelValues().containsOneKey = true;
+                this.getSentinelValues().oneValue = function.valueOf(initialValueIfAbsent);
             }
-            return this.sentinelValues.oneValue;
+            return this.getSentinelValues().oneValue;
         }
         int index = this.probe(key);
         if (<(equals.(type))("this.keys[index]", "key")>)
@@ -787,14 +781,14 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     {
         if (isEmptyKey(key))
         {
-            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            if (this.sentinelValues == null || !this.getSentinelValues().containsZeroKey)
             {
                 return;
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
-                this.sentinelValues.containsZeroKey = false;
-                this.sentinelValues.zeroValue = EMPTY_VALUE;
+                this.getSentinelValues().containsZeroKey = false;
+                this.getSentinelValues().zeroValue = this.getEmptyValue();
             }
             else
             {
@@ -804,14 +798,14 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         }
         if (isRemovedKey(key))
         {
-            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            if (this.sentinelValues == null || !this.getSentinelValues().containsOneKey)
             {
                 return;
             }
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                this.sentinelValues.containsOneKey = false;
-                this.sentinelValues.oneValue = EMPTY_VALUE;
+                this.getSentinelValues().containsOneKey = false;
+                this.getSentinelValues().oneValue = this.getEmptyValue();
             }
             else
             {
@@ -823,7 +817,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         if (<(equals.(type))("this.keys[index]", "key")>)
         {
             this.keys[index] = REMOVED_KEY;
-            this.values.set(index, EMPTY_VALUE);
+            this.values.set(index, this.getEmptyValue());
             this.occupiedWithData--;
             this.occupiedWithSentinels++;
             if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
@@ -842,15 +836,15 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     {
         if (isEmptyKey(key))
         {
-            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            if (this.sentinelValues == null || !this.getSentinelValues().containsZeroKey)
             {
                 return value;
             }
-            boolean oldValue = this.sentinelValues.zeroValue;
-            if (this.sentinelValues.containsOneKey)
+            boolean oldValue = this.getSentinelValues().zeroValue;
+            if (this.getSentinelValues().containsOneKey)
             {
-                this.sentinelValues.containsZeroKey = false;
-                this.sentinelValues.zeroValue = EMPTY_VALUE;
+                this.getSentinelValues().containsZeroKey = false;
+                this.getSentinelValues().zeroValue = this.getEmptyValue();
             }
             else
             {
@@ -860,15 +854,15 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         }
         if (isRemovedKey(key))
         {
-            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            if (this.sentinelValues == null || !this.getSentinelValues().containsOneKey)
             {
                 return value;
             }
-            boolean oldValue = this.sentinelValues.oneValue;
-            if (this.sentinelValues.containsZeroKey)
+            boolean oldValue = this.getSentinelValues().oneValue;
+            if (this.getSentinelValues().containsZeroKey)
             {
-                this.sentinelValues.containsOneKey = false;
-                this.sentinelValues.oneValue = EMPTY_VALUE;
+                this.getSentinelValues().containsOneKey = false;
+                this.getSentinelValues().oneValue = this.getEmptyValue();
             }
             else
             {
@@ -881,7 +875,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         {
             this.keys[index] = REMOVED_KEY;
             boolean oldValue = this.values.get(index);
-            this.values.set(index, EMPTY_VALUE);
+            this.values.set(index, this.getEmptyValue());
             this.occupiedWithData--;
             this.occupiedWithSentinels++;
             if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
@@ -923,12 +917,12 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         }
         else
         {
-            if (this.sentinelValues.containsZeroKey && (!other.containsKey(EMPTY_KEY) || this.sentinelValues.zeroValue != other.getOrThrow(EMPTY_KEY)))
+            if (this.getSentinelValues().containsZeroKey && (!other.containsKey(EMPTY_KEY) || this.getSentinelValues().zeroValue != other.getOrThrow(EMPTY_KEY)))
             {
                 return false;
             }
 
-            if (this.sentinelValues.containsOneKey && (!other.containsKey(REMOVED_KEY) || this.sentinelValues.oneValue != other.getOrThrow(REMOVED_KEY)))
+            if (this.getSentinelValues().containsOneKey && (!other.containsKey(REMOVED_KEY) || this.getSentinelValues().oneValue != other.getOrThrow(REMOVED_KEY)))
             {
                 return false;
             }
@@ -936,8 +930,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
         for (int i = 0; i \< this.keys.length; i++)
         {
-            <type> key = this.keys[i];
-            if (isNonSentinel(key) && (!other.containsKey(key) || this.values.get(i) != other.getOrThrow(key)))
+            if (this.isNonSentinelAtIndex(i) && (!other.containsKey(this.keys[i]) || this.getValueAtIndex(i) != other.getOrThrow(this.keys[i])))
             {
                 return false;
             }
@@ -952,20 +945,20 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                result += <(hashCode.(type))("EMPTY_KEY")> ^ (this.sentinelValues.zeroValue ? 1231 : 1237);
+                result += <(hashCode.(type))("EMPTY_KEY")> ^ (this.getSentinelValues().zeroValue ? 1231 : 1237);
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
-                result += <(hashCode.(type))("REMOVED_KEY")> ^ (this.sentinelValues.oneValue ? 1231 : 1237);
+                result += <(hashCode.(type))("REMOVED_KEY")> ^ (this.getSentinelValues().oneValue ? 1231 : 1237);
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]))
             {
-                result += <(hashCode.(type))("this.keys[i]")> ^ (this.values.get(i) ? 1231 : 1237);
+                result += <(hashCode.(type))("this.keys[i]")> ^ (this.getValueAtIndex(i) ? 1231 : 1237);
             }
         }
 
@@ -983,31 +976,30 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                appendable.append(EMPTY_KEY).append("=").append(this.sentinelValues.zeroValue);
+                appendable.append(EMPTY_KEY).append("=").append(this.getSentinelValues().zeroValue);
                 first = false;
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
                 if (!first)
                 {
                     appendable.append(", ");
                 }
-                appendable.append(REMOVED_KEY).append("=").append(this.sentinelValues.oneValue);
+                appendable.append(REMOVED_KEY).append("=").append(this.getSentinelValues().oneValue);
                 first = false;
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            <type> key = this.keys[i];
-            if (isNonSentinel(key))
+            if (this.isNonSentinelAtIndex(i))
             {
                 if (!first)
                 {
                     appendable.append(", ");
                 }
-                appendable.append(key).append("=").append(this.values.get(i));
+                appendable.append(this.keys[i]).append("=").append(this.getValueAtIndex(i));
                 first = false;
             }
         }
@@ -1025,20 +1017,20 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     {
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                procedure.value(this.sentinelValues.zeroValue);
+                procedure.value(this.getSentinelValues().zeroValue);
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
-                procedure.value(this.sentinelValues.oneValue);
+                procedure.value(this.getSentinelValues().oneValue);
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]))
             {
-                procedure.value(this.values.get(i));
+                procedure.value(this.getValueAtIndex(i));
             }
         }
     }
@@ -1047,11 +1039,11 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     {
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
                 procedure.value(EMPTY_KEY);
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
                 procedure.value(REMOVED_KEY);
             }
@@ -1069,20 +1061,20 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     {
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                procedure.value(EMPTY_KEY, this.sentinelValues.zeroValue);
+                procedure.value(EMPTY_KEY, this.getSentinelValues().zeroValue);
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
-                procedure.value(REMOVED_KEY, this.sentinelValues.oneValue);
+                procedure.value(REMOVED_KEY, this.getSentinelValues().oneValue);
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]))
             {
-                procedure.value(this.keys[i], this.values.get(i));
+                procedure.value(this.keys[i], this.getValueAtIndex(i));
             }
         }
     }
@@ -1093,20 +1085,20 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY, this.sentinelValues.zeroValue))
+            if (this.getSentinelValues().containsZeroKey && predicate.accept(EMPTY_KEY, this.getSentinelValues().zeroValue))
             {
-                result.put(EMPTY_KEY, this.sentinelValues.zeroValue);
+                result.put(EMPTY_KEY, this.getSentinelValues().zeroValue);
             }
-            if (this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY, this.sentinelValues.oneValue))
+            if (this.getSentinelValues().containsOneKey && predicate.accept(REMOVED_KEY, this.getSentinelValues().oneValue))
             {
-                result.put(REMOVED_KEY, this.sentinelValues.oneValue);
+                result.put(REMOVED_KEY, this.getSentinelValues().oneValue);
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.keys[i], this.values.get(i)))
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.keys[i], this.getValueAtIndex(i)))
             {
-                result.put(this.keys[i], this.values.get(i));
+                result.put(this.keys[i], this.getValueAtIndex(i));
             }
         }
 
@@ -1119,20 +1111,20 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY_KEY, this.sentinelValues.zeroValue))
+            if (this.getSentinelValues().containsZeroKey && !predicate.accept(EMPTY_KEY, this.getSentinelValues().zeroValue))
             {
-                result.put(EMPTY_KEY, this.sentinelValues.zeroValue);
+                result.put(EMPTY_KEY, this.getSentinelValues().zeroValue);
             }
-            if (this.sentinelValues.containsOneKey && !predicate.accept(REMOVED_KEY, this.sentinelValues.oneValue))
+            if (this.getSentinelValues().containsOneKey && !predicate.accept(REMOVED_KEY, this.getSentinelValues().oneValue))
             {
-                result.put(REMOVED_KEY, this.sentinelValues.oneValue);
+                result.put(REMOVED_KEY, this.getSentinelValues().oneValue);
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.keys[i], this.values.get(i)))
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.keys[i], this.getValueAtIndex(i)))
             {
-                result.put(this.keys[i], this.values.get(i));
+                result.put(this.keys[i], this.getValueAtIndex(i));
             }
         }
         return result;
@@ -1144,13 +1136,13 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                result = function.valueOf(result, this.sentinelValues.zeroValue);
+                result = function.valueOf(result, this.getSentinelValues().zeroValue);
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
-                result = function.valueOf(result, this.sentinelValues.oneValue);
+                result = function.valueOf(result, this.getSentinelValues().oneValue);
             }
         }
 
@@ -1158,7 +1150,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         {
             if (isNonSentinel(this.keys[i]))
             {
-                result = function.valueOf(result, this.values.get(i));
+                result = function.valueOf(result, this.getValueAtIndex(i));
             }
         }
 
@@ -1175,31 +1167,30 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
             if (this.sentinelValues != null)
             {
-                if (this.sentinelValues.containsZeroKey)
+                if (this.getSentinelValues().containsZeroKey)
                 {
-                    appendable.append(String.valueOf(this.sentinelValues.zeroValue));
+                    appendable.append(String.valueOf(this.getSentinelValues().zeroValue));
                     first = false;
                 }
-                if (this.sentinelValues.containsOneKey)
+                if (this.getSentinelValues().containsOneKey)
                 {
                     if (!first)
                     {
                         appendable.append(separator);
                     }
-                    appendable.append(String.valueOf(this.sentinelValues.oneValue));
+                    appendable.append(String.valueOf(this.getSentinelValues().oneValue));
                     first = false;
                 }
             }
             for (int i = 0; i \< this.keys.length; i++)
             {
-                <type> key = this.keys[i];
-                if (isNonSentinel(key))
+                if (this.isNonSentinelAtIndex(i))
                 {
                     if (!first)
                     {
                         appendable.append(separator);
                     }
-                    appendable.append(String.valueOf(this.values.get(i)));
+                    appendable.append(String.valueOf(this.getValueAtIndex(i)));
                     first = false;
                 }
             }
@@ -1217,20 +1208,20 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            if (this.getSentinelValues().containsZeroKey && predicate.accept(this.getSentinelValues().zeroValue))
             {
-                result.add(this.sentinelValues.zeroValue);
+                result.add(this.getSentinelValues().zeroValue);
             }
-            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            if (this.getSentinelValues().containsOneKey && predicate.accept(this.getSentinelValues().oneValue))
             {
-                result.add(this.sentinelValues.oneValue);
+                result.add(this.getSentinelValues().oneValue);
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.getValueAtIndex(i)))
             {
-                result.add(this.values.get(i));
+                result.add(this.getValueAtIndex(i));
             }
         }
 
@@ -1242,20 +1233,20 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         BooleanArrayList result = new BooleanArrayList();
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && !predicate.accept(this.sentinelValues.zeroValue))
+            if (this.getSentinelValues().containsZeroKey && !predicate.accept(this.getSentinelValues().zeroValue))
             {
-                result.add(this.sentinelValues.zeroValue);
+                result.add(this.getSentinelValues().zeroValue);
             }
-            if (this.sentinelValues.containsOneKey && !predicate.accept(this.sentinelValues.oneValue))
+            if (this.getSentinelValues().containsOneKey && !predicate.accept(this.getSentinelValues().oneValue))
             {
-                result.add(this.sentinelValues.oneValue);
+                result.add(this.getSentinelValues().oneValue);
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values.get(i)))
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.getValueAtIndex(i)))
             {
-                result.add(this.values.get(i));
+                result.add(this.getValueAtIndex(i));
             }
         }
         return result;
@@ -1265,20 +1256,20 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     {
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            if (this.getSentinelValues().containsZeroKey && predicate.accept(this.getSentinelValues().zeroValue))
             {
-                return this.sentinelValues.zeroValue;
+                return this.getSentinelValues().zeroValue;
             }
-            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            if (this.getSentinelValues().containsOneKey && predicate.accept(this.getSentinelValues().oneValue))
             {
-                return this.sentinelValues.oneValue;
+                return this.getSentinelValues().oneValue;
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.getValueAtIndex(i)))
             {
-                return this.values.get(i);
+                return this.getValueAtIndex(i);
             }
         }
         return value;
@@ -1289,20 +1280,20 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         FastList\<V> target = FastList.newList(this.size());
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                target.add(function.valueOf(this.sentinelValues.zeroValue));
+                target.add(function.valueOf(this.getSentinelValues().zeroValue));
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
-                target.add(function.valueOf(this.sentinelValues.oneValue));
+                target.add(function.valueOf(this.getSentinelValues().oneValue));
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]))
             {
-                target.add(function.valueOf(this.values.get(i)));
+                target.add(function.valueOf(this.getValueAtIndex(i)));
             }
         }
         return target;
@@ -1313,18 +1304,18 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         int count = 0;
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            if (this.getSentinelValues().containsZeroKey && predicate.accept(this.getSentinelValues().zeroValue))
             {
                 count++;
             }
-            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            if (this.getSentinelValues().containsOneKey && predicate.accept(this.getSentinelValues().oneValue))
             {
                 count++;
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.getValueAtIndex(i)))
             {
                 count++;
             }
@@ -1336,18 +1327,18 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     {
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            if (this.getSentinelValues().containsZeroKey && predicate.accept(this.getSentinelValues().zeroValue))
             {
                 return true;
             }
-            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            if (this.getSentinelValues().containsOneKey && predicate.accept(this.getSentinelValues().oneValue))
             {
                 return true;
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.getValueAtIndex(i)))
             {
                 return true;
             }
@@ -1359,18 +1350,18 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     {
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && !predicate.accept(this.sentinelValues.zeroValue))
+            if (this.getSentinelValues().containsZeroKey && !predicate.accept(this.getSentinelValues().zeroValue))
             {
                 return false;
             }
-            if (this.sentinelValues.containsOneKey && !predicate.accept(this.sentinelValues.oneValue))
+            if (this.getSentinelValues().containsOneKey && !predicate.accept(this.getSentinelValues().oneValue))
             {
                 return false;
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values.get(i)))
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.getValueAtIndex(i)))
             {
                 return false;
             }
@@ -1390,14 +1381,14 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
-                array[index] = this.sentinelValues.zeroValue;
+                array[index] = this.getSentinelValues().zeroValue;
                 index++;
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
-                array[index] = this.sentinelValues.oneValue;
+                array[index] = this.getSentinelValues().oneValue;
                 index++;
             }
         }
@@ -1405,7 +1396,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         {
             if (isNonSentinel(this.keys[i]))
             {
-                array[index] = this.values.get(i);
+                array[index] = this.getValueAtIndex(i);
                 index++;
             }
         }
@@ -1432,15 +1423,15 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         out.writeFloat(DEFAULT_LOAD_FACTOR);
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey)
+            if (this.getSentinelValues().containsZeroKey)
             {
                 out.write<name>(EMPTY_KEY);
-                out.writeBoolean(this.sentinelValues.zeroValue);
+                out.writeBoolean(this.getSentinelValues().zeroValue);
             }
-            if (this.sentinelValues.containsOneKey)
+            if (this.getSentinelValues().containsOneKey)
             {
                 out.write<name>(REMOVED_KEY);
-                out.writeBoolean(this.sentinelValues.oneValue);
+                out.writeBoolean(this.getSentinelValues().oneValue);
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
@@ -1448,7 +1439,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             if (isNonSentinel(this.keys[i]))
             {
                 out.write<name>(this.keys[i]);
-                out.writeBoolean(this.values.get(i));
+                out.writeBoolean(this.getValueAtIndex(i));
             }
         }
     }
@@ -1507,7 +1498,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 if (<name>BooleanHashMap.this.containsKey(EMPTY_KEY))
                 {
                     this.lastKey = EMPTY_KEY;
-                    return <name>BooleanHashMap.this.sentinelValues.zeroValue;
+                    return <name>BooleanHashMap.this.getSentinelValues().zeroValue;
                 }
             }
             if (!this.handledOne)
@@ -1516,7 +1507,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 if (<name>BooleanHashMap.this.containsKey(REMOVED_KEY))
                 {
                     this.lastKey = REMOVED_KEY;
-                    return <name>BooleanHashMap.this.sentinelValues.oneValue;
+                    return <name>BooleanHashMap.this.getSentinelValues().oneValue;
                 }
             }
 
@@ -1639,12 +1630,12 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 boolean first = true;
                 if (<name>BooleanHashMap.this.sentinelValues != null)
                 {
-                    if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                    if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey)
                     {
                         appendable.append(String.valueOf(EMPTY_KEY));
                         first = false;
                     }
-                    if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                    if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey)
                     {
                         if (!first)
                         {
@@ -1679,11 +1670,11 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             int count = 0;
             if (<name>BooleanHashMap.this.sentinelValues != null)
             {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
+                if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey && predicate.accept(EMPTY_KEY))
                 {
                     count++;
                 }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
+                if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey && predicate.accept(REMOVED_KEY))
                 {
                     count++;
                 }
@@ -1702,11 +1693,11 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         {
             if (<name>BooleanHashMap.this.sentinelValues != null)
             {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
+                if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey && predicate.accept(EMPTY_KEY))
                 {
                     return true;
                 }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
+                if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey && predicate.accept(REMOVED_KEY))
                 {
                     return true;
                 }
@@ -1725,11 +1716,11 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         {
             if (<name>BooleanHashMap.this.sentinelValues != null)
             {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY_KEY))
+                if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey && !predicate.accept(EMPTY_KEY))
                 {
                     return false;
                 }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && !predicate.accept(REMOVED_KEY))
+                if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey && !predicate.accept(REMOVED_KEY))
                 {
                     return false;
                 }
@@ -1763,11 +1754,11 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         {
             if (<name>BooleanHashMap.this.sentinelValues != null)
             {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
+                if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey && predicate.accept(EMPTY_KEY))
                 {
                     return EMPTY_KEY;
                 }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
+                if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey && predicate.accept(REMOVED_KEY))
                 {
                     return REMOVED_KEY;
                 }
@@ -1793,11 +1784,11 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
             if (<name>BooleanHashMap.this.sentinelValues != null)
             {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey)
                 {
                     result += EMPTY_KEY;
                 }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey)
                 {
                     result += REMOVED_KEY;
                 }
@@ -1924,11 +1915,11 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             T result = injectedValue;
             if (<name>BooleanHashMap.this.sentinelValues != null)
             {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey)
                 {
                     result = function.valueOf(result, EMPTY_KEY);
                 }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey)
                 {
                     result = function.valueOf(result, REMOVED_KEY);
                 }
@@ -1977,9 +1968,15 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
     private class KeySet extends AbstractMutable<name>KeySet
     {
         @Override
-        protected <type>[] getKeys()
+        protected <type> getKeyAtIndex(int index)
         {
-            return <name>BooleanHashMap.this.keys;
+            return <name>BooleanHashMap.this.keys[index];
+        }
+
+        @Override
+        protected int getTableSize()
+        {
+            return <name>BooleanHashMap.this.keys.length;
         }
 
         @Override
@@ -2050,31 +2047,30 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
                 if (<name>BooleanHashMap.this.sentinelValues != null)
                 {
-                    if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                    if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey)
                     {
-                        appendable.append(String.valueOf(<name>BooleanHashMap.this.sentinelValues.zeroValue));
+                        appendable.append(String.valueOf(<name>BooleanHashMap.this.getSentinelValues().zeroValue));
                         first = false;
                     }
-                    if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                    if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey)
                     {
                         if (!first)
                         {
                             appendable.append(separator);
                         }
-                        appendable.append(String.valueOf(<name>BooleanHashMap.this.sentinelValues.oneValue));
+                        appendable.append(String.valueOf(<name>BooleanHashMap.this.getSentinelValues().oneValue));
                         first = false;
                     }
                 }
                 for (int i = 0; i \< <name>BooleanHashMap.this.keys.length; i++)
                 {
-                    <type> key = <name>BooleanHashMap.this.keys[i];
-                    if (isNonSentinel(key))
+                    if (<name>BooleanHashMap.this.isNonSentinelAtIndex(i))
                     {
                         if (!first)
                         {
                             appendable.append(separator);
                         }
-                        appendable.append(String.valueOf(<name>BooleanHashMap.this.values.get(i)));
+                        appendable.append(String.valueOf(<name>BooleanHashMap.this.getValueAtIndex(i)));
                         first = false;
                     }
                 }
@@ -2097,18 +2093,18 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
             if (<name>BooleanHashMap.this.sentinelValues != null)
             {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && item == <name>BooleanHashMap.this.sentinelValues.zeroValue)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey && item == <name>BooleanHashMap.this.getSentinelValues().zeroValue)
                 {
                     <name>BooleanHashMap.this.removeKey(EMPTY_KEY);
                 }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && item == <name>BooleanHashMap.this.sentinelValues.oneValue)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey && item == <name>BooleanHashMap.this.getSentinelValues().oneValue)
                 {
                     <name>BooleanHashMap.this.removeKey(REMOVED_KEY);
                 }
             }
             for (int i = 0; i \< <name>BooleanHashMap.this.keys.length; i++)
             {
-                if (isNonSentinel(<name>BooleanHashMap.this.keys[i]) && item == <name>BooleanHashMap.this.values.get(i))
+                if (isNonSentinel(<name>BooleanHashMap.this.keys[i]) && item == <name>BooleanHashMap.this.getValueAtIndex(i))
                 {
                     <name>BooleanHashMap.this.removeKey(<name>BooleanHashMap.this.keys[i]);
                 }
@@ -2215,20 +2211,20 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         {
             if (<name>BooleanHashMap.this.sentinelValues != null)
             {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey)
                 {
-                    procedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.sentinelValues.zeroValue));
+                    procedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.getSentinelValues().zeroValue));
                 }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey)
                 {
-                    procedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.sentinelValues.oneValue));
+                    procedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.getSentinelValues().oneValue));
                 }
             }
             for (int i = 0; i \< <name>BooleanHashMap.this.keys.length; i++)
             {
                 if (isNonSentinel(<name>BooleanHashMap.this.keys[i]))
                 {
-                    procedure.value(PrimitiveTuples.pair(<name>BooleanHashMap.this.keys[i], <name>BooleanHashMap.this.values.get(i)));
+                    procedure.value(PrimitiveTuples.pair(<name>BooleanHashMap.this.keys[i], <name>BooleanHashMap.this.getValueAtIndex(i)));
                 }
             }
         }
@@ -2238,14 +2234,14 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             int index = 0;
             if (<name>BooleanHashMap.this.sentinelValues != null)
             {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey)
                 {
-                    objectIntProcedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.sentinelValues.zeroValue), index);
+                    objectIntProcedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.getSentinelValues().zeroValue), index);
                     index++;
                 }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey)
                 {
-                    objectIntProcedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.sentinelValues.oneValue), index);
+                    objectIntProcedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.getSentinelValues().oneValue), index);
                     index++;
                 }
             }
@@ -2253,7 +2249,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 if (isNonSentinel(<name>BooleanHashMap.this.keys[i]))
                 {
-                    objectIntProcedure.value(PrimitiveTuples.pair(<name>BooleanHashMap.this.keys[i], <name>BooleanHashMap.this.values.get(i)), index);
+                    objectIntProcedure.value(PrimitiveTuples.pair(<name>BooleanHashMap.this.keys[i], <name>BooleanHashMap.this.getValueAtIndex(i)), index);
                     index++;
                 }
             }
@@ -2263,20 +2259,20 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         {
             if (<name>BooleanHashMap.this.sentinelValues != null)
             {
-                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsZeroKey)
                 {
-                    procedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.sentinelValues.zeroValue), parameter);
+                    procedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.getSentinelValues().zeroValue), parameter);
                 }
-                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                if (<name>BooleanHashMap.this.getSentinelValues().containsOneKey)
                 {
-                    procedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.sentinelValues.oneValue), parameter);
+                    procedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.getSentinelValues().oneValue), parameter);
                 }
             }
             for (int i = 0; i \< <name>BooleanHashMap.this.keys.length; i++)
             {
                 if (isNonSentinel(<name>BooleanHashMap.this.keys[i]))
                 {
-                    procedure.value(PrimitiveTuples.pair(<name>BooleanHashMap.this.keys[i], <name>BooleanHashMap.this.values.get(i)), parameter);
+                    procedure.value(PrimitiveTuples.pair(<name>BooleanHashMap.this.keys[i], <name>BooleanHashMap.this.getValueAtIndex(i)), parameter);
                 }
             }
         }
@@ -2306,7 +2302,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                     this.handledZero = true;
                     if (<name>BooleanHashMap.this.containsKey(EMPTY_KEY))
                     {
-                        return PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.sentinelValues.zeroValue);
+                        return PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.getSentinelValues().zeroValue);
                     }
                 }
                 if (!this.handledOne)
@@ -2314,7 +2310,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                     this.handledOne = true;
                     if (<name>BooleanHashMap.this.containsKey(REMOVED_KEY))
                     {
-                        return PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.sentinelValues.oneValue);
+                        return PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.getSentinelValues().oneValue);
                     }
                 }
 

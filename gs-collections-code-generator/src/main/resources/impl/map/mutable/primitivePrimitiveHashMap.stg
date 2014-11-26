@@ -1077,16 +1077,6 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
     private class KeySet extends AbstractMutable<name1>KeySet
     {
         @Override
-        protected <type1>[] getKeys()
-        {
-        <if(sameTwoPrimitives)>
-            return null;
-        <else>
-            return <name1><name2>HashMap.this.keys;
-        <endif>
-        }
-
-        @Override
         protected Mutable<name1>KeysMap getOuter()
         {
             return <name1><name2>HashMap.this;
@@ -1098,93 +1088,22 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
             return <name1><name2>HashMap.this.sentinelValues;
         }
 
+        @Override
+        protected <type1> getKeyAtIndex(int index)
+        {
+            return <name1><name2>HashMap.this.<keyArray>[index<if(sameTwoPrimitives)> * 2<endif>];
+        }
+
+        @Override
+        protected int getTableSize()
+        {
+            return <name1><name2>HashMap.this.<keyArray>.length<if(sameTwoPrimitives)> / 2<endif>;
+        }
+
         public Mutable<name1>Iterator <type1>Iterator()
         {
             return new KeySetIterator();
         }
-
-<if(sameTwoPrimitives)>
-        public void forEach(<name1>Procedure procedure)
-        {
-            <name1><name2>HashMap.this.forEachKey(procedure);
-        }
-
-        public int count(<name1>Predicate predicate)
-        {
-            int count = 0;
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
-                {
-                    count++;
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
-                {
-                    count++;
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
-                {
-                    count++;
-                }
-            }
-            return count;
-        }
-
-        public boolean anySatisfy(<name1>Predicate predicate)
-        {
-            <forEachKeySatisfying(template = {return true}, innerClass = true)>
-            return false;
-        }
-
-        public boolean allSatisfy(<name1>Predicate predicate)
-        {
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY_KEY))
-                {
-                    return false;
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey && !predicate.accept(REMOVED_KEY))
-                {
-                    return false;
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && !predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public boolean noneSatisfy(<name1>Predicate predicate)
-        {
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
-                {
-                    return false;
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
-                {
-                    return false;
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-<endif>
 
         public boolean retainAll(<name1>Iterable source)
         {
@@ -1216,219 +1135,6 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
             return this.retainAll(<name1>HashSet.newSetWith(source));
         }
 
-<if(sameTwoPrimitives)>
-        public Mutable<name1>Set select(<name1>Predicate predicate)
-        {
-            Mutable<name1>Set result = new <name1>HashSet();
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
-                {
-                    result.add(EMPTY_KEY);
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
-                {
-                    result.add(REMOVED_KEY);
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
-                {
-                    result.add(<name1><name2>HashMap.this.<keyArray>[i]);
-                }
-            }
-            return result;
-        }
-
-        public Mutable<name1>Set reject(<name1>Predicate predicate)
-        {
-            Mutable<name1>Set result = new <name1>HashSet();
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY_KEY))
-                {
-                    result.add(EMPTY_KEY);
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey && !predicate.accept(REMOVED_KEY))
-                {
-                    result.add(REMOVED_KEY);
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && !predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
-                {
-                    result.add(<name1><name2>HashMap.this.<keyArray>[i]);
-                }
-            }
-            return result;
-        }
-
-        public <type1> detectIfNone(<name1>Predicate predicate, <type1> ifNone)
-        {
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
-                {
-                    return EMPTY_KEY;
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
-                {
-                    return REMOVED_KEY;
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && predicate.accept(<name1><name2>HashMap.this.<keyArray>[i]))
-                {
-                    return <name1><name2>HashMap.this.<keyArray>[i];
-                }
-            }
-            return ifNone;
-        }
-
-        public \<V> MutableSet\<V> collect(<name1>ToObjectFunction\<? extends V> function)
-        {
-            MutableSet\<V> result = Sets.mutable.with();
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey)
-                {
-                    result.add(function.valueOf(EMPTY_KEY));
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey)
-                {
-                    result.add(function.valueOf(REMOVED_KEY));
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]))
-                {
-                    result.add(function.valueOf(<name1><name2>HashMap.this.<keyArray>[i]));
-                }
-            }
-            return result;
-        }
-
-        public <wideType.(type1)> sum()
-        {
-            <wideType.(type1)> sum = <wideZero.(type1)>;
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey)
-                {
-                    sum += EMPTY_KEY;
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey)
-                {
-                    sum += REMOVED_KEY;
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]))
-                {
-                    sum += <name1><name2>HashMap.this.<keyArray>[i];
-                }
-            }
-            return sum;
-        }
-
-        public <type1> max()
-        {
-            if (<name1><name2>HashMap.this.isEmpty())
-            {
-                throw new NoSuchElementException();
-            }
-
-            <type1> max = 0;
-            boolean isMaxSet = false;
-
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey)
-                {
-                    max = EMPTY_KEY;
-                    isMaxSet = true;
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey && (!isMaxSet || <(lessThan.(type1))("max", "REMOVED_KEY")>))
-                {
-                    max = REMOVED_KEY;
-                    isMaxSet = true;
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && (!isMaxSet || <(lessThan.(type1))({max}, {<name1><name2>HashMap.this.<keyArray>[i]})>))
-                {
-                    max = <name1><name2>HashMap.this.<keyArray>[i];
-                    isMaxSet = true;
-                }
-            }
-            return max;
-        }
-
-        public <type1> min()
-        {
-            if (<name1><name2>HashMap.this.isEmpty())
-            {
-                throw new NoSuchElementException();
-            }
-
-            <type1> min = 0;
-            boolean isMinSet = false;
-
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey)
-                {
-                    min = EMPTY_KEY;
-                    isMinSet = true;
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey && (!isMinSet || <(lessThan.(type1))("REMOVED_KEY", "min")>))
-                {
-                    min = REMOVED_KEY;
-                    isMinSet = true;
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]) && (!isMinSet || <(lessThan.(type1))({<name1><name2>HashMap.this.<keyArray>[i]}, {min})>))
-                {
-                    min = <name1><name2>HashMap.this.<keyArray>[i];
-                    isMinSet = true;
-                }
-            }
-            return min;
-        }
-
-        public \<T> T injectInto(T injectedValue, Object<name1>ToObjectFunction\<? super T, ? extends T> function)
-        {
-            T result = injectedValue;
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey)
-                {
-                    result = function.valueOf(result, EMPTY_KEY);
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey)
-                {
-                    result = function.valueOf(result, REMOVED_KEY);
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]))
-                {
-                    result = function.valueOf(result, <name1><name2>HashMap.this.<keyArray>[i]);
-                }
-            }
-            return result;
-        }
-
-<endif>
         public <name1>Set freeze()
         {
             <name1><name2>HashMap.this.copyKeysOnWrite = true;
@@ -1445,78 +1151,6 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
             return new Immutable<name1>MapKeySet(<name1><name2>HashMap.this.<keyArray>, <name1><name2>HashMap.this.occupiedWithData, containsZeroKey, containsOneKey);
             <endif>
         }
-<if(sameTwoPrimitives)>
-
-        @Override
-        public int hashCode()
-        {
-            int result = 0;
-
-            if (<name1><name2>HashMap.this.sentinelValues != null)
-            {
-                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey)
-                {
-                    result += <(hashCode.(type1))("EMPTY_KEY")>;
-                }
-                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey)
-                {
-                    result += <(hashCode.(type1))("REMOVED_KEY")>;
-                }
-            }
-            for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-            {
-                if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]))
-                {
-                    result += <(hashCode.(type1))({<name1><name2>HashMap.this.<keyArray>[i]})>;
-                }
-            }
-
-            return result;
-        }
-
-        public void appendString(Appendable appendable, String start, String separator, String end)
-        {
-            try
-            {
-                appendable.append(start);
-                boolean first = true;
-                if (<name1><name2>HashMap.this.sentinelValues != null)
-                {
-                    if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey)
-                    {
-                        appendable.append(String.valueOf(EMPTY_KEY));
-                        first = false;
-                    }
-                    if (<name1><name2>HashMap.this.sentinelValues.containsOneKey)
-                    {
-                        if (!first)
-                        {
-                            appendable.append(separator);
-                        }
-                        appendable.append(String.valueOf(REMOVED_KEY));
-                        first = false;
-                    }
-                }
-                for (int i = 0; i \< <name1><name2>HashMap.this.<keyArray>.length; i<increment>)
-                {
-                    if (isNonSentinel(<name1><name2>HashMap.this.<keyArray>[i]))
-                    {
-                        if (!first)
-                        {
-                            appendable.append(separator);
-                        }
-                        appendable.append(String.valueOf(<name1><name2>HashMap.this.<keyArray>[i]));
-                        first = false;
-                    }
-                }
-                appendable.append(end);
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
-        <endif>
     }
 
     public Mutable<name2>Collection values()

@@ -69,7 +69,9 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
         return !isEmptyKey(key) && !isRemovedKey(key);
     }
 
-    protected abstract <type>[] getKeys();
+    protected abstract <type> getKeyAtIndex(int index);
+
+    protected abstract int getTableSize();
 
     protected abstract Mutable<name>KeysMap getOuter();
 
@@ -94,9 +96,9 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 count++;
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]) && predicate.accept(this.getKeys()[i]))
+            if (isNonSentinel(this.getKeyAtIndex(i)) && predicate.accept(this.getKeyAtIndex(i)))
             {
                 count++;
             }
@@ -117,9 +119,9 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 return true;
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]) && predicate.accept(this.getKeys()[i]))
+            if (isNonSentinel(this.getKeyAtIndex(i)) && predicate.accept(this.getKeyAtIndex(i)))
             {
                 return true;
             }
@@ -140,9 +142,9 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 return false;
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]) && !predicate.accept(this.getKeys()[i]))
+            if (isNonSentinel(this.getKeyAtIndex(i)) && !predicate.accept(this.getKeyAtIndex(i)))
             {
                 return false;
             }
@@ -163,9 +165,9 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 return false;
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]) && predicate.accept(this.getKeys()[i]))
+            if (isNonSentinel(this.getKeyAtIndex(i)) && predicate.accept(this.getKeyAtIndex(i)))
             {
                 return false;
             }
@@ -202,11 +204,11 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 result.add(REMOVED_KEY);
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]) && predicate.accept(this.getKeys()[i]))
+            if (isNonSentinel(this.getKeyAtIndex(i)) && predicate.accept(this.getKeyAtIndex(i)))
             {
-                result.add(this.getKeys()[i]);
+                result.add(this.getKeyAtIndex(i));
             }
         }
         return result;
@@ -226,11 +228,11 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 result.add(REMOVED_KEY);
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]) && !predicate.accept(this.getKeys()[i]))
+            if (isNonSentinel(this.getKeyAtIndex(i)) && !predicate.accept(this.getKeyAtIndex(i)))
             {
-                result.add(this.getKeys()[i]);
+                result.add(this.getKeyAtIndex(i));
             }
         }
         return result;
@@ -270,11 +272,11 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 result.add(function.valueOf(REMOVED_KEY));
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]))
+            if (isNonSentinel(this.getKeyAtIndex(i)))
             {
-                result.add(function.valueOf(this.getKeys()[i]));
+                result.add(function.valueOf(this.getKeyAtIndex(i)));
             }
         }
         return result;
@@ -326,11 +328,11 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 return REMOVED_KEY;
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]) && predicate.accept(this.getKeys()[i]))
+            if (isNonSentinel(this.getKeyAtIndex(i)) && predicate.accept(this.getKeyAtIndex(i)))
             {
-                return this.getKeys()[i];
+                return this.getKeyAtIndex(i);
             }
         }
         return ifNone;
@@ -360,11 +362,11 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 sum += REMOVED_KEY;
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]))
+            if (isNonSentinel(this.getKeyAtIndex(i)))
             {
-                sum += this.getKeys()[i];
+                sum += this.getKeyAtIndex(i);
             }
         }
         return sum;
@@ -393,11 +395,11 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 isMaxSet = true;
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]) && (!isMaxSet || <(lessThan.(type))({max}, {this.getKeys()[i]})>))
+            if (isNonSentinel(this.getKeyAtIndex(i)) && (!isMaxSet || <(lessThan.(type))({max}, {this.getKeyAtIndex(i)})>))
             {
-                max = this.getKeys()[i];
+                max = this.getKeyAtIndex(i);
                 isMaxSet = true;
             }
         }
@@ -437,11 +439,11 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 isMinSet = true;
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]) && (!isMinSet || <(lessThan.(type))({this.getKeys()[i]}, {min})>))
+            if (isNonSentinel(this.getKeyAtIndex(i)) && (!isMinSet || <(lessThan.(type))({this.getKeyAtIndex(i)}, {min})>))
             {
-                min = this.getKeys()[i];
+                min = this.getKeyAtIndex(i);
                 isMinSet = true;
             }
         }
@@ -577,11 +579,11 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 result = function.valueOf(result, REMOVED_KEY);
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]))
+            if (isNonSentinel(this.getKeyAtIndex(i)))
             {
-                result = function.valueOf(result, this.getKeys()[i]);
+                result = function.valueOf(result, this.getKeyAtIndex(i));
             }
         }
         return result;
@@ -640,11 +642,11 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                 result += <(hashCode.(type))("REMOVED_KEY")>;
             }
         }
-        for (int i = 0; i \< this.getKeys().length; i++)
+        for (int i = 0; i \< this.getTableSize(); i++)
         {
-            if (isNonSentinel(this.getKeys()[i]))
+            if (isNonSentinel(this.getKeyAtIndex(i)))
             {
-                result += <(hashCode.(type))({this.getKeys()[i]})>;
+                result += <(hashCode.(type))({this.getKeyAtIndex(i)})>;
             }
         }
 
@@ -707,15 +709,15 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
                     first = false;
                 }
             }
-            for (int i = 0; i \< this.getKeys().length; i++)
+            for (int i = 0; i \< this.getTableSize(); i++)
             {
-                if (isNonSentinel(this.getKeys()[i]))
+                if (isNonSentinel(this.getKeyAtIndex(i)))
                 {
                     if (!first)
                     {
                         appendable.append(separator);
                     }
-                    appendable.append(String.valueOf(this.getKeys()[i]));
+                    appendable.append(String.valueOf(this.getKeyAtIndex(i)));
                     first = false;
                 }
             }

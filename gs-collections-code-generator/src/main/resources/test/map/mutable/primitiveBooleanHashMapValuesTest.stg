@@ -414,6 +414,8 @@ public class <name>BooleanHashMapValuesTest extends AbstractMutableBooleanCollec
     @Test
     public void appendString()
     {
+        //does not call super.appendString() because of itereator.toString() test.
+
         StringBuilder appendable = new StringBuilder();
         this.newWith().appendString(appendable);
         Assert.assertEquals("", appendable.toString());
@@ -433,6 +435,14 @@ public class <name>BooleanHashMapValuesTest extends AbstractMutableBooleanCollec
         iterable.appendString(appendable3, "/");
         Assert.assertTrue("true/false".equals(appendable3.toString())
                 || "false/true".equals(appendable3.toString()));
+
+        <name>BooleanHashMap map = new <name>BooleanHashMap();
+        map.put(<(literal.(type))("1")>, true);
+        map.put(<(literal.(type))("2")>, false);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        map.values().appendString(stringBuilder, "[", ", ", "]");
+        Assert.assertEquals("[true, false]", stringBuilder.toString());
     }
 
     @Override
