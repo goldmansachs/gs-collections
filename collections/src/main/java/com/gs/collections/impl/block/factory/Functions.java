@@ -193,6 +193,8 @@ public final class Functions
     }
 
     /**
+     * Alias for identity(). Inlineable.
+     *
      * @see #identity()
      */
     public static <T> Function<T, T> getPassThru()

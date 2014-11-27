@@ -245,11 +245,6 @@ public interface Multimap<K, V>
 
     /**
      * Given a Multimap from Domain -> Range return a multimap from Range -> Domain.
-     * <p>
-     * Since the keys in the input are unique, the values in the output are unique, so the return type should
-     * be a SetMultimap. However since SetMultimap and SortedSetMultimap don't inherit from one another, SetMultimap
-     * here does not allow SortedMapIterable to have a SortedSetMultimap return. Thus we compromise and call this
-     * Multimap, even though all implementations will be a SetMultimap or SortedSetMultimap.
      *
      * @since 6.0
      */

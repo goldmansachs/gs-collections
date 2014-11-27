@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import java.util.Comparator;
 import com.gs.collections.api.block.procedure.Procedure;
 
 /**
- * Implementation of {@link Procedure <T>} that holds on to the maximum element seen so far,
- * determined by the {@link Comparator}
+ * Implementation of {@link Procedure} that holds on to the maximum element seen so far,
+ * determined by the {@link Comparator}.
  */
 public class MaxComparatorProcedure<T> extends ComparatorProcedure<T>
 {
