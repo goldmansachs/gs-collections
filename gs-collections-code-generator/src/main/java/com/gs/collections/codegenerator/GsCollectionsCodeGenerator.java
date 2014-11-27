@@ -43,6 +43,7 @@ public class GsCollectionsCodeGenerator
     private STGroupFile templateFile;
     private final STErrorListener stErrorListener;
     private URL url;
+    private int numFileWritten = 0;
 
     public GsCollectionsCodeGenerator(String templateDirectory, File moduleBaseDir, List<URL> classPathURLs, ErrorListener errorListener)
     {
@@ -52,7 +53,12 @@ public class GsCollectionsCodeGenerator
         this.stErrorListener = new LoggingErrorListener(errorListener);
     }
 
-    public void generate()
+    /**
+     * Generates code and only write contents to disk which differ from the current file contents.
+     *
+     * @return The number of files written.
+     */
+    public int generateFiles()
     {
         List<URL> allTemplateFilesFromClassPath = FileUtils.getAllTemplateFilesFromClasspath(this.templateDirectory, this.classPathURLs);
         for (URL url : allTemplateFilesFromClassPath)
@@ -91,7 +97,7 @@ public class GsCollectionsCodeGenerator
                             if (!GsCollectionsCodeGenerator.sourceFileExists(outputFile))
                             {
                                 String classContents = this.executeTemplate(primitive1, primitive2, "class");
-                                GsCollectionsCodeGenerator.checkSumClassContentsAndWrite(classContents, targetPath, sourceFileName);
+                                this.checkSumClassContentsAndWrite(classContents, targetPath, sourceFileName);
                             }
                         }
                     }
@@ -110,15 +116,17 @@ public class GsCollectionsCodeGenerator
                         if (!GsCollectionsCodeGenerator.sourceFileExists(outputFile))
                         {
                             String classContents = this.executeTemplate(primitive, "class");
-                            GsCollectionsCodeGenerator.checkSumClassContentsAndWrite(classContents, targetPath, sourceFileName);
+                            this.checkSumClassContentsAndWrite(classContents, targetPath, sourceFileName);
                         }
                     }
                 }
             }
         }
+
+        return this.numFileWritten;
     }
 
-    private static void checkSumClassContentsAndWrite(String classContents, File targetPath, String sourceFileName)
+    private void checkSumClassContentsAndWrite(String classContents, File targetPath, String sourceFileName)
     {
         long checksumValue = GsCollectionsCodeGenerator.calculateChecksum(classContents);
 
@@ -126,7 +134,7 @@ public class GsCollectionsCodeGenerator
         Path outputChecksumPath = Paths.get(targetPath.getAbsolutePath(), sourceFileName + ".java.crc");
         if (!outputChecksumPath.toFile().exists())
         {
-            GsCollectionsCodeGenerator.writeFileAndChecksum(outputFile, classContents, checksumValue, outputChecksumPath, false);
+            this.writeFileAndChecksum(outputFile, classContents, checksumValue, outputChecksumPath, false);
             return;
         }
 
@@ -136,7 +144,7 @@ public class GsCollectionsCodeGenerator
             return;
         }
 
-        GsCollectionsCodeGenerator.writeFileAndChecksum(outputFile, classContents, checksumValue, outputChecksumPath, true);
+        this.writeFileAndChecksum(outputFile, classContents, checksumValue, outputChecksumPath, true);
     }
 
     private static long calculateChecksum(String string)
@@ -146,8 +154,9 @@ public class GsCollectionsCodeGenerator
         return checksum.getValue();
     }
 
-    private static void writeFileAndChecksum(File outputFile, String output, long checksumValue, Path outputChecksumPath, boolean outputFileMustExist)
+    private void writeFileAndChecksum(File outputFile, String output, long checksumValue, Path outputChecksumPath, boolean outputFileMustExist)
     {
+        this.numFileWritten++;
         FileUtils.writeToFile(output, outputFile, outputFileMustExist);
         FileUtils.writeToFile(String.valueOf(checksumValue), outputChecksumPath.toFile(), outputFileMustExist);
     }

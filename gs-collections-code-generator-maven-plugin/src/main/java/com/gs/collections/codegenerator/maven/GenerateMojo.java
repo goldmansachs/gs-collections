@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,7 +80,8 @@ public class GenerateMojo extends AbstractMojo
                 new GsCollectionsCodeGenerator(this.templateDirectory, this.project.getBasedir(), urls, errorListener);
         if (!this.skipCodeGen)
         {
-            gsCollectionsCodeGenerator.generate();
+            int numFilesWritten = gsCollectionsCodeGenerator.generateFiles();
+            this.getLog().info("Generated " + numFilesWritten + " files");
         }
         if (error[0])
         {

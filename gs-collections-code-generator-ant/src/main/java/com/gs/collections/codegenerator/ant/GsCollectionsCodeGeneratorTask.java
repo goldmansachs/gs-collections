@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,8 @@ public class GsCollectionsCodeGeneratorTask extends Task
         };
         GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
                 new GsCollectionsCodeGenerator(this.templateDirectory, this.getProject().getBaseDir(), this.getClassPathURLs(), errorListener);
-        gsCollectionsCodeGenerator.generate();
+        int numFilesWritten = gsCollectionsCodeGenerator.generateFiles();
+        this.log("Generated " + numFilesWritten + " files.");
         if (error[0])
         {
             throw new BuildException("Error(s) during code generation.");
