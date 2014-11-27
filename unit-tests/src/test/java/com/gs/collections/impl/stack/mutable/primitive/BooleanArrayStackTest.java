@@ -20,6 +20,7 @@ import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.stack.primitive.MutableBooleanStack;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableBooleanStackTestCase;
+import com.gs.collections.impl.factory.primitive.BooleanStacks;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.test.Verify;
@@ -34,13 +35,13 @@ public class BooleanArrayStackTest extends AbstractMutableBooleanStackTestCase
     @Override
     protected MutableBooleanStack classUnderTest()
     {
-        return BooleanArrayStack.newStackWith(true, false, true, false);
+        return BooleanStacks.mutable.with(true, false, true, false);
     }
 
     @Override
     protected MutableBooleanStack newWith(boolean... elements)
     {
-        return BooleanArrayStack.newStackWith(elements);
+        return BooleanStacks.mutable.of(elements);
     }
 
     @Override
@@ -64,13 +65,13 @@ public class BooleanArrayStackTest extends AbstractMutableBooleanStackTestCase
     @Override
     protected MutableBooleanStack newWithIterableTopToBottom(BooleanIterable iterable)
     {
-        return BooleanArrayStack.newStackFromTopToBottom(iterable);
+        return BooleanStacks.mutable.ofAllReversed(iterable);
     }
 
     @Override
     protected MutableBooleanStack newWithIterable(BooleanIterable iterable)
     {
-        return BooleanArrayStack.newStack(iterable);
+        return BooleanStacks.mutable.ofAll(iterable);
     }
 
     @Test
