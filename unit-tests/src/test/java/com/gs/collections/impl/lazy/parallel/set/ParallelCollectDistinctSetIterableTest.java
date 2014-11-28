@@ -29,10 +29,9 @@ public class ParallelCollectDistinctSetIterableTest extends ParallelUnsortedSetI
     @Override
     protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
-        Function<Double, Integer> function = Double::intValue;
-        return (ParallelUnsortedSetIterable<Integer>) UnifiedSet.newSetWith(1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4)
+        return (ParallelUnsortedSetIterable<Integer>) UnifiedSet.newSetWith(11, 21, 22, 31, 32, 33, 41, 42, 43, 44)
                 .asParallel(this.executorService, 2)
-                .collect(function)
+                .collect(i -> i / 10)
                 .asUnique();
     }
 

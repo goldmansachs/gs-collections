@@ -414,55 +414,103 @@ public abstract class ParallelIterableTestCase
     @Test
     public void anySatisfy()
     {
-        Assert.assertTrue(this.classUnderTest().anySatisfy(Predicates.lessThan(2)));
-        Assert.assertTrue(this.classUnderTest().anySatisfy(Predicates.lessThan(5)));
+        Assert.assertFalse(this.classUnderTest().anySatisfy(Predicates.lessThan(0)));
         Assert.assertFalse(this.classUnderTest().anySatisfy(Predicates.lessThan(1)));
+        Assert.assertTrue(this.classUnderTest().anySatisfy(Predicates.lessThan(2)));
+        Assert.assertTrue(this.classUnderTest().anySatisfy(Predicates.lessThan(3)));
+        Assert.assertTrue(this.classUnderTest().anySatisfy(Predicates.lessThan(4)));
+        Assert.assertTrue(this.classUnderTest().anySatisfy(Predicates.lessThan(5)));
+        Assert.assertTrue(this.classUnderTest().anySatisfy(Predicates.greaterThan(0)));
+        Assert.assertTrue(this.classUnderTest().anySatisfy(Predicates.greaterThan(1)));
+        Assert.assertTrue(this.classUnderTest().anySatisfy(Predicates.greaterThan(2)));
+        Assert.assertTrue(this.classUnderTest().anySatisfy(Predicates.greaterThan(3)));
+        Assert.assertFalse(this.classUnderTest().anySatisfy(Predicates.greaterThan(4)));
         Assert.assertFalse(this.classUnderTest().anySatisfy(Predicates.greaterThan(5)));
     }
 
     @Test
     public void anySatisfyWith()
     {
-        Assert.assertTrue(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>lessThan(), 2));
-        Assert.assertTrue(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>lessThan(), 5));
+        Assert.assertFalse(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>lessThan(), 0));
         Assert.assertFalse(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>lessThan(), 1));
+        Assert.assertTrue(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>lessThan(), 2));
+        Assert.assertTrue(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>lessThan(), 3));
+        Assert.assertTrue(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>lessThan(), 4));
+        Assert.assertTrue(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>lessThan(), 5));
+        Assert.assertTrue(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>greaterThan(), 0));
+        Assert.assertTrue(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>greaterThan(), 1));
+        Assert.assertTrue(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>greaterThan(), 2));
+        Assert.assertTrue(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>greaterThan(), 3));
+        Assert.assertFalse(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>greaterThan(), 4));
         Assert.assertFalse(this.classUnderTest().anySatisfyWith(Predicates2.<Integer>greaterThan(), 5));
     }
 
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(this.classUnderTest().allSatisfy(Predicates.greaterThan(0)));
-        Assert.assertTrue(this.classUnderTest().allSatisfy(Predicates.lessThan(5)));
+        Assert.assertFalse(this.classUnderTest().allSatisfy(Predicates.lessThan(0)));
+        Assert.assertFalse(this.classUnderTest().allSatisfy(Predicates.lessThan(1)));
+        Assert.assertFalse(this.classUnderTest().allSatisfy(Predicates.lessThan(2)));
         Assert.assertFalse(this.classUnderTest().allSatisfy(Predicates.lessThan(3)));
+        Assert.assertFalse(this.classUnderTest().allSatisfy(Predicates.lessThan(4)));
+        Assert.assertTrue(this.classUnderTest().allSatisfy(Predicates.lessThan(5)));
+        Assert.assertTrue(this.classUnderTest().allSatisfy(Predicates.greaterThan(0)));
+        Assert.assertFalse(this.classUnderTest().allSatisfy(Predicates.greaterThan(1)));
+        Assert.assertFalse(this.classUnderTest().allSatisfy(Predicates.greaterThan(2)));
+        Assert.assertFalse(this.classUnderTest().allSatisfy(Predicates.greaterThan(3)));
+        Assert.assertFalse(this.classUnderTest().allSatisfy(Predicates.greaterThan(4)));
         Assert.assertFalse(this.classUnderTest().allSatisfy(Predicates.greaterThan(5)));
     }
 
     @Test
     public void allSatisfyWith()
     {
-        Assert.assertTrue(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>greaterThan(), 0));
-        Assert.assertTrue(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>lessThan(), 5));
+        Assert.assertFalse(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>lessThan(), 0));
+        Assert.assertFalse(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>lessThan(), 1));
+        Assert.assertFalse(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>lessThan(), 2));
         Assert.assertFalse(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>lessThan(), 3));
+        Assert.assertFalse(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>lessThan(), 4));
+        Assert.assertTrue(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>lessThan(), 5));
+        Assert.assertTrue(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>greaterThan(), 0));
+        Assert.assertFalse(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>greaterThan(), 1));
+        Assert.assertFalse(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>greaterThan(), 2));
+        Assert.assertFalse(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>greaterThan(), 3));
+        Assert.assertFalse(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>greaterThan(), 4));
         Assert.assertFalse(this.classUnderTest().allSatisfyWith(Predicates2.<Integer>greaterThan(), 5));
     }
 
     @Test
     public void noneSatisfy()
     {
-        Assert.assertTrue(this.classUnderTest().noneSatisfy(Predicates.greaterThan(5)));
         Assert.assertTrue(this.classUnderTest().noneSatisfy(Predicates.lessThan(0)));
-        Assert.assertFalse(this.classUnderTest().noneSatisfy(Predicates.lessThan(5)));
+        Assert.assertTrue(this.classUnderTest().noneSatisfy(Predicates.lessThan(1)));
+        Assert.assertFalse(this.classUnderTest().noneSatisfy(Predicates.lessThan(2)));
         Assert.assertFalse(this.classUnderTest().noneSatisfy(Predicates.lessThan(3)));
+        Assert.assertFalse(this.classUnderTest().noneSatisfy(Predicates.lessThan(4)));
+        Assert.assertFalse(this.classUnderTest().noneSatisfy(Predicates.lessThan(5)));
+        Assert.assertFalse(this.classUnderTest().noneSatisfy(Predicates.greaterThan(0)));
+        Assert.assertFalse(this.classUnderTest().noneSatisfy(Predicates.greaterThan(1)));
+        Assert.assertFalse(this.classUnderTest().noneSatisfy(Predicates.greaterThan(2)));
+        Assert.assertFalse(this.classUnderTest().noneSatisfy(Predicates.greaterThan(3)));
+        Assert.assertTrue(this.classUnderTest().noneSatisfy(Predicates.greaterThan(4)));
+        Assert.assertTrue(this.classUnderTest().noneSatisfy(Predicates.greaterThan(5)));
     }
 
     @Test
     public void noneSatisfyWith()
     {
-        Assert.assertTrue(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>greaterThan(), 5));
         Assert.assertTrue(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>lessThan(), 0));
-        Assert.assertFalse(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>lessThan(), 5));
+        Assert.assertTrue(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>lessThan(), 1));
+        Assert.assertFalse(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>lessThan(), 2));
         Assert.assertFalse(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>lessThan(), 3));
+        Assert.assertFalse(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>lessThan(), 4));
+        Assert.assertFalse(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>lessThan(), 5));
+        Assert.assertFalse(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>greaterThan(), 0));
+        Assert.assertFalse(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>greaterThan(), 1));
+        Assert.assertFalse(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>greaterThan(), 2));
+        Assert.assertFalse(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>greaterThan(), 3));
+        Assert.assertTrue(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>greaterThan(), 4));
+        Assert.assertTrue(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>greaterThan(), 5));
     }
 
     @Test

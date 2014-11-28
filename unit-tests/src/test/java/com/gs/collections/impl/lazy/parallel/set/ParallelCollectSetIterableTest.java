@@ -32,9 +32,9 @@ public class ParallelCollectSetIterableTest extends ParallelIterableTestCase
     @Override
     protected ParallelIterable<Integer> classUnderTest()
     {
-        return UnifiedSet.newSetWith(1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4)
+        return UnifiedSet.newSetWith(11, 21, 22, 31, 32, 33, 41, 42, 43, 44)
                 .asParallel(this.executorService, 2)
-                .collect(Double::intValue);
+                .collect(i -> i / 10);
     }
 
     @Override

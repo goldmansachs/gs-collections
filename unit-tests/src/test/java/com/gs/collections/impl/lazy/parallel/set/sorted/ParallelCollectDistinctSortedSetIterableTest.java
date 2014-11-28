@@ -31,10 +31,9 @@ public class ParallelCollectDistinctSortedSetIterableTest extends ParallelUnsort
     @Override
     protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
-        Function<Double, Integer> function = Double::intValue;
-        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), 4.4, 4.3, 4.2, 4.1, 3.3, 3.2, 3.1, 2.2, 2.1, 1.1)
+        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), 44, 43, 42, 41, 33, 32, 31, 22, 21, 11)
                 .asParallel(this.executorService, 2)
-                .collect(function)
+                .collect(i -> i / 10)
                 .asUnique();
     }
 

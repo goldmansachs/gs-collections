@@ -244,7 +244,8 @@ class ParallelDistinctListIterable<T> extends AbstractParallelUnsortedSetIterabl
 
         public boolean accept(T each)
         {
-            return this.distinct.put(each, true) == null || this.predicate.accept(each);
+            boolean distinct = this.distinct.put(each, true) == null;
+            return distinct && this.predicate.accept(each) || !distinct;
         }
     }
 }

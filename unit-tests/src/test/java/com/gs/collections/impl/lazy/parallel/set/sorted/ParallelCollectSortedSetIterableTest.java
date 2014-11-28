@@ -28,9 +28,9 @@ public class ParallelCollectSortedSetIterableTest extends ParallelListIterableTe
     @Override
     protected ParallelListIterable<Integer> classUnderTest()
     {
-        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), 4.4, 4.3, 4.2, 4.1, 3.3, 3.2, 3.1, 2.2, 2.1, 1.0)
+        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), 44, 43, 42, 41, 33, 32, 31, 22, 21, 10)
                 .asParallel(this.executorService, 2)
-                .collect(Double::intValue);
+                .collect(i -> i / 10);
     }
 
     @Override

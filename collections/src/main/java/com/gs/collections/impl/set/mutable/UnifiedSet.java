@@ -3188,7 +3188,10 @@ public class UnifiedSet<T>
                 Object cur = UnifiedSet.this.table[i];
                 if (cur instanceof ChainedBucket)
                 {
-                    UnifiedSet.this.chainedAnySatisfy((ChainedBucket) cur, predicate);
+                    if (UnifiedSet.this.chainedAnySatisfy((ChainedBucket) cur, predicate))
+                    {
+                        return true;
+                    }
                 }
                 else if (cur != null)
                 {
@@ -3208,7 +3211,10 @@ public class UnifiedSet<T>
                 Object cur = UnifiedSet.this.table[i];
                 if (cur instanceof ChainedBucket)
                 {
-                    UnifiedSet.this.chainedAllSatisfy((ChainedBucket) cur, predicate);
+                    if (!UnifiedSet.this.chainedAllSatisfy((ChainedBucket) cur, predicate))
+                    {
+                        return false;
+                    }
                 }
                 else if (cur != null)
                 {

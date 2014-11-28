@@ -3077,7 +3077,10 @@ public class UnifiedSetWithHashingStrategy<K>
                 Object cur = UnifiedSetWithHashingStrategy.this.table[i];
                 if (cur instanceof ChainedBucket)
                 {
-                    UnifiedSetWithHashingStrategy.this.chainedAnySatisfy((ChainedBucket) cur, predicate);
+                    if (UnifiedSetWithHashingStrategy.this.chainedAnySatisfy((ChainedBucket) cur, predicate))
+                    {
+                        return true;
+                    }
                 }
                 else if (cur != null)
                 {
@@ -3097,7 +3100,10 @@ public class UnifiedSetWithHashingStrategy<K>
                 Object cur = UnifiedSetWithHashingStrategy.this.table[i];
                 if (cur instanceof ChainedBucket)
                 {
-                    UnifiedSetWithHashingStrategy.this.chainedAllSatisfy((ChainedBucket) cur, predicate);
+                    if (!UnifiedSetWithHashingStrategy.this.chainedAllSatisfy((ChainedBucket) cur, predicate))
+                    {
+                        return false;
+                    }
                 }
                 else if (cur != null)
                 {

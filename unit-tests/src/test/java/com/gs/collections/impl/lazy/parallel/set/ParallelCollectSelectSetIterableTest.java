@@ -33,10 +33,9 @@ public class ParallelCollectSelectSetIterableTest extends ParallelIterableTestCa
     @Override
     protected ParallelIterable<Integer> classUnderTest()
     {
-        Function<Double, Integer> intValue = Double::intValue;
-        return UnifiedSet.newSetWith(0.0, 1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4, 5.0)
+        return UnifiedSet.newSetWith(0, 11, 21, 22, 31, 32, 33, 41, 42, 43, 44, 50)
                 .asParallel(this.executorService, 2)
-                .collect(intValue)
+                .collect(i -> i / 10)
                 .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
     }
 
