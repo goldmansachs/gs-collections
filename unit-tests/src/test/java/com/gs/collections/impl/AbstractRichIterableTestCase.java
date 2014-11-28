@@ -78,6 +78,14 @@ import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.primitive.BooleanBags;
+import com.gs.collections.impl.factory.primitive.ByteBags;
+import com.gs.collections.impl.factory.primitive.CharBags;
+import com.gs.collections.impl.factory.primitive.DoubleBags;
+import com.gs.collections.impl.factory.primitive.FloatBags;
+import com.gs.collections.impl.factory.primitive.IntBags;
+import com.gs.collections.impl.factory.primitive.LongBags;
+import com.gs.collections.impl.factory.primitive.ShortBags;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -272,7 +280,8 @@ public abstract class AbstractRichIterableTestCase
     public void collectBoolean()
     {
         BooleanIterable result = this.newWith(1, 0).collectBoolean(PrimitiveFunctions.integerIsPositive());
-        Assert.assertEquals(BooleanHashBag.newBagWith(true, false), result.toBag());
+        Assert.assertEquals(BooleanBags.mutable.of(true, false), result.toBag());
+        Assert.assertEquals(BooleanBags.mutable.of(true, false), BooleanBags.mutable.ofAll(result));
     }
 
     @Test
@@ -281,7 +290,7 @@ public abstract class AbstractRichIterableTestCase
         MutableBooleanCollection target = new BooleanArrayList();
         BooleanIterable result = this.newWith(1, 0).collectBoolean(PrimitiveFunctions.integerIsPositive(), target);
         Assert.assertSame("Target list sent as parameter not returned", target, result);
-        Assert.assertEquals(BooleanHashBag.newBagWith(true, false), result.toBag());
+        Assert.assertEquals(BooleanBags.mutable.of(true, false), result.toBag());
     }
 
     @Test
@@ -297,7 +306,8 @@ public abstract class AbstractRichIterableTestCase
     public void collectByte()
     {
         ByteIterable result = this.newWith(1, 2, 3, 4).collectByte(PrimitiveFunctions.unboxIntegerToByte());
-        Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2, (byte) 3, (byte) 4), result.toBag());
+        Assert.assertEquals(ByteBags.mutable.of((byte) 1, (byte) 2, (byte) 3, (byte) 4), result.toBag());
+        Assert.assertEquals(ByteBags.mutable.of((byte) 1, (byte) 2, (byte) 3, (byte) 4), ByteBags.mutable.ofAll(result));
     }
 
     @Test
@@ -322,7 +332,8 @@ public abstract class AbstractRichIterableTestCase
     public void collectChar()
     {
         CharIterable result = this.newWith(1, 2, 3, 4).collectChar(PrimitiveFunctions.unboxIntegerToChar());
-        Assert.assertEquals(CharHashBag.newBagWith((char) 1, (char) 2, (char) 3, (char) 4), result.toBag());
+        Assert.assertEquals(CharBags.mutable.of((char) 1, (char) 2, (char) 3, (char) 4), result.toBag());
+        Assert.assertEquals(CharBags.mutable.of((char) 1, (char) 2, (char) 3, (char) 4), CharBags.mutable.ofAll(result));
     }
 
     @Test
@@ -347,7 +358,8 @@ public abstract class AbstractRichIterableTestCase
     public void collectDouble()
     {
         DoubleIterable result = this.newWith(1, 2, 3, 4).collectDouble(PrimitiveFunctions.unboxIntegerToDouble());
-        Assert.assertEquals(DoubleHashBag.newBagWith(1.0d, 2.0d, 3.0d, 4.0d), result.toBag());
+        Assert.assertEquals(DoubleBags.mutable.of(1.0d, 2.0d, 3.0d, 4.0d), result.toBag());
+        Assert.assertEquals(DoubleBags.mutable.of(1.0d, 2.0d, 3.0d, 4.0d), DoubleBags.mutable.ofAll(result));
     }
 
     @Test
@@ -372,7 +384,8 @@ public abstract class AbstractRichIterableTestCase
     public void collectFloat()
     {
         FloatIterable result = this.newWith(1, 2, 3, 4).collectFloat(PrimitiveFunctions.unboxIntegerToFloat());
-        Assert.assertEquals(FloatHashBag.newBagWith(1.0f, 2.0f, 3.0f, 4.0f), result.toBag());
+        Assert.assertEquals(FloatBags.mutable.of(1.0f, 2.0f, 3.0f, 4.0f), result.toBag());
+        Assert.assertEquals(FloatBags.mutable.of(1.0f, 2.0f, 3.0f, 4.0f), FloatBags.mutable.ofAll(result));
     }
 
     @Test
@@ -397,7 +410,8 @@ public abstract class AbstractRichIterableTestCase
     public void collectInt()
     {
         IntIterable result = this.newWith(1, 2, 3, 4).collectInt(PrimitiveFunctions.unboxIntegerToInt());
-        Assert.assertEquals(IntHashBag.newBagWith(1, 2, 3, 4), result.toBag());
+        Assert.assertEquals(IntBags.mutable.of(1, 2, 3, 4), result.toBag());
+        Assert.assertEquals(IntBags.mutable.of(1, 2, 3, 4), IntBags.mutable.ofAll(result));
     }
 
     @Test
@@ -422,7 +436,8 @@ public abstract class AbstractRichIterableTestCase
     public void collectLong()
     {
         LongIterable result = this.newWith(1, 2, 3, 4).collectLong(PrimitiveFunctions.unboxIntegerToLong());
-        Assert.assertEquals(LongHashBag.newBagWith(1, 2, 3, 4), result.toBag());
+        Assert.assertEquals(LongBags.mutable.of(1, 2, 3, 4), result.toBag());
+        Assert.assertEquals(LongBags.mutable.of(1, 2, 3, 4), LongBags.mutable.ofAll(result));
     }
 
     @Test
@@ -447,7 +462,8 @@ public abstract class AbstractRichIterableTestCase
     public void collectShort()
     {
         ShortIterable result = this.newWith(1, 2, 3, 4).collectShort(PrimitiveFunctions.unboxIntegerToShort());
-        Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2, (short) 3, (short) 4), result.toBag());
+        Assert.assertEquals(ShortBags.mutable.of((short) 1, (short) 2, (short) 3, (short) 4), result.toBag());
+        Assert.assertEquals(ShortBags.mutable.of((short) 1, (short) 2, (short) 3, (short) 4), ShortBags.mutable.ofAll(result));
     }
 
     @Test
