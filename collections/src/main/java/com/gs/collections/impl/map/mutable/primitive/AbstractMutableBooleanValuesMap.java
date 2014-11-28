@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.map.mutable.primitive;
 
+import java.io.IOException;
+
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
@@ -34,6 +36,8 @@ import com.gs.collections.impl.collection.mutable.primitive.SynchronizedBooleanC
 import com.gs.collections.impl.collection.mutable.primitive.UnmodifiableBooleanCollection;
 import com.gs.collections.impl.factory.primitive.BooleanLists;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.primitive.AbstractBooleanIterable;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 
@@ -48,6 +52,8 @@ public abstract class AbstractMutableBooleanValuesMap extends AbstractBooleanIte
     protected abstract boolean getEmptyValue();
 
     protected abstract boolean getValueAtIndex(int index);
+
+    protected abstract int getTableSize();
 
     protected abstract boolean isNonSentinelAtIndex(int index);
 
@@ -126,6 +132,302 @@ public abstract class AbstractMutableBooleanValuesMap extends AbstractBooleanIte
     public void forEach(BooleanProcedure procedure)
     {
         this.forEachValue(procedure);
+    }
+
+    public void forEachValue(BooleanProcedure procedure)
+    {
+        if (this.getSentinelValues() != null)
+        {
+            if (this.getSentinelValues().containsZeroKey)
+            {
+                procedure.value(this.getSentinelValues().zeroValue);
+            }
+            if (this.getSentinelValues().containsOneKey)
+            {
+                procedure.value(this.getSentinelValues().oneValue);
+            }
+        }
+        for (int i = 0; i < this.getTableSize(); i++)
+        {
+            if (this.isNonSentinelAtIndex(i))
+            {
+                procedure.value(this.getValueAtIndex(i));
+            }
+        }
+    }
+
+    public <V> V injectInto(V injectedValue, ObjectBooleanToObjectFunction<? super V, ? extends V> function)
+    {
+        V result = injectedValue;
+
+        if (this.getSentinelValues() != null)
+        {
+            if (this.getSentinelValues().containsZeroKey)
+            {
+                result = function.valueOf(result, this.getSentinelValues().zeroValue);
+            }
+            if (this.getSentinelValues().containsOneKey)
+            {
+                result = function.valueOf(result, this.getSentinelValues().oneValue);
+            }
+        }
+
+        for (int i = 0; i < this.getTableSize(); i++)
+        {
+            if (this.isNonSentinelAtIndex(i))
+            {
+                result = function.valueOf(result, this.getValueAtIndex(i));
+            }
+        }
+
+        return result;
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        try
+        {
+            appendable.append(start);
+
+            boolean first = true;
+
+            if (this.getSentinelValues() != null)
+            {
+                if (this.getSentinelValues().containsZeroKey)
+                {
+                    appendable.append(String.valueOf(this.getSentinelValues().zeroValue));
+                    first = false;
+                }
+                if (this.getSentinelValues().containsOneKey)
+                {
+                    if (!first)
+                    {
+                        appendable.append(separator);
+                    }
+                    appendable.append(String.valueOf(this.getSentinelValues().oneValue));
+                    first = false;
+                }
+            }
+            for (int i = 0; i < this.getTableSize(); i++)
+            {
+                if (this.isNonSentinelAtIndex(i))
+                {
+                    if (!first)
+                    {
+                        appendable.append(separator);
+                    }
+                    appendable.append(String.valueOf(this.getValueAtIndex(i)));
+                    first = false;
+                }
+            }
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public MutableBooleanCollection select(BooleanPredicate predicate)
+    {
+        BooleanArrayList result = new BooleanArrayList();
+
+        if (this.getSentinelValues() != null)
+        {
+            if (this.getSentinelValues().containsZeroKey && predicate.accept(this.getSentinelValues().zeroValue))
+            {
+                result.add(this.getSentinelValues().zeroValue);
+            }
+            if (this.getSentinelValues().containsOneKey && predicate.accept(this.getSentinelValues().oneValue))
+            {
+                result.add(this.getSentinelValues().oneValue);
+            }
+        }
+        for (int i = 0; i < this.getTableSize(); i++)
+        {
+            if (this.isNonSentinelAtIndex(i) && predicate.accept(this.getValueAtIndex(i)))
+            {
+                result.add(this.getValueAtIndex(i));
+            }
+        }
+
+        return result;
+    }
+
+    public MutableBooleanCollection reject(BooleanPredicate predicate)
+    {
+        BooleanArrayList result = new BooleanArrayList();
+        if (this.getSentinelValues() != null)
+        {
+            if (this.getSentinelValues().containsZeroKey && !predicate.accept(this.getSentinelValues().zeroValue))
+            {
+                result.add(this.getSentinelValues().zeroValue);
+            }
+            if (this.getSentinelValues().containsOneKey && !predicate.accept(this.getSentinelValues().oneValue))
+            {
+                result.add(this.getSentinelValues().oneValue);
+            }
+        }
+        for (int i = 0; i < this.getTableSize(); i++)
+        {
+            if (this.isNonSentinelAtIndex(i) && !predicate.accept(this.getValueAtIndex(i)))
+            {
+                result.add(this.getValueAtIndex(i));
+            }
+        }
+        return result;
+    }
+
+    public boolean detectIfNone(BooleanPredicate predicate, boolean value)
+    {
+        if (this.getSentinelValues() != null)
+        {
+            if (this.getSentinelValues().containsZeroKey && predicate.accept(this.getSentinelValues().zeroValue))
+            {
+                return this.getSentinelValues().zeroValue;
+            }
+            if (this.getSentinelValues().containsOneKey && predicate.accept(this.getSentinelValues().oneValue))
+            {
+                return this.getSentinelValues().oneValue;
+            }
+        }
+        for (int i = 0; i < this.getTableSize(); i++)
+        {
+            if (this.isNonSentinelAtIndex(i) && predicate.accept(this.getValueAtIndex(i)))
+            {
+                return this.getValueAtIndex(i);
+            }
+        }
+        return value;
+    }
+
+    public <V> MutableCollection<V> collect(BooleanToObjectFunction<? extends V> function)
+    {
+        FastList<V> target = FastList.newList(this.size());
+        if (this.getSentinelValues() != null)
+        {
+            if (this.getSentinelValues().containsZeroKey)
+            {
+                target.add(function.valueOf(this.getSentinelValues().zeroValue));
+            }
+            if (this.getSentinelValues().containsOneKey)
+            {
+                target.add(function.valueOf(this.getSentinelValues().oneValue));
+            }
+        }
+        for (int i = 0; i < this.getTableSize(); i++)
+        {
+            if (this.isNonSentinelAtIndex(i))
+            {
+                target.add(function.valueOf(this.getValueAtIndex(i)));
+            }
+        }
+        return target;
+    }
+
+    public int count(BooleanPredicate predicate)
+    {
+        int count = 0;
+        if (this.getSentinelValues() != null)
+        {
+            if (this.getSentinelValues().containsZeroKey && predicate.accept(this.getSentinelValues().zeroValue))
+            {
+                count++;
+            }
+            if (this.getSentinelValues().containsOneKey && predicate.accept(this.getSentinelValues().oneValue))
+            {
+                count++;
+            }
+        }
+        for (int i = 0; i < this.getTableSize(); i++)
+        {
+            if (this.isNonSentinelAtIndex(i) && predicate.accept(this.getValueAtIndex(i)))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean anySatisfy(BooleanPredicate predicate)
+    {
+        if (this.getSentinelValues() != null)
+        {
+            if (this.getSentinelValues().containsZeroKey && predicate.accept(this.getSentinelValues().zeroValue))
+            {
+                return true;
+            }
+            if (this.getSentinelValues().containsOneKey && predicate.accept(this.getSentinelValues().oneValue))
+            {
+                return true;
+            }
+        }
+        for (int i = 0; i < this.getTableSize(); i++)
+        {
+            if (this.isNonSentinelAtIndex(i) && predicate.accept(this.getValueAtIndex(i)))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean allSatisfy(BooleanPredicate predicate)
+    {
+        if (this.getSentinelValues() != null)
+        {
+            if (this.getSentinelValues().containsZeroKey && !predicate.accept(this.getSentinelValues().zeroValue))
+            {
+                return false;
+            }
+            if (this.getSentinelValues().containsOneKey && !predicate.accept(this.getSentinelValues().oneValue))
+            {
+                return false;
+            }
+        }
+        for (int i = 0; i < this.getTableSize(); i++)
+        {
+            if (this.isNonSentinelAtIndex(i) && !predicate.accept(this.getValueAtIndex(i)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean noneSatisfy(BooleanPredicate predicate)
+    {
+        return !this.anySatisfy(predicate);
+    }
+
+    public boolean[] toArray()
+    {
+        boolean[] array = new boolean[this.size()];
+        int index = 0;
+
+        if (this.getSentinelValues() != null)
+        {
+            if (this.getSentinelValues().containsZeroKey)
+            {
+                array[index] = this.getSentinelValues().zeroValue;
+                index++;
+            }
+            if (this.getSentinelValues().containsOneKey)
+            {
+                array[index] = this.getSentinelValues().oneValue;
+                index++;
+            }
+        }
+        for (int i = 0; i < this.getTableSize(); i++)
+        {
+            if (this.isNonSentinelAtIndex(i))
+            {
+                array[index] = this.getValueAtIndex(i);
+                index++;
+            }
+        }
+
+        return array;
     }
 
     protected static class SentinelValues extends AbstractSentinelValues
@@ -255,29 +557,27 @@ public abstract class AbstractMutableBooleanValuesMap extends AbstractBooleanIte
 
         public String makeString()
         {
-            return this.makeString(", ");
+            return AbstractMutableBooleanValuesMap.this.makeString();
         }
 
         public String makeString(String separator)
         {
-            return this.makeString("", separator, "");
+            return AbstractMutableBooleanValuesMap.this.makeString(separator);
         }
 
         public String makeString(String start, String separator, String end)
         {
-            Appendable stringBuilder = new StringBuilder();
-            this.appendString(stringBuilder, start, separator, end);
-            return stringBuilder.toString();
+            return AbstractMutableBooleanValuesMap.this.makeString(start, separator, end);
         }
 
         public void appendString(Appendable appendable)
         {
-            this.appendString(appendable, ", ");
+            AbstractMutableBooleanValuesMap.this.appendString(appendable);
         }
 
         public void appendString(Appendable appendable, String separator)
         {
-            this.appendString(appendable, "", separator, "");
+            AbstractMutableBooleanValuesMap.this.appendString(appendable, separator);
         }
 
         public void forEach(BooleanProcedure procedure)
