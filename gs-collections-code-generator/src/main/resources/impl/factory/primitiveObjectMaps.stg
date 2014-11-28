@@ -16,7 +16,9 @@ body(type, name) ::= <<
 package com.gs.collections.impl.factory.primitive;
 
 import com.gs.collections.api.factory.map.primitive.Immutable<name>ObjectMapFactory;
+import com.gs.collections.api.factory.map.primitive.Mutable<name>ObjectMapFactory;
 import com.gs.collections.impl.map.immutable.primitive.Immutable<name>ObjectMapFactoryImpl;
+import com.gs.collections.impl.map.mutable.primitive.Mutable<name>ObjectMapFactoryImpl;
 
 /**
  * <name>ObjectMaps is a static utility for creating {@link Immutable<name>ObjectMapFactory}.
@@ -28,6 +30,7 @@ import com.gs.collections.impl.map.immutable.primitive.Immutable<name>ObjectMapF
 public final class <name>ObjectMaps
 {
     public static final Immutable<name>ObjectMapFactory immutable = new Immutable<name>ObjectMapFactoryImpl();
+    public static final Mutable<name>ObjectMapFactory mutable = new Mutable<name>ObjectMapFactoryImpl();
 
     private <name>ObjectMaps()
     {

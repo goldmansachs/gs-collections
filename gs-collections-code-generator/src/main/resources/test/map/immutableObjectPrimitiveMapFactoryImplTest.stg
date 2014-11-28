@@ -32,20 +32,20 @@ public class ImmutableObject<name>MapFactoryImplTest
     @Test
     public void of()
     {
-        Assert.assertEquals(Object<name>HashMap.newMap().toImmutable(), Object<name>Maps.immutable.of());
+        Assert.assertEquals(Object<name>Maps.mutable.of().toImmutable(), Object<name>Maps.immutable.of());
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues("2", <(literal.(type))("1")>).toImmutable(), Object<name>Maps.immutable.of("2", <(literal.(type))("1")>));
     }
 
     @Test
     public void ofAll()
     {
-        Assert.assertEquals(Object<name>HashMap.newMap().toImmutable(), Object<name>Maps.immutable.ofAll(Object<name>Maps.immutable.of()));
+        Assert.assertEquals(Object<name>Maps.mutable.empty().toImmutable(), Object<name>Maps.immutable.ofAll(Object<name>Maps.immutable.of()));
     }
 
     @Test
     public void withAll()
     {
-        Assert.assertEquals(Object<name>HashMap.newMap().toImmutable(), Object<name>Maps.immutable.withAll(Object<name>Maps.immutable.of()));
+        Assert.assertEquals(Object<name>Maps.mutable.with().toImmutable(), Object<name>Maps.immutable.withAll(Object<name>Maps.immutable.of()));
     }
 }
 

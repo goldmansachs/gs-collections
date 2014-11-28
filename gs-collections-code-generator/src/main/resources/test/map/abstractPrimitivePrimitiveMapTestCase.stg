@@ -40,6 +40,7 @@ import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name2>Predicates;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
 import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
 <if(!sameTwoPrimitives)>import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;<endif>
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -228,6 +229,9 @@ public abstract class Abstract<name1><name2>MapTestCase
         Assert.assertNotEquals(map1, map5);
         Assert.assertNotEquals(map7, map6);
         Assert.assertNotEquals(map7, map8);
+
+        Assert.assertEquals(map1, <name1><name2>Maps.mutable.ofAll(map1));
+        Assert.assertEquals(map1, <name1><name2>Maps.immutable.ofAll(map1));
     }
 
     @Test

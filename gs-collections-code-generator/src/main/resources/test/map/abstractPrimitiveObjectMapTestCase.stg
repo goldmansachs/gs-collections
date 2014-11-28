@@ -61,6 +61,7 @@ import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.factory.StringPredicates;
 import com.gs.collections.impl.block.factory.StringPredicates2;
+import com.gs.collections.impl.factory.primitive.<name>ObjectMaps;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
@@ -1231,6 +1232,9 @@ public abstract class Abstract<name>ObjectMapTestCase
         Assert.assertNotEquals(map9, map8);
         Assert.assertNotEquals(this.newWithKeysValues(<(literal.(type))("0")>, null), this.newWithKeysValues(<(literal.(type))("6")>, ""));
         Assert.assertNotEquals(this.newWithKeysValues(<(literal.(type))("5")>, null), this.newWithKeysValues(<(literal.(type))("6")>, ""));
+
+        Assert.assertEquals(map1, <name>ObjectMaps.mutable.ofAll(map1));
+        Assert.assertEquals(map1, <name>ObjectMaps.immutable.ofAll(map1));
     }
 
     @Test

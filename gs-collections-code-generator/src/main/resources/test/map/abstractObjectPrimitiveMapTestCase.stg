@@ -29,6 +29,7 @@ import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.api.map.primitive.Object<name>Map;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.factory.primitive.Object<name>Maps;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -188,6 +189,9 @@ public abstract class AbstractObject<name>MapTestCase
         Assert.assertNotEquals(map1, map3);
         Assert.assertNotEquals(map1, map5);
         Assert.assertNotEquals(map1, map7);
+
+        Assert.assertEquals(map1, Object<name>Maps.mutable.ofAll(map1));
+        Assert.assertEquals(map1, Object<name>Maps.immutable.ofAll(map1));
     }
 
     @Test

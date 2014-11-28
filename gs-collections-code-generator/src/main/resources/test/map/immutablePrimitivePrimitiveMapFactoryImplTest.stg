@@ -46,7 +46,7 @@ public class Immutable<name1><name2>MapFactoryImplTest
     {
         Immutable<name1><name2>Map map = <name1><name2>Maps.immutable.of();
 
-        Assert.assertEquals(new <name1><name2>HashMap().toImmutable(), <name1><name2>Maps.immutable.withAll(map));
+        Assert.assertEquals(<name1><name2>Maps.mutable.empty().toImmutable(), <name1><name2>Maps.immutable.withAll(map));
     }
 }
 
