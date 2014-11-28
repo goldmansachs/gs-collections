@@ -551,6 +551,22 @@ public abstract class AbstractRichIterableTestCase
     }
 
     @Test
+    public void min_null_safe()
+    {
+        RichIterable<Integer> integers = this.newWith(1, 3, 2, null);
+        Assert.assertEquals(Integer.valueOf(1), integers.min(Comparators.safeNullsHigh(Integer::compareTo)));
+        Assert.assertNull(integers.min(Comparators.safeNullsLow(Integer::compareTo)));
+    }
+
+    @Test
+    public void max_null_safe()
+    {
+        RichIterable<Integer> integers = this.newWith(1, 3, 2, null);
+        Assert.assertEquals(Integer.valueOf(3), integers.max(Comparators.safeNullsLow(Integer::compareTo)));
+        Assert.assertNull(integers.max(Comparators.safeNullsHigh(Integer::compareTo)));
+    }
+
+    @Test
     public void minBy()
     {
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 3, 2).minBy(String::valueOf));
@@ -560,6 +576,18 @@ public abstract class AbstractRichIterableTestCase
     public void maxBy()
     {
         Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 3, 2).maxBy(String::valueOf));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void minBy_null_throws()
+    {
+        this.newWith(1, null, 2).minBy(Integer::valueOf);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void maxBy_null_throws()
+    {
+        this.newWith(1, null, 2).maxBy(Integer::valueOf);
     }
 
     @Test

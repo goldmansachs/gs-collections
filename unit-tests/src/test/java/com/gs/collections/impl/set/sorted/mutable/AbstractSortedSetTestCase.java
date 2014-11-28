@@ -732,4 +732,18 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         MutableSortedBag<Integer> bag = integers.toSortedBagBy(String::valueOf);
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 2, 3, 4), bag);
     }
+
+    @Override
+    @Test(expected = NullPointerException.class)
+    public void min_null_safe()
+    {
+        super.min_null_safe();
+    }
+
+    @Override
+    @Test(expected = NullPointerException.class)
+    public void max_null_safe()
+    {
+        super.max_null_safe();
+    }
 }

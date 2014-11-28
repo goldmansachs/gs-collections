@@ -86,4 +86,18 @@ public class TreeBagTest extends AbstractSortedBagTestCase
         MutableSortedBag<Integer> bag = this.newWith(1, 2, 3, 4, 5);
         Verify.assertPostSerializedEqualsAndHashCode(bag);
     }
+
+    @Override
+    @Test(expected = NullPointerException.class)
+    public void min_null_safe()
+    {
+        super.min_null_safe();
+    }
+
+    @Override
+    @Test(expected = NullPointerException.class)
+    public void max_null_safe()
+    {
+        super.max_null_safe();
+    }
 }

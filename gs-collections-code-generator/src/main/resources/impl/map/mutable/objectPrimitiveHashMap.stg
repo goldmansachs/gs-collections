@@ -1836,7 +1836,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
                 {
                     this.position++;
                 }
-                K result = (K) Object<name>HashMap.this.keys[this.position];
+                K result = Object<name>HashMap.this.toNonSentinel(Object<name>HashMap.this.keys[this.position]);
                 this.count++;
                 this.position++;
                 return result;

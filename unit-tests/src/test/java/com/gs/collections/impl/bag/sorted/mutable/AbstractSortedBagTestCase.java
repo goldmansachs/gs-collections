@@ -1623,6 +1623,20 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 2, 2, 1), bag);
     }
 
+    @Override
+    @Test(expected = NullPointerException.class)
+    public void min_null_safe()
+    {
+        super.min_null_safe();
+    }
+
+    @Override
+    @Test(expected = NullPointerException.class)
+    public void max_null_safe()
+    {
+        super.max_null_safe();
+    }
+
     // Like Integer, but not Comparable
     public static final class Holder
     {
