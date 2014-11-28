@@ -35,10 +35,6 @@
         <jmh.version>1.1.1</jmh.version>
     </properties>
 
-    <prerequisites>
-        <maven>3.0.5</maven>
-    </prerequisites>
-
     <dependencies>
 
         <dependency>

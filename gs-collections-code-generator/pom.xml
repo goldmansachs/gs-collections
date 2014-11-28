@@ -37,10 +37,6 @@
         <maven.deploy.skip>${build.is.personal}</maven.deploy.skip>
     </properties>
 
-    <prerequisites>
-        <maven>3.0.5</maven>
-    </prerequisites>
-
     <dependencies>
         <dependency>
             <groupId>org.antlr</groupId>
