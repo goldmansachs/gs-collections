@@ -113,7 +113,7 @@ public final class TreeBagMultimap<K, V>
 
     public TreeBagMultimap<K, V> newEmpty()
     {
-        return new TreeBagMultimap<K, V>();
+        return new TreeBagMultimap<K, V>(this.comparator);
     }
 
     public Comparator<? super V> comparator()
