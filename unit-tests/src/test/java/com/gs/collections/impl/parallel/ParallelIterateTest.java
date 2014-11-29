@@ -40,6 +40,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
@@ -82,6 +83,7 @@ public class ParallelIterateTest
     private static final Function<Integer, Collection<String>> INT_TO_TWO_STRINGS = integer -> Lists.fixedSize.of(integer.toString(), integer.toString());
 
     private static final Function<Integer, String> EVEN_OR_ODD = value -> value % 2 == 0 ? "Even" : "Odd";
+    private static final int UNEVEN_COUNT_FOR_SUMBY = 43957;
 
     private ImmutableList<RichIterable<Integer>> iterables;
     private final ExecutorService executor = Executors.newFixedThreadPool(2);
@@ -549,13 +551,79 @@ public class ParallelIterateTest
         Assert.assertEquals(interval.sumByDouble(EVEN_OR_ODD, Integer::doubleValue), sumByValue);
         ObjectDoubleMap<Integer> sumByValue2 = ParallelIterate.sumByDouble(interval, i -> i % 1000, Integer::doubleValue);
         Assert.assertEquals(interval.sumByDouble(i -> i % 1000, Integer::doubleValue), sumByValue2);
-        Interval interval2 = Interval.oneTo(43957);
+        Interval interval2 = Interval.oneTo(UNEVEN_COUNT_FOR_SUMBY);
         ObjectDoubleMap<String> sumByValue3 = ParallelIterate.sumByDouble(interval2, EVEN_OR_ODD, Integer::doubleValue);
         Assert.assertEquals(interval2.sumByDouble(EVEN_OR_ODD, Integer::doubleValue), sumByValue3);
         ObjectDoubleMap<Integer> sumByValue4 = ParallelIterate.sumByDouble(interval2, i -> i % 1000, Integer::doubleValue);
         Assert.assertEquals(interval2.sumByDouble(i -> i % 1000, Integer::doubleValue), sumByValue4);
         Interval small = Interval.oneTo(11);
         ObjectDoubleMap<String> smallSumByCount = ParallelIterate.sumByDouble(small, EVEN_OR_ODD, i -> 1.0d);
+        Assert.assertEquals(5.0, smallSumByCount.get("Even"), 0.0);
+        Assert.assertEquals(6.0, smallSumByCount.get("Odd"), 0.0);
+    }
+
+    @Test
+    public void sumByFloat()
+    {
+        Interval interval = Interval.oneTo(100000);
+        ObjectDoubleMap<String> sumByCount = ParallelIterate.sumByFloat(interval, EVEN_OR_ODD, i -> 1.0f);
+        Assert.assertEquals(50000.0, sumByCount.get("Even"), 0.0);
+        Assert.assertEquals(50000.0, sumByCount.get("Odd"), 0.0);
+        ObjectDoubleMap<String> sumByValue = ParallelIterate.sumByFloat(interval, EVEN_OR_ODD, Integer::floatValue);
+        Assert.assertEquals(interval.sumByFloat(EVEN_OR_ODD, Integer::floatValue), sumByValue);
+        ObjectDoubleMap<Integer> sumByValue2 = ParallelIterate.sumByFloat(interval, i -> i % 1000, Integer::floatValue);
+        Assert.assertEquals(interval.sumByDouble(i -> i % 1000, Integer::doubleValue), sumByValue2);
+        Interval interval2 = Interval.oneTo(UNEVEN_COUNT_FOR_SUMBY);
+        ObjectDoubleMap<String> sumByValue3 = ParallelIterate.sumByFloat(interval2, EVEN_OR_ODD, Integer::floatValue);
+        Assert.assertEquals(interval2.sumByFloat(EVEN_OR_ODD, Integer::floatValue), sumByValue3);
+        ObjectDoubleMap<Integer> sumByValue4 = ParallelIterate.sumByFloat(interval2, i -> i % 1000, Integer::floatValue);
+        Assert.assertEquals(interval2.sumByFloat(i -> i % 1000, Integer::floatValue), sumByValue4);
+        Interval small = Interval.oneTo(11);
+        ObjectDoubleMap<String> smallSumByCount = ParallelIterate.sumByFloat(small, EVEN_OR_ODD, i -> 1.0f);
+        Assert.assertEquals(5.0, smallSumByCount.get("Even"), 0.0);
+        Assert.assertEquals(6.0, smallSumByCount.get("Odd"), 0.0);
+    }
+
+    @Test
+    public void sumByLong()
+    {
+        Interval interval = Interval.oneTo(100000);
+        ObjectLongMap<String> sumByCount = ParallelIterate.sumByLong(interval, EVEN_OR_ODD, i -> 1L);
+        Assert.assertEquals(50000, sumByCount.get("Even"));
+        Assert.assertEquals(50000, sumByCount.get("Odd"));
+        ObjectLongMap<String> sumByValue = ParallelIterate.sumByLong(interval, EVEN_OR_ODD, Integer::longValue);
+        Assert.assertEquals(interval.sumByLong(EVEN_OR_ODD, Integer::longValue), sumByValue);
+        ObjectLongMap<Integer> sumByValue2 = ParallelIterate.sumByLong(interval, i -> i % 1000, Integer::longValue);
+        Assert.assertEquals(interval.sumByLong(i -> i % 1000, Integer::longValue), sumByValue2);
+        Interval interval2 = Interval.oneTo(UNEVEN_COUNT_FOR_SUMBY);
+        ObjectLongMap<String> sumByValue3 = ParallelIterate.sumByLong(interval2, EVEN_OR_ODD, Integer::longValue);
+        Assert.assertEquals(interval2.sumByLong(EVEN_OR_ODD, Integer::longValue), sumByValue3);
+        ObjectLongMap<Integer> sumByValue4 = ParallelIterate.sumByLong(interval2, i -> i % 1000, Integer::longValue);
+        Assert.assertEquals(interval2.sumByLong(i -> i % 1000, Integer::longValue), sumByValue4);
+        Interval small = Interval.oneTo(11);
+        ObjectLongMap<String> smallSumByCount = ParallelIterate.sumByLong(small, EVEN_OR_ODD, i -> 1L);
+        Assert.assertEquals(5.0, smallSumByCount.get("Even"), 0.0);
+        Assert.assertEquals(6.0, smallSumByCount.get("Odd"), 0.0);
+    }
+
+    @Test
+    public void sumByInt()
+    {
+        Interval interval = Interval.oneTo(100000);
+        ObjectLongMap<String> sumByCount = ParallelIterate.sumByInt(interval, EVEN_OR_ODD, i -> 1);
+        Assert.assertEquals(50000, sumByCount.get("Even"));
+        Assert.assertEquals(50000, sumByCount.get("Odd"));
+        ObjectLongMap<String> sumByValue = ParallelIterate.sumByInt(interval, EVEN_OR_ODD, Integer::intValue);
+        Assert.assertEquals(interval.sumByInt(EVEN_OR_ODD, Integer::intValue), sumByValue);
+        ObjectLongMap<Integer> sumByValue2 = ParallelIterate.sumByInt(interval, i -> i % 1000, Integer::intValue);
+        Assert.assertEquals(interval.sumByInt(i -> i % 1000, Integer::intValue), sumByValue2);
+        Interval interval2 = Interval.oneTo(UNEVEN_COUNT_FOR_SUMBY);
+        ObjectLongMap<String> sumByValue3 = ParallelIterate.sumByInt(interval2, EVEN_OR_ODD, Integer::intValue);
+        Assert.assertEquals(interval2.sumByInt(EVEN_OR_ODD, Integer::intValue), sumByValue3);
+        ObjectLongMap<Integer> sumByValue4 = ParallelIterate.sumByInt(interval2, i -> i % 1000, Integer::intValue);
+        Assert.assertEquals(interval2.sumByInt(i -> i % 1000, Integer::intValue), sumByValue4);
+        Interval small = Interval.oneTo(11);
+        ObjectLongMap<String> smallSumByCount = ParallelIterate.sumByInt(small, EVEN_OR_ODD, i -> 1);
         Assert.assertEquals(5.0, smallSumByCount.get("Even"), 0.0);
         Assert.assertEquals(6.0, smallSumByCount.get("Odd"), 0.0);
     }

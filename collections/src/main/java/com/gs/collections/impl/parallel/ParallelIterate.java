@@ -19,7 +19,6 @@ package com.gs.collections.impl.parallel;
 import java.util.Collection;
 import java.util.List;
 import java.util.RandomAccess;
-import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
@@ -30,27 +29,29 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectDoubleProcedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectLongProcedure;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
-import com.gs.collections.impl.map.mutable.ConcurrentHashMapUnsafe;
 import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.multimap.list.SynchronizedPutFastListMultimap;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.Iterate;
-import com.gs.collections.impl.utility.LazyIterate;
 
 import static com.gs.collections.impl.factory.Iterables.*;
 
@@ -1165,41 +1166,6 @@ public final class ParallelIterate
         return mutableMap;
     }
 
-    public static <T, V> ObjectDoubleMap<V> sumByDouble(
-            Iterable<T> iterable,
-            Function<T, V> groupBy,
-            DoubleFunction<? super T> function)
-    {
-        int sampleSetSize = Math.max(Iterate.sizeOf(iterable) / 1000, 1);
-        Set<V> set = LazyIterate.take(iterable, sampleSetSize).collect(groupBy, UnifiedSet.<V>newSet(sampleSetSize));
-        if (set.size() < sampleSetSize * 3 / 4)
-        {
-            ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
-            ParallelIterate.forEach(
-                    iterable,
-                    new SumByDoubleProcedureFactory<T, V>(groupBy, function),
-                    new SumByDoubleCombiner<T, V>(result),
-                    ParallelIterate.DEFAULT_MIN_FORK_SIZE,
-                    ParallelIterate.EXECUTOR_SERVICE);
-            return result;
-        }
-        ConcurrentHashMapUnsafe<V, Double> concurrentResult = ConcurrentHashMapUnsafe.newMap();
-        ParallelIterate.forEach(
-                iterable,
-                new ConcurrentSumDoubleProcedure<T, V>(concurrentResult, groupBy, function),
-                ParallelIterate.DEFAULT_MIN_FORK_SIZE,
-                ParallelIterate.EXECUTOR_SERVICE);
-        final ObjectDoubleHashMap<V> result = new ObjectDoubleHashMap<V>(concurrentResult.size());
-        concurrentResult.forEachKeyValue(new Procedure2<V, Double>()
-        {
-            public void value(V key, Double value)
-            {
-                result.put(key, value);
-            }
-        });
-        return result;
-    }
-
     /**
      * Same effect as {@link Iterate#groupBy(Iterable, Function)},
      * but executed in parallel batches, and writing output into a SynchronizedPutFastListMultimap.
@@ -1270,6 +1236,66 @@ public final class ParallelIterate
         return concurrentMultimap;
     }
 
+    public static <T, V> ObjectDoubleMap<V> sumByDouble(
+            Iterable<T> iterable,
+            Function<T, V> groupBy,
+            DoubleFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        ParallelIterate.forEach(
+                iterable,
+                new SumByDoubleProcedure<T, V>(groupBy, function),
+                new SumByDoubleCombiner<T, V>(result),
+                ParallelIterate.DEFAULT_MIN_FORK_SIZE,
+                ParallelIterate.EXECUTOR_SERVICE);
+        return result;
+    }
+
+    public static <T, V> ObjectDoubleMap<V> sumByFloat(
+            Iterable<T> iterable,
+            Function<T, V> groupBy,
+            FloatFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        ParallelIterate.forEach(
+                iterable,
+                new SumByFloatProcedure<T, V>(groupBy, function),
+                new SumByFloatCombiner<T, V>(result),
+                ParallelIterate.DEFAULT_MIN_FORK_SIZE,
+                ParallelIterate.EXECUTOR_SERVICE);
+        return result;
+    }
+
+    public static <T, V> ObjectLongMap<V> sumByLong(
+            Iterable<T> iterable,
+            Function<T, V> groupBy,
+            LongFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        ParallelIterate.forEach(
+                iterable,
+                new SumByLongProcedure<T, V>(groupBy, function),
+                new SumByLongCombiner<T, V>(result),
+                ParallelIterate.DEFAULT_MIN_FORK_SIZE,
+                ParallelIterate.EXECUTOR_SERVICE);
+        return result;
+    }
+
+    public static <T, V> ObjectLongMap<V> sumByInt(
+            Iterable<T> iterable,
+            Function<T, V> groupBy,
+            IntFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        ParallelIterate.forEach(
+                iterable,
+                new SumByIntProcedure<T, V>(groupBy, function),
+                new SumByIntCombiner<T, V>(result),
+                ParallelIterate.DEFAULT_MIN_FORK_SIZE,
+                ParallelIterate.EXECUTOR_SERVICE);
+        return result;
+    }
+
     /**
      * Returns a brand new ExecutorService using the specified poolName with the specified maximum thread pool size. The
      * same poolName may be used more than once resulting in multiple pools with the same name.
@@ -1314,13 +1340,13 @@ public final class ParallelIterate
         return TASK_RATIO;
     }
 
-    private static class SumByDoubleProcedure<T, V> implements Procedure<T>
+    private static final class SumByDoubleProcedure<T, V> implements Procedure<T>, ProcedureFactory<SumByDoubleProcedure<T, V>>
     {
         private final ObjectDoubleHashMap<V> map = ObjectDoubleHashMap.newMap();
         private final Function<T, V> groupBy;
         private final DoubleFunction<? super T> function;
 
-        public SumByDoubleProcedure(Function<T, V> groupBy, DoubleFunction<? super T> function)
+        private SumByDoubleProcedure(Function<T, V> groupBy, DoubleFunction<? super T> function)
         {
             this.groupBy = groupBy;
             this.function = function;
@@ -1335,13 +1361,18 @@ public final class ParallelIterate
         {
             return this.map;
         }
+
+        public SumByDoubleProcedure<T, V> create()
+        {
+            return new SumByDoubleProcedure<T, V>(this.groupBy, this.function);
+        }
     }
 
-    private static class SumByDoubleCombiner<T, V> extends AbstractProcedureCombiner<SumByDoubleProcedure<T, V>>
+    private static final class SumByDoubleCombiner<T, V> extends AbstractProcedureCombiner<SumByDoubleProcedure<T, V>>
     {
         private final ObjectDoubleHashMap<V> result;
 
-        public SumByDoubleCombiner(ObjectDoubleHashMap<V> result)
+        private SumByDoubleCombiner(ObjectDoubleHashMap<V> result)
         {
             super(true);
             this.result = result;
@@ -1366,47 +1397,174 @@ public final class ParallelIterate
         }
     }
 
-    private static class SumByDoubleProcedureFactory<T, V> implements ProcedureFactory<SumByDoubleProcedure<T, V>>
+    private static final class SumByFloatProcedure<T, V> implements Procedure<T>, ProcedureFactory<SumByFloatProcedure<T, V>>
     {
+        private final ObjectDoubleHashMap<V> map = ObjectDoubleHashMap.newMap();
         private final Function<T, V> groupBy;
-        private final DoubleFunction<? super T> function;
+        private final FloatFunction<? super T> function;
 
-        public SumByDoubleProcedureFactory(Function<T, V> groupBy, DoubleFunction<? super T> function)
+        private SumByFloatProcedure(Function<T, V> groupBy, FloatFunction<? super T> function)
         {
-            this.groupBy = groupBy;
-            this.function = function;
-        }
-
-        public SumByDoubleProcedure<T, V> create()
-        {
-            return new SumByDoubleProcedure<T, V>(this.groupBy, this.function);
-        }
-    }
-
-    private static class ConcurrentSumDoubleProcedure<T, V> implements Procedure<T>
-    {
-        public static final Function0<Double> DOUBLE_FUNCTION_0 = Functions0.value(Double.valueOf(0.0d));
-        private final Function2<Double, T, Double> addFunction = new Function2<Double, T, Double>()
-        {
-            public Double value(Double value, T item)
-            {
-                return value + ConcurrentSumDoubleProcedure.this.function.doubleValueOf(item);
-            }
-        };
-        private final ConcurrentHashMapUnsafe<V, Double> concurrentResult;
-        private final Function<T, V> groupBy;
-        private final DoubleFunction<? super T> function;
-
-        public ConcurrentSumDoubleProcedure(ConcurrentHashMapUnsafe<V, Double> concurrentResult, Function<T, V> groupBy, DoubleFunction<? super T> function)
-        {
-            this.concurrentResult = concurrentResult;
             this.groupBy = groupBy;
             this.function = function;
         }
 
         public void value(T each)
         {
-            this.concurrentResult.updateValueWith(this.groupBy.valueOf(each), DOUBLE_FUNCTION_0, this.addFunction, each);
+            this.map.addToValue(this.groupBy.valueOf(each), (double) this.function.floatValueOf(each));
+        }
+
+        public ObjectDoubleHashMap<V> getResult()
+        {
+            return this.map;
+        }
+
+        public SumByFloatProcedure<T, V> create()
+        {
+            return new SumByFloatProcedure<T, V>(this.groupBy, this.function);
+        }
+    }
+
+    private static final class SumByFloatCombiner<T, V> extends AbstractProcedureCombiner<SumByFloatProcedure<T, V>>
+    {
+        private final ObjectDoubleHashMap<V> result;
+
+        private SumByFloatCombiner(ObjectDoubleHashMap<V> result)
+        {
+            super(true);
+            this.result = result;
+        }
+
+        public void combineOne(SumByFloatProcedure<T, V> thingToCombine)
+        {
+            if (this.result.isEmpty())
+            {
+                this.result.putAll(thingToCombine.getResult());
+            }
+            else
+            {
+                thingToCombine.getResult().forEachKeyValue(new ObjectDoubleProcedure<V>()
+                {
+                    public void value(V each, double value)
+                    {
+                        SumByFloatCombiner.this.result.addToValue(each, value);
+                    }
+                });
+            }
+        }
+    }
+
+    private static final class SumByLongProcedure<T, V> implements Procedure<T>, ProcedureFactory<SumByLongProcedure<T, V>>
+    {
+        private final ObjectLongHashMap<V> map = ObjectLongHashMap.newMap();
+        private final Function<T, V> groupBy;
+        private final LongFunction<? super T> function;
+
+        private SumByLongProcedure(Function<T, V> groupBy, LongFunction<? super T> function)
+        {
+            this.groupBy = groupBy;
+            this.function = function;
+        }
+
+        public void value(T each)
+        {
+            this.map.addToValue(this.groupBy.valueOf(each), this.function.longValueOf(each));
+        }
+
+        public ObjectLongHashMap<V> getResult()
+        {
+            return this.map;
+        }
+
+        public SumByLongProcedure<T, V> create()
+        {
+            return new SumByLongProcedure<T, V>(this.groupBy, this.function);
+        }
+    }
+
+    private static final class SumByLongCombiner<T, V> extends AbstractProcedureCombiner<SumByLongProcedure<T, V>>
+    {
+        private final ObjectLongHashMap<V> result;
+
+        private SumByLongCombiner(ObjectLongHashMap<V> result)
+        {
+            super(true);
+            this.result = result;
+        }
+
+        public void combineOne(SumByLongProcedure<T, V> thingToCombine)
+        {
+            if (this.result.isEmpty())
+            {
+                this.result.putAll(thingToCombine.getResult());
+            }
+            else
+            {
+                thingToCombine.getResult().forEachKeyValue(new ObjectLongProcedure<V>()
+                {
+                    public void value(V each, long value)
+                    {
+                        SumByLongCombiner.this.result.addToValue(each, value);
+                    }
+                });
+            }
+        }
+    }
+
+    private static final class SumByIntProcedure<T, V> implements Procedure<T>, ProcedureFactory<SumByIntProcedure<T, V>>
+    {
+        private final ObjectLongHashMap<V> map = ObjectLongHashMap.newMap();
+        private final Function<T, V> groupBy;
+        private final IntFunction<? super T> function;
+
+        private SumByIntProcedure(Function<T, V> groupBy, IntFunction<? super T> function)
+        {
+            this.groupBy = groupBy;
+            this.function = function;
+        }
+
+        public void value(T each)
+        {
+            this.map.addToValue(this.groupBy.valueOf(each), (long) this.function.intValueOf(each));
+        }
+
+        public ObjectLongHashMap<V> getResult()
+        {
+            return this.map;
+        }
+
+        public SumByIntProcedure<T, V> create()
+        {
+            return new SumByIntProcedure<T, V>(this.groupBy, this.function);
+        }
+    }
+
+    private static final class SumByIntCombiner<T, V> extends AbstractProcedureCombiner<SumByIntProcedure<T, V>>
+    {
+        private final ObjectLongHashMap<V> result;
+
+        private SumByIntCombiner(ObjectLongHashMap<V> result)
+        {
+            super(true);
+            this.result = result;
+        }
+
+        public void combineOne(SumByIntProcedure<T, V> thingToCombine)
+        {
+            if (this.result.isEmpty())
+            {
+                this.result.putAll(thingToCombine.getResult());
+            }
+            else
+            {
+                thingToCombine.getResult().forEachKeyValue(new ObjectLongProcedure<V>()
+                {
+                    public void value(V each, long value)
+                    {
+                        SumByIntCombiner.this.result.addToValue(each, value);
+                    }
+                });
+            }
         }
     }
 }

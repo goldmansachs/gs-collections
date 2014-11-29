@@ -51,9 +51,9 @@ import org.openjdk.jmh.annotations.Warmup;
 @OutputTimeUnit(TimeUnit.SECONDS)
 public class SumByTest
 {
-    private static final int SIZE = 1_000_000;
+    private static final int SIZE = 3_000_000;
     private static final Random RANDOM = new Random(System.currentTimeMillis());
-    private static final PrimitiveIterator.OfInt INTS = RANDOM.ints(1, 10).iterator();
+    private static final PrimitiveIterator.OfInt INTS = RANDOM.ints(1, 100).iterator();
     private static final PrimitiveIterator.OfDouble DOUBLES = RANDOM.ints(1, 100).asDoubleStream().iterator();
     private final Pool<Account> accountPool = UnifiedSet.newSet();
     private final Pool<Product> productPool = UnifiedSet.newSet();
