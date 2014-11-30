@@ -27,6 +27,8 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
@@ -1174,6 +1176,78 @@ public class ArrayIterateTest
                 throw new IOException();
             }
         });
+    }
+
+    @Test
+    public void sumFloat()
+    {
+        Integer[] objects = {1, 2, 3};
+        float expected = ArrayIterate.injectInto(0.0f, objects, AddFunction.INTEGER_TO_FLOAT);
+        double actual = ArrayIterate.sumOfFloat(objects, Integer::floatValue);
+        Assert.assertEquals(expected, actual, 0.001);
+    }
+
+    @Test
+    public void sumDouble()
+    {
+        Integer[] objects = {1, 2, 3};
+        double expected = ArrayIterate.injectInto(0.0d, objects, AddFunction.INTEGER_TO_DOUBLE);
+        double actual = ArrayIterate.sumOfDouble(objects, Integer::doubleValue);
+        Assert.assertEquals(expected, actual, 0.001);
+    }
+
+    @Test
+    public void sumInteger()
+    {
+        Integer[] objects = {1, 2, 3};
+        long expected = ArrayIterate.injectInto(0, objects, AddFunction.INTEGER_TO_LONG);
+        long actual = ArrayIterate.sumOfInt(objects, integer -> integer);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void sumLong()
+    {
+        Integer[] objects = {1, 2, 3};
+        long expected = ArrayIterate.injectInto(0L, objects, AddFunction.INTEGER_TO_LONG);
+        long actual = ArrayIterate.sumOfLong(objects, Integer::longValue);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void sumByInt()
+    {
+        Integer[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        ObjectLongMap<Integer> result = ArrayIterate.sumByInt(values, i -> i % 2, e -> e);
+        Assert.assertEquals(25, result.get(1));
+        Assert.assertEquals(30, result.get(0));
+    }
+
+    @Test
+    public void sumByFloat()
+    {
+        Integer[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        ObjectDoubleMap<Integer> result = ArrayIterate.sumByFloat(values, f -> f % 2, e -> e);
+        Assert.assertEquals(25.0f, result.get(1), 0.0);
+        Assert.assertEquals(30.0f, result.get(0), 0.0);
+    }
+
+    @Test
+    public void sumByLong()
+    {
+        Integer[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        ObjectLongMap<Integer> result = ArrayIterate.sumByLong(values, l -> l % 2, e -> e);
+        Assert.assertEquals(25, result.get(1));
+        Assert.assertEquals(30, result.get(0));
+    }
+
+    @Test
+    public void sumByDouble()
+    {
+        Integer[] values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        ObjectDoubleMap<Integer> result = ArrayIterate.sumByDouble(values, d -> d % 2, e -> e);
+        Assert.assertEquals(25.0d, result.get(1), 0.0);
+        Assert.assertEquals(30.0d, result.get(0), 0.0);
     }
 
     @Test

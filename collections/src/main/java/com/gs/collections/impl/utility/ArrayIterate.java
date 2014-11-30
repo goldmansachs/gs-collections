@@ -32,6 +32,7 @@ import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
@@ -60,6 +61,8 @@ import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
@@ -991,6 +994,27 @@ public final class ArrayIterate
     }
 
     /**
+     * @see Iterate#injectInto(float, Iterable, FloatObjectToFloatFunction)
+     * @since 6.0
+     */
+    public static <T> float injectInto(float injectValue, T[] objectArray, FloatObjectToFloatFunction<? super T> function)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform an injectInto on null");
+        }
+        float result = injectValue;
+        if (ArrayIterate.notEmpty(objectArray))
+        {
+            for (T each : objectArray)
+            {
+                result = function.floatValueOf(result, each);
+            }
+        }
+        return result;
+    }
+
+    /**
      * @see Iterate#injectInto(double, Iterable, DoubleObjectToDoubleFunction)
      */
     public static <T> double injectInto(
@@ -1591,5 +1615,77 @@ public final class ArrayIterate
         {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * @see Iterate#sumOfInt(Iterable, IntFunction)
+     * @since 6.0
+     */
+    public static <T> long sumOfInt(T[] array, IntFunction<? super T> function)
+    {
+        return InternalArrayIterate.sumOfInt(array, array.length, function);
+    }
+
+    /**
+     * @see Iterate#sumOfLong(Iterable, LongFunction)
+     * @since 6.0
+     */
+    public static <T> long sumOfLong(T[] array, LongFunction<? super T> function)
+    {
+        return InternalArrayIterate.sumOfLong(array, array.length, function);
+    }
+
+    /**
+     * @see Iterate#sumOfFloat(Iterable, FloatFunction)
+     * @since 6.0
+     */
+    public static <T> double sumOfFloat(T[] array, FloatFunction<? super T> function)
+    {
+        return InternalArrayIterate.sumOfFloat(array, array.length, function);
+    }
+
+    /**
+     * @see Iterate#sumOfDouble(Iterable, DoubleFunction)
+     * @since 6.0
+     */
+    public static <T> double sumOfDouble(T[] array, DoubleFunction<? super T> function)
+    {
+        return InternalArrayIterate.sumOfDouble(array, array.length, function);
+    }
+
+    /**
+     * @see Iterate#sumByInt(Iterable, Function, IntFunction)
+     * @since 6.0
+     */
+    public static <V, T> ObjectLongMap<V> sumByInt(T[] array, Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        return InternalArrayIterate.sumByInt(array, array.length, groupBy, function);
+    }
+
+    /**
+     * @see Iterate#sumByLong(Iterable, Function, LongFunction)
+     * @since 6.0
+     */
+    public static <V, T> ObjectLongMap<V> sumByLong(T[] array, Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        return InternalArrayIterate.sumByLong(array, array.length, groupBy, function);
+    }
+
+    /**
+     * @see Iterate#sumByFloat(Iterable, Function, FloatFunction)
+     * @since 6.0
+     */
+    public static <V, T> ObjectDoubleMap<V> sumByFloat(T[] array, Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        return InternalArrayIterate.sumByFloat(array, array.length, groupBy, function);
+    }
+
+    /**
+     * @see Iterate#sumByDouble(Iterable, Function, DoubleFunction)
+     * @since 6.0
+     */
+    public static <V, T> ObjectDoubleMap<V> sumByDouble(T[] array, Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        return InternalArrayIterate.sumByDouble(array, array.length, groupBy, function);
     }
 }

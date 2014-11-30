@@ -856,7 +856,7 @@ public abstract class AbstractRichIterableTestCase
     public void sumLong()
     {
         RichIterable<Integer> objects = this.newWith(1, 2, 3);
-        long expected = objects.injectInto(0, AddFunction.INTEGER_TO_LONG);
+        long expected = objects.injectInto(0L, AddFunction.INTEGER_TO_LONG);
         long actual = objects.sumOfLong(Integer::longValue);
         Assert.assertEquals(expected, actual);
     }

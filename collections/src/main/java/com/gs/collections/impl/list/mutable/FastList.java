@@ -84,8 +84,6 @@ import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
-import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.partition.list.PartitionFastList;
@@ -1226,93 +1224,49 @@ public class FastList<T>
     @Override
     public long sumOfInt(IntFunction<? super T> function)
     {
-        long result = 0L;
-        for (int i = 0; i < this.size; i++)
-        {
-            result += (long) function.intValueOf(this.items[i]);
-        }
-        return result;
+        return InternalArrayIterate.sumOfInt(this.items, this.size, function);
     }
 
     @Override
     public long sumOfLong(LongFunction<? super T> function)
     {
-        long result = 0L;
-        for (int i = 0; i < this.size; i++)
-        {
-            result += function.longValueOf(this.items[i]);
-        }
-        return result;
+        return InternalArrayIterate.sumOfLong(this.items, this.size, function);
     }
 
     @Override
     public double sumOfFloat(FloatFunction<? super T> function)
     {
-        double result = 0.0d;
-        for (int i = 0; i < this.size; i++)
-        {
-            result += (double) function.floatValueOf(this.items[i]);
-        }
-        return result;
+        return InternalArrayIterate.sumOfFloat(this.items, this.size, function);
     }
 
     @Override
     public double sumOfDouble(DoubleFunction<? super T> function)
     {
-        double result = 0.0d;
-        for (int i = 0; i < this.size; i++)
-        {
-            result += function.doubleValueOf(this.items[i]);
-        }
-        return result;
+        return InternalArrayIterate.sumOfDouble(this.items, this.size, function);
     }
 
     @Override
     public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
     {
-        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            result.addToValue(groupBy.valueOf(item), function.intValueOf(item));
-        }
-        return result;
+        return InternalArrayIterate.sumByInt(this.items, this.size, groupBy, function);
     }
 
     @Override
     public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
     {
-        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            result.addToValue(groupBy.valueOf(item), function.longValueOf(item));
-        }
-        return result;
+        return InternalArrayIterate.sumByLong(this.items, this.size, groupBy, function);
     }
 
     @Override
     public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
     {
-        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            result.addToValue(groupBy.valueOf(item), function.floatValueOf(item));
-        }
-        return result;
+        return InternalArrayIterate.sumByFloat(this.items, this.size, groupBy, function);
     }
 
     @Override
     public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
     {
-        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
-        for (int i = 0; i < this.size; i++)
-        {
-            T item = this.items[i];
-            result.addToValue(groupBy.valueOf(item), function.doubleValueOf(item));
-        }
-        return result;
+        return InternalArrayIterate.sumByDouble(this.items, this.size, groupBy, function);
     }
 
     @Override

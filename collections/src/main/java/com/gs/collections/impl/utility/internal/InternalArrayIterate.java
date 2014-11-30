@@ -26,6 +26,10 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -33,6 +37,8 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.ObjectDoubleMap;
+import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
@@ -45,6 +51,8 @@ import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
@@ -791,5 +799,89 @@ public final class InternalArrayIterate
             }
         }
         return targetCollection;
+    }
+
+    public static <T> long sumOfInt(T[] array, int size, IntFunction<? super T> function)
+    {
+        long result = 0L;
+        for (int i = 0; i < size; i++)
+        {
+            result += (long) function.intValueOf(array[i]);
+        }
+        return result;
+    }
+
+    public static <T> long sumOfLong(T[] array, int size, LongFunction<? super T> function)
+    {
+        long result = 0L;
+        for (int i = 0; i < size; i++)
+        {
+            result += function.longValueOf(array[i]);
+        }
+        return result;
+    }
+
+    public static <T> double sumOfFloat(T[] array, int size, FloatFunction<? super T> function)
+    {
+        double result = 0.0d;
+        for (int i = 0; i < size; i++)
+        {
+            result += (double) function.floatValueOf(array[i]);
+        }
+        return result;
+    }
+
+    public static <T> double sumOfDouble(T[] array, int size, DoubleFunction<? super T> function)
+    {
+        double result = 0.0d;
+        for (int i = 0; i < size; i++)
+        {
+            result += function.doubleValueOf(array[i]);
+        }
+        return result;
+    }
+
+    public static <V, T> ObjectLongMap<V> sumByInt(T[] array, int size, Function<T, V> groupBy, IntFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        for (int i = 0; i < size; i++)
+        {
+            T item = array[i];
+            result.addToValue(groupBy.valueOf(item), function.intValueOf(item));
+        }
+        return result;
+    }
+
+    public static <V, T> ObjectLongMap<V> sumByLong(T[] array, int size, Function<T, V> groupBy, LongFunction<? super T> function)
+    {
+        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
+        for (int i = 0; i < size; i++)
+        {
+            T item = array[i];
+            result.addToValue(groupBy.valueOf(item), function.longValueOf(item));
+        }
+        return result;
+    }
+
+    public static <V, T> ObjectDoubleMap<V> sumByFloat(T[] array, int size, Function<T, V> groupBy, FloatFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        for (int i = 0; i < size; i++)
+        {
+            T item = array[i];
+            result.addToValue(groupBy.valueOf(item), function.floatValueOf(item));
+        }
+        return result;
+    }
+
+    public static <V, T> ObjectDoubleMap<V> sumByDouble(T[] array, int size, Function<T, V> groupBy, DoubleFunction<? super T> function)
+    {
+        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        for (int i = 0; i < size; i++)
+        {
+            T item = array[i];
+            result.addToValue(groupBy.valueOf(item), function.doubleValueOf(item));
+        }
+        return result;
     }
 }
