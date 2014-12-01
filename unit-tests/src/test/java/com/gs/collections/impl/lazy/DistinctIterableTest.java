@@ -40,7 +40,7 @@ public class DistinctIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEach()
     {
-        InternalIterable<Integer> distinct = new DistinctIterable<Integer>(FastList.newListWith(3, 1, 2, 2, 3, 4));
+        InternalIterable<Integer> distinct = new DistinctIterable<>(FastList.newListWith(3, 1, 2, 2, 3, 4));
         Appendable builder = new StringBuilder();
         Procedure<Integer> appendProcedure = Procedures.append(builder);
         distinct.forEach(appendProcedure);
@@ -50,7 +50,7 @@ public class DistinctIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWithIndex()
     {
-        InternalIterable<Integer> distinct = new DistinctIterable<Integer>(FastList.newListWith(1, 2, 1, 3, 2, 4, 3, 5, 4, 6, 5, 7, 6, 8, 7, 9));
+        InternalIterable<Integer> distinct = new DistinctIterable<>(FastList.newListWith(1, 2, 1, 3, 2, 4, 3, 5, 4, 6, 5, 7, 6, 8, 7, 9));
         StringBuilder builder = new StringBuilder("");
         distinct.forEachWithIndex((object, index) -> {
             builder.append(object);
@@ -63,7 +63,7 @@ public class DistinctIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void iterator()
     {
-        InternalIterable<Integer> distinct = new DistinctIterable<Integer>(FastList.newListWith(3, 1, 2, 2, 3, 4, 2, 5));
+        InternalIterable<Integer> distinct = new DistinctIterable<>(FastList.newListWith(3, 1, 2, 2, 3, 4, 2, 5));
         StringBuilder builder = new StringBuilder("");
         for (Integer each : distinct)
         {
@@ -75,7 +75,7 @@ public class DistinctIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWith()
     {
-        InternalIterable<Integer> distinct = new DistinctIterable<Integer>(FastList.newListWith(1, 3, 3, 2, 5, 4, 2, 5, 4));
+        InternalIterable<Integer> distinct = new DistinctIterable<>(FastList.newListWith(1, 3, 3, 2, 5, 4, 2, 5, 4));
         StringBuilder builder = new StringBuilder("");
         distinct.forEachWith((each, aBuilder) -> aBuilder.append(each), builder);
         Assert.assertEquals("13254", builder.toString());
@@ -84,13 +84,13 @@ public class DistinctIterableTest extends AbstractLazyIterableTestCase
     @Test(expected = NoSuchElementException.class)
     public void noSuchElementException()
     {
-        new DistinctIterator<Integer>(Lists.mutable.<Integer>of()).next();
+        new DistinctIterator<>(Lists.mutable.<Integer>of()).next();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void remove()
     {
-        new DistinctIterator<Integer>(Lists.mutable.<Integer>of()).remove();
+        new DistinctIterator<>(Lists.mutable.<Integer>of()).remove();
     }
 
     @Override
@@ -98,7 +98,7 @@ public class DistinctIterableTest extends AbstractLazyIterableTestCase
     public void distinct()
     {
         super.distinct();
-        DistinctIterable<Integer> distinct = new DistinctIterable<Integer>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5));
+        DistinctIterable<Integer> distinct = new DistinctIterable<>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5));
         LazyIterable<Integer> distinctDistinct = distinct.distinct();
         Assert.assertSame(distinctDistinct, distinct);
         Assert.assertEquals(

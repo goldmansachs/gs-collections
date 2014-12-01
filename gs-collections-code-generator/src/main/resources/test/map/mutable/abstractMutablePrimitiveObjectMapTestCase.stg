@@ -64,7 +64,7 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
     protected static <name>ArrayList generateCollisions()
     {
         <name>ArrayList collisions = new <name>ArrayList();
-        <name>ObjectHashMap\<?> hashMap = new <name>ObjectHashMap\<Object>();
+        <name>ObjectHashMap\<?> hashMap = new <name>ObjectHashMap\<>();
         for (<type> i = <(literal.(type))("2")>; collisions.size() \<= 10; i++)
         {
             if (hashMap.spread(i) == hashMap.spread(<(literal.(type))("2")>))
@@ -81,15 +81,15 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
         Mutable<name>ObjectMap\<Object> hashMap = this.getEmptyMap();
         hashMap.put(<(literal.(type))("0")>, new Object());
         hashMap.clear();
-        Assert.assertEquals(new <name>ObjectHashMap\<Object>(), hashMap);
+        Assert.assertEquals(new <name>ObjectHashMap\<>(), hashMap);
 
         hashMap.put(<(literal.(type))("1")>, new Object());
         hashMap.clear();
-        Assert.assertEquals(new <name>ObjectHashMap\<Object>(), hashMap);
+        Assert.assertEquals(new <name>ObjectHashMap\<>(), hashMap);
 
         hashMap.put(<(literal.(type))("33")>, new Object());
         hashMap.clear();
-        Assert.assertEquals(new <name>ObjectHashMap\<Object>(), hashMap);
+        Assert.assertEquals(new <name>ObjectHashMap\<>(), hashMap);
     }
 
     @Test
@@ -722,7 +722,7 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
 
         Mutable<name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
         Iterator\<String> iterator1 = map1.iterator();
-        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator1::remove);
+        Verify.assertThrows(IllegalStateException.class, iterator1::remove);
         iterator1.next();
         iterator1.remove();
         Assert.assertTrue(map1.toString(), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero").equals(map1)
@@ -730,11 +730,11 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
         iterator1.next();
         iterator1.remove();
         Assert.assertEquals(<name>ObjectHashMap.newMap(), map1);
-        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator1::remove);
+        Verify.assertThrows(IllegalStateException.class, iterator1::remove);
 
         Mutable<name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("9")>, "nine");
         Iterator\<String> iterator2 = map2.iterator();
-        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator2::remove);
+        Verify.assertThrows(IllegalStateException.class, iterator2::remove);
         iterator2.next();
         iterator2.remove();
         Assert.assertTrue(map2.toString(), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero").equals(map2)
@@ -745,7 +745,7 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
 
         Mutable<name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("8")>, "eight", <(literal.(type))("9")>, "nine");
         Iterator\<String> iterator3 = map3.iterator();
-        Verify.assertThrows(IllegalStateException.class, (Runnable) iterator3::remove);
+        Verify.assertThrows(IllegalStateException.class, iterator3::remove);
         iterator3.next();
         iterator3.remove();
         Assert.assertTrue(map3.toString(), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("8")>, "eight").equals(map3)
@@ -759,14 +759,14 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
     public void asUnmodifiable()
     {
         Verify.assertInstanceOf(Unmodifiable<name>ObjectMap.class, this.map.asUnmodifiable());
-        Assert.assertEquals(new Unmodifiable<name>ObjectMap\<String>(this.map), this.map.asUnmodifiable());
+        Assert.assertEquals(new Unmodifiable<name>ObjectMap\<>(this.map), this.map.asUnmodifiable());
     }
 
     @Test
     public void asSynchronized()
     {
         Verify.assertInstanceOf(Synchronized<name>ObjectMap.class, this.map.asSynchronized());
-        Assert.assertEquals(new Synchronized<name>ObjectMap\<String>(this.map), this.map.asSynchronized());
+        Assert.assertEquals(new Synchronized<name>ObjectMap\<>(this.map), this.map.asSynchronized());
     }
 }
 
@@ -777,7 +777,7 @@ NaNTests(key) ::= <<
 public void put_<key>()
 {
     Mutable<name>ObjectMap\<String> map = this.newWithKeysValues(<wrapperName>.<key>, "one");
-    Map\<<wrapperName>, String> hashmap = new HashMap\<<wrapperName>, String>();
+    Map\<<wrapperName>, String> hashmap = new HashMap\<>();
     hashmap.put(<wrapperName>.<key>, "one");
 
     Assert.assertTrue(hashmap.containsKey(<wrapperName>.<key>));
@@ -797,7 +797,7 @@ ZeroTests() ::= <<
 public void put_zero()
 {
     Mutable<name>ObjectMap\<String> map = this.newWithKeysValues(<(literal.(type))("0")>, "one");
-    Map\<<wrapperName>, String> hashmap = new HashMap\<<wrapperName>, String>();
+    Map\<<wrapperName>, String> hashmap = new HashMap\<>();
     hashmap.put(<(literal.(type))("0")>, "one");
 
     Assert.assertTrue(hashmap.containsKey(<(literal.(type))("0")>));

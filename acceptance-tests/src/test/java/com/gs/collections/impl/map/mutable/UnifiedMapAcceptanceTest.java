@@ -315,7 +315,7 @@ public class UnifiedMapAcceptanceTest
         {
             map.put(new CollidingInt(i, shift), UnifiedMapAcceptanceTest.createVal(i));
         }
-        List<CollidingInt> keys = new ArrayList<CollidingInt>(size);
+        List<CollidingInt> keys = new ArrayList<>(size);
         map.forEachKey(keys::add);
         Verify.assertSize(size, keys);
         Collections.sort(keys);
@@ -344,7 +344,7 @@ public class UnifiedMapAcceptanceTest
         {
             map.put(new CollidingInt(i, shift), UnifiedMapAcceptanceTest.createVal(i));
         }
-        List<String> values = new ArrayList<String>(size);
+        List<String> values = new ArrayList<>(size);
         map.forEachValue(values::add);
         Verify.assertSize(size, values);
         Collections.sort(values, UnifiedMapAcceptanceTest.VALUE_COMPARATOR);
@@ -375,7 +375,7 @@ public class UnifiedMapAcceptanceTest
     private static void assertUnifiedMapEqualsAndHashCode(int shift)
     {
         MutableMap<CollidingInt, String> map1 = UnifiedMap.newMap();
-        Map<CollidingInt, String> map2 = new HashMap<CollidingInt, String>();
+        Map<CollidingInt, String> map2 = new HashMap<>();
         MutableMap<CollidingInt, String> map3 = UnifiedMap.newMap();
         MutableMap<CollidingInt, String> map4 = UnifiedMap.newMap();
 
@@ -456,7 +456,7 @@ public class UnifiedMapAcceptanceTest
 
     private static void assertUnifiedMapPutAllWithHashMap(int shift)
     {
-        Map<CollidingInt, String> map = new HashMap<CollidingInt, String>();
+        Map<CollidingInt, String> map = new HashMap<>();
 
         int size = 100000;
         for (int i = 0; i < size; i++)
@@ -581,7 +581,7 @@ public class UnifiedMapAcceptanceTest
     {
         UnifiedMap<CollidingInt, String> map = UnifiedMap.newMap();
 
-        List<CollidingInt> toRetain = new ArrayList<CollidingInt>();
+        List<CollidingInt> toRetain = new ArrayList<>();
 
         int size = 100000;
         for (int i = 0; i < size; i++)
@@ -625,7 +625,7 @@ public class UnifiedMapAcceptanceTest
     {
         UnifiedMap<CollidingInt, String> map = UnifiedMap.newMap();
 
-        List<CollidingInt> toRemove = new ArrayList<CollidingInt>();
+        List<CollidingInt> toRemove = new ArrayList<>();
 
         int size = 100000;
         for (int i = 0; i < size; i++)
@@ -883,7 +883,7 @@ public class UnifiedMapAcceptanceTest
     {
         UnifiedMap<CollidingInt, String> map = UnifiedMap.newMap();
 
-        List<Entry> toRetain = new ArrayList<Entry>();
+        List<Entry> toRetain = new ArrayList<>();
 
         int size = 100000;
         for (int i = 0; i < size; i++)
@@ -927,7 +927,7 @@ public class UnifiedMapAcceptanceTest
     {
         UnifiedMap<CollidingInt, String> map = UnifiedMap.newMap();
 
-        List<Entry> toRemove = new ArrayList<Entry>();
+        List<Entry> toRemove = new ArrayList<>();
 
         int size = 100000;
         for (int i = 0; i < size; i++)
@@ -1225,7 +1225,7 @@ public class UnifiedMapAcceptanceTest
     {
         UnifiedMap<CollidingInt, String> map = UnifiedMap.newMap();
 
-        List<String> toRetain = new ArrayList<String>();
+        List<String> toRetain = new ArrayList<>();
 
         int size = 1000;
         for (int i = 0; i < size; i++)
@@ -1269,7 +1269,7 @@ public class UnifiedMapAcceptanceTest
     {
         UnifiedMap<CollidingInt, String> map = UnifiedMap.newMap();
 
-        List<String> toRemove = new ArrayList<String>();
+        List<String> toRemove = new ArrayList<>();
 
         int size = 1000;
         for (int i = 0; i < size; i++)
@@ -1533,7 +1533,7 @@ public class UnifiedMapAcceptanceTest
             }
         }
 
-        List<String> values = new ArrayList<String>(SerializeTestHelper.serializeDeserialize(map.values()));
+        List<String> values = new ArrayList<>(SerializeTestHelper.serializeDeserialize(map.values()));
         Collections.sort(values, UnifiedMapAcceptanceTest.VALUE_COMPARATOR);
         Verify.assertSize(size + 1, values);
         for (int i = 0; i < size; i++)
@@ -1547,7 +1547,7 @@ public class UnifiedMapAcceptanceTest
     {
         for (int i = 1000000; i > 10; i /= 10)
         {
-            this.runGetTest(new UnifiedMap<CollidingInt, String>(), "Unified Map", i);
+            this.runGetTest(new UnifiedMap<>(), "Unified Map", i);
         }
     }
 
@@ -1555,22 +1555,22 @@ public class UnifiedMapAcceptanceTest
     {
         for (int i = 1000000; i > 10; i /= 10)
         {
-            this.runGetTest(new HashMap<CollidingInt, String>(), "JDK HashMap", i);
+            this.runGetTest(new HashMap<>(), "JDK HashMap", i);
         }
     }
 
     public void perfTestUnifiedMapCollidingGet()
     {
-        this.runCollidingGetTest(new UnifiedMap<CollidingInt, String>(), "Unified Map", 1);
-        this.runCollidingGetTest(new UnifiedMap<CollidingInt, String>(), "Unified Map", 2);
-        this.runCollidingGetTest(new UnifiedMap<CollidingInt, String>(), "Unified Map", 3);
+        this.runCollidingGetTest(new UnifiedMap<>(), "Unified Map", 1);
+        this.runCollidingGetTest(new UnifiedMap<>(), "Unified Map", 2);
+        this.runCollidingGetTest(new UnifiedMap<>(), "Unified Map", 3);
     }
 
     public void perfTestJdkHashMapCollidingGet()
     {
-        this.runCollidingGetTest(new HashMap<CollidingInt, String>(), "JDK HashMap", 1);
-        this.runCollidingGetTest(new HashMap<CollidingInt, String>(), "JDK HashMap", 2);
-        this.runCollidingGetTest(new HashMap<CollidingInt, String>(), "JDK HashMap", 3);
+        this.runCollidingGetTest(new HashMap<>(), "JDK HashMap", 1);
+        this.runCollidingGetTest(new HashMap<>(), "JDK HashMap", 2);
+        this.runCollidingGetTest(new HashMap<>(), "JDK HashMap", 3);
     }
 
     private void runGetTest(Map<CollidingInt, String> map, String mapName, int size)

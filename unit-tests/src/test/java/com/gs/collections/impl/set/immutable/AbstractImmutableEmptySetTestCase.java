@@ -40,7 +40,7 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
     @Test
     public void containsAll()
     {
-        Assert.assertTrue(this.classUnderTest().castToSet().containsAll(new HashSet<Object>()));
+        Assert.assertTrue(this.classUnderTest().castToSet().containsAll(new HashSet<>()));
         Assert.assertFalse(this.classUnderTest().castToSet().containsAll(UnifiedSet.newSetWith(1)));
     }
 

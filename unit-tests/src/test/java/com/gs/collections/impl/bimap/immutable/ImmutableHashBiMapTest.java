@@ -30,31 +30,31 @@ public class ImmutableHashBiMapTest extends AbstractImmutableBiMapTestCase
     @Override
     protected ImmutableBiMap<Integer, String> classUnderTest()
     {
-        return new ImmutableHashBiMap<Integer, String>(Maps.immutable.with(1, "1", 2, "2", 3, "3", 4, "4"));
+        return new ImmutableHashBiMap<>(Maps.immutable.with(1, "1", 2, "2", 3, "3", 4, "4"));
     }
 
     @Override
     protected ImmutableBiMap<Integer, String> newEmpty()
     {
-        return new ImmutableHashBiMap<Integer, String>();
+        return new ImmutableHashBiMap<>();
     }
 
     @Override
     protected ImmutableBiMap<Integer, String> newWithMap()
     {
-        return new ImmutableHashBiMap<Integer, String>(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
+        return new ImmutableHashBiMap<>(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
     }
 
     @Override
     protected ImmutableBiMap<Integer, String> newWithHashBiMap()
     {
-        return new ImmutableHashBiMap<Integer, String>(HashBiMap.newWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
+        return new ImmutableHashBiMap<>(HashBiMap.newWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
     }
 
     @Override
     protected ImmutableBiMap<Integer, String> newWithImmutableMap()
     {
-        return new ImmutableHashBiMap<Integer, String>(Maps.immutable.of(1, "1", 2, "2", 3, "3", 4, "4"));
+        return new ImmutableHashBiMap<>(Maps.immutable.of(1, "1", 2, "2", 3, "3", 4, "4"));
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ImmutableHashBiMapTest extends AbstractImmutableBiMapTestCase
     @Test
     public void keySet()
     {
-        ImmutableHashBiMap<Integer, String> immutableHashBiMap = new ImmutableHashBiMap<Integer, String>(Maps.immutable.of(1, "1", 2, "2", 3, "3", 4, "4"));
+        ImmutableHashBiMap<Integer, String> immutableHashBiMap = new ImmutableHashBiMap<>(Maps.immutable.of(1, "1", 2, "2", 3, "3", 4, "4"));
         Verify.assertSetsEqual(UnifiedSet.newSetWith(1, 2, 3, 4), immutableHashBiMap.keySet());
     }
 }

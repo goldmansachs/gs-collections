@@ -30,7 +30,7 @@ public class ChunkIterableTest
     @Before
     public void setUp()
     {
-        this.undertest = new ChunkIterable<Integer>(FastList.newListWith(1, 2, 3, 4, 5), 2);
+        this.undertest = new ChunkIterable<>(FastList.newListWith(1, 2, 3, 4, 5), 2);
     }
 
     @Test

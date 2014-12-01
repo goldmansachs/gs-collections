@@ -37,19 +37,19 @@ public class ImmutableHashBiMapInverse2Test extends MapIterableTestCase
     @Override
     protected <K, V> ImmutableBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableHashBiMap<V, K>(Maps.immutable.with(value1, key1, value2, key2)).inverse();
+        return new ImmutableHashBiMap<>(Maps.immutable.with(value1, key1, value2, key2)).inverse();
     }
 
     @Override
     protected <K, V> ImmutableBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableHashBiMap<V, K>(Maps.immutable.with(value1, key1, value2, key2, value3, key3)).inverse();
+        return new ImmutableHashBiMap<>(Maps.immutable.with(value1, key1, value2, key2, value3, key3)).inverse();
     }
 
     @Override
     protected <K, V> ImmutableBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new ImmutableHashBiMap<V, K>(Maps.immutable.with(value1, key1, value2, key2, value3, key3, value4, key4)).inverse();
+        return new ImmutableHashBiMap<>(Maps.immutable.with(value1, key1, value2, key2, value3, key3, value4, key4)).inverse();
     }
 
     @Override

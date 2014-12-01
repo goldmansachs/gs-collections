@@ -30,7 +30,7 @@ public class ImmutableDecapletonListTest extends AbstractImmutableListTestCase
     @Override
     protected ImmutableList<Integer> classUnderTest()
     {
-        return new ImmutableDecapletonList<Integer>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        return new ImmutableDecapletonList<>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ImmutableDecapletonListTest extends AbstractImmutableListTestCase
     @Test
     public void selectInstanceOf()
     {
-        ImmutableList<Number> numbers = new ImmutableDecapletonList<Number>(1, 2.0, 3, 4.0, 5, 6.0, 7, 8.0, 9, 10.0);
+        ImmutableList<Number> numbers = new ImmutableDecapletonList<>(1, 2.0, 3, 4.0, 5, 6.0, 7, 8.0, 9, 10.0);
         Assert.assertEquals(
                 iList(1, 3, 5, 7, 9),
                 numbers.selectInstancesOf(Integer.class));

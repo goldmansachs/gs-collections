@@ -36,7 +36,7 @@ public class IfFunctionTest
         map.put(4, 4);
         map.put(5, 5);
 
-        IfFunction<Integer, Integer> function = new IfFunction<Integer, Integer>(
+        IfFunction<Integer, Integer> function = new IfFunction<>(
                 IntegerPredicates.isEven(),
                 (Integer ignored) -> 1,
                 (Integer ignored) -> 0);
@@ -48,7 +48,7 @@ public class IfFunctionTest
     @Test
     public void testIf()
     {
-        IfFunction<Integer, Boolean> function = new IfFunction<Integer, Boolean>(
+        IfFunction<Integer, Boolean> function = new IfFunction<>(
                 Predicates.greaterThan(5),
                 (Integer ignored) -> true);
 
@@ -58,7 +58,7 @@ public class IfFunctionTest
     @Test
     public void ifElse()
     {
-        IfFunction<Integer, Boolean> function = new IfFunction<Integer, Boolean>(
+        IfFunction<Integer, Boolean> function = new IfFunction<>(
                 Predicates.greaterThan(5),
                 (Integer ignored) -> true,
                 (Integer ignored) -> false);

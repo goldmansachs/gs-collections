@@ -118,7 +118,7 @@ public class IntListMemoryTest
         @Override
         public ArrayList<Integer> value()
         {
-            final ArrayList<Integer> list = new ArrayList<Integer>();
+            final ArrayList<Integer> list = new ArrayList<>();
             this.data.forEach(new IntProcedure()
             {
                 public void value(int each)

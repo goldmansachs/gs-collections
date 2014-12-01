@@ -52,12 +52,12 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     @Override
     protected ImmutableBag<String> newBag()
     {
-        return new ImmutableSingletonBag<String>(VAL);
+        return new ImmutableSingletonBag<>(VAL);
     }
 
     private ImmutableBag<String> newBagWithNull()
     {
-        return new ImmutableSingletonBag<String>(null);
+        return new ImmutableSingletonBag<>(null);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     @Override
     public void toStringOfItemToCount()
     {
-        Assert.assertEquals("{1=1}", new ImmutableSingletonBag<String>(VAL).toStringOfItemToCount());
+        Assert.assertEquals("{1=1}", new ImmutableSingletonBag<>(VAL).toStringOfItemToCount());
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void equalsAndHashCode()
     {
         super.equalsAndHashCode();
-        ImmutableSingletonBag<Integer> immutable = new ImmutableSingletonBag<Integer>(1);
+        ImmutableSingletonBag<Integer> immutable = new ImmutableSingletonBag<>(1);
         Bag<Integer> mutable = Bags.mutable.of(1);
         Verify.assertEqualsAndHashCode(immutable, mutable);
         Assert.assertNotEquals(immutable, FastList.newList(mutable));
@@ -108,7 +108,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void injectInto()
     {
         super.injectInto();
-        Assert.assertEquals(1, new ImmutableSingletonBag<Integer>(1).injectInto(0, AddFunction.INTEGER).intValue());
+        Assert.assertEquals(1, new ImmutableSingletonBag<>(1).injectInto(0, AddFunction.INTEGER).intValue());
     }
 
     @Override
@@ -412,8 +412,8 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     {
         super.detectWithIfNone();
 
-        Assert.assertEquals(VAL, this.newBag().detectWithIfNone(Object::equals, "1", new PassThruFunction0<String>("Not Found")));
-        Assert.assertEquals("Not Found", this.newBag().detectWithIfNone(Object::equals, "10000", new PassThruFunction0<String>("Not Found")));
+        Assert.assertEquals(VAL, this.newBag().detectWithIfNone(Object::equals, "1", new PassThruFunction0<>("Not Found")));
+        Assert.assertEquals("Not Found", this.newBag().detectWithIfNone(Object::equals, "10000", new PassThruFunction0<>("Not Found")));
     }
 
     @Override
@@ -422,8 +422,8 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     {
         super.detectIfNone();
 
-        Assert.assertEquals(VAL, this.newBag().detectIfNone(ignored -> true, new PassThruFunction0<String>(NOT_VAL)));
-        Assert.assertEquals(NOT_VAL, this.newBag().detectIfNone(ignored -> false, new PassThruFunction0<String>(NOT_VAL)));
+        Assert.assertEquals(VAL, this.newBag().detectIfNone(ignored -> true, new PassThruFunction0<>(NOT_VAL)));
+        Assert.assertEquals(NOT_VAL, this.newBag().detectIfNone(ignored -> false, new PassThruFunction0<>(NOT_VAL)));
     }
 
     @Override
@@ -580,7 +580,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     @Test
     public void selectInstancesOf()
     {
-        ImmutableBag<Number> numbers = new ImmutableSingletonBag<Number>(1);
+        ImmutableBag<Number> numbers = new ImmutableSingletonBag<>(1);
         Assert.assertEquals(iBag(1), numbers.selectInstancesOf(Integer.class));
         Assert.assertEquals(iBag(), numbers.selectInstancesOf(Double.class));
     }

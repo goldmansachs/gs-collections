@@ -269,8 +269,8 @@ public class ParallelIterateTest
                 RuntimeException.class,
                 () -> ParallelIterate.forEach(
                         createIntegerList(5),
-                        new PassThruProcedureFactory<Procedure<Integer>>(EXCEPTION_PROCEDURE),
-                        new PassThruCombiner<Procedure<Integer>>(),
+                        new PassThruProcedureFactory<>(EXCEPTION_PROCEDURE),
+                        new PassThruCombiner<>(),
                         1,
                         5));
     }
@@ -309,7 +309,7 @@ public class ParallelIterateTest
     public void testForEachWithIndexToArrayUsingArrayList()
     {
         Integer[] array = new Integer[200];
-        List<Integer> list = new ArrayList<Integer>(Interval.oneTo(200));
+        List<Integer> list = new ArrayList<>(Interval.oneTo(200));
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
         ParallelIterate.forEachWithIndex(list, (each, index) -> array[index] = each, 10, 10);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
@@ -332,8 +332,8 @@ public class ParallelIterateTest
                 RuntimeException.class,
                 () -> ParallelIterate.forEachWithIndex(
                         createIntegerList(5),
-                        new PassThruObjectIntProcedureFactory<ObjectIntProcedure<Integer>>(EXCEPTION_OBJECT_INT_PROCEDURE),
-                        new PassThruCombiner<ObjectIntProcedure<Integer>>(),
+                        new PassThruObjectIntProcedureFactory<>(EXCEPTION_OBJECT_INT_PROCEDURE),
+                        new PassThruCombiner<>(),
                         1,
                         5));
     }
@@ -474,7 +474,7 @@ public class ParallelIterateTest
         Multimap<Character, String> result2 = ParallelIterate.groupBy(Collections.synchronizedList(source), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result3 = ParallelIterate.groupBy(Collections.synchronizedCollection(source), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result4 = ParallelIterate.groupBy(LazyIterate.adapt(source), StringFunctions.firstLetter(), 1);
-        Multimap<Character, String> result5 = ParallelIterate.groupBy(new ArrayList<String>(source), StringFunctions.firstLetter(), 1);
+        Multimap<Character, String> result5 = ParallelIterate.groupBy(new ArrayList<>(source), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result6 = ParallelIterate.groupBy(source.toSet(), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result7 = ParallelIterate.groupBy(source.toMap(Functions.getStringPassThru(), Functions.getStringPassThru()), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result8 = ParallelIterate.groupBy(source.toBag(), StringFunctions.firstLetter(), 1);

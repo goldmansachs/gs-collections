@@ -228,7 +228,7 @@ public abstract class AbstractMutableObjectBooleanMapTestCase extends AbstractOb
     protected static MutableList<String> generateCollisions()
     {
         MutableList<String> collisions = FastList.newList();
-        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<String>();
+        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<>();
         for (int each = 3; collisions.size() <= 10; each++)
         {
             if (hashMap.spread(String.valueOf(each)) == hashMap.spread(String.valueOf(3)))
@@ -484,14 +484,14 @@ public abstract class AbstractMutableObjectBooleanMapTestCase extends AbstractOb
     public void asUnmodifiable()
     {
         Verify.assertInstanceOf(UnmodifiableObjectBooleanMap.class, this.map.asUnmodifiable());
-        Assert.assertEquals(new UnmodifiableObjectBooleanMap<String>(this.map), this.map.asUnmodifiable());
+        Assert.assertEquals(new UnmodifiableObjectBooleanMap<>(this.map), this.map.asUnmodifiable());
     }
 
     @Test
     public void asSynchronized()
     {
         Verify.assertInstanceOf(SynchronizedObjectBooleanMap.class, this.map.asSynchronized());
-        Assert.assertEquals(new SynchronizedObjectBooleanMap<String>(this.map), this.map.asSynchronized());
+        Assert.assertEquals(new SynchronizedObjectBooleanMap<>(this.map), this.map.asSynchronized());
     }
 
     @Test

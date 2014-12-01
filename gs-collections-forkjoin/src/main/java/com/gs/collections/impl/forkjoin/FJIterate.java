@@ -735,9 +735,9 @@ public final class FJIterate
             boolean allowReorderedResult)
     {
         int size = Iterate.sizeOf(iterable);
-        FastListCollectProcedureCombiner<T, V> combiner = new FastListCollectProcedureCombiner<T, V>(iterable, target, size, allowReorderedResult);
+        FastListCollectProcedureCombiner<T, V> combiner = new FastListCollectProcedureCombiner<>(iterable, target, size, allowReorderedResult);
         int taskCount = FJIterate.calculateTaskCount(size, batchSize);
-        FastListCollectProcedureFactory<T, V> procedureFactory = new FastListCollectProcedureFactory<T, V>(function, size / taskCount);
+        FastListCollectProcedureFactory<T, V> procedureFactory = new FastListCollectProcedureFactory<>(function, size / taskCount);
         FJIterate.forEach(
                 iterable,
                 procedureFactory,
@@ -969,7 +969,7 @@ public final class FJIterate
             ForkJoinPool executor)
     {
         NonMutatingAggregationProcedure<T, K, V> nonMutatingAggregationProcedure =
-                new NonMutatingAggregationProcedure<T, K, V>(mutableMap, groupBy, zeroValueFactory, nonMutatingAggregator);
+                new NonMutatingAggregationProcedure<>(mutableMap, groupBy, zeroValueFactory, nonMutatingAggregator);
         FJIterate.forEach(
                 iterable,
                 new PassThruProcedureFactory<Procedure<T>>(nonMutatingAggregationProcedure),
@@ -1053,7 +1053,7 @@ public final class FJIterate
     {
         MutableMap<K, V> map = ConcurrentHashMap.newMap();
         MutatingAggregationProcedure<T, K, V> mutatingAggregationProcedure =
-                new MutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, mutatingAggregator);
+                new MutatingAggregationProcedure<>(map, groupBy, zeroValueFactory, mutatingAggregator);
         FJIterate.forEach(
                 iterable,
                 new PassThruProcedureFactory<Procedure<T>>(mutatingAggregationProcedure),
@@ -1073,7 +1073,7 @@ public final class FJIterate
             ForkJoinPool executor)
     {
         MutatingAggregationProcedure<T, K, V> mutatingAggregationProcedure =
-                new MutatingAggregationProcedure<T, K, V>(mutableMap, groupBy, zeroValueFactory, mutatingAggregator);
+                new MutatingAggregationProcedure<>(mutableMap, groupBy, zeroValueFactory, mutatingAggregator);
         FJIterate.forEach(
                 iterable,
                 new PassThruProcedureFactory<Procedure<T>>(mutatingAggregationProcedure),
@@ -1157,7 +1157,7 @@ public final class FJIterate
     {
         FJIterate.forEach(
                 iterable,
-                new PassThruProcedureFactory<Procedure<V>>(new MultimapPutProcedure<K, V>(concurrentMultimap, function)),
+                new PassThruProcedureFactory<Procedure<V>>(new MultimapPutProcedure<>(concurrentMultimap, function)),
                 Combiners.<Procedure<V>>passThru(),
                 batchSize,
                 executor);

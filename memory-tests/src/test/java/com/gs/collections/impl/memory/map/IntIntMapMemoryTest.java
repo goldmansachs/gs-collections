@@ -118,7 +118,7 @@ public class IntIntMapMemoryTest
         @Override
         public HashMap<Integer, Integer> value()
         {
-            final HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+            final HashMap<Integer, Integer> map = new HashMap<>();
             this.data.forEach(new IntProcedure()
             {
                 public void value(int each)

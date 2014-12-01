@@ -157,7 +157,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
                 UnifiedSetWithHashingStrategy.newSetWith(INTEGER_HASHING_STRATEGY, 1, 2, 3, 4, 5);
         LazyIterable<Integer> select = integers.lazyReject(Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
-        select.forEach(new SumProcedure<Integer>(sum));
+        select.forEach(new SumProcedure<>(sum));
         Assert.assertEquals(5L, sum.getValue().intValue());
     }
 
@@ -172,7 +172,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
                 UnifiedSetWithHashingStrategy.newSetWith(INTEGER_HASHING_STRATEGY, 1, 2, 3, 4, 5);
         LazyIterable<Integer> select = integers.lazySelect(Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
-        select.forEach(new SumProcedure<Integer>(sum));
+        select.forEach(new SumProcedure<>(sum));
         Assert.assertEquals(10, sum.getValue().intValue());
     }
 
@@ -727,7 +727,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Verify.assertEqualsAndHashCode(setA, setB);
 
         //Checking that a hashing set is symmetrically equal to an identical JDK set
-        HashSet<Person> hashSet = new HashSet<Person>(setA);
+        HashSet<Person> hashSet = new HashSet<>(setA);
         Assert.assertTrue(hashSet.equals(setA) && setA.equals(hashSet));
 
         //Checking that a hash set is symmetrically equal to an identical GS Collections set
@@ -766,7 +766,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
     @Test
     public void constructor_from_UnifiedSet()
     {
-        Verify.assertEqualsAndHashCode(new HashSet<Integer>(MORE_COLLISIONS),
+        Verify.assertEqualsAndHashCode(new HashSet<>(MORE_COLLISIONS),
                 UnifiedSetWithHashingStrategy.newSet(
                         INTEGER_HASHING_STRATEGY,
                         MORE_COLLISIONS));
@@ -803,7 +803,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
             Sum sum = new IntegerSum(0);
             for (int sectionIndex = 0; sectionIndex < sectionCount; ++sectionIndex)
             {
-                set.batchForEach(new SumProcedure<Integer>(sum), sectionIndex, sectionCount);
+                set.batchForEach(new SumProcedure<>(sum), sectionIndex, sectionCount);
             }
             Assert.assertEquals(55, sum.getValue());
         }
@@ -815,7 +815,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         int numBatches = set2.getBatchCount(100);
         for (int i = 0; i < numBatches; ++i)
         {
-            set2.batchForEach(new SumProcedure<Integer>(sum2), i, numBatches);
+            set2.batchForEach(new SumProcedure<>(sum2), i, numBatches);
         }
         Assert.assertEquals(1, numBatches);
         Assert.assertEquals(54, sum2.getValue());
@@ -827,14 +827,14 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         int numBatches2 = set3.getBatchCount(3);
         for (int i = 0; i < numBatches2; ++i)
         {
-            set3.batchForEach(new SumProcedure<Integer>(sum3), i, numBatches2);
+            set3.batchForEach(new SumProcedure<>(sum3), i, numBatches2);
         }
         Assert.assertEquals(32, sum3.getValue());
 
         //Test batchForEach on empty set, it should simply do nothing and not throw any exceptions
         Sum sum4 = new IntegerSum(0);
         UnifiedSetWithHashingStrategy<Integer> set4 = UnifiedSetWithHashingStrategy.newSet(INTEGER_HASHING_STRATEGY);
-        set4.batchForEach(new SumProcedure<Integer>(sum4), 0, set4.getBatchCount(1));
+        set4.batchForEach(new SumProcedure<>(sum4), 0, set4.getBatchCount(1));
         Assert.assertEquals(0, sum4.getValue());
     }
 

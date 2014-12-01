@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,24 +25,24 @@ public class ImmutableTreeMap2Test extends MapIterableTestCase
     @Override
     protected <K, V> ImmutableSortedMap<K, V> newMap()
     {
-        return new ImmutableTreeMap<K, V>(TreeSortedMap.<K, V>newMap());
+        return new ImmutableTreeMap<>(TreeSortedMap.<K, V>newMap());
     }
 
     @Override
     protected <K, V> ImmutableSortedMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableTreeMap<K, V>(TreeSortedMap.newMapWith(key1, value1, key2, value2));
+        return new ImmutableTreeMap<>(TreeSortedMap.newMapWith(key1, value1, key2, value2));
     }
 
     @Override
     protected <K, V> ImmutableSortedMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableTreeMap<K, V>(TreeSortedMap.newMapWith(key1, value1, key2, value2, key3, value3));
+        return new ImmutableTreeMap<>(TreeSortedMap.newMapWith(key1, value1, key2, value2, key3, value3));
     }
 
     @Override
     protected <K, V> ImmutableSortedMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new ImmutableTreeMap<K, V>(TreeSortedMap.newMapWith(key1, value1, key2, value2, key3, value3, key4, value4));
+        return new ImmutableTreeMap<>(TreeSortedMap.newMapWith(key1, value1, key2, value2, key3, value3, key4, value4));
     }
 }

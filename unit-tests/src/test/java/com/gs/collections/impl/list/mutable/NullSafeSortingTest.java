@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,13 +64,13 @@ public class NullSafeSortingTest
     @Test
     public void emptyArrayListAdapter()
     {
-        ListAdapter.adapt(new ArrayList<Object>()).sortThis(null);
+        ListAdapter.adapt(new ArrayList<>()).sortThis(null);
     }
 
     @Test
     public void arrayListAdapterWithOneElement()
     {
-        MutableList<Integer> list = ListAdapter.adapt(new ArrayList<Integer>());
+        MutableList<Integer> list = ListAdapter.adapt(new ArrayList<>());
         list.add(1);
         list.sortThis(null);
     }
@@ -78,7 +78,7 @@ public class NullSafeSortingTest
     @Test
     public void arrayListAdapterWithThreeElements()
     {
-        MutableList<Integer> list = ListAdapter.adapt(new ArrayList<Integer>());
+        MutableList<Integer> list = ListAdapter.adapt(new ArrayList<>());
         list.add(1);
         list.add(2);
         list.add(3);
@@ -94,7 +94,7 @@ public class NullSafeSortingTest
     @Test
     public void adaptedCustomList()
     {
-        MutableList<Integer> adapt = ListAdapter.adapt(new CustomList<Integer>(1, 2));
+        MutableList<Integer> adapt = ListAdapter.adapt(new CustomList<>(1, 2));
         adapt.sortThis(null);
     }
 

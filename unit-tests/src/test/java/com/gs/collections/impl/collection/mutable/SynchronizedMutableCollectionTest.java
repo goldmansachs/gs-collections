@@ -42,7 +42,7 @@ public class SynchronizedMutableCollectionTest extends AbstractSynchronizedColle
     @Override
     protected <T> MutableCollection<T> newWith(T... littleElements)
     {
-        return new SynchronizedMutableCollection<T>(FastList.newListWith(littleElements));
+        return new SynchronizedMutableCollection<>(FastList.newListWith(littleElements));
     }
 
     @Override

@@ -467,7 +467,7 @@ NaNTests(key) ::= <<
 public void add_<key>()
 {
     Mutable<name>Set set = this.newWith(<wrapperName>.<key>);
-    Set\<<wrapperName>\> hashSet = new HashSet\<<wrapperName>\>();
+    Set\<<wrapperName>\> hashSet = new HashSet\<>();
     Assert.assertTrue(hashSet.add(<wrapperName>.<key>));
 
     Assert.assertFalse(hashSet.add(<wrapperName>.<key>));

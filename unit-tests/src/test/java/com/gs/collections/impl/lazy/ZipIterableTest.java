@@ -28,7 +28,7 @@ public class ZipIterableTest
     @Before
     public void setUp()
     {
-        this.zipIterable = new ZipIterable<Character, Integer>(
+        this.zipIterable = new ZipIterable<>(
                 Lists.immutable.of('a', 'b', 'c'),
                 Lists.immutable.of(0, 1, 2));
     }

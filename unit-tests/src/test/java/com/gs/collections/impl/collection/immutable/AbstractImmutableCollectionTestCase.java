@@ -410,7 +410,7 @@ public abstract class AbstractImmutableCollectionTestCase
     public void detectIfNone()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);
+        Function0<Integer> function = new PassThruFunction0<>(integers.size() + 1);
         Assert.assertEquals(Integer.valueOf(1), integers.detectIfNone(Predicates.equal(1), function));
         Assert.assertEquals(Integer.valueOf(integers.size() + 1), integers.detectIfNone(Predicates.equal(integers.size() + 1), function));
     }
@@ -420,7 +420,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Integer sum = Integer.valueOf(integers.size() + 1);
-        Function0<Integer> function = new PassThruFunction0<Integer>(sum);
+        Function0<Integer> function = new PassThruFunction0<>(sum);
         Assert.assertEquals(Integer.valueOf(1), integers.detectWithIfNone(Object::equals, Integer.valueOf(1), function));
         Assert.assertEquals(sum, integers.detectWithIfNone(Object::equals, sum, function));
     }

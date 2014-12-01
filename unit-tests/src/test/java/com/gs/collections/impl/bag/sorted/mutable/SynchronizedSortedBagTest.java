@@ -29,13 +29,13 @@ public class SynchronizedSortedBagTest extends AbstractSortedBagTestCase
     @Override
     protected <T> MutableSortedBag<T> newWith(T... littleElements)
     {
-        return new SynchronizedSortedBag<T>(TreeBag.newBagWith(littleElements));
+        return new SynchronizedSortedBag<>(TreeBag.newBagWith(littleElements));
     }
 
     @Override
     protected <T> MutableSortedBag<T> newWith(Comparator<? super T> comparator, T... elements)
     {
-        return new SynchronizedSortedBag<T>(TreeBag.newBagWith(comparator, elements));
+        return new SynchronizedSortedBag<>(TreeBag.newBagWith(comparator, elements));
     }
 
     @Override

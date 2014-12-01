@@ -27,20 +27,22 @@ public class TapIteratorTest
     @Test(expected = NoSuchElementException.class)
     public void nextIfDoesntHaveAnything()
     {
-        new TapIterator<Object>(Lists.immutable.of(), object -> { }).next();
+        new TapIterator<>(Lists.immutable.of(), object -> {
+        }).next();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void removeIsUnsupported()
     {
-        new TapIterator<Object>(Lists.immutable.of().iterator(), object -> { }).remove();
+        new TapIterator<>(Lists.immutable.of().iterator(), object -> {
+        }).remove();
     }
 
     @Test
     public void nextAfterEmptyIterable()
     {
         Object expected = new Object();
-        TapIterator<Object> iterator = new TapIterator<Object>(
+        TapIterator<Object> iterator = new TapIterator<>(
                 Lists.fixedSize.of(expected), object -> { });
         Assert.assertSame(expected, iterator.next());
     }

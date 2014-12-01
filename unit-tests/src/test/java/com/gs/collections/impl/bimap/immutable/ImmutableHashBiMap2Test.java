@@ -31,25 +31,25 @@ public class ImmutableHashBiMap2Test extends MapIterableTestCase
     @Override
     protected <K, V> ImmutableHashBiMap<K, V> newMap()
     {
-        return new ImmutableHashBiMap<K, V>();
+        return new ImmutableHashBiMap<>();
     }
 
     @Override
     protected <K, V> ImmutableHashBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableHashBiMap<K, V>(Maps.immutable.of(key1, value1, key2, value2));
+        return new ImmutableHashBiMap<>(Maps.immutable.of(key1, value1, key2, value2));
     }
 
     @Override
     protected <K, V> ImmutableHashBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableHashBiMap<K, V>(Maps.immutable.of(key1, value1, key2, value2, key3, value3));
+        return new ImmutableHashBiMap<>(Maps.immutable.of(key1, value1, key2, value2, key3, value3));
     }
 
     @Override
     protected <K, V> ImmutableHashBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new ImmutableHashBiMap<K, V>(Maps.immutable.of(key1, value1, key2, value2, key3, value3, key4, value4));
+        return new ImmutableHashBiMap<>(Maps.immutable.of(key1, value1, key2, value2, key3, value3, key4, value4));
     }
 
     @Override

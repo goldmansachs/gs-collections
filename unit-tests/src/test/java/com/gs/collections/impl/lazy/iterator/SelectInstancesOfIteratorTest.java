@@ -32,8 +32,8 @@ public class SelectInstancesOfIteratorTest
     public void iterator()
     {
         MutableList<Number> list = FastList.<Number>newListWith(null, 1, 2.0, null, 3, 4.0, 5, null);
-        this.assertElements(new SelectInstancesOfIterator<Integer>(list.iterator(), Integer.class));
-        this.assertElements(new SelectInstancesOfIterator<Integer>(list, Integer.class));
+        this.assertElements(new SelectInstancesOfIterator<>(list.iterator(), Integer.class));
+        this.assertElements(new SelectInstancesOfIterator<>(list, Integer.class));
     }
 
     private void assertElements(Iterator<Integer> iterator)
@@ -49,12 +49,12 @@ public class SelectInstancesOfIteratorTest
     @Test
     public void noSuchElementException()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> new SelectInstancesOfIterator<Object>(Lists.fixedSize.of(), Object.class).next());
+        Verify.assertThrows(NoSuchElementException.class, () -> new SelectInstancesOfIterator<>(Lists.fixedSize.of(), Object.class).next());
     }
 
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> new SelectInstancesOfIterator<Object>(Lists.fixedSize.of(), Object.class).remove());
+        Verify.assertThrows(UnsupportedOperationException.class, () -> new SelectInstancesOfIterator<>(Lists.fixedSize.of(), Object.class).remove());
     }
 }

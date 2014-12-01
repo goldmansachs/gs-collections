@@ -40,7 +40,7 @@ public class ParallelIterate2Test
         int howManyTimes = 200;
         AtomicInteger counter = new AtomicInteger(0);
 
-        Collection<Callable<Integer>> tasks = new ArrayList<Callable<Integer>>();
+        Collection<Callable<Integer>> tasks = new ArrayList<>();
 
         Interval.oneTo(howManyTimes).run(() -> tasks.add(counter::getAndIncrement));
 

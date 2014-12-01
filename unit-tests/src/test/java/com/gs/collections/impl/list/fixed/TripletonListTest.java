@@ -352,7 +352,7 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void without()
     {
-        MutableList<Integer> list = new TripletonList<Integer>(2, 3, 2);
+        MutableList<Integer> list = new TripletonList<>(2, 3, 2);
         Assert.assertSame(list, list.without(9));
         list = list.without(2);
         Verify.assertListsEqual(FastList.newListWith(3, 2), list);

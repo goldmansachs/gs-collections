@@ -73,7 +73,7 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
     @Override
     protected \<T> Object<name>HashMap\<T> getEmptyMap()
     {
-        return new Object<name>HashMap\<T>();
+        return new Object<name>HashMap\<>();
     }
 
     @Test
@@ -84,7 +84,7 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
         Field values = Object<name>HashMap.class.getDeclaredField("values");
         values.setAccessible(true);
 
-        Object<name>HashMap\<String> hashMap = new Object<name>HashMap\<String>();
+        Object<name>HashMap\<String> hashMap = new Object<name>HashMap\<>();
         Assert.assertEquals(16L, ((Object[]) keys.get(hashMap)).length);
         Assert.assertEquals(16L, ((<type>[]) values.get(hashMap)).length);
     }
@@ -97,11 +97,11 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
         Field values = Object<name>HashMap.class.getDeclaredField("values");
         values.setAccessible(true);
 
-        Object<name>HashMap\<String> hashMap = new Object<name>HashMap\<String>(3);
+        Object<name>HashMap\<String> hashMap = new Object<name>HashMap\<>(3);
         Assert.assertEquals(8L, ((Object[]) keys.get(hashMap)).length);
         Assert.assertEquals(8L, ((<type>[]) values.get(hashMap)).length);
 
-        Object<name>HashMap\<String> hashMap2 = new Object<name>HashMap\<String>(15);
+        Object<name>HashMap\<String> hashMap2 = new Object<name>HashMap\<>(15);
         Assert.assertEquals(32L, ((Object[]) keys.get(hashMap2)).length);
         Assert.assertEquals(32L, ((<type>[]) values.get(hashMap2)).length);
     }
@@ -214,7 +214,7 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
         Field occupiedWithSentinels = Object<name>HashMap.class.getDeclaredField("occupiedWithSentinels");
         occupiedWithData.setAccessible(true);
         occupiedWithSentinels.setAccessible(true);
-        Object<name>HashMap\<Float> hashMap = new Object<name>HashMap\<Float>();
+        Object<name>HashMap\<Float> hashMap = new Object<name>HashMap\<>();
         Assert.assertEquals(0, occupiedWithData.get(hashMap));
         Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
 
@@ -351,7 +351,7 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
         Field occupiedWithSentinels = Object<name>HashMap.class.getDeclaredField("occupiedWithSentinels");
         occupiedWithData.setAccessible(true);
         occupiedWithSentinels.setAccessible(true);
-        Object<name>HashMap\<Float> hashMap = new Object<name>HashMap\<Float>();
+        Object<name>HashMap\<Float> hashMap = new Object<name>HashMap\<>();
         Assert.assertEquals(0, occupiedWithData.get(hashMap));
         Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
 
@@ -452,7 +452,7 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
     @Test
     public void removeWithRehash() throws Exception
     {
-        Object<name>HashMap\<Float> hashMap = new Object<name>HashMap\<Float>();
+        Object<name>HashMap\<Float> hashMap = new Object<name>HashMap\<>();
         for (int i = 2; i \< 10; i++)
         {
             hashMap.put((float) i, <(castFromInt.(type))("i")>);
@@ -517,7 +517,7 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
     public void withKeysValues()
     {
         super.withKeysValues();
-        Object<name>HashMap\<Integer> hashMap0 = new Object<name>HashMap\<Integer>();
+        Object<name>HashMap\<Integer> hashMap0 = new Object<name>HashMap\<>();
         Assert.assertSame(hashMap0, hashMap0.withKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>));
         Object<name>HashMap\<Integer> hashMap1 = new Object<name>HashMap\<Integer>().withKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>);
         Object<name>HashMap\<Integer> hashMap2 = new Object<name>HashMap\<Integer>().withKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>, 4, <(literal.(type))("4")>);
@@ -626,7 +626,7 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
     {
         <name>To<name>Function incrementFunction = (<type> value) -> <(castIntToNarrowTypeWithParens.(type))("value + 1")>;
 
-        Object<name>HashMap\<String> hashMap = new Object<name>HashMap\<String>();
+        Object<name>HashMap\<String> hashMap = new Object<name>HashMap\<>();
 
         for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
         {

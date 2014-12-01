@@ -31,37 +31,37 @@ public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBoole
     @Override
     protected UnmodifiableObjectBooleanMap<String> classUnderTest()
     {
-        return new UnmodifiableObjectBooleanMap<String>(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false));
+        return new UnmodifiableObjectBooleanMap<>(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false));
     }
 
     @Override
     protected <T> UnmodifiableObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1)
     {
-        return new UnmodifiableObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1));
+        return new UnmodifiableObjectBooleanMap<>(ObjectBooleanHashMap.newWithKeysValues(key1, value1));
     }
 
     @Override
     protected <T> UnmodifiableObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1, T key2, boolean value2)
     {
-        return new UnmodifiableObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2));
+        return new UnmodifiableObjectBooleanMap<>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2));
     }
 
     @Override
     protected <T> UnmodifiableObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1, T key2, boolean value2, T key3, boolean value3)
     {
-        return new UnmodifiableObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
+        return new UnmodifiableObjectBooleanMap<>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
     }
 
     @Override
     protected <T> UnmodifiableObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1, T key2, boolean value2, T key3, boolean value3, T key4, boolean value4)
     {
-        return new UnmodifiableObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
+        return new UnmodifiableObjectBooleanMap<>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
     }
 
     @Override
     protected <T> UnmodifiableObjectBooleanMap<T> getEmptyMap()
     {
-        return new UnmodifiableObjectBooleanMap<T>(new ObjectBooleanHashMap<T>());
+        return new UnmodifiableObjectBooleanMap<>(new ObjectBooleanHashMap<>());
     }
 
     @Override

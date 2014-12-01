@@ -49,19 +49,19 @@ public class DoubletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Before
     public void setUp()
     {
-        this.set = new DoubletonSet<String>("1", "2");
+        this.set = new DoubletonSet<>("1", "2");
     }
 
     @Override
     protected MutableSet<String> classUnderTest()
     {
-        return new DoubletonSet<String>("1", "2");
+        return new DoubletonSet<>("1", "2");
     }
 
     @Override
     protected MutableSet<String> classUnderTestWithNull()
     {
-        return new DoubletonSet<String>(null, "2");
+        return new DoubletonSet<>(null, "2");
     }
 
     @Test
@@ -69,7 +69,7 @@ public class DoubletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     {
         Twin<String> twin1 = Tuples.twin("1", "1");
         Twin<String> twin2 = Tuples.twin("2", "2");
-        DoubletonSet<Twin<String>> set = new DoubletonSet<Twin<String>>(twin1, twin2);
+        DoubletonSet<Twin<String>> set = new DoubletonSet<>(twin1, twin2);
 
         Twin<String> twin3 = Tuples.twin("1", "1");
         set.with(twin3);

@@ -39,7 +39,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     @Override
     protected ImmutableMap<Integer, String> classUnderTest()
     {
-        return new ImmutableDoubletonMap<Integer, String>(1, "1", 2, "2");
+        return new ImmutableDoubletonMap<>(1, "1", 2, "2");
     }
 
     @Override
@@ -53,8 +53,8 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     public void equalsAndHashCode()
     {
         super.equalsAndHashCode();
-        ImmutableMap<Integer, String> map1 = new ImmutableDoubletonMap<Integer, String>(1, "One", 2, "Two");
-        ImmutableMap<Integer, String> map2 = new ImmutableDoubletonMap<Integer, String>(1, "One", 2, "Two");
+        ImmutableMap<Integer, String> map1 = new ImmutableDoubletonMap<>(1, "One", 2, "Two");
+        ImmutableMap<Integer, String> map2 = new ImmutableDoubletonMap<>(1, "One", 2, "Two");
         Verify.assertEqualsAndHashCode(map1, map2);
     }
 
@@ -87,7 +87,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
         super.getIfAbsent_function();
         ImmutableMap<Integer, String> map = this.classUnderTest();
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
+        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<>("4")));
         Assert.assertNull(map.get(4));
     }
 
@@ -127,7 +127,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.forEachWith();
         MutableList<Integer> result = Lists.mutable.of();
-        ImmutableMap<Integer, Integer> map = new ImmutableDoubletonMap<Integer, Integer>(1, 1, 2, 2);
+        ImmutableMap<Integer, Integer> map = new ImmutableDoubletonMap<>(1, 1, 2, 2);
         map.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 10);
         Assert.assertEquals(FastList.newListWith(11, 12), result);
     }
@@ -138,7 +138,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.forEachWithIndex();
         MutableList<String> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableDoubletonMap<Integer, String>(1, "One", 2, "Two");
+        ImmutableMap<Integer, String> map = new ImmutableDoubletonMap<>(1, "One", 2, "Two");
         map.forEachWithIndex((value, index) -> {
             result.add(value);
             result.add(String.valueOf(index));
@@ -152,7 +152,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.keyValuesView();
         MutableList<String> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableDoubletonMap<Integer, String>(1, "One", 2, "Two");
+        ImmutableMap<Integer, String> map = new ImmutableDoubletonMap<>(1, "One", 2, "Two");
         for (Pair<Integer, String> entry : map.keyValuesView())
         {
             result.add(entry.getTwo());
@@ -166,7 +166,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.valuesView();
         MutableList<String> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableDoubletonMap<Integer, String>(1, "One", 2, "Two");
+        ImmutableMap<Integer, String> map = new ImmutableDoubletonMap<>(1, "One", 2, "Two");
         for (String value : map.valuesView())
         {
             result.add(value);
@@ -180,7 +180,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.keysView();
         MutableList<Integer> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableDoubletonMap<Integer, String>(1, "One", 2, "Two");
+        ImmutableMap<Integer, String> map = new ImmutableDoubletonMap<>(1, "One", 2, "Two");
         for (Integer key : map.keysView())
         {
             result.add(key);
@@ -192,21 +192,21 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     @Test
     public void testToString()
     {
-        ImmutableMap<Integer, String> map = new ImmutableDoubletonMap<Integer, String>(1, "One", 2, "Two");
+        ImmutableMap<Integer, String> map = new ImmutableDoubletonMap<>(1, "One", 2, "Two");
         Assert.assertEquals("{1=One, 2=Two}", map.toString());
     }
 
     @Test
     public void asLazyKeys()
     {
-        MutableList<Integer> keys = new ImmutableDoubletonMap<Integer, Integer>(1, 1, 2, 2).keysView().toSortedList();
+        MutableList<Integer> keys = new ImmutableDoubletonMap<>(1, 1, 2, 2).keysView().toSortedList();
         Assert.assertEquals(FastList.newListWith(1, 2), keys);
     }
 
     @Test
     public void asLazyValues()
     {
-        MutableList<Integer> values = new ImmutableDoubletonMap<Integer, Integer>(1, 1, 2, 2).valuesView().toSortedList();
+        MutableList<Integer> values = new ImmutableDoubletonMap<>(1, 1, 2, 2).valuesView().toSortedList();
         Assert.assertEquals(FastList.newListWith(1, 2), values);
     }
 
@@ -214,7 +214,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     public void asLazyEntries()
     {
         MutableList<Pair<Integer, Integer>> values =
-                new ImmutableDoubletonMap<Integer, Integer>(1, 1, 2, 2)
+                new ImmutableDoubletonMap<>(1, 1, 2, 2)
                         .keyValuesView()
                         .toSortedList(Comparators.byFunction((Function<Pair<Integer, ?>, Integer>) Pair::getOne));
         Assert.assertEquals(FastList.newListWith(Tuples.pair(1, 1), Tuples.pair(2, 2)), values);
@@ -234,11 +234,11 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
 
         ImmutableMap<Integer, String> one = map.select((argument1, argument2) -> "1".equals(argument2));
         Verify.assertInstanceOf(ImmutableSingletonMap.class, one);
-        Assert.assertEquals(new ImmutableSingletonMap<Integer, String>(1, "1"), one);
+        Assert.assertEquals(new ImmutableSingletonMap<>(1, "1"), one);
 
         ImmutableMap<Integer, String> two = map.select((argument1, argument2) -> "2".equals(argument2));
         Verify.assertInstanceOf(ImmutableSingletonMap.class, two);
-        Assert.assertEquals(new ImmutableSingletonMap<Integer, String>(2, "2"), two);
+        Assert.assertEquals(new ImmutableSingletonMap<>(2, "2"), two);
     }
 
     @Override
@@ -255,11 +255,11 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
 
         ImmutableMap<Integer, String> one = map.reject((argument1, argument2) -> "2".equals(argument2));
         Verify.assertInstanceOf(ImmutableSingletonMap.class, one);
-        Assert.assertEquals(new ImmutableSingletonMap<Integer, String>(1, "1"), one);
+        Assert.assertEquals(new ImmutableSingletonMap<>(1, "1"), one);
 
         ImmutableMap<Integer, String> two = map.reject((argument1, argument2) -> "1".equals(argument2));
         Verify.assertInstanceOf(ImmutableSingletonMap.class, two);
-        Assert.assertEquals(new ImmutableSingletonMap<Integer, String>(2, "2"), two);
+        Assert.assertEquals(new ImmutableSingletonMap<>(2, "2"), two);
     }
 
     @Override
@@ -279,18 +279,18 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableDoubletonMap<K, V>(key1, value1, key2, value2);
+        return new ImmutableDoubletonMap<>(key1, value1, key2, value2);
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableDoubletonMap<K, V>(key1, value1, key2, value2);
+        return new ImmutableDoubletonMap<>(key1, value1, key2, value2);
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new ImmutableDoubletonMap<K, V>(key1, value1, key2, value2);
+        return new ImmutableDoubletonMap<>(key1, value1, key2, value2);
     }
 }

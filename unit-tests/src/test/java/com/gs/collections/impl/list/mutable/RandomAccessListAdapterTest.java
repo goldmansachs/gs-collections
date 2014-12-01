@@ -38,7 +38,7 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
     @Override
     protected <T> RandomAccessListAdapter<T> newWith(T... littleElements)
     {
-        return new RandomAccessListAdapter<T>(Collections.synchronizedList(new ArrayList<T>(FastList.newListWith(littleElements))));
+        return new RandomAccessListAdapter<>(Collections.synchronizedList(new ArrayList<>(FastList.newListWith(littleElements))));
     }
 
     @Test
@@ -101,7 +101,7 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
     {
         MutableList<Integer> collection = this.newWith(1, 2, 3);
         Verify.assertContainsAll(collection, 1, 2, 3);
-        Verify.assertThrows(IllegalArgumentException.class, () -> new RandomAccessListAdapter<Integer>(new LinkedList<Integer>()));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new RandomAccessListAdapter<>(new LinkedList<>()));
     }
 
     @Test
@@ -212,12 +212,12 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
     @Test
     public void adaptNull()
     {
-        Verify.assertThrows(NullPointerException.class, () -> new RandomAccessListAdapter<Object>(null));
+        Verify.assertThrows(NullPointerException.class, () -> new RandomAccessListAdapter<>(null));
         Verify.assertThrows(NullPointerException.class, () -> RandomAccessListAdapter.adapt(null)); }
 
     @Test
     public void adapt()
     {
-        Verify.assertInstanceOf(ArrayListAdapter.class, RandomAccessListAdapter.adapt(new ArrayList<Integer>()));
+        Verify.assertInstanceOf(ArrayListAdapter.class, RandomAccessListAdapter.adapt(new ArrayList<>()));
     }
 }

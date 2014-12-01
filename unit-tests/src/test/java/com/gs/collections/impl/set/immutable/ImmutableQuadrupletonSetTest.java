@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public class ImmutableQuadrupletonSetTest
     @Override
     protected ImmutableSet<Integer> classUnderTest()
     {
-        return new ImmutableQuadrupletonSet<Integer>(1, 2, 3, 4);
+        return new ImmutableQuadrupletonSet<>(1, 2, 3, 4);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ImmutableQuadrupletonSetTest
     @Test
     public void selectInstanceOf()
     {
-        ImmutableSet<Number> numbers = new ImmutableQuadrupletonSet<Number>(1, 2.0, 3, 4.0);
+        ImmutableSet<Number> numbers = new ImmutableQuadrupletonSet<>(1, 2.0, 3, 4.0);
         Assert.assertEquals(
                 iSet(1, 3),
                 numbers.selectInstancesOf(Integer.class));

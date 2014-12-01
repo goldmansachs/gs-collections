@@ -62,7 +62,7 @@ public abstract class ImmutableMapTestCase
         ImmutableMap<Integer, String> immutable = this.classUnderTest();
         Map<Integer, String> map = immutable.castToMap();
         Assert.assertSame(immutable, map);
-        Assert.assertEquals(immutable, new HashMap<Integer, String>(map));
+        Assert.assertEquals(immutable, new HashMap<>(map));
     }
 
     @Test
@@ -187,10 +187,10 @@ public abstract class ImmutableMapTestCase
 
         // Absent key behavior
         ImmutableMap<Integer, String> classUnderTest = this.classUnderTest();
-        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<String>(absentValue)));
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<>(absentValue)));
 
         // Present key behavior
-        Assert.assertEquals("1", classUnderTest.getIfAbsent(1, new PassThruFunction0<String>(absentValue)));
+        Assert.assertEquals("1", classUnderTest.getIfAbsent(1, new PassThruFunction0<>(absentValue)));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);
@@ -336,7 +336,7 @@ public abstract class ImmutableMapTestCase
     public void entrySet()
     {
         ImmutableMap<Integer, String> immutable = this.classUnderTest();
-        Map<Integer, String> map = new HashMap<Integer, String>(immutable.castToMap());
+        Map<Integer, String> map = new HashMap<>(immutable.castToMap());
         Assert.assertEquals(immutable.size(), immutable.castToMap().entrySet().size());
         Assert.assertEquals(map.entrySet(), immutable.castToMap().entrySet());
     }

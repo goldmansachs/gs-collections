@@ -42,7 +42,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     @Override
     protected <T> SetAdapter<T> newWith(T... littleElements)
     {
-        return new SetAdapter<T>(new HashSet<T>(UnifiedSet.newSetWith(littleElements)));
+        return new SetAdapter<>(new HashSet<>(UnifiedSet.newSetWith(littleElements)));
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedMutableSet.class, SetAdapter.adapt(new HashSet<Integer>()).asSynchronized());
+        Verify.assertInstanceOf(SynchronizedMutableSet.class, SetAdapter.adapt(new HashSet<>()).asSynchronized());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void adapt()
     {
         MutableSet<Integer> adapter1 = SetAdapter.adapt(Sets.fixedSize.of(1, 2, 3, 4));
-        MutableSet<Integer> adapter2 = new SetAdapter<Integer>(new HashSet<Integer>()).with(1, 2, 3, 4);
+        MutableSet<Integer> adapter2 = new SetAdapter<Integer>(new HashSet<>()).with(1, 2, 3, 4);
         Verify.assertEqualsAndHashCode(adapter1, adapter2);
     }
 
@@ -205,7 +205,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void returnType()
     {
         //Type HashSet is important here because it's not a MutableSet
-        Set<Integer> set = new HashSet<Integer>();
+        Set<Integer> set = new HashSet<>();
         MutableSet<Integer> integerSetAdapter = SetAdapter.adapt(set);
         Verify.assertInstanceOf(MutableSet.class, integerSetAdapter.select(ignored -> true));
     }
@@ -213,7 +213,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     @Test
     public void adaptNull()
     {
-        Verify.assertThrows(NullPointerException.class, () -> new SetAdapter<Object>(null));
+        Verify.assertThrows(NullPointerException.class, () -> new SetAdapter<>(null));
 
         Verify.assertThrows(NullPointerException.class, () -> SetAdapter.adapt(null));
     }

@@ -98,7 +98,7 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
 
         // Absent key behavior
         ImmutableSortedMap<Integer, String> classUnderTest = this.classUnderTest();
-        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<String>(absentValue)));
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<>(absentValue)));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);
@@ -141,7 +141,7 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     @Test
     public void allSatisfy()
     {
-        ImmutableSortedMap<String, String> map = new ImmutableEmptySortedMap<String, String>();
+        ImmutableSortedMap<String, String> map = new ImmutableEmptySortedMap<>();
 
         Assert.assertTrue(map.allSatisfy(String.class::isInstance));
         Assert.assertTrue(map.allSatisfy("Monkey"::equals));
@@ -150,7 +150,7 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     @Test
     public void noneSatisfy()
     {
-        ImmutableSortedMap<String, String> map = new ImmutableEmptySortedMap<String, String>();
+        ImmutableSortedMap<String, String> map = new ImmutableEmptySortedMap<>();
 
         Assert.assertTrue(map.noneSatisfy(Integer.class::isInstance));
         Assert.assertTrue(map.noneSatisfy("Monkey"::equals));
@@ -159,7 +159,7 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     @Test
     public void anySatisfy()
     {
-        ImmutableSortedMap<String, String> map = new ImmutableEmptySortedMap<String, String>();
+        ImmutableSortedMap<String, String> map = new ImmutableEmptySortedMap<>();
 
         Assert.assertFalse(map.anySatisfy(String.class::isInstance));
         Assert.assertFalse(map.anySatisfy("Monkey"::equals));

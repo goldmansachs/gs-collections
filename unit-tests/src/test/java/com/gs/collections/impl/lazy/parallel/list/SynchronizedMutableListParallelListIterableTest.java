@@ -43,7 +43,7 @@ public class SynchronizedMutableListParallelListIterableTest extends ParallelLis
     @Override
     protected ParallelListIterable<Integer> newWith(Integer... littleElements)
     {
-        return ListAdapter.adapt(new LinkedList<Integer>(Lists.mutable.of(littleElements))).asSynchronized().asParallel(null, 2);
+        return ListAdapter.adapt(new LinkedList<>(Lists.mutable.of(littleElements))).asSynchronized().asParallel(null, 2);
     }
 
     @Override

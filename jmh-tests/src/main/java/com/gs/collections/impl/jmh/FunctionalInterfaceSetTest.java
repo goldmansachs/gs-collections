@@ -251,16 +251,16 @@ public class FunctionalInterfaceSetTest
         if (this.megamorphicWarmupLevel > 2)
         {
             // parallel, eager, GSC, executorService
-            UnifiedSet<Integer> select1 = ParallelIterate.select(this.integersGSC, predicate1, new UnifiedSet<Integer>(), BATCH_SIZE, this.executorService, true);
+            UnifiedSet<Integer> select1 = ParallelIterate.select(this.integersGSC, predicate1, new UnifiedSet<>(), BATCH_SIZE, this.executorService, true);
             UnifiedSet<String> collect1 = ParallelIterate.collect(select1, function1, new UnifiedSet<>(), BATCH_SIZE, this.executorService, true);
-            UnifiedSet<Integer> collect2 = ParallelIterate.collect(collect1, function2, new UnifiedSet<Integer>(), BATCH_SIZE, this.executorService, true);
+            UnifiedSet<Integer> collect2 = ParallelIterate.collect(collect1, function2, new UnifiedSet<>(), BATCH_SIZE, this.executorService, true);
             UnifiedSet<Integer> set = ParallelIterate.select(collect2, predicate2, new UnifiedSet<>(), BATCH_SIZE, this.executorService, true);
             Verify.assertSize(999_800, set);
 
-            HashBag<Integer> select3 = ParallelIterate.select(this.integersGSC, predicate3, new HashBag<Integer>(), BATCH_SIZE, this.executorService, true);
+            HashBag<Integer> select3 = ParallelIterate.select(this.integersGSC, predicate3, new HashBag<>(), BATCH_SIZE, this.executorService, true);
             HashBag<String> collect3 = ParallelIterate.collect(select3, function3, new HashBag<>(), BATCH_SIZE, this.executorService, true);
-            HashBag<Integer> collect4 = ParallelIterate.collect(collect3, function4, new HashBag<Integer>(), BATCH_SIZE, this.executorService, true);
-            HashBag<Integer> bag = ParallelIterate.select(collect4, predicate4, new HashBag<Integer>(), BATCH_SIZE, this.executorService, true);
+            HashBag<Integer> collect4 = ParallelIterate.collect(collect3, function4, new HashBag<>(), BATCH_SIZE, this.executorService, true);
+            HashBag<Integer> bag = ParallelIterate.select(collect4, predicate4, new HashBag<>(), BATCH_SIZE, this.executorService, true);
             Verify.assertSize(999_800, bag);
         }
 

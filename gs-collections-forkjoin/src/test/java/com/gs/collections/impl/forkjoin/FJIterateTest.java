@@ -297,7 +297,7 @@ public class FJIterateTest
             {
                 FJIterate.forEach(
                         FJIterateTest.createIntegerList(5),
-                        new PassThruProcedureFactory<Procedure<Integer>>(EXCEPTION_PROCEDURE),
+                        new PassThruProcedureFactory<>(EXCEPTION_PROCEDURE),
                         new PassThruCombiner<Procedure<Integer>>(),
                         1,
                         5);
@@ -394,7 +394,7 @@ public class FJIterateTest
             {
                 FJIterate.forEachWithIndex(
                         FJIterateTest.createIntegerList(5),
-                        new PassThruObjectIntProcedureFactory<ObjectIntProcedure<Integer>>(EXCEPTION_OBJECT_INT_PROCEDURE),
+                        new PassThruObjectIntProcedureFactory<>(EXCEPTION_OBJECT_INT_PROCEDURE),
                         new PassThruCombiner<ObjectIntProcedure<Integer>>(),
                         1,
                         5);
@@ -568,7 +568,7 @@ public class FJIterateTest
         Multimap<Character, String> result2 = FJIterate.groupBy(Collections.synchronizedList(source), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result3 = FJIterate.groupBy(Collections.synchronizedCollection(source), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result4 = FJIterate.groupBy(LazyIterate.adapt(source), StringFunctions.firstLetter(), 1);
-        Multimap<Character, String> result5 = FJIterate.groupBy(new ArrayList<String>(source), StringFunctions.firstLetter(), 1);
+        Multimap<Character, String> result5 = FJIterate.groupBy(new ArrayList<>(source), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result6 = FJIterate.groupBy(source.toSet(), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result7 = FJIterate.groupBy(source.toMap(Functions.getStringPassThru(), Functions.getStringPassThru()), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result8 = FJIterate.groupBy(source.toBag(), StringFunctions.firstLetter(), 1);

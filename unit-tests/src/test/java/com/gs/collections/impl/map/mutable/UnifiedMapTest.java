@@ -226,7 +226,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
             Sum sum = new IntegerSum(0);
             for (int sectionIndex = 0; sectionIndex < sectionCount; ++sectionIndex)
             {
-                batchIterable.batchForEach(new SumProcedure<Integer>(sum), sectionIndex, sectionCount);
+                batchIterable.batchForEach(new SumProcedure<>(sum), sectionIndex, sectionCount);
             }
             Assert.assertEquals(expectedValue, sum.getValue());
         }
@@ -240,7 +240,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         int numBatches = batchIterable.getBatchCount(100000);
         for (int i = 0; i < numBatches; ++i)
         {
-            batchIterable.batchForEach(new SumProcedure<Integer>(sum), i, numBatches);
+            batchIterable.batchForEach(new SumProcedure<>(sum), i, numBatches);
         }
         Assert.assertEquals(1, numBatches);
         Assert.assertEquals(expectedValue, sum.getValue());
@@ -249,7 +249,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         Sum sum2 = new IntegerSum(0);
         for (int i = 0; i < 5; ++i)
         {
-            batchIterable.batchForEach(new SumProcedure<Integer>(sum2), i, 5);
+            batchIterable.batchForEach(new SumProcedure<>(sum2), i, 5);
         }
         Assert.assertEquals(expectedValue, sum2.getValue());
     }
@@ -270,7 +270,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     {
         //Test batchForEach on empty set, it should simply do nothing and not throw any exceptions
         Sum sum = new IntegerSum(0);
-        batchIterable.batchForEach(new SumProcedure<Integer>(sum), 0, batchIterable.getBatchCount(1));
+        batchIterable.batchForEach(new SumProcedure<>(sum), 0, batchIterable.getBatchCount(1));
         Assert.assertEquals(0, sum.getValue());
     }
 
@@ -372,7 +372,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     private void batchIterable_forEach(BatchIterable<Integer> batchIterable, int expectedValue)
     {
         IntegerSum sum = new IntegerSum(0);
-        batchIterable.forEach(new SumProcedure<Integer>(sum));
+        batchIterable.forEach(new SumProcedure<>(sum));
         Assert.assertEquals(expectedValue, sum.getValue());
     }
 
@@ -388,7 +388,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     {
         //Test forEach on empty set, it should simply do nothing and not throw any exceptions
         Sum sum = new IntegerSum(0);
-        batchIterable.batchForEach(new SumProcedure<Integer>(sum), 0, batchIterable.getBatchCount(1));
+        batchIterable.batchForEach(new SumProcedure<>(sum), 0, batchIterable.getBatchCount(1));
         Assert.assertEquals(0, sum.getValue());
     }
 
@@ -428,7 +428,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
 
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
         UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
-        COLLISIONS.subList(0, 5).forEach(Procedures.cast(each -> map.getIfAbsentPut(each, new PassThruFunction0<Integer>(each))));
+        COLLISIONS.subList(0, 5).forEach(Procedures.cast(each -> map.getIfAbsentPut(each, new PassThruFunction0<>(each))));
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(5), map);
 
@@ -441,8 +441,8 @@ public class UnifiedMapTest extends UnifiedMapTestCase
 
         //Test rehashing while creating a new chained key
         UnifiedMap<Integer, Integer> map3 = UnifiedMap.<Integer, Integer>newMap(2, 0.75f).withKeysValues(1, COLLISION_1, 2, COLLISION_2, 3, COLLISION_3);
-        Assert.assertEquals(COLLISION_4, map3.getIfAbsentPut(4, new PassThruFunction0<Integer>(COLLISION_4)));
-        Assert.assertNull(map3.getIfAbsentPut(5, new PassThruFunction0<Integer>(null)));
+        Assert.assertEquals(COLLISION_4, map3.getIfAbsentPut(4, new PassThruFunction0<>(COLLISION_4)));
+        Assert.assertNull(map3.getIfAbsentPut(5, new PassThruFunction0<>(null)));
     }
 
     @Override

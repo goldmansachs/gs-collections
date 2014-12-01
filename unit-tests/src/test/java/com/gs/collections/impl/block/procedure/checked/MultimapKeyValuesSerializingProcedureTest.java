@@ -30,12 +30,12 @@ public class MultimapKeyValuesSerializingProcedureTest
     @Test
     public void testSerialization()
     {
-        FastListMultimap<String, String> map = new FastListMultimap<String, String>();
+        FastListMultimap<String, String> map = new FastListMultimap<>();
         map.put("A", "alpha");
         map.put("A", "beta");
         FastList<? extends Serializable> expectedWrites = FastList.newListWith("A", 2, "alpha", "beta");
         MultimapKeyValuesSerializingProcedure<String, String> procedure =
-                new MultimapKeyValuesSerializingProcedure<String, String>(new MockObjectOutput(expectedWrites));
+                new MultimapKeyValuesSerializingProcedure<>(new MockObjectOutput(expectedWrites));
         map.toMap().forEachKeyValue(procedure);
     }
 

@@ -73,14 +73,14 @@ public class HashBiMapTest extends AbstractMutableBiMapTestCase
     @Test
     public void newMap_throws()
     {
-        Verify.assertThrows(IllegalArgumentException.class, () -> new HashBiMap<Object, Object>(UnifiedMap.newMap(), null));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new HashBiMap<>(UnifiedMap.newMap(), null));
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> new HashBiMap<Object, Object>(null, null));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new HashBiMap<>(null, null));
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> new HashBiMap<Object, Object>(null, UnifiedMap.newMap()));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new HashBiMap<>(null, UnifiedMap.newMap()));
 
         UnifiedMap<Object, Object> map = UnifiedMap.newMap();
-        Verify.assertThrows(IllegalArgumentException.class, () -> new HashBiMap<Object, Object>(map, map));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new HashBiMap<>(map, map));
     }
 
     @Test

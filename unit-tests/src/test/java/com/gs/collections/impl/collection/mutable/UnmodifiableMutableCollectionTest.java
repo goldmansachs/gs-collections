@@ -80,7 +80,7 @@ public class UnmodifiableMutableCollectionTest
     public void setUp()
     {
         this.mutableCollection = FastList.<String>newList().with(METALLICA, "Bon Jovi", "Europe", "Scorpions");
-        this.unmodifiableCollection = new UnmodifiableMutableCollection<String>(this.mutableCollection);
+        this.unmodifiableCollection = new UnmodifiableMutableCollection<>(this.mutableCollection);
     }
 
     @Test
@@ -131,10 +131,10 @@ public class UnmodifiableMutableCollectionTest
                         FastList.<String>newList()));
         Assert.assertEquals(METALLICA, this.unmodifiableCollection.detect(StringPredicates.contains("allic")));
         Assert.assertEquals("Not found", this.unmodifiableCollection.detectIfNone(StringPredicates.contains("donna"),
-                new PassThruFunction0<String>("Not found")));
+                new PassThruFunction0<>("Not found")));
         Assert.assertEquals(METALLICA, this.unmodifiableCollection.detectWith(Object::equals, METALLICA));
         Assert.assertEquals("Not found", this.unmodifiableCollection.detectWithIfNone(Object::equals, "Madonna",
-                new PassThruFunction0<String>("Not found")));
+                new PassThruFunction0<>("Not found")));
         Assert.assertEquals(4, this.unmodifiableCollection.count(ignored -> true));
         Assert.assertEquals(1, this.unmodifiableCollection.countWith(Object::equals, METALLICA));
         Assert.assertTrue(this.unmodifiableCollection.anySatisfy(StringPredicates.contains("allic")));
@@ -154,7 +154,7 @@ public class UnmodifiableMutableCollectionTest
     public void delegatingCollectPrimitiveMethods()
     {
         MutableCollection<Integer> mutable = Interval.oneTo(4).toList();
-        MutableCollection<Integer> unmodifiable = new UnmodifiableMutableCollection<Integer>(mutable);
+        MutableCollection<Integer> unmodifiable = new UnmodifiableMutableCollection<>(mutable);
 
         MutableBooleanCollection expectedBooleans = mutable.collectBoolean(PrimitiveFunctions.integerIsPositive());
         Assert.assertEquals(expectedBooleans, unmodifiable.collectBoolean(PrimitiveFunctions.integerIsPositive()));
@@ -192,7 +192,7 @@ public class UnmodifiableMutableCollectionTest
     @Test
     public void nullCollection()
     {
-        Verify.assertThrows(NullPointerException.class, () -> new UnmodifiableMutableCollection<Object>(null));
+        Verify.assertThrows(NullPointerException.class, () -> new UnmodifiableMutableCollection<>(null));
     }
 
     @Test
@@ -363,7 +363,7 @@ Verify.assertThrows(UnsupportedOperationException.class, () -> this.unmodifiable
 
     private <T> UnmodifiableMutableCollection<T> newWith(T... elements)
     {
-        return new UnmodifiableMutableCollection<T>(FastList.newListWith(elements));
+        return new UnmodifiableMutableCollection<>(FastList.newListWith(elements));
     }
 
     @Test

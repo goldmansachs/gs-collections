@@ -70,7 +70,7 @@ public class HashSetAddTest
     {
         for (int i = 0; i < runs; i++)
         {
-            HashSet<Object> set = new HashSet<Object>(8);
+            HashSet<Object> set = new HashSet<>(8);
             for (int j = 0; j < length; j++)
             {
                 set.add(objects[j]);

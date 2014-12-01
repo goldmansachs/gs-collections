@@ -468,7 +468,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     public void detectWithIfNone()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
-        Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);
+        Function0<Integer> function = new PassThruFunction0<>(integers.size() + 1);
         Integer sum = Integer.valueOf(integers.size() + 1);
         Assert.assertEquals(Integer.valueOf(1), integers.detectWithIfNone(Object::equals, Integer.valueOf(1), function));
         Assert.assertEquals(Integer.valueOf(integers.size() + 1), integers.detectWithIfNone(Object::equals, sum, function));
@@ -478,7 +478,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     public void detectIfNone()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
-        Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);
+        Function0<Integer> function = new PassThruFunction0<>(integers.size() + 1);
         Assert.assertEquals(Integer.valueOf(1), integers.detectIfNone(Predicates.equal(1), function));
         Assert.assertEquals(Integer.valueOf(integers.size() + 1), integers.detectIfNone(Predicates.equal(integers.size() + 1), function));
     }

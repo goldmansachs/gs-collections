@@ -41,17 +41,17 @@ public class TakeIterableTest extends AbstractLazyIterableTestCase
     @Before
     public void setUp()
     {
-        this.takeIterable = new TakeIterable<Integer>(Interval.oneTo(5), 2);
-        this.emptyListTakeIterable = new TakeIterable<Integer>(FastList.<Integer>newList(), 2);
-        this.zeroCountTakeIterable = new TakeIterable<Integer>(Interval.oneTo(5), 0);
-        this.sameCountTakeIterable = new TakeIterable<Integer>(Interval.oneTo(5), 5);
-        this.higherCountTakeIterable = new TakeIterable<Integer>(Interval.oneTo(5), 10);
+        this.takeIterable = new TakeIterable<>(Interval.oneTo(5), 2);
+        this.emptyListTakeIterable = new TakeIterable<>(FastList.<Integer>newList(), 2);
+        this.zeroCountTakeIterable = new TakeIterable<>(Interval.oneTo(5), 0);
+        this.sameCountTakeIterable = new TakeIterable<>(Interval.oneTo(5), 5);
+        this.higherCountTakeIterable = new TakeIterable<>(Interval.oneTo(5), 10);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void negative_throws()
     {
-        new TakeIterable<Integer>(Interval.oneTo(5), -1);
+        new TakeIterable<>(Interval.oneTo(5), -1);
     }
 
     @Test
@@ -69,23 +69,23 @@ public class TakeIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEach()
     {
-        CountProcedure<Integer> cb1 = new CountProcedure<Integer>();
+        CountProcedure<Integer> cb1 = new CountProcedure<>();
         this.takeIterable.forEach(cb1);
         Assert.assertEquals(2, cb1.getCount());
 
-        CountProcedure<Integer> cb2 = new CountProcedure<Integer>();
+        CountProcedure<Integer> cb2 = new CountProcedure<>();
         this.emptyListTakeIterable.forEach(cb2);
         Assert.assertEquals(0, cb2.getCount());
 
-        CountProcedure<Integer> cb3 = new CountProcedure<Integer>();
+        CountProcedure<Integer> cb3 = new CountProcedure<>();
         this.zeroCountTakeIterable.forEach(cb3);
         Assert.assertEquals(0, cb3.getCount());
 
-        CountProcedure<Integer> cb5 = new CountProcedure<Integer>();
+        CountProcedure<Integer> cb5 = new CountProcedure<>();
         this.sameCountTakeIterable.forEach(cb5);
         Assert.assertEquals(5, cb5.getCount());
 
-        CountProcedure<Integer> cb6 = new CountProcedure<Integer>();
+        CountProcedure<Integer> cb6 = new CountProcedure<>();
         this.higherCountTakeIterable.forEach(cb6);
         Assert.assertEquals(5, cb6.getCount());
     }
@@ -195,6 +195,6 @@ public class TakeIterableTest extends AbstractLazyIterableTestCase
         super.distinct();
         Assert.assertEquals(
                 FastList.newListWith(3, 2, 4, 1),
-                new TakeIterable<Integer>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5), 7).distinct().toList());
+                new TakeIterable<>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5), 7).distinct().toList());
     }
 }

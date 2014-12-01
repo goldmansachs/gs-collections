@@ -35,19 +35,19 @@ public class TakeIteratorTest
     {
         Interval list = Interval.oneTo(5);
 
-        Iterator<Integer> iterator1 = new TakeIterator<Integer>(list.iterator(), 2);
+        Iterator<Integer> iterator1 = new TakeIterator<>(list.iterator(), 2);
         assertElements(iterator1, 2);
 
-        Iterator<Integer> iterator2 = new TakeIterator<Integer>(list, 5);
+        Iterator<Integer> iterator2 = new TakeIterator<>(list, 5);
         assertElements(iterator2, 5);
 
-        Iterator<Integer> iterator3 = new TakeIterator<Integer>(list, 10);
+        Iterator<Integer> iterator3 = new TakeIterator<>(list, 10);
         assertElements(iterator3, 5);
 
-        Iterator<Integer> iterator4 = new TakeIterator<Integer>(list, 0);
+        Iterator<Integer> iterator4 = new TakeIterator<>(list, 0);
         assertElements(iterator4, 0);
 
-        Iterator<Integer> iterator5 = new TakeIterator<Integer>(Lists.fixedSize.<Integer>of(), 0);
+        Iterator<Integer> iterator5 = new TakeIterator<>(Lists.fixedSize.<Integer>of(), 0);
         assertElements(iterator5, 0);
     }
 
@@ -64,14 +64,14 @@ public class TakeIteratorTest
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> new TakeIterator<Integer>(Lists.fixedSize.<Integer>of(), 0).remove());
+        Verify.assertThrows(UnsupportedOperationException.class, () -> new TakeIterator<>(Lists.fixedSize.<Integer>of(), 0).remove());
     }
 
     @Test
     public void noSuchElementException()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> new TakeIterator<Integer>(Lists.fixedSize.<Integer>of(), 0).next());
+        Verify.assertThrows(NoSuchElementException.class, () -> new TakeIterator<>(Lists.fixedSize.<Integer>of(), 0).next());
 
-        Verify.assertThrows(NoSuchElementException.class, () -> new TakeIterator<Integer>(Lists.fixedSize.of(1, 2, 3), 0).next());
+        Verify.assertThrows(NoSuchElementException.class, () -> new TakeIterator<>(Lists.fixedSize.of(1, 2, 3), 0).next());
     }
 }

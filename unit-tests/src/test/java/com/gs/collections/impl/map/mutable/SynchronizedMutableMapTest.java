@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,30 +26,30 @@ public class SynchronizedMutableMapTest extends MutableMapTestCase
     @Override
     public <K, V> MutableMap<K, V> newMap()
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.<K, V>newMap());
+        return new SynchronizedMutableMap<>(UnifiedMap.<K, V>newMap());
     }
 
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeyValue(K key, V value)
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.newWithKeysValues(key, value));
+        return new SynchronizedMutableMap<>(UnifiedMap.newWithKeysValues(key, value));
     }
 
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2));
+        return new SynchronizedMutableMap<>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2));
     }
 
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
+        return new SynchronizedMutableMap<>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
     }
 
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
+        return new SynchronizedMutableMap<>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
     }
 }

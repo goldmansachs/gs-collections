@@ -44,22 +44,22 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     @Override
     protected <T> SortedSetAdapter<T> newWith(T... elements)
     {
-        return new SortedSetAdapter<T>(new TreeSet<T>(FastList.newListWith(elements)));
+        return new SortedSetAdapter<>(new TreeSet<>(FastList.newListWith(elements)));
     }
 
     @Override
     protected <T> SortedSetAdapter<T> newWith(Comparator<? super T> comparator, T... elements)
     {
-        TreeSet<T> set = new TreeSet<T>(comparator);
+        TreeSet<T> set = new TreeSet<>(comparator);
         set.addAll(FastList.newListWith(elements));
-        return new SortedSetAdapter<T>(set);
+        return new SortedSetAdapter<>(set);
     }
 
     @Override
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedSortedSet.class, SortedSetAdapter.adapt(new TreeSet<Integer>()).asSynchronized());
+        Verify.assertInstanceOf(SynchronizedSortedSet.class, SortedSetAdapter.adapt(new TreeSet<>()).asSynchronized());
     }
 
     @Override
@@ -82,9 +82,9 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     @Test
     public void adapt()
     {
-        TreeSet<Integer> integers = new TreeSet<Integer>(FastList.newListWith(1, 2, 3, 4));
+        SortedSet<Integer> integers = new TreeSet<>(FastList.newListWith(1, 2, 3, 4));
         MutableSortedSet<Integer> adapter1 = SortedSetAdapter.adapt(integers);
-        MutableSortedSet<Integer> adapter2 = new SortedSetAdapter<Integer>(new TreeSet<Integer>()).with(1, 2, 3, 4);
+        MutableSortedSet<Integer> adapter2 = new SortedSetAdapter<Integer>(new TreeSet<>()).with(1, 2, 3, 4);
         Verify.assertEqualsAndHashCode(adapter1, adapter2);
         Verify.assertSortedSetsEqual(adapter1, adapter2);
     }
@@ -172,7 +172,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         super.getFirst();
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getFirst());
         Assert.assertEquals(Integer.valueOf(3), this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 3).getFirst());
-        Verify.assertThrows(NoSuchElementException.class, () -> new SortedSetAdapter<Object>(new TreeSet<Object>()).getFirst());
+        Verify.assertThrows(NoSuchElementException.class, () -> new SortedSetAdapter<>(new TreeSet<>()).getFirst());
     }
 
     @Override
@@ -183,7 +183,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(1), this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 3).getLast());
-        Verify.assertThrows(NoSuchElementException.class, () -> new SortedSetAdapter<Object>(new TreeSet<Object>()).getLast());
+        Verify.assertThrows(NoSuchElementException.class, () -> new SortedSetAdapter<>(new TreeSet<>()).getLast());
     }
 
     @Override
@@ -215,7 +215,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void returnType()
     {
         //Type TreeSet is important here because it's not a MutableSet
-        SortedSet<Integer> set = new TreeSet<Integer>();
+        SortedSet<Integer> set = new TreeSet<>();
         MutableSortedSet<Integer> integerSetAdapter = SortedSetAdapter.adapt(set);
         Verify.assertInstanceOf(MutableSortedSet.class, integerSetAdapter.select(ignored -> true));
     }
@@ -223,7 +223,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     @Test
     public void adaptNull()
     {
-        Verify.assertThrows(NullPointerException.class, () -> new SortedSetAdapter<Object>(null));
+        Verify.assertThrows(NullPointerException.class, () -> new SortedSetAdapter<>(null));
         Verify.assertThrows(NullPointerException.class, () -> SortedSetAdapter.adapt(null));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ public class ImmutableSingletonListTest extends AbstractImmutableListTestCase
     @Override
     protected ImmutableList<Integer> classUnderTest()
     {
-        return new ImmutableSingletonList<Integer>(1);
+        return new ImmutableSingletonList<>(1);
     }
 
     @Test

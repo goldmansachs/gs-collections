@@ -76,8 +76,8 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         ImmutableList<Integer> immutable = this.classUnderTest();
         MutableList<Integer> mutable1 = FastList.newList(immutable);
         ImmutableList<Integer> immutable1 = mutable1.toImmutable();
-        List<Integer> mutable2 = new LinkedList<Integer>(mutable1);
-        List<Integer> mutable3 = new ArrayList<Integer>(mutable1);
+        List<Integer> mutable2 = new LinkedList<>(mutable1);
+        List<Integer> mutable3 = new ArrayList<>(mutable1);
         Verify.assertEqualsAndHashCode(mutable1, immutable);
         Verify.assertEqualsAndHashCode(immutable1, immutable);
         Verify.assertEqualsAndHashCode(mutable2, immutable);

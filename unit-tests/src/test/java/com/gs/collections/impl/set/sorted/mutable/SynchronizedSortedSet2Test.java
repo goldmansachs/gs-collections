@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,13 +32,13 @@ public class SynchronizedSortedSet2Test extends AbstractSortedSetTestCase
     @Override
     protected <T> MutableSortedSet<T> newWith(T... elements)
     {
-        return new SynchronizedSortedSet<T>(TreeSortedSet.newSetWith(elements));
+        return new SynchronizedSortedSet<>(TreeSortedSet.newSetWith(elements));
     }
 
     @Override
     protected <T> MutableSortedSet<T> newWith(Comparator<? super T> comparator, T... elements)
     {
-        return new SynchronizedSortedSet<T>(TreeSortedSet.newSetWith(comparator, elements));
+        return new SynchronizedSortedSet<>(TreeSortedSet.newSetWith(comparator, elements));
     }
 
     @Override

@@ -184,7 +184,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     @Test
     public void detectIfNone()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(6);
+        Function0<Integer> function = new PassThruFunction0<>(6);
         Assert.assertEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3, 4, 5).detectIfNone(Integer.valueOf(3)::equals, function));
         Assert.assertEquals(Integer.valueOf(6), this.newSetWith(1, 2, 3, 4, 5).detectIfNone(Integer.valueOf(6)::equals, function));
     }
@@ -351,7 +351,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
         Assert.assertNotEquals(set2, set3);
         UnifiedSet<Integer> fastSet = UnifiedSet.newSet(set1);
         Verify.assertEqualsAndHashCode(set1, fastSet);
-        Assert.assertEquals(set1, new HashSet<Integer>(fastSet));
+        Assert.assertEquals(set1, new HashSet<>(fastSet));
         Verify.assertEqualsAndHashCode(set1, UnifiedSet.newSetWith(1, 2, 3, 4));
     }
 

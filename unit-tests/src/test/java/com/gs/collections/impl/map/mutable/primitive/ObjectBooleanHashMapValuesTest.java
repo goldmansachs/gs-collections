@@ -47,7 +47,7 @@ public class ObjectBooleanHashMapValuesTest extends AbstractMutableBooleanCollec
     @Override
     protected MutableBooleanCollection newWith(boolean... elements)
     {
-        ObjectBooleanHashMap<Integer> map = new ObjectBooleanHashMap<Integer>();
+        ObjectBooleanHashMap<Integer> map = new ObjectBooleanHashMap<>();
         for (int i = 0; i < elements.length; i++)
         {
             map.put(i, elements[i]);

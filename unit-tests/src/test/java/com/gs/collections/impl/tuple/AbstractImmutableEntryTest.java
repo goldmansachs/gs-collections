@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,14 @@ public class AbstractImmutableEntryTest
     @Test
     public void getKeyFunction()
     {
-        ImmutableEntry<String, Integer> entry = new ImmutableEntry<String, Integer>("foo", 2);
+        ImmutableEntry<String, Integer> entry = new ImmutableEntry<>("foo", 2);
         Assert.assertEquals("foo", AbstractImmutableEntry.<String>getKeyFunction().valueOf(entry));
     }
 
     @Test
     public void getValueFunction()
     {
-        ImmutableEntry<String, Integer> entry = new ImmutableEntry<String, Integer>("foo", 2);
+        ImmutableEntry<String, Integer> entry = new ImmutableEntry<>("foo", 2);
         Assert.assertEquals(Integer.valueOf(2), AbstractImmutableEntry.<Integer>getValueFunction().valueOf(entry));
     }
 }

@@ -34,37 +34,37 @@ public class SynchronizedObject<name>MapTest extends AbstractMutableObject<name>
     @Override
     protected SynchronizedObject<name>Map\<String> classUnderTest()
     {
-        return new SynchronizedObject<name>Map\<String>(Object<name>HashMap.newWithKeysValues("0", <(literal.(type))("0")>, "1", <(literal.(type))("1")>, "2", <(literal.(type))("2")>));
+        return new SynchronizedObject<name>Map\<>(Object<name>HashMap.newWithKeysValues("0", <(literal.(type))("0")>, "1", <(literal.(type))("1")>, "2", <(literal.(type))("2")>));
     }
 
     @Override
     protected \<T> SynchronizedObject<name>Map\<T> newWithKeysValues(T key1, <type> value1)
     {
-        return new SynchronizedObject<name>Map\<T>(Object<name>HashMap.newWithKeysValues(key1, value1));
+        return new SynchronizedObject<name>Map\<>(Object<name>HashMap.newWithKeysValues(key1, value1));
     }
 
     @Override
     protected \<T> SynchronizedObject<name>Map\<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2)
     {
-        return new SynchronizedObject<name>Map\<T>(Object<name>HashMap.newWithKeysValues(key1, value1, key2, value2));
+        return new SynchronizedObject<name>Map\<>(Object<name>HashMap.newWithKeysValues(key1, value1, key2, value2));
     }
 
     @Override
     protected \<T> SynchronizedObject<name>Map\<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2, T key3, <type> value3)
     {
-        return new SynchronizedObject<name>Map\<T>(Object<name>HashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
+        return new SynchronizedObject<name>Map\<>(Object<name>HashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
     }
 
     @Override
     protected \<T> SynchronizedObject<name>Map\<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2, T key3, <type> value3, T key4, <type> value4)
     {
-        return new SynchronizedObject<name>Map\<T>(Object<name>HashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
+        return new SynchronizedObject<name>Map\<>(Object<name>HashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
     }
 
     @Override
     protected \<T> SynchronizedObject<name>Map\<T> getEmptyMap()
     {
-        return new SynchronizedObject<name>Map\<T>(new Object<name>HashMap\<T>());
+        return new SynchronizedObject<name>Map\<>(new Object<name>HashMap\<>());
     }
 
     @Override

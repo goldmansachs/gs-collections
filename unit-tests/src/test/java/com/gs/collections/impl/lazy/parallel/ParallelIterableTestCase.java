@@ -348,7 +348,7 @@ public abstract class ParallelIterableTestCase
     @Test
     public void detectWithIfNone()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(Integer.valueOf(1000));
+        Function0<Integer> function = new PassThruFunction0<>(Integer.valueOf(1000));
         Assert.assertEquals(Integer.valueOf(3), this.classUnderTest().detectWithIfNone(Object::equals, Integer.valueOf(3), function));
         Assert.assertEquals(Integer.valueOf(1000), this.classUnderTest().detectWithIfNone(Object::equals, Integer.valueOf(8), function));
     }

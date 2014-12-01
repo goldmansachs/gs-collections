@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public class ArrayListIterateAcceptanceTest
     @Test
     public void testSortOnListWithMoreThan10Elements()
     {
-        ArrayList<Integer> integers = new ArrayList<Integer>(Interval.toReverseList(1, 10000));
+        ArrayList<Integer> integers = new ArrayList<>(Interval.toReverseList(1, 10000));
         Verify.assertStartsWith(ArrayListIterate.sortThis(integers), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Verify.assertEndsWith(integers, 9997, 9998, 9999, 10000);
     }

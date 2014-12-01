@@ -30,7 +30,7 @@ public class ZipWithIndexIterableTest
     @Before
     public void setUp()
     {
-        this.iterableUnderTest = new ZipWithIndexIterable<Integer>(Lists.immutable.of(1, 2, 3, 4));
+        this.iterableUnderTest = new ZipWithIndexIterable<>(Lists.immutable.of(1, 2, 3, 4));
     }
 
     private void assertBufferContains(String expected)

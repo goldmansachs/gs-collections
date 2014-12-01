@@ -230,8 +230,8 @@ public class MapIterateTest
         map.putAll(this.getIntegerMap());
         MutableList<Integer> list = Lists.mutable.of();
         MapIterate.forEachValue(map, CollectionAddProcedure.on(list));
-        MapIterate.forEachValue(new HashMap<String, Integer>(map), CollectionAddProcedure.on(list));
-        MapIterate.forEachValue(new HashMap<String, Integer>(), CollectionAddProcedure.on(list));
+        MapIterate.forEachValue(new HashMap<>(map), CollectionAddProcedure.on(list));
+        MapIterate.forEachValue(new HashMap<>(), CollectionAddProcedure.on(list));
         Verify.assertSize(10, list);
         Assert.assertEquals(30, list.injectInto(0, AddFunction.INTEGER_TO_INT));
     }
@@ -268,8 +268,8 @@ public class MapIterateTest
         map.putAll(this.getIntegerMap());
         MutableBag<String> bag = Bags.mutable.of();
         MapIterate.forEachKey(map, CollectionAddProcedure.on(bag));
-        MapIterate.forEachKey(new HashMap<String, Integer>(map), CollectionAddProcedure.on(bag));
-        MapIterate.forEachKey(new HashMap<String, Integer>(), CollectionAddProcedure.on(bag));
+        MapIterate.forEachKey(new HashMap<>(map), CollectionAddProcedure.on(bag));
+        MapIterate.forEachKey(new HashMap<>(), CollectionAddProcedure.on(bag));
         Assert.assertEquals(HashBag.newBagWith("1", "1", "2", "2", "3", "3", "4", "4", "5", "5"), bag);
     }
 
@@ -286,7 +286,7 @@ public class MapIterateTest
         MutableMap<String, Integer> map = UnifiedMap.newMap();
         map.putAll(UnifiedMap.newMap(this.getIntegerMap()));
         MutableMap<String, Integer> newMap = UnifiedMap.newMap();
-        MapPutProcedure<String, Integer> procedure = new MapPutProcedure<String, Integer>(newMap);
+        MapPutProcedure<String, Integer> procedure = new MapPutProcedure<>(newMap);
         MapIterate.forEachKeyValue(map, procedure);
         Verify.assertMapsEqual(map, newMap);
     }
@@ -295,7 +295,7 @@ public class MapIterateTest
     public void getIfAbsentPut()
     {
         MutableMap<String, String> unifiedMap = UnifiedMap.newMap();
-        Map<String, String> hashMap = new HashMap<String, String>();
+        Map<String, String> hashMap = new HashMap<>();
         String value = new String("value");
         String value1 = MapIterate.getIfAbsentPut(unifiedMap, "key", () -> value);
         String value2 = MapIterate.getIfAbsentPut(unifiedMap, "key", () -> value);
@@ -329,7 +329,7 @@ public class MapIterateTest
     public void getIfAbsent()
     {
         MutableMap<String, String> unifiedMap = UnifiedMap.newMapWith(Tuples.pair("key1", "key1Value"));
-        Map<String, String> hashMap = new HashMap<String, String>(unifiedMap);
+        Map<String, String> hashMap = new HashMap<>(unifiedMap);
         String value1 = MapIterate.getIfAbsent(unifiedMap, "key", () -> new String("value"));
         String value2 = MapIterate.getIfAbsent(unifiedMap, "key", () -> new String("value"));
         String value3 = MapIterate.getIfAbsent(hashMap, "key", () -> new String("value"));
@@ -357,7 +357,7 @@ public class MapIterateTest
     {
         MutableMap<String, Integer> unifiedMap = UnifiedMap.newMap();
         this.populateIntegerMap(unifiedMap);
-        Map<String, Integer> hashMap = new HashMap<String, Integer>(unifiedMap);
+        Map<String, Integer> hashMap = new HashMap<>(unifiedMap);
         Function<Integer, Integer> function = Functions.getPassThru();
         Integer ifAbsentValue = Integer.valueOf(6);
         Assert.assertEquals(ifAbsentValue, MapIterate.getIfAbsentWith(unifiedMap, "six", function, ifAbsentValue));
@@ -380,7 +380,7 @@ public class MapIterateTest
     public void ifPresentApply()
     {
         MutableMap<String, String> unifiedMap = UnifiedMap.newWithKeysValues("testKey", "testValue");
-        Map<String, String> hashMap = new HashMap<String, String>(unifiedMap);
+        Map<String, String> hashMap = new HashMap<>(unifiedMap);
         Assert.assertEquals("TESTVALUE", MapIterate.ifPresentApply(unifiedMap, "testKey", String::toUpperCase));
         Assert.assertEquals("TESTVALUE", MapIterate.ifPresentApply(hashMap, "testKey", String::toUpperCase));
     }

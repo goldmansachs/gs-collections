@@ -30,7 +30,7 @@ public class CollectIteratorTest
     @Test
     public void iterator()
     {
-        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE), String::valueOf);
+        Iterator<String> iterator = new CollectIterator<>(iList(Boolean.TRUE), String::valueOf);
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals("true", iterator.next());
         Assert.assertFalse(iterator.hasNext());
@@ -39,7 +39,7 @@ public class CollectIteratorTest
     @Test
     public void iteratorWithFunctionName()
     {
-        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE), String::valueOf);
+        Iterator<String> iterator = new CollectIterator<>(iList(Boolean.TRUE), String::valueOf);
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals("true", iterator.next());
         Assert.assertFalse(iterator.hasNext());
@@ -48,7 +48,7 @@ public class CollectIteratorTest
     @Test
     public void iteratorWithFunctionNameAndIterator()
     {
-        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE).iterator(), String::valueOf);
+        Iterator<String> iterator = new CollectIterator<>(iList(Boolean.TRUE).iterator(), String::valueOf);
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals("true", iterator.next());
         Assert.assertFalse(iterator.hasNext());
@@ -57,12 +57,12 @@ public class CollectIteratorTest
     @Test(expected = NoSuchElementException.class)
     public void noSuchElementException()
     {
-        new CollectIterator<Boolean, String>(Lists.mutable.<Boolean>of(), String::valueOf).next();
+        new CollectIterator<>(Lists.mutable.<Boolean>of(), String::valueOf).next();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void remove()
     {
-        new CollectIterator<Boolean, String>(Lists.mutable.<Boolean>of(), String::valueOf).remove();
+        new CollectIterator<>(Lists.mutable.<Boolean>of(), String::valueOf).remove();
     }
 }

@@ -28,30 +28,30 @@ public class SynchronizedMutableMapCustomLockTest extends MutableMapTestCase
     @Override
     public <K, V> MutableMap<K, V> newMap()
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.<K, V>newMap(), LOCK);
+        return new SynchronizedMutableMap<>(UnifiedMap.<K, V>newMap(), LOCK);
     }
 
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeyValue(K key, V value)
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.newWithKeysValues(key, value), LOCK);
+        return new SynchronizedMutableMap<>(UnifiedMap.newWithKeysValues(key, value), LOCK);
     }
 
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2), LOCK);
+        return new SynchronizedMutableMap<>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2), LOCK);
     }
 
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3), LOCK);
+        return new SynchronizedMutableMap<>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3), LOCK);
     }
 
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4), LOCK);
+        return new SynchronizedMutableMap<>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4), LOCK);
     }
 }

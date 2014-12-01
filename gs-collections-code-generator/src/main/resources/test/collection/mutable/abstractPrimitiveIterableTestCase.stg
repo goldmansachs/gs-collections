@@ -859,7 +859,7 @@ NaNTests(key) ::= <<
 public void contains_<key>()
 {
     <name>Iterable primitiveIterable = this.newWith(<wrapperName>.<key>);
-    Set\<<wrapperName>\> hashSet = new HashSet\<<wrapperName>\>();
+    Set\<<wrapperName>\> hashSet = new HashSet\<>();
     Assert.assertTrue(hashSet.add(<wrapperName>.<key>));
     Assert.assertTrue(hashSet.contains(<wrapperName>.<key>));
     Assert.assertTrue(primitiveIterable.contains(<wrapperName>.<key>));
@@ -871,22 +871,22 @@ NaNEqualsTests() ::= <<
 public void testEquals_NaN()
 {
     <name>Iterable iterable1 = this.newWith(<wrapperName>.NaN);
-    Set\<<wrapperName>\> hashSet1 = new HashSet\<<wrapperName>\>();
+    Set\<<wrapperName>\> hashSet1 = new HashSet\<>();
     hashSet1.add(<wrapperName>.NaN);
     <name>Iterable iterable2 = this.newWith(<wrapperName>.NaN);
-    Set\<<wrapperName>\> hashSet2 = new HashSet\<<wrapperName>\>();
+    Set\<<wrapperName>\> hashSet2 = new HashSet\<>();
     hashSet2.add(<wrapperName>.NaN);
     <name>Iterable iterable3 = this.newWith(<wrapperName>.POSITIVE_INFINITY);
-    Set\<<wrapperName>\> hashSet3 = new HashSet\<<wrapperName>\>();
+    Set\<<wrapperName>\> hashSet3 = new HashSet\<>();
     hashSet3.add(<wrapperName>.POSITIVE_INFINITY);
     <name>Iterable iterable4 = this.newWith(<wrapperName>.POSITIVE_INFINITY);
-    Set\<<wrapperName>\> hashSet4 = new HashSet\<<wrapperName>\>();
+    Set\<<wrapperName>\> hashSet4 = new HashSet\<>();
     hashSet4.add(<wrapperName>.POSITIVE_INFINITY);
     <name>Iterable iterable5 = this.newWith(<wrapperName>.NEGATIVE_INFINITY);
-    Set\<<wrapperName>\> hashSet5 = new HashSet\<<wrapperName>\>();
+    Set\<<wrapperName>\> hashSet5 = new HashSet\<>();
     hashSet5.add(<wrapperName>.NEGATIVE_INFINITY);
     <name>Iterable iterable6 = this.newWith(<wrapperName>.NEGATIVE_INFINITY);
-    Set\<<wrapperName>\> hashSet6 = new HashSet\<<wrapperName>\>();
+    Set\<<wrapperName>\> hashSet6 = new HashSet\<>();
     hashSet6.add(<wrapperName>.NEGATIVE_INFINITY);
 
     Assert.assertEquals(hashSet1, hashSet2);
@@ -911,7 +911,7 @@ public void contains_different_NaNs()
 {
     <bitsType.(type)> nan1 = <NaNBits1.(type)>;
     <name>Iterable primitiveIterable = this.newWith(<wrapperName>.<bitsType.(type)>BitsTo<name>(nan1));
-    Set\<<wrapperName>\> hashSet = new HashSet\<<wrapperName>\>();
+    Set\<<wrapperName>\> hashSet = new HashSet\<>();
     hashSet.add(<wrapperName>.<bitsType.(type)>BitsTo<name>(nan1));
     <bitsType.(type)> nan2 = <NaNBits2.(type)>;
     Assert.assertEquals(hashSet.contains(<wrapperName>.<bitsType.(type)>BitsTo<name>(nan2)), primitiveIterable.contains(<wrapperName>.<bitsType.(type)>BitsTo<name>(nan2)));
@@ -923,7 +923,7 @@ ZeroTests() ::= <<
 public void contains_zero()
 {
     <name>Iterable iterable = this.newWith(<(literal.(type))("0")>);
-    Set\<<wrapperName>\> hashSet = new HashSet\<<wrapperName>\>();
+    Set\<<wrapperName>\> hashSet = new HashSet\<>();
     hashSet.add(<(literal.(type))("0")>);
 
     Assert.assertTrue(hashSet.contains(<(literal.(type))("0")>));

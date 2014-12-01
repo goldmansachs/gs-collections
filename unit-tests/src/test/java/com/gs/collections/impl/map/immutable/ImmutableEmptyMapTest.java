@@ -33,7 +33,7 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
     @Override
     protected ImmutableMap<Integer, String> classUnderTest()
     {
-        return new ImmutableEmptyMap<Integer, String>();
+        return new ImmutableEmptyMap<>();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
 
         // Absent key behavior
         ImmutableMap<Integer, String> classUnderTest = this.classUnderTest();
-        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<String>(absentValue)));
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<>(absentValue)));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);
@@ -139,7 +139,7 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
     @Test
     public void allSatisfy()
     {
-        ImmutableMap<String, String> map = new ImmutableEmptyMap<String, String>();
+        ImmutableMap<String, String> map = new ImmutableEmptyMap<>();
 
         Assert.assertTrue(map.allSatisfy(String.class::isInstance));
         Assert.assertTrue(map.allSatisfy("Monkey"::equals));
@@ -149,7 +149,7 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
     @Test
     public void anySatisfy()
     {
-        ImmutableMap<String, String> map = new ImmutableEmptyMap<String, String>();
+        ImmutableMap<String, String> map = new ImmutableEmptyMap<>();
 
         Assert.assertFalse(map.anySatisfy(String.class::isInstance));
         Assert.assertFalse(map.anySatisfy("Monkey"::equals));
@@ -159,7 +159,7 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
     @Test
     public void noneSatisfy()
     {
-        ImmutableMap<String, String> map = new ImmutableEmptyMap<String, String>();
+        ImmutableMap<String, String> map = new ImmutableEmptyMap<>();
 
         Assert.assertTrue(map.noneSatisfy(String.class::isInstance));
         Assert.assertTrue(map.noneSatisfy("Monkey"::equals));
@@ -169,7 +169,7 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
     @Test(expected = NoSuchElementException.class)
     public void max()
     {
-        ImmutableMap<String, String> map = new ImmutableEmptyMap<String, String>();
+        ImmutableMap<String, String> map = new ImmutableEmptyMap<>();
 
         map.max();
     }
@@ -178,7 +178,7 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
     @Test(expected = NoSuchElementException.class)
     public void maxBy()
     {
-        ImmutableMap<String, String> map = new ImmutableEmptyMap<String, String>();
+        ImmutableMap<String, String> map = new ImmutableEmptyMap<>();
 
         map.maxBy(Functions.getStringPassThru());
     }
@@ -187,7 +187,7 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
     @Test(expected = NoSuchElementException.class)
     public void min()
     {
-        ImmutableMap<String, String> map = new ImmutableEmptyMap<String, String>();
+        ImmutableMap<String, String> map = new ImmutableEmptyMap<>();
 
         map.min();
     }
@@ -196,7 +196,7 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
     @Test(expected = NoSuchElementException.class)
     public void minBy()
     {
-        ImmutableMap<String, String> map = new ImmutableEmptyMap<String, String>();
+        ImmutableMap<String, String> map = new ImmutableEmptyMap<>();
 
         map.minBy(Functions.getStringPassThru());
     }
@@ -227,18 +227,18 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableEmptyMap<K, V>();
+        return new ImmutableEmptyMap<>();
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableEmptyMap<K, V>();
+        return new ImmutableEmptyMap<>();
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new ImmutableEmptyMap<K, V>();
+        return new ImmutableEmptyMap<>();
     }
 }

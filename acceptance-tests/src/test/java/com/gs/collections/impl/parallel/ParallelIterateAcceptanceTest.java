@@ -293,8 +293,8 @@ public class ParallelIterateAcceptanceTest
     {
         Verify.assertThrows(RuntimeException.class, () -> ParallelIterate.forEach(
                 createIntegerList(5),
-                new PassThruProcedureFactory<Procedure<Integer>>(EXCEPTION_PROCEDURE),
-                new PassThruCombiner<Procedure<Integer>>(),
+                new PassThruProcedureFactory<>(EXCEPTION_PROCEDURE),
+                new PassThruCombiner<>(),
                 1,
                 5));
     }
@@ -333,7 +333,7 @@ public class ParallelIterateAcceptanceTest
     public void testForEachWithIndexToArrayUsingArrayList()
     {
         Integer[] array = new Integer[200];
-        List<Integer> list = new ArrayList<Integer>(Interval.oneTo(200));
+        List<Integer> list = new ArrayList<>(Interval.oneTo(200));
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
         ParallelIterate.forEachWithIndex(list, (each, index) -> array[index] = each, 10, 10);
         Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
@@ -354,8 +354,8 @@ public class ParallelIterateAcceptanceTest
     {
         Verify.assertThrows(RuntimeException.class, () -> ParallelIterate.forEachWithIndex(
                 createIntegerList(5),
-                new PassThruObjectIntProcedureFactory<ObjectIntProcedure<Integer>>(EXCEPTION_OBJECT_INT_PROCEDURE),
-                new PassThruCombiner<ObjectIntProcedure<Integer>>(),
+                new PassThruObjectIntProcedureFactory<>(EXCEPTION_OBJECT_INT_PROCEDURE),
+                new PassThruCombiner<>(),
                 1,
                 5));
     }

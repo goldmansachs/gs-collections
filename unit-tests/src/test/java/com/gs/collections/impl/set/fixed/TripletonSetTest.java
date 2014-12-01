@@ -42,19 +42,19 @@ public class TripletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Before
     public void setUp()
     {
-        this.set = new TripletonSet<String>("1", "2", "3");
+        this.set = new TripletonSet<>("1", "2", "3");
     }
 
     @Override
     protected MutableSet<String> classUnderTest()
     {
-        return new TripletonSet<String>("1", "2", "3");
+        return new TripletonSet<>("1", "2", "3");
     }
 
     @Override
     protected MutableSet<String> classUnderTestWithNull()
     {
-        return new TripletonSet<String>(null, "2", "3");
+        return new TripletonSet<>(null, "2", "3");
     }
 
     @Test
@@ -63,7 +63,7 @@ public class TripletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
         Twin<String> twin1 = Tuples.twin("1", "1");
         Twin<String> twin2 = Tuples.twin("2", "2");
         Twin<String> twin3 = Tuples.twin("3", "3");
-        TripletonSet<Twin<String>> set = new TripletonSet<Twin<String>>(twin1, twin2, twin3);
+        TripletonSet<Twin<String>> set = new TripletonSet<>(twin1, twin2, twin3);
 
         set.with(Tuples.twin("1", "1"));
         set.with(Tuples.twin("2", "2"));

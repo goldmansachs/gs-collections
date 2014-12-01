@@ -55,7 +55,7 @@ public class SextupletonListTest extends AbstractMemoryEfficientMutableListTestC
     public void testEqualsAndHashCode()
     {
         MutableList<String> one = Lists.fixedSize.of("1", "2", "3", "4", "5", "6");
-        List<String> oneA = new ArrayList<String>(one);
+        List<String> oneA = new ArrayList<>(one);
         Verify.assertEqualsAndHashCode(one, oneA);
         Verify.assertPostSerializedEqualsAndHashCode(one);
     }
@@ -96,7 +96,7 @@ public class SextupletonListTest extends AbstractMemoryEfficientMutableListTestC
     @Test
     public void testAddingAllToOtherList()
     {
-        List<String> newList = new ArrayList<String>(this.list);
+        List<String> newList = new ArrayList<>(this.list);
         newList.add("7");
         Verify.assertStartsWith(newList, "1", "2", "3", "4", "5", "6", "7");
     }
@@ -203,7 +203,7 @@ public class SextupletonListTest extends AbstractMemoryEfficientMutableListTestC
     @Test
     public void without()
     {
-        MutableList<Integer> list = new SextupletonList<Integer>(1, 2, 3, 2, 3, 4);
+        MutableList<Integer> list = new SextupletonList<>(1, 2, 3, 2, 3, 4);
         Assert.assertSame(list, list.without(9));
         list = list.without(2);
         Verify.assertListsEqual(FastList.newListWith(1, 3, 2, 3, 4), list);

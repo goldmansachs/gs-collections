@@ -34,7 +34,7 @@ public class ObjectIntProcedureFJTaskRunnerTest
     @Before
     public void setUp()
     {
-        this.undertest = new ObjectIntProcedureFJTaskRunner<Integer, ObjectIntProcedure<Integer>>(
+        this.undertest = new ObjectIntProcedureFJTaskRunner<>(
                 new DoNothingWithFalseCombineOneCombiner(),
                 1,
                 null,

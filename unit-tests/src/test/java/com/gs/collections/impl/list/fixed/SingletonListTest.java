@@ -237,7 +237,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void detectIfNone()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(6);
+        Function0<Integer> function = new PassThruFunction0<>(6);
         Assert.assertEquals(Integer.valueOf(1), newWith(1).detectIfNone(Integer.valueOf(1)::equals, function));
         Assert.assertEquals(Integer.valueOf(6), newWith(1).detectIfNone(Integer.valueOf(6)::equals, function));
     }
@@ -245,7 +245,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void detectWithIfNone()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(6);
+        Function0<Integer> function = new PassThruFunction0<>(6);
         Assert.assertEquals(Integer.valueOf(1), newWith(1).detectWithIfNone(Object::equals, 1, function));
         Assert.assertEquals(Integer.valueOf(6), newWith(1).detectWithIfNone(Object::equals, 6, function));
     }
@@ -582,7 +582,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void without()
     {
-        MutableList<Integer> list = new SingletonList<Integer>(2);
+        MutableList<Integer> list = new SingletonList<>(2);
         Assert.assertSame(list, list.without(9));
         list = list.without(2);
         Verify.assertListsEqual(Lists.mutable.of(), list);

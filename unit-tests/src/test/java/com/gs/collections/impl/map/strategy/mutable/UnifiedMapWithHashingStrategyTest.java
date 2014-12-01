@@ -473,7 +473,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
             Sum sum = new IntegerSum(0);
             for (int sectionIndex = 0; sectionIndex < sectionCount; ++sectionIndex)
             {
-                batchIterable.batchForEach(new SumProcedure<Integer>(sum), sectionIndex, sectionCount);
+                batchIterable.batchForEach(new SumProcedure<>(sum), sectionIndex, sectionCount);
             }
             Assert.assertEquals(expectedValue, sum.getValue());
         }
@@ -487,7 +487,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
         int numBatches = batchIterable.getBatchCount(100000);
         for (int i = 0; i < numBatches; ++i)
         {
-            batchIterable.batchForEach(new SumProcedure<Integer>(sum), i, numBatches);
+            batchIterable.batchForEach(new SumProcedure<>(sum), i, numBatches);
         }
         Assert.assertEquals(1, numBatches);
         Assert.assertEquals(expectedValue, sum.getValue());
@@ -496,7 +496,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
         Sum sum2 = new IntegerSum(0);
         for (int i = 0; i < 5; ++i)
         {
-            batchIterable.batchForEach(new SumProcedure<Integer>(sum2), i, 5);
+            batchIterable.batchForEach(new SumProcedure<>(sum2), i, 5);
         }
         Assert.assertEquals(expectedValue, sum2.getValue());
     }
@@ -517,7 +517,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
     {
         //Test batchForEach on empty set, it should simply do nothing and not throw any exceptions
         Sum sum = new IntegerSum(0);
-        batchIterable.batchForEach(new SumProcedure<Integer>(sum), 0, batchIterable.getBatchCount(1));
+        batchIterable.batchForEach(new SumProcedure<>(sum), 0, batchIterable.getBatchCount(1));
         Assert.assertEquals(0, sum.getValue());
     }
 
@@ -632,7 +632,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
     private void batchIterable_forEach(BatchIterable<Integer> batchIterable, int expectedValue)
     {
         IntegerSum sum = new IntegerSum(0);
-        batchIterable.forEach(new SumProcedure<Integer>(sum));
+        batchIterable.forEach(new SumProcedure<>(sum));
         Assert.assertEquals(expectedValue, sum.getValue());
     }
 
@@ -648,7 +648,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
     {
         //Test forEach on empty set, it should simply do nothing and not throw any exceptions
         Sum sum = new IntegerSum(0);
-        batchIterable.batchForEach(new SumProcedure<Integer>(sum), 0, batchIterable.getBatchCount(1));
+        batchIterable.batchForEach(new SumProcedure<>(sum), 0, batchIterable.getBatchCount(1));
         Assert.assertEquals(0, sum.getValue());
     }
 
@@ -730,7 +730,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
         UnifiedMapWithHashingStrategy<Integer, Integer> map = UnifiedMapWithHashingStrategy.newMap(
                 INTEGER_HASHING_STRATEGY, 2, 0.75f);
-        MORE_COLLISIONS.forEach(Procedures.cast(each -> map.getIfAbsentPut(each, new PassThruFunction0<Integer>(each))));
+        MORE_COLLISIONS.forEach(Procedures.cast(each -> map.getIfAbsentPut(each, new PassThruFunction0<>(each))));
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(9), map);
 
@@ -745,7 +745,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
         //Testing rehashing while creating a new chained key
         UnifiedMapWithHashingStrategy<Integer, Integer> map3 = UnifiedMapWithHashingStrategy.<Integer, Integer>newMap(
                 INTEGER_HASHING_STRATEGY, 2, 0.75f).withKeysValues(COLLISION_1, 1, 2, 2, 3, 3);
-        Assert.assertEquals(4, map3.getIfAbsentPut(COLLISION_2, new PassThruFunction0<Integer>(4)).intValue());
+        Assert.assertEquals(4, map3.getIfAbsentPut(COLLISION_2, new PassThruFunction0<>(4)).intValue());
     }
 
     @Override
@@ -803,7 +803,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
         UnifiedMapWithHashingStrategy<Person, Integer> map3 = UnifiedMapWithHashingStrategy.newWithKeysValues(
                 LAST_NAME_HASHING_STRATEGY, JOHNDOE, 1, JANEDOE, 2, JOHNSMITH, 3, JANESMITH, 4);
         UnifiedMapWithHashingStrategy<Person, Integer> map4 = UnifiedMapWithHashingStrategy.newMap(map3);
-        HashMap<Person, Integer> hashMap = new HashMap<Person, Integer>(map3);
+        HashMap<Person, Integer> hashMap = new HashMap<>(map3);
 
         Verify.assertEqualsAndHashCode(map3, map4);
         Assert.assertTrue(map3.equals(hashMap) && hashMap.equals(map3) && map3.hashCode() != hashMap.hashCode());

@@ -128,7 +128,7 @@ public class ImmutableSet0To100MemoryTest
             {
                 return Collections.singleton(Integer.valueOf(0));
             }
-            HashSet<Integer> set = new HashSet<Integer>(this.size);
+            HashSet<Integer> set = new HashSet<>(this.size);
             for (int i = 0; i < this.size; i++)
             {
                 set.add(Integer.valueOf(i));

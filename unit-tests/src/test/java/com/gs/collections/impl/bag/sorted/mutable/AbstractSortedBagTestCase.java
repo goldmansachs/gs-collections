@@ -1257,7 +1257,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     {
         super.detectIfNone();
 
-        Function0<Integer> function = new PassThruFunction0<Integer>(6);
+        Function0<Integer> function = new PassThruFunction0<>(6);
         Assert.assertEquals(Integer.valueOf(3), this.newWith(Comparators.reverseNaturalOrder(), 2, 3, 4, 5).detectIfNone(Integer.valueOf(3)::equals, function));
         Assert.assertEquals(Integer.valueOf(3), this.newWith(Comparators.reverseNaturalOrder(), 2, 3, 4, 5).detectIfNone(Integer.valueOf(3)::equals, null));
         Assert.assertEquals(Integer.valueOf(6), this.newWith(Comparators.reverseNaturalOrder(), 1, 2, 3, 4, 5).detectIfNone(Integer.valueOf(6)::equals, function));
@@ -1269,7 +1269,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     {
         super.detectWithIfNoneBlock();
 
-        Function0<Integer> function = new PassThruFunction0<Integer>(-42);
+        Function0<Integer> function = new PassThruFunction0<>(-42);
         Assert.assertEquals(
                 Integer.valueOf(5),
                 this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 1, 2, 3, 4, 5).detectWithIfNone(

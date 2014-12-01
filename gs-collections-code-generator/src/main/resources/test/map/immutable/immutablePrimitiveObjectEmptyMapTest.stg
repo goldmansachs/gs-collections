@@ -686,7 +686,7 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     @Test
     public void toSortedBagBy_empty()
     {
-        Immutable<name>ObjectMap\<Integer> map = new Immutable<name>ObjectEmptyMap\<Integer>();
+        Immutable<name>ObjectMap\<Integer> map = new Immutable<name>ObjectEmptyMap\<>();
         Function\<Integer, Integer> function = object -> object * -1;
         MutableSortedBag\<Integer> sortedBag = map.toSortedBagBy(function);
         sortedBag.addOccurrences(1, 3);

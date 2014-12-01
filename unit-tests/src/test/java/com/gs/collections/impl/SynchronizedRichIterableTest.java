@@ -81,7 +81,7 @@ public class SynchronizedRichIterableTest extends AbstractRichIterableTestCase
     public void groupByWithTarget()
     {
         RichIterable<Integer> list = this.newWith(1, 2, 3, 4, 5, 6, 7);
-        MutableMultimap<Boolean, Integer> multimap = new FastListMultimap<Boolean, Integer>();
+        MutableMultimap<Boolean, Integer> multimap = new FastListMultimap<>();
         list.groupBy(object -> IntegerPredicates.isOdd().accept(object), multimap);
 
         Assert.assertEquals(FastList.newListWith(1, 3, 5, 7), multimap.get(Boolean.TRUE));

@@ -74,12 +74,12 @@ public abstract class ImmutableSortedMapTestCase
         ImmutableSortedMap<Integer, String> immutable = this.classUnderTest();
         SortedMap<Integer, String> map = immutable.castToSortedMap();
         Assert.assertSame(immutable, map);
-        Assert.assertEquals(immutable, new HashMap<Integer, String>(map));
+        Assert.assertEquals(immutable, new HashMap<>(map));
 
         ImmutableSortedMap<Integer, String> revImmutable = this.classUnderTest(REV_INT_COMPARATOR);
         SortedMap<Integer, String> revMap = revImmutable.castToSortedMap();
         Assert.assertSame(revImmutable, revMap);
-        Assert.assertEquals(revImmutable, new HashMap<Integer, String>(revMap));
+        Assert.assertEquals(revImmutable, new HashMap<>(revMap));
     }
 
     @Test
@@ -250,10 +250,10 @@ public abstract class ImmutableSortedMapTestCase
 
         // Absent key behavior
         ImmutableSortedMap<Integer, String> classUnderTest = this.classUnderTest();
-        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<String>(absentValue)));
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<>(absentValue)));
 
         // Present key behavior
-        Assert.assertEquals("1", classUnderTest.getIfAbsent(1, new PassThruFunction0<String>(absentValue)));
+        Assert.assertEquals("1", classUnderTest.getIfAbsent(1, new PassThruFunction0<>(absentValue)));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);
@@ -416,7 +416,7 @@ public abstract class ImmutableSortedMapTestCase
     public void entrySet()
     {
         ImmutableSortedMap<Integer, String> immutableSortedMap = this.classUnderTest();
-        Map<Integer, String> map = new HashMap<Integer, String>(immutableSortedMap.castToSortedMap());
+        Map<Integer, String> map = new HashMap<>(immutableSortedMap.castToSortedMap());
         Assert.assertEquals(map.entrySet(), immutableSortedMap.castToSortedMap().entrySet());
 
         Set<Map.Entry<Integer, String>> entries = immutableSortedMap.castToSortedMap().entrySet();

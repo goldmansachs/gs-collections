@@ -29,7 +29,7 @@ public class SynchronizedMutableListTest extends AbstractListTestCase
     @Override
     protected <T> MutableList<T> newWith(T... littleElements)
     {
-        return new SynchronizedMutableList<T>(FastList.newListWith(littleElements));
+        return new SynchronizedMutableList<>(FastList.newListWith(littleElements));
     }
 
     @Override

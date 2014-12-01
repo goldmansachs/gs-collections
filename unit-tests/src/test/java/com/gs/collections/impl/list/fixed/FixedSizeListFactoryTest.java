@@ -176,10 +176,10 @@ public class FixedSizeListFactoryTest
         Assert.assertNotEquals(three, differentThree);
         Assert.assertNotEquals(differentThree, three);
 
-        Assert.assertEquals(new LinkedList<String>(threeA), three);
-        Assert.assertNotEquals(new LinkedList<String>(differentThree), three);
-        Assert.assertNotEquals(new LinkedList<String>(FastList.newListWith("1", "2", "3", "4")), three);
-        Assert.assertNotEquals(new LinkedList<String>(FastList.newListWith("1", "2")), three);
+        Assert.assertEquals(new LinkedList<>(threeA), three);
+        Assert.assertNotEquals(new LinkedList<>(differentThree), three);
+        Assert.assertNotEquals(new LinkedList<>(FastList.newListWith("1", "2", "3", "4")), three);
+        Assert.assertNotEquals(new LinkedList<>(FastList.newListWith("1", "2")), three);
     }
 
     @Test

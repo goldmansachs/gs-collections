@@ -42,8 +42,8 @@ public class SelectIteratorTest
                 Boolean.FALSE,
                 Boolean.TRUE,
                 null);
-        this.assertElements(new SelectIterator<Boolean>(list.iterator(), Boolean.TRUE::equals));
-        this.assertElements(new SelectIterator<Boolean>(list, Boolean.TRUE::equals));
+        this.assertElements(new SelectIterator<>(list.iterator(), Boolean.TRUE::equals));
+        this.assertElements(new SelectIterator<>(list, Boolean.TRUE::equals));
     }
 
     private void assertElements(Iterator<Boolean> newIterator)
@@ -59,12 +59,12 @@ public class SelectIteratorTest
     @Test
     public void noSuchElementException()
     {
-        Verify.assertThrows(NoSuchElementException.class, () -> new SelectIterator<Object>(Lists.fixedSize.of(), ignored -> true).next());
+        Verify.assertThrows(NoSuchElementException.class, () -> new SelectIterator<>(Lists.fixedSize.of(), ignored -> true).next());
     }
 
     @Test
     public void remove()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> new SelectIterator<Object>(Lists.fixedSize.of(), ignored -> true).remove());
+        Verify.assertThrows(UnsupportedOperationException.class, () -> new SelectIterator<>(Lists.fixedSize.of(), ignored -> true).remove());
     }
 }

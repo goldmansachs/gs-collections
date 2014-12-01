@@ -42,13 +42,13 @@ public class UnmodifiableMapTest
         this.mutableMap = Maps.mutable.<String, List<String>>of(
                 ROCK_OUT, MASTERS_OF_ROCK,
                 NAP_TIME, Lists.mutable.of("Metallica", "Bon Jovi", "Europe", "Scorpions"));
-        this.unmodifiableMap = new UnmodifiableMap<String, List<String>>(this.mutableMap);
+        this.unmodifiableMap = new UnmodifiableMap<>(this.mutableMap);
     }
 
     @Test
     public void testNullConstructorArgument()
     {
-        Verify.assertThrows(NullPointerException.class, () -> new UnmodifiableMap<Object, Object>(null));
+        Verify.assertThrows(NullPointerException.class, () -> new UnmodifiableMap<>(null));
     }
 
     @Test
@@ -145,7 +145,7 @@ public class UnmodifiableMapTest
     @Test(expected = NullPointerException.class)
     public void notNull()
     {
-        new UnmodifiableMap<Object, Object>(null);
+        new UnmodifiableMap<>(null);
     }
 
     @Test

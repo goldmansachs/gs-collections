@@ -44,35 +44,35 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     @Override
     protected MutableMap<String, String> classUnderTest()
     {
-        return new EmptyMap<String, String>();
+        return new EmptyMap<>();
     }
 
     @Override
     protected MutableMap<String, Integer> mixedTypeClassUnderTest()
     {
-        return new EmptyMap<String, Integer>();
+        return new EmptyMap<>();
     }
 
     @Override
     @Test
     public void containsValue()
     {
-        Assert.assertFalse(new EmptyMap<Object, Object>().containsValue("One"));
+        Assert.assertFalse(new EmptyMap<>().containsValue("One"));
     }
 
     @Test
     public void size()
     {
-        Verify.assertEmpty(new EmptyMap<Object, Object>());
+        Verify.assertEmpty(new EmptyMap<>());
     }
 
     @Test
     public void empty()
     {
-        Verify.assertEmpty(new EmptyMap<Object, Object>());
-        Assert.assertFalse(new EmptyMap<Object, Object>().notEmpty());
-        Verify.assertEmpty(new EmptyMap<Object, Object>());
-        Assert.assertFalse(new EmptyMap<Object, Object>().notEmpty());
+        Verify.assertEmpty(new EmptyMap<>());
+        Assert.assertFalse(new EmptyMap<>().notEmpty());
+        Verify.assertEmpty(new EmptyMap<>());
+        Assert.assertFalse(new EmptyMap<>().notEmpty());
         Verify.assertEmpty(Maps.fixedSize.of());
         Assert.assertFalse(Maps.fixedSize.of().notEmpty());
     }
@@ -80,15 +80,15 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void viewsEmpty()
     {
-        Verify.assertEmpty(new EmptyMap<Object, Object>().entrySet());
-        Verify.assertEmpty(new EmptyMap<Object, Object>().values());
-        Verify.assertEmpty(new EmptyMap<Object, Object>().keySet());
+        Verify.assertEmpty(new EmptyMap<>().entrySet());
+        Verify.assertEmpty(new EmptyMap<>().values());
+        Verify.assertEmpty(new EmptyMap<>().keySet());
     }
 
     @Test
     public void flipUniqueValues()
     {
-        MutableMap<Object, Object> flip = new EmptyMap<Object, Object>().flipUniqueValues();
+        MutableMap<Object, Object> flip = new EmptyMap<>().flipUniqueValues();
         Verify.assertEmpty(flip);
         Verify.assertInstanceOf(EmptyMap.class, flip);
     }
@@ -111,8 +111,8 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void iterations()
     {
-        StubProcedure<Object> procedure = new StubProcedure<Object>();
-        MutableMap<Object, Object> map = new EmptyMap<Object, Object>();
+        StubProcedure<Object> procedure = new StubProcedure<>();
+        MutableMap<Object, Object> map = new EmptyMap<>();
 
         map.forEach(procedure);
         Assert.assertFalse(procedure.called);
@@ -178,13 +178,13 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     @Override
     protected <K, V> FixedSizeMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new EmptyMap<K, V>();
+        return new EmptyMap<>();
     }
 
     @Override
     protected <K, V> FixedSizeMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new EmptyMap<K, V>();
+        return new EmptyMap<>();
     }
 
     @Override
@@ -269,7 +269,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEachValue()
     {
         MutableList<String> collection = Lists.mutable.of();
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         map.forEachValue(CollectionAddProcedure.on(collection));
         Verify.assertEmpty(collection);
     }
@@ -279,7 +279,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEach()
     {
         MutableList<String> collection = Lists.mutable.of();
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         map.forEach(CollectionAddProcedure.on(collection));
         Verify.assertEmpty(collection);
     }
@@ -289,7 +289,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEachKey()
     {
         MutableList<Integer> collection = Lists.mutable.of();
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         map.forEachKey(CollectionAddProcedure.on(collection));
         Verify.assertEmpty(collection);
     }
@@ -299,7 +299,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEachWith()
     {
         MutableList<Integer> result = Lists.mutable.of();
-        MutableMap<Integer, Integer> map = new EmptyMap<Integer, Integer>();
+        MutableMap<Integer, Integer> map = new EmptyMap<>();
         map.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 10);
         Verify.assertEmpty(result);
     }
@@ -309,7 +309,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEachWithIndex()
     {
         MutableList<String> result = Lists.mutable.of();
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         map.forEachWithIndex((value, index) -> {
             result.add(value);
             result.add(String.valueOf(index));
@@ -322,7 +322,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEachKeyValue()
     {
         MutableList<String> collection = Lists.mutable.of();
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         map.forEachKeyValue((key, value) -> collection.add(key + value));
         Verify.assertEmpty(collection);
     }
@@ -345,15 +345,15 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsentPut()
     {
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
-        Verify.assertThrows(UnsupportedOperationException.class, () -> map.getIfAbsentPut(4, new PassThruFunction0<String>("4")));
+        MutableMap<Integer, String> map = new EmptyMap<>();
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.getIfAbsentPut(4, new PassThruFunction0<>("4")));
     }
 
     @Override
     @Test
     public void getIfAbsentPutWith()
     {
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         Verify.assertThrows(UnsupportedOperationException.class, () -> map.getIfAbsentPutWith(4, String::valueOf, 4));
     }
 
@@ -361,9 +361,9 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsent_function()
     {
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
+        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<>("4")));
         Assert.assertNull(map.get(4));
     }
 
@@ -371,7 +371,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsent()
     {
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         Assert.assertNull(map.get(4));
         Assert.assertEquals("4", map.getIfAbsentValue(4, "4"));
         Assert.assertNull(map.get(4));
@@ -381,7 +381,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsentWith()
     {
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         Assert.assertNull(map.get(4));
         Assert.assertEquals("4", map.getIfAbsentWith(4, String::valueOf, 4));
         Assert.assertNull(map.get(4));
@@ -391,7 +391,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void ifPresentApply()
     {
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         Assert.assertNull(map.ifPresentApply(4, Functions.<String>getPassThru()));
     }
 
@@ -453,7 +453,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     @Override
     public void withoutKey()
     {
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         MutableMap<Integer, String> mapWithout = map.withoutKey(1);
         Assert.assertSame(map, mapWithout);
     }
@@ -461,7 +461,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     @Override
     public void withoutAllKeys()
     {
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         MutableMap<Integer, String> mapWithout = map.withoutAllKeys(FastList.newListWith(1, 2));
         Assert.assertSame(map, mapWithout);
     }
@@ -471,7 +471,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     public void iterator()
     {
         MutableList<String> collection = Lists.mutable.of();
-        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        MutableMap<Integer, String> map = new EmptyMap<>();
         for (String eachValue : map)
         {
             collection.add(eachValue);

@@ -623,7 +623,7 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void detectWithIfNoneBlock()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(-42);
+        Function0<Integer> function = new PassThruFunction0<>(-42);
         Assert.assertEquals(
                 Integer.valueOf(5),
                 this.newWith(1, 2, 3, 4, 5).detectWithIfNone(

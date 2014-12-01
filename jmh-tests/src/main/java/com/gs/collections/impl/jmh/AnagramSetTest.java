@@ -118,7 +118,7 @@ public class AnagramSetTest
     public void parallel_eager_gsc()
     {
         MutableMultimap<Alphagram, String> groupBy = ParallelIterate.groupBy(this.gscWords, Alphagram::new);
-        CompositeFastList<RichIterable<String>> select = ParallelIterate.select(groupBy.multiValuesView(), iterable -> iterable.size() >= SIZE_THRESHOLD, new CompositeFastList<RichIterable<String>>(), false);
+        CompositeFastList<RichIterable<String>> select = ParallelIterate.select(groupBy.multiValuesView(), iterable -> iterable.size() >= SIZE_THRESHOLD, new CompositeFastList<>(), false);
         Collection<String> collect = ParallelIterate.collect(select
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
                 .asReversed(), iterable -> iterable.size() + ": " + iterable);
@@ -143,7 +143,7 @@ public class AnagramSetTest
     public void parallel_eager_forkjoin_gsc()
     {
         MutableMultimap<Alphagram, String> groupBy = FJIterate.groupBy(this.gscWords, Alphagram::new);
-        CompositeFastList<RichIterable<String>> select = FJIterate.select(groupBy.multiValuesView(), iterable -> iterable.size() >= SIZE_THRESHOLD, new CompositeFastList<RichIterable<String>>(), false);
+        CompositeFastList<RichIterable<String>> select = FJIterate.select(groupBy.multiValuesView(), iterable -> iterable.size() >= SIZE_THRESHOLD, new CompositeFastList<>(), false);
         Collection<String> collect = FJIterate.collect(select
                 .toSortedList(Comparators.<RichIterable<String>>byIntFunction(RichIterable::size))
                 .asReversed(), iterable -> iterable.size() + ": " + iterable);

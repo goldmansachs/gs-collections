@@ -30,7 +30,7 @@ public class CollectBooleanToObjectIterableTest
 {
     private LazyIterable<Boolean> newPrimitiveWith(boolean... elements)
     {
-        return new CollectBooleanToObjectIterable<Boolean>(BooleanArrayList.newListWith(elements), Boolean::valueOf);
+        return new CollectBooleanToObjectIterable<>(BooleanArrayList.newListWith(elements), Boolean::valueOf);
     }
 
     @Test

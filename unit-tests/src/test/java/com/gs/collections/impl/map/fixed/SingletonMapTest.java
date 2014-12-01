@@ -43,13 +43,13 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Override
     protected MutableMap<String, String> classUnderTest()
     {
-        return new SingletonMap<String, String>("1", "One");
+        return new SingletonMap<>("1", "One");
     }
 
     @Override
     protected MutableMap<String, Integer> mixedTypeClassUnderTest()
     {
-        return new SingletonMap<String, Integer>("1", 1);
+        return new SingletonMap<>("1", 1);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEachKeyValue()
     {
         MutableList<String> collection = Lists.mutable.of();
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "One");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "One");
         map.forEachKeyValue((key, value) -> collection.add(key + value));
         Assert.assertEquals(FastList.newListWith("1One"), collection);
     }
@@ -75,7 +75,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     {
         Twin<String> twin1 = Tuples.twin("1", "1");
         Twin<String> twin2 = Tuples.twin("1", "1");
-        SingletonMap<Twin<String>, Twin<String>> map = new SingletonMap<Twin<String>, Twin<String>>(twin1, twin1);
+        SingletonMap<Twin<String>, Twin<String>> map = new SingletonMap<>(twin1, twin1);
         map.withKeyValue(twin2, twin2);
         Assert.assertSame(map.getKey1(), twin1);
         Assert.assertSame(map.get(twin1), twin2);
@@ -85,11 +85,11 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void withKeyValue()
     {
-        MutableMap<Integer, String> map1 = new SingletonMap<Integer, String>(1, "A").withKeyValue(2, "B");
+        MutableMap<Integer, String> map1 = new SingletonMap<>(1, "A").withKeyValue(2, "B");
         Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(1, "A", 2, "B"), map1);
         Verify.assertInstanceOf(DoubletonMap.class, map1);
 
-        MutableMap<Integer, String> map2 = new SingletonMap<Integer, String>(1, "A");
+        MutableMap<Integer, String> map2 = new SingletonMap<>(1, "A");
         MutableMap<Integer, String> map2with = map2.withKeyValue(1, "AA");
         Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(1, "AA"), map2with);
         Assert.assertSame(map2, map2with);
@@ -99,12 +99,12 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void withAllKeyValueArguments()
     {
-        MutableMap<Integer, String> map1 = new SingletonMap<Integer, String>(1, "A").withAllKeyValueArguments(
+        MutableMap<Integer, String> map1 = new SingletonMap<>(1, "A").withAllKeyValueArguments(
                 Tuples.pair(1, "AA"), Tuples.pair(2, "B"));
         Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(1, "AA", 2, "B"), map1);
         Verify.assertInstanceOf(DoubletonMap.class, map1);
 
-        MutableMap<Integer, String> map2 = new SingletonMap<Integer, String>(1, "A");
+        MutableMap<Integer, String> map2 = new SingletonMap<>(1, "A");
         MutableMap<Integer, String> map2with = map2.withAllKeyValueArguments(Tuples.pair(1, "AA"));
         Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(1, "AA"), map2with);
         Assert.assertSame(map2, map2with);
@@ -114,7 +114,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void withoutKey()
     {
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "A");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "A");
         MutableMap<Integer, String> mapWithout1 = map.withoutKey(2);
         Assert.assertSame(map, mapWithout1);
         MutableMap<Integer, String> mapWithout2 = map.withoutKey(1);
@@ -126,7 +126,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void withoutAllKeys()
     {
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "A");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "A");
         MutableMap<Integer, String> mapWithout1 = map.withoutAllKeys(FastList.newListWith(2, 3));
         Assert.assertSame(map, mapWithout1);
         MutableMap<Integer, String> mapWithout2 = map.withoutAllKeys(FastList.newListWith(1, 2));
@@ -139,7 +139,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEachValue()
     {
         MutableList<String> collection = Lists.mutable.of();
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "1");
         map.forEachValue(CollectionAddProcedure.on(collection));
         Assert.assertEquals(FastList.newListWith("1"), collection);
     }
@@ -149,7 +149,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEach()
     {
         MutableList<String> collection = Lists.mutable.of();
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "1");
         map.forEach(CollectionAddProcedure.on(collection));
         Assert.assertEquals(FastList.newListWith("1"), collection);
     }
@@ -159,7 +159,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void iterator()
     {
         MutableList<String> collection = Lists.mutable.of();
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "1");
         for (String eachValue : map)
         {
             collection.add(eachValue);
@@ -172,7 +172,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEachKey()
     {
         MutableList<Integer> collection = Lists.mutable.of();
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "1");
         map.forEachKey(CollectionAddProcedure.on(collection));
         Assert.assertEquals(FastList.newListWith(1), collection);
     }
@@ -181,16 +181,16 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsentPut()
     {
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
-        Verify.assertThrows(UnsupportedOperationException.class, () -> map.getIfAbsentPut(4, new PassThruFunction0<String>("4")));
-        Assert.assertEquals("1", map.getIfAbsentPut(1, new PassThruFunction0<String>("1")));
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "1");
+        Verify.assertThrows(UnsupportedOperationException.class, () -> map.getIfAbsentPut(4, new PassThruFunction0<>("4")));
+        Assert.assertEquals("1", map.getIfAbsentPut(1, new PassThruFunction0<>("1")));
     }
 
     @Override
     @Test
     public void getIfAbsentPutWith()
     {
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "1");
         Verify.assertThrows(UnsupportedOperationException.class, () -> map.getIfAbsentPutWith(4, String::valueOf, 4));
         Assert.assertEquals("1", map.getIfAbsentPutWith(1, String::valueOf, 1));
     }
@@ -199,10 +199,10 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsent_function()
     {
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "1");
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
-        Assert.assertEquals("1", map.getIfAbsent(1, new PassThruFunction0<String>("1")));
+        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<>("4")));
+        Assert.assertEquals("1", map.getIfAbsent(1, new PassThruFunction0<>("1")));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1"), map);
     }
 
@@ -210,7 +210,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsent()
     {
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "1");
         Assert.assertNull(map.get(4));
         Assert.assertEquals("4", map.getIfAbsentValue(4, "4"));
         Assert.assertEquals("1", map.getIfAbsentValue(1, "1"));
@@ -221,7 +221,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void getIfAbsentWith()
     {
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "1");
         Assert.assertNull(map.get(4));
         Assert.assertEquals("4", map.getIfAbsentWith(4, String::valueOf, 4));
         Assert.assertEquals("1", map.getIfAbsentWith(1, String::valueOf, 1));
@@ -232,7 +232,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void ifPresentApply()
     {
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "1");
         Assert.assertNull(map.ifPresentApply(4, Functions.<String>getPassThru()));
         Assert.assertEquals("1", map.ifPresentApply(1, Functions.<String>getPassThru()));
     }
@@ -241,7 +241,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void notEmpty()
     {
-        Assert.assertTrue(new SingletonMap<Integer, String>(1, "1").notEmpty());
+        Assert.assertTrue(new SingletonMap<>(1, "1").notEmpty());
     }
 
     @Override
@@ -249,7 +249,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEachWith()
     {
         MutableList<Integer> result = Lists.mutable.of();
-        MutableMap<Integer, Integer> map = new SingletonMap<Integer, Integer>(1, 1);
+        MutableMap<Integer, Integer> map = new SingletonMap<>(1, 1);
         map.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 10);
         Assert.assertEquals(FastList.newListWith(11), result);
     }
@@ -259,7 +259,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void forEachWithIndex()
     {
         MutableList<String> result = Lists.mutable.of();
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "One");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "One");
         map.forEachWithIndex((value, index) -> {
             result.add(value);
             result.add(String.valueOf(index));
@@ -272,7 +272,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void entrySet()
     {
         MutableList<String> result = Lists.mutable.of();
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "One");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "One");
         for (Map.Entry<Integer, String> entry : map.entrySet())
         {
             result.add(entry.getValue());
@@ -285,7 +285,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void values()
     {
         MutableList<String> result = Lists.mutable.of();
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "One");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "One");
         for (String value : map.values())
         {
             result.add(value);
@@ -298,7 +298,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void keySet()
     {
         MutableList<Integer> result = Lists.mutable.of();
-        MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "One");
+        MutableMap<Integer, String> map = new SingletonMap<>(1, "One");
         for (Integer key : map.keySet())
         {
             result.add(key);
@@ -310,7 +310,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void testToString()
     {
-        Assert.assertEquals("{1=One}", new SingletonMap<Integer, String>(1, "One").toString());
+        Assert.assertEquals("{1=One}", new SingletonMap<>(1, "One").toString());
         Assert.assertEquals("{1=null}", new SingletonMap<Integer, String>(1, null).toString());
         Assert.assertEquals("{null=One}", new SingletonMap<Integer, String>(null, "One").toString());
     }
@@ -383,7 +383,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void flipUniqueValues()
     {
-        MutableMap<String, String> flip = new SingletonMap<String, String>("1", "One").flipUniqueValues();
+        MutableMap<String, String> flip = new SingletonMap<>("1", "One").flipUniqueValues();
         Verify.assertInstanceOf(SingletonMap.class, flip);
         Assert.assertEquals(UnifiedMap.newWithKeysValues("One", "1"), flip);
     }
@@ -391,12 +391,12 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Override
     protected <K, V> FixedSizeMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new SingletonMap<K, V>(key1, value1);
+        return new SingletonMap<>(key1, value1);
     }
 
     @Override
     protected <K, V> FixedSizeMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new SingletonMap<K, V>(key1, value1);
+        return new SingletonMap<>(key1, value1);
     }
 }

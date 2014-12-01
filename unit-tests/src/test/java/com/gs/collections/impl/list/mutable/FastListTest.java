@@ -97,8 +97,8 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void constructorWithCollection()
     {
-        List<Integer> expected = new ArrayList<Integer>(Interval.oneTo(20));
-        FastList<Integer> actual = new FastList<Integer>(expected);
+        List<Integer> expected = new ArrayList<>(Interval.oneTo(20));
+        FastList<Integer> actual = new FastList<>(expected);
         Assert.assertEquals(expected, actual);
     }
 
@@ -252,7 +252,7 @@ public class FastListTest extends AbstractListTestCase
     public void testDetectWithIfNone()
     {
         MutableList<Integer> list = Interval.toReverseList(1, 5);
-        Assert.assertNull(list.detectWithIfNone(Object::equals, 6, new PassThruFunction0<Integer>(null)));
+        Assert.assertNull(list.detectWithIfNone(Object::equals, 6, new PassThruFunction0<>(null)));
     }
 
     @Override
@@ -371,7 +371,7 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void detectIfNone()
     {
-        Function0<Integer> defaultResultFunction = new PassThruFunction0<Integer>(6);
+        Function0<Integer> defaultResultFunction = new PassThruFunction0<>(6);
         Assert.assertEquals(
                 Integer.valueOf(3),
                 FastList.newListWith(1, 2, 3, 4, 5).detectIfNone(Integer.valueOf(3)::equals, defaultResultFunction));
@@ -395,7 +395,7 @@ public class FastListTest extends AbstractListTestCase
     public void testForEachIf()
     {
         FastList<Integer> collection = FastList.newListWith(1, 2, 3, 4);
-        CountProcedure<Integer> countProcedure = new CountProcedure<Integer>(ignored -> true);
+        CountProcedure<Integer> countProcedure = new CountProcedure<>(ignored -> true);
         collection.forEachIf(Predicates.lessThan(4), countProcedure);
         Assert.assertEquals(3, countProcedure.getCount());
     }
@@ -437,7 +437,7 @@ public class FastListTest extends AbstractListTestCase
         Verify.assertContainsAll(FastList.newListWith(1, 2, 3).collectIf(
                 Integer.class::isInstance,
                 String::valueOf,
-                new ArrayList<String>()), "1", "2", "3");
+                new ArrayList<>()), "1", "2", "3");
     }
 
     @Override
@@ -547,7 +547,7 @@ public class FastListTest extends AbstractListTestCase
         objects.removeAll(mList("Fred"));
         objects.remove(0);
         Verify.assertSize(0, objects);
-        WeakReference<String> ref = new WeakReference<String>(wilma);
+        WeakReference<String> ref = new WeakReference<>(wilma);
         //noinspection ReuseOfLocalVariable
         fred = null;   // Deliberate null of a local variable for unit test purpose
         //noinspection ReuseOfLocalVariable
@@ -699,8 +699,8 @@ public class FastListTest extends AbstractListTestCase
                         FastList.newList(),
                         FastList.newList());
 
-        List<List<Object>> arrayList = new ArrayList<List<Object>>();
-        Interval.oneTo(8).forEach(Procedures.cast(object -> arrayList.add(new ArrayList<Object>())));
+        List<List<Object>> arrayList = new ArrayList<>();
+        Interval.oneTo(8).forEach(Procedures.cast(object -> arrayList.add(new ArrayList<>())));
         ByteArrayOutputStream stream2 = SerializeTestHelper.getByteArrayOutputStream(arrayList);
         Assert.assertEquals(194L, stream2.size());
 
@@ -759,7 +759,7 @@ public class FastListTest extends AbstractListTestCase
         FastList<Integer> list = FastList.newList();
         list.addAll(mList(1, 2, 3, 4));
         list.addAll(mSet(5, 6));
-        list.addAll(new ArrayList<Integer>(mList(7, 8)));
+        list.addAll(new ArrayList<>(mList(7, 8)));
         list.addAll(this.newWith(9, 10));
         Assert.assertFalse(list.addAll(Lists.mutable.<Integer>of()));
         Assert.assertEquals(this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), list);
@@ -991,9 +991,9 @@ public class FastListTest extends AbstractListTestCase
         FastList<Integer> integers3 = this.newWith(1, null, 3, 4, 5);
         FastList<Integer> integers4 = this.newWith(1, null, 3, 4, 5);
         FastList<Integer> integers5 = this.newWith(1, null, 3);
-        List<Integer> linkedList = new LinkedList<Integer>(integers);
-        List<Integer> linkedList2 = new LinkedList<Integer>(integers3);
-        List<Integer> linkedList3 = new LinkedList<Integer>(integers5);
+        List<Integer> linkedList = new LinkedList<>(integers);
+        List<Integer> linkedList2 = new LinkedList<>(integers3);
+        List<Integer> linkedList3 = new LinkedList<>(integers5);
         Verify.assertEqualsAndHashCode(integers, integers);
         Verify.assertPostSerializedEqualsAndHashCode(integers);
         Verify.assertEqualsAndHashCode(integers, integers2);
@@ -1006,8 +1006,8 @@ public class FastListTest extends AbstractListTestCase
         Assert.assertNotEquals(integers, linkedList3);
         Assert.assertNotEquals(integers, mSet());
         Verify.assertEqualsAndHashCode(integers3, integers4);
-        Verify.assertEqualsAndHashCode(integers3, new ArrayList<Integer>(integers3));
-        Verify.assertEqualsAndHashCode(integers3, new LinkedList<Integer>(integers3));
+        Verify.assertEqualsAndHashCode(integers3, new ArrayList<>(integers3));
+        Verify.assertEqualsAndHashCode(integers3, new LinkedList<>(integers3));
         Verify.assertEqualsAndHashCode(integers3, ArrayAdapter.newArrayWith(1, null, 3, 4, 5));
         Assert.assertNotEquals(integers3, ArrayAdapter.newArrayWith(1, null, 3, 4, 6));
         Verify.assertEqualsAndHashCode(integers3, ArrayListAdapter.<Integer>newList().with(1, null, 3, 4, 5));
@@ -1172,7 +1172,7 @@ public class FastListTest extends AbstractListTestCase
     {
         LazyIterable<Integer> select = FastList.newList(Interval.oneTo(5)).asLazy().reject(Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
-        select.forEach(new SumProcedure<Integer>(sum));
+        select.forEach(new SumProcedure<>(sum));
         Assert.assertEquals(5, sum.getValue().intValue());
     }
 
@@ -1185,7 +1185,7 @@ public class FastListTest extends AbstractListTestCase
     {
         LazyIterable<Integer> select = FastList.newList(Interval.oneTo(5)).asLazy().select(Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
-        select.forEach(new SumProcedure<Integer>(sum));
+        select.forEach(new SumProcedure<>(sum));
         Assert.assertEquals(10, sum.getValue().intValue());
     }
 

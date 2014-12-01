@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ public class ImmutableDoubletonSetTest
     @Override
     protected ImmutableSet<Integer> classUnderTest()
     {
-        return new ImmutableDoubletonSet<Integer>(1, 2);
+        return new ImmutableDoubletonSet<>(1, 2);
     }
 
     @Override

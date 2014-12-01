@@ -38,7 +38,7 @@ public class FunctionComparatorTest
     @Test
     public void comparator()
     {
-        FunctionComparator<Band, String> comparator = new FunctionComparator<Band, String>(
+        FunctionComparator<Band, String> comparator = new FunctionComparator<>(
                 Band.TO_NAME,
                 String::compareTo);
 

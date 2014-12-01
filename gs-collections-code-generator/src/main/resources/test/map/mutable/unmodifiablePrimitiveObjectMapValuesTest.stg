@@ -41,17 +41,17 @@ public class Unmodifiable<name>ObjectMapValuesTest
 {
     private Unmodifiable<name>ObjectMap\<String> newMapWithKeysValues(<type> key1, String value1, <type> key2, String value2)
     {
-        return new Unmodifiable<name>ObjectMap\<String>(<name>ObjectHashMap.newWithKeysValues(key1, value1, key2, value2));
+        return new Unmodifiable<name>ObjectMap\<>(<name>ObjectHashMap.newWithKeysValues(key1, value1, key2, value2));
     }
 
     private Unmodifiable<name>ObjectMap\<Integer> newMapWithKeysValues(<type> key1, Integer value1, <type> key2, Integer value2, <type> key3, Integer value3)
     {
-        return new Unmodifiable<name>ObjectMap\<Integer>(<name>ObjectHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
+        return new Unmodifiable<name>ObjectMap\<>(<name>ObjectHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
     }
 
     private Unmodifiable<name>ObjectMap\<Integer> newMapWithKeysValues(<type> key1, Integer value1, <type> key2, Integer value2, <type> key3, Integer value3, <type> key4, Integer value4)
     {
-        return new Unmodifiable<name>ObjectMap\<Integer>(<name>ObjectHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3).withKeyValue(key4, value4));
+        return new Unmodifiable<name>ObjectMap\<>(<name>ObjectHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3).withKeyValue(key4, value4));
     }
 
     @Test(expected = UnsupportedOperationException.class)

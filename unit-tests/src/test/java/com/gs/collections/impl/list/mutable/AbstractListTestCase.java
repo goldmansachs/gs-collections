@@ -77,7 +77,7 @@ public abstract class AbstractListTestCase
     @Test
     public void randomAccess_throws()
     {
-        Verify.assertThrows(IllegalArgumentException.class, () -> new ListAdapter<Integer>(FastList.newListWith(1, 2, 3)));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new ListAdapter<>(FastList.newListWith(1, 2, 3)));
     }
 
     @Override
@@ -187,17 +187,17 @@ public abstract class AbstractListTestCase
         Assert.assertNotEquals(list1, null);
         Verify.assertEqualsAndHashCode(list1, list1);
         Verify.assertEqualsAndHashCode(list1, list2);
-        Verify.assertEqualsAndHashCode(new LinkedList<Integer>(Arrays.asList(1, 2, 3)), list1);
-        Verify.assertEqualsAndHashCode(new ArrayList<Integer>(Arrays.asList(1, 2, 3)), list1);
+        Verify.assertEqualsAndHashCode(new LinkedList<>(Arrays.asList(1, 2, 3)), list1);
+        Verify.assertEqualsAndHashCode(new ArrayList<>(Arrays.asList(1, 2, 3)), list1);
         Verify.assertEqualsAndHashCode(ArrayAdapter.newArrayWith(1, 2, 3), list1);
         Assert.assertNotEquals(list2, list3);
         Assert.assertNotEquals(list2, list4);
-        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.asList(1, 2, 3, 4)), list1);
-        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.asList(1, 2, null)), list1);
-        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.asList(1, 2)), list1);
-        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4)), list1);
-        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.asList(1, 2, null)), list1);
-        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.asList(1, 2)), list1);
+        Assert.assertNotEquals(new LinkedList<>(Arrays.asList(1, 2, 3, 4)), list1);
+        Assert.assertNotEquals(new LinkedList<>(Arrays.asList(1, 2, null)), list1);
+        Assert.assertNotEquals(new LinkedList<>(Arrays.asList(1, 2)), list1);
+        Assert.assertNotEquals(new ArrayList<>(Arrays.asList(1, 2, 3, 4)), list1);
+        Assert.assertNotEquals(new ArrayList<>(Arrays.asList(1, 2, null)), list1);
+        Assert.assertNotEquals(new ArrayList<>(Arrays.asList(1, 2)), list1);
         Assert.assertNotEquals(ArrayAdapter.newArrayWith(1, 2, 3, 4), list1);
     }
 
@@ -332,7 +332,7 @@ public abstract class AbstractListTestCase
         MutableList<Integer> objects = this.newWith(1, 2, 3);
         objects.addAll(0, Lists.fixedSize.of(0));
         Integer one = -1;
-        objects.addAll(0, new ArrayList<Integer>(Lists.fixedSize.of(one)));
+        objects.addAll(0, new ArrayList<>(Lists.fixedSize.of(one)));
         objects.addAll(0, FastList.newListWith(-2));
         objects.addAll(0, UnifiedSet.newSetWith(-3));
         Assert.assertEquals(FastList.newListWith(-3, -2, -1, 0, 1, 2, 3), objects);

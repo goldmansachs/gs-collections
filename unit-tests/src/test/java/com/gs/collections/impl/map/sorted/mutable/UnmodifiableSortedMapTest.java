@@ -27,10 +27,10 @@ import org.junit.Test;
 
 public class UnmodifiableSortedMapTest
 {
-    private final UnmodifiableSortedMap<Integer, String> map = new UnmodifiableSortedMap<Integer, String>(
-            new TreeMap<Integer, String>(SortedMaps.mutable.of(1, "1", 2, "2", 3, "3", 4, "4")));
-    private final UnmodifiableSortedMap<Integer, String> revMap = new UnmodifiableSortedMap<Integer, String>(
-            new TreeMap<Integer, String>(SortedMaps.mutable.of(Comparators.<Integer>reverseNaturalOrder(),
+    private final UnmodifiableSortedMap<Integer, String> map = new UnmodifiableSortedMap<>(
+            new TreeMap<>(SortedMaps.mutable.of(1, "1", 2, "2", 3, "3", 4, "4")));
+    private final UnmodifiableSortedMap<Integer, String> revMap = new UnmodifiableSortedMap<>(
+            new TreeMap<>(SortedMaps.mutable.of(Comparators.<Integer>reverseNaturalOrder(),
                     1, "1", 2, "2", 3, "3", 4, "4")));
 
     @Test

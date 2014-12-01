@@ -35,29 +35,29 @@ public class LazyIterableAdapterTest extends AbstractLazyIterableTestCase
     @Override
     protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return new LazyIterableAdapter<T>(FastList.newListWith(elements));
+        return new LazyIterableAdapter<>(FastList.newListWith(elements));
     }
 
     @Test
     public void forEach()
     {
-        LazyIterable<Integer> select = new LazyIterableAdapter<Integer>(Interval.oneTo(5));
+        LazyIterable<Integer> select = new LazyIterableAdapter<>(Interval.oneTo(5));
         Sum sum = new IntegerSum(0);
-        select.forEach(new SumProcedure<Integer>(sum));
+        select.forEach(new SumProcedure<>(sum));
         Assert.assertEquals(15, sum.getValue().intValue());
     }
 
     @Test
     public void into()
     {
-        int sum = new LazyIterableAdapter<Integer>(Interval.oneTo(5)).into(FastList.<Integer>newList()).injectInto(0, AddFunction.INTEGER_TO_INT);
+        int sum = new LazyIterableAdapter<>(Interval.oneTo(5)).into(FastList.<Integer>newList()).injectInto(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(15, sum);
     }
 
     @Test
     public void forEachWithIndex()
     {
-        LazyIterable<Integer> select = new LazyIterableAdapter<Integer>(Interval.oneTo(5));
+        LazyIterable<Integer> select = new LazyIterableAdapter<>(Interval.oneTo(5));
         Sum sum = new IntegerSum(0);
         select.forEachWithIndex((object, index) -> {
             sum.add(object);
@@ -72,7 +72,7 @@ public class LazyIterableAdapterTest extends AbstractLazyIterableTestCase
     @Test
     public void iterator()
     {
-        LazyIterable<Integer> select = new LazyIterableAdapter<Integer>(Interval.oneTo(5));
+        LazyIterable<Integer> select = new LazyIterableAdapter<>(Interval.oneTo(5));
         Sum sum = new IntegerSum(0);
         for (Integer each : select)
         {
@@ -84,7 +84,7 @@ public class LazyIterableAdapterTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWith()
     {
-        LazyIterable<Integer> select = new LazyIterableAdapter<Integer>(Interval.oneTo(5));
+        LazyIterable<Integer> select = new LazyIterableAdapter<>(Interval.oneTo(5));
         Sum sum = new IntegerSum(0);
         select.forEachWith((each, aSum) -> aSum.add(each), sum);
         Assert.assertEquals(15, sum.getValue().intValue());
@@ -95,7 +95,7 @@ public class LazyIterableAdapterTest extends AbstractLazyIterableTestCase
     public void distinct()
     {
         super.distinct();
-        LazyIterable<Integer> iterable = new LazyIterableAdapter<Integer>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5));
+        LazyIterable<Integer> iterable = new LazyIterableAdapter<>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5));
         Assert.assertEquals(
                 FastList.newListWith(3, 2, 4, 1, 5),
                 iterable.distinct().toList());

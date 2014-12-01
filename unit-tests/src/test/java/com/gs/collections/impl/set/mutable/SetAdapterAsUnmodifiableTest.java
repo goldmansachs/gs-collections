@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public class SetAdapterAsUnmodifiableTest extends UnmodifiableMutableCollectionT
     @Override
     protected MutableCollection<Integer> getCollection()
     {
-        Set<Integer> set = new HashSet<Integer>();
+        Set<Integer> set = new HashSet<>();
         set.add(1);
         return SetAdapter.adapt(set).asUnmodifiable();
     }

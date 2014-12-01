@@ -38,7 +38,7 @@ public class Collect<name>ToObjectIterableTest
 {
     private LazyIterable\<<wrapperName>\> newPrimitiveWith(<type>... elements)
     {
-        return new Collect<name>ToObjectIterable\<<wrapperName>\>(<name>ArrayList.newListWith(elements), <wrapperName>::valueOf);
+        return new Collect<name>ToObjectIterable\<>(<name>ArrayList.newListWith(elements), <wrapperName>::valueOf);
     }
 
     @Test

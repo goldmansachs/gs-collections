@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,37 +26,37 @@ public class SynchronizedObjectBooleanMapTest extends AbstractMutableObjectBoole
     @Override
     protected SynchronizedObjectBooleanMap<String> classUnderTest()
     {
-        return new SynchronizedObjectBooleanMap<String>(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false));
+        return new SynchronizedObjectBooleanMap<>(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false));
     }
 
     @Override
     protected <T> SynchronizedObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1)
     {
-        return new SynchronizedObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1));
+        return new SynchronizedObjectBooleanMap<>(ObjectBooleanHashMap.newWithKeysValues(key1, value1));
     }
 
     @Override
     protected <T> SynchronizedObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1, T key2, boolean value2)
     {
-        return new SynchronizedObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2));
+        return new SynchronizedObjectBooleanMap<>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2));
     }
 
     @Override
     protected <T> SynchronizedObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1, T key2, boolean value2, T key3, boolean value3)
     {
-        return new SynchronizedObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
+        return new SynchronizedObjectBooleanMap<>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
     }
 
     @Override
     protected <T> SynchronizedObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1, T key2, boolean value2, T key3, boolean value3, T key4, boolean value4)
     {
-        return new SynchronizedObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
+        return new SynchronizedObjectBooleanMap<>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
     }
 
     @Override
     protected <T> SynchronizedObjectBooleanMap<T> getEmptyMap()
     {
-        return new SynchronizedObjectBooleanMap<T>(new ObjectBooleanHashMap<T>());
+        return new SynchronizedObjectBooleanMap<>(new ObjectBooleanHashMap<>());
     }
 
     @Override

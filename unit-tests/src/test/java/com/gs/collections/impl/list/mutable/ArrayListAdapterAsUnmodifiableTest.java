@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ public class ArrayListAdapterAsUnmodifiableTest extends UnmodifiableMutableListT
     @Override
     protected MutableList<Integer> getCollection()
     {
-        ArrayList<Integer> list = new ArrayList<Integer>();
+        ArrayList<Integer> list = new ArrayList<>();
         list.add(1);
         return ArrayListAdapter.adapt(list).asUnmodifiable();
     }

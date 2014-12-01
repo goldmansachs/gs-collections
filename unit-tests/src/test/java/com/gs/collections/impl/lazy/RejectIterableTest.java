@@ -39,16 +39,16 @@ public class RejectIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEach()
     {
-        InternalIterable<Integer> select = new RejectIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(5));
+        InternalIterable<Integer> select = new RejectIterable<>(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
-        select.forEach(new SumProcedure<Integer>(sum));
+        select.forEach(new SumProcedure<>(sum));
         Assert.assertEquals(5, sum.getValue().intValue());
     }
 
     @Test
     public void forEachWithIndex()
     {
-        InternalIterable<Integer> select = new RejectIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(2).or(Predicates.greaterThan(3)));
+        InternalIterable<Integer> select = new RejectIterable<>(Interval.oneTo(5), Predicates.lessThan(2).or(Predicates.greaterThan(3)));
         Sum sum = new IntegerSum(0);
         select.forEachWithIndex((object, index) -> {
             sum.add(object);
@@ -61,7 +61,7 @@ public class RejectIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void iterator()
     {
-        InternalIterable<Integer> select = new RejectIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(5));
+        InternalIterable<Integer> select = new RejectIterable<>(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
         for (Integer each : select)
         {
@@ -73,7 +73,7 @@ public class RejectIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWith()
     {
-        InternalIterable<Integer> select = new RejectIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(5));
+        InternalIterable<Integer> select = new RejectIterable<>(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
         select.forEachWith((each, aSum) -> aSum.add(each), sum);
         Assert.assertEquals(5, sum.getValue().intValue());
@@ -84,7 +84,7 @@ public class RejectIterableTest extends AbstractLazyIterableTestCase
     public void distinct()
     {
         super.distinct();
-        RejectIterable<Integer> iterable = new RejectIterable<Integer>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5), Predicates.lessThan(2));
+        RejectIterable<Integer> iterable = new RejectIterable<>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5), Predicates.lessThan(2));
         Assert.assertEquals(
                 FastList.newListWith(3, 2, 4, 5),
                 iterable.distinct().toList());

@@ -41,13 +41,13 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Before
     public void setUp()
     {
-        this.emptySet = new EmptySet<Object>();
+        this.emptySet = new EmptySet<>();
     }
 
     @Override
     protected MutableSet<String> classUnderTest()
     {
-        return new EmptySet<String>();
+        return new EmptySet<>();
     }
 
     @Override

@@ -37,7 +37,7 @@ public class SynchronizedMutableSet2Test extends AbstractMutableSetTestCase
     @Override
     protected <T> MutableSet<T> newWith(T... littleElements)
     {
-        return new SynchronizedMutableSet<T>(SetAdapter.adapt(new HashSet<T>(UnifiedSet.newSetWith(littleElements))));
+        return new SynchronizedMutableSet<>(SetAdapter.adapt(new HashSet<>(UnifiedSet.newSetWith(littleElements))));
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -90,7 +90,7 @@ public class SynchronizedMutableSet2Test extends AbstractMutableSetTestCase
     @Override
     public void selectInstancesOf()
     {
-        MutableSet<Number> numbers = new SynchronizedMutableSet<Number>(SetAdapter.adapt(new TreeSet<Number>((o1, o2) -> Double.compare(o1.doubleValue(), o2.doubleValue())))).withAll(FastList.newListWith(1, 2.0, 3, 4.0, 5));
+        MutableSet<Number> numbers = new SynchronizedMutableSet<Number>(SetAdapter.adapt(new TreeSet<>((o1, o2) -> Double.compare(o1.doubleValue(), o2.doubleValue())))).withAll(FastList.newListWith(1, 2.0, 3, 4.0, 5));
         MutableSet<Integer> integers = numbers.selectInstancesOf(Integer.class);
         Assert.assertEquals(UnifiedSet.newSetWith(1, 3, 5), integers);
         Assert.assertEquals(FastList.newListWith(1, 3, 5), integers.toList());

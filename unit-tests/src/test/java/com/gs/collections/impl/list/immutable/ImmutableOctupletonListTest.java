@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,6 @@ public class ImmutableOctupletonListTest extends AbstractImmutableListTestCase
     @Override
     protected ImmutableList<Integer> classUnderTest()
     {
-        return new ImmutableOctupletonList<Integer>(1, 2, 3, 4, 5, 6, 7, 8);
+        return new ImmutableOctupletonList<>(1, 2, 3, 4, 5, 6, 7, 8);
     }
 }

@@ -30,7 +30,7 @@ public class ParallelMapIterateTest
     @Test
     public void forEachKeyValueWithNoParameters()
     {
-        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<String, String>();
+        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<>();
         MutableMap<String, String> map = UnifiedMap.newWithKeysValues("1", "One", "2", "Two", "3", "Three");
         ParallelMapIterate.forEachKeyValue(map, concurrentMap::put);
         Verify.assertMapsEqual(concurrentMap, map);
@@ -39,7 +39,7 @@ public class ParallelMapIterateTest
     @Test
     public void forEachKeyValueWithExecutor()
     {
-        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<String, String>();
+        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<>();
         MutableMap<String, String> map = UnifiedMap.newWithKeysValues("1", "One", "2", "Two", "3", "Three");
         ParallelMapIterate.forEachKeyValue(map, concurrentMap::put, Executors.newSingleThreadExecutor());
         Verify.assertMapsEqual(concurrentMap, map);
@@ -48,7 +48,7 @@ public class ParallelMapIterateTest
     @Test
     public void forEachKeyValueWithMinForkSizeTaskCountAndExecutorParallel()
     {
-        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<String, String>();
+        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<>();
         MutableMap<String, String> map = UnifiedMap.newWithKeysValues("1", "One", "2", "Two", "3", "Three");
         ParallelMapIterate.forEachKeyValue(map, concurrentMap::put, 1, 3, Executors.newSingleThreadExecutor());
         Verify.assertMapsEqual(concurrentMap, map);
@@ -57,7 +57,7 @@ public class ParallelMapIterateTest
     @Test
     public void forEachKeyValueWithMinForkSizeTaskCountAndExecutorSerial()
     {
-        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<String, String>();
+        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<>();
         MutableMap<String, String> map = UnifiedMap.newWithKeysValues("1", "One", "2", "Two", "3", "Three");
         ParallelMapIterate.forEachKeyValue(map, concurrentMap::put, 5, 3, Executors.newSingleThreadExecutor());
         Verify.assertMapsEqual(concurrentMap, map);
@@ -66,7 +66,7 @@ public class ParallelMapIterateTest
     @Test
     public void forEachKeyValueWithMinForkSizeAndTaskCountParallel()
     {
-        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<String, String>();
+        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<>();
         MutableMap<String, String> map = UnifiedMap.newWithKeysValues("1", "One", "2", "Two", "3", "Three");
         ParallelMapIterate.forEachKeyValue(map, concurrentMap::put, 1, 3);
         Verify.assertMapsEqual(concurrentMap, map);
@@ -75,7 +75,7 @@ public class ParallelMapIterateTest
     @Test
     public void forEachKeyValueWithMinForkSizeAndTaskCountSerial()
     {
-        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<String, String>();
+        ConcurrentMap<String, String> concurrentMap = new ConcurrentHashMap<>();
         MutableMap<String, String> map = UnifiedMap.newWithKeysValues("1", "One", "2", "Two", "3", "Three");
         ParallelMapIterate.forEachKeyValue(map, concurrentMap::put, 5, 3);
         Verify.assertMapsEqual(concurrentMap, map);

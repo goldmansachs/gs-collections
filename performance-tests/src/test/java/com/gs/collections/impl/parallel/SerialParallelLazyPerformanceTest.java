@@ -526,7 +526,7 @@ public class SerialParallelLazyPerformanceTest
         runnables.add(() -> this.basicParallelLazySelectPerformance(collection, "Predicate", PREDICATES, PARALLEL_RUN_COUNT, cores, service));
         runnables.add(() -> this.basicParallelLazySelectPerformance(collection, "MethodRef", PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT, cores, service));
         runnables.add(() -> this.basicJava8ParallelLazySelectPerformance(collection, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT));
-        List<Integer> arrayList = new ArrayList<Integer>(collection);
+        List<Integer> arrayList = new ArrayList<>(collection);
         runnables.add(() -> this.basicJava8ParallelLazySelectPerformance(arrayList, "Lambda", JAVA_PREDICATES_LAMBDA, PARALLEL_RUN_COUNT));
         runnables.add(() -> this.basicJava8ParallelLazySelectPerformance(arrayList, "Predicate", JAVA_PREDICATES, PARALLEL_RUN_COUNT));
         runnables.add(() -> this.basicJava8ParallelLazySelectPerformance(arrayList, "MethodRef", JAVA_PREDICATES_METHOD_REF, PARALLEL_RUN_COUNT));

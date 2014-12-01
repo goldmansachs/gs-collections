@@ -36,7 +36,7 @@ public class IfProcedureTest
     {
         MutableList<String> list1 = Lists.mutable.of();
         MutableList<String> list2 = Lists.mutable.of();
-        Procedure<String> ifProcedure = new IfProcedure<String>("1"::equals, list1::add, list2::add);
+        Procedure<String> ifProcedure = new IfProcedure<>("1"::equals, list1::add, list2::add);
         LOGGER.info("{}", ifProcedure);
         MutableList<String> list = FastList.newListWith("1", "2");
         Iterate.forEach(list, ifProcedure);

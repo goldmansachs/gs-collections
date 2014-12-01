@@ -29,20 +29,20 @@ public class FlatCollectIteratorTest
     @Test(expected = NoSuchElementException.class)
     public void nextIfDoesntHaveAnything()
     {
-        new FlatCollectIterator<Object, Object>(Lists.immutable.of(), object -> null).next();
+        new FlatCollectIterator<>(Lists.immutable.of(), object -> null).next();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void removeIsUnsupported()
     {
-        new FlatCollectIterator<Object, Object>(Lists.immutable.of().iterator(), object -> null).remove();
+        new FlatCollectIterator<>(Lists.immutable.of().iterator(), object -> null).remove();
     }
 
     @Test
     public void nextAfterEmptyIterable()
     {
         Object expected = new Object();
-        FlatCollectIterator<List<Object>, Object> flattenIterator = new FlatCollectIterator<List<Object>, Object>(
+        FlatCollectIterator<List<Object>, Object> flattenIterator = new FlatCollectIterator<>(
                 Lists.fixedSize.<List<Object>>of(
                         Lists.fixedSize.of(),
                         Lists.fixedSize.of(expected)),

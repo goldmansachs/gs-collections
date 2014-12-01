@@ -28,14 +28,14 @@ public class CaseFunctionTest
     @Test
     public void noopCase()
     {
-        CaseFunction<Integer, Integer> function = new CaseFunction<Integer, Integer>();
+        CaseFunction<Integer, Integer> function = new CaseFunction<>();
         Assert.assertNull(function.valueOf(42));
     }
 
     @Test
     public void basicCase()
     {
-        CaseFunction<Integer, Integer> function = new CaseFunction<Integer, Integer>();
+        CaseFunction<Integer, Integer> function = new CaseFunction<>();
         function.addCase(ignored -> true, Functions.getIntegerPassThru());
         Integer fortyTwo = 42;
         Assert.assertEquals(fortyTwo, function.valueOf(fortyTwo));

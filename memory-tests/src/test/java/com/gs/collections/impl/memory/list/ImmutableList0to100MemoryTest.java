@@ -119,7 +119,7 @@ public class ImmutableList0to100MemoryTest
             {
                 return Collections.singletonList("dummy");
             }
-            return Collections.unmodifiableList(new ArrayList<String>(Collections.nCopies(this.size, "dummy")));
+            return Collections.unmodifiableList(new ArrayList<>(Collections.nCopies(this.size, "dummy")));
         }
     }
 

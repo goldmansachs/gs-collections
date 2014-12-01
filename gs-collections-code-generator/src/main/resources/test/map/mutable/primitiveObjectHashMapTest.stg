@@ -68,7 +68,7 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
     @Override
     protected \<T> <name>ObjectHashMap\<T> getEmptyMap()
     {
-        return new <name>ObjectHashMap\<T>();
+        return new <name>ObjectHashMap\<>();
     }
 
     @Test
@@ -79,7 +79,7 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
         Field values = <name>ObjectHashMap.class.getDeclaredField("values");
         values.setAccessible(true);
 
-        <name>ObjectHashMap\<Object> hashMap = new <name>ObjectHashMap\<Object>();
+        <name>ObjectHashMap\<Object> hashMap = new <name>ObjectHashMap\<>();
         Assert.assertEquals(16L, ((<type>[]) keys.get(hashMap)).length);
         Assert.assertEquals(16L, ((Object[]) values.get(hashMap)).length);
     }
@@ -92,11 +92,11 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
         Field values = <name>ObjectHashMap.class.getDeclaredField("values");
         values.setAccessible(true);
 
-        <name>ObjectHashMap\<Object> hashMap = new <name>ObjectHashMap\<Object>(3);
+        <name>ObjectHashMap\<Object> hashMap = new <name>ObjectHashMap\<>(3);
         Assert.assertEquals(8L, ((<type>[]) keys.get(hashMap)).length);
         Assert.assertEquals(8L, ((Object[]) values.get(hashMap)).length);
 
-        <name>ObjectHashMap\<?> hashMap2 = new <name>ObjectHashMap\<Object>(15);
+        <name>ObjectHashMap\<?> hashMap2 = new <name>ObjectHashMap\<>(15);
         Assert.assertEquals(32L, ((<type>[]) keys.get(hashMap2)).length);
         Assert.assertEquals(32L, ((Object[]) values.get(hashMap2)).length);
     }
@@ -104,7 +104,7 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
     @Test(expected = IllegalArgumentException.class)
     public void newWithInitialCapacity_negative_throws()
     {
-        new <name>ObjectHashMap\<Object>(-1);
+        new <name>ObjectHashMap\<>(-1);
     }
 
     @Test
@@ -118,7 +118,7 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
         <name>ObjectHashMap\<Object> hashMap = <name>ObjectHashMap.newMap();
         Assert.assertEquals(16L, ((<type>[]) keys.get(hashMap)).length);
         Assert.assertEquals(16L, ((Object[]) values.get(hashMap)).length);
-        Assert.assertEquals(new <name>ObjectHashMap\<Object>(), hashMap);
+        Assert.assertEquals(new <name>ObjectHashMap\<>(), hashMap);
     }
 
     @Test
@@ -310,7 +310,7 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
         Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
         occupiedWithData.setAccessible(true);
         occupiedWithSentinels.setAccessible(true);
-        <name>ObjectHashMap\<Float> hashMap = new <name>ObjectHashMap\<Float>();
+        <name>ObjectHashMap\<Float> hashMap = new <name>ObjectHashMap\<>();
         Assert.assertEquals(0, occupiedWithData.get(hashMap));
         Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
 
@@ -447,7 +447,7 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
         Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
         occupiedWithData.setAccessible(true);
         occupiedWithSentinels.setAccessible(true);
-        <name>ObjectHashMap\<Float> hashMap = new <name>ObjectHashMap\<Float>();
+        <name>ObjectHashMap\<Float> hashMap = new <name>ObjectHashMap\<>();
         Assert.assertEquals(0, occupiedWithData.get(hashMap));
         Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
 
@@ -471,7 +471,8 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
     public void withKeysValues()
     {
         super.withKeysValues();
-        <name>ObjectHashMap\<String> hashMap0 = new <name>ObjectHashMap\<String>();
+
+        <name>ObjectHashMap\<String> hashMap0 = new <name>ObjectHashMap\<>();
         Assert.assertSame(hashMap0.withKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two"), hashMap0);
         <name>ObjectHashMap\<String> hashMap1 = new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three");
         <name>ObjectHashMap\<String> hashMap2 = new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three", <(literal.(type))("4")>, "four");

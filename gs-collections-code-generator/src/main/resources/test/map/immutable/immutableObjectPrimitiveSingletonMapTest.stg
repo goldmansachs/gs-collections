@@ -335,7 +335,7 @@ public class ImmutableObject<name>SingletonMapTest extends AbstractImmutableObje
     @Test
     public void injectInto()
     {
-        ImmutableObject<name>SingletonMap\<String> iterable = new ImmutableObject<name>SingletonMap\<String>("1", <(literal.(type))("1")>);
+        ImmutableObject<name>SingletonMap\<String> iterable = new ImmutableObject<name>SingletonMap\<>("1", <(literal.(type))("1")>);
         Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("1")>), (Mutable<wrapperName> object, <type> value) -> object.add(value));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("2")>), result);
     }

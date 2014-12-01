@@ -26,7 +26,7 @@ public class ImmutableHashBiMapInverseTest extends AbstractImmutableBiMapTestCas
     @Override
     protected ImmutableBiMap<Integer, String> classUnderTest()
     {
-        return new ImmutableHashBiMap<String, Integer>(Maps.immutable.with("1", 1, "2", 2, "3", 3, "4", 4)).inverse();
+        return new ImmutableHashBiMap<>(Maps.immutable.with("1", 1, "2", 2, "3", 3, "4", 4)).inverse();
     }
 
     @Override
@@ -38,18 +38,18 @@ public class ImmutableHashBiMapInverseTest extends AbstractImmutableBiMapTestCas
     @Override
     protected ImmutableBiMap<Integer, String> newWithMap()
     {
-        return new ImmutableHashBiMap<String, Integer>(UnifiedMap.newWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4)).inverse();
+        return new ImmutableHashBiMap<>(UnifiedMap.newWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4)).inverse();
     }
 
     @Override
     protected ImmutableBiMap<Integer, String> newWithHashBiMap()
     {
-        return new ImmutableHashBiMap<String, Integer>(HashBiMap.newWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4)).inverse();
+        return new ImmutableHashBiMap<>(HashBiMap.newWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4)).inverse();
     }
 
     @Override
     protected ImmutableBiMap<Integer, String> newWithImmutableMap()
     {
-        return new ImmutableHashBiMap<String, Integer>(Maps.immutable.of("1", 1, "2", 2, "3", 3, "4", 4)).inverse();
+        return new ImmutableHashBiMap<>(Maps.immutable.of("1", 1, "2", 2, "3", 3, "4", 4)).inverse();
     }
 }

@@ -33,6 +33,6 @@ public class SetAdapterParallelSetIterableTest extends NonParallelUnsortedSetIte
     @Override
     protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
     {
-        return SetAdapter.adapt(new HashSet<Integer>(UnifiedSet.newSetWith(littleElements))).asParallel(this.executorService, 2);
+        return SetAdapter.adapt(new HashSet<>(UnifiedSet.newSetWith(littleElements))).asParallel(this.executorService, 2);
     }
 }

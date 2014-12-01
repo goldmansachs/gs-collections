@@ -752,8 +752,8 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsentPut(4, new PassThruFunction0<String>("4")));
-        Assert.assertEquals("3", map.getIfAbsentPut(3, new PassThruFunction0<String>("3")));
+        Assert.assertEquals("4", map.getIfAbsentPut(4, new PassThruFunction0<>("4")));
+        Assert.assertEquals("3", map.getIfAbsentPut(3, new PassThruFunction0<>("3")));
         Verify.assertContainsKeyValue(4, "4", map);
     }
 

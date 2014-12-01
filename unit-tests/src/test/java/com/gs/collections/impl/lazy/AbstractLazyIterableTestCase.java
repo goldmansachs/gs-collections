@@ -399,7 +399,7 @@ public abstract class AbstractLazyIterableTestCase
     @Test
     public void detectWithIfNone()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(Integer.valueOf(1000));
+        Function0<Integer> function = new PassThruFunction0<>(Integer.valueOf(1000));
         Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detectWithIfNone(Object::equals, Integer.valueOf(3), function));
         Assert.assertEquals(Integer.valueOf(1000), this.lazyIterable.detectWithIfNone(Object::equals, Integer.valueOf(8), function));
     }
@@ -491,7 +491,7 @@ public abstract class AbstractLazyIterableTestCase
     @Test
     public void detectIfNone()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(9);
+        Function0<Integer> function = new PassThruFunction0<>(9);
         Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detectIfNone(Integer.valueOf(3)::equals, function));
         Assert.assertEquals(Integer.valueOf(9), this.lazyIterable.detectIfNone(Integer.valueOf(8)::equals, function));
     }

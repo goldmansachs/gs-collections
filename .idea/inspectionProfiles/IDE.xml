@@ -170,7 +170,7 @@
     <inspection_tool class="ConstraintValidatorCreator" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ContinueOrBreakFromFinallyBlockJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="Convert to string" enabled="false" level="INFO" enabled_by_default="false" />
-    <inspection_tool class="Convert2Diamond" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="Convert2Diamond" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="Convert2Lambda" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="Convert2MethodRef" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="ConvertAnnotations" enabled="false" level="WARNING" enabled_by_default="false" />

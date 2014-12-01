@@ -154,7 +154,7 @@ public class RandomAccessListIterateTest
 
         Assert.assertEquals(
                 iList("true", "false", "null"),
-                RandomAccessListIterate.collect(mList(true, false, null), String::valueOf, new ArrayList<String>()));
+                RandomAccessListIterate.collect(mList(true, false, null), String::valueOf, new ArrayList<>()));
     }
 
     @Test
@@ -184,7 +184,7 @@ public class RandomAccessListIterateTest
     @Test
     public void getLastOnEmpty()
     {
-        List<?> list = new ArrayList<Object>();
+        List<?> list = new ArrayList<>();
         Assert.assertNull(RandomAccessListIterate.getLast(list));
     }
 
@@ -270,7 +270,7 @@ public class RandomAccessListIterateTest
     {
         MutableList<String> list1 = Lists.fixedSize.of("1", "2");
         MutableList<String> list2 = Lists.fixedSize.of("a", "b");
-        List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
+        List<Pair<String, String>> list = new ArrayList<>();
         RandomAccessListIterate.forEachInBoth(list1, list2, (argument1, argument2) -> list.add(Tuples.twin(argument1, argument2)));
         Assert.assertEquals(FastList.newListWith(Tuples.twin("1", "a"), Tuples.twin("2", "b")), list);
     }
@@ -345,7 +345,7 @@ public class RandomAccessListIterateTest
     {
         MutableList<Integer> integers = Lists.fixedSize.of(1, 2, 3);
         Verify.assertContainsAll(RandomAccessListIterate.collectIf(integers, Integer.class::isInstance, String::valueOf), "1", "2", "3");
-        Verify.assertContainsAll(RandomAccessListIterate.collectIf(integers, Integer.class::isInstance, String::valueOf, new ArrayList<String>()), "1", "2", "3");
+        Verify.assertContainsAll(RandomAccessListIterate.collectIf(integers, Integer.class::isInstance, String::valueOf, new ArrayList<>()), "1", "2", "3");
     }
 
     @Test

@@ -457,7 +457,7 @@ public abstract class StackIterableTestCase
     public void select()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        CountingPredicate<Object> predicate = new CountingPredicate<Object>(Integer.valueOf(1)::equals);
+        CountingPredicate<Object> predicate = new CountingPredicate<>(Integer.valueOf(1)::equals);
         StackIterable<Integer> actual = stack.select(predicate);
         Assert.assertEquals(this.newStackFromTopToBottom(1), actual);
         Assert.assertEquals(3, predicate.count);
@@ -497,7 +497,7 @@ public abstract class StackIterableTestCase
     public void reject()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(3, 2, 1);
-        CountingPredicate<Integer> predicate = new CountingPredicate<Integer>(Predicates.greaterThan(2));
+        CountingPredicate<Integer> predicate = new CountingPredicate<>(Predicates.greaterThan(2));
         Assert.assertEquals(
                 this.newStackFromTopToBottom(2, 1),
                 stack.reject(predicate));
@@ -528,7 +528,7 @@ public abstract class StackIterableTestCase
     public void detect()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        CountingPredicate<Integer> predicate = new CountingPredicate<Integer>(Predicates.lessThan(3));
+        CountingPredicate<Integer> predicate = new CountingPredicate<>(Predicates.lessThan(3));
         Assert.assertEquals(Integer.valueOf(1), stack.detect(predicate));
         Assert.assertEquals(1, predicate.count);
         Assert.assertNull(stack.detect(Integer.valueOf(4)::equals));
@@ -538,7 +538,7 @@ public abstract class StackIterableTestCase
     public void detectWith()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        CountingPredicate2<Integer, Integer> predicate = new CountingPredicate2<Integer, Integer>(Predicates2.<Integer>lessThan());
+        CountingPredicate2<Integer, Integer> predicate = new CountingPredicate2<>(Predicates2.<Integer>lessThan());
         Assert.assertEquals(Integer.valueOf(1), stack.detectWith(predicate, 3));
         Assert.assertEquals(1, predicate.count);
         Assert.assertNull(stack.detectWith(Object::equals, Integer.valueOf(4)));
@@ -547,8 +547,8 @@ public abstract class StackIterableTestCase
     @Test
     public void detectIfNone()
     {
-        Function0<Integer> defaultResultFunction = new PassThruFunction0<Integer>(-1);
-        CountingPredicate<Integer> predicate = new CountingPredicate<Integer>(Predicates.lessThan(3));
+        Function0<Integer> defaultResultFunction = new PassThruFunction0<>(-1);
+        CountingPredicate<Integer> predicate = new CountingPredicate<>(Predicates.lessThan(3));
         Assert.assertEquals(
                 Integer.valueOf(1),
                 this.newStackFromTopToBottom(1, 2, 3, 4, 5).detectIfNone(predicate, defaultResultFunction));
@@ -561,8 +561,8 @@ public abstract class StackIterableTestCase
     @Test
     public void detectWithIfNone()
     {
-        Function0<Integer> defaultResultFunction = new PassThruFunction0<Integer>(-1);
-        CountingPredicate2<Integer, Integer> predicate = new CountingPredicate2<Integer, Integer>(Predicates2.<Integer>lessThan());
+        Function0<Integer> defaultResultFunction = new PassThruFunction0<>(-1);
+        CountingPredicate2<Integer, Integer> predicate = new CountingPredicate2<>(Predicates2.<Integer>lessThan());
         Assert.assertEquals(
                 Integer.valueOf(1),
                 this.newStackFromTopToBottom(1, 2, 3, 4, 5).detectWithIfNone(predicate, Integer.valueOf(3), defaultResultFunction));
@@ -575,7 +575,7 @@ public abstract class StackIterableTestCase
     @Test
     public void partition()
     {
-        CountingPredicate<Integer> predicate = new CountingPredicate<Integer>(Predicates.lessThan(3));
+        CountingPredicate<Integer> predicate = new CountingPredicate<>(Predicates.lessThan(3));
         PartitionStack<Integer> partition = this.newStackFromTopToBottom(1, 2, 3, 4, 5).partition(predicate);
         Assert.assertEquals(5, predicate.count);
         Assert.assertEquals(this.newStackFromTopToBottom(1, 2), partition.getSelected());
@@ -630,7 +630,7 @@ public abstract class StackIterableTestCase
     public void count()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3, 4, 5);
-        CountingPredicate<Integer> predicate = new CountingPredicate<Integer>(Predicates.greaterThan(2));
+        CountingPredicate<Integer> predicate = new CountingPredicate<>(Predicates.greaterThan(2));
         Assert.assertEquals(3, stack.count(predicate));
         Assert.assertEquals(5, predicate.count);
         Assert.assertEquals(0, stack.count(Predicates.greaterThan(6)));
@@ -640,7 +640,7 @@ public abstract class StackIterableTestCase
     public void countWith()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3, 4, 5);
-        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<Object, Object>(Object::equals);
+        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<>(Object::equals);
         Assert.assertEquals(1, stack.countWith(predicate, 1));
         Assert.assertEquals(5, predicate.count);
         Assert.assertNotEquals(2, stack.countWith(predicate, 4));
@@ -650,7 +650,7 @@ public abstract class StackIterableTestCase
     public void anySatisfy()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        CountingPredicate<Object> predicate = new CountingPredicate<Object>(Integer.valueOf(1)::equals);
+        CountingPredicate<Object> predicate = new CountingPredicate<>(Integer.valueOf(1)::equals);
         Assert.assertTrue(stack.anySatisfy(predicate));
         Assert.assertEquals(1, predicate.count);
         Assert.assertFalse(stack.anySatisfy(Integer.valueOf(4)::equals));
@@ -660,7 +660,7 @@ public abstract class StackIterableTestCase
     public void allSatisfy()
     {
         StackIterable<Integer> stack = this.newStackWith(3, 3, 3);
-        CountingPredicate<Object> predicate = new CountingPredicate<Object>(Integer.valueOf(3)::equals);
+        CountingPredicate<Object> predicate = new CountingPredicate<>(Integer.valueOf(3)::equals);
         Assert.assertTrue(stack.allSatisfy(predicate));
         Assert.assertEquals(3, predicate.count);
         Assert.assertFalse(stack.allSatisfy(Integer.valueOf(2)::equals));
@@ -670,7 +670,7 @@ public abstract class StackIterableTestCase
     public void noneSatisfy()
     {
         StackIterable<Integer> stack = this.newStackWith(3, 3, 3);
-        CountingPredicate<Object> predicate = new CountingPredicate<Object>(Integer.valueOf(4)::equals);
+        CountingPredicate<Object> predicate = new CountingPredicate<>(Integer.valueOf(4)::equals);
         Assert.assertTrue(stack.noneSatisfy(predicate));
         Assert.assertEquals(3, predicate.count);
         Assert.assertTrue(stack.noneSatisfy(Integer.valueOf(2)::equals));
@@ -680,7 +680,7 @@ public abstract class StackIterableTestCase
     public void anySatisfyWith()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<Object, Object>(Object::equals);
+        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<>(Object::equals);
         Assert.assertTrue(stack.anySatisfyWith(predicate, 1));
         Assert.assertEquals(1, predicate.count);
         Assert.assertFalse(stack.anySatisfyWith(Object::equals, 4));
@@ -690,7 +690,7 @@ public abstract class StackIterableTestCase
     public void allSatisfyWith()
     {
         StackIterable<Integer> stack = this.newStackWith(3, 3, 3);
-        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<Object, Object>(Object::equals);
+        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<>(Object::equals);
         Assert.assertTrue(stack.allSatisfyWith(predicate, 3));
         Assert.assertEquals(3, predicate.count);
         Assert.assertFalse(stack.allSatisfyWith(Object::equals, 2));
@@ -700,7 +700,7 @@ public abstract class StackIterableTestCase
     public void noneSatisfyWith()
     {
         StackIterable<Integer> stack = this.newStackWith(3, 3, 3);
-        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<Object, Object>(Object::equals);
+        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<>(Object::equals);
         Assert.assertTrue(stack.noneSatisfyWith(predicate, 4));
         Assert.assertEquals(3, predicate.count);
         Assert.assertTrue(stack.noneSatisfyWith(Object::equals, 2));
@@ -1172,7 +1172,7 @@ public abstract class StackIterableTestCase
 
         private static <T> CountingPredicate<T> of(Predicate<T> predicate)
         {
-            return new CountingPredicate<T>(predicate);
+            return new CountingPredicate<>(predicate);
         }
 
         @Override
@@ -1197,7 +1197,7 @@ public abstract class StackIterableTestCase
 
         private static <T1, T2> CountingPredicate2<T1, T2> of(Predicate2<T1, T2> predicate)
         {
-            return new CountingPredicate2<T1, T2>(predicate);
+            return new CountingPredicate2<>(predicate);
         }
 
         @Override
@@ -1222,7 +1222,7 @@ public abstract class StackIterableTestCase
 
         private static <T, V> CountingFunction<T, V> of(Function<T, V> function)
         {
-            return new CountingFunction<T, V>(function);
+            return new CountingFunction<>(function);
         }
 
         @Override

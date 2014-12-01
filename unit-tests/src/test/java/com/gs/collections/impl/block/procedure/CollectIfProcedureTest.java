@@ -26,8 +26,8 @@ public class CollectIfProcedureTest
     @Test
     public void constructorWithSize()
     {
-        CollectIfProcedure<Integer, String> underTestTrue = new CollectIfProcedure<Integer, String>(10, String::valueOf, ignored -> true);
-        CollectIfProcedure<Integer, String> underTestFalse = new CollectIfProcedure<Integer, String>(10, String::valueOf, ignored -> false);
+        CollectIfProcedure<Integer, String> underTestTrue = new CollectIfProcedure<>(10, String::valueOf, ignored -> true);
+        CollectIfProcedure<Integer, String> underTestFalse = new CollectIfProcedure<>(10, String::valueOf, ignored -> false);
         underTestTrue.value(THE_ANSWER);
         underTestFalse.value(THE_ANSWER);
         Assert.assertTrue(underTestTrue.getCollection().contains("42"));

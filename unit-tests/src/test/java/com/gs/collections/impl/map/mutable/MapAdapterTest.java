@@ -30,7 +30,7 @@ public class MapAdapterTest extends MutableMapTestCase
     @Override
     public <K, V> MutableMap<K, V> newMap()
     {
-        return MapAdapter.adapt(new HashMap<K, V>());
+        return MapAdapter.adapt(new HashMap<>());
     }
 
     @Override
@@ -67,7 +67,7 @@ public class MapAdapterTest extends MutableMapTestCase
     @Test
     public void adaptNull()
     {
-        Verify.assertThrows(NullPointerException.class, () -> new MapAdapter<Object, Object>(null));
+        Verify.assertThrows(NullPointerException.class, () -> new MapAdapter<>(null));
 
         Verify.assertThrows(NullPointerException.class, () -> MapAdapter.adapt(null));
     }

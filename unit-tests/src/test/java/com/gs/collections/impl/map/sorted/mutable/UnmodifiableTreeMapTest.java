@@ -37,25 +37,25 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     @Override
     public <K, V> MutableSortedMap<K, V> newMap()
     {
-        return new UnmodifiableTreeMap<K, V>(new TreeSortedMap<K, V>());
+        return new UnmodifiableTreeMap<>(new TreeSortedMap<>());
     }
 
     @Override
     public <K, V> MutableSortedMap<K, V> newMapWithKeyValue(K key, V value)
     {
-        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(key, value));
+        return new UnmodifiableTreeMap<>(TreeSortedMap.newMapWith(key, value));
     }
 
     @Override
     public <K, V> MutableSortedMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(key1, value1, key2, value2));
+        return new UnmodifiableTreeMap<>(TreeSortedMap.newMapWith(key1, value1, key2, value2));
     }
 
     @Override
     public <K, V> MutableSortedMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(
+        return new UnmodifiableTreeMap<>(TreeSortedMap.newMapWith(
                 key1, value1, key2, value2, key3, value3));
     }
 
@@ -63,32 +63,32 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     public <K, V> MutableSortedMap<K, V> newMapWithKeysValues(
             K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(
+        return new UnmodifiableTreeMap<>(TreeSortedMap.newMapWith(
                 key1, value1, key2, value2, key3, value3, key4, value4));
     }
 
     @Override
     public <K, V> MutableSortedMap<K, V> newMap(Comparator<? super K> comparator)
     {
-        return new UnmodifiableTreeMap<K, V>(new TreeSortedMap<K, V>(comparator));
+        return new UnmodifiableTreeMap<>(new TreeSortedMap<>(comparator));
     }
 
     @Override
     public <K, V> MutableSortedMap<K, V> newMapWithKeyValue(Comparator<? super K> comparator, K key, V value)
     {
-        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(key, value));
+        return new UnmodifiableTreeMap<>(TreeSortedMap.newMapWith(key, value));
     }
 
     @Override
     public <K, V> MutableSortedMap<K, V> newMapWithKeysValues(Comparator<? super K> comparator, K key1, V value1, K key2, V value2)
     {
-        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(comparator, key1, value1, key2, value2));
+        return new UnmodifiableTreeMap<>(TreeSortedMap.newMapWith(comparator, key1, value1, key2, value2));
     }
 
     @Override
     public <K, V> MutableSortedMap<K, V> newMapWithKeysValues(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(
+        return new UnmodifiableTreeMap<>(TreeSortedMap.newMapWith(
                 comparator,
                 key1, value1,
                 key2, value2,
@@ -103,7 +103,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
             K key3, V value3,
             K key4, V value4)
     {
-        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(
+        return new UnmodifiableTreeMap<>(TreeSortedMap.newMapWith(
                 comparator,
                 key1, value1,
                 key2, value2,

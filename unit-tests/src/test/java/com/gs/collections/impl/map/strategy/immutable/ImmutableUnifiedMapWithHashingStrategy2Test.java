@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,14 @@ public class ImmutableUnifiedMapWithHashingStrategy2Test extends MapIterableTest
     @Override
     protected <K, V> ImmutableMap<K, V> newMap()
     {
-        return new ImmutableUnifiedMapWithHashingStrategy<K, V>(
+        return new ImmutableUnifiedMapWithHashingStrategy<>(
                 UnifiedMapWithHashingStrategy.<K, V>newMap(HashingStrategies.nullSafeHashingStrategy(HashingStrategies.<K>defaultStrategy())));
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableUnifiedMapWithHashingStrategy<K, V>(
+        return new ImmutableUnifiedMapWithHashingStrategy<>(
                 UnifiedMapWithHashingStrategy.newWithKeysValues(HashingStrategies.nullSafeHashingStrategy(
                         HashingStrategies.<K>defaultStrategy()), key1, value1, key2, value2));
     }
@@ -42,7 +42,7 @@ public class ImmutableUnifiedMapWithHashingStrategy2Test extends MapIterableTest
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableUnifiedMapWithHashingStrategy<K, V>(
+        return new ImmutableUnifiedMapWithHashingStrategy<>(
                 UnifiedMapWithHashingStrategy.newWithKeysValues(HashingStrategies.nullSafeHashingStrategy(
                         HashingStrategies.<K>defaultStrategy()), key1, value1, key2, value2, key3, value3));
     }
@@ -50,7 +50,7 @@ public class ImmutableUnifiedMapWithHashingStrategy2Test extends MapIterableTest
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new ImmutableUnifiedMapWithHashingStrategy<K, V>(
+        return new ImmutableUnifiedMapWithHashingStrategy<>(
                 UnifiedMapWithHashingStrategy.newMapWith(HashingStrategies.nullSafeHashingStrategy(
                         HashingStrategies.<K>defaultStrategy()), Tuples.pair(key1, value1), Tuples.pair(key2, value2), Tuples.pair(key3, value3), Tuples.pair(key4, value4)));
     }

@@ -181,7 +181,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     @Test
     public void detectWithIfNone()
     {
-        Assert.assertEquals("Not Found", this.newBag().detectWithIfNone(Object::equals, "1", new PassThruFunction0<String>("Not Found")));
+        Assert.assertEquals("Not Found", this.newBag().detectWithIfNone(Object::equals, "1", new PassThruFunction0<>("Not Found")));
     }
 
     @Override
@@ -189,7 +189,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     {
         super.detectIfNone();
 
-        Assert.assertEquals("Not Found", this.newBag().detectIfNone("2"::equals, new PassThruFunction0<String>("Not Found")));
+        Assert.assertEquals("Not Found", this.newBag().detectIfNone("2"::equals, new PassThruFunction0<>("Not Found")));
     }
 
     @Override

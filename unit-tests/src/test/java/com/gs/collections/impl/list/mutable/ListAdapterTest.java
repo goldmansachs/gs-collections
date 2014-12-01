@@ -37,13 +37,13 @@ public class ListAdapterTest extends AbstractListTestCase
     @Override
     protected <T> ListAdapter<T> newWith(T... littleElements)
     {
-        return new ListAdapter<T>(new LinkedList<T>(FastList.newListWith(littleElements)));
+        return new ListAdapter<>(new LinkedList<>(FastList.newListWith(littleElements)));
     }
 
     @Test(expected = NullPointerException.class)
     public void null_throws()
     {
-        new ListAdapter<Object>(null);
+        new ListAdapter<>(null);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class ListAdapterTest extends AbstractListTestCase
     public void testForEachFromTo()
     {
         MutableList<Integer> result = FastList.newList();
-        MutableList<Integer> collection = new ListAdapter<Integer>(this.newWith(1, 2, 3, 4));
+        MutableList<Integer> collection = new ListAdapter<>(this.newWith(1, 2, 3, 4));
         collection.forEach(2, 3, CollectionAddProcedure.on(result));
         Verify.assertSize(2, result);
         Verify.assertContainsAll(result, 3, 4);
@@ -225,7 +225,7 @@ public class ListAdapterTest extends AbstractListTestCase
     @Test
     public void adaptNull()
     {
-        Verify.assertThrows(NullPointerException.class, () -> new ListAdapter<Object>(null));
+        Verify.assertThrows(NullPointerException.class, () -> new ListAdapter<>(null));
         Verify.assertThrows(NullPointerException.class, () -> ListAdapter.adapt(null));
     }
 }

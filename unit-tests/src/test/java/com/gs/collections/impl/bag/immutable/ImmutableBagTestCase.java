@@ -599,8 +599,8 @@ public abstract class ImmutableBagTestCase
     public void detectWithIfNone()
     {
         ImmutableBag<String> immutableStrings = this.newBag();
-        Assert.assertEquals("1", immutableStrings.detectWithIfNone(Object::equals, "1", new PassThruFunction0<String>("Not Found")));
-        Assert.assertEquals("Not Found", immutableStrings.detectWithIfNone(Object::equals, "10000", new PassThruFunction0<String>("Not Found")));
+        Assert.assertEquals("1", immutableStrings.detectWithIfNone(Object::equals, "1", new PassThruFunction0<>("Not Found")));
+        Assert.assertEquals("Not Found", immutableStrings.detectWithIfNone(Object::equals, "10000", new PassThruFunction0<>("Not Found")));
     }
 
     @Test
@@ -728,7 +728,7 @@ public abstract class ImmutableBagTestCase
     public void detectIfNone()
     {
         ImmutableBag<String> strings = this.newBag();
-        Function0<String> function = new PassThruFunction0<String>(String.valueOf(this.numKeys() + 1));
+        Function0<String> function = new PassThruFunction0<>(String.valueOf(this.numKeys() + 1));
         Assert.assertEquals("1", strings.detectIfNone("1"::equals, function));
         Assert.assertEquals(String.valueOf(this.numKeys() + 1), strings.detectIfNone(String.valueOf(this.numKeys() + 1)::equals, function));
     }
@@ -1018,7 +1018,7 @@ public abstract class ImmutableBagTestCase
     @Test
     public void groupBy_with_target()
     {
-        ImmutableBagMultimap<Boolean, String> multimap = this.newBag().groupBy(string -> IntegerPredicates.isOdd().accept(Integer.valueOf(string)), new HashBagMultimap<Boolean, String>()).toImmutable();
+        ImmutableBagMultimap<Boolean, String> multimap = this.newBag().groupBy(string -> IntegerPredicates.isOdd().accept(Integer.valueOf(string)), new HashBagMultimap<>()).toImmutable();
 
         this.groupByAssertions(multimap);
     }

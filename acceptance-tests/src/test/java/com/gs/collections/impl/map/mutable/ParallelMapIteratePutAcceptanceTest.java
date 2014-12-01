@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ public class ParallelMapIteratePutAcceptanceTest
 
     private void runAllPutTests(Integer[] contents, Integer[] constContents)
     {
-        ExecutorService executorService = new ThreadPoolExecutor(MAX_THREADS, MAX_THREADS, 0, TimeUnit.SECONDS, new LinkedBlockingDeque<Runnable>(MAX_THREADS));
+        ExecutorService executorService = new ThreadPoolExecutor(MAX_THREADS, MAX_THREADS, 0, TimeUnit.SECONDS, new LinkedBlockingDeque<>(MAX_THREADS));
         int threads = 10;
         this.runPutTest1(threads, contents, constContents, executorService, false);
         executorService.shutdown();
@@ -100,7 +100,7 @@ public class ParallelMapIteratePutAcceptanceTest
         Future<?>[] futures = new Future<?>[threadCount];
         for (int i = 0; i < ops; i++)
         {
-            ConcurrentHashMap<Integer, Integer> map = new ConcurrentHashMap<Integer, Integer>(constContents.length);
+            ConcurrentHashMap<Integer, Integer> map = new ConcurrentHashMap<>(constContents.length);
             UnifiedSet<Integer> setToRemove = UnifiedSet.newSet(constContents.length);
             for (Integer x : constContents)
             {

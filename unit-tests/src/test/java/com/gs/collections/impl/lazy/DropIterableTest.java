@@ -41,18 +41,18 @@ public class DropIterableTest extends AbstractLazyIterableTestCase
     @Before
     public void setUp()
     {
-        this.dropIterable = new DropIterable<Integer>(Interval.oneTo(5), 2);
-        this.emptyListDropIterable = new DropIterable<Integer>(FastList.<Integer>newList(), 2);
-        this.zeroCountDropIterable = new DropIterable<Integer>(Interval.oneTo(5), 0);
-        this.nearCountDropIterable = new DropIterable<Integer>(Interval.oneTo(5), 4);
-        this.sameCountDropIterable = new DropIterable<Integer>(Interval.oneTo(5), 5);
-        this.higherCountDropIterable = new DropIterable<Integer>(Interval.oneTo(5), 6);
+        this.dropIterable = new DropIterable<>(Interval.oneTo(5), 2);
+        this.emptyListDropIterable = new DropIterable<>(FastList.<Integer>newList(), 2);
+        this.zeroCountDropIterable = new DropIterable<>(Interval.oneTo(5), 0);
+        this.nearCountDropIterable = new DropIterable<>(Interval.oneTo(5), 4);
+        this.sameCountDropIterable = new DropIterable<>(Interval.oneTo(5), 5);
+        this.higherCountDropIterable = new DropIterable<>(Interval.oneTo(5), 6);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void negative_throws()
     {
-        new DropIterable<Integer>(Interval.oneTo(5), -1);
+        new DropIterable<>(Interval.oneTo(5), -1);
     }
 
     @Test
@@ -72,27 +72,27 @@ public class DropIterableTest extends AbstractLazyIterableTestCase
     public void forEach()
     {
         Sum sum1 = new IntegerSum(0);
-        this.dropIterable.forEach(new SumProcedure<Integer>(sum1));
+        this.dropIterable.forEach(new SumProcedure<>(sum1));
         Assert.assertEquals(12, sum1.getValue().intValue());
 
         Sum sum2 = new IntegerSum(0);
-        this.emptyListDropIterable.forEach(new SumProcedure<Integer>(sum2));
+        this.emptyListDropIterable.forEach(new SumProcedure<>(sum2));
         Assert.assertEquals(0, sum2.getValue().intValue());
 
         Sum sum3 = new IntegerSum(0);
-        this.zeroCountDropIterable.forEach(new SumProcedure<Integer>(sum3));
+        this.zeroCountDropIterable.forEach(new SumProcedure<>(sum3));
         Assert.assertEquals(15, sum3.getValue().intValue());
 
         Sum sum5 = new IntegerSum(0);
-        this.nearCountDropIterable.forEach(new SumProcedure<Integer>(sum5));
+        this.nearCountDropIterable.forEach(new SumProcedure<>(sum5));
         Assert.assertEquals(5, sum5.getValue().intValue());
 
         Sum sum6 = new IntegerSum(0);
-        this.sameCountDropIterable.forEach(new SumProcedure<Integer>(sum6));
+        this.sameCountDropIterable.forEach(new SumProcedure<>(sum6));
         Assert.assertEquals(0, sum6.getValue().intValue());
 
         Sum sum7 = new IntegerSum(0);
-        this.higherCountDropIterable.forEach(new SumProcedure<Integer>(sum7));
+        this.higherCountDropIterable.forEach(new SumProcedure<>(sum7));
         Assert.assertEquals(0, sum7.getValue().intValue());
     }
 
@@ -228,6 +228,6 @@ public class DropIterableTest extends AbstractLazyIterableTestCase
         super.distinct();
         Assert.assertEquals(
                 FastList.newListWith(2, 3, 4, 5),
-                new DropIterable<Integer>(FastList.newListWith(1, 1, 2, 3, 3, 3, 4, 5), 2).distinct().toList());
+                new DropIterable<>(FastList.newListWith(1, 1, 2, 3, 3, 3, 4, 5), 2).distinct().toList());
     }
 }

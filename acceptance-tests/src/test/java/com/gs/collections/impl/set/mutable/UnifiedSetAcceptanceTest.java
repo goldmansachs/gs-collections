@@ -339,7 +339,7 @@ public class UnifiedSetAcceptanceTest
 
     private static void assertUnifiedSetAddAllWithHashSet(int shift)
     {
-        Set<CollidingInt> set = new HashSet<CollidingInt>();
+        Set<CollidingInt> set = new HashSet<>();
 
         int size = 100000;
         for (int i = 0; i < size; i++)
@@ -447,7 +447,7 @@ public class UnifiedSetAcceptanceTest
     {
         UnifiedSet<CollidingInt> set = UnifiedSet.newSet();
 
-        Set<CollidingInt> toRetain = new HashSet<CollidingInt>();
+        Set<CollidingInt> toRetain = new HashSet<>();
 
         int size = 100000;
         for (int i = 0; i < size; i++)
@@ -690,7 +690,7 @@ public class UnifiedSetAcceptanceTest
     private static void assertUnifiedSetEqualsAndHashCode(int shift)
     {
         MutableSet<CollidingInt> set1 = UnifiedSet.newSet();
-        Set<CollidingInt> set2 = new HashSet<CollidingInt>();
+        Set<CollidingInt> set2 = new HashSet<>();
         MutableSet<CollidingInt> set3 = UnifiedSet.newSet();
         MutableSet<CollidingInt> set4 = UnifiedSet.newSet();
 
@@ -726,7 +726,7 @@ public class UnifiedSetAcceptanceTest
     {
         UnifiedSet<CollidingInt> set = UnifiedSet.newSet();
 
-        List<CollidingInt> toRemove = new ArrayList<CollidingInt>();
+        List<CollidingInt> toRemove = new ArrayList<>();
 
         int size = 100000;
         for (int i = 0; i < size; i++)
@@ -795,7 +795,7 @@ public class UnifiedSetAcceptanceTest
     {
         CollidingInt[] toPool = new CollidingInt[5000];
 
-        UnifiedSet<CollidingInt> set = new UnifiedSet<CollidingInt>();
+        UnifiedSet<CollidingInt> set = new UnifiedSet<>();
 
         for (int i = 0; i < toPool.length; i++)
         {
@@ -848,7 +848,7 @@ public class UnifiedSetAcceptanceTest
 
         toPool = shuffle(toPool);
 
-        UnifiedSet<CollidingInt> set = new UnifiedSet<CollidingInt>();
+        UnifiedSet<CollidingInt> set = new UnifiedSet<>();
         for (int i = 0; i < toPool.length; i++)
         {
             Assert.assertSame(toPool[i], set.put(toPool[i]));

@@ -182,7 +182,7 @@ public class SumByTest
     }
 
     @Test
-    public void test_sumByProduct_gsc()
+    public void sumByProduct_gsc()
     {
         Assert.assertArrayEquals(
                 this.sumByProduct_parallel_eager_gsc().values().toSortedArray(),
@@ -216,7 +216,7 @@ public class SumByTest
     }
 
     @Test
-    public void test_sumByAccount_gsc()
+    public void sumByAccount_gsc()
     {
         Assert.assertArrayEquals(
                 this.sumByAccount_parallel_eager_gsc().values().toSortedArray(),
@@ -250,7 +250,7 @@ public class SumByTest
     }
 
     @Test
-    public void test_sumByCategory_gsc()
+    public void sumByCategory_gsc()
     {
         Assert.assertArrayEquals(
                 this.sumByCategory_parallel_eager_gsc().values().toSortedArray(),

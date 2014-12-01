@@ -37,8 +37,8 @@ public class UnmodifiableStackTest extends StackIterableTestCase
     public void setUp()
     {
         this.mutableStack = ArrayStack.newStackFromTopToBottom(1, 2, 3);
-        this.unmodifiableStack = new UnmodifiableStack<Integer>(this.mutableStack);
-        this.unmodifiableStackString = new UnmodifiableStack<String>(ArrayStack.newStackFromTopToBottom("1", "2", "3"));
+        this.unmodifiableStack = new UnmodifiableStack<>(this.mutableStack);
+        this.unmodifiableStackString = new UnmodifiableStack<>(ArrayStack.newStackFromTopToBottom("1", "2", "3"));
     }
 
     @Override

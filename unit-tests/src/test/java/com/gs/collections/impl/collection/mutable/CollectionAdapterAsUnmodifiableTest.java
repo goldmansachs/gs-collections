@@ -31,9 +31,9 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
     @Override
     protected MutableCollection<Integer> getCollection()
     {
-        List<Integer> list = new ArrayList<Integer>();
+        List<Integer> list = new ArrayList<>();
         list.add(1);
-        return new CollectionAdapter<Integer>(list).asUnmodifiable();
+        return new CollectionAdapter<>(list).asUnmodifiable();
     }
 
     @Override

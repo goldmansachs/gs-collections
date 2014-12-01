@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public class ImmutableQuadrupletonListTest extends AbstractImmutableListTestCase
     @Override
     protected ImmutableList<Integer> classUnderTest()
     {
-        return new ImmutableQuadrupletonList<Integer>(1, 2, 3, 4);
+        return new ImmutableQuadrupletonList<>(1, 2, 3, 4);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ImmutableQuadrupletonListTest extends AbstractImmutableListTestCase
     public void distinct()
     {
         super.distinct();
-        ImmutableList<Integer> list = new ImmutableQuadrupletonList<Integer>(2, 1, 1, 2);
+        ImmutableList<Integer> list = new ImmutableQuadrupletonList<>(2, 1, 1, 2);
         ImmutableList<Integer> distinctList = list.distinct();
         Assert.assertFalse(distinctList.isEmpty());
         Verify.assertInstanceOf(ImmutableDoubletonList.class, distinctList);

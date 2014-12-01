@@ -205,8 +205,8 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void detectWithIfNone()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Assert.assertNull(list.detectWithIfNone(Object::equals, 6, new PassThruFunction0<Integer>(null)));
-        Assert.assertEquals(Integer.valueOf(1), list.detectWithIfNone(Object::equals, Integer.valueOf(1), new PassThruFunction0<Integer>(Integer.valueOf(10000))));
+        Assert.assertNull(list.detectWithIfNone(Object::equals, 6, new PassThruFunction0<>(null)));
+        Assert.assertEquals(Integer.valueOf(1), list.detectWithIfNone(Object::equals, Integer.valueOf(1), new PassThruFunction0<>(Integer.valueOf(10000))));
     }
 
     @Override
@@ -325,7 +325,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     @Test
     public void detectIfNone()
     {
-        Function0<Integer> defaultResultFunction = new PassThruFunction0<Integer>(6);
+        Function0<Integer> defaultResultFunction = new PassThruFunction0<>(6);
         Assert.assertEquals(
                 Integer.valueOf(3),
                 MultiReaderFastList.newListWith(1, 2, 3, 4, 5).detectIfNone(Integer.valueOf(3)::equals, defaultResultFunction));
@@ -499,7 +499,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
         objects.removeAll(Lists.fixedSize.of("Fred"));
         objects.remove(0);
         Verify.assertEmpty(objects);
-        WeakReference<String> ref = new WeakReference<String>(wilma);
+        WeakReference<String> ref = new WeakReference<>(wilma);
         //noinspection ReuseOfLocalVariable
         fred = null;   // Deliberate null of a local variable for unit test purpose
         //noinspection ReuseOfLocalVariable
@@ -993,11 +993,11 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void withWritelockAndDelegate()
     {
         MultiReaderFastList<Integer> list = MultiReaderFastList.newList(2);
-        AtomicReference<MutableList<?>> delegateList = new AtomicReference<MutableList<?>>();
-        AtomicReference<MutableList<?>> subLists = new AtomicReference<MutableList<?>>();
-        AtomicReference<Iterator<?>> iterator = new AtomicReference<Iterator<?>>();
-        AtomicReference<Iterator<?>> listIterator = new AtomicReference<Iterator<?>>();
-        AtomicReference<Iterator<?>> listIteratorWithPosition = new AtomicReference<Iterator<?>>();
+        AtomicReference<MutableList<?>> delegateList = new AtomicReference<>();
+        AtomicReference<MutableList<?>> subLists = new AtomicReference<>();
+        AtomicReference<Iterator<?>> iterator = new AtomicReference<>();
+        AtomicReference<Iterator<?>> listIterator = new AtomicReference<>();
+        AtomicReference<Iterator<?>> listIteratorWithPosition = new AtomicReference<>();
         list.withWriteLockAndDelegate(delegate -> {
             delegate.add(1);
             delegate.add(2);

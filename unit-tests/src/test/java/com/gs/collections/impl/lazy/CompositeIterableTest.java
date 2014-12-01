@@ -53,7 +53,7 @@ public class CompositeIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void emptyIterator()
     {
-        LazyIterable<String> list = new CompositeIterable<String>();
+        LazyIterable<String> list = new CompositeIterable<>();
         Assert.assertFalse(list.iterator().hasNext());
     }
 
@@ -106,7 +106,7 @@ public class CompositeIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void ensureLazy()
     {
-        CompositeIterable<Integer> iterables = new CompositeIterable<Integer>();
+        CompositeIterable<Integer> iterables = new CompositeIterable<>();
         List<Integer> expected = Interval.oneTo(5);
         iterables.add(expected);
         iterables.add(() -> { throw new RuntimeException("Iterator should not be invoked eagerly"); });
@@ -118,7 +118,7 @@ public class CompositeIterableTest extends AbstractLazyIterableTestCase
     public void distinct()
     {
         super.distinct();
-        CompositeIterable<Integer> composite = new CompositeIterable<Integer>();
+        CompositeIterable<Integer> composite = new CompositeIterable<>();
         MutableList<Integer> expected = FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5);
         composite.add(expected);
         Assert.assertEquals(

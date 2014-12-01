@@ -41,7 +41,7 @@ public class FlatCollectTest
 {
     private static final int COUNT = 10_000;
     private static final int LIST_SIZE = 100;
-    private final List<List<Integer>> integersJDK = new ArrayList<>(FastList.<List<Integer>>newWithNValues(COUNT, () -> new ArrayList<Integer>(Interval.oneTo(LIST_SIZE))));
+    private final List<List<Integer>> integersJDK = new ArrayList<>(FastList.<List<Integer>>newWithNValues(COUNT, () -> new ArrayList<>(Interval.oneTo(LIST_SIZE))));
     private final MutableList<MutableList<Integer>> integersGSC = FastList.newWithNValues(COUNT, () -> Interval.oneTo(LIST_SIZE).toList());
 
     @Benchmark

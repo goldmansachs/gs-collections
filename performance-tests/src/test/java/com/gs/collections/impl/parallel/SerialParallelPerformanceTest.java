@@ -345,17 +345,17 @@ public class SerialParallelPerformanceTest
             Verify.assertNotEmpty(ParallelIterate.select(
                     iterable,
                     predicateList.get(0),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(ParallelIterate.select(
                     iterable,
                     predicateList.get(1),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(ParallelIterate.select(
                     iterable,
                     predicateList.get(2),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
         }, count, WARM_UP_COUNT);
     }
@@ -372,17 +372,17 @@ public class SerialParallelPerformanceTest
             Verify.assertNotEmpty(FJIterate.select(
                     iterable,
                     predicateList.get(0),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(FJIterate.select(
                     iterable,
                     predicateList.get(1),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(FJIterate.select(
                     iterable,
                     predicateList.get(2),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
         }, count, WARM_UP_COUNT);
     }
@@ -464,17 +464,17 @@ public class SerialParallelPerformanceTest
             Verify.assertNotEmpty(ParallelIterate.reject(
                     iterable,
                     predicateList.get(0),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(ParallelIterate.reject(
                     iterable,
                     predicateList.get(1),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(ParallelIterate.reject(
                     iterable,
                     predicateList.get(2),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
         }, count, WARM_UP_COUNT);
     }
@@ -491,17 +491,17 @@ public class SerialParallelPerformanceTest
             Verify.assertNotEmpty(FJIterate.reject(
                     iterable,
                     predicateList.get(0),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(FJIterate.reject(
                     iterable,
                     predicateList.get(1),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(FJIterate.reject(
                     iterable,
                     predicateList.get(2),
-                    new CompositeFastList<Integer>(),
+                    new CompositeFastList<>(),
                     true));
         }, count, WARM_UP_COUNT);
     }
@@ -519,19 +519,19 @@ public class SerialParallelPerformanceTest
                     iterable,
                     predicates.get(0),
                     PAIR_FUNCTION,
-                    new CompositeFastList<Pair<Integer, Integer>>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(ParallelIterate.collectIf(
                     iterable,
                     predicates.get(1),
                     Integer::longValue,
-                    new CompositeFastList<Long>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(ParallelIterate.collectIf(
                     iterable,
                     predicates.get(0),
                     Integer::shortValue,
-                    new CompositeFastList<Short>(),
+                    new CompositeFastList<>(),
                     true));
         }, count, WARM_UP_COUNT);
     }
@@ -549,19 +549,19 @@ public class SerialParallelPerformanceTest
                     iterable,
                     predicates.get(0),
                     PAIR_FUNCTION,
-                    new CompositeFastList<Pair<Integer, Integer>>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(FJIterate.collectIf(
                     iterable,
                     predicates.get(1),
                     Integer::longValue,
-                    new CompositeFastList<Long>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(FJIterate.collectIf(
                     iterable,
                     predicates.get(0),
                     Integer::shortValue,
-                    new CompositeFastList<Short>(),
+                    new CompositeFastList<>(),
                     true));
         }, count, WARM_UP_COUNT);
     }
@@ -676,17 +676,17 @@ public class SerialParallelPerformanceTest
             Verify.assertNotEmpty(ParallelIterate.collect(
                     iterable,
                     PAIR_FUNCTION,
-                    new CompositeFastList<Pair<Integer, Integer>>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(ParallelIterate.collect(
                     iterable,
                     Integer::longValue,
-                    new CompositeFastList<Long>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(ParallelIterate.collect(
                     iterable,
                     Integer::shortValue,
-                    new CompositeFastList<Short>(),
+                    new CompositeFastList<>(),
                     true));
         }, count, WARM_UP_COUNT);
     }
@@ -700,17 +700,17 @@ public class SerialParallelPerformanceTest
             Verify.assertNotEmpty(FJIterate.collect(
                     iterable,
                     PAIR_FUNCTION,
-                    new CompositeFastList<Pair<Integer, Integer>>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(FJIterate.collect(
                     iterable,
                     Integer::longValue,
-                    new CompositeFastList<Long>(),
+                    new CompositeFastList<>(),
                     true));
             Verify.assertNotEmpty(FJIterate.collect(
                     iterable,
                     Integer::shortValue,
-                    new CompositeFastList<Short>(),
+                    new CompositeFastList<>(),
                     true));
         }, count, WARM_UP_COUNT);
     }

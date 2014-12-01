@@ -39,19 +39,19 @@ public class QuadrupletonSetTest extends AbstractMemoryEfficientMutableSetTestCa
     @Before
     public void setUp()
     {
-        this.set = new QuadrupletonSet<String>("1", "2", "3", "4");
+        this.set = new QuadrupletonSet<>("1", "2", "3", "4");
     }
 
     @Override
     protected MutableSet<String> classUnderTest()
     {
-        return new QuadrupletonSet<String>("1", "2", "3", "4");
+        return new QuadrupletonSet<>("1", "2", "3", "4");
     }
 
     @Override
     protected MutableSet<String> classUnderTestWithNull()
     {
-        return new QuadrupletonSet<String>(null, "2", "3", "4");
+        return new QuadrupletonSet<>(null, "2", "3", "4");
     }
 
     @Test
@@ -61,7 +61,7 @@ public class QuadrupletonSetTest extends AbstractMemoryEfficientMutableSetTestCa
         Twin<String> twin2 = Tuples.twin("2", "2");
         Twin<String> twin3 = Tuples.twin("3", "3");
         Twin<String> twin4 = Tuples.twin("4", "4");
-        QuadrupletonSet<Twin<String>> set = new QuadrupletonSet<Twin<String>>(twin1, twin2, twin3, twin4);
+        QuadrupletonSet<Twin<String>> set = new QuadrupletonSet<>(twin1, twin2, twin3, twin4);
 
         set.with(Tuples.twin("1", "1"));
         set.with(Tuples.twin("2", "2"));

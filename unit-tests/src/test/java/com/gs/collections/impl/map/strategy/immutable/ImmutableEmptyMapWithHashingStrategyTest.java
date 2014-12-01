@@ -50,7 +50,7 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     @Override
     protected ImmutableMap<Integer, String> classUnderTest()
     {
-        return new ImmutableEmptyMapWithHashingStrategy<Integer, String>(HASHING_STRATEGY);
+        return new ImmutableEmptyMapWithHashingStrategy<>(HASHING_STRATEGY);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
 
         // Absent key behavior
         ImmutableMap<Integer, String> classUnderTest = this.classUnderTest();
-        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<String>(absentValue)));
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<>(absentValue)));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);
@@ -244,21 +244,21 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableEmptyMapWithHashingStrategy<K, V>(HashingStrategies.nullSafeHashingStrategy(
+        return new ImmutableEmptyMapWithHashingStrategy<>(HashingStrategies.nullSafeHashingStrategy(
                 HashingStrategies.<K>defaultStrategy()));
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableEmptyMapWithHashingStrategy<K, V>(HashingStrategies.nullSafeHashingStrategy(
+        return new ImmutableEmptyMapWithHashingStrategy<>(HashingStrategies.nullSafeHashingStrategy(
                 HashingStrategies.<K>defaultStrategy()));
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new ImmutableEmptyMapWithHashingStrategy<K, V>(HashingStrategies.nullSafeHashingStrategy(
+        return new ImmutableEmptyMapWithHashingStrategy<>(HashingStrategies.nullSafeHashingStrategy(
                 HashingStrategies.<K>defaultStrategy()));
     }
 }

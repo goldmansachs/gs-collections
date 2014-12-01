@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ public class ChainedProcedureTest
     {
         MutableList<String> list1 = Lists.mutable.of();
         MutableList<String> list2 = Lists.mutable.of();
-        Procedure<String> procedure1 = new CollectionAddProcedure<String>(list1);
-        Procedure<String> procedure2 = new CollectionAddProcedure<String>(list2);
+        Procedure<String> procedure1 = new CollectionAddProcedure<>(list1);
+        Procedure<String> procedure2 = new CollectionAddProcedure<>(list2);
         ChainedProcedure<String> chainedProcedure = ChainedProcedure.with(procedure1, procedure2);
 
         MutableList<String> list = FastList.newListWith("1", "2");

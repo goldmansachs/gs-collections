@@ -118,7 +118,7 @@ public class IntSetMemoryTest
         @Override
         public HashSet<Integer> value()
         {
-            final HashSet<Integer> set = new HashSet<Integer>();
+            final HashSet<Integer> set = new HashSet<>();
             this.data.forEach(new IntProcedure()
             {
                 public void value(int each)

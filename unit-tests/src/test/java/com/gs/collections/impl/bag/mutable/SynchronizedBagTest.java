@@ -42,7 +42,7 @@ public class SynchronizedBagTest extends AbstractSynchronizedCollectionTestCase
     @Override
     protected <T> MutableBag<T> newWith(T... littleElements)
     {
-        return new SynchronizedBag<T>(HashBag.newBagWith(littleElements));
+        return new SynchronizedBag<>(HashBag.newBagWith(littleElements));
     }
 
     @Override

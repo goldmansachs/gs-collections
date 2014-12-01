@@ -163,8 +163,8 @@ public abstract class MapIterableTestCase
     {
         MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
-        Assert.assertEquals("3", map.getIfAbsent(3, new PassThruFunction0<String>("3")));
+        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<>("4")));
+        Assert.assertEquals("3", map.getIfAbsent(3, new PassThruFunction0<>("3")));
         Assert.assertNull(map.get(4));
     }
 

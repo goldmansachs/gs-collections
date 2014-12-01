@@ -242,7 +242,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
     {
         MutableMap<Integer, String> map = this.newMapWithKeyValue(1, "One");
         Map.Entry<Integer, String>[] target = new Map.Entry[4];
-        ImmutableEntry<Integer, String> immutableEntry = new ImmutableEntry<Integer, String>(null, null);
+        ImmutableEntry<Integer, String> immutableEntry = new ImmutableEntry<>(null, null);
         target[1] = immutableEntry;
         target[2] = immutableEntry;
         target[3] = immutableEntry;
@@ -765,7 +765,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         for (int i = 1; i < COLLISIONS.size(); i++)
         {
             MutableMap<Integer, Integer> map = this.mapWithCollisionsOfSize(i);
-            Map<Integer, Integer> expectedMap = new HashMap<Integer, Integer>(map);
+            Map<Integer, Integer> expectedMap = new HashMap<>(map);
 
             Verify.assertEqualsAndHashCode(expectedMap, map);
             MutableMap<Integer, Integer> clone1 = map.clone();

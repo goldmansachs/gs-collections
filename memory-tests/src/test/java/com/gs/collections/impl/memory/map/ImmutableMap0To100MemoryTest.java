@@ -128,7 +128,7 @@ public class ImmutableMap0To100MemoryTest
             {
                 return Collections.singletonMap(Integer.valueOf(0), "dummy");
             }
-            HashMap<Integer, String> map = new HashMap<Integer, String>(this.size);
+            HashMap<Integer, String> map = new HashMap<>(this.size);
             for (int i = 0; i < this.size; i++)
             {
                 map.put(Integer.valueOf(i), "dummy");

@@ -520,7 +520,7 @@ public class ArrayIterateTest
     @Test
     public void getFirstAndLast()
     {
-        List<Boolean> list = new ArrayList<Boolean>();
+        List<Boolean> list = new ArrayList<>();
         list.add(Boolean.TRUE);
         list.add(null);
         list.add(Boolean.FALSE);
@@ -621,20 +621,20 @@ public class ArrayIterateTest
     {
         Assert.assertEquals(
                 FastList.newListWith(5, 4, 3, 2, 1),
-                ArrayIterate.select(INTEGER_ARRAY, Integer.class::isInstance, new ArrayList<Integer>()));
+                ArrayIterate.select(INTEGER_ARRAY, Integer.class::isInstance, new ArrayList<>()));
     }
 
     @Test
     public void rejectDifferentTargetCollection()
     {
-        Verify.assertEmpty(ArrayIterate.reject(INTEGER_ARRAY, Integer.class::isInstance, new ArrayList<Integer>()));
+        Verify.assertEmpty(ArrayIterate.reject(INTEGER_ARRAY, Integer.class::isInstance, new ArrayList<>()));
     }
 
     @Test
     public void rejectWith()
     {
         Verify.assertEmpty(ArrayIterate.rejectWith(INTEGER_ARRAY, Predicates2.instanceOf(), Integer.class));
-        Verify.assertEmpty(ArrayIterate.rejectWith(INTEGER_ARRAY, Predicates2.instanceOf(), Integer.class, new ArrayList<Integer>()));
+        Verify.assertEmpty(ArrayIterate.rejectWith(INTEGER_ARRAY, Predicates2.instanceOf(), Integer.class, new ArrayList<>()));
     }
 
     @Test
@@ -793,7 +793,7 @@ public class ArrayIterateTest
         ArrayIterate.forEachInBoth(
                 new String[]{"1", "2", "3"},
                 new String[]{"a", "b", "c"},
-                new MapPutProcedure<String, String>(map));
+                new MapPutProcedure<>(map));
         Assert.assertEquals(
                 UnifiedMap.newWithKeysValues(
                         "1", "a",

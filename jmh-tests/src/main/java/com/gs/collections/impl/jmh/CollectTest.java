@@ -122,7 +122,7 @@ public class CollectTest
         Collection<String> strings = ParallelIterate.collect(
                 this.integersGSC,
                 Object::toString,
-                new CompositeFastList<String>(),
+                new CompositeFastList<>(),
                 BATCH_SIZE,
                 this.executorService,
                 false);

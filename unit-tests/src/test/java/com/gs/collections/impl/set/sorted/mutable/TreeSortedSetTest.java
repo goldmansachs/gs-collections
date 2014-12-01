@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,15 +63,15 @@ public class TreeSortedSetTest extends AbstractSortedSetTestCase
         TreeSortedSet<Integer> sortedSetB = TreeSortedSet.newSet(sortedSetA.with(1).with(2, 3).with(4, 5, 6));
         Verify.assertSortedSetsEqual(sortedSetA, sortedSetB);
         Assert.assertTrue(sortedSetA.first().equals(sortedSetB.first()) && sortedSetB.first() == 6);
-        Verify.assertSortedSetsEqual(sortedSetB, new TreeSortedSet<Integer>(sortedSetB));
+        Verify.assertSortedSetsEqual(sortedSetB, new TreeSortedSet<>(sortedSetB));
     }
 
     @Test
     public void sortedSetConstructor()
     {
-        SortedSet<String> setA = new TreeSet<String>(FastList.newListWith("a", "c", "b", "d"));
+        SortedSet<String> setA = new TreeSet<>(FastList.newListWith("a", "c", "b", "d"));
         Verify.assertSortedSetsEqual(setA, TreeSortedSet.newSet(setA));
-        Verify.assertSortedSetsEqual(setA, new TreeSortedSet<String>(setA));
+        Verify.assertSortedSetsEqual(setA, new TreeSortedSet<>(setA));
     }
 
     @Test

@@ -335,7 +335,7 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
     @Test
     public void constructor_from_UnifiedSet()
     {
-        Verify.assertEqualsAndHashCode(new HashSet<Integer>(MORE_COLLISIONS), UnifiedSet.newSet(MORE_COLLISIONS));
+        Verify.assertEqualsAndHashCode(new HashSet<>(MORE_COLLISIONS), UnifiedSet.newSet(MORE_COLLISIONS));
     }
 
     @Test
@@ -362,7 +362,7 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
             Sum sum = new IntegerSum(0);
             for (int sectionIndex = 0; sectionIndex < sectionCount; ++sectionIndex)
             {
-                set.batchForEach(new SumProcedure<Integer>(sum), sectionIndex, sectionCount);
+                set.batchForEach(new SumProcedure<>(sum), sectionIndex, sectionCount);
             }
             Assert.assertEquals(55, sum.getValue());
         }
@@ -373,7 +373,7 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
         int numBatches = set2.getBatchCount(100);
         for (int i = 0; i < numBatches; ++i)
         {
-            set2.batchForEach(new SumProcedure<Integer>(sum2), i, numBatches);
+            set2.batchForEach(new SumProcedure<>(sum2), i, numBatches);
         }
         Assert.assertEquals(1, numBatches);
         Assert.assertEquals(54, sum2.getValue());
@@ -384,14 +384,14 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
         int numBatches2 = set3.getBatchCount(3);
         for (int i = 0; i < numBatches2; ++i)
         {
-            set3.batchForEach(new SumProcedure<Integer>(sum3), i, numBatches2);
+            set3.batchForEach(new SumProcedure<>(sum3), i, numBatches2);
         }
         Assert.assertEquals(32, sum3.getValue());
 
         //Test batchForEach on empty set, it should simply do nothing and not throw any exceptions
         Sum sum4 = new IntegerSum(0);
         UnifiedSet<Integer> set4 = UnifiedSet.newSet();
-        set4.batchForEach(new SumProcedure<Integer>(sum4), 0, set4.getBatchCount(1));
+        set4.batchForEach(new SumProcedure<>(sum4), 0, set4.getBatchCount(1));
         Assert.assertEquals(0, sum4.getValue());
     }
 

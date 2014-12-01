@@ -56,20 +56,20 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Before
     public void setUp()
     {
-        this.set = new SingletonSet<String>("1");
+        this.set = new SingletonSet<>("1");
         this.intSet = Sets.fixedSize.of(1);
     }
 
     @Override
     protected MutableSet<String> classUnderTest()
     {
-        return new SingletonSet<String>("1");
+        return new SingletonSet<>("1");
     }
 
     @Override
     protected MutableSet<String> classUnderTestWithNull()
     {
-        return new SingletonSet<String>(null);
+        return new SingletonSet<>(null);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     {
         Twin<String> twin1 = Tuples.twin("1", "1");
         Twin<String> twin2 = Tuples.twin("1", "1");
-        SingletonSet<Twin<String>> set = new SingletonSet<Twin<String>>(twin1);
+        SingletonSet<Twin<String>> set = new SingletonSet<>(twin1);
         set.with(twin2);
         Assert.assertSame(set.getFirst(), twin1);
     }
@@ -295,7 +295,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void detectIfNone()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(6);
+        Function0<Integer> function = new PassThruFunction0<>(6);
         Assert.assertEquals(Integer.valueOf(1), this.intSet.detectIfNone(Integer.valueOf(1)::equals, function));
         Assert.assertEquals(Integer.valueOf(6), this.intSet.detectIfNone(Integer.valueOf(6)::equals, function));
     }
@@ -303,7 +303,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void detectWithIfNone()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(6);
+        Function0<Integer> function = new PassThruFunction0<>(6);
         Assert.assertEquals(Integer.valueOf(1), this.intSet.detectWithIfNone(Object::equals, Integer.valueOf(1), function));
         Assert.assertEquals(Integer.valueOf(6), this.intSet.detectWithIfNone(Object::equals, Integer.valueOf(6), function));
     }

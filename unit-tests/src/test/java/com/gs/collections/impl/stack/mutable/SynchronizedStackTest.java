@@ -28,25 +28,25 @@ public class SynchronizedStackTest extends MutableStackTestCase
     @Override
     protected <T> MutableStack<T> newStackWith(T... elements)
     {
-        return new SynchronizedStack<T>(ArrayStack.newStackWith(elements));
+        return new SynchronizedStack<>(ArrayStack.newStackWith(elements));
     }
 
     @Override
     protected <T> MutableStack<T> newStackFromTopToBottom(T... elements)
     {
-        return new SynchronizedStack<T>(ArrayStack.newStackFromTopToBottom(elements));
+        return new SynchronizedStack<>(ArrayStack.newStackFromTopToBottom(elements));
     }
 
     @Override
     protected <T> MutableStack<T> newStackFromTopToBottom(Iterable<T> elements)
     {
-        return new SynchronizedStack<T>(ArrayStack.newStackFromTopToBottom(elements));
+        return new SynchronizedStack<>(ArrayStack.newStackFromTopToBottom(elements));
     }
 
     @Override
     protected <T> MutableStack<T> newStack(Iterable<T> elements)
     {
-        return new SynchronizedStack<T>(ArrayStack.newStack(elements));
+        return new SynchronizedStack<>(ArrayStack.newStack(elements));
     }
 
     @Test

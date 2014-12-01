@@ -98,12 +98,12 @@ public class SetsTest
 
     private <E> TreeSet<E> newSortedSet(E... elements)
     {
-        return new TreeSet<E>(UnifiedSet.newSetWith(elements));
+        return new TreeSet<>(UnifiedSet.newSetWith(elements));
     }
 
     private <E> TreeSet<E> newReverseSortedSet(E... elements)
     {
-        TreeSet<E> set = new TreeSet<E>(Collections.reverseOrder());
+        TreeSet<E> set = new TreeSet<>(Collections.reverseOrder());
         set.addAll(UnifiedSet.newSetWith(elements));
         return set;
     }
@@ -624,7 +624,7 @@ public class SetsTest
             E... elements)
     {
         Set<E> aXbXc = function.value(function.value(setA, setB), setC);
-        Set<E> empty = new TreeSet<E>();
+        Set<E> empty = new TreeSet<>();
         setContainsProcedure.value(function.value(aXbXc, empty), elements);
         setContainsProcedure.value(function.value(empty, aXbXc), elements);
     }

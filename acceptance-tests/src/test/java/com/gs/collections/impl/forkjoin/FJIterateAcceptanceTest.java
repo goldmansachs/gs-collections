@@ -287,8 +287,8 @@ public class FJIterateAcceptanceTest
     {
         Verify.assertThrows(RuntimeException.class, () -> FJIterate.forEach(
                 FJIterateAcceptanceTest.createIntegerList(5),
-                new PassThruProcedureFactory<Procedure<Integer>>(EXCEPTION_PROCEDURE),
-                new PassThruCombiner<Procedure<Integer>>(),
+                new PassThruProcedureFactory<>(EXCEPTION_PROCEDURE),
+                new PassThruCombiner<>(),
                 1,
                 5));
     }
@@ -348,8 +348,8 @@ public class FJIterateAcceptanceTest
     {
         Verify.assertThrows(RuntimeException.class, () -> FJIterate.forEachWithIndex(
                 FJIterateAcceptanceTest.createIntegerList(5),
-                new PassThruObjectIntProcedureFactory<ObjectIntProcedure<Integer>>(EXCEPTION_OBJECT_INT_PROCEDURE),
-                new PassThruCombiner<ObjectIntProcedure<Integer>>(),
+                new PassThruObjectIntProcedureFactory<>(EXCEPTION_OBJECT_INT_PROCEDURE),
+                new PassThruCombiner<>(),
                 1,
                 5));
     }

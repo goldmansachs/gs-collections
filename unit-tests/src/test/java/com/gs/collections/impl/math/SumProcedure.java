@@ -34,7 +34,7 @@ public class SumProcedure<T>
         implements Procedure<T>, Function2<Sum, T, Sum>, ProcedureFactory<SumProcedure<T>>
 {
     private static final long serialVersionUID = 1L;
-    private static final SumProcedure<?> NUMBER = new SumProcedure<Object>();
+    private static final SumProcedure<?> NUMBER = new SumProcedure<>();
 
     protected final Sum sum;
     protected final Function<? super T, ? extends Number> function;
@@ -63,7 +63,7 @@ public class SumProcedure<T>
     @Override
     public SumProcedure<T> create()
     {
-        return new SumProcedure<T>(this.sum.speciesNew(), this.function);
+        return new SumProcedure<>(this.sum.speciesNew(), this.function);
     }
 
     @Override

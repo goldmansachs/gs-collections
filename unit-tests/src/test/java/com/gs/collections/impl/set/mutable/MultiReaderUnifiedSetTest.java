@@ -346,8 +346,8 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     public void withWriteLockAndDelegate()
     {
         MultiReaderUnifiedSet<Integer> set = MultiReaderUnifiedSet.newSetWith(2);
-        AtomicReference<MutableSet<?>> delegateList = new AtomicReference<MutableSet<?>>();
-        AtomicReference<Iterator<?>> iterator = new AtomicReference<Iterator<?>>();
+        AtomicReference<MutableSet<?>> delegateList = new AtomicReference<>();
+        AtomicReference<Iterator<?>> iterator = new AtomicReference<>();
         set.withWriteLockAndDelegate(delegate -> {
             delegate.add(1);
             delegate.add(2);

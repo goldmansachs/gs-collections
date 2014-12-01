@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,6 @@ public class ImmutableQuintupletonListTest extends AbstractImmutableListTestCase
     @Override
     protected ImmutableList<Integer> classUnderTest()
     {
-        return new ImmutableQuintupletonList<Integer>(1, 2, 3, 4, 5);
+        return new ImmutableQuintupletonList<>(1, 2, 3, 4, 5);
     }
 }

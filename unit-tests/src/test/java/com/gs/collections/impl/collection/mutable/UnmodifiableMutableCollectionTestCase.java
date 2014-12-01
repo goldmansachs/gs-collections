@@ -304,7 +304,7 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
 
         Assert.assertEquals(
                 collection.zip(nulls).toSet(),
-                collection.zip(nulls, new UnifiedSet<Pair<Object, Object>>()));
+                collection.zip(nulls, new UnifiedSet<>()));
     }
 
     @Test
@@ -322,7 +322,7 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
 
         Assert.assertEquals(
                 collection.zipWithIndex().toSet(),
-                collection.zipWithIndex(new UnifiedSet<Pair<Object, Integer>>()));
+                collection.zipWithIndex(new UnifiedSet<>()));
     }
 
     @Test

@@ -157,7 +157,7 @@ public class IntervalTest
     @Test
     public void reverseForEachOnFromToInterval()
     {
-        List<Integer> result = new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<>();
         Interval interval = Interval.oneTo(5);
         interval.reverseForEach(CollectionAddProcedure.on(result));
         Verify.assertSize(5, result);
@@ -178,7 +178,7 @@ public class IntervalTest
     @Test
     public void forEachOnFromToByInterval()
     {
-        List<Integer> result = new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<>();
         Interval interval = Interval.fromToBy(1, 5, 2);
         interval.forEach(CollectionAddProcedure.on(result));
         Verify.assertSize(3, result);
@@ -190,7 +190,7 @@ public class IntervalTest
     @Test
     public void forEachOnFromToByInterval2()
     {
-        List<Integer> result = new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<>();
         Interval interval = Interval.fromToBy(5, 1, -2);
         interval.forEach(CollectionAddProcedure.on(result));
         Verify.assertSize(3, result);
@@ -269,7 +269,7 @@ public class IntervalTest
     {
         Interval interval = Interval.fromToBy(5, 1, -1);
         Interval interval2 = interval.reverseThis();
-        List<Integer> result = new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<>();
         interval2.forEach(CollectionAddProcedure.on(result));
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4, 5), result);
     }

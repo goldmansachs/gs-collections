@@ -42,7 +42,7 @@ public class TapIterableTest extends AbstractLazyIterableTestCase
         StringBuilder builder = new StringBuilder();
         Procedure<Integer> appendProcedure = Procedures.append(builder);
 
-        InternalIterable<Integer> tap = new TapIterable<Integer>(Interval.oneTo(5), appendProcedure);
+        InternalIterable<Integer> tap = new TapIterable<>(Interval.oneTo(5), appendProcedure);
         Procedure<Integer> appendDouble = each -> builder.append(each * 2);
         tap.forEach(appendDouble);
         Assert.assertEquals("12243648510", builder.toString());
@@ -53,7 +53,7 @@ public class TapIterableTest extends AbstractLazyIterableTestCase
     {
         StringBuilder builder = new StringBuilder();
         Procedure<Integer> appendProcedure = Procedures.append(builder);
-        InternalIterable<Integer> tap = new TapIterable<Integer>(Interval.oneTo(5), appendProcedure);
+        InternalIterable<Integer> tap = new TapIterable<>(Interval.oneTo(5), appendProcedure);
         tap.forEachWithIndex((each, index) -> {
             builder.append(each * 2);
             builder.append(index);
@@ -67,7 +67,7 @@ public class TapIterableTest extends AbstractLazyIterableTestCase
     {
         StringBuilder builder = new StringBuilder();
         Procedure<Integer> appendProcedure = Procedures.append(builder);
-        InternalIterable<Integer> tap = new TapIterable<Integer>(Interval.oneTo(5), appendProcedure);
+        InternalIterable<Integer> tap = new TapIterable<>(Interval.oneTo(5), appendProcedure);
         for (Integer each : tap)
         {
             builder.append(each + 1);
@@ -80,7 +80,7 @@ public class TapIterableTest extends AbstractLazyIterableTestCase
     {
         StringBuilder builder = new StringBuilder();
         Procedure<Integer> appendProcedure = Procedures.append(builder);
-        InternalIterable<Integer> tap = new TapIterable<Integer>(Interval.oneTo(5), appendProcedure);
+        InternalIterable<Integer> tap = new TapIterable<>(Interval.oneTo(5), appendProcedure);
         tap.forEachWith((each, aBuilder) -> aBuilder.append(each - 1), builder);
         Assert.assertEquals("1021324354", builder.toString());
     }

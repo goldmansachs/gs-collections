@@ -42,7 +42,7 @@ public class SynchronizedSortedSetTest extends AbstractSynchronizedCollectionTes
     @Override
     protected <T> MutableCollection<T> newWith(T... littleElements)
     {
-        return new SynchronizedSortedSet<T>(SortedSetAdapter.adapt(new TreeSet<T>(FastList.newListWith(littleElements))));
+        return new SynchronizedSortedSet<>(SortedSetAdapter.adapt(new TreeSet<>(FastList.newListWith(littleElements))));
     }
 
     @Override
@@ -75,8 +75,9 @@ public class SynchronizedSortedSetTest extends AbstractSynchronizedCollectionTes
     @Test
     public void selectInstancesOf()
     {
-        MutableSortedSet<Number> numbers = new SynchronizedSortedSet<Number>(SortedSetAdapter.adapt(new TreeSet<Number>((o1, o2) -> Double.compare(o1.doubleValue(), o2.doubleValue())))).withAll(FastList.newListWith(1, 2.0, 3, 4.0, 5));
-        MutableSortedSet<Integer> integers = numbers.selectInstancesOf(Integer.class);
+        MutableSortedSet<Number> mutableSortedSet = SortedSetAdapter.adapt(new TreeSet<>((o1, o2) -> Double.compare(o1.doubleValue(), o2.doubleValue())));
+        MutableSortedSet<Number> synchronizedSortedSet = new SynchronizedSortedSet<>(mutableSortedSet).withAll(FastList.newListWith(1, 2.0, 3, 4.0, 5));
+        MutableSortedSet<Integer> integers = synchronizedSortedSet.selectInstancesOf(Integer.class);
         Assert.assertEquals(UnifiedSet.newSetWith(1, 3, 5), integers);
         Assert.assertEquals(FastList.newListWith(1, 3, 5), integers.toList());
     }

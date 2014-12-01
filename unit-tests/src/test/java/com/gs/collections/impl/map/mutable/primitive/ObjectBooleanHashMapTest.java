@@ -65,7 +65,7 @@ public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTes
     @Override
     protected <T> ObjectBooleanHashMap<T> getEmptyMap()
     {
-        return new ObjectBooleanHashMap<T>();
+        return new ObjectBooleanHashMap<>();
     }
 
     @Test
@@ -76,7 +76,7 @@ public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTes
         Field values = ObjectBooleanHashMap.class.getDeclaredField("values");
         values.setAccessible(true);
 
-        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<String>();
+        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<>();
         Assert.assertEquals(16L, ((Object[]) keys.get(hashMap)).length);
         Assert.assertEquals(64L, ((BitSet) values.get(hashMap)).size());
     }
@@ -89,11 +89,11 @@ public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTes
         Field values = ObjectBooleanHashMap.class.getDeclaredField("values");
         values.setAccessible(true);
 
-        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<String>(3);
+        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<>(3);
         Assert.assertEquals(8L, ((Object[]) keys.get(hashMap)).length);
         Assert.assertEquals(64L, ((BitSet) values.get(hashMap)).size());
 
-        ObjectBooleanHashMap<String> hashMap2 = new ObjectBooleanHashMap<String>(15);
+        ObjectBooleanHashMap<String> hashMap2 = new ObjectBooleanHashMap<>(15);
         Assert.assertEquals(32L, ((Object[]) keys.get(hashMap2)).length);
         Assert.assertEquals(64L, ((BitSet) values.get(hashMap)).size());
     }
@@ -374,7 +374,7 @@ public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTes
     {
         BooleanToBooleanFunction function = (boolean value) -> !value;
 
-        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<String>();
+        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<>();
 
         for (int each = 2; each < 100; each++)
         {

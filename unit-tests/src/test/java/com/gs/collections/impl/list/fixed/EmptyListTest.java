@@ -32,14 +32,14 @@ public class EmptyListTest
     @Test
     public void size()
     {
-        Verify.assertSize(0, new EmptyList<Object>());
+        Verify.assertSize(0, new EmptyList<>());
     }
 
     @Test
     public void empty()
     {
-        Assert.assertTrue(new EmptyList<Object>().isEmpty());
-        Assert.assertFalse(new EmptyList<Object>().notEmpty());
+        Assert.assertTrue(new EmptyList<>().isEmpty());
+        Assert.assertFalse(new EmptyList<>().notEmpty());
         Assert.assertTrue(Lists.fixedSize.of().isEmpty());
         Assert.assertFalse(Lists.fixedSize.of().notEmpty());
     }
@@ -47,8 +47,8 @@ public class EmptyListTest
     @Test
     public void getFirstLast()
     {
-        Assert.assertNull(new EmptyList<Object>().getFirst());
-        Assert.assertNull(new EmptyList<Object>().getLast());
+        Assert.assertNull(new EmptyList<>().getFirst());
+        Assert.assertNull(new EmptyList<>().getLast());
     }
 
     @Test
@@ -161,21 +161,21 @@ public class EmptyListTest
     @Test
     public void without()
     {
-        MutableList<Integer> list = new EmptyList<Integer>();
+        MutableList<Integer> list = new EmptyList<>();
         Assert.assertSame(list, list.without(2));
     }
 
     @Test
     public void withoutAll()
     {
-        MutableList<Integer> list = new EmptyList<Integer>();
+        MutableList<Integer> list = new EmptyList<>();
         Assert.assertEquals(list, list.withoutAll(FastList.newListWith(1, 2)));
     }
 
     @Test
     public void collectPrimitives()
     {
-        MutableList<Integer> list = new EmptyList<Integer>();
+        MutableList<Integer> list = new EmptyList<>();
         Verify.assertEmpty(list.collectBoolean(PrimitiveFunctions.integerIsPositive()));
         Verify.assertEmpty(list.collectByte(PrimitiveFunctions.unboxIntegerToByte()));
         Verify.assertEmpty(list.collectChar(PrimitiveFunctions.unboxIntegerToChar()));

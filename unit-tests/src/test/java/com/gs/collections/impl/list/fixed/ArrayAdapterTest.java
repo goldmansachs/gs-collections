@@ -128,7 +128,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testForEach()
     {
-        List<Integer> result = new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<>();
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
         collection.forEach(CollectionAddProcedure.on(result));
         Verify.assertSize(4, result);
@@ -148,7 +148,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testForEachWithIndex()
     {
-        List<Integer> result = new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<>();
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
         collection.forEachWithIndex((object, index) -> result.add(object + index));
         Verify.assertContainsAll(result, 1, 3, 5, 7);
@@ -218,7 +218,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
         Verify.assertContainsAll(this.newWith(1, 2, 3).collectIf(
                 Integer.class::isInstance,
                 String::valueOf,
-                new ArrayList<String>()), "1", "2", "3");
+                new ArrayList<>()), "1", "2", "3");
     }
 
     @Test
@@ -363,17 +363,17 @@ public class ArrayAdapterTest extends AbstractListTestCase
         Verify.assertEqualsAndHashCode(array1, array1);
         Verify.assertEqualsAndHashCode(array1, array2);
         Assert.assertNotEquals(array2, array3);
-        Verify.assertEqualsAndHashCode(array1, new ArrayList<Integer>(array1));
-        Verify.assertEqualsAndHashCode(array1, new LinkedList<Integer>(array1));
+        Verify.assertEqualsAndHashCode(array1, new ArrayList<>(array1));
+        Verify.assertEqualsAndHashCode(array1, new LinkedList<>(array1));
         Verify.assertEqualsAndHashCode(array1, ArrayListAdapter.<Integer>newList().with(1, 2, 3, 4));
         Verify.assertEqualsAndHashCode(array1, FastList.<Integer>newList().with(1, 2, 3, 4));
-        Assert.assertNotEquals(array1, new LinkedList<Integer>(array4));
+        Assert.assertNotEquals(array1, new LinkedList<>(array4));
     }
 
     @Test
     public void testForEachWith()
     {
-        List<Integer> result = new ArrayList<Integer>();
+        List<Integer> result = new ArrayList<>();
         MutableList<Integer> collection = ArrayAdapter.newArrayWith(1, 2, 3, 4);
         collection.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 0);
         Verify.assertSize(4, result);
@@ -416,8 +416,8 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void detectWithIfNone()
     {
         MutableList<Integer> list = ArrayAdapter.newArrayWith(1, 2, 3, 4, 5);
-        Assert.assertNull(list.detectWithIfNone(Object::equals, 6, new PassThruFunction0<Integer>(null)));
-        Assert.assertEquals(Integer.valueOf(10000), list.detectWithIfNone(Object::equals, 6, new PassThruFunction0<Integer>(Integer.valueOf(10000))));
+        Assert.assertNull(list.detectWithIfNone(Object::equals, 6, new PassThruFunction0<>(null)));
+        Assert.assertEquals(Integer.valueOf(10000), list.detectWithIfNone(Object::equals, 6, new PassThruFunction0<>(Integer.valueOf(10000))));
     }
 
     @Test
@@ -488,7 +488,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     {
         MutableList<Integer> mutableArrayList = ArrayAdapter.newArray();
 
-        List<Integer> arrayList = new ArrayList<Integer>();
+        List<Integer> arrayList = new ArrayList<>();
         ByteArrayOutputStream stream2 = SerializeTestHelper.getByteArrayOutputStream(arrayList);
         LOGGER.info("ArrayList size: {}", stream2.size());
         LOGGER.info("{}", stream2);

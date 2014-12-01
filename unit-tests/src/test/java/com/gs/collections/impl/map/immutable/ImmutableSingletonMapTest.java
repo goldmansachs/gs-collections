@@ -40,7 +40,7 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     @Override
     protected ImmutableMap<Integer, String> classUnderTest()
     {
-        return new ImmutableSingletonMap<Integer, String>(1, "1");
+        return new ImmutableSingletonMap<>(1, "1");
     }
 
     @Override
@@ -54,15 +54,15 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     public void equalsAndHashCode()
     {
         super.equalsAndHashCode();
-        ImmutableMap<Integer, String> map1 = new ImmutableSingletonMap<Integer, String>(1, "One");
-        ImmutableMap<Integer, String> map2 = new ImmutableSingletonMap<Integer, String>(1, "One");
+        ImmutableMap<Integer, String> map1 = new ImmutableSingletonMap<>(1, "One");
+        ImmutableMap<Integer, String> map2 = new ImmutableSingletonMap<>(1, "One");
         Verify.assertEqualsAndHashCode(map1, map2);
     }
 
     @Test
     public void equalsAndHashCodeWithNulls()
     {
-        ImmutableMap<Integer, String> map1 = new ImmutableSingletonMap<Integer, String>(null, null);
+        ImmutableMap<Integer, String> map1 = new ImmutableSingletonMap<>(null, null);
         MutableMap<Integer, String> map2 = Maps.fixedSize.of((Integer) null, (String) null);
         Verify.assertEqualsAndHashCode(map1, map2);
     }
@@ -118,8 +118,8 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
         super.getIfAbsent_function();
         ImmutableMap<Integer, String> map = this.classUnderTest();
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
-        Assert.assertEquals("1", map.getIfAbsent(1, new PassThruFunction0<String>("1")));
+        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<>("4")));
+        Assert.assertEquals("1", map.getIfAbsent(1, new PassThruFunction0<>("1")));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1"), map);
     }
 
@@ -171,7 +171,7 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.forEachWith();
         MutableList<Integer> result = Lists.mutable.of();
-        ImmutableMap<Integer, Integer> map = new ImmutableSingletonMap<Integer, Integer>(1, 1);
+        ImmutableMap<Integer, Integer> map = new ImmutableSingletonMap<>(1, 1);
         map.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 10);
         Assert.assertEquals(FastList.newListWith(11), result);
     }
@@ -182,7 +182,7 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.forEachWithIndex();
         MutableList<String> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableSingletonMap<Integer, String>(1, "One");
+        ImmutableMap<Integer, String> map = new ImmutableSingletonMap<>(1, "One");
         map.forEachWithIndex((value, index) -> {
             result.add(value);
             result.add(String.valueOf(index));
@@ -196,7 +196,7 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.keyValuesView();
         MutableList<String> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableSingletonMap<Integer, String>(1, "One");
+        ImmutableMap<Integer, String> map = new ImmutableSingletonMap<>(1, "One");
         for (Pair<Integer, String> entry : map.keyValuesView())
         {
             result.add(entry.getTwo());
@@ -210,7 +210,7 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.valuesView();
         MutableList<String> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableSingletonMap<Integer, String>(1, "One");
+        ImmutableMap<Integer, String> map = new ImmutableSingletonMap<>(1, "One");
         for (String value : map.valuesView())
         {
             result.add(value);
@@ -224,7 +224,7 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.keysView();
         MutableList<Integer> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableSingletonMap<Integer, String>(1, "One");
+        ImmutableMap<Integer, String> map = new ImmutableSingletonMap<>(1, "One");
         for (Integer key : map.keysView())
         {
             result.add(key);
@@ -236,7 +236,7 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     @Test
     public void testToString()
     {
-        ImmutableMap<Integer, String> map = new ImmutableSingletonMap<Integer, String>(1, "One");
+        ImmutableMap<Integer, String> map = new ImmutableSingletonMap<>(1, "One");
         Assert.assertEquals("{1=One}", map.toString());
     }
 
@@ -295,18 +295,18 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableSingletonMap<K, V>(key1, value1);
+        return new ImmutableSingletonMap<>(key1, value1);
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableSingletonMap<K, V>(key1, value1);
+        return new ImmutableSingletonMap<>(key1, value1);
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new ImmutableSingletonMap<K, V>(key1, value1);
+        return new ImmutableSingletonMap<>(key1, value1);
     }
 }

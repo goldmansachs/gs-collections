@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public class SortedMapAdapterTest extends MutableSortedMapTestCase
     @Override
     public <K, V> MutableSortedMap<K, V> newMap(Comparator<? super K> comparator)
     {
-        return SortedMapAdapter.adapt(new TreeMap<K, V>(comparator));
+        return SortedMapAdapter.adapt(new TreeMap<>(comparator));
     }
 
     @Override
@@ -63,7 +63,7 @@ public class SortedMapAdapterTest extends MutableSortedMapTestCase
     @Override
     public <K, V> MutableSortedMap<K, V> newMap()
     {
-        return SortedMapAdapter.adapt(new TreeMap<K, V>());
+        return SortedMapAdapter.adapt(new TreeMap<>());
     }
 
     @Override
@@ -103,7 +103,7 @@ public class SortedMapAdapterTest extends MutableSortedMapTestCase
         MutableSortedMap<Integer, String> adapt = SortedMapAdapter.adapt(sortedMap);
         Assert.assertSame(sortedMap, adapt);
 
-        SortedMap<Integer, String> treeMap = new TreeMap<Integer, String>(sortedMap);
+        SortedMap<Integer, String> treeMap = new TreeMap<>(sortedMap);
         MutableSortedMap<Integer, String> treeAdapt = SortedMapAdapter.adapt(treeMap);
         Assert.assertNotSame(treeMap, treeAdapt);
         Assert.assertEquals(treeMap, treeAdapt);

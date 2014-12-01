@@ -474,8 +474,8 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     public void withWriteLockAndDelegate()
     {
         MultiReaderHashBag<Integer> bag = MultiReaderHashBag.newBagWith(2);
-        AtomicReference<MutableBag<?>> delegateList = new AtomicReference<MutableBag<?>>();
-        AtomicReference<Iterator<?>> iterator = new AtomicReference<Iterator<?>>();
+        AtomicReference<MutableBag<?>> delegateList = new AtomicReference<>();
+        AtomicReference<Iterator<?>> iterator = new AtomicReference<>();
         bag.withWriteLockAndDelegate(delegate -> {
             delegate.add(1);
             delegate.add(2);

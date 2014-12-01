@@ -83,7 +83,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void testAddingAllToOtherList()
     {
-        List<String> newList = new ArrayList<String>(this.list);
+        List<String> newList = new ArrayList<>(this.list);
         newList.add("3");
         Verify.assertStartsWith(newList, "1", "2", "3");
     }
@@ -120,7 +120,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void testEqualsAndHashCode()
     {
         MutableList<String> one = this.classUnderTest();
-        List<String> oneA = new ArrayList<String>(one);
+        List<String> oneA = new ArrayList<>(one);
         Verify.assertEqualsAndHashCode(one, oneA);
         Verify.assertPostSerializedEqualsAndHashCode(one);
     }
@@ -197,7 +197,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void without()
     {
-        MutableList<Integer> list = new DoubletonList<Integer>(2, 2);
+        MutableList<Integer> list = new DoubletonList<>(2, 2);
         Assert.assertSame(list, list.without(9));
         list = list.without(2);
         Verify.assertListsEqual(FastList.newListWith(2), list);

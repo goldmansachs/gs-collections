@@ -318,7 +318,7 @@ public class ImmutableObject<name>EmptyMapTest extends AbstractImmutableObject<n
     @Test
     public void injectInto()
     {
-        ImmutableObject<name>EmptyMap\<Object> iterable = new ImmutableObject<name>EmptyMap\<Object>();
+        ImmutableObject<name>EmptyMap\<Object> iterable = new ImmutableObject<name>EmptyMap\<>();
         Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), (Mutable<wrapperName> object, <type> value) -> object.add(value));
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("0")>), result);
     }

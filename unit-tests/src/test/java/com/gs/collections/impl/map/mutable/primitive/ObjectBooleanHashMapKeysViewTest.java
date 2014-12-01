@@ -35,7 +35,7 @@ public class ObjectBooleanHashMapKeysViewTest extends AbstractLazyIterableTestCa
     @Override
     protected <T> LazyIterable<T> newWith(T... elements)
     {
-        ObjectBooleanHashMap<T> map = new ObjectBooleanHashMap<T>();
+        ObjectBooleanHashMap<T> map = new ObjectBooleanHashMap<>();
         for (int i = 0; i < elements.length; i++)
         {
             map.put(elements[i], (i & 1) == 0);

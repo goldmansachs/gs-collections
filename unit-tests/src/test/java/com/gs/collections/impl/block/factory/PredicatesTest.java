@@ -550,7 +550,7 @@ public class PredicatesTest
     @Test
     public void in_Set()
     {
-        Predicate<Object> predicate = Predicates.in(new HashSet<Integer>(Arrays.asList(1, 2, 3)));
+        Predicate<Object> predicate = Predicates.in(new HashSet<>(Arrays.asList(1, 2, 3)));
         assertAccepts(predicate, 1, 2, 3);
         assertRejects(predicate, 0, 4, null);
     }
@@ -558,7 +558,7 @@ public class PredicatesTest
     @Test
     public void notIn_Set()
     {
-        Predicate<Object> predicate = Predicates.notIn(new HashSet<Integer>(Arrays.asList(1, 2, 3)));
+        Predicate<Object> predicate = Predicates.notIn(new HashSet<>(Arrays.asList(1, 2, 3)));
         assertAccepts(predicate, 0, 4, null);
         assertRejects(predicate, 1, 2, 3);
     }

@@ -60,7 +60,7 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
     public void testConstructor()
     {
         UnifiedMap<Integer, ImmutableSortedSet<Integer>> map = UnifiedMap.newWithKeysValues(1, TreeSortedSet.newSetWith(1).toImmutable());
-        ImmutableSortedSetMultimap<Integer, Integer> immutableMap = new ImmutableSortedSetMultimapImpl<Integer, Integer>(map, null);
+        ImmutableSortedSetMultimap<Integer, Integer> immutableMap = new ImmutableSortedSetMultimapImpl<>(map, null);
         Assert.assertEquals(FastList.newListWith(1), immutableMap.get(1).toList());
         Assert.assertNull(immutableMap.comparator());
         Verify.assertSize(1, immutableMap);
@@ -69,7 +69,7 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
     @Test
     public void testNewEmpty()
     {
-        ImmutableSortedSetMultimap<Integer, Integer> map = new ImmutableSortedSetMultimapImpl<Integer, Integer>(UnifiedMap.<Integer, ImmutableSortedSet<Integer>>newMap(), Collections.<Integer>reverseOrder());
+        ImmutableSortedSetMultimap<Integer, Integer> map = new ImmutableSortedSetMultimapImpl<>(UnifiedMap.<Integer, ImmutableSortedSet<Integer>>newMap(), Collections.<Integer>reverseOrder());
         Assert.assertEquals(Collections.<Integer>reverseOrder(), map.newEmpty().comparator());
         Verify.assertEmpty(map.newEmpty());
     }

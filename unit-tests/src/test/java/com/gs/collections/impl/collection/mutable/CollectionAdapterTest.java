@@ -61,23 +61,23 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     @Override
     protected <T> CollectionAdapter<T> newWith(T... littleElements)
     {
-        return new CollectionAdapter<T>(new ArrayList<T>(FastList.newListWith(littleElements)));
+        return new CollectionAdapter<>(new ArrayList<>(FastList.newListWith(littleElements)));
     }
 
     private <T> CollectionAdapter<T> newSet()
     {
-        return new CollectionAdapter<T>(UnifiedSet.<T>newSet());
+        return new CollectionAdapter<>(UnifiedSet.<T>newSet());
     }
 
     private <T> CollectionAdapter<T> newList()
     {
-        return new CollectionAdapter<T>(FastList.<T>newList());
+        return new CollectionAdapter<>(FastList.<T>newList());
     }
 
     @Test(expected = NullPointerException.class)
     public void null_throws()
     {
-        new CollectionAdapter<Object>(null);
+        new CollectionAdapter<>(null);
     }
 
     @Override
@@ -102,8 +102,8 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     public void toImmutable()
     {
         super.toImmutable();
-        Verify.assertInstanceOf(ImmutableList.class, new CollectionAdapter<String>(Collections.singletonList("1")).toImmutable());
-        Verify.assertInstanceOf(ImmutableSet.class, new CollectionAdapter<String>(Collections.singleton("1")).toImmutable());
+        Verify.assertInstanceOf(ImmutableList.class, new CollectionAdapter<>(Collections.singletonList("1")).toImmutable());
+        Verify.assertInstanceOf(ImmutableSet.class, new CollectionAdapter<>(Collections.singleton("1")).toImmutable());
     }
 
     @Override
@@ -121,7 +121,7 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     @Test
     public void newEmpty()
     {
-        Verify.assertInstanceOf(FastList.class, CollectionAdapter.adapt(new LinkedList<Object>()).newEmpty());
+        Verify.assertInstanceOf(FastList.class, CollectionAdapter.adapt(new LinkedList<>()).newEmpty());
     }
 
     @Override
@@ -209,11 +209,11 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     public void adapt()
     {
         Verify.assertInstanceOf(FastList.class, CollectionAdapter.adapt(FastList.newList()));
-        Verify.assertInstanceOf(ArrayListAdapter.class, CollectionAdapter.adapt(new ArrayList<Object>()));
-        Verify.assertInstanceOf(SetAdapter.class, CollectionAdapter.adapt(new HashSet<Object>()));
+        Verify.assertInstanceOf(ArrayListAdapter.class, CollectionAdapter.adapt(new ArrayList<>()));
+        Verify.assertInstanceOf(SetAdapter.class, CollectionAdapter.adapt(new HashSet<>()));
         Verify.assertInstanceOf(UnifiedSet.class, CollectionAdapter.adapt(UnifiedSet.newSet()));
         Verify.assertInstanceOf(RandomAccessListAdapter.class, CollectionAdapter.adapt(Collections.emptyList()));
-        Verify.assertInstanceOf(ListAdapter.class, CollectionAdapter.adapt(new LinkedList<Object>()));
+        Verify.assertInstanceOf(ListAdapter.class, CollectionAdapter.adapt(new LinkedList<>()));
         Verify.assertInstanceOf(ArrayAdapter.class, CollectionAdapter.adapt(ArrayAdapter.newArray()));
     }
 
@@ -257,32 +257,32 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     @Test
     public void wrapSet()
     {
-        Verify.assertInstanceOf(SetAdapter.class, CollectionAdapter.wrapSet(new HashSet<Object>()));
-        Verify.assertInstanceOf(UnifiedSet.class, CollectionAdapter.wrapSet(new FastList<Object>()));
+        Verify.assertInstanceOf(SetAdapter.class, CollectionAdapter.wrapSet(new HashSet<>()));
+        Verify.assertInstanceOf(UnifiedSet.class, CollectionAdapter.wrapSet(new FastList<>()));
     }
 
     @Test
     public void wrapList()
     {
-        Verify.assertInstanceOf(ArrayListAdapter.class, CollectionAdapter.wrapList(new ArrayList<Object>()));
-        Verify.assertInstanceOf(FastList.class, CollectionAdapter.wrapList(new HashSet<Object>()));
+        Verify.assertInstanceOf(ArrayListAdapter.class, CollectionAdapter.wrapList(new ArrayList<>()));
+        Verify.assertInstanceOf(FastList.class, CollectionAdapter.wrapList(new HashSet<>()));
         Verify.assertInstanceOf(FastList.class, CollectionAdapter.wrapList(FastList.newList()));
     }
 
     @Test
     public void testEquals()
     {
-        Assert.assertEquals(new CollectionAdapter<Object>(FastList.newList()), new CollectionAdapter<Object>(FastList.newList()));
-        Assert.assertNotEquals(new CollectionAdapter<Object>(FastList.newList()), new CollectionAdapter<Integer>(FastList.newListWith(1)));
-        Assert.assertEquals(new CollectionAdapter<Integer>(FastList.newListWith(1)), new CollectionAdapter<Integer>(FastList.newListWith(1)));
-        Assert.assertNotEquals(new CollectionAdapter<Integer>(FastList.newListWith(1)), new CollectionAdapter<Integer>(FastList.newListWith(2)));
+        Assert.assertEquals(new CollectionAdapter<>(FastList.newList()), new CollectionAdapter<>(FastList.newList()));
+        Assert.assertNotEquals(new CollectionAdapter<>(FastList.newList()), new CollectionAdapter<>(FastList.newListWith(1)));
+        Assert.assertEquals(new CollectionAdapter<>(FastList.newListWith(1)), new CollectionAdapter<>(FastList.newListWith(1)));
+        Assert.assertNotEquals(new CollectionAdapter<>(FastList.newListWith(1)), new CollectionAdapter<>(FastList.newListWith(2)));
     }
 
     @Test
     public void testNewEmpty()
     {
-        Verify.assertInstanceOf(UnifiedSet.class, new CollectionAdapter<Object>(new HashSet<Object>()).newEmpty());
-        Verify.assertInstanceOf(FastList.class, new CollectionAdapter<Object>(new ArrayList<Object>()).newEmpty());
+        Verify.assertInstanceOf(UnifiedSet.class, new CollectionAdapter<>(new HashSet<>()).newEmpty());
+        Verify.assertInstanceOf(FastList.class, new CollectionAdapter<>(new ArrayList<>()).newEmpty());
     }
 
     @Override

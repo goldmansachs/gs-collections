@@ -50,12 +50,12 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
     @Override
     protected MutableSet<Map.Entry<String, String>> getCollection()
     {
-        return SetAdapter.adapt(new UnmodifiableMap<String, String>(Maps.mutable.of("1", "1", "2", "2")).entrySet());
+        return SetAdapter.adapt(new UnmodifiableMap<>(Maps.mutable.of("1", "1", "2", "2")).entrySet());
     }
 
     private MutableSet<Map.Entry<String, String>> newCollection()
     {
-        return SetAdapter.adapt(new UnmodifiableMap<String, String>(Maps.mutable.<String, String>of()).entrySet());
+        return SetAdapter.adapt(new UnmodifiableMap<>(Maps.mutable.<String, String>of()).entrySet());
     }
 
     @Override
@@ -163,19 +163,19 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
     private <T> MutableSet<Map.Entry<T, T>> newWith(T one)
     {
         MutableMap<T, T> map = Maps.mutable.of(one, one);
-        return SetAdapter.adapt(new UnmodifiableMap<T, T>(map).entrySet());
+        return SetAdapter.adapt(new UnmodifiableMap<>(map).entrySet());
     }
 
     private <T> MutableSet<Map.Entry<T, T>> newWith(T one, T two)
     {
         MutableMap<T, T> map = Maps.mutable.of(one, one, two, two);
-        return SetAdapter.adapt(new UnmodifiableMap<T, T>(map).entrySet());
+        return SetAdapter.adapt(new UnmodifiableMap<>(map).entrySet());
     }
 
     private <T> MutableSet<Map.Entry<T, T>> newWith(T one, T two, T three)
     {
         MutableMap<T, T> map = Maps.mutable.of(one, one, two, two, three, three);
-        return SetAdapter.adapt(new UnmodifiableMap<T, T>(map).entrySet());
+        return SetAdapter.adapt(new UnmodifiableMap<>(map).entrySet());
     }
 
     private <T> MutableSet<Map.Entry<T, T>> newWith(T... littleElements)
@@ -185,7 +185,7 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
         {
             map.put(littleElements[i], littleElements[i]);
         }
-        return SetAdapter.adapt(new UnmodifiableMap<T, T>(map).entrySet());
+        return SetAdapter.adapt(new UnmodifiableMap<>(map).entrySet());
     }
 
     @Test

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,7 +100,7 @@ public class ImmutableUnifiedSetWithHashingStrategyTest extends AbstractImmutabl
     {
         Sum sum = new IntegerSum(0);
         BatchIterable<Integer> integerBatchIterable = (BatchIterable<Integer>) this.newSet(1, 2, 3, 4, 5);
-        integerBatchIterable.batchForEach(new SumProcedure<Integer>(sum), 0, 1);
+        integerBatchIterable.batchForEach(new SumProcedure<>(sum), 0, 1);
         Assert.assertEquals(15, sum.getValue());
     }
 

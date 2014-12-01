@@ -29,7 +29,7 @@ public class ImmutableUnifiedMapTest extends ImmutableMapTestCase
     @Override
     protected ImmutableMap<Integer, String> classUnderTest()
     {
-        return new ImmutableUnifiedMap<Integer, String>(Tuples.pair(1, "1"), Tuples.pair(2, "2"), Tuples.pair(3, "3"), Tuples.pair(4, "4"));
+        return new ImmutableUnifiedMap<>(Tuples.pair(1, "1"), Tuples.pair(2, "2"), Tuples.pair(3, "3"), Tuples.pair(4, "4"));
     }
 
     @Override

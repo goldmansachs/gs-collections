@@ -59,7 +59,7 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
     protected static MutableList\<String> generateCollisions()
     {
         MutableList\<String> collisions = FastList.newList();
-        Object<name>HashMap\<String> hashMap = new Object<name>HashMap\<String>();
+        Object<name>HashMap\<String> hashMap = new Object<name>HashMap\<>();
         for (int each = 3; collisions.size() \<= 10; each++)
         {
             if (hashMap.spread(String.valueOf(each)) == hashMap.spread(String.valueOf(3)))
@@ -567,14 +567,14 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
     public void asUnmodifiable()
     {
         Verify.assertInstanceOf(UnmodifiableObject<name>Map.class, this.map.asUnmodifiable());
-        Assert.assertEquals(new UnmodifiableObject<name>Map\<String>(this.map), this.map.asUnmodifiable());
+        Assert.assertEquals(new UnmodifiableObject<name>Map\<>(this.map), this.map.asUnmodifiable());
     }
 
     @Test
     public void asSynchronized()
     {
         Verify.assertInstanceOf(SynchronizedObject<name>Map.class, this.map.asSynchronized());
-        Assert.assertEquals(new SynchronizedObject<name>Map\<String>(this.map), this.map.asSynchronized());
+        Assert.assertEquals(new SynchronizedObject<name>Map\<>(this.map), this.map.asSynchronized());
     }
 }
 

@@ -224,7 +224,7 @@ public class MultiReaderUnifiedSetAcceptanceTest
 
     private static void assertUnifiedSetAddAllWithHashSet(int shift)
     {
-        Set<CollidingInt> set = new HashSet<CollidingInt>();
+        Set<CollidingInt> set = new HashSet<>();
 
         int size = 100000;
         for (int i = 0; i < size; i++)
@@ -332,7 +332,7 @@ public class MultiReaderUnifiedSetAcceptanceTest
     {
         MultiReaderUnifiedSet<CollidingInt> set = MultiReaderUnifiedSet.newSet();
 
-        Set<CollidingInt> toRetain = new HashSet<CollidingInt>();
+        Set<CollidingInt> toRetain = new HashSet<>();
 
         int size = 100000;
         for (int i = 0; i < size; i++)
@@ -442,7 +442,7 @@ public class MultiReaderUnifiedSetAcceptanceTest
     private static void assertUnifiedSetEqualsAndHashCode(int shift)
     {
         MutableSet<CollidingInt> set1 = MultiReaderUnifiedSet.newSet();
-        Set<CollidingInt> set2 = new HashSet<CollidingInt>();
+        Set<CollidingInt> set2 = new HashSet<>();
         MutableSet<CollidingInt> set3 = MultiReaderUnifiedSet.newSet();
         MutableSet<CollidingInt> set4 = MultiReaderUnifiedSet.newSet();
 
@@ -477,7 +477,7 @@ public class MultiReaderUnifiedSetAcceptanceTest
     {
         MultiReaderUnifiedSet<CollidingInt> set = MultiReaderUnifiedSet.newSet();
 
-        List<CollidingInt> toRemove = new ArrayList<CollidingInt>();
+        List<CollidingInt> toRemove = new ArrayList<>();
 
         int size = 100000;
         for (int i = 0; i < size; i++)

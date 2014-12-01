@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ public class ArrayListAddAllTest
 
     private void runArrayListAddAll(String type, Object[] objects)
     {
-        ArrayList<Object> listToAddAll = new ArrayList<Object>(Arrays.asList(objects));
+        ArrayList<Object> listToAddAll = new ArrayList<>(Arrays.asList(objects));
         for (int i = 0; i < 100; i++)
         {
             this.runArrayListAddAll(listToAddAll, 100);
@@ -100,15 +100,15 @@ public class ArrayListAddAllTest
         long time1 = System.currentTimeMillis() - now1;
         LOGGER.info("ArrayList, list size 100,000, {} addAll/msec: {}", type, 100000 / time1);
         long now2 = System.currentTimeMillis();
-        this.runArrayListAddAll(new ArrayList<Object>(Interval.oneTo(100)), 100000000);
+        this.runArrayListAddAll(new ArrayList<>(Interval.oneTo(100)), 100000000);
         long time2 = System.currentTimeMillis() - now2;
         LOGGER.info("ArrayList, list size 100, addAll/msec: {}", 100000000 / time2);
         long now3 = System.currentTimeMillis();
-        this.runArrayListAddAll(new ArrayList<Object>(Interval.oneTo(1)), 1000000000);
+        this.runArrayListAddAll(new ArrayList<>(Interval.oneTo(1)), 1000000000);
         long time3 = System.currentTimeMillis() - now3;
         LOGGER.info("ArrayList, list size 1, addAll/msec: {}", 1000000000 / time3);
         long now4 = System.currentTimeMillis();
-        this.runArrayListAddAll(new ArrayList<Object>(), 1000000000);
+        this.runArrayListAddAll(new ArrayList<>(), 1000000000);
         long time4 = System.currentTimeMillis() - now4;
         LOGGER.info("ArrayList, list size (empty), addAll/msec: {}", 1000000000 / time4);
     }
@@ -117,7 +117,7 @@ public class ArrayListAddAllTest
     {
         for (long l = 0; l < runs; l++)
         {
-            ArrayList<Object> list = new ArrayList<Object>();
+            ArrayList<Object> list = new ArrayList<>();
             list.addAll(objects);
         }
     }
