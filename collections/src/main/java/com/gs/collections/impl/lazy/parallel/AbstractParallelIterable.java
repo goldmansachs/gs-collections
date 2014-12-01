@@ -19,6 +19,7 @@ package com.gs.collections.impl.lazy.parallel;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
@@ -53,6 +54,7 @@ import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -343,6 +345,137 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
             {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    private T collectReduce(Function<Batch<T>, T> map, Function2<T, T, T> function2)
+    {
+        return this.isOrdered()
+                ? this.collectReduceOrdered(map, function2)
+                : this.collectReduceUnordered(map, function2);
+    }
+
+    private T collectReduceOrdered(final Function<Batch<T>, T> map, Function2<T, T, T> function2)
+    {
+        LazyIterable<? extends Batch<T>> chunks = this.split();
+        LazyIterable<Future<T>> futures = chunks.collect(new Function<Batch<T>, Future<T>>()
+        {
+            public Future<T> valueOf(final Batch<T> chunk)
+            {
+                return AbstractParallelIterable.this.getExecutorService().submit(new Callable<T>()
+                {
+                    public T call()
+                    {
+                        return map.valueOf(chunk);
+                    }
+                });
+            }
+        });
+        // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+        MutableList<Future<T>> futuresList = futures.toList();
+        try
+        {
+            T result = futuresList.getFirst().get();
+            for (int i = 1; i < futuresList.size(); i++)
+            {
+                T next = futuresList.get(i).get();
+                if (next != null)
+                {
+                    if (result == null)
+                    {
+                        result = next;
+                    }
+                    else
+                    {
+                        result = function2.value(result, next);
+                    }
+                }
+            }
+            if (result == null)
+            {
+                throw new NoSuchElementException();
+            }
+            return result;
+        }
+        catch (InterruptedException e)
+        {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+        catch (ExecutionException e)
+        {
+            if (e.getCause() instanceof NullPointerException)
+            {
+                throw (NullPointerException) e.getCause();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    private T collectReduceUnordered(final Function<Batch<T>, T> map, Function2<T, T, T> function2)
+    {
+        LazyIterable<? extends Batch<T>> chunks = this.split();
+        MutableList<Callable<T>> callables = chunks.collect(new Function<Batch<T>, Callable<T>>()
+        {
+            public Callable<T> valueOf(final Batch<T> chunk)
+            {
+                return new Callable<T>()
+                {
+                    public T call()
+                    {
+                        return map.valueOf(chunk);
+                    }
+                };
+            }
+        }).toList();
+
+        final ExecutorCompletionService<T> completionService = new ExecutorCompletionService<T>(this.getExecutorService());
+        callables.forEach(new Procedure<Callable<T>>()
+        {
+            public void value(Callable<T> callable)
+            {
+                completionService.submit(callable);
+            }
+        });
+
+        try
+        {
+            T result = completionService.take().get();
+            int numTasks = callables.size() - 1;
+            while (numTasks > 0)
+            {
+                T next = completionService.take().get();
+                if (next != null)
+                {
+                    if (result == null)
+                    {
+                        result = next;
+                    }
+                    else
+                    {
+                        result = function2.value(result, next);
+                    }
+                }
+                numTasks--;
+            }
+            if (result == null)
+            {
+                throw new NoSuchElementException();
+            }
+            return result;
+        }
+        catch (InterruptedException e)
+        {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+        catch (ExecutionException e)
+        {
+            if (e.getCause() instanceof NullPointerException)
+            {
+                throw (NullPointerException) e.getCause();
+            }
+            throw new RuntimeException(e);
         }
     }
 
@@ -639,34 +772,62 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
         return this.count(Predicates.bind(predicate, parameter));
     }
 
-    public T min(Comparator<? super T> comparator)
+    public T min(final Comparator<? super T> comparator)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".min() not implemented yet");
+        Function<Batch<T>, T> map = new Function<Batch<T>, T>()
+        {
+            public T valueOf(Batch<T> batch)
+            {
+                return batch.min(comparator);
+            }
+        };
+        return this.collectReduce(map, Functions2.min(comparator));
     }
 
-    public T max(Comparator<? super T> comparator)
+    public T max(final Comparator<? super T> comparator)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".max() not implemented yet");
+        Function<Batch<T>, T> map = new Function<Batch<T>, T>()
+        {
+            public T valueOf(Batch<T> batch)
+            {
+                return batch.max(comparator);
+            }
+        };
+        return this.collectReduce(map, Functions2.max(comparator));
     }
 
     public T min()
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".min() not implemented yet");
+        return this.min(Comparators.naturalOrder());
     }
 
     public T max()
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".max() not implemented yet");
+        return this.max(Comparators.naturalOrder());
     }
 
-    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
+    public <V extends Comparable<? super V>> T minBy(final Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".minBy() not implemented yet");
+        Function<Batch<T>, T> map = new Function<Batch<T>, T>()
+        {
+            public T valueOf(Batch<T> batch)
+            {
+                return batch.minBy(function);
+            }
+        };
+        return this.collectReduce(map, Functions2.minBy(function));
     }
 
-    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
+    public <V extends Comparable<? super V>> T maxBy(final Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".maxBy() not implemented yet");
+        Function<Batch<T>, T> map = new Function<Batch<T>, T>()
+        {
+            public T valueOf(Batch<T> batch)
+            {
+                return batch.maxBy(function);
+            }
+        };
+        return this.collectReduce(map, Functions2.maxBy(function));
     }
 
     public long sumOfInt(IntFunction<? super T> function)

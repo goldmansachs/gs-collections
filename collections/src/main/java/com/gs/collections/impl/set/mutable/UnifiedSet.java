@@ -101,7 +101,11 @@ import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.GroupByUniqueKeyProcedure;
 import com.gs.collections.impl.block.procedure.MaxByProcedure;
+import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
+import com.gs.collections.impl.block.procedure.MaxProcedure;
 import com.gs.collections.impl.block.procedure.MinByProcedure;
+import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
+import com.gs.collections.impl.block.procedure.MinProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
@@ -1075,22 +1079,30 @@ public class UnifiedSet<T>
 
     public T min(Comparator<? super T> comparator)
     {
-        return Iterate.min(this, comparator);
+        MinComparatorProcedure<T> procedure = new MinComparatorProcedure<T>(comparator);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public T max(Comparator<? super T> comparator)
     {
-        return Iterate.max(this, comparator);
+        MaxComparatorProcedure<T> procedure = new MaxComparatorProcedure<T>(comparator);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public T min()
     {
-        return Iterate.min(this);
+        MinProcedure<T> procedure = new MinProcedure<T>();
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public T max()
     {
-        return Iterate.max(this);
+        MaxProcedure<T> procedure = new MaxProcedure<T>();
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
@@ -3310,48 +3322,6 @@ public class UnifiedSet<T>
         public T detect(Predicate<? super T> predicate)
         {
             return detect(this, predicate);
-        }
-
-        @Override
-        public T min(Comparator<? super T> comparator)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSet.this.min(comparator);
-        }
-
-        @Override
-        public T max(Comparator<? super T> comparator)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSet.this.max(comparator);
-        }
-
-        @Override
-        public T min()
-        {
-            // TODO: Implement in parallel
-            return UnifiedSet.this.min();
-        }
-
-        @Override
-        public T max()
-        {
-            // TODO: Implement in parallel
-            return UnifiedSet.this.max();
-        }
-
-        @Override
-        public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSet.this.minBy(function);
-        }
-
-        @Override
-        public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSet.this.maxBy(function);
         }
 
         @Override

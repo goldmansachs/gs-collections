@@ -16,9 +16,16 @@
 
 package com.gs.collections.impl.lazy.parallel;
 
+import java.util.Comparator;
+
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.procedure.CountProcedure;
+import com.gs.collections.impl.block.procedure.MaxByProcedure;
+import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
+import com.gs.collections.impl.block.procedure.MinByProcedure;
+import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
 
 public abstract class AbstractBatch<T> implements Batch<T>
 {
@@ -44,5 +51,33 @@ public abstract class AbstractBatch<T> implements Batch<T>
             }
         });
         return stringBuilder.toString();
+    }
+
+    public T min(Comparator<? super T> comparator)
+    {
+        MinComparatorProcedure<T> procedure = new MinComparatorProcedure<T>(comparator);
+        this.forEach(procedure);
+        return procedure.isVisitedAtLeastOnce() ? procedure.getResult() : null;
+    }
+
+    public T max(Comparator<? super T> comparator)
+    {
+        MaxComparatorProcedure<T> procedure = new MaxComparatorProcedure<T>(comparator);
+        this.forEach(procedure);
+        return procedure.isVisitedAtLeastOnce() ? procedure.getResult() : null;
+    }
+
+    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
+    {
+        MinByProcedure<T, V> procedure = new MinByProcedure<T, V>(function);
+        this.forEach(procedure);
+        return procedure.isVisitedAtLeastOnce() ? procedure.getResult() : null;
+    }
+
+    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
+    {
+        MaxByProcedure<T, V> procedure = new MaxByProcedure<T, V>(function);
+        this.forEach(procedure);
+        return procedure.isVisitedAtLeastOnce() ? procedure.getResult() : null;
     }
 }

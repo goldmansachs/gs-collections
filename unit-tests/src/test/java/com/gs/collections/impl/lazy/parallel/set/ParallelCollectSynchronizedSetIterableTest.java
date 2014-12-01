@@ -32,7 +32,13 @@ public class ParallelCollectSynchronizedSetIterableTest extends ParallelIterable
     @Override
     protected ParallelIterable<Integer> classUnderTest()
     {
-        return UnifiedSet.newSetWith(11, 21, 22, 31, 32, 33, 41, 42, 43, 44)
+        return this.newWith(11, 21, 22, 31, 32, 33, 41, 42, 43, 44);
+    }
+
+    @Override
+    protected ParallelIterable<Integer> newWith(Integer... littleElements)
+    {
+        return UnifiedSet.newSetWith(littleElements)
                 .asSynchronized()
                 .asParallel(this.executorService, 2)
                 .collect(i -> i / 10);
@@ -43,7 +49,6 @@ public class ParallelCollectSynchronizedSetIterableTest extends ParallelIterable
     {
         return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
     }
-
 
     @Override
     protected boolean isOrdered()

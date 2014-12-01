@@ -28,7 +28,13 @@ public class UnmodifiableMutableListParallelListIterableTest extends ParallelLis
     @Override
     protected ParallelListIterable<Integer> classUnderTest()
     {
-        return ArrayListAdapter.adapt(new ArrayList<Integer>(Lists.mutable.of(1, 2, 2, 3, 3, 3, 4, 4, 4, 4))).asUnmodifiable().asParallel(this.executorService, 2);
+        return this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected ParallelListIterable<Integer> newWith(Integer... littleElements)
+    {
+        return ArrayListAdapter.adapt(new ArrayList<Integer>(Lists.mutable.of(littleElements))).asUnmodifiable().asParallel(this.executorService, 2);
     }
 
     @Test(expected = IllegalArgumentException.class)

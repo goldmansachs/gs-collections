@@ -27,6 +27,12 @@ public class ListAdapterParallelListIterableTest extends NonParallelListIterable
     @Override
     protected ParallelListIterable<Integer> classUnderTest()
     {
-        return ListAdapter.adapt(new LinkedList<Integer>(Lists.mutable.of(1, 2, 2, 3, 3, 3, 4, 4, 4, 4))).asParallel(null, 2);
+        return this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected ParallelListIterable<Integer> newWith(Integer... littleElements)
+    {
+        return ListAdapter.adapt(new LinkedList<Integer>(Lists.mutable.of(littleElements))).asParallel(null, 2);
     }
 }

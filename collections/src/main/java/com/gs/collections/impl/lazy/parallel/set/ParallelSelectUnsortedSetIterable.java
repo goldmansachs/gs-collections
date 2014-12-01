@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
-import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
@@ -85,48 +84,6 @@ class ParallelSelectUnsortedSetIterable<T> extends AbstractParallelUnsortedSetIt
     public T detect(Predicate<? super T> predicate)
     {
         return this.delegate.detect(Predicates.and(this.predicate, predicate));
-    }
-
-    @Override
-    public T min(Comparator<? super T> comparator)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toSet().select(this.predicate).min(comparator);
-    }
-
-    @Override
-    public T max(Comparator<? super T> comparator)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toSet().select(this.predicate).max(comparator);
-    }
-
-    @Override
-    public T min()
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toSet().select(this.predicate).min();
-    }
-
-    @Override
-    public T max()
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toSet().select(this.predicate).max();
-    }
-
-    @Override
-    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toSet().select(this.predicate).minBy(function);
-    }
-
-    @Override
-    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toSet().select(this.predicate).maxBy(function);
     }
 
     @Override

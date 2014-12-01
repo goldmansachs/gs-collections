@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.block.factory;
 
+import java.util.Comparator;
+
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.impl.block.function.checked.CheckedFunction2;
@@ -48,6 +50,26 @@ public final class Functions2
         return INTEGER_ADDITION;
     }
 
+    public static <T> Function2<T, T, T> min(Comparator<? super T> comparator)
+    {
+        return new MinFunction2<T>(comparator);
+    }
+
+    public static <T> Function2<T, T, T> max(Comparator<? super T> comparator)
+    {
+        return new MaxFunction2<T>(comparator);
+    }
+
+    public static <T, V extends Comparable<? super V>> Function2<T, T, T> minBy(Function<? super T, ? extends V> function)
+    {
+        return new MinByFunction2<T, V>(function);
+    }
+
+    public static <T, V extends Comparable<? super V>> Function2<T, T, T> maxBy(Function<? super T, ? extends V> function)
+    {
+        return new MaxByFunction2<T, V>(function);
+    }
+
     private static final class FunctionAdapter<T, P, V> implements Function2<T, P, V>
     {
         private static final long serialVersionUID = 1L;
@@ -74,12 +96,12 @@ public final class Functions2
         }
     }
 
-    private static class ThrowingFunction2Adapter<T, P, V> extends CheckedFunction2<T, P, V>
+    private static final class ThrowingFunction2Adapter<T, P, V> extends CheckedFunction2<T, P, V>
     {
         private static final long serialVersionUID = 1L;
         private final ThrowingFunction2<T, P, V> throwingFunction2;
 
-        public ThrowingFunction2Adapter(ThrowingFunction2<T, P, V> throwingFunction2)
+        private ThrowingFunction2Adapter(ThrowingFunction2<T, P, V> throwingFunction2)
         {
             this.throwingFunction2 = throwingFunction2;
         }
@@ -87,6 +109,74 @@ public final class Functions2
         public V safeValue(T argument1, P argument2) throws Exception
         {
             return this.throwingFunction2.safeValue(argument1, argument2);
+        }
+    }
+
+    private static final class MinFunction2<T> implements Function2<T, T, T>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Comparator<? super T> comparator;
+
+        private MinFunction2(Comparator<? super T> comparator)
+        {
+            this.comparator = comparator;
+        }
+
+        public T value(T argument1, T argument2)
+        {
+            return this.comparator.compare(argument1, argument2) > 0 ? argument2 : argument1;
+        }
+    }
+
+    private static final class MaxFunction2<T> implements Function2<T, T, T>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Comparator<? super T> comparator;
+
+        private MaxFunction2(Comparator<? super T> comparator)
+        {
+            this.comparator = comparator;
+        }
+
+        public T value(T argument1, T argument2)
+        {
+            return this.comparator.compare(argument1, argument2) < 0 ? argument2 : argument1;
+        }
+    }
+
+    private static final class MinByFunction2<T, V extends Comparable<? super V>> implements Function2<T, T, T>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function<? super T, ? extends V> function;
+
+        private MinByFunction2(Function<? super T, ? extends V> function)
+        {
+            this.function = function;
+        }
+
+        public T value(T argument1, T argument2)
+        {
+            V first = this.function.valueOf(argument1);
+            V second = this.function.valueOf(argument2);
+            return first.compareTo(second) > 0 ? argument2 : argument1;
+        }
+    }
+
+    private static final class MaxByFunction2<T, V extends Comparable<? super V>> implements Function2<T, T, T>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function<? super T, ? extends V> function;
+
+        private MaxByFunction2(Function<? super T, ? extends V> function)
+        {
+            this.function = function;
+        }
+
+        public T value(T argument1, T argument2)
+        {
+            V first = this.function.valueOf(argument1);
+            V second = this.function.valueOf(argument2);
+            return first.compareTo(second) < 0 ? argument2 : argument1;
         }
     }
 }

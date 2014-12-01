@@ -25,6 +25,12 @@ public class MultiReaderUnifiedSetParallelSetIterableTest extends ParallelUnsort
     @Override
     protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
-        return SetAdapter.adapt(MultiReaderUnifiedSet.newSetWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)).asParallel(this.executorService, 2);
+        return this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return SetAdapter.adapt(MultiReaderUnifiedSet.newSetWith(littleElements)).asParallel(this.executorService, 2);
     }
 }

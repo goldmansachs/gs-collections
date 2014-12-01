@@ -24,9 +24,15 @@ public class ParallelCollectBagTest extends ParallelBagTestCase
     @Override
     protected ParallelBag<Integer> classUnderTest()
     {
-        return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
+        return this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected ParallelBag<Integer> newWith(Integer... littleElements)
+    {
+        return HashBag.newBagWith(littleElements)
                 .asParallel(this.executorService, 2)
                 .collect(String::valueOf)
-                .collect(Integer::valueOf);
+                .collect(string -> "null".equals(string) ? null : Integer.valueOf(string));
     }
 }

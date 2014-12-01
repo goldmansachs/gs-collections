@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.lazy.parallel.list;
 
-import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
@@ -107,48 +106,6 @@ class ParallelDistinctListIterable<T> extends AbstractParallelUnsortedSetIterabl
     public T detect(Predicate<? super T> predicate)
     {
         return this.delegate.detect(new DistinctAndPredicate<T>(predicate));
-    }
-
-    @Override
-    public T min(Comparator<? super T> comparator)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.min(comparator);
-    }
-
-    @Override
-    public T max(Comparator<? super T> comparator)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.max(comparator);
-    }
-
-    @Override
-    public T min()
-    {
-        // TODO: Implement in parallel
-        return this.delegate.min();
-    }
-
-    @Override
-    public T max()
-    {
-        // TODO: Implement in parallel
-        return this.delegate.max();
-    }
-
-    @Override
-    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.minBy(function);
-    }
-
-    @Override
-    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.maxBy(function);
     }
 
     @Override

@@ -41,6 +41,12 @@ public class ImmutableEmptySortedSetParallelTest extends NonParallelSortedSetIte
     @Override
     protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
+        return this.newWith();
+    }
+
+    @Override
+    protected ParallelSortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
         return SortedSets.immutable.with(Comparators.<Integer>reverseNaturalOrder()).asParallel(this.executorService, 2);
     }
 
@@ -169,5 +175,47 @@ public class ImmutableEmptySortedSetParallelTest extends NonParallelSortedSetIte
     public void max_without_comparator()
     {
         this.classUnderTest().max();
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void minWithEmptyBatch()
+    {
+        super.minWithEmptyBatch();
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void maxWithEmptyBatch()
+    {
+        super.minWithEmptyBatch();
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void min_null_throws()
+    {
+        this.classUnderTest().min(Integer::compareTo);
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void max_null_throws()
+    {
+        this.classUnderTest().max(Integer::compareTo);
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void minBy_null_throws()
+    {
+        this.classUnderTest().minBy(Integer::valueOf);
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void maxBy_null_throws()
+    {
+        this.classUnderTest().maxBy(Integer::valueOf);
     }
 }

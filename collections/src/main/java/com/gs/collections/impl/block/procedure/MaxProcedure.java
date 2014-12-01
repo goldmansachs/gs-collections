@@ -16,28 +16,21 @@
 
 package com.gs.collections.impl.block.procedure;
 
-import java.util.Comparator;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
 
-public abstract class ComparatorProcedure<T> implements Procedure<T>
+/**
+ * Implementation of {@link Procedure} that holds on to the minimum element seen so far,
+ * determined by the {@link Function}.
+ */
+public class MaxProcedure<T> implements Procedure<T>
 {
     private static final long serialVersionUID = 1L;
 
-    protected final Comparator<? super T> comparator;
     protected boolean visitedAtLeastOnce;
     protected T result;
-
-    protected ComparatorProcedure(Comparator<? super T> comparator)
-    {
-        this.comparator = comparator;
-    }
-
-    public boolean isVisitedAtLeastOnce()
-    {
-        return this.visitedAtLeastOnce;
-    }
 
     public T getResult()
     {
@@ -46,5 +39,21 @@ public abstract class ComparatorProcedure<T> implements Procedure<T>
             throw new NoSuchElementException();
         }
         return this.result;
+    }
+
+    public void value(T each)
+    {
+        if (this.visitedAtLeastOnce)
+        {
+            if (((Comparable<T>) each).compareTo(this.result) > 0)
+            {
+                this.result = each;
+            }
+        }
+        else
+        {
+            this.visitedAtLeastOnce = true;
+            this.result = each;
+        }
     }
 }

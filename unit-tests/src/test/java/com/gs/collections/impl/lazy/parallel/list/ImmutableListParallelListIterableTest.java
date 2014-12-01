@@ -25,7 +25,13 @@ public class ImmutableListParallelListIterableTest extends ParallelListIterableT
     @Override
     protected ParallelListIterable<Integer> classUnderTest()
     {
-        return Lists.immutable.with(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 2);
+        return this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected ParallelListIterable<Integer> newWith(Integer... littleElements)
+    {
+        return Lists.immutable.with(littleElements).asParallel(this.executorService, 2);
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
-import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
@@ -99,48 +98,6 @@ public class ParallelCollectIterable<T, V> extends AbstractParallelIterableImpl<
     {
         // TODO: Implement in parallel
         return new NonParallelUnsortedBag<V1>(this.delegate.toBag().collect(this.function).flatCollect(function));
-    }
-
-    @Override
-    public V min(Comparator<? super V> comparator)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toList().collect(this.function).min(comparator);
-    }
-
-    @Override
-    public V max(Comparator<? super V> comparator)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toList().collect(this.function).max(comparator);
-    }
-
-    @Override
-    public V min()
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toList().collect(this.function).min();
-    }
-
-    @Override
-    public V max()
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toList().collect(this.function).max();
-    }
-
-    @Override
-    public <V1 extends Comparable<? super V1>> V minBy(Function<? super V, ? extends V1> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toList().collect(this.function).minBy(function);
-    }
-
-    @Override
-    public <V1 extends Comparable<? super V1>> V maxBy(Function<? super V, ? extends V1> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toList().collect(this.function).maxBy(function);
     }
 
     @Override

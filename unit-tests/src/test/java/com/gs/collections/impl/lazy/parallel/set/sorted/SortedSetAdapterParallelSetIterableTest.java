@@ -28,6 +28,12 @@ public class SortedSetAdapterParallelSetIterableTest extends NonParallelSortedSe
     @Override
     protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
-        return SortedSetAdapter.adapt(new TreeSet<Integer>(TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1))).asParallel(this.executorService, 2);
+        return this.newWith(4, 3, 2, 1);
+    }
+
+    @Override
+    protected ParallelSortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return SortedSetAdapter.adapt(new TreeSet<Integer>(TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), littleElements))).asParallel(this.executorService, 2);
     }
 }

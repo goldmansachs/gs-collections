@@ -29,11 +29,13 @@ public abstract class ParallelBagTestCase extends ParallelIterableTestCase
     protected abstract ParallelBag<Integer> classUnderTest();
 
     @Override
+    protected abstract ParallelBag<Integer> newWith(Integer... littleElements);
+
+    @Override
     protected MutableBag<Integer> getExpected()
     {
         return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
     }
-
 
     @Override
     protected boolean isOrdered()

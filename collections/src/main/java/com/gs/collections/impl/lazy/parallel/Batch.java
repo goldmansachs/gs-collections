@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.lazy.parallel;
 
+import java.util.Comparator;
+
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -33,5 +35,13 @@ public interface Batch<T>
     int count(Predicate<? super T> predicate);
 
     String makeString(String separator);
+
+    T min(Comparator<? super T> comparator);
+
+    T max(Comparator<? super T> comparator);
+
+    <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function);
+
+    <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function);
 }
 

@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.lazy.parallel;
 
-import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
@@ -93,48 +92,6 @@ public class ParallelSelectIterable<T> extends AbstractParallelIterableImpl<T, B
     {
         // TODO: Implement in parallel
         return new NonParallelUnsortedBag<V>(this.parallelIterable.toBag().select(this.predicate).flatCollect(function));
-    }
-
-    @Override
-    public T min(Comparator<? super T> comparator)
-    {
-        // TODO: Implement in parallel
-        return this.parallelIterable.toList().select(this.predicate).min(comparator);
-    }
-
-    @Override
-    public T max(Comparator<? super T> comparator)
-    {
-        // TODO: Implement in parallel
-        return this.parallelIterable.toList().select(this.predicate).max(comparator);
-    }
-
-    @Override
-    public T min()
-    {
-        // TODO: Implement in parallel
-        return this.parallelIterable.toList().select(this.predicate).min();
-    }
-
-    @Override
-    public T max()
-    {
-        // TODO: Implement in parallel
-        return this.parallelIterable.toList().select(this.predicate).max();
-    }
-
-    @Override
-    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
-    {
-        // TODO: Implement in parallel
-        return this.parallelIterable.toList().select(this.predicate).minBy(function);
-    }
-
-    @Override
-    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
-    {
-        // TODO: Implement in parallel
-        return this.parallelIterable.toList().select(this.predicate).maxBy(function);
     }
 
     @Override

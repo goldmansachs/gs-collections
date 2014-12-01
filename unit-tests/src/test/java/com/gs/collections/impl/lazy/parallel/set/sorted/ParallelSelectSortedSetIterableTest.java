@@ -26,7 +26,13 @@ public class ParallelSelectSortedSetIterableTest extends ParallelSortedSetIterab
     @Override
     protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
-        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), -1, 1, -1, 2, -1, 2, -1, 3, -1, 3, -1, 3, 5, 4, 5, 4, 5, 4, 5, 4, 5)
+        return this.newWith(-1, 1, -1, 2, -1, 2, -1, 3, -1, 3, -1, 3, 5, 4, 5, 4, 5, 4, 5, 4, 5);
+    }
+
+    @Override
+    protected ParallelSortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), littleElements)
                 .asParallel(this.executorService, 2)
                 .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
     }

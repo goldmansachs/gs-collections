@@ -77,6 +77,8 @@ public abstract class ParallelIterableTestCase
     // 1, 2, 2, 3, 3, 3, 4, 4, 4, 4
     protected abstract ParallelIterable<Integer> classUnderTest();
 
+    protected abstract ParallelIterable<Integer> newWith(Integer... littleElements);
+
     // 1, 2, 2, 3, 3, 3, 4, 4, 4, 4
     protected abstract RichIterable<Integer> getExpected();
 
@@ -1060,5 +1062,47 @@ public abstract class ParallelIterableTestCase
         MutableCollection<Integer> actual = HashBag.<Integer>newBag().asSynchronized();
         this.classUnderTest().forEach(CollectionAddProcedure.on(actual));
         Assert.assertEquals(this.getExpected().toBag(), actual);
+    }
+
+    @Test
+    public void minWithEmptyBatch()
+    {
+        //there will be a batch contains [4, 4] that will return empty before computing min of the batch
+        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().select(Predicates.lessThan(4)).min());
+        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().reject(Predicates.greaterThan(3)).min());
+        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().asUnique().min());
+    }
+
+    @Test
+    public void maxWithEmptyBatch()
+    {
+        //there will be a batch contains [4, 4] that will return empty before computing min of the batch
+        Assert.assertEquals(Integer.valueOf(3), this.classUnderTest().select(Predicates.lessThan(4)).max());
+        Assert.assertEquals(Integer.valueOf(3), this.classUnderTest().reject(Predicates.greaterThan(3)).max());
+        Assert.assertEquals(Integer.valueOf(4), this.classUnderTest().asUnique().max());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void min_null_throws()
+    {
+        this.newWith(1, null, 2).min(Integer::compareTo);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void max_null_throws()
+    {
+        this.newWith(1, null, 2).max(Integer::compareTo);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void minBy_null_throws()
+    {
+        this.newWith(1, null, 2).minBy(Integer::valueOf);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void maxBy_null_throws()
+    {
+        this.newWith(1, null, 2).maxBy(Integer::valueOf);
     }
 }

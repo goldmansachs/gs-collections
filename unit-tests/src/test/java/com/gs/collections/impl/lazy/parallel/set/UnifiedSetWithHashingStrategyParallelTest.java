@@ -30,7 +30,13 @@ public class UnifiedSetWithHashingStrategyParallelTest extends ParallelUnsortedS
     @Override
     protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
-        return UnifiedSetWithHashingStrategy.newSetWith(INTEGER_TO_STRING_HASHING_STRATEGY, 1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 2);
+        return this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return UnifiedSetWithHashingStrategy.newSetWith(INTEGER_TO_STRING_HASHING_STRATEGY, littleElements).asParallel(this.executorService, 2);
     }
 
     @Override

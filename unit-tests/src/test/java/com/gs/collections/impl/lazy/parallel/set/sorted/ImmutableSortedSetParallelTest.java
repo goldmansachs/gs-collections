@@ -26,7 +26,13 @@ public class ImmutableSortedSetParallelTest extends ParallelSortedSetIterableTes
     @Override
     protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
-        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), 4, 3, 2, 1).asParallel(this.executorService, 2);
+        return this.newWith(4, 3, 2, 1);
+    }
+
+    @Override
+    protected ParallelSortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), littleElements).asParallel(this.executorService, 2);
     }
 
     @Test(expected = IllegalArgumentException.class)

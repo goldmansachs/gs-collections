@@ -25,7 +25,13 @@ public class ParallelSelectListIterableTest extends ParallelListIterableTestCase
     @Override
     protected ParallelListIterable<Integer> classUnderTest()
     {
-        return FastList.newListWith(-1, 1, -1, 2, -1, 2, -1, 3, -1, 3, -1, 3, 5, 4, 5, 4, 5, 4, 5, 4, 5)
+        return this.newWith(-1, 1, -1, 2, -1, 2, -1, 3, -1, 3, -1, 3, 5, 4, 5, 4, 5, 4, 5, 4, 5);
+    }
+
+    @Override
+    protected ParallelListIterable<Integer> newWith(Integer... littleElements)
+    {
+        return FastList.newListWith(littleElements)
                 .asParallel(this.executorService, 2)
                 .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
     }

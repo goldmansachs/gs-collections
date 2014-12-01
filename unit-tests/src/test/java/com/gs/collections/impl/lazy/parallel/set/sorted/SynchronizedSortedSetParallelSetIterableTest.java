@@ -25,6 +25,12 @@ public class SynchronizedSortedSetParallelSetIterableTest extends NonParallelSor
     @Override
     protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
-        return TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1).asSynchronized().asParallel(this.executorService, 2);
+        return this.newWith(4, 3, 2, 1);
+    }
+
+    @Override
+    protected ParallelSortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), littleElements).asSynchronized().asParallel(this.executorService, 2);
     }
 }

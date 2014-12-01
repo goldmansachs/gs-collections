@@ -28,7 +28,13 @@ public class ParallelCollectSortedSetIterableTest extends ParallelListIterableTe
     @Override
     protected ParallelListIterable<Integer> classUnderTest()
     {
-        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), 44, 43, 42, 41, 33, 32, 31, 22, 21, 10)
+        return this.newWith(44, 43, 42, 41, 33, 32, 31, 22, 21, 11);
+    }
+
+    @Override
+    protected ParallelListIterable<Integer> newWith(Integer... littleElements)
+    {
+        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), littleElements)
                 .asParallel(this.executorService, 2)
                 .collect(i -> i / 10);
     }

@@ -32,7 +32,13 @@ public class ParallelCollectMultiReaderSetIterableTest extends ParallelIterableT
     @Override
     protected ParallelIterable<Integer> classUnderTest()
     {
-        return MultiReaderUnifiedSet.newSetWith(11, 21, 22, 31, 32, 33, 41, 42, 43, 44)
+        return this.newWith(44, 43, 42, 41, 33, 32, 31, 22, 21, 11);
+    }
+
+    @Override
+    protected ParallelIterable<Integer> newWith(Integer... littleElements)
+    {
+        return MultiReaderUnifiedSet.newSetWith(littleElements)
                 .asParallel(this.executorService, 2)
                 .collect(i -> i / 10);
     }
@@ -42,7 +48,6 @@ public class ParallelCollectMultiReaderSetIterableTest extends ParallelIterableT
     {
         return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
     }
-
 
     @Override
     protected boolean isOrdered()

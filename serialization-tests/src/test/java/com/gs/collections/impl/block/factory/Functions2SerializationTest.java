@@ -54,4 +54,48 @@ public class Functions2SerializationTest
                         + "bnMvYXBpL2Jsb2NrL2Z1bmN0aW9uL0Z1bmN0aW9uO3hwcA==",
                 Functions2.fromFunction(null));
     }
+
+    @Test
+    public void min()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAD1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczIk\n"
+                        + "TWluRnVuY3Rpb24yAAAAAAAAAAECAAFMAApjb21wYXJhdG9ydAAWTGphdmEvdXRpbC9Db21wYXJh\n"
+                        + "dG9yO3hwcA==",
+                Functions2.min(null));
+    }
+
+    @Test
+    public void max()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAD1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczIk\n"
+                        + "TWF4RnVuY3Rpb24yAAAAAAAAAAECAAFMAApjb21wYXJhdG9ydAAWTGphdmEvdXRpbC9Db21wYXJh\n"
+                        + "dG9yO3hwcA==",
+                Functions2.max(null));
+    }
+
+    @Test
+    public void minBy()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczIk\n"
+                        + "TWluQnlGdW5jdGlvbjIAAAAAAAAAAQIAAUwACGZ1bmN0aW9udAAwTGNvbS9ncy9jb2xsZWN0aW9u\n"
+                        + "cy9hcGkvYmxvY2svZnVuY3Rpb24vRnVuY3Rpb247eHBw",
+                Functions2.minBy(null));
+    }
+
+    @Test
+    public void maxBy()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczIk\n"
+                        + "TWF4QnlGdW5jdGlvbjIAAAAAAAAAAQIAAUwACGZ1bmN0aW9udAAwTGNvbS9ncy9jb2xsZWN0aW9u\n"
+                        + "cy9hcGkvYmxvY2svZnVuY3Rpb24vRnVuY3Rpb247eHBw",
+                Functions2.maxBy(null));
+    }
 }

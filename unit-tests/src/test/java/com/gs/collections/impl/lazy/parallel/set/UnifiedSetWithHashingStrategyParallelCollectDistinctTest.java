@@ -30,7 +30,13 @@ public class UnifiedSetWithHashingStrategyParallelCollectDistinctTest extends Pa
     @Override
     protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
-        return (ParallelUnsortedSetIterable<Integer>) UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.defaultStrategy(), 11, 21, 22, 31, 32, 33, 41, 42, 43, 44)
+        return this.newWith(11, 21, 22, 31, 32, 33, 41, 42, 43, 44);
+    }
+
+    @Override
+    protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return (ParallelUnsortedSetIterable<Integer>) UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.defaultStrategy(), littleElements)
                 .asParallel(this.executorService, 2)
                 .collect(i -> i / 10)
                 .asUnique();

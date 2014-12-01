@@ -27,6 +27,9 @@ public abstract class ParallelListIterableTestCase extends ParallelIterableTestC
     protected abstract ParallelListIterable<Integer> classUnderTest();
 
     @Override
+    protected abstract ParallelListIterable<Integer> newWith(Integer... littleElements);
+
+    @Override
     protected MutableList<Integer> getExpected()
     {
         return FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);

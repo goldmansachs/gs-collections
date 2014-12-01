@@ -29,6 +29,9 @@ public abstract class ParallelUnsortedSetIterableTestCase extends ParallelIterab
     protected abstract ParallelUnsortedSetIterable<Integer> classUnderTest();
 
     @Override
+    protected abstract ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements);
+
+    @Override
     protected MutableSet<Integer> getExpected()
     {
         return UnifiedSet.newSetWith(1, 2, 3, 4);

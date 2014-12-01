@@ -100,6 +100,12 @@ import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.GroupByUniqueKeyProcedure;
+import com.gs.collections.impl.block.procedure.MaxByProcedure;
+import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
+import com.gs.collections.impl.block.procedure.MaxProcedure;
+import com.gs.collections.impl.block.procedure.MinByProcedure;
+import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
+import com.gs.collections.impl.block.procedure.MinProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
@@ -1102,32 +1108,44 @@ public class UnifiedSetWithHashingStrategy<K>
 
     public K min(Comparator<? super K> comparator)
     {
-        return Iterate.min(this, comparator);
+        MinComparatorProcedure<K> procedure = new MinComparatorProcedure<K>(comparator);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public K max(Comparator<? super K> comparator)
     {
-        return Iterate.max(this, comparator);
+        MaxComparatorProcedure<K> procedure = new MaxComparatorProcedure<K>(comparator);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public K min()
     {
-        return Iterate.min(this);
+        MinProcedure<K> procedure = new MinProcedure<K>();
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public K max()
     {
-        return Iterate.max(this);
+        MaxProcedure<K> procedure = new MaxProcedure<K>();
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public <V extends Comparable<? super V>> K minBy(Function<? super K, ? extends V> function)
     {
-        return IterableIterate.minBy(this, function);
+        MinByProcedure<K, V> minByProcedure = new MinByProcedure<K, V>(function);
+        this.forEach(minByProcedure);
+        return minByProcedure.getResult();
     }
 
     public <V extends Comparable<? super V>> K maxBy(Function<? super K, ? extends V> function)
     {
-        return IterableIterate.maxBy(this, function);
+        MaxByProcedure<K, V> maxByProcedure = new MaxByProcedure<K, V>(function);
+        this.forEach(maxByProcedure);
+        return maxByProcedure.getResult();
     }
 
     public K detectIfNone(Predicate<? super K> predicate, Function0<? extends K> function)
@@ -3199,48 +3217,6 @@ public class UnifiedSetWithHashingStrategy<K>
         public K detect(Predicate<? super K> predicate)
         {
             return detect(this, predicate);
-        }
-
-        @Override
-        public K min(Comparator<? super K> comparator)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSetWithHashingStrategy.this.min(comparator);
-        }
-
-        @Override
-        public K max(Comparator<? super K> comparator)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSetWithHashingStrategy.this.max(comparator);
-        }
-
-        @Override
-        public K min()
-        {
-            // TODO: Implement in parallel
-            return UnifiedSetWithHashingStrategy.this.min();
-        }
-
-        @Override
-        public K max()
-        {
-            // TODO: Implement in parallel
-            return UnifiedSetWithHashingStrategy.this.max();
-        }
-
-        @Override
-        public <V extends Comparable<? super V>> K minBy(Function<? super K, ? extends V> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSetWithHashingStrategy.this.minBy(function);
-        }
-
-        @Override
-        public <V extends Comparable<? super V>> K maxBy(Function<? super K, ? extends V> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSetWithHashingStrategy.this.maxBy(function);
         }
 
         @Override

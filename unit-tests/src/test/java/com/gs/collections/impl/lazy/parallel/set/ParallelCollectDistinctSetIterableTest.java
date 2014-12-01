@@ -29,7 +29,13 @@ public class ParallelCollectDistinctSetIterableTest extends ParallelUnsortedSetI
     @Override
     protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
-        return (ParallelUnsortedSetIterable<Integer>) UnifiedSet.newSetWith(11, 21, 22, 31, 32, 33, 41, 42, 43, 44)
+        return this.newWith(44, 43, 42, 41, 33, 32, 31, 22, 21, 11);
+    }
+
+    @Override
+    protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return (ParallelUnsortedSetIterable<Integer>) UnifiedSet.newSetWith(littleElements)
                 .asParallel(this.executorService, 2)
                 .collect(i -> i / 10)
                 .asUnique();

@@ -39,6 +39,11 @@ public class MaxByProcedure<T, V extends Comparable<? super V>> implements Proce
         this.function = function;
     }
 
+    public boolean isVisitedAtLeastOnce()
+    {
+        return this.visitedAtLeastOnce;
+    }
+
     public T getResult()
     {
         if (!this.visitedAtLeastOnce)

@@ -25,7 +25,13 @@ public class ParallelSelectBagTest extends ParallelBagTestCase
     @Override
     protected ParallelBag<Integer> classUnderTest()
     {
-        return HashBag.newBagWith(-1, 1, -1, 2, -1, 2, -1, 3, -1, 3, -1, 3, 5, 4, 5, 4, 5, 4, 5, 4, 5)
+        return this.newWith(-1, 1, -1, 2, -1, 2, -1, 3, -1, 3, -1, 3, 5, 4, 5, 4, 5, 4, 5, 4, 5);
+    }
+
+    @Override
+    protected ParallelBag<Integer> newWith(Integer... littleElements)
+    {
+        return HashBag.newBagWith(littleElements)
                 .asParallel(this.executorService, 2)
                 .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
     }

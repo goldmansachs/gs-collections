@@ -25,7 +25,13 @@ public class UnmodifiableUnsortedSetParallelTest extends ParallelUnsortedSetIter
     @Override
     protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
-        return UnifiedSet.newSetWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asUnmodifiable().asParallel(this.executorService, 2);
+        return this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return UnifiedSet.newSetWith(littleElements).asUnmodifiable().asParallel(this.executorService, 2);
     }
 
     @Test(expected = IllegalArgumentException.class)

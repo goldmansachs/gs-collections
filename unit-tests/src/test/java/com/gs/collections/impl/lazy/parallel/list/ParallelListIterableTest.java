@@ -25,7 +25,13 @@ public class ParallelListIterableTest extends ParallelListIterableTestCase
     @Override
     protected ParallelListIterable<Integer> classUnderTest()
     {
-        return FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 2);
+        return this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected ParallelListIterable<Integer> newWith(Integer... littleElements)
+    {
+        return FastList.newListWith(littleElements).asParallel(this.executorService, 2);
     }
 
     @Test(expected = IllegalArgumentException.class)

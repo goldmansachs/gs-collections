@@ -25,7 +25,13 @@ public class ParallelDistinctListIterableTest extends ParallelUnsortedSetIterabl
     @Override
     protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
-        return FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
+        return this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return FastList.newListWith(littleElements)
                 .asParallel(this.executorService, 2)
                 .asUnique();
     }

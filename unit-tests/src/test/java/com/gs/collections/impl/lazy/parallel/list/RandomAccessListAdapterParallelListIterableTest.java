@@ -27,7 +27,13 @@ public class RandomAccessListAdapterParallelListIterableTest extends ParallelLis
     @Override
     protected ParallelListIterable<Integer> classUnderTest()
     {
-        return RandomAccessListAdapter.adapt(Lists.mutable.of(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)).asParallel(this.executorService, 2);
+        return this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected ParallelListIterable<Integer> newWith(Integer... littleElements)
+    {
+        return RandomAccessListAdapter.adapt(Lists.mutable.of(littleElements)).asParallel(this.executorService, 2);
     }
 
     @Test(expected = IllegalArgumentException.class)

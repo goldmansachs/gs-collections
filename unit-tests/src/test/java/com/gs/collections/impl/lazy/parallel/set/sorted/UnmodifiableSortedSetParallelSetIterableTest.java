@@ -25,6 +25,12 @@ public class UnmodifiableSortedSetParallelSetIterableTest extends NonParallelSor
     @Override
     protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
-        return TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1).asUnmodifiable().asParallel(this.executorService, 2);
+        return this.newWith(4, 3, 2, 1);
+    }
+
+    @Override
+    protected ParallelSortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), littleElements).asUnmodifiable().asParallel(this.executorService, 2);
     }
 }

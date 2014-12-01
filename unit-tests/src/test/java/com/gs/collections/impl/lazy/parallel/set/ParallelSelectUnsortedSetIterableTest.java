@@ -25,7 +25,13 @@ public class ParallelSelectUnsortedSetIterableTest extends ParallelUnsortedSetIt
     @Override
     protected ParallelUnsortedSetIterable<Integer> classUnderTest()
     {
-        return UnifiedSet.newSetWith(-1, 1, -1, 2, -1, 2, -1, 3, -1, 3, -1, 3, 5, 4, 5, 4, 5, 4, 5, 4, 5)
+        return this.newWith(-1, 1, -1, 2, -1, 2, -1, 3, -1, 3, -1, 3, 5, 4, 5, 4, 5, 4, 5, 4, 5);
+    }
+
+    @Override
+    protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return UnifiedSet.newSetWith(littleElements)
                 .asParallel(this.executorService, 2)
                 .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
     }

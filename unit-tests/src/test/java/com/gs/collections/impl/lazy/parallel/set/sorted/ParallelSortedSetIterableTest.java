@@ -26,7 +26,13 @@ public class ParallelSortedSetIterableTest extends NonParallelSortedSetIterableT
     @Override
     protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
-        return TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1).asParallel(this.executorService, 2);
+        return this.newWith(4, 3, 2, 1);
+    }
+
+    @Override
+    protected ParallelSortedSetIterable<Integer> newWith(Integer... littleElements)
+    {
+        return TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), littleElements).asParallel(this.executorService, 2);
     }
 
     @Test(expected = IllegalArgumentException.class)

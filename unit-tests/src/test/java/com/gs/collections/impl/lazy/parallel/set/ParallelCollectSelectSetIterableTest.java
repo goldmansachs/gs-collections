@@ -33,7 +33,13 @@ public class ParallelCollectSelectSetIterableTest extends ParallelIterableTestCa
     @Override
     protected ParallelIterable<Integer> classUnderTest()
     {
-        return UnifiedSet.newSetWith(0, 11, 21, 22, 31, 32, 33, 41, 42, 43, 44, 50)
+        return this.newWith(0, 11, 21, 22, 31, 32, 33, 41, 42, 43, 44, 50);
+    }
+
+    @Override
+    protected ParallelIterable<Integer> newWith(Integer... littleElements)
+    {
+        return UnifiedSet.newSetWith(littleElements)
                 .asParallel(this.executorService, 2)
                 .collect(i -> i / 10)
                 .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
@@ -44,7 +50,6 @@ public class ParallelCollectSelectSetIterableTest extends ParallelIterableTestCa
     {
         return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
     }
-
 
     @Override
     protected boolean isOrdered()

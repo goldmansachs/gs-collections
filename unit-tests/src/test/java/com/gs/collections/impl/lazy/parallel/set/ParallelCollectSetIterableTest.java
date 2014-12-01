@@ -32,7 +32,13 @@ public class ParallelCollectSetIterableTest extends ParallelIterableTestCase
     @Override
     protected ParallelIterable<Integer> classUnderTest()
     {
-        return UnifiedSet.newSetWith(11, 21, 22, 31, 32, 33, 41, 42, 43, 44)
+        return this.newWith(11, 21, 22, 31, 32, 33, 41, 42, 43, 44);
+    }
+
+    @Override
+    protected ParallelIterable<Integer> newWith(Integer... littleElements)
+    {
+        return UnifiedSet.newSetWith(littleElements)
                 .asParallel(this.executorService, 2)
                 .collect(i -> i / 10);
     }
