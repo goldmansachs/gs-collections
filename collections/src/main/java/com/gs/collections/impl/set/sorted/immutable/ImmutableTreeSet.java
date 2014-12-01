@@ -272,48 +272,6 @@ final class ImmutableTreeSet<T>
         }
 
         @Override
-        public T min(Comparator<? super T> comparator)
-        {
-            // TODO: Implement in parallel
-            return ImmutableTreeSet.this.min(comparator);
-        }
-
-        @Override
-        public T max(Comparator<? super T> comparator)
-        {
-            // TODO: Implement in parallel
-            return ImmutableTreeSet.this.max(comparator);
-        }
-
-        @Override
-        public T min()
-        {
-            // TODO: Implement in parallel
-            return ImmutableTreeSet.this.min();
-        }
-
-        @Override
-        public T max()
-        {
-            // TODO: Implement in parallel
-            return ImmutableTreeSet.this.max();
-        }
-
-        @Override
-        public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
-        {
-            // TODO: Implement in parallel
-            return ImmutableTreeSet.this.minBy(function);
-        }
-
-        @Override
-        public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
-        {
-            // TODO: Implement in parallel
-            return ImmutableTreeSet.this.maxBy(function);
-        }
-
-        @Override
         public long sumOfInt(IntFunction<? super T> function)
         {
             // TODO: Implement in parallel
