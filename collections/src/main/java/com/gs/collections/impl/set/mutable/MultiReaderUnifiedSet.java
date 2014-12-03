@@ -94,7 +94,11 @@ public final class MultiReaderUnifiedSet<T>
     private transient ReadWriteLock lock;
     private MutableSet<T> delegate;
 
+    /**
+     * @deprecated Empty default constructor used for serialization.
+     */
     @SuppressWarnings("UnusedDeclaration")
+    @Deprecated
     public MultiReaderUnifiedSet()
     {
         // For Externalizable use only

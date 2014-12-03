@@ -100,7 +100,11 @@ public final class MultiReaderFastList<T>
     private transient ReadWriteLock lock;
     private MutableList<T> delegate;
 
+    /**
+     * @deprecated Empty default constructor used for serialization.
+     */
     @SuppressWarnings("UnusedDeclaration")
+    @Deprecated
     public MultiReaderFastList()
     {
         // For Externalizable use only

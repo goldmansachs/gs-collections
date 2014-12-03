@@ -90,7 +90,11 @@ public final class MultiReaderHashBag<T>
     private transient ReadWriteLock lock;
     private MutableBag<T> delegate;
 
+    /**
+     * @deprecated Empty default constructor used for serialization.
+     */
     @SuppressWarnings("UnusedDeclaration")
+    @Deprecated
     public MultiReaderHashBag()
     {
         // For Externalizable use only
