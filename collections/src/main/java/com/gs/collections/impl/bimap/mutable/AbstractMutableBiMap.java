@@ -20,6 +20,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
@@ -56,12 +57,15 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bimap.AbstractBiMap;
+import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.factory.BiMaps;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.MapIterate;
 
@@ -642,7 +646,7 @@ abstract class AbstractMutableBiMap<K, V> extends AbstractBiMap<K, V> implements
         }
     }
 
-    private class KeySet implements Set<K>
+    private class KeySet implements Set<K>, Serializable
     {
         @Override
         public boolean equals(Object obj)
@@ -749,6 +753,13 @@ abstract class AbstractMutableBiMap<K, V> extends AbstractBiMap<K, V> implements
         public String toString()
         {
             return Iterate.makeString(this, "[", ", ", "]");
+        }
+
+        protected Object writeReplace()
+        {
+            MutableSet<K> replace = UnifiedSet.newSet(AbstractMutableBiMap.this.size());
+            AbstractMutableBiMap.this.forEachKey(CollectionAddProcedure.on(replace));
+            return replace;
         }
     }
 

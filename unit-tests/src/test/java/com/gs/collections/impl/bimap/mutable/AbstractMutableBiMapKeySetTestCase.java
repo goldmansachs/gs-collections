@@ -234,4 +234,11 @@ public abstract class AbstractMutableBiMapKeySetTestCase
         expected.add(null);
         Assert.assertEquals(expected, HashBag.newBagWith(keySet.toArray(new String[keySet.size() + 1])));
     }
+
+    @Test
+    public void serialization()
+    {
+        MutableBiMap<String, Integer> biMap = this.newMapWithKeysValues("One", 1, "Two", 2, "Three", 3);
+        Verify.assertPostSerializedEqualsAndHashCode(biMap);
+    }
 }
