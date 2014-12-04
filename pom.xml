@@ -99,10 +99,6 @@
         <sonar.clover.version>${clover.version}</sonar.clover.version>
     </properties>
 
-    <prerequisites>
-        <maven>3.0.5</maven>
-    </prerequisites>
-
     <dependencyManagement>
         <dependencies>
 
