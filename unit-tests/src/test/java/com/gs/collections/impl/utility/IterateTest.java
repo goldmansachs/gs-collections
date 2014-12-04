@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.utility;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1989,29 +1991,47 @@ public class IterateTest
     @Test
     public void sumOfInt()
     {
-        Assert.assertEquals(6, Iterate.sumOfInt(FastList.newListWith(1, 2, 3), value -> value));
+        this.iterables.each(each -> Assert.assertEquals(15L, Iterate.sumOfLong(each, value -> value)));
+        long result = Iterate.sumOfInt(FastList.<Integer>newListWith(2_000_000_000, 2_000_000_000, 2_000_000_000), e -> e);
+        Assert.assertEquals(6_000_000_000L, result);
         Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumOfInt(null, null));
     }
 
     @Test
     public void sumOfLong()
     {
-        Assert.assertEquals(6L, Iterate.sumOfLong(FastList.newListWith(Long.valueOf(1), Long.valueOf(2), Long.valueOf(3)), value -> value));
+        this.iterables.each(each -> Assert.assertEquals(15L, Iterate.sumOfLong(each, Integer::longValue)));
         Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumOfLong(null, null));
     }
 
     @Test
     public void sumOfFloat()
     {
-        Assert.assertEquals(6.0d, Iterate.sumOfFloat(FastList.newListWith(Float.valueOf(1), Float.valueOf(2), Float.valueOf(3)), value -> value), 0.0d);
+        this.iterables.each(each -> Assert.assertEquals(15.0d, Iterate.sumOfFloat(each, Integer::floatValue), 0.0d));
         Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumOfFloat(null, null));
+        double result = Iterate.sumOfFloat(FastList.<Integer>newListWith(2_000_000_000, 2_000_000_000, 2_000_000_000), e -> e);
+        Assert.assertEquals((double) 6_000_000_000L, result, 0.0d);
     }
 
     @Test
     public void sumOfDouble()
     {
-        Assert.assertEquals(6.0d, Iterate.sumOfDouble(FastList.newListWith(Double.valueOf(1), Double.valueOf(2), Double.valueOf(3)), value -> value), 0.0d);
+        this.iterables.each(each -> Assert.assertEquals(15.0d, Iterate.sumOfDouble(each, Integer::doubleValue), 0.0d));
         Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumOfDouble(null, null));
+    }
+
+    @Test
+    public void sumOfBigDecimal()
+    {
+        this.iterables.each(each -> Assert.assertEquals(new BigDecimal(15), Iterate.sumOfBigDecimal(each, BigDecimal::new)));
+        Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumOfBigDecimal(null, null));
+    }
+
+    @Test
+    public void sumOfBigInteger()
+    {
+        this.iterables.each(each -> Assert.assertEquals(new BigInteger("15"), Iterate.sumOfBigInteger(each, integer -> new BigInteger(integer.toString()))));
+        Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumOfBigDecimal(null, null));
     }
 
     @Test
@@ -2023,6 +2043,10 @@ public class IterateTest
             Assert.assertEquals(9, result.get(1));
             Assert.assertEquals(6, result.get(0));
         });
+        ObjectLongMap<Integer> map =
+                Iterate.sumByInt(FastList.<Integer>newListWith(2_000_000_000, 2_000_000_001, 2_000_000_000, 2_000_000_001, 2_000_000_000), i -> i % 2, e -> e);
+        Assert.assertEquals(4_000_000_002L, map.get(1));
+        Assert.assertEquals(6_000_000_000L, map.get(0));
     }
 
     @Test
@@ -2034,6 +2058,10 @@ public class IterateTest
             Assert.assertEquals(9.0d, result.get(1), 0.0);
             Assert.assertEquals(6.0d, result.get(0), 0.0);
         });
+        ObjectDoubleMap<Integer> map =
+                Iterate.sumByFloat(FastList.<Integer>newListWith(2_000_000_000, 2_000_001, 2_000_000_000, 2_000_001, 2_000_000_000), i -> i % 2, e -> e);
+        Assert.assertEquals((double) 4_000_002L, map.get(1), 0.00001d);
+        Assert.assertEquals((double) 6_000_000_000L, map.get(0), 0.00001d);
     }
 
     @Test

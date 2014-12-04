@@ -17,6 +17,8 @@
 package com.gs.collections.impl.utility;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -1651,6 +1653,34 @@ public final class ArrayIterate
     public static <T> double sumOfDouble(T[] array, DoubleFunction<? super T> function)
     {
         return InternalArrayIterate.sumOfDouble(array, array.length, function);
+    }
+
+    /**
+     * @see Iterate#sumOfBigDecimal(Iterable, Function)
+     * @since 6.0
+     */
+    public static <T> BigDecimal sumOfBigDecimal(T[] array, Function<? super T, BigDecimal> function)
+    {
+        BigDecimal result = BigDecimal.ZERO;
+        for (T each : array)
+        {
+            result = result.add(function.valueOf(each));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#sumOfBigInteger(Iterable, Function)
+     * @since 6.0
+     */
+    public static <T> BigInteger sumOfBigInteger(T[] array, Function<? super T, BigInteger> function)
+    {
+        BigInteger result = BigInteger.ZERO;
+        for (T each : array)
+        {
+            result = result.add(function.valueOf(each));
+        }
+        return result;
     }
 
     /**

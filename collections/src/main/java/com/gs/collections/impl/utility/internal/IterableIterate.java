@@ -17,6 +17,8 @@
 package com.gs.collections.impl.utility.internal;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -605,6 +607,16 @@ public final class IterableIterate
     public static <T> double sumOfDouble(Iterable<T> iterable, DoubleFunction<? super T> function)
     {
         return IteratorIterate.sumOfDouble(iterable.iterator(), function);
+    }
+
+    public static <T> BigDecimal sumOfBigDecimal(Iterable<T> iterable, Function<? super T, BigDecimal> function)
+    {
+        return IteratorIterate.sumOfBigDecimal(iterable.iterator(), function);
+    }
+
+    public static <T> BigInteger sumOfBigInteger(Iterable<T> iterable, Function<? super T, BigInteger> function)
+    {
+        return IteratorIterate.sumOfBigInteger(iterable.iterator(), function);
     }
 
     public static <V, T> ObjectLongMap<V> sumByInt(Iterable<T> iterable, Function<T, V> groupBy, IntFunction<? super T> function)

@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.utility;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -913,6 +915,24 @@ public final class ListIterate
             return RandomAccessListIterate.sumOfDouble(list, function);
         }
         return IterableIterate.sumOfDouble(list, function);
+    }
+
+    public static <T> BigDecimal sumOfBigDecimal(List<T> list, Function<? super T, BigDecimal> function)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.sumOfBigDecimal(list, function);
+        }
+        return IterableIterate.sumOfBigDecimal(list, function);
+    }
+
+    public static <T> BigInteger sumOfBigInteger(List<T> list, Function<? super T, BigInteger> function)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.sumOfBigInteger(list, function);
+        }
+        return IterableIterate.sumOfBigInteger(list, function);
     }
 
     public static <V, T> ObjectLongMap<V> sumByInt(List<T> list, Function<T, V> groupBy, IntFunction<? super T> function)

@@ -17,6 +17,8 @@
 package com.gs.collections.impl.utility;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1212,6 +1214,20 @@ public class ArrayIterateTest
         long expected = ArrayIterate.injectInto(0L, objects, AddFunction.INTEGER_TO_LONG);
         long actual = ArrayIterate.sumOfLong(objects, Integer::longValue);
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void sumOfBigDecimal()
+    {
+        Integer[] objects = {1, 2, 3, 4, 5};
+        Assert.assertEquals(new BigDecimal(15), ArrayIterate.sumOfBigDecimal(objects, BigDecimal::new));
+    }
+
+    @Test
+    public void sumOfBigInteger()
+    {
+        Integer[] objects = {1, 2, 3, 4, 5};
+        Assert.assertEquals(new BigInteger("15"), ArrayIterate.sumOfBigInteger(objects, integer -> new BigInteger(integer.toString())));
     }
 
     @Test

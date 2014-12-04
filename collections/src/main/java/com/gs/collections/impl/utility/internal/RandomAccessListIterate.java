@@ -17,6 +17,8 @@
 package com.gs.collections.impl.utility.internal;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -839,6 +841,26 @@ public final class RandomAccessListIterate
         for (int i = 0; i < list.size(); i++)
         {
             result += function.doubleValueOf(list.get(i));
+        }
+        return result;
+    }
+
+    public static <T> BigDecimal sumOfBigDecimal(List<T> list, Function<? super T, BigDecimal> function)
+    {
+        BigDecimal result = BigDecimal.ZERO;
+        for (int i = 0; i < list.size(); i++)
+        {
+            result = result.add(function.valueOf(list.get(i)));
+        }
+        return result;
+    }
+
+    public static <T> BigInteger sumOfBigInteger(List<T> list, Function<? super T, BigInteger> function)
+    {
+        BigInteger result = BigInteger.ZERO;
+        for (int i = 0; i < list.size(); i++)
+        {
+            result = result.add(function.valueOf(list.get(i)));
         }
         return result;
     }

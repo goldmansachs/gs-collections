@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.utility;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -2298,6 +2300,42 @@ public final class Iterate
             return IterableIterate.sumOfDouble(iterable, function);
         }
         throw new IllegalArgumentException("Cannot perform an sumOfDouble on null");
+    }
+
+    /**
+     * Returns the BigDecimal sum of the result of applying the function to each element of the iterable.
+     *
+     * @since 6.0
+     */
+    public static <T> BigDecimal sumOfBigDecimal(Iterable<T> iterable, Function<? super T, BigDecimal> function)
+    {
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumOfBigDecimal((List<T>) iterable, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumOfBigDecimal(iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an sumOfBigDecimal on null");
+    }
+
+    /**
+     * Returns the BigInteger sum of the result of applying the function to each element of the iterable.
+     *
+     * @since 6.0
+     */
+    public static <T> BigInteger sumOfBigInteger(Iterable<T> iterable, Function<? super T, BigInteger> function)
+    {
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumOfBigInteger((List<T>) iterable, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumOfBigInteger(iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an sumOfBigDecimal on null");
     }
 
     /**

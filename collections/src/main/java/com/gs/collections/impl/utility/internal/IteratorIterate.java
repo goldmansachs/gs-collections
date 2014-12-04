@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.utility.internal;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -1209,6 +1211,26 @@ public final class IteratorIterate
             sum += function.doubleValueOf(iterator.next());
         }
         return sum;
+    }
+
+    public static <T> BigDecimal sumOfBigDecimal(Iterator<T> iterator, Function<? super T, BigDecimal> function)
+    {
+        BigDecimal result = BigDecimal.ZERO;
+        while (iterator.hasNext())
+        {
+            result = result.add(function.valueOf(iterator.next()));
+        }
+        return result;
+    }
+
+    public static <T> BigInteger sumOfBigInteger(Iterator<T> iterator, Function<? super T, BigInteger> function)
+    {
+        BigInteger result = BigInteger.ZERO;
+        while (iterator.hasNext())
+        {
+            result = result.add(function.valueOf(iterator.next()));
+        }
+        return result;
     }
 
     public static <T, K, V> MutableMap<K, V> aggregateBy(
