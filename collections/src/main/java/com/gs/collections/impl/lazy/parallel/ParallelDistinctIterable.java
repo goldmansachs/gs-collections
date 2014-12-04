@@ -21,10 +21,6 @@ import java.util.concurrent.ExecutorService;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MapIterable;
@@ -107,34 +103,6 @@ public class ParallelDistinctIterable<T> extends AbstractParallelUnsortedSetIter
     public T detect(Predicate<? super T> predicate)
     {
         return this.delegate.detect(new DistinctAndPredicate<T>(predicate));
-    }
-
-    @Override
-    public long sumOfInt(IntFunction<? super T> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toSet().sumOfInt(function);
-    }
-
-    @Override
-    public double sumOfFloat(FloatFunction<? super T> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toSet().sumOfFloat(function);
-    }
-
-    @Override
-    public long sumOfLong(LongFunction<? super T> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toSet().sumOfLong(function);
-    }
-
-    @Override
-    public double sumOfDouble(DoubleFunction<? super T> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toSet().sumOfDouble(function);
     }
 
     @Override

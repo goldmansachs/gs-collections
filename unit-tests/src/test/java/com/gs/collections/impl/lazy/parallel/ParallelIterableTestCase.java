@@ -18,6 +18,7 @@ package com.gs.collections.impl.lazy.parallel;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -877,6 +878,26 @@ public abstract class ParallelIterableTestCase
     }
 
     @Test
+    public void sumOfDoubleConsistentRounding()
+    {
+        int collectionSize = 100;
+        Integer[] largeData = new Integer[collectionSize];
+        Random random = new Random();
+        for (int i = 0; i < collectionSize; i++)
+        {
+            largeData[i] = random.nextInt();
+        }
+
+        double doubleBaseline = this.newWith(largeData).sumOfDouble(integer -> integer / 0.3);
+
+        int trialCount = 100;
+        for (int i = 0; i < trialCount; i++)
+        {
+            Assert.assertEquals(doubleBaseline, this.newWith(largeData).sumOfDouble(integer -> integer / 0.3), 0.0);
+        }
+    }
+
+    @Test
     public void asUnique()
     {
         Assert.assertEquals(this.getExpected().toSet(), this.classUnderTest().asUnique().toSet());
@@ -890,7 +911,9 @@ public abstract class ParallelIterableTestCase
     {
         try
         {
-            this.classUnderTest().forEach(each -> { throw new RuntimeException("Execution exception"); });
+            this.classUnderTest().forEach(each -> {
+                throw new RuntimeException("Execution exception");
+            });
         }
         catch (RuntimeException e)
         {
@@ -905,7 +928,9 @@ public abstract class ParallelIterableTestCase
     {
         try
         {
-            this.classUnderTest().collect(each -> { throw new RuntimeException("Execution exception"); }).toString();
+            this.classUnderTest().collect(each -> {
+                throw new RuntimeException("Execution exception");
+            }).toString();
         }
         catch (RuntimeException e)
         {
@@ -920,7 +945,9 @@ public abstract class ParallelIterableTestCase
     {
         try
         {
-            this.classUnderTest().anySatisfy(each -> { throw new RuntimeException("Execution exception"); });
+            this.classUnderTest().anySatisfy(each -> {
+                throw new RuntimeException("Execution exception");
+            });
         }
         catch (RuntimeException e)
         {
@@ -935,7 +962,9 @@ public abstract class ParallelIterableTestCase
     {
         try
         {
-            this.classUnderTest().allSatisfy(each -> { throw new RuntimeException("Execution exception"); });
+            this.classUnderTest().allSatisfy(each -> {
+                throw new RuntimeException("Execution exception");
+            });
         }
         catch (RuntimeException e)
         {
@@ -950,7 +979,9 @@ public abstract class ParallelIterableTestCase
     {
         try
         {
-            this.classUnderTest().detect(each -> { throw new RuntimeException("Execution exception"); });
+            this.classUnderTest().detect(each -> {
+                throw new RuntimeException("Execution exception");
+            });
         }
         catch (RuntimeException e)
         {

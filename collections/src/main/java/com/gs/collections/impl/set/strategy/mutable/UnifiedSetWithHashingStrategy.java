@@ -3220,34 +3220,6 @@ public class UnifiedSetWithHashingStrategy<K>
         }
 
         @Override
-        public long sumOfInt(IntFunction<? super K> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSetWithHashingStrategy.this.sumOfInt(function);
-        }
-
-        @Override
-        public double sumOfFloat(FloatFunction<? super K> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSetWithHashingStrategy.this.sumOfFloat(function);
-        }
-
-        @Override
-        public long sumOfLong(LongFunction<? super K> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSetWithHashingStrategy.this.sumOfLong(function);
-        }
-
-        @Override
-        public double sumOfDouble(DoubleFunction<? super K> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSetWithHashingStrategy.this.sumOfDouble(function);
-        }
-
-        @Override
         public Object[] toArray()
         {
             // TODO: Implement in parallel

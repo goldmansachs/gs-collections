@@ -90,7 +90,7 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
                 });
             }
         });
-        // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+        // The call to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
         MutableList<Future<?>> futuresList = futures.toList();
         for (Future<?> future : futuresList)
         {
@@ -216,7 +216,7 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
                 });
             }
         });
-        // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+        // The call to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
         MutableList<Future<T>> futuresList = futures.toList();
         for (Future<T> future : futuresList)
         {
@@ -281,7 +281,7 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
                 });
             }
         });
-        // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+        // The call to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
         MutableList<Future<V>> futuresList = futures.toList();
         for (Future<V> future : futuresList)
         {
@@ -371,7 +371,7 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
                 });
             }
         });
-        // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+        // The call to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
         MutableList<Future<T>> futuresList = futures.toList();
         try
         {
@@ -830,24 +830,128 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
         return this.collectReduce(map, Functions2.maxBy(function));
     }
 
-    public long sumOfInt(IntFunction<? super T> function)
+    public long sumOfInt(final IntFunction<? super T> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".sumOfInt() not implemented yet");
+        LongFunction<Batch<T>> map = new LongFunction<Batch<T>>()
+        {
+            public long longValueOf(Batch<T> batch)
+            {
+                return batch.sumOfInt(function);
+            }
+        };
+        return this.sumOfLongOrdered(map);
     }
 
-    public double sumOfFloat(FloatFunction<? super T> function)
+    public double sumOfFloat(final FloatFunction<? super T> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".sumOfFloat() not implemented yet");
+        DoubleFunction<Batch<T>> map = new DoubleFunction<Batch<T>>()
+        {
+            public double doubleValueOf(Batch<T> batch)
+            {
+                return batch.sumOfFloat(function);
+            }
+        };
+        return this.sumOfDoubleOrdered(map);
     }
 
-    public long sumOfLong(LongFunction<? super T> function)
+    public long sumOfLong(final LongFunction<? super T> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".sumOfLong() not implemented yet");
+        LongFunction<Batch<T>> map = new LongFunction<Batch<T>>()
+        {
+            public long longValueOf(Batch<T> batch)
+            {
+                return batch.sumOfLong(function);
+            }
+        };
+        return this.sumOfLongOrdered(map);
     }
 
-    public double sumOfDouble(DoubleFunction<? super T> function)
+    public double sumOfDouble(final DoubleFunction<? super T> function)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".sumOfDouble() not implemented yet");
+        DoubleFunction<Batch<T>> map = new DoubleFunction<Batch<T>>()
+        {
+            public double doubleValueOf(Batch<T> batch)
+            {
+                return batch.sumOfDouble(function);
+            }
+        };
+        return this.sumOfDoubleOrdered(map);
+    }
+
+    private long sumOfLongOrdered(final LongFunction<Batch<T>> map)
+    {
+        LazyIterable<? extends Batch<T>> chunks = this.split();
+        LazyIterable<Future<Long>> futures = chunks.collect(new Function<Batch<T>, Future<Long>>()
+        {
+            public Future<Long> valueOf(final Batch<T> chunk)
+            {
+                return AbstractParallelIterable.this.getExecutorService().submit(new Callable<Long>()
+                {
+                    public Long call()
+                    {
+                        return map.longValueOf(chunk);
+                    }
+                });
+            }
+        });
+        // The call to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+        MutableList<Future<Long>> futuresList = futures.toList();
+        try
+        {
+            long result = 0;
+            for (int i = 0; i < futuresList.size(); i++)
+            {
+                result += futuresList.get(i).get();
+            }
+            return result;
+        }
+        catch (InterruptedException e)
+        {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+        catch (ExecutionException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private double sumOfDoubleOrdered(final DoubleFunction<Batch<T>> map)
+    {
+        LazyIterable<? extends Batch<T>> chunks = this.split();
+        LazyIterable<Future<Double>> futures = chunks.collect(new Function<Batch<T>, Future<Double>>()
+        {
+            public Future<Double> valueOf(final Batch<T> chunk)
+            {
+                return AbstractParallelIterable.this.getExecutorService().submit(new Callable<Double>()
+                {
+                    public Double call()
+                    {
+                        return map.doubleValueOf(chunk);
+                    }
+                });
+            }
+        });
+        // The call to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+        MutableList<Future<Double>> futuresList = futures.toList();
+        try
+        {
+            double result = 0.0;
+            for (int i = 0; i < futuresList.size(); i++)
+            {
+                result += futuresList.get(i).get();
+            }
+            return result;
+        }
+        catch (InterruptedException e)
+        {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+        catch (ExecutionException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public <V> MapIterable<V, T> groupByUniqueKey(final Function<? super T, ? extends V> function)

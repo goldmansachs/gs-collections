@@ -19,10 +19,6 @@ package com.gs.collections.impl.lazy.parallel.set.sorted;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -133,34 +129,6 @@ public abstract class AbstractParallelSortedSetIterable<T, B extends SortedSetBa
     {
         // TODO: Implement in parallel
         return this.toList().groupByUniqueKey(function);
-    }
-
-    @Override
-    public long sumOfInt(IntFunction<? super T> function)
-    {
-        // TODO: Implement in parallel
-        return this.toList().sumOfInt(function);
-    }
-
-    @Override
-    public double sumOfFloat(FloatFunction<? super T> function)
-    {
-        // TODO: Implement in parallel
-        return this.toList().sumOfFloat(function);
-    }
-
-    @Override
-    public long sumOfLong(LongFunction<? super T> function)
-    {
-        // TODO: Implement in parallel
-        return this.toList().sumOfLong(function);
-    }
-
-    @Override
-    public double sumOfDouble(DoubleFunction<? super T> function)
-    {
-        // TODO: Implement in parallel
-        return this.toList().sumOfDouble(function);
     }
 
     @Override

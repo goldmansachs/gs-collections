@@ -26,10 +26,6 @@ import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -269,34 +265,6 @@ final class ImmutableTreeSet<T>
         {
             // TODO: Implement in parallel
             return ImmutableTreeSet.this.flatCollect(function).asParallel(this.executorService, this.batchSize);
-        }
-
-        @Override
-        public long sumOfInt(IntFunction<? super T> function)
-        {
-            // TODO: Implement in parallel
-            return ImmutableTreeSet.this.sumOfInt(function);
-        }
-
-        @Override
-        public double sumOfFloat(FloatFunction<? super T> function)
-        {
-            // TODO: Implement in parallel
-            return ImmutableTreeSet.this.sumOfFloat(function);
-        }
-
-        @Override
-        public long sumOfLong(LongFunction<? super T> function)
-        {
-            // TODO: Implement in parallel
-            return ImmutableTreeSet.this.sumOfLong(function);
-        }
-
-        @Override
-        public double sumOfDouble(DoubleFunction<? super T> function)
-        {
-            // TODO: Implement in parallel
-            return ImmutableTreeSet.this.sumOfDouble(function);
         }
 
         @Override

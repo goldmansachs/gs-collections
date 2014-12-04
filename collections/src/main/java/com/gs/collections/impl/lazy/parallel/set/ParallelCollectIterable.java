@@ -22,10 +22,6 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MapIterable;
@@ -98,34 +94,6 @@ public class ParallelCollectIterable<T, V> extends AbstractParallelIterableImpl<
     {
         // TODO: Implement in parallel
         return new NonParallelUnsortedBag<V1>(this.delegate.toBag().collect(this.function).flatCollect(function));
-    }
-
-    @Override
-    public long sumOfInt(IntFunction<? super V> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toList().collect(this.function).sumOfInt(function);
-    }
-
-    @Override
-    public double sumOfFloat(FloatFunction<? super V> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toList().collect(this.function).sumOfFloat(function);
-    }
-
-    @Override
-    public long sumOfLong(LongFunction<? super V> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toList().collect(this.function).sumOfLong(function);
-    }
-
-    @Override
-    public double sumOfDouble(DoubleFunction<? super V> function)
-    {
-        // TODO: Implement in parallel
-        return this.delegate.toList().collect(this.function).sumOfDouble(function);
     }
 
     @Override

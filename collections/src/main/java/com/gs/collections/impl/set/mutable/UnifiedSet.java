@@ -3325,34 +3325,6 @@ public class UnifiedSet<T>
         }
 
         @Override
-        public long sumOfInt(IntFunction<? super T> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSet.this.sumOfInt(function);
-        }
-
-        @Override
-        public double sumOfFloat(FloatFunction<? super T> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSet.this.sumOfFloat(function);
-        }
-
-        @Override
-        public long sumOfLong(LongFunction<? super T> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSet.this.sumOfLong(function);
-        }
-
-        @Override
-        public double sumOfDouble(DoubleFunction<? super T> function)
-        {
-            // TODO: Implement in parallel
-            return UnifiedSet.this.sumOfDouble(function);
-        }
-
-        @Override
         public Object[] toArray()
         {
             // TODO: Implement in parallel

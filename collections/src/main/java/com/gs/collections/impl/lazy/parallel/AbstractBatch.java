@@ -19,6 +19,10 @@ package com.gs.collections.impl.lazy.parallel;
 import java.util.Comparator;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.procedure.CountProcedure;
@@ -26,6 +30,10 @@ import com.gs.collections.impl.block.procedure.MaxByProcedure;
 import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
 import com.gs.collections.impl.block.procedure.MinByProcedure;
 import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
+import com.gs.collections.impl.block.procedure.SumOfDoubleProcedure;
+import com.gs.collections.impl.block.procedure.SumOfFloatProcedure;
+import com.gs.collections.impl.block.procedure.SumOfIntProcedure;
+import com.gs.collections.impl.block.procedure.SumOfLongProcedure;
 
 public abstract class AbstractBatch<T> implements Batch<T>
 {
@@ -79,5 +87,33 @@ public abstract class AbstractBatch<T> implements Batch<T>
         MaxByProcedure<T, V> procedure = new MaxByProcedure<T, V>(function);
         this.forEach(procedure);
         return procedure.isVisitedAtLeastOnce() ? procedure.getResult() : null;
+    }
+
+    public long sumOfInt(IntFunction<? super T> function)
+    {
+        SumOfIntProcedure<T> procedure = new SumOfIntProcedure<T>(function);
+        this.forEach(procedure);
+        return procedure.getResult();
+    }
+
+    public double sumOfFloat(FloatFunction<? super T> function)
+    {
+        SumOfFloatProcedure<T> procedure = new SumOfFloatProcedure<T>(function);
+        this.forEach(procedure);
+        return procedure.getResult();
+    }
+
+    public long sumOfLong(LongFunction<? super T> function)
+    {
+        SumOfLongProcedure<T> procedure = new SumOfLongProcedure<T>(function);
+        this.forEach(procedure);
+        return procedure.getResult();
+    }
+
+    public double sumOfDouble(DoubleFunction<? super T> function)
+    {
+        SumOfDoubleProcedure<T> procedure = new SumOfDoubleProcedure<T>(function);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 }
