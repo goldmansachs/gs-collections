@@ -68,6 +68,7 @@ import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
@@ -1679,6 +1680,46 @@ public final class ArrayIterate
         for (T each : array)
         {
             result = result.add(function.valueOf(each));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#sumByBigDecimal(Iterable, Function, Function)
+     * @since 6.0
+     */
+    public static <V, T> MutableMap<V, BigDecimal> sumByBigDecimal(T[] array, Function<T, V> groupBy, final Function<? super T, BigDecimal> function)
+    {
+        MutableMap<V, BigDecimal> result = UnifiedMap.newMap();
+        for (final T each : array)
+        {
+            result.updateValue(groupBy.valueOf(each), Functions0.zeroBigDecimal(), new Function<BigDecimal, BigDecimal>()
+            {
+                public BigDecimal valueOf(BigDecimal original)
+                {
+                    return original.add(function.valueOf(each));
+                }
+            });
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#sumByBigInteger(Iterable, Function, Function)
+     * @since 6.0
+     */
+    public static <V, T> MutableMap<V, BigInteger> sumByBigInteger(T[] array, Function<T, V> groupBy, final Function<? super T, BigInteger> function)
+    {
+        MutableMap<V, BigInteger> result = UnifiedMap.newMap();
+        for (final T each : array)
+        {
+            result.updateValue(groupBy.valueOf(each), Functions0.zeroBigInteger(), new Function<BigInteger, BigInteger>()
+            {
+                public BigInteger valueOf(BigInteger original)
+                {
+                    return original.add(function.valueOf(each));
+                }
+            });
         }
         return result;
     }

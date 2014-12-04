@@ -72,6 +72,7 @@ import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.factory.Lists;
@@ -848,7 +849,8 @@ public final class RandomAccessListIterate
     public static <T> BigDecimal sumOfBigDecimal(List<T> list, Function<? super T, BigDecimal> function)
     {
         BigDecimal result = BigDecimal.ZERO;
-        for (int i = 0; i < list.size(); i++)
+        int size = list.size();
+        for (int i = 0; i < size; i++)
         {
             result = result.add(function.valueOf(list.get(i)));
         }
@@ -858,9 +860,46 @@ public final class RandomAccessListIterate
     public static <T> BigInteger sumOfBigInteger(List<T> list, Function<? super T, BigInteger> function)
     {
         BigInteger result = BigInteger.ZERO;
-        for (int i = 0; i < list.size(); i++)
+        int size = list.size();
+        for (int i = 0; i < size; i++)
         {
             result = result.add(function.valueOf(list.get(i)));
+        }
+        return result;
+    }
+
+    public static <V, T> MutableMap<V, BigDecimal> sumByBigDecimal(List<T> list, Function<T, V> groupBy, final Function<? super T, BigDecimal> function)
+    {
+        MutableMap<V, BigDecimal> result = UnifiedMap.newMap();
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            final T item = list.get(i);
+            result.updateValue(groupBy.valueOf(item), Functions0.zeroBigDecimal(), new Function<BigDecimal, BigDecimal>()
+            {
+                public BigDecimal valueOf(BigDecimal original)
+                {
+                    return original.add(function.valueOf(item));
+                }
+            });
+        }
+        return result;
+    }
+
+    public static <V, T> MutableMap<V, BigInteger> sumByBigInteger(List<T> list, Function<T, V> groupBy, final Function<? super T, BigInteger> function)
+    {
+        MutableMap<V, BigInteger> result = UnifiedMap.newMap();
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            final T item = list.get(i);
+            result.updateValue(groupBy.valueOf(item), Functions0.zeroBigInteger(), new Function<BigInteger, BigInteger>()
+            {
+                public BigInteger valueOf(BigInteger original)
+                {
+                    return original.add(function.valueOf(item));
+                }
+            });
         }
         return result;
     }

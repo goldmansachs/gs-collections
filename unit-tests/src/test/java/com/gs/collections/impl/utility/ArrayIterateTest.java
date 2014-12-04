@@ -1267,6 +1267,24 @@ public class ArrayIterateTest
     }
 
     @Test
+    public void sumByBigDecimal()
+    {
+        Integer[] integers = {1, 2, 3, 4, 5};
+        MutableMap<Integer, BigDecimal> result = ArrayIterate.sumByBigDecimal(integers, e -> e % 2, BigDecimal::new);
+        Assert.assertEquals(new BigDecimal(9), result.get(1));
+        Assert.assertEquals(new BigDecimal(6), result.get(0));
+    }
+
+    @Test
+    public void sumByBigInteger()
+    {
+        Integer[] integers = {1, 2, 3, 4, 5};
+        MutableMap<Integer, BigInteger> result = ArrayIterate.sumByBigInteger(integers, e -> e % 2, i -> new BigInteger(i.toString()));
+        Assert.assertEquals(new BigInteger("9"), result.get(1));
+        Assert.assertEquals(new BigInteger("6"), result.get(0));
+    }
+
+    @Test
     public void classIsNonInstantiable()
     {
         Verify.assertClassNonInstantiable(ArrayIterate.class);

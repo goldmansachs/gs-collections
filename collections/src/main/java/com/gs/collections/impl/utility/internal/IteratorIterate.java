@@ -62,6 +62,7 @@ import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.factory.Lists;
@@ -1229,6 +1230,40 @@ public final class IteratorIterate
         while (iterator.hasNext())
         {
             result = result.add(function.valueOf(iterator.next()));
+        }
+        return result;
+    }
+
+    public static <V, T> MutableMap<V, BigDecimal> sumByBigDecimal(Iterator<T> iterator, Function<T, V> groupBy, final Function<? super T, BigDecimal> function)
+    {
+        MutableMap<V, BigDecimal> result = UnifiedMap.newMap();
+        while (iterator.hasNext())
+        {
+            final T item = iterator.next();
+            result.updateValue(groupBy.valueOf(item), Functions0.zeroBigDecimal(), new Function<BigDecimal, BigDecimal>()
+            {
+                public BigDecimal valueOf(BigDecimal original)
+                {
+                    return original.add(function.valueOf(item));
+                }
+            });
+        }
+        return result;
+    }
+
+    public static <V, T> MutableMap<V, BigInteger> sumByBigInteger(Iterator<T> iterator, Function<T, V> groupBy, final Function<? super T, BigInteger> function)
+    {
+        MutableMap<V, BigInteger> result = UnifiedMap.newMap();
+        while (iterator.hasNext())
+        {
+            final T item = iterator.next();
+            result.updateValue(groupBy.valueOf(item), Functions0.zeroBigInteger(), new Function<BigInteger, BigInteger>()
+            {
+                public BigInteger valueOf(BigInteger original)
+                {
+                    return original.add(function.valueOf(item));
+                }
+            });
         }
         return result;
     }

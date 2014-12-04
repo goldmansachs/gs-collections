@@ -2339,6 +2339,38 @@ public final class Iterate
     }
 
     /**
+     * @since 6.0
+     */
+    public static <V, T> MutableMap<V, BigDecimal> sumByBigDecimal(Iterable<T> iterable, Function<T, V> groupBy, Function<? super T, BigDecimal> function)
+    {
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumByBigDecimal((List<T>) iterable, groupBy, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumByBigDecimal(iterable, groupBy, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an sumByBigDecimal on null");
+    }
+
+    /**
+     * @since 6.0
+     */
+    public static <V, T> MutableMap<V, BigInteger> sumByBigInteger(Iterable<T> iterable, Function<T, V> groupBy, Function<? super T, BigInteger> function)
+    {
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumByBigInteger((List<T>) iterable, groupBy, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumByBigInteger(iterable, groupBy, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an sumByBigInteger on null");
+    }
+
+    /**
      * @see RichIterable#sumByInt(Function, IntFunction)
      */
     public static <T, V> ObjectLongMap<V> sumByInt(Iterable<T> iterable, Function<T, V> groupBy, IntFunction<? super T> function)

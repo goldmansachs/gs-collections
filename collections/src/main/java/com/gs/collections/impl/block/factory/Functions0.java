@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.block.factory;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -42,6 +44,8 @@ public final class Functions0
     private static final AtomicIntegerZeroFunction ATOMIC_INTEGER_ZERO = new AtomicIntegerZeroFunction();
     private static final AtomicLongZeroFunction ATOMIC_LONG_ZERO = new AtomicLongZeroFunction();
     private static final IntegerZeroFunction INTEGER_ZERO = new IntegerZeroFunction();
+    private static final BigDecimalZeroFunction BIG_DECIMAL_ZERO = new BigDecimalZeroFunction();
+    private static final BigIntegerZeroFunction BIG_INTEGER_ZERO = new BigIntegerZeroFunction();
 
     private Functions0()
     {
@@ -91,6 +95,22 @@ public final class Functions0
     public static Function0<AtomicLong> zeroAtomicLong()
     {
         return ATOMIC_LONG_ZERO;
+    }
+
+    /**
+     * @since 6.0
+     */
+    public static Function0<BigDecimal> zeroBigDecimal()
+    {
+        return BIG_DECIMAL_ZERO;
+    }
+
+    /**
+     * @since 6.0
+     */
+    public static Function0<BigInteger> zeroBigInteger()
+    {
+        return BIG_INTEGER_ZERO;
     }
 
     private static final class NewFastListFunction<T> implements Function0<MutableList<T>>
@@ -186,6 +206,26 @@ public final class Functions0
         public T safeValue() throws Exception
         {
             return this.throwingFunction0.safeValue();
+        }
+    }
+
+    private static class BigDecimalZeroFunction implements Function0<BigDecimal>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public BigDecimal value()
+        {
+            return BigDecimal.ZERO;
+        }
+    }
+
+    private static class BigIntegerZeroFunction implements Function0<BigInteger>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public BigInteger value()
+        {
+            return BigInteger.ZERO;
         }
     }
 }

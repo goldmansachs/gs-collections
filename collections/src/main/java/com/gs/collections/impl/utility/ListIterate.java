@@ -935,6 +935,24 @@ public final class ListIterate
         return IterableIterate.sumOfBigInteger(list, function);
     }
 
+    public static <V, T> MutableMap<V, BigDecimal> sumByBigDecimal(List<T> list, Function<T, V> groupBy, Function<? super T, BigDecimal> function)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.sumByBigDecimal(list, groupBy, function);
+        }
+        return IterableIterate.sumByBigDecimal(list, groupBy, function);
+    }
+
+    public static <V, T> MutableMap<V, BigInteger> sumByBigInteger(List<T> list, Function<T, V> groupBy, Function<? super T, BigInteger> function)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.sumByBigInteger(list, groupBy, function);
+        }
+        return IterableIterate.sumByBigInteger(list, groupBy, function);
+    }
+
     public static <V, T> ObjectLongMap<V> sumByInt(List<T> list, Function<T, V> groupBy, IntFunction<? super T> function)
     {
         if (list instanceof RandomAccess)

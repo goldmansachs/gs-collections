@@ -2035,6 +2035,28 @@ public class IterateTest
     }
 
     @Test
+    public void sumByBigDecimal()
+    {
+        this.iterables.each(each ->
+        {
+            MutableMap<Integer, BigDecimal> result = Iterate.sumByBigDecimal(each, e -> e % 2, BigDecimal::new);
+            Assert.assertEquals(new BigDecimal(9), result.get(1));
+            Assert.assertEquals(new BigDecimal(6), result.get(0));
+        });
+    }
+
+    @Test
+    public void sumByBigInteger()
+    {
+        this.iterables.each(each ->
+        {
+            MutableMap<Integer, BigInteger> result = Iterate.sumByBigInteger(each, e -> e % 2, i -> new BigInteger(i.toString()));
+            Assert.assertEquals(new BigInteger("9"), result.get(1));
+            Assert.assertEquals(new BigInteger("6"), result.get(0));
+        });
+    }
+
+    @Test
     public void sumByInt()
     {
         this.iterables.each(each ->

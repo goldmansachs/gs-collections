@@ -619,6 +619,16 @@ public final class IterableIterate
         return IteratorIterate.sumOfBigInteger(iterable.iterator(), function);
     }
 
+    public static <V, T> MutableMap<V, BigDecimal> sumByBigDecimal(Iterable<T> iterable, Function<T, V> groupBy, Function<? super T, BigDecimal> function)
+    {
+        return IteratorIterate.sumByBigDecimal(iterable.iterator(), groupBy, function);
+    }
+
+    public static <V, T> MutableMap<V, BigInteger> sumByBigInteger(Iterable<T> iterable, Function<T, V> groupBy, Function<? super T, BigInteger> function)
+    {
+        return IteratorIterate.sumByBigInteger(iterable.iterator(), groupBy, function);
+    }
+
     public static <V, T> ObjectLongMap<V> sumByInt(Iterable<T> iterable, Function<T, V> groupBy, IntFunction<? super T> function)
     {
         ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
