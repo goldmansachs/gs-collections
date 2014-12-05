@@ -16,30 +16,25 @@
 
 package com.gs.collections.impl.multimap;
 
-import java.util.Collection;
 import java.util.Map;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MapIterable;
-import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableRichIterable;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.factory.Bags;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.tuple.Tuples;
-import com.gs.collections.impl.utility.Iterate;
 
 public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
         implements Multimap<K, V>
@@ -240,22 +235,6 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
     public void forEachKeyMultiValues(Procedure2<K, ? super Iterable<V>> procedure)
     {
         this.getMap().forEachKeyValue(procedure);
-    }
-
-    public <R extends Collection<V>> MutableMap<K, R> toMap(final Function0<R> collectionFactory)
-    {
-        final MutableMap<K, R> result = UnifiedMap.newMap();
-        this.getMap().forEachKeyValue(new Procedure2<K, C>()
-        {
-            public void value(K key, C iterable)
-            {
-                R newCollection = collectionFactory.value();
-                Iterate.addAllTo(iterable, newCollection);
-                result.put(key, newCollection);
-            }
-        });
-
-        return result;
     }
 
     public <R extends MutableMultimap<K, V>> R selectKeysValues(final Predicate2<? super K, ? super V> predicate, final R target)

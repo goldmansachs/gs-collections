@@ -31,9 +31,14 @@ public abstract class MultimapSerializationTestCase
     public void serializedForm()
     {
         Verify.assertSerializedForm(
-                1L,
+                this.getExpectedSerialVersionUID(),
                 this.getSerializedForm(),
                 this.getMultimapUnderTest());
+    }
+
+    protected long getExpectedSerialVersionUID()
+    {
+        return 1L;
     }
 
     protected abstract Multimap<String, String> getMultimapUnderTest();

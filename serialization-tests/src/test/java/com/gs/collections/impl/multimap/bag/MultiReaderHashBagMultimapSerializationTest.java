@@ -29,10 +29,16 @@ public class MultiReaderHashBagMultimapSerializationTest
     }
 
     @Override
+    protected long getExpectedSerialVersionUID()
+    {
+        return 2L;
+    }
+
+    @Override
     protected String getSerializedForm()
     {
         return "rO0ABXNyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tdWx0aW1hcC5iYWcuTXVsdGlSZWFkZXJI\n"
-                + "YXNoQmFnTXVsdGltYXAAAAAAAAAAAQwAAHhwdwQAAAACdAABQXcEAAAAA3EAfgACdAABQnEAfgAD\n"
-                + "cQB+AAN3BAAAAAFxAH4AAng=";
+                + "YXNoQmFnTXVsdGltYXAAAAAAAAAAAgwAAHhwdwQAAAACdAABQXcEAAAAAnEAfgACdwQAAAABdAAB\n"
+                + "QncEAAAAAnEAfgADdwQAAAABcQB+AAJ3BAAAAAF4";
     }
 }

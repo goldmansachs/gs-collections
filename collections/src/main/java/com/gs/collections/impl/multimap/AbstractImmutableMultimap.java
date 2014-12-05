@@ -18,14 +18,19 @@ package com.gs.collections.impl.multimap;
 
 import java.io.InvalidClassException;
 import java.io.ObjectStreamException;
+import java.util.Collection;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.utility.Iterate;
 
 public abstract class AbstractImmutableMultimap<K, V, C extends ImmutableCollection<V>>
         extends AbstractMultimap<K, V, C>
@@ -105,6 +110,22 @@ public abstract class AbstractImmutableMultimap<K, V, C extends ImmutableCollect
     public MutableMap<K, RichIterable<V>> toMap()
     {
         return (MutableMap<K, RichIterable<V>>) (MutableMap<?, ?>) this.map.toMap();
+    }
+
+    public <R extends Collection<V>> MutableMap<K, R> toMap(final Function0<R> collectionFactory)
+    {
+        final MutableMap<K, R> result = UnifiedMap.newMap();
+        this.map.forEachKeyValue(new Procedure2<K, C>()
+        {
+            public void value(K key, C iterable)
+            {
+                R newCollection = collectionFactory.value();
+                Iterate.addAllTo(iterable, newCollection);
+                result.put(key, newCollection);
+            }
+        });
+
+        return result;
     }
 
     public ImmutableMultimap<K, V> newWith(K key, V value)

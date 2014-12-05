@@ -19,6 +19,7 @@ package com.gs.collections.impl.multimap.bag;
 import java.io.Externalizable;
 
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -31,7 +32,7 @@ import com.gs.collections.impl.utility.Iterate;
 public final class MultiReaderHashBagMultimap<K, V>
         extends AbstractMutableBagMultimap<K, V> implements Externalizable
 {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     public MultiReaderHashBagMultimap()
     {
@@ -101,23 +102,28 @@ public final class MultiReaderHashBagMultimap<K, V>
         return Iterate.flip(this);
     }
 
-    public HashBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
+    public <V2> MultiReaderHashBagMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
     {
-        return this.selectKeysValues(predicate, HashBagMultimap.<K, V>newMultimap());
+        return this.collectValues(function, MultiReaderHashBagMultimap.<K, V2>newMultimap());
     }
 
-    public HashBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
+    public MultiReaderHashBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)
     {
-        return this.rejectKeysValues(predicate, HashBagMultimap.<K, V>newMultimap());
+        return this.selectKeysValues(predicate, this.newEmpty());
     }
 
-    public HashBagMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    public MultiReaderHashBagMultimap<K, V> rejectKeysValues(Predicate2<? super K, ? super V> predicate)
     {
-        return this.selectKeysMultiValues(predicate, HashBagMultimap.<K, V>newMultimap());
+        return this.rejectKeysValues(predicate, this.newEmpty());
     }
 
-    public HashBagMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    public MultiReaderHashBagMultimap<K, V> selectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
     {
-        return this.rejectKeysMultiValues(predicate, HashBagMultimap.<K, V>newMultimap());
+        return this.selectKeysMultiValues(predicate, this.newEmpty());
+    }
+
+    public MultiReaderHashBagMultimap<K, V> rejectKeysMultiValues(Predicate2<? super K, ? super Iterable<V>> predicate)
+    {
+        return this.rejectKeysMultiValues(predicate, this.newEmpty());
     }
 }

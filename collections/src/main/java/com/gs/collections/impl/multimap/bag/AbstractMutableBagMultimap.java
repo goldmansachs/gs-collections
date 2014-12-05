@@ -16,16 +16,20 @@
 
 package com.gs.collections.impl.multimap.bag;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.block.procedure.checked.CheckedObjectIntProcedure;
+import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 
 public abstract class AbstractMutableBagMultimap<K, V> extends AbstractMutableMultimap<K, V, MutableBag<V>> implements MutableBagMultimap<K, V>
@@ -51,22 +55,24 @@ public abstract class AbstractMutableBagMultimap<K, V> extends AbstractMutableMu
 
     public MutableBagMultimap<K, V> toMutable()
     {
-        return new HashBagMultimap<K, V>(this);
+        MutableBagMultimap<K, V> mutableBagMultimap = this.newEmpty();
+        mutableBagMultimap.putAll(this);
+        return mutableBagMultimap;
     }
 
     public ImmutableBagMultimap<K, V> toImmutable()
     {
-        final MutableMap<K, ImmutableBag<V>> map = UnifiedMap.newMap();
+        final MutableMap<K, ImmutableBag<V>> result = (MutableMap<K, ImmutableBag<V>>) (MutableMap<?, ?>) this.createMapWithKeyCount(this.map.size());
 
         this.map.forEachKeyValue(new Procedure2<K, MutableBag<V>>()
         {
             public void value(K key, MutableBag<V> bag)
             {
-                map.put(key, bag.toImmutable());
+                result.put(key, bag.toImmutable());
             }
         });
 
-        return new ImmutableBagMultimapImpl<K, V>(map);
+        return new ImmutableBagMultimapImpl<K, V>(result);
     }
 
     public <K2, V2> HashBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
@@ -74,8 +80,47 @@ public abstract class AbstractMutableBagMultimap<K, V> extends AbstractMutableMu
         return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap());
     }
 
-    public <V2> HashBagMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
+    @Override
+    public void writeExternal(final ObjectOutput out) throws IOException
     {
-        return this.collectValues(function, HashBagMultimap.<K, V2>newMultimap());
+        int keysCount = this.map.size();
+        out.writeInt(keysCount);
+        this.map.forEachKeyValue(new CheckedProcedure2<K, MutableBag<V>>()
+        {
+            public void safeValue(K key, MutableBag<V> bag) throws IOException
+            {
+                out.writeObject(key);
+                out.writeInt(bag.sizeDistinct());
+                bag.forEachWithOccurrences(new CheckedObjectIntProcedure<V>()
+                {
+                    public void safeValue(V value, int count) throws IOException
+                    {
+                        out.writeObject(value);
+                        out.writeInt(count);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    {
+        int keyCount = in.readInt();
+        this.map = this.createMapWithKeyCount(keyCount);
+        for (int i = 0; i < keyCount; i++)
+        {
+            K key = (K) in.readObject();
+            int valuesSize = in.readInt();
+            MutableBag<V> bag = this.createCollection();
+            for (int j = 0; j < valuesSize; j++)
+            {
+                V value = (V) in.readObject();
+                int count = in.readInt();
+
+                bag.addOccurrences(value, count);
+            }
+            this.putAll(key, bag);
+        }
     }
 }

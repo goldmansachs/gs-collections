@@ -17,20 +17,15 @@
 package com.gs.collections.impl.multimap.bag;
 
 import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.block.procedure.checked.CheckedObjectIntProcedure;
-import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
-import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.utility.Iterate;
 
@@ -102,53 +97,14 @@ public final class HashBagMultimap<K, V>
         return new HashBagMultimap<K, V>();
     }
 
-    @Override
-    public void writeExternal(final ObjectOutput out) throws IOException
-    {
-        int keysCount = this.map.size();
-        out.writeInt(keysCount);
-        this.map.forEachKeyValue(new CheckedProcedure2<K, MutableBag<V>>()
-        {
-            public void safeValue(K key, MutableBag<V> bag) throws IOException
-            {
-                out.writeObject(key);
-                out.writeInt(bag.sizeDistinct());
-                bag.forEachWithOccurrences(new CheckedObjectIntProcedure<V>()
-                {
-                    public void safeValue(V value, int count) throws IOException
-                    {
-                        out.writeObject(value);
-                        out.writeInt(count);
-                    }
-                });
-            }
-        });
-    }
-
-    @Override
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
-    {
-        int keyCount = in.readInt();
-        this.map = UnifiedMap.newMap(keyCount);
-        for (int i = 0; i < keyCount; i++)
-        {
-            K key = (K) in.readObject();
-            int valuesSize = in.readInt();
-            MutableBag<V> bag = Bags.mutable.of();
-            for (int j = 0; j < valuesSize; j++)
-            {
-                V value = (V) in.readObject();
-                int count = in.readInt();
-
-                bag.addOccurrences(value, count);
-            }
-            this.putAll(key, bag);
-        }
-    }
-
     public MutableBagMultimap<V, K> flip()
     {
         return Iterate.flip(this);
+    }
+
+    public <V2> HashBagMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
+    {
+        return this.collectValues(function, HashBagMultimap.<K, V2>newMultimap());
     }
 
     public HashBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate)

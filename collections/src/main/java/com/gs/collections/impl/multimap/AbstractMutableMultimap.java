@@ -19,8 +19,10 @@ package com.gs.collections.impl.multimap;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Collection;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
@@ -311,17 +313,31 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
 
     public MutableMap<K, RichIterable<V>> toMap()
     {
-        final MutableMap<K, RichIterable<V>> result = (MutableMap<K, RichIterable<V>>) (MutableMap<?, ?>) this.map.newEmpty();
+        final MutableMap<K, RichIterable<V>> result = (MutableMap<K, RichIterable<V>>) (MutableMap<?, ?>) this.createMapWithKeyCount(this.map.size());
         this.map.forEachKeyValue(new Procedure2<K, C>()
         {
             public void value(K key, C collection)
             {
                 MutableCollection<V> mutableCollection = collection.newEmpty();
                 mutableCollection.addAll(collection);
-                result.put(key, collection);
+                result.put(key, mutableCollection);
             }
         });
+        return result;
+    }
 
+    public <R extends Collection<V>> MutableMap<K, R> toMap(final Function0<R> collectionFactory)
+    {
+        final MutableMap<K, R> result = (MutableMap<K, R>) (MutableMap<?, ?>) this.createMapWithKeyCount(this.map.size());
+        this.map.forEachKeyValue(new Procedure2<K, C>()
+        {
+            public void value(K key, C collection)
+            {
+                R mutableCollection = collectionFactory.value();
+                mutableCollection.addAll(collection);
+                result.put(key, mutableCollection);
+            }
+        });
         return result;
     }
 
