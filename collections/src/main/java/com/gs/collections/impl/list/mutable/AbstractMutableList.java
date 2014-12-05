@@ -67,27 +67,11 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.lazy.parallel.list.ListIterableParallelIterable;
-import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
-import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
-import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
-import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
-import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
-import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
@@ -312,58 +296,42 @@ public abstract class AbstractMutableList<T>
 
     public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        BooleanArrayList result = new BooleanArrayList(this.size());
-        this.forEach(new CollectBooleanProcedure<T>(booleanFunction, result));
-        return result;
+        return ListIterate.collectBoolean(this, booleanFunction);
     }
 
     public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
     {
-        ByteArrayList result = new ByteArrayList(this.size());
-        this.forEach(new CollectByteProcedure<T>(byteFunction, result));
-        return result;
+        return ListIterate.collectByte(this, byteFunction);
     }
 
     public MutableCharList collectChar(CharFunction<? super T> charFunction)
     {
-        CharArrayList result = new CharArrayList(this.size());
-        this.forEach(new CollectCharProcedure<T>(charFunction, result));
-        return result;
+        return ListIterate.collectChar(this, charFunction);
     }
 
     public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        DoubleArrayList result = new DoubleArrayList(this.size());
-        this.forEach(new CollectDoubleProcedure<T>(doubleFunction, result));
-        return result;
+        return ListIterate.collectDouble(this, doubleFunction);
     }
 
     public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
-        FloatArrayList result = new FloatArrayList(this.size());
-        this.forEach(new CollectFloatProcedure<T>(floatFunction, result));
-        return result;
+        return ListIterate.collectFloat(this, floatFunction);
     }
 
     public MutableIntList collectInt(IntFunction<? super T> intFunction)
     {
-        IntArrayList result = new IntArrayList(this.size());
-        this.forEach(new CollectIntProcedure<T>(intFunction, result));
-        return result;
+        return ListIterate.collectInt(this, intFunction);
     }
 
     public MutableLongList collectLong(LongFunction<? super T> longFunction)
     {
-        LongArrayList result = new LongArrayList(this.size());
-        this.forEach(new CollectLongProcedure<T>(longFunction, result));
-        return result;
+        return ListIterate.collectLong(this, longFunction);
     }
 
     public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
-        ShortArrayList result = new ShortArrayList(this.size());
-        this.forEach(new CollectShortProcedure<T>(shortFunction, result));
-        return result;
+        return ListIterate.collectShort(this, shortFunction);
     }
 
     @Override
@@ -744,51 +712,25 @@ public abstract class AbstractMutableList<T>
         ListIterate.forEach(this, from, to, procedure);
     }
 
-    public int indexOf(Object o)
+    public int indexOf(Object object)
     {
-        if (o == null)
+        for (int i = 0; i < this.size(); i++)
         {
-            for (int i = 0; i < this.size(); i++)
+            if (Comparators.nullSafeEquals(this.get(i), object))
             {
-                if (this.get(i) == null)
-                {
-                    return i;
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < this.size(); i++)
-            {
-                if (o.equals(this.get(i)))
-                {
-                    return i;
-                }
+                return i;
             }
         }
         return -1;
     }
 
-    public int lastIndexOf(Object o)
+    public int lastIndexOf(Object object)
     {
-        if (o == null)
+        for (int i = this.size() - 1; i >= 0; i--)
         {
-            for (int i = this.size(); i-- > 0; )
+            if (Comparators.nullSafeEquals(this.get(i), object))
             {
-                if (this.get(i) == null)
-                {
-                    return i;
-                }
-            }
-        }
-        else
-        {
-            for (int i = this.size(); i-- > 0; )
-            {
-                if (o.equals(this.get(i)))
-                {
-                    return i;
-                }
+                return i;
             }
         }
         return -1;
