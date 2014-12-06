@@ -90,43 +90,26 @@ final class ImmutableArrayList<T>
     }
 
     @Override
-    public boolean equals(Object otherList)
+    public boolean equals(Object that)
     {
-        if (otherList == this)
+        if (that == this)
         {
             return true;
         }
-        if (!(otherList instanceof List))
+        if (!(that instanceof List))
         {
             return false;
         }
-        List<?> list = (List<?>) otherList;
-        if (otherList instanceof ImmutableArrayList)
+        if (that instanceof ImmutableArrayList)
         {
-            return this.immutableArrayListEquals((ImmutableArrayList<?>) otherList);
+            return this.immutableArrayListEquals((ImmutableArrayList<?>) that);
         }
-        if (list instanceof RandomAccess)
-        {
-            return this.randomAccessListEquals(list);
-        }
-        return this.regularListEquals(list);
+        return InternalArrayIterate.arrayEqualsList(this.items, this.items.length, (List<?>) that);
     }
 
     public boolean immutableArrayListEquals(ImmutableArrayList<?> otherList)
     {
         return Arrays.equals(this.items, otherList.items);
-    }
-
-    @Override
-    protected boolean randomAccessListEquals(List<?> otherList)
-    {
-        return InternalArrayIterate.randomAccessListEquals(this.items, this.items.length, otherList);
-    }
-
-    @Override
-    protected boolean regularListEquals(List<?> otherList)
-    {
-        return InternalArrayIterate.regularListEquals(this.items, this.items.length, otherList);
     }
 
     @Override

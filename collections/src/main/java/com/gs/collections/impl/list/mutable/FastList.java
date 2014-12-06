@@ -1346,26 +1346,21 @@ public class FastList<T>
     }
 
     @Override
-    public boolean equals(Object otherList)
+    public boolean equals(Object that)
     {
-        if (otherList == this)
+        if (that == this)
         {
             return true;
         }
-        if (!(otherList instanceof List))
+        if (!(that instanceof List))
         {
             return false;
         }
-        List<?> list = (List<?>) otherList;
-        if (otherList instanceof FastList)
+        if (that instanceof FastList)
         {
-            return this.fastListEquals((FastList<?>) otherList);
+            return this.fastListEquals((FastList<?>) that);
         }
-        if (otherList instanceof RandomAccess)
-        {
-            return this.randomAccessListEquals(list);
-        }
-        return this.regularListEquals(list);
+        return InternalArrayIterate.arrayEqualsList(this.items, this.size, (List<?>) that);
     }
 
     public boolean fastListEquals(FastList<?> otherFastList)
@@ -1384,16 +1379,6 @@ public class FastList<T>
             }
         }
         return true;
-    }
-
-    private boolean regularListEquals(List<?> otherList)
-    {
-        return InternalArrayIterate.regularListEquals(this.items, this.size, otherList);
-    }
-
-    private boolean randomAccessListEquals(List<?> otherList)
-    {
-        return InternalArrayIterate.randomAccessListEquals(this.items, this.size, otherList);
     }
 
     @Override

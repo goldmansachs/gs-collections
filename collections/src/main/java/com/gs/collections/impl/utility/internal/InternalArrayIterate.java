@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.RandomAccess;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
@@ -66,17 +67,24 @@ public final class InternalArrayIterate
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
-    public static <T> boolean randomAccessListEquals(T[] array, int size, List<?> otherList)
+    public static <T> boolean arrayEqualsList(T[] array, int size, List<?> list)
     {
-        if (size != otherList.size())
+        if (size != list.size())
         {
             return false;
         }
+        if (list instanceof RandomAccess)
+        {
+            return InternalArrayIterate.randomAccessListEquals(array, size, list);
+        }
+        return InternalArrayIterate.nonRandomAccessListEquals(array, size, list);
+    }
+
+    private static <T> boolean randomAccessListEquals(T[] array, int size, List<?> list)
+    {
         for (int i = 0; i < size; i++)
         {
-            T one = array[i];
-            Object two = otherList.get(i);
-            if (!Comparators.nullSafeEquals(one, two))
+            if (!Comparators.nullSafeEquals(array[i], list.get(i)))
             {
                 return false;
             }
@@ -84,18 +92,16 @@ public final class InternalArrayIterate
         return true;
     }
 
-    public static <T> boolean regularListEquals(T[] array, int size, List<?> otherList)
+    private static <T> boolean nonRandomAccessListEquals(T[] array, int size, List<?> list)
     {
-        Iterator<?> iterator = otherList.iterator();
+        Iterator<?> iterator = list.iterator();
         for (int i = 0; i < size; i++)
         {
-            T one = array[i];
             if (!iterator.hasNext())
             {
                 return false;
             }
-            Object two = iterator.next();
-            if (!Comparators.nullSafeEquals(one, two))
+            if (!Comparators.nullSafeEquals(array[i], iterator.next()))
             {
                 return false;
             }

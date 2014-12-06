@@ -645,7 +645,7 @@ public abstract class AbstractMutable<name>BooleanMapTestCase extends Abstract<n
     public void iterator_throws_on_consecutive_invocation_of_remove()
     {
         MutableBooleanIterator iterator = this.classUnderTest().booleanIterator();
-        Verify.assertTrue(iterator.hasNext());
+        Assert.assertTrue(iterator.hasNext());
         iterator.next();
         iterator.remove();
         Verify.assertThrows(IllegalStateException.class, iterator::remove);

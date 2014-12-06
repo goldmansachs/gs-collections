@@ -113,17 +113,21 @@ abstract class AbstractImmutableList<T>
     }
 
     @Override
-    public boolean equals(Object otherList)
+    public boolean equals(Object that)
     {
-        if (otherList == this)
+        if (that == this)
         {
             return true;
         }
-        if (!(otherList instanceof List))
+        if (!(that instanceof List))
         {
             return false;
         }
-        List<?> list = (List<?>) otherList;
+        List<?> list = (List<?>) that;
+        if (this.size() != list.size())
+        {
+            return false;
+        }
         if (list instanceof RandomAccess)
         {
             return this.randomAccessListEquals(list);
@@ -131,18 +135,12 @@ abstract class AbstractImmutableList<T>
         return this.regularListEquals(list);
     }
 
-    protected boolean randomAccessListEquals(List<?> otherList)
+    private boolean randomAccessListEquals(List<?> list)
     {
-        if (this.size() != otherList.size())
-        {
-            return false;
-        }
         int localSize = this.size();
         for (int i = 0; i < localSize; i++)
         {
-            T one = this.get(i);
-            Object two = otherList.get(i);
-            if (!Comparators.nullSafeEquals(one, two))
+            if (!Comparators.nullSafeEquals(this.get(i), list.get(i)))
             {
                 return false;
             }
@@ -150,18 +148,17 @@ abstract class AbstractImmutableList<T>
         return true;
     }
 
-    protected boolean regularListEquals(List<?> otherList)
+    protected boolean regularListEquals(List<?> list)
     {
-        Iterator<?> iterator = otherList.iterator();
-        for (int i = 0; i < this.size(); i++)
+        Iterator<?> iterator = list.iterator();
+        int localSize = this.size();
+        for (int i = 0; i < localSize; i++)
         {
-            T one = this.get(i);
             if (!iterator.hasNext())
             {
                 return false;
             }
-            Object two = iterator.next();
-            if (!Comparators.nullSafeEquals(one, two))
+            if (!Comparators.nullSafeEquals(this.get(i), iterator.next()))
             {
                 return false;
             }

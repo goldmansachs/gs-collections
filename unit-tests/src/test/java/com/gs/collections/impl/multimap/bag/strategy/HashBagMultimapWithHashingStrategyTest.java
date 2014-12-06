@@ -207,7 +207,7 @@ public class HashBagMultimapWithHashingStrategyTest extends AbstractMutableBagMu
         HashBagMultimapWithHashingStrategy<String, Integer> multimap = this.newMultimap();
         multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
         multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
-        HashBagMultimapWithHashingStrategy<String, String> collectedMultimap = (HashBagMultimapWithHashingStrategy<String, String>) multimap.collectValues(value -> value + "Value");
+        HashBagMultimapWithHashingStrategy<String, String> collectedMultimap = multimap.collectValues(value -> value + "Value");
         HashBagMultimapWithHashingStrategy<String, String> expectedMultimap = this.newMultimap();
         expectedMultimap.putAll("1", FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
         expectedMultimap.putAll("2", FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
