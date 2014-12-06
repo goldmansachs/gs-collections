@@ -80,6 +80,29 @@ public class LongPredicatesTest
     }
 
     @Test
+    public void attributeIsZero()
+    {
+        Assert.assertTrue(LongPredicates.attributeIsZero(Integer::longValue).accept(0));
+        Assert.assertFalse(LongPredicates.attributeIsZero(Integer::longValue).accept(1));
+    }
+
+    @Test
+    public void attributeIsPositive()
+    {
+        Assert.assertTrue(LongPredicates.attributeIsPositive(Integer::longValue).accept(1));
+        Assert.assertFalse(LongPredicates.attributeIsPositive(Integer::longValue).accept(0));
+        Assert.assertFalse(LongPredicates.attributeIsPositive(Integer::longValue).accept(-1));
+    }
+
+    @Test
+    public void attributeIsNegative()
+    {
+        Assert.assertTrue(LongPredicates.attributeIsNegative(Integer::longValue).accept(-1));
+        Assert.assertFalse(LongPredicates.attributeIsNegative(Integer::longValue).accept(0));
+        Assert.assertFalse(LongPredicates.attributeIsNegative(Integer::longValue).accept(1));
+    }
+
+    @Test
     public void classIsNonInstantiable()
     {
         Verify.assertClassNonInstantiable(LongPredicates.class);

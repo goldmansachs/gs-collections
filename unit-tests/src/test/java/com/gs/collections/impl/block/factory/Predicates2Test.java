@@ -92,7 +92,10 @@ public class Predicates2Test
     {
         Assert.assertFalse(Predicates2.notEqual().accept(1, 1));
         Assert.assertTrue(Predicates2.notEqual().accept(2, 1));
+        Assert.assertTrue(Predicates2.notEqual().accept(1, 2));
         Assert.assertTrue(Predicates2.notEqual().accept(null, 1));
+        Assert.assertTrue(Predicates2.notEqual().accept(1, null));
+        Assert.assertFalse(Predicates2.notEqual().accept(null, null));
         Assert.assertNotNull(Predicates2.notEqual().toString());
     }
 

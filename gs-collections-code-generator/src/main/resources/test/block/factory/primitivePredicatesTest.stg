@@ -47,8 +47,22 @@ public final class <name>PredicatesTest
         Assert.assertFalse(<name>Predicates.greaterThan(<(literal.(type))("5")>).accept(<(literal.(type))("4")>));
     }
 
+    @Test
+    public void alwaysTrue()
+    {
+        Assert.assertTrue(<name>Predicates.alwaysTrue().accept(<(literal.(type))("5")>));
+    }
+
+    @Test
+    public void alwaysFalse()
+    {
+        Assert.assertFalse(<name>Predicates.alwaysFalse().accept(<(literal.(type))("5")>));
+    }
+
     <(intPredicatesTest.(type))()>
     <(charPredicatesTest.(type))()>
+    <(doublePredicatesTest.(type))()>
+    <(floatPredicatesTest.(type))()>
 
     @Test
     public void testAnd()
@@ -92,6 +106,16 @@ intPredicatesTest ::=[
 
 charPredicatesTest ::=[
     "char": "allCharPredicateTests",
+    default: "noTests"
+]
+
+doublePredicatesTest ::=[
+    "double": "allDoublePredicateTests",
+    default: "noTests"
+]
+
+floatPredicatesTest ::=[
+    "float": "allFloatPredicateTests",
     default: "noTests"
 ]
 
@@ -180,3 +204,26 @@ public void testIsUndefined()
     Assert.assertFalse(CharPredicates.isUndefined().accept('a'));
 }
 >>
+
+allDoublePredicateTests() ::= <<
+@Test
+public void equalWithDelta()
+{
+    Assert.assertFalse(DoublePredicates.not(DoublePredicates.equal(5.0, Double.valueOf("1e-15"))).accept(5.0));
+    Assert.assertFalse(DoublePredicates.not(DoublePredicates.equal(5.0, 2.0)).accept(6.0));
+    Assert.assertTrue(DoublePredicates.not(DoublePredicates.equal(5.0, Double.valueOf("1e-15"))).accept(6.0));
+    Assert.assertTrue(DoublePredicates.not(DoublePredicates.equal(5.0, 1.0)).accept(7.0));
+}
+>>
+
+allFloatPredicateTests() ::= <<
+@Test
+public void equalWithDelta()
+{
+    Assert.assertFalse(FloatPredicates.not(FloatPredicates.equal(5.0f, Float.valueOf("1e-15"))).accept(5.0f));
+    Assert.assertFalse(FloatPredicates.not(FloatPredicates.equal(5.0f, 2.0f)).accept(6.0f));
+    Assert.assertTrue(FloatPredicates.not(FloatPredicates.equal(5.0f, Float.valueOf("1e-15"))).accept(6.0f));
+    Assert.assertTrue(FloatPredicates.not(FloatPredicates.equal(5.0f, 1.0f)).accept(7.0f));
+}
+>>
+

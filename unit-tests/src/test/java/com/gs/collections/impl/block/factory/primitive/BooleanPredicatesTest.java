@@ -84,6 +84,26 @@ public final class BooleanPredicatesTest
     {
         Assert.assertTrue(BooleanPredicates.not(BooleanPredicates.isTrue()).accept(false));
         Assert.assertFalse(BooleanPredicates.not(BooleanPredicates.isTrue()).accept(true));
+        Assert.assertTrue(BooleanPredicates.not(BooleanPredicates.isFalse()).accept(true));
+        Assert.assertFalse(BooleanPredicates.not(BooleanPredicates.isFalse()).accept(false));
+        Assert.assertTrue(BooleanPredicates.not(true).accept(false));
+        Assert.assertFalse(BooleanPredicates.not(true).accept(true));
+        Assert.assertTrue(BooleanPredicates.not(false).accept(true));
+        Assert.assertFalse(BooleanPredicates.not(false).accept(false));
+    }
+
+    @Test
+    public void testAlwaysTrue()
+    {
+        Assert.assertTrue(BooleanPredicates.alwaysTrue().accept(false));
+        Assert.assertTrue(BooleanPredicates.alwaysTrue().accept(true));
+    }
+
+    @Test
+    public void testAlwaysFalse()
+    {
+        Assert.assertFalse(BooleanPredicates.alwaysFalse().accept(false));
+        Assert.assertFalse(BooleanPredicates.alwaysFalse().accept(true));
     }
 
     @Test

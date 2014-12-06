@@ -84,6 +84,16 @@ public class PredicatesTest
     }
 
     @Test
+    public void bind()
+    {
+        MutableList<Integer> list = Lists.mutable.of(1, 2, 3);
+
+        Predicate<Integer> predicate = Predicates.bind((element, parameter) -> (element + parameter) % 2 == 0, 1);
+        Verify.assertListsEqual(Lists.mutable.of(1, 3), list.select(predicate));
+        assertToString(predicate);
+    }
+
+    @Test
     public void alwaysTrue()
     {
         assertAccepts(Predicates.alwaysTrue(), (Object) null);
@@ -235,6 +245,8 @@ public class PredicatesTest
 
         assertRejects(Predicates.notEqual("test"), "test");
         assertAccepts(Predicates.notEqual("test"), "production");
+
+        assertAccepts(Predicates.notEqual(null), "test");
 
         assertToString(Predicates.notEqual(1));
     }
@@ -587,6 +599,13 @@ public class PredicatesTest
         assertAccepts(inList, "1");
         assertRejects(inList, "2");
         assertAccepts(Predicates.in(list1.toArray()), "1");
+        assertRejects(Predicates.in(list1.toArray()), "2");
+        assertAccepts(
+                Predicates.in(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").toArray()),
+                "1");
+        assertRejects(
+                Predicates.in(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").toArray()),
+                "0");
 
         Assert.assertEquals(FastList.newListWith("1"), ListIterate.select(Lists.fixedSize.of("1", "2"), inList));
         assertToString(inList);
@@ -618,7 +637,12 @@ public class PredicatesTest
         Predicate<Object> predicate = Predicates.notIn(odds);
         assertAccepts(predicate, "2");
         assertRejects(predicate, "1");
+        assertAccepts(Predicates.notIn(odds.toArray()), "2");
         assertRejects(Predicates.notIn(odds.toArray()), "1");
+        assertAccepts(Predicates.notIn(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")), "0");
+        assertRejects(Predicates.notIn(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")), "1");
+        assertAccepts(Predicates.notIn(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").toArray()), "0");
+        assertRejects(Predicates.notIn(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").toArray()), "1");
 
         Assert.assertEquals(FastList.newListWith("2"), ListIterate.select(Lists.fixedSize.of("1", "2"), predicate));
         assertToString(predicate);
