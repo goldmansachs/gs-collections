@@ -27,6 +27,12 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ExecutorService;
 
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -34,7 +40,6 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.ParallelListIterable;
-import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Lists;
@@ -112,6 +117,66 @@ public final class CompositeFastList<E>
             public void value(FastList<E> list)
             {
                 list.forEach(procedure);
+            }
+        });
+    }
+
+    @Override
+    public <IV> IV injectInto(IV injectedValue, final Function2<? super IV, ? super E, ? extends IV> function)
+    {
+        return this.lists.injectInto(injectedValue, new Function2<IV, FastList<E>, IV>()
+        {
+            public IV value(IV inject, FastList<E> list)
+            {
+                return list.injectInto(inject, function);
+            }
+        });
+    }
+
+    @Override
+    public int injectInto(int injectedValue, final IntObjectToIntFunction<? super E> function)
+    {
+        return this.lists.injectInto(injectedValue, new IntObjectToIntFunction<FastList<E>>()
+        {
+            public int intValueOf(int inject, FastList<E> list)
+            {
+                return list.injectInto(inject, function);
+            }
+        });
+    }
+
+    @Override
+    public float injectInto(float injectedValue, final FloatObjectToFloatFunction<? super E> function)
+    {
+        return this.lists.injectInto(injectedValue, new FloatObjectToFloatFunction<FastList<E>>()
+        {
+            public float floatValueOf(float inject, FastList<E> list)
+            {
+                return list.injectInto(inject, function);
+            }
+        });
+    }
+
+    @Override
+    public long injectInto(long injectedValue, final LongObjectToLongFunction<? super E> function)
+    {
+        return this.lists.injectInto(injectedValue, new LongObjectToLongFunction<FastList<E>>()
+        {
+            public long longValueOf(long inject, FastList<E> list)
+            {
+                return list.injectInto(inject, function);
+            }
+        });
+    }
+
+    @Override
+    public double injectInto(double injectedValue, final DoubleObjectToDoubleFunction<? super E> function)
+    {
+        return this.lists.injectInto(injectedValue, new DoubleObjectToDoubleFunction<FastList<E>>()
+        {
+            public double doubleValueOf(double inject, FastList<E> list)
+            {
+                return list.injectInto(inject, function);
             }
         });
     }
@@ -325,7 +390,7 @@ public final class CompositeFastList<E>
 
     public boolean addAll(int index, Collection<? extends E> collection)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".addAll() not implemented yet");
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".addAll(index, collection) not implemented yet");
     }
 
     public void clear()
@@ -509,6 +574,168 @@ public final class CompositeFastList<E>
         return super.listIterator(index);
     }
 
+    @Override
+    public int count(Predicate<? super E> predicate)
+    {
+        int count = 0;
+        int localSize = this.lists.size();
+        for (int i = 0; i < localSize; i++)
+        {
+            count += this.lists.get(i).count(predicate);
+        }
+        return count;
+    }
+
+    @Override
+    public <P> int countWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    {
+        int count = 0;
+        int localSize = this.lists.size();
+        for (int i = 0; i < localSize; i++)
+        {
+            count += this.lists.get(i).countWith(predicate, parameter);
+        }
+        return count;
+    }
+
+    @Override
+    public boolean anySatisfy(final Predicate<? super E> predicate)
+    {
+        return this.lists.anySatisfy(new Predicate<FastList<E>>()
+        {
+            public boolean accept(FastList<E> each)
+            {
+                return each.anySatisfy(predicate);
+            }
+        });
+    }
+
+    @Override
+    public <R extends Collection<E>> R select(Predicate<? super E> predicate, R target)
+    {
+        int localSize = this.lists.size();
+        for (int i = 0; i < localSize; i++)
+        {
+            this.lists.get(i).select(predicate, target);
+        }
+        return target;
+    }
+
+    @Override
+    public <P, R extends Collection<E>> R selectWith(Predicate2<? super E, ? super P> predicate, P parameter, R target)
+    {
+        int localSize = this.lists.size();
+        for (int i = 0; i < localSize; i++)
+        {
+            this.lists.get(i).selectWith(predicate, parameter, target);
+        }
+        return target;
+    }
+
+    @Override
+    public <R extends Collection<E>> R reject(Predicate<? super E> predicate, R target)
+    {
+        int localSize = this.lists.size();
+        for (int i = 0; i < localSize; i++)
+        {
+            this.lists.get(i).reject(predicate, target);
+        }
+        return target;
+    }
+
+    @Override
+    public <P, R extends Collection<E>> R rejectWith(Predicate2<? super E, ? super P> predicate, P parameter, R target)
+    {
+        int localSize = this.lists.size();
+        for (int i = 0; i < localSize; i++)
+        {
+            this.lists.get(i).rejectWith(predicate, parameter, target);
+        }
+        return target;
+    }
+
+    @Override
+    public <V, R extends Collection<V>> R collect(Function<? super E, ? extends V> function, R target)
+    {
+        int localSize = this.lists.size();
+        for (int i = 0; i < localSize; i++)
+        {
+            this.lists.get(i).collect(function, target);
+        }
+        return target;
+    }
+
+    @Override
+    public <P, A, R extends Collection<A>> R collectWith(Function2<? super E, ? super P, ? extends A> function, P parameter, R target)
+    {
+        int localSize = this.lists.size();
+        for (int i = 0; i < localSize; i++)
+        {
+            this.lists.get(i).collectWith(function, parameter, target);
+        }
+        return target;
+    }
+
+    @Override
+    public <P> boolean anySatisfyWith(final Predicate2<? super E, ? super P> predicate, P parameter)
+    {
+        return this.lists.anySatisfyWith(new Predicate2<FastList<E>, P>()
+        {
+            public boolean accept(FastList<E> each, P parm)
+            {
+                return each.anySatisfyWith(predicate, parm);
+            }
+        }, parameter);
+    }
+
+    @Override
+    public boolean allSatisfy(final Predicate<? super E> predicate)
+    {
+        return this.lists.allSatisfy(new Predicate<FastList<E>>()
+        {
+            public boolean accept(FastList<E> each)
+            {
+                return each.allSatisfy(predicate);
+            }
+        });
+    }
+
+    @Override
+    public <P> boolean allSatisfyWith(final Predicate2<? super E, ? super P> predicate, P parameter)
+    {
+        return this.lists.allSatisfyWith(new Predicate2<FastList<E>, P>()
+        {
+            public boolean accept(FastList<E> each, P param)
+            {
+                return each.allSatisfyWith(predicate, param);
+            }
+        }, parameter);
+    }
+
+    @Override
+    public boolean noneSatisfy(final Predicate<? super E> predicate)
+    {
+        return this.lists.allSatisfy(new Predicate<FastList<E>>()
+        {
+            public boolean accept(FastList<E> each)
+            {
+                return each.noneSatisfy(predicate);
+            }
+        });
+    }
+
+    @Override
+    public <P> boolean noneSatisfyWith(final Predicate2<? super E, ? super P> predicate, P parameter)
+    {
+        return this.lists.allSatisfyWith(new Predicate2<FastList<E>, P>()
+        {
+            public boolean accept(FastList<E> each, P param)
+            {
+                return each.noneSatisfyWith(predicate, param);
+            }
+        }, parameter);
+    }
+
     /**
      * convert multiple contained lists into one list and replace the contained lists with that list.
      * Synchronize to prevent changes to this list whilst this process is happening
@@ -583,46 +810,6 @@ public final class CompositeFastList<E>
         {
             this.currentIterator.remove();
         }
-    }
-
-    @Override
-    public boolean equals(Object other)
-    {
-        if (!(other instanceof List))
-        {
-            return false;
-        }
-        List<?> otherList = (List<?>) other;
-        if (this.size() != otherList.size())
-        {
-            return false;
-        }
-
-        Iterator<E> thisIterator = this.iterator();
-        Iterator<?> otherIterator = otherList.iterator();
-        while (thisIterator.hasNext())
-        {
-            E thisObject = thisIterator.next();
-            Object otherObject = otherIterator.next();
-            if (!Comparators.nullSafeEquals(thisObject, otherObject))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int hashCode = 1;
-        Iterator<E> iterator = this.iterator();
-        while (iterator.hasNext())
-        {
-            E item = iterator.next();
-            hashCode = 31 * hashCode + (item == null ? 0 : item.hashCode());
-        }
-        return hashCode;
     }
 
     private static final class ProcedureToInnerListObjectIntProcedure<E> implements Procedure<FastList<E>>

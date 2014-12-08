@@ -82,6 +82,14 @@ public abstract class AbstractMutableList<T>
         extends AbstractMutableCollection<T>
         implements MutableList<T>
 {
+    private static final IntObjectToIntFunction<?> HASH_CODE_FUNCTION = new IntObjectToIntFunction<Object>()
+    {
+        public int intValueOf(int hashCode, Object item)
+        {
+            return 31 * hashCode + (item == null ? 0 : item.hashCode());
+        }
+    };
+
     @Override
     public MutableList<T> clone()
     {
@@ -95,29 +103,30 @@ public abstract class AbstractMutableList<T>
         }
     }
 
+    @SuppressWarnings("InstanceofThis")
     @Override
-    public boolean equals(Object o)
+    public boolean equals(Object that)
     {
-        if (o == this)
+        if (that == this)
         {
             return true;
         }
-        if (!(o instanceof List))
+        if (!(that instanceof List))
         {
             return false;
         }
-
-        List<?> that = (List<?>) o;
-        return that instanceof RandomAccess ? this.randomAccessEquals(that) : this.nonRandomAccessEquals(that);
+        List<?> list = (List<?>) that;
+        if (this.size() != list.size())   // we assume that size() is a constant time operation in most lists
+        {
+            return false;
+        }
+        return this instanceof RandomAccess && that instanceof RandomAccess ? this.randomAccessEquals(list) : this.nonRandomAccessEquals(list);
     }
 
     private boolean randomAccessEquals(List<?> that)
     {
-        if (this.size() != that.size())
-        {
-            return false;
-        }
-        for (int i = 0; i < this.size(); i++)
+        int localSize = this.size();
+        for (int i = 0; i < localSize; i++)
         {
             if (!Comparators.nullSafeEquals(this.get(i), that.get(i)))
             {
@@ -129,32 +138,23 @@ public abstract class AbstractMutableList<T>
 
     private boolean nonRandomAccessEquals(List<?> that)
     {
-        Iterator<?> iterator = that.iterator();
-        for (int i = 0; i < this.size(); i++)
+        Iterator<T> thisIterator = this.iterator();
+        Iterator<?> thatIterator = that.iterator();
+        while (thisIterator.hasNext())
         {
-            if (!iterator.hasNext())
-            {
-                return false;
-            }
-
-            if (!Comparators.nullSafeEquals(this.get(i), iterator.next()))
+            if (!thatIterator.hasNext() || !Comparators.nullSafeEquals(thisIterator.next(), thatIterator.next()))
             {
                 return false;
             }
         }
-        return !iterator.hasNext();
+        return !thatIterator.hasNext();
     }
 
     @Override
     public int hashCode()
     {
-        int hashCode = 1;
-        for (int i = 0; i < this.size(); i++)
-        {
-            T obj = this.get(i);
-            hashCode = 31 * hashCode + (obj == null ? 0 : obj.hashCode());
-        }
-        return hashCode;
+        // Optimize injectInto in subclasses if necessary
+        return this.injectInto(1, (IntObjectToIntFunction<T>) HASH_CODE_FUNCTION);
     }
 
     public void forEach(Procedure<? super T> procedure)
