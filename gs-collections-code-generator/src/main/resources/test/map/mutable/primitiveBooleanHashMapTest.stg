@@ -208,7 +208,7 @@ public class <name>BooleanHashMapTest extends AbstractMutable<name>BooleanMapTes
     {
         <name>BooleanHashMap hashMap0 = new <name>BooleanHashMap().withKeysValues(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false, <(literal.(type))("4")>, false);
 
-        <wrapperName> total = hashMap0.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, boolean value) -> value ? result : <wrapperName>.valueOf((<type>) (result + (<type>) 2)));
+        <wrapperName> total = hashMap0.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), (<wrapperName> result, boolean value) -> value ? result : <wrapperName>.valueOf((<type>) (result + <(literal.(type))("2")>)));
 
         Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("6")>), total);
     }

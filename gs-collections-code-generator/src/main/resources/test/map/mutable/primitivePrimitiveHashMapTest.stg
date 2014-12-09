@@ -533,7 +533,7 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
         {
             Assert.assertEquals(<(literal.(type2))("0")>, hashMap.get(<(castFromInt.(type1))("i")>)<(wideDelta.(type2))>);
             Assert.assertEquals(<(wideLiteral.(type2))("1")>, hashMap.updateValue(<(castFromInt.(type1))("i")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
-            Assert.assertEquals(<(castFromInt.(type2))("1")>, hashMap.get(<(castFromInt.(type1))("i")>)<(wideDelta.(type2))>);
+            Assert.assertEquals(<(literal.(type2))("1")>, hashMap.get(<(castFromInt.(type1))("i")>)<(wideDelta.(type2))>);
         }
     }
 
