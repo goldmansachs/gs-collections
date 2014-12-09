@@ -529,4 +529,34 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
     {
         this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).asParallel(Executors.newFixedThreadPool(10), 0);
     }
+
+    @Override
+    public void getFirst()
+    {
+        super.getFirst();
+
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i <= size - 1; i++)
+        {
+            MutableSet<Integer> unifiedSet = UnifiedSet.<Integer>newSet(1).withAll(MORE_COLLISIONS.subList(0, i));
+            Assert.assertSame(MORE_COLLISIONS.get(0), unifiedSet.getFirst());
+        }
+    }
+
+    @Override
+    public void getLast()
+    {
+        super.getLast();
+
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i <= size - 1; i++)
+        {
+            MutableSet<Integer> unifiedSet = UnifiedSet.<Integer>newSet(1).withAll(MORE_COLLISIONS.subList(0, i));
+            Assert.assertSame(MORE_COLLISIONS.get(i - 1), unifiedSet.getLast());
+        }
+
+        MutableSet<Integer> chainedWithOneSlot = UnifiedSet.newSetWith(COLLISION_1, COLLISION_2);
+        chainedWithOneSlot.remove(COLLISION_2);
+        Assert.assertSame(COLLISION_1, chainedWithOneSlot.getLast());
+    }
 }

@@ -971,4 +971,34 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Assert.assertFalse(setWithNull.retainAll(FastList.newListWith((Object) null)));
         Assert.assertEquals(UnifiedSet.newSetWith((Object) null), setWithNull);
     }
+
+    @Override
+    public void getFirst()
+    {
+        super.getFirst();
+
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i <= size - 1; i++)
+        {
+            MutableSet<Integer> unifiedSet = UnifiedSetWithHashingStrategy.newSet(INTEGER_HASHING_STRATEGY, 1).withAll(MORE_COLLISIONS.subList(0, i));
+            Assert.assertSame(MORE_COLLISIONS.get(0), unifiedSet.getFirst());
+        }
+    }
+
+    @Override
+    public void getLast()
+    {
+        super.getLast();
+
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i <= size - 1; i++)
+        {
+            MutableSet<Integer> unifiedSet = UnifiedSetWithHashingStrategy.newSet(INTEGER_HASHING_STRATEGY, 1).withAll(MORE_COLLISIONS.subList(0, i));
+            Assert.assertSame(MORE_COLLISIONS.get(i - 1), unifiedSet.getLast());
+        }
+
+        MutableSet<Integer> chainedWithOneSlot = UnifiedSetWithHashingStrategy.newSetWith(INTEGER_HASHING_STRATEGY, COLLISION_1, COLLISION_2);
+        chainedWithOneSlot.remove(COLLISION_2);
+        Assert.assertSame(COLLISION_1, chainedWithOneSlot.getLast());
+    }
 }

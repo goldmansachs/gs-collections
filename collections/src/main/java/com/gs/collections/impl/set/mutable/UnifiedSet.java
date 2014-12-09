@@ -741,12 +741,59 @@ public class UnifiedSet<T>
 
     public T getFirst()
     {
-        return this.isEmpty() ? null : this.iterator().next();
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                return this.nonSentinel(((ChainedBucket) cur).zero);
+            }
+            if (cur != null)
+            {
+                return this.nonSentinel(cur);
+            }
+        }
+        return null;
     }
 
     public T getLast()
     {
-        return this.getFirst();
+        for (int i = this.table.length - 1; i >= 0; i--)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                return this.getLast((ChainedBucket) cur);
+            }
+            if (cur != null)
+            {
+                return this.nonSentinel(cur);
+            }
+        }
+        return null;
+    }
+
+    private T getLast(ChainedBucket bucket)
+    {
+        while (bucket.three instanceof ChainedBucket)
+        {
+            bucket = (ChainedBucket) bucket.three;
+        }
+
+        if (bucket.three != null)
+        {
+            return this.nonSentinel(bucket.three);
+        }
+        if (bucket.two != null)
+        {
+            return this.nonSentinel(bucket.two);
+        }
+        if (bucket.one != null)
+        {
+            return this.nonSentinel(bucket.one);
+        }
+        assert bucket.zero != null;
+        return this.nonSentinel(bucket.zero);
     }
 
     public UnifiedSet<T> select(Predicate<? super T> predicate)
