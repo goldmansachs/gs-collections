@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -179,5 +180,19 @@ public class ConcurrentMutableHashMapTest extends ConcurrentHashMapTestCase
         PartitionIterable<Integer> partition = map.partitionWith(Predicates2.in(), map.select(IntegerPredicates.isEven()));
         Assert.assertEquals(iSet(2, 4), partition.getSelected().toSet());
         Assert.assertEquals(iSet(1, 3), partition.getRejected().toSet());
+    }
+
+    @Override
+    public void equalsAndHashCode()
+    {
+        // java.util.concurrent.ConcurrentHashMap doesn't support null keys OR values
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        Verify.assertPostSerializedEqualsAndHashCode(map);
+        Verify.assertEqualsAndHashCode(Maps.mutable.of(1, "1", 2, "2", 3, "3"), map);
+        Verify.assertEqualsAndHashCode(Maps.immutable.of(1, "1", 2, "2", 3, "3"), map);
+
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2"));
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
+        Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2", 4, "4"));
     }
 }

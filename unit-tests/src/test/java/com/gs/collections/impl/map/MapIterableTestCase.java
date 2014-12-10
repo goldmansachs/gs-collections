@@ -125,6 +125,10 @@ public abstract class MapIterableTestCase
         Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2"));
         Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
         Assert.assertNotEquals(map, this.newMapWithKeysValues(1, "1", 2, "2", 4, "4"));
+
+        Verify.assertEqualsAndHashCode(
+                Maps.immutable.with(1, "1", 2, "2", 3, null),
+                this.newMapWithKeysValues(1, "1", 2, "2", 3, null));
     }
 
     @Test
@@ -797,6 +801,26 @@ public abstract class MapIterableTestCase
         Assert.assertTrue(map.containsAll(FastList.newListWith("One", "Two")));
         Assert.assertTrue(map.containsAll(FastList.newListWith("One", "Two", "Three")));
         Assert.assertFalse(map.containsAll(FastList.newListWith("One", "Two", "Three", "Four")));
+    }
+
+    @Test
+    public void containsKey()
+    {
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        Assert.assertTrue(map.containsKey(1));
+        Assert.assertFalse(map.containsKey(4));
+    }
+
+    @Test
+    public void containsValue()
+    {
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        Assert.assertTrue(map.containsValue("1"));
+        Assert.assertFalse(map.containsValue("4"));
+
+        MapIterable<Integer, String> map2 = this.newMapWithKeysValues(3, "1", 2, "2", 1, "3");
+        Assert.assertTrue(map2.containsValue("1"));
+        Assert.assertFalse(map2.containsValue("4"));
     }
 
     @Test

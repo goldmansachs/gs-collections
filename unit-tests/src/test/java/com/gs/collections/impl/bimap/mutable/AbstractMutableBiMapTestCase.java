@@ -212,6 +212,8 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
     @Test
     public void containsKey()
     {
+        super.containsKey();
+
         MutableBiMap<Integer, Character> biMap = this.classUnderTest();
 
         Assert.assertTrue(biMap.containsKey(1));
@@ -261,6 +263,8 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
     @Test
     public void containsValue()
     {
+        super.containsValue();
+
         MutableBiMap<Integer, Character> biMap = this.classUnderTest();
 
         Assert.assertTrue(biMap.containsValue(null));

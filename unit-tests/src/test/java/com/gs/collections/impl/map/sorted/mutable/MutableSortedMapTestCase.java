@@ -848,22 +848,6 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
     }
 
     @Test
-    public void containsValue()
-    {
-        MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        Assert.assertTrue(map.containsValue("1"));
-        Assert.assertFalse(map.containsValue("4"));
-    }
-
-    @Test
-    public void containsKey()
-    {
-        MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        Assert.assertTrue(map.containsKey(1));
-        Assert.assertFalse(map.containsKey(4));
-    }
-
-    @Test
     public void newEmpty()
     {
         MutableSortedMap<Integer, Integer> map = this.newMapWithKeysValues(1, 1, 2, 2);

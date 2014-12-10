@@ -30,4 +30,14 @@ public class ImmutableTreeMapSerializationTest
                 ImmutableEmptySortedMapSerializationTest.EXPECTED_BASE_64_FORM,
                 ImmutableTreeMap.newMap(new TreeSortedMap<Object, Object>()));
     }
+
+    @Test
+    public void keySetSerializedForm()
+    {
+        Verify.assertSerializedForm(
+                2L,
+                "rO0ABXNyAFFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuc29ydGVkLmltbXV0YWJsZS5JbW11\n"
+                        + "dGFibGVTb3J0ZWRTZXRTZXJpYWxpemF0aW9uUHJveHkAAAAAAAAAAQwAAHhwcHcEAAAAAHg=",
+                new ImmutableTreeMap<Object, Object>(new TreeSortedMap<Object, Object>()).keySet());
+    }
 }

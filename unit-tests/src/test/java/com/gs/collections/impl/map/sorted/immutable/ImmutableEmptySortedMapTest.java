@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.map.ImmutableMap;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -52,6 +53,30 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     }
 
     @Override
+    protected <K, V> MapIterable<K, V> newMap()
+    {
+        return SortedMaps.immutable.of();
+    }
+
+    @Override
+    protected <K, V> MapIterable<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
+    {
+        return SortedMaps.immutable.of(key1, value1, key2, value2);
+    }
+
+    @Override
+    protected <K, V> MapIterable<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
+    {
+        return SortedMaps.immutable.of(key1, value1, key2, value2, key3, value3);
+    }
+
+    @Override
+    protected <K, V> MapIterable<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
+    {
+        return SortedMaps.immutable.of(key1, value1, key2, value2, key3, value3, key4, value4);
+    }
+
+    @Override
     protected int size()
     {
         return 0;
@@ -71,10 +96,24 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
         Assert.assertEquals("{}", map.toString());
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void firstKey()
+    {
+        new ImmutableEmptySortedMap<Object, Object>().firstKey();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void lastKey()
+    {
+        new ImmutableEmptySortedMap<Object, Object>().lastKey();
+    }
+
     @Override
     @Test
     public void get()
     {
+        //Cannot call super.get() as map is empty and present key behavior does not exist.
+
         Integer absentKey = this.size() + 1;
         String absentValue = String.valueOf(absentKey);
 
@@ -125,6 +164,8 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     @Test
     public void ifPresentApply()
     {
+        super.ifPresentApply();
+
         Integer absentKey = this.size() + 1;
 
         ImmutableSortedMap<Integer, String> classUnderTest = this.classUnderTest();
@@ -135,57 +176,79 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     @Test
     public void notEmpty()
     {
+        //Cannot call super.notEmpty() as map is empty.
         Assert.assertFalse(this.classUnderTest().notEmpty());
     }
 
+    @Override
     @Test
     public void allSatisfy()
     {
+        super.allSatisfy();
+
         ImmutableSortedMap<String, String> map = new ImmutableEmptySortedMap<>();
 
         Assert.assertTrue(map.allSatisfy(String.class::isInstance));
         Assert.assertTrue(map.allSatisfy("Monkey"::equals));
     }
 
+    @Override
     @Test
     public void noneSatisfy()
     {
+        super.noneSatisfy();
+
         ImmutableSortedMap<String, String> map = new ImmutableEmptySortedMap<>();
 
         Assert.assertTrue(map.noneSatisfy(Integer.class::isInstance));
         Assert.assertTrue(map.noneSatisfy("Monkey"::equals));
     }
 
+    @Override
     @Test
     public void anySatisfy()
     {
+        super.anySatisfy();
+
         ImmutableSortedMap<String, String> map = new ImmutableEmptySortedMap<>();
 
         Assert.assertFalse(map.anySatisfy(String.class::isInstance));
         Assert.assertFalse(map.anySatisfy("Monkey"::equals));
     }
 
+    @Override
     @Test(expected = NoSuchElementException.class)
     public void max()
     {
+        super.max();
+
         this.classUnderTest().max();
     }
 
+    @Override
     @Test(expected = NoSuchElementException.class)
     public void maxBy()
     {
+        super.maxBy();
+
         this.classUnderTest().maxBy(Functions.getStringPassThru());
     }
 
+    @Override
     @Test(expected = NoSuchElementException.class)
     public void min()
     {
+        super.min();
+
         this.classUnderTest().min();
     }
 
+    @Override
     @Test(expected = NoSuchElementException.class)
     public void minBy()
     {
+        super.minBy();
+
         this.classUnderTest().minBy(Functions.getStringPassThru());
     }
 
@@ -234,16 +297,22 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
         Assert.assertSame(collect, revCollect);
     }
 
+    @Override
     @Test
     public void detect()
     {
+        super.detect();
+
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
         Assert.assertNull(map.detect((ignored1, ignored2) -> true));
     }
 
+    @Override
     @Test
     public void containsKey()
     {
+        super.containsKey();
+
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
         ImmutableSortedMap<Integer, String> revMap = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder());
         Assert.assertFalse(map.containsKey(0));
@@ -266,9 +335,12 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
         Assert.assertSame(Lists.immutable.of(), revMap.values());
     }
 
+    @Override
     @Test
     public void serialization()
     {
+        super.serialization();
+
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
         ImmutableSortedMap<Integer, String> deserialized = SerializeTestHelper.serializeDeserialize(map);
         Assert.assertSame(ImmutableEmptySortedMap.INSTANCE, map);
@@ -280,9 +352,12 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
         Assert.assertNotNull(revDeserialized.comparator());
     }
 
+    @Override
     @Test
     public void keyValuesView()
     {
+        super.keyValuesView();
+
         Assert.assertTrue(this.classUnderTest().keyValuesView().isEmpty());
     }
 }

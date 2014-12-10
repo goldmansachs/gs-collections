@@ -206,6 +206,7 @@
             <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$EntrySet" />
             <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$ValuesCollection" />
             <Class name="com.gs.collections.impl.bimap.mutable.AbstractMutableBiMap$KeySet" />
+            <Class name="com.gs.collections.impl.map.sorted.immutable.ImmutableTreeMap$ImmutableSortedMapKeySet" />
         </Or>
     </Match>
 

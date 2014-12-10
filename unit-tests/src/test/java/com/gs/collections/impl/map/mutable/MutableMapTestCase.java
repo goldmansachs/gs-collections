@@ -463,7 +463,9 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     public void getIfAbsentPut_block_throws()
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        Verify.assertThrows(RuntimeException.class, () -> map.getIfAbsentPut(4, () -> { throw new RuntimeException(); }));
+        Verify.assertThrows(RuntimeException.class, () -> map.getIfAbsentPut(4, () -> {
+            throw new RuntimeException();
+        }));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3"), map);
     }
 
@@ -471,7 +473,9 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     public void getIfAbsentPutWith_block_throws()
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        Verify.assertThrows(RuntimeException.class, () -> map.getIfAbsentPutWith(4, object -> { throw new RuntimeException(); }, null));
+        Verify.assertThrows(RuntimeException.class, () -> map.getIfAbsentPutWith(4, object -> {
+            throw new RuntimeException();
+        }, null));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3"), map);
     }
 
@@ -481,22 +485,6 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         Verify.assertContainsAll(map.keySet(), 1, 2, 3);
         Verify.assertContainsAll(map.values(), "1", "2", "3");
-    }
-
-    @Test
-    public void containsValue()
-    {
-        MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        Assert.assertTrue(map.containsValue("1"));
-        Assert.assertFalse(map.containsValue("4"));
-    }
-
-    @Test
-    public void containsKey()
-    {
-        MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        Assert.assertTrue(map.containsKey(1));
-        Assert.assertFalse(map.containsKey(4));
     }
 
     @Test
