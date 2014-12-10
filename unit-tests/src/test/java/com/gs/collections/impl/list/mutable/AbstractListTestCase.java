@@ -192,6 +192,14 @@ public abstract class AbstractListTestCase
         Verify.assertEqualsAndHashCode(ArrayAdapter.newArrayWith(1, 2, 3), list1);
         Assert.assertNotEquals(list2, list3);
         Assert.assertNotEquals(list2, list4);
+        Assert.assertNotEquals(new LinkedList<>(Arrays.asList(1, 2, 3)), list4);
+        Assert.assertNotEquals(new LinkedList<>(Arrays.asList(1, 2, 3, 3)), list4);
+        Assert.assertNotEquals(new ArrayList<>(Arrays.asList(1, 2, 3)), list4);
+        Assert.assertNotEquals(new ArrayList<>(Arrays.asList(1, 2, 3, 3)), list4);
+        Assert.assertNotEquals(list4, new LinkedList<>(Arrays.asList(1, 2, 3)));
+        Assert.assertNotEquals(list4, new LinkedList<>(Arrays.asList(1, 2, 3, 3)));
+        Assert.assertNotEquals(list4, new ArrayList<>(Arrays.asList(1, 2, 3)));
+        Assert.assertNotEquals(list4, new ArrayList<>(Arrays.asList(1, 2, 3, 3)));
         Assert.assertNotEquals(new LinkedList<>(Arrays.asList(1, 2, 3, 4)), list1);
         Assert.assertNotEquals(new LinkedList<>(Arrays.asList(1, 2, null)), list1);
         Assert.assertNotEquals(new LinkedList<>(Arrays.asList(1, 2)), list1);

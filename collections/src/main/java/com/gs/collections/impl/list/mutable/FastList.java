@@ -1363,17 +1363,15 @@ public class FastList<T>
         return InternalArrayIterate.arrayEqualsList(this.items, this.size, (List<?>) that);
     }
 
-    public boolean fastListEquals(FastList<?> otherFastList)
+    public boolean fastListEquals(FastList<?> that)
     {
-        if (this.size() != otherFastList.size())
+        if (this.size != that.size)
         {
             return false;
         }
         for (int i = 0; i < this.size; i++)
         {
-            T one = this.items[i];
-            Object two = otherFastList.items[i];
-            if (!Comparators.nullSafeEquals(one, two))
+            if (!Comparators.nullSafeEquals(this.items[i], that.items[i]))
             {
                 return false;
             }

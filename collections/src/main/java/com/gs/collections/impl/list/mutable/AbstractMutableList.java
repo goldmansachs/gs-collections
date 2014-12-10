@@ -103,51 +103,10 @@ public abstract class AbstractMutableList<T>
         }
     }
 
-    @SuppressWarnings("InstanceofThis")
     @Override
     public boolean equals(Object that)
     {
-        if (that == this)
-        {
-            return true;
-        }
-        if (!(that instanceof List))
-        {
-            return false;
-        }
-        List<?> list = (List<?>) that;
-        if (this.size() != list.size())   // we assume that size() is a constant time operation in most lists
-        {
-            return false;
-        }
-        return this instanceof RandomAccess && that instanceof RandomAccess ? this.randomAccessEquals(list) : this.nonRandomAccessEquals(list);
-    }
-
-    private boolean randomAccessEquals(List<?> that)
-    {
-        int localSize = this.size();
-        for (int i = 0; i < localSize; i++)
-        {
-            if (!Comparators.nullSafeEquals(this.get(i), that.get(i)))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean nonRandomAccessEquals(List<?> that)
-    {
-        Iterator<T> thisIterator = this.iterator();
-        Iterator<?> thatIterator = that.iterator();
-        while (thisIterator.hasNext())
-        {
-            if (!thatIterator.hasNext() || !Comparators.nullSafeEquals(thisIterator.next(), thatIterator.next()))
-            {
-                return false;
-            }
-        }
-        return !thatIterator.hasNext();
+        return this == that || (that instanceof List && ListIterate.equals(this, (List<?>) that));
     }
 
     @Override

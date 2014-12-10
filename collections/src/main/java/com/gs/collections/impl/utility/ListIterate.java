@@ -74,6 +74,7 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -92,6 +93,60 @@ public final class ListIterate
     private ListIterate()
     {
         throw new AssertionError("Suppress default constructor for noninstantiability");
+    }
+
+    public static boolean equals(List<?> one, List<?> two)
+    {
+        if (one.size() != two.size())   // we assume that size() is a constant time operation in most lists
+        {
+            return false;
+        }
+        if (one instanceof RandomAccess)
+        {
+            return two instanceof RandomAccess ? ListIterate.randomAccessEquals(one, two) : ListIterate.oneRandomAccessEquals(one, two);
+        }
+        return two instanceof RandomAccess ? ListIterate.oneRandomAccessEquals(two, one) : ListIterate.nonRandomAccessEquals(one, two);
+    }
+
+    private static boolean randomAccessEquals(List<?> one, List<?> two)
+    {
+        int localSize = one.size();
+        for (int i = 0; i < localSize; i++)
+        {
+            if (!Comparators.nullSafeEquals(one.get(i), two.get(i)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean oneRandomAccessEquals(List<?> one, List<?> two)
+    {
+        int localSize = one.size();
+        Iterator<?> twoIterator = two.iterator();
+        for (int i = 0; i < localSize; i++)
+        {
+            if (!twoIterator.hasNext() || !Comparators.nullSafeEquals(one.get(i), twoIterator.next()))
+            {
+                return false;
+            }
+        }
+        return !twoIterator.hasNext();
+    }
+
+    private static boolean nonRandomAccessEquals(List<?> one, List<?> two)
+    {
+        Iterator<?> oneIterator = one.iterator();
+        Iterator<?> twoIterator = two.iterator();
+        while (oneIterator.hasNext())
+        {
+            if (!twoIterator.hasNext() || !Comparators.nullSafeEquals(oneIterator.next(), twoIterator.next()))
+            {
+                return false;
+            }
+        }
+        return !twoIterator.hasNext();
     }
 
     public static <T> void toArray(List<T> list, T[] target, int startIndex, int sourceSize)
