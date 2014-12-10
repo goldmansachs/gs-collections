@@ -17,6 +17,7 @@
 package com.gs.collections.impl.utility;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,6 +73,14 @@ public class ListIterateTest
         Integer[] target2 = {1, 2, null, null};
         ListIterate.toArray(arrayList, target2, 2, 2);
         Assert.assertArrayEquals(target2, new Integer[]{1, 2, 1, 2});
+    }
+
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void toArray_throws()
+    {
+        LinkedList<Integer> notAnArrayList = new LinkedList<>(Interval.oneTo(10));
+        Integer[] target1 = {1, 2, null, null};
+        ListIterate.toArray(notAnArrayList, target1, 2, 10);
     }
 
     @Test
@@ -202,12 +211,20 @@ public class ListIterateTest
     @Test
     public void getFirstAndLast()
     {
+        Assert.assertNull(ListIterate.getFirst(null));
+        Assert.assertNull(ListIterate.getLast(null));
+
         MutableList<Boolean> list = Lists.fixedSize.of(true, null, false);
         Assert.assertEquals(Boolean.TRUE, ListIterate.getFirst(list));
         Assert.assertEquals(Boolean.FALSE, ListIterate.getLast(list));
+
         List<Boolean> linked = new LinkedList<>(list);
         Assert.assertEquals(Boolean.TRUE, ListIterate.getFirst(linked));
         Assert.assertEquals(Boolean.FALSE, ListIterate.getLast(linked));
+
+        List<Boolean> arrayList = new ArrayList<>(list);
+        Assert.assertEquals(Boolean.TRUE, ListIterate.getFirst(arrayList));
+        Assert.assertEquals(Boolean.FALSE, ListIterate.getLast(arrayList));
     }
 
     @Test
@@ -220,6 +237,10 @@ public class ListIterateTest
         List<?> linked = new LinkedList<>();
         Assert.assertNull(ListIterate.getFirst(linked));
         Assert.assertNull(ListIterate.getLast(linked));
+
+        List<?> synchronizedList = Collections.synchronizedList(linked);
+        Assert.assertNull(ListIterate.getFirst(synchronizedList));
+        Assert.assertNull(ListIterate.getLast(synchronizedList));
     }
 
     @Test

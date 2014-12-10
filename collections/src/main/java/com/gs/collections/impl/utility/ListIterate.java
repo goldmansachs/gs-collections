@@ -21,6 +21,7 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -101,9 +102,12 @@ public final class ListIterate
         }
         else
         {
-            for (int i = 0; i < sourceSize; i++)
+            int index = 0;
+            ListIterator<T> iterator = list.listIterator();
+            while (iterator.hasNext() && index < sourceSize)
             {
-                target[startIndex + i] = list.get(i);
+                target[startIndex + index] = iterator.next();
+                index++;
             }
         }
     }
@@ -569,9 +573,26 @@ public final class ListIterate
     /**
      * Returns the last element of a list.
      */
-    public static <T> T getLast(List<T> collection)
+    public static <T> T getLast(List<T> list)
     {
-        return Iterate.isEmpty(collection) ? null : collection.get(collection.size() - 1);
+        if (list == null)
+        {
+            return null;
+        }
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.getLast(list);
+        }
+        if (list instanceof Deque)
+        {
+            return ((Deque<T>) list).peekLast();
+        }
+        ListIterator<T> iterator = list.listIterator(list.size());
+        if (iterator.hasPrevious())
+        {
+            return iterator.previous();
+        }
+        return null;
     }
 
     /**
