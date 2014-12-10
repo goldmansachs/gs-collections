@@ -21,7 +21,6 @@ import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -637,10 +636,6 @@ public final class ListIterate
         if (list instanceof RandomAccess)
         {
             return RandomAccessListIterate.getLast(list);
-        }
-        if (list instanceof Deque)
-        {
-            return ((Deque<T>) list).peekLast();
         }
         ListIterator<T> iterator = list.listIterator(list.size());
         if (iterator.hasPrevious())
