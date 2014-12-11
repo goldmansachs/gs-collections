@@ -91,18 +91,8 @@ public abstract class AbstractListAdapter<T>
 
     public MutableList<T> reverseThis()
     {
-        int mid = this.size() >> 1;
-        int j = this.size() - 1;
-        for (int i = 0; i < mid; i++, j--)
-        {
-            this.swapElements(i, j);
-        }
+        Collections.reverse(this);
         return this;
-    }
-
-    protected void swapElements(int i, int j)
-    {
-        this.set(i, this.set(j, this.get(i)));
     }
 
     public T get(int index)
