@@ -50,6 +50,44 @@ public class CompositeFastListTest extends AbstractListTestCase
     }
 
     @Test
+    public void size()
+    {
+        CompositeFastList<String> list = new CompositeFastList<>();
+        Verify.assertSize(0, list);
+        list.add("1");
+        Verify.assertSize(1, list);
+        list.addAll(FastList.newListWith("1", "1", "1", "1"));
+        Verify.assertSize(5, list);
+        list.remove(1);
+        Verify.assertSize(4, list);
+        list.remove("1");
+        Verify.assertSize(3, list);
+        list.add(3, "1");
+        Verify.assertSize(4, list);
+        ListIterator<String> listIterator = list.listIterator();
+        listIterator.add("1");
+        Verify.assertSize(5, list);
+        listIterator.next();
+        listIterator.remove();
+        Verify.assertSize(4, list);
+        Iterator<String> iterator = list.iterator();
+        iterator.next();
+        iterator.remove();
+        Verify.assertSize(3, list);
+        list.removeAll(FastList.newListWith("1"));
+        Verify.assertSize(0, list);
+        list.addAll(FastList.newListWith("1", "2", "3", "4"));
+        list.addAll(FastList.newListWith("1", "2", "3", "4"));
+        Verify.assertSize(8, list);
+        list.clear();
+        Verify.assertSize(0, list);
+        CompositeFastList<String> list2 = new CompositeFastList<>();
+        Verify.assertSize(0, list2);
+        list2.listIterator().add("1");
+        Verify.assertSize(1, list2);
+    }
+
+    @Test
     public void testDefaultConstructor()
     {
         MutableList<String> list = new CompositeFastList<>();

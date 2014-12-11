@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,11 @@ public class CompositeFastListSerializationTest
     public void serializedForm()
     {
         Verify.assertSerializedForm(
-                1L,
+                2L,
                 "rO0ABXNyADZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuQ29tcG9zaXRlRmFz\n"
-                        + "dExpc3QAAAAAAAAAAQIAAUwABWxpc3RzdAAvTGNvbS9ncy9jb2xsZWN0aW9ucy9pbXBsL2xpc3Qv\n"
-                        + "bXV0YWJsZS9GYXN0TGlzdDt4cHNyAC1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFi\n"
-                        + "bGUuRmFzdExpc3QAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
+                        + "dExpc3QAAAAAAAAAAgIAAkkABHNpemVMAAVsaXN0c3QAL0xjb20vZ3MvY29sbGVjdGlvbnMvaW1w\n"
+                        + "bC9saXN0L211dGFibGUvRmFzdExpc3Q7eHAAAAAAc3IALWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBs\n"
+                        + "Lmxpc3QubXV0YWJsZS5GYXN0TGlzdAAAAAAAAAABDAAAeHB3BAAAAAB4",
                 new CompositeFastList<Object>());
     }
 }

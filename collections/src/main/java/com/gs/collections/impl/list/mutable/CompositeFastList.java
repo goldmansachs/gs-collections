@@ -42,7 +42,6 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
-import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.parallel.list.NonParallelListIterable;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.utility.Iterate;
@@ -76,8 +75,9 @@ public final class CompositeFastList<E>
         }
     };
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
     private final FastList<FastList<E>> lists = FastList.newList();
+    private int size = 0;
 
     @Override
     public MutableList<E> clone()
@@ -87,12 +87,17 @@ public final class CompositeFastList<E>
 
     public int size()
     {
-        int size = 0;
+        return this.size;
+    }
+
+    public void resetSize()
+    {
+        int newSize = 0;
         for (int i = this.lists.size() - 1; i >= 0; i--)
         {
-            size += this.lists.get(i).size();
+            newSize += this.lists.get(i).size();
         }
-        return size;
+        this.size = newSize;
     }
 
     @Override
@@ -333,13 +338,19 @@ public final class CompositeFastList<E>
             this.addComposited(FastList.<E>newList());
         }
         Collection<E> list = this.lists.getLast();
+        this.size++;
         return list.add(object);
     }
 
     @Override
     public boolean remove(Object object)
     {
-        return this.lists.anySatisfyWith(REMOVE_PREDICATE, object);
+        boolean removed = this.lists.anySatisfyWith(REMOVE_PREDICATE, object);
+        if (removed)
+        {
+            this.size--;
+        }
+        return removed;
     }
 
     @Override
@@ -385,6 +396,7 @@ public final class CompositeFastList<E>
         {
             throw new IllegalArgumentException("CompositeFastList can only add FastLists");
         }
+        this.size += collection.size();
         this.lists.add((FastList<E>) collection);
     }
 
@@ -402,6 +414,7 @@ public final class CompositeFastList<E>
                 object.clear();
             }
         });
+        this.size = 0;
     }
 
     @Override
@@ -411,6 +424,10 @@ public final class CompositeFastList<E>
         for (int i = this.lists.size() - 1; i >= 0; i--)
         {
             changed = this.lists.get(i).retainAll(collection) || changed;
+        }
+        if (changed)
+        {
+            this.resetSize();
         }
         return changed;
     }
@@ -426,6 +443,10 @@ public final class CompositeFastList<E>
         for (int i = this.lists.size() - 1; i >= 0; i--)
         {
             changed = this.lists.get(i).removeAll(collection) || changed;
+        }
+        if (changed)
+        {
+            this.resetSize();
         }
         return changed;
     }
@@ -480,6 +501,7 @@ public final class CompositeFastList<E>
             if (index <= max)
             {
                 list.add(index - previousMax, element);
+                this.size++;
                 return;
             }
         }
@@ -495,6 +517,7 @@ public final class CompositeFastList<E>
             index -= currentSize;
             currentSize = this.lists.get(++p).size();
         }
+        this.size--;
         return this.lists.get(p).remove(index);
     }
 
@@ -550,7 +573,7 @@ public final class CompositeFastList<E>
     }
 
     /**
-     * a llst iterator is a problem for a composite list as going back in the order of the list is an issue,
+     * a list iterator is a problem for a composite list as going back in the order of the list is an issue,
      * as are the other methods like set() and add() (and especially, remove).
      * Convert the internal lists to one list (if not already just one list)
      * and return that list's list iterator.
@@ -562,15 +585,10 @@ public final class CompositeFastList<E>
     @Override
     public ListIterator<E> listIterator(int index)
     {
-        if (this.lists.size() == 1)
+        if (this.lists.size() > 1 || this.lists.isEmpty())
         {
-            return this.lists.getFirst().listIterator(index);
+            this.flattenLists();
         }
-        if (this.lists.isEmpty())
-        {
-            return Lists.immutable.<E>of().listIterator(index);
-        }
-        this.flattenLists();
         return super.listIterator(index);
     }
 
@@ -808,6 +826,7 @@ public final class CompositeFastList<E>
 
         public void remove()
         {
+            CompositeFastList.this.size--;
             this.currentIterator.remove();
         }
     }
