@@ -803,7 +803,7 @@ public final class ParallelIterate
     {
         int size = Iterate.sizeOf(iterable);
         FastListCollectProcedureCombiner<T, V> combiner = new FastListCollectProcedureCombiner<T, V>(iterable, target, size, allowReorderedResult);
-        int taskCount = ParallelIterate.calculateTaskCount(size, batchSize);
+        int taskCount = ParallelIterate.calculateTaskCount(iterable, batchSize);
         FastListCollectProcedureFactory<T, V> procedureFactory = new FastListCollectProcedureFactory<T, V>(function, size / taskCount);
         ParallelIterate.forEach(
                 iterable,
@@ -854,7 +854,8 @@ public final class ParallelIterate
             boolean allowReorderedResult)
     {
         int size = Iterate.sizeOf(iterable);
-        int taskSize = size / ParallelIterate.DEFAULT_PARALLEL_TASK_COUNT;
+        int taskCount = ParallelIterate.calculateTaskCount(iterable, batchSize);
+        int taskSize = size / taskCount;
         FlatCollectProcedureCombiner<T, V> combiner =
                 new FlatCollectProcedureCombiner<T, V>(iterable, target, size, allowReorderedResult);
         FlatCollectProcedureFactory<T, V> procedureFactory = new FlatCollectProcedureFactory<T, V>(function, taskSize);
@@ -863,7 +864,7 @@ public final class ParallelIterate
                 procedureFactory,
                 combiner,
                 batchSize,
-                ParallelIterate.calculateTaskCount(size, batchSize),
+                taskCount,
                 executor);
         return (R) combiner.getResult();
     }

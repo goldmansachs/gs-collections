@@ -43,6 +43,7 @@ import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.lazy.parallel.list.NonParallelListIterable;
+import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
@@ -58,7 +59,7 @@ import com.gs.collections.impl.utility.ListIterate;
  */
 public final class CompositeFastList<E>
         extends AbstractMutableList<E>
-        implements Serializable
+        implements BatchIterable<E>, Serializable
 {
     private static final Predicate2<FastList<?>, Object> REMOVE_PREDICATE = new Predicate2<FastList<?>, Object>()
     {
@@ -98,6 +99,27 @@ public final class CompositeFastList<E>
             newSize += this.lists.get(i).size();
         }
         this.size = newSize;
+    }
+
+    public void batchForEach(Procedure<? super E> procedure, int sectionIndex, int sectionCount)
+    {
+        if (this.lists.size() == 1)
+        {
+            this.lists.get(0).batchForEach(procedure, sectionIndex, sectionCount);
+        }
+        else
+        {
+            this.lists.get(sectionIndex).batchForEach(procedure, 0, 1);
+        }
+    }
+
+    public int getBatchCount(int batchSize)
+    {
+        if (this.lists.size() == 1)
+        {
+            return this.lists.get(0).getBatchCount(batchSize);
+        }
+        return this.lists.size();
     }
 
     @Override
@@ -356,8 +378,11 @@ public final class CompositeFastList<E>
     @Override
     public boolean addAll(Collection<? extends E> collection)
     {
-        Collection<? extends E> collectionToAdd = collection instanceof FastList ? collection : new FastList<E>(collection);
-        this.addComposited(collectionToAdd);
+        if (!collection.isEmpty())
+        {
+            Collection<? extends E> collectionToAdd = collection instanceof FastList ? collection : new FastList<E>(collection);
+            this.addComposited(collectionToAdd);
+        }
         return true;
     }
 

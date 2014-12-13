@@ -16,15 +16,20 @@
 
 package com.gs.collections.impl.list.mutable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.RandomAccess;
 
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -95,6 +100,33 @@ public class CompositeFastListTest extends AbstractListTestCase
         list.add("2");
         Verify.assertSize(2, list);
         Verify.assertContains("1", list);
+    }
+
+    @Test
+    public void parallelBatchForEach()
+    {
+        MutableList<Integer> integers = Interval.oneTo(1_000_000).toList();
+        Collections.shuffle(integers);
+
+        Collection<Integer> evens = ParallelIterate.select(integers, IntegerPredicates.isEven());
+        Verify.assertInstanceOf(CompositeFastList.class, evens);
+        Collection<Integer> evens2 = ParallelIterate.select(evens, Predicates.lessThan(100_001));
+        Verify.assertInstanceOf(CompositeFastList.class, evens2);
+        Verify.assertSize(50_000, evens2);
+        Collection<String> evenStrings = ParallelIterate.collect(evens2, Functions.getToString());
+        Verify.assertInstanceOf(CompositeFastList.class, evenStrings);
+        Verify.assertSize(50_000, evenStrings);
+        Assert.assertEquals(integers.select(Predicates.lessThan(100_001)).select(IntegerPredicates.isEven()).collect(Functions.getToString()).toList(), evenStrings);
+
+        Collection<Integer> odds = ParallelIterate.select(integers, IntegerPredicates.isOdd());
+        Verify.assertInstanceOf(CompositeFastList.class, odds);
+        Collection<Integer> odds2 = ParallelIterate.select(odds, Predicates.lessThan(100_001));
+        Verify.assertInstanceOf(CompositeFastList.class, odds2);
+        Verify.assertSize(50_000, odds2);
+        Collection<String> oddStrings = ParallelIterate.collect(odds2, Functions.getToString());
+        Verify.assertInstanceOf(CompositeFastList.class, oddStrings);
+        Verify.assertSize(50_000, oddStrings);
+        Assert.assertEquals(integers.select(Predicates.lessThan(100_001)).select(IntegerPredicates.isOdd()).collect(Functions.getToString()).toList(), oddStrings);
     }
 
     @Test
