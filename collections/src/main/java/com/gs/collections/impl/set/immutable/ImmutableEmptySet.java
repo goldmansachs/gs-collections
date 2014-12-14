@@ -274,9 +274,9 @@ final class ImmutableEmptySet<T>
     }
 
     @Override
-    public <P, R extends Collection<T>> R selectWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<T>> R selectWith(Predicate2<? super T, ? super P> predicate, P parameter, R target)
     {
-        return targetCollection;
+        return target;
     }
 
     @Override
@@ -286,9 +286,9 @@ final class ImmutableEmptySet<T>
     }
 
     @Override
-    public <P, R extends Collection<T>> R rejectWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<T>> R rejectWith(Predicate2<? super T, ? super P> predicate, P parameter, R target)
     {
-        return targetCollection;
+        return target;
     }
 
     @Override
@@ -298,9 +298,9 @@ final class ImmutableEmptySet<T>
     }
 
     @Override
-    public <P, V, R extends Collection<V>> R collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
+    public <P, V, R extends Collection<V>> R collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R target)
     {
-        return targetCollection;
+        return target;
     }
 
     @Override

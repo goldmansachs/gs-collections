@@ -345,148 +345,84 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
         return ImmutableArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collect(function));
     }
 
-    public ImmutableBooleanStack collectBoolean(final BooleanFunction<? super T> booleanFunction)
+    public ImmutableBooleanStack collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        final BooleanArrayStack result = new BooleanArrayStack();
-        this.delegate.forEach(new Procedure<T>()
-        {
-            public void value(T each)
-            {
-                result.push(booleanFunction.booleanValueOf(each));
-            }
-        });
-        return result.toImmutable();
+        return BooleanArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectBoolean(booleanFunction)).toImmutable();
     }
 
     public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
     {
-        return this.delegate.collectBoolean(booleanFunction, target);
+        return this.delegate.asReversed().collectBoolean(booleanFunction, target);
     }
 
-    public ImmutableByteStack collectByte(final ByteFunction<? super T> byteFunction)
+    public ImmutableByteStack collectByte(ByteFunction<? super T> byteFunction)
     {
-        final ByteArrayStack result = new ByteArrayStack();
-        this.delegate.forEach(new Procedure<T>()
-        {
-            public void value(T each)
-            {
-                result.push(byteFunction.byteValueOf(each));
-            }
-        });
-        return result.toImmutable();
+        return ByteArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectByte(byteFunction)).toImmutable();
     }
 
     public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
     {
-        return this.delegate.collectByte(byteFunction, target);
+        return this.delegate.asReversed().collectByte(byteFunction, target);
     }
 
-    public ImmutableCharStack collectChar(final CharFunction<? super T> charFunction)
+    public ImmutableCharStack collectChar(CharFunction<? super T> charFunction)
     {
-        final CharArrayStack result = new CharArrayStack();
-        this.delegate.forEach(new Procedure<T>()
-        {
-            public void value(T each)
-            {
-                result.push(charFunction.charValueOf(each));
-            }
-        });
-        return result.toImmutable();
+        return CharArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectChar(charFunction)).toImmutable();
     }
 
     public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
     {
-        return this.delegate.collectChar(charFunction, target);
+        return this.delegate.asReversed().collectChar(charFunction, target);
     }
 
-    public ImmutableDoubleStack collectDouble(final DoubleFunction<? super T> doubleFunction)
+    public ImmutableDoubleStack collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        final DoubleArrayStack result = new DoubleArrayStack();
-        this.delegate.forEach(new Procedure<T>()
-        {
-            public void value(T each)
-            {
-                result.push(doubleFunction.doubleValueOf(each));
-            }
-        });
-        return result.toImmutable();
+        return DoubleArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectDouble(doubleFunction)).toImmutable();
     }
 
     public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
     {
-        return this.delegate.collectDouble(doubleFunction, target);
+        return this.delegate.asReversed().collectDouble(doubleFunction, target);
     }
 
-    public ImmutableFloatStack collectFloat(final FloatFunction<? super T> floatFunction)
+    public ImmutableFloatStack collectFloat(FloatFunction<? super T> floatFunction)
     {
-        final FloatArrayStack result = new FloatArrayStack();
-        this.delegate.forEach(new Procedure<T>()
-        {
-            public void value(T each)
-            {
-                result.push(floatFunction.floatValueOf(each));
-            }
-        });
-        return result.toImmutable();
+        return FloatArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectFloat(floatFunction)).toImmutable();
     }
 
     public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
     {
-        return this.delegate.collectFloat(floatFunction, target);
+        return this.delegate.asReversed().collectFloat(floatFunction, target);
     }
 
-    public ImmutableIntStack collectInt(final IntFunction<? super T> intFunction)
+    public ImmutableIntStack collectInt(IntFunction<? super T> intFunction)
     {
-        final IntArrayStack result = new IntArrayStack();
-        this.delegate.forEach(new Procedure<T>()
-        {
-            public void value(T each)
-            {
-                result.push(intFunction.intValueOf(each));
-            }
-        });
-        return result.toImmutable();
+        return IntArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectInt(intFunction)).toImmutable();
     }
 
     public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
     {
-        return this.delegate.collectInt(intFunction, target);
+        return this.delegate.asReversed().collectInt(intFunction, target);
     }
 
-    public ImmutableLongStack collectLong(final LongFunction<? super T> longFunction)
+    public ImmutableLongStack collectLong(LongFunction<? super T> longFunction)
     {
-        final LongArrayStack result = new LongArrayStack();
-        this.delegate.forEach(new Procedure<T>()
-        {
-            public void value(T each)
-            {
-                result.push(longFunction.longValueOf(each));
-            }
-        });
-        return result.toImmutable();
+        return LongArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectLong(longFunction)).toImmutable();
     }
 
     public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
     {
-        return this.delegate.collectLong(longFunction, target);
+        return this.delegate.asReversed().collectLong(longFunction, target);
     }
 
-    public ImmutableShortStack collectShort(final ShortFunction<? super T> shortFunction)
+    public ImmutableShortStack collectShort(ShortFunction<? super T> shortFunction)
     {
-        final ShortArrayStack result = new ShortArrayStack();
-        this.delegate.forEach(new Procedure<T>()
-        {
-            public void value(T each)
-            {
-                result.push(shortFunction.shortValueOf(each));
-            }
-        });
-        return result.toImmutable();
+        return ShortArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectShort(shortFunction)).toImmutable();
     }
 
     public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
     {
-        return this.delegate.collectShort(shortFunction, target);
+        return this.delegate.asReversed().collectShort(shortFunction, target);
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)

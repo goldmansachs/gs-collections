@@ -49,6 +49,7 @@ import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.AbstractRichIterableTestCase;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
@@ -82,12 +83,18 @@ import com.gs.collections.impl.utility.StringIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
-public abstract class ImmutableBagTestCase
+public abstract class ImmutableBagTestCase extends AbstractRichIterableTestCase
 {
     /**
      * @return A bag containing "1", "2", "2", "3", "3", "3", etc.
      */
     protected abstract ImmutableBag<String> newBag();
+
+    @Override
+    protected <T> ImmutableBag<T> newWith(T... littleElements)
+    {
+        return ImmutableHashBag.newBagWith(littleElements);
+    }
 
     /**
      * @return The number of unique keys.
@@ -836,81 +843,108 @@ public abstract class ImmutableBagTestCase
         Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 
+    @Override
     @Test
     public void injectInto()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(Integer::valueOf);
+        super.injectInto();
+
+        ImmutableBag<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
         Integer result = integers.injectInto(0, AddFunction.INTEGER);
         Assert.assertEquals(FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT), result.intValue());
         String result1 = this.newBag().injectInto("0", String::concat);
         Assert.assertEquals(FastList.newList(this.newBag()).injectInto("0", String::concat), result1);
     }
 
+    @Override
     @Test
     public void injectIntoInt()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(Integer::valueOf);
+        super.injectIntoInt();
+
+        ImmutableBag<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
         int result = integers.injectInto(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT), result);
     }
 
+    @Override
     @Test
     public void injectIntoLong()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(Integer::valueOf);
+        super.injectIntoLong();
+
+        ImmutableBag<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
         long result = integers.injectInto(0, AddFunction.INTEGER_TO_LONG);
         Assert.assertEquals(FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT), result);
     }
 
+    @Override
     @Test
     public void injectIntoDouble()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(Integer::valueOf);
+        super.injectIntoDouble();
+
+        ImmutableBag<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
         double result = integers.injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
         double expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
         Assert.assertEquals(expected, result, 0.001);
     }
 
+    @Override
     @Test
     public void injectIntoFloat()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(Integer::valueOf);
+        super.injectIntoFloat();
+
+        ImmutableBag<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
         float result = integers.injectInto(0, AddFunction.INTEGER_TO_FLOAT);
         float expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_FLOAT);
         Assert.assertEquals(expected, result, 0.001);
     }
 
+    @Override
     @Test
     public void sumFloat()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(Integer::valueOf);
+        super.sumFloat();
+
+        ImmutableBag<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
         double result = integers.sumOfFloat(Integer::floatValue);
         float expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_FLOAT);
         Assert.assertEquals(expected, result, 0.001);
     }
 
+    @Override
     @Test
     public void sumDouble()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(Integer::valueOf);
+        super.sumDouble();
+
+        ImmutableBag<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
         double result = integers.sumOfDouble(Integer::doubleValue);
         double expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
         Assert.assertEquals(expected, result, 0.001);
     }
 
+    @Override
     @Test
     public void sumInteger()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(Integer::valueOf);
+        super.sumInteger();
+
+        ImmutableBag<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
         long result = integers.sumOfInt(integer -> integer);
         int expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(expected, result);
     }
 
+    @Override
     @Test
     public void sumLong()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(Integer::valueOf);
+        super.sumLong();
+
+        ImmutableBag<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
         long result = integers.sumOfLong(Integer::longValue);
         long expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_LONG);
         Assert.assertEquals(expected, result);

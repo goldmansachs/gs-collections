@@ -16,7 +16,11 @@
 
 package com.gs.collections.impl.bag.immutable;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import com.gs.collections.api.bag.ImmutableBag;
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
 import com.gs.collections.api.bag.primitive.ImmutableByteBag;
 import com.gs.collections.api.bag.primitive.ImmutableCharBag;
@@ -25,22 +29,37 @@ import com.gs.collections.api.bag.primitive.ImmutableFloatBag;
 import com.gs.collections.api.bag.primitive.ImmutableIntBag;
 import com.gs.collections.api.bag.primitive.ImmutableLongBag;
 import com.gs.collections.api.bag.primitive.ImmutableShortBag;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
+import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
@@ -51,11 +70,10 @@ import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
-import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.partition.bag.PartitionHashBag;
+import com.gs.collections.impl.utility.Iterate;
 
 /**
  * @since 1.0
@@ -76,9 +94,53 @@ public abstract class AbstractImmutableBag<T>
         return this;
     }
 
+    @Override
+    public <R extends Collection<T>> R select(final Predicate<? super T> predicate, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                if (predicate.accept(each))
+                {
+                    for (int i = 0; i < occurrences; i++)
+                    {
+                        target.add(each);
+                    }
+                }
+            }
+        });
+        return target;
+    }
+
     public <P> ImmutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this.select(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public <P, R extends Collection<T>> R selectWith(Predicate2<? super T, ? super P> predicate, P parameter, R target)
+    {
+        return this.select(Predicates.bind(predicate, parameter), target);
+    }
+
+    @Override
+    public <R extends Collection<T>> R reject(final Predicate<? super T> predicate, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                if (!predicate.accept(each))
+                {
+                    for (int i = 0; i < occurrences; i++)
+                    {
+                        target.add(each);
+                    }
+                }
+            }
+        });
+        return target;
     }
 
     public <P> ImmutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
@@ -86,18 +148,90 @@ public abstract class AbstractImmutableBag<T>
         return this.reject(Predicates.bind(predicate, parameter));
     }
 
-    public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
+    @Override
+    public <P, R extends Collection<T>> R rejectWith(Predicate2<? super T, ? super P> predicate, P parameter, R target)
     {
-        PartitionMutableBag<T> partitionMutableBag = new PartitionHashBag<T>();
-        this.forEach(new PartitionProcedure<T>(predicate, partitionMutableBag));
+        return this.reject(Predicates.bind(predicate, parameter), target);
+    }
+
+    public PartitionImmutableBag<T> partition(final Predicate<? super T> predicate)
+    {
+        final PartitionMutableBag<T> partitionMutableBag = new PartitionHashBag<T>();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                MutableBag<T> bucket = predicate.accept(each)
+                        ? partitionMutableBag.getSelected()
+                        : partitionMutableBag.getRejected();
+                bucket.addOccurrences(each, occurrences);
+            }
+        });
         return partitionMutableBag.toImmutable();
     }
 
     public <P> PartitionImmutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        PartitionMutableBag<T> partitionMutableBag = new PartitionHashBag<T>();
-        this.forEach(new PartitionPredicate2Procedure<T, P>(predicate, parameter, partitionMutableBag));
-        return partitionMutableBag.toImmutable();
+        return this.partition(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public <V, R extends Collection<V>> R collect(final Function<? super T, ? extends V> function, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                V value = function.valueOf(each);
+                for (int i = 0; i < occurrences; i++)
+                {
+                    target.add(value);
+                }
+            }
+        });
+        return target;
+    }
+
+    public <P, V> ImmutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return this.collect(Functions.bind(function, parameter));
+    }
+
+    @Override
+    public <V, R extends Collection<V>> R collectIf(final Predicate<? super T> predicate, final Function<? super T, ? extends V> function, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                if (predicate.accept(each))
+                {
+                    V value = function.valueOf(each);
+                    for (int i = 0; i < occurrences; i++)
+                    {
+                        target.add(value);
+                    }
+                }
+            }
+        });
+        return target;
+    }
+
+    @Override
+    public <V, R extends Collection<V>> R flatCollect(final Function<? super T, ? extends Iterable<V>> function, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                Iterable<V> iterable = function.valueOf(each);
+                for (int i = 0; i < occurrences; i++)
+                {
+                    Iterate.addAllIterable(iterable, target);
+                }
+            }
+        });
+        return target;
     }
 
     public ImmutableBooleanBag collectBoolean(final BooleanFunction<? super T> booleanFunction)
@@ -113,6 +247,23 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
+    @Override
+    public <R extends MutableBooleanCollection> R collectBoolean(final BooleanFunction<? super T> booleanFunction, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                boolean value = booleanFunction.booleanValueOf(each);
+                for (int i = 0; i < occurrences; i++)
+                {
+                    target.add(value);
+                }
+            }
+        });
+        return target;
+    }
+
     public ImmutableByteBag collectByte(final ByteFunction<? super T> byteFunction)
     {
         final ByteHashBag result = new ByteHashBag(this.size());
@@ -124,6 +275,23 @@ public abstract class AbstractImmutableBag<T>
             }
         });
         return result.toImmutable();
+    }
+
+    @Override
+    public <R extends MutableByteCollection> R collectByte(final ByteFunction<? super T> byteFunction, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                byte value = byteFunction.byteValueOf(each);
+                for (int i = 0; i < occurrences; i++)
+                {
+                    target.add(value);
+                }
+            }
+        });
+        return target;
     }
 
     public ImmutableCharBag collectChar(final CharFunction<? super T> charFunction)
@@ -139,6 +307,23 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
+    @Override
+    public <R extends MutableCharCollection> R collectChar(final CharFunction<? super T> charFunction, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                char value = charFunction.charValueOf(each);
+                for (int i = 0; i < occurrences; i++)
+                {
+                    target.add(value);
+                }
+            }
+        });
+        return target;
+    }
+
     public ImmutableDoubleBag collectDouble(final DoubleFunction<? super T> doubleFunction)
     {
         final DoubleHashBag result = new DoubleHashBag(this.size());
@@ -150,6 +335,23 @@ public abstract class AbstractImmutableBag<T>
             }
         });
         return result.toImmutable();
+    }
+
+    @Override
+    public <R extends MutableDoubleCollection> R collectDouble(final DoubleFunction<? super T> doubleFunction, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                double value = doubleFunction.doubleValueOf(each);
+                for (int i = 0; i < occurrences; i++)
+                {
+                    target.add(value);
+                }
+            }
+        });
+        return target;
     }
 
     public ImmutableFloatBag collectFloat(final FloatFunction<? super T> floatFunction)
@@ -165,6 +367,23 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
+    @Override
+    public <R extends MutableFloatCollection> R collectFloat(final FloatFunction<? super T> floatFunction, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                Float value = floatFunction.floatValueOf(each);
+                for (int i = 0; i < occurrences; i++)
+                {
+                    target.add(value);
+                }
+            }
+        });
+        return target;
+    }
+
     public ImmutableIntBag collectInt(final IntFunction<? super T> intFunction)
     {
         final IntHashBag result = new IntHashBag(this.size());
@@ -176,6 +395,23 @@ public abstract class AbstractImmutableBag<T>
             }
         });
         return result.toImmutable();
+    }
+
+    @Override
+    public <R extends MutableIntCollection> R collectInt(final IntFunction<? super T> intFunction, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                int value = intFunction.intValueOf(each);
+                for (int i = 0; i < occurrences; i++)
+                {
+                    target.add(value);
+                }
+            }
+        });
+        return target;
     }
 
     public ImmutableLongBag collectLong(final LongFunction<? super T> longFunction)
@@ -191,6 +427,23 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
+    @Override
+    public <R extends MutableLongCollection> R collectLong(final LongFunction<? super T> longFunction, final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                long value = longFunction.longValueOf(each);
+                for (int i = 0; i < occurrences; i++)
+                {
+                    target.add(value);
+                }
+            }
+        });
+        return target;
+    }
+
     public ImmutableShortBag collectShort(final ShortFunction<? super T> shortFunction)
     {
         final ShortHashBag result = new ShortHashBag(this.size());
@@ -204,9 +457,221 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
-    public <P, V> ImmutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    @Override
+    public <R extends MutableShortCollection> R collectShort(final ShortFunction<? super T> shortFunction, final R target)
     {
-        return this.collect(Functions.bind(function, parameter));
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                short value = shortFunction.shortValueOf(each);
+                for (int i = 0; i < occurrences; i++)
+                {
+                    target.add(value);
+                }
+            }
+        });
+        return target;
+    }
+
+    @Override
+    public int count(final Predicate<? super T> predicate)
+    {
+        final Counter result = new Counter();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                if (predicate.accept(each))
+                {
+                    result.add(occurrences);
+                }
+            }
+        });
+        return result.getCount();
+    }
+
+    @Override
+    public <V, R extends MutableMultimap<V, T>> R groupBy(
+            final Function<? super T, ? extends V> function,
+            final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                V value = function.valueOf(each);
+                target.putAll(value, Collections.nCopies(occurrences, each));
+            }
+        });
+        return target;
+    }
+
+    @Override
+    public <V, R extends MutableMultimap<V, T>> R groupByEach(
+            final Function<? super T, ? extends Iterable<V>> function,
+            final R target)
+    {
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(final T each, final int occurrences)
+            {
+                Iterable<V> values = function.valueOf(each);
+                Iterate.forEach(values, new Procedure<V>()
+                {
+                    public void value(V value)
+                    {
+                        target.putAll(value, Collections.nCopies(occurrences, each));
+                    }
+                });
+            }
+        });
+        return target;
+    }
+
+    @Override
+    public long sumOfInt(final IntFunction<? super T> function)
+    {
+        final long[] sum = {0L};
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                long value = function.intValueOf(each);
+                sum[0] += value * (long) occurrences;
+            }
+        });
+        return sum[0];
+    }
+
+    @Override
+    public long sumOfLong(final LongFunction<? super T> function)
+    {
+        final long[] sum = {0L};
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                long value = function.longValueOf(each);
+                sum[0] += value * (long) occurrences;
+            }
+        });
+        return sum[0];
+    }
+
+    @Override
+    public double sumOfFloat(final FloatFunction<? super T> function)
+    {
+        final double[] sum = {0.0};
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                double value = function.floatValueOf(each);
+                sum[0] += value * (double) occurrences;
+            }
+        });
+        return sum[0];
+    }
+
+    @Override
+    public double sumOfDouble(final DoubleFunction<? super T> function)
+    {
+        final double[] sum = {0.0};
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                double value = function.doubleValueOf(each);
+                sum[0] += value * (double) occurrences;
+            }
+        });
+        return sum[0];
+    }
+
+    @Override
+    public <IV> IV injectInto(IV injectedValue, final Function2<? super IV, ? super T, ? extends IV> function)
+    {
+        final IV[] result = (IV[]) new Object[]{injectedValue};
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                for (int i = 0; i < occurrences; i++)
+                {
+                    result[0] = function.value(result[0], each);
+                }
+            }
+        });
+        return result[0];
+    }
+
+    @Override
+    public int injectInto(int injectedValue, final IntObjectToIntFunction<? super T> function)
+    {
+        final int[] result = {injectedValue};
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                for (int i = 0; i < occurrences; i++)
+                {
+                    result[0] = function.intValueOf(result[0], each);
+                }
+            }
+        });
+        return result[0];
+    }
+
+    @Override
+    public long injectInto(long injectedValue, final LongObjectToLongFunction<? super T> function)
+    {
+        final long[] result = {injectedValue};
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                for (int i = 0; i < occurrences; i++)
+                {
+                    result[0] = function.longValueOf(result[0], each);
+                }
+            }
+        });
+        return result[0];
+    }
+
+    @Override
+    public double injectInto(double injectedValue, final DoubleObjectToDoubleFunction<? super T> function)
+    {
+        final double[] result = {injectedValue};
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                for (int i = 0; i < occurrences; i++)
+                {
+                    result[0] = function.doubleValueOf(result[0], each);
+                }
+            }
+        });
+        return result[0];
+    }
+
+    @Override
+    public float injectInto(float injectedValue, final FloatObjectToFloatFunction<? super T> function)
+    {
+        final float[] result = {injectedValue};
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                for (int i = 0; i < occurrences; i++)
+                {
+                    result[0] = function.floatValueOf(result[0], each);
+                }
+            }
+        });
+        return result[0];
     }
 
     public String toStringOfItemToCount()

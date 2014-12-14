@@ -30,11 +30,13 @@ import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
@@ -255,12 +257,6 @@ public class ImmutableHashBag<T>
         this.delegate.forEachWithIndex(objectIntProcedure);
     }
 
-    @Override
-    public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
-    {
-        this.delegate.forEachWith(procedure, parameter);
-    }
-
     public ImmutableBag<T> selectByOccurrences(IntPredicate predicate)
     {
         return this.delegate.selectByOccurrences(predicate).toImmutable();
@@ -282,12 +278,6 @@ public class ImmutableHashBag<T>
         return this.delegate.partition(predicate).toImmutable();
     }
 
-    @Override
-    public <P> PartitionImmutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        return this.delegate.partitionWith(predicate, parameter).toImmutable();
-    }
-
     public <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz)
     {
         return this.delegate.selectInstancesOf(clazz).toImmutable();
@@ -299,7 +289,8 @@ public class ImmutableHashBag<T>
     }
 
     public <V> ImmutableBag<V> collectIf(
-            Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function)
     {
         return this.delegate.collectIf(predicate, function).toImmutable();
     }
@@ -349,36 +340,15 @@ public class ImmutableHashBag<T>
     }
 
     @Override
-    public <P, R extends Collection<T>> R selectWith(
-            Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
-    {
-        return this.delegate.selectWith(predicate, parameter, targetCollection);
-    }
-
-    @Override
     public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
     {
         return this.delegate.reject(predicate, target);
     }
 
     @Override
-    public <P, R extends Collection<T>> R rejectWith(
-            Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
-    {
-        return this.delegate.rejectWith(predicate, parameter, targetCollection);
-    }
-
-    @Override
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {
         return this.delegate.collect(function, target);
-    }
-
-    @Override
-    public <P, V, R extends Collection<V>> R collectWith(
-            Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
-    {
-        return this.delegate.collectWith(function, parameter, targetCollection);
     }
 
     @Override
@@ -433,6 +403,30 @@ public class ImmutableHashBag<T>
 
     @Override
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    {
+        return this.delegate.injectInto(injectedValue, function);
+    }
+
+    @Override
+    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
+    {
+        return this.delegate.injectInto(injectedValue, function);
+    }
+
+    @Override
+    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
+    {
+        return this.delegate.injectInto(injectedValue, function);
+    }
+
+    @Override
+    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
+    {
+        return this.delegate.injectInto(injectedValue, function);
+    }
+
+    @Override
+    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function)
     {
         return this.delegate.injectInto(injectedValue, function);
     }

@@ -592,9 +592,9 @@ public class FastList<T>
     public <P, R extends Collection<T>> R selectWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            R targetCollection)
+            R target)
     {
-        return InternalArrayIterate.selectWith(this.items, this.size, predicate, parameter, targetCollection);
+        return InternalArrayIterate.selectWith(this.items, this.size, predicate, parameter, target);
     }
 
     @Override
@@ -851,9 +851,9 @@ public class FastList<T>
     public <P, V, R extends Collection<V>> R collectWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter,
-            R targetCollection)
+            R target)
     {
-        return InternalArrayIterate.collectWith(this.items, this.size, function, parameter, targetCollection);
+        return InternalArrayIterate.collectWith(this.items, this.size, function, parameter, target);
     }
 
     @Override

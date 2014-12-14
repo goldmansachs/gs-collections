@@ -44,13 +44,9 @@ import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -69,16 +65,12 @@ import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.api.map.primitive.ObjectDoubleMap;
-import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.api.set.sorted.MutableSortedSet;
-import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.EmptyIterator;
 import com.gs.collections.impl.bag.mutable.HashBag;
@@ -88,7 +80,6 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
-import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.factory.primitive.BooleanBags;
 import com.gs.collections.impl.factory.primitive.ByteBags;
 import com.gs.collections.impl.factory.primitive.CharBags;
@@ -98,13 +89,10 @@ import com.gs.collections.impl.factory.primitive.IntBags;
 import com.gs.collections.impl.factory.primitive.LongBags;
 import com.gs.collections.impl.factory.primitive.ShortBags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
-import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.partition.bag.PartitionHashBag;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
-import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.LazyIterate;
@@ -117,7 +105,8 @@ import net.jcip.annotations.Immutable;
  */
 @Immutable
 final class ImmutableEmptyBag<T>
-        implements ImmutableBag<T>, Serializable
+        extends AbstractImmutableBag<T>
+        implements Serializable
 {
     static final ImmutableBag<?> INSTANCE = new ImmutableEmptyBag<Object>();
 
@@ -142,6 +131,7 @@ final class ImmutableEmptyBag<T>
         return 0;
     }
 
+    @Override
     public String toStringOfItemToCount()
     {
         return "";
@@ -177,36 +167,37 @@ final class ImmutableEmptyBag<T>
         return 0;
     }
 
+    @Override
     public boolean isEmpty()
     {
         return true;
     }
 
+    @Override
     public boolean notEmpty()
     {
         return false;
     }
 
+    @Override
     public boolean contains(Object object)
     {
         return false;
     }
 
-    public boolean containsAll(Collection<?> source)
-    {
-        return this.containsAllIterable(source);
-    }
-
+    @Override
     public boolean containsAllIterable(Iterable<?> source)
     {
         return Iterate.isEmpty(source);
     }
 
+    @Override
     public boolean containsAllArguments(Object... elements)
     {
         return ArrayIterate.isEmpty(elements);
     }
 
+    @Override
     public ImmutableBag<T> tap(Procedure<? super T> procedure)
     {
         return this;
@@ -220,10 +211,12 @@ final class ImmutableEmptyBag<T>
     {
     }
 
+    @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
     }
 
+    @Override
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
     }
@@ -273,16 +266,19 @@ final class ImmutableEmptyBag<T>
         return this;
     }
 
+    @Override
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
     {
         return target;
     }
 
+    @Override
     public <P> ImmutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this;
     }
 
+    @Override
     public <P, R extends Collection<T>> R selectWith(
             Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
@@ -294,27 +290,32 @@ final class ImmutableEmptyBag<T>
         return this;
     }
 
+    @Override
     public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
     {
         return target;
     }
 
+    @Override
     public <P> ImmutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this;
     }
 
+    @Override
     public <P, R extends Collection<T>> R rejectWith(
             Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
         return targetCollection;
     }
 
+    @Override
     public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
     {
         return (PartitionImmutableBag<T>) IMMUTABLE_EMPTY_PARTITION;
     }
 
+    @Override
     public <P> PartitionImmutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return (PartitionImmutableBag<T>) IMMUTABLE_EMPTY_PARTITION;
@@ -330,96 +331,115 @@ final class ImmutableEmptyBag<T>
         return (ImmutableBag<V>) INSTANCE;
     }
 
+    @Override
     public ImmutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         return BooleanBags.immutable.of();
     }
 
+    @Override
     public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
     {
         return target;
     }
 
+    @Override
     public ImmutableByteBag collectByte(ByteFunction<? super T> byteFunction)
     {
         return ByteBags.immutable.of();
     }
 
+    @Override
     public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
     {
         return target;
     }
 
+    @Override
     public ImmutableCharBag collectChar(CharFunction<? super T> charFunction)
     {
         return CharBags.immutable.of();
     }
 
+    @Override
     public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
     {
         return target;
     }
 
+    @Override
     public ImmutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return DoubleBags.immutable.of();
     }
 
+    @Override
     public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
     {
         return target;
     }
 
+    @Override
     public ImmutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
     {
         return FloatBags.immutable.of();
     }
 
+    @Override
     public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
     {
         return target;
     }
 
+    @Override
     public ImmutableIntBag collectInt(IntFunction<? super T> intFunction)
     {
         return IntBags.immutable.of();
     }
 
+    @Override
     public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
     {
         return target;
     }
 
+    @Override
     public ImmutableLongBag collectLong(LongFunction<? super T> longFunction)
     {
         return LongBags.immutable.of();
     }
 
+    @Override
     public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
     {
         return target;
     }
 
+    @Override
     public ImmutableShortBag collectShort(ShortFunction<? super T> shortFunction)
     {
         return ShortBags.immutable.of();
     }
 
+    @Override
     public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
     {
         return target;
     }
 
+    @Override
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {
         return target;
     }
 
+    @Override
     public <P, V> ImmutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
         return (ImmutableBag<V>) INSTANCE;
     }
 
+    @Override
     public <P, V, R extends Collection<V>> R collectWith(
             Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
@@ -433,6 +453,7 @@ final class ImmutableEmptyBag<T>
         return (ImmutableBag<V>) INSTANCE;
     }
 
+    @Override
     public <V, R extends Collection<V>> R collectIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function,
@@ -446,6 +467,7 @@ final class ImmutableEmptyBag<T>
         return (ImmutableBag<V>) INSTANCE;
     }
 
+    @Override
     public <V, R extends Collection<V>> R flatCollect(
             Function<? super T, ? extends Iterable<V>> function,
             R target)
@@ -459,6 +481,7 @@ final class ImmutableEmptyBag<T>
         return HashBagMultimap.<V, T>newMultimap().toImmutable();
     }
 
+    @Override
     public <V, R extends MutableMultimap<V, T>> R groupBy(
             Function<? super T, ? extends V> function, R target)
     {
@@ -471,17 +494,20 @@ final class ImmutableEmptyBag<T>
         return HashBagMultimap.<V, T>newMultimap().toImmutable();
     }
 
+    @Override
     public <V, R extends MutableMultimap<V, T>> R groupByEach(
             Function<? super T, ? extends Iterable<V>> function, R target)
     {
         return target;
     }
 
+    @Override
     public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
         return Maps.immutable.of();
     }
 
+    @Override
     public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
             Function<? super T, ? extends V> function,
             R target)
@@ -489,196 +515,139 @@ final class ImmutableEmptyBag<T>
         return target;
     }
 
+    @Override
     public T detect(Predicate<? super T> predicate)
     {
         return null;
     }
 
+    @Override
     public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return null;
     }
 
+    @Override
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         return function.value();
     }
 
+    @Override
     public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate, P parameter, Function0<? extends T> function)
     {
         return function.value();
     }
 
+    @Override
     public int count(Predicate<? super T> predicate)
     {
         return 0;
     }
 
+    @Override
     public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return 0;
     }
 
+    @Override
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
         return false;
     }
 
+    @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
         return true;
     }
 
+    @Override
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
         return true;
     }
 
+    @Override
     public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return false;
     }
 
+    @Override
     public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return true;
     }
 
+    @Override
     public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return true;
     }
 
+    @Override
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return injectedValue;
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
-    {
-        return injectedValue;
-    }
-
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
-    {
-        return injectedValue;
-    }
-
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
-    {
-        return injectedValue;
-    }
-
-    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function)
-    {
-        return injectedValue;
-    }
-
-    public long sumOfInt(IntFunction<? super T> function)
-    {
-        return 0;
-    }
-
-    public double sumOfFloat(FloatFunction<? super T> function)
-    {
-        return 0.0F;
-    }
-
-    public long sumOfLong(LongFunction<? super T> function)
-    {
-        return 0L;
-    }
-
-    public double sumOfDouble(DoubleFunction<? super T> function)
-    {
-        return 0.0d;
-    }
-
-    public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
-    {
-        return ObjectLongHashMap.newMap();
-    }
-
-    public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
-    {
-        return ObjectDoubleHashMap.newMap();
-    }
-
-    public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
-    {
-        return ObjectLongHashMap.newMap();
-    }
-
-    public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
-    {
-        return ObjectDoubleHashMap.newMap();
-    }
-
+    @Override
     public MutableList<T> toList()
     {
         return Lists.mutable.of();
     }
 
+    @Override
     public MutableList<T> toSortedList()
     {
         return Lists.mutable.of();
     }
 
+    @Override
     public MutableList<T> toSortedList(Comparator<? super T> comparator)
     {
         return Lists.mutable.of();
     }
 
+    @Override
     public <V extends Comparable<? super V>> MutableList<T> toSortedListBy(Function<? super T, ? extends V> function)
     {
         return Lists.mutable.of();
     }
 
-    public MutableSortedSet<T> toSortedSet()
-    {
-        return TreeSortedSet.newSet();
-    }
-
-    public MutableSortedSet<T> toSortedSet(Comparator<? super T> comparator)
-    {
-        return TreeSortedSet.newSet(comparator);
-    }
-
-    public <V extends Comparable<? super V>> MutableSortedSet<T> toSortedSetBy(Function<? super T, ? extends V> function)
-    {
-        return TreeSortedSet.newSet(Comparators.byFunction(function));
-    }
-
+    @Override
     public MutableSet<T> toSet()
     {
         return UnifiedSet.newSet();
     }
 
+    @Override
     public MutableBag<T> toBag()
     {
         return Bags.mutable.of();
     }
 
+    @Override
     public MutableSortedBag<T> toSortedBag()
     {
         return TreeBag.newBag();
     }
 
+    @Override
     public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
     {
         return TreeBag.newBag(comparator);
     }
 
+    @Override
     public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
     {
         return TreeBag.newBag(Comparators.byFunction(function));
     }
 
-    public MutableStack<T> toStack()
-    {
-        return Stacks.mutable.of();
-    }
-
+    @Override
     public <NK, NV> MutableMap<NK, NV> toMap(
             Function<? super T, ? extends NK> keyFunction,
             Function<? super T, ? extends NV> valueFunction)
@@ -686,6 +655,7 @@ final class ImmutableEmptyBag<T>
         return UnifiedMap.newMap();
     }
 
+    @Override
     public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(
             Function<? super T, ? extends NK> keyFunction,
             Function<? super T, ? extends NV> valueFunction)
@@ -693,6 +663,7 @@ final class ImmutableEmptyBag<T>
         return TreeSortedMap.newMap();
     }
 
+    @Override
     public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(Comparator<? super NK> comparator,
             Function<? super T, ? extends NK> keyFunction,
             Function<? super T, ? extends NV> valueFunction)
@@ -700,16 +671,19 @@ final class ImmutableEmptyBag<T>
         return TreeSortedMap.newMap(comparator);
     }
 
+    @Override
     public LazyIterable<T> asLazy()
     {
         return (LazyIterable<T>) LAZY_ITERABLE;
     }
 
+    @Override
     public Object[] toArray()
     {
         return TO_ARRAY;
     }
 
+    @Override
     public <T> T[] toArray(T[] a)
     {
         if (a.length > 0)
@@ -719,31 +693,37 @@ final class ImmutableEmptyBag<T>
         return a;
     }
 
+    @Override
     public T min(Comparator<? super T> comparator)
     {
         throw new NoSuchElementException();
     }
 
+    @Override
     public T max(Comparator<? super T> comparator)
     {
         throw new NoSuchElementException();
     }
 
+    @Override
     public T min()
     {
         throw new NoSuchElementException();
     }
 
+    @Override
     public T max()
     {
         throw new NoSuchElementException();
     }
 
+    @Override
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
         throw new NoSuchElementException();
     }
 
+    @Override
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
         throw new NoSuchElementException();
@@ -755,29 +735,35 @@ final class ImmutableEmptyBag<T>
         return "[]";
     }
 
+    @Override
     public String makeString()
     {
         return "";
     }
 
+    @Override
     public String makeString(String separator)
     {
         return "";
     }
 
+    @Override
     public String makeString(String start, String separator, String end)
     {
         return start + end;
     }
 
+    @Override
     public void appendString(Appendable appendable)
     {
     }
 
+    @Override
     public void appendString(Appendable appendable, String separator)
     {
     }
 
+    @Override
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
         try
@@ -796,6 +782,7 @@ final class ImmutableEmptyBag<T>
         return Bags.immutable.of();
     }
 
+    @Override
     public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
     {
         return target;
@@ -806,11 +793,13 @@ final class ImmutableEmptyBag<T>
         return Sets.immutable.of();
     }
 
+    @Override
     public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
     {
         return target;
     }
 
+    @Override
     public RichIterable<RichIterable<T>> chunk(int size)
     {
         if (size <= 0)
@@ -823,21 +812,5 @@ final class ImmutableEmptyBag<T>
     private Object writeReplace()
     {
         return new ImmutableBagSerializationProxy<T>(this);
-    }
-
-    public <K, V> ImmutableMap<K, V> aggregateInPlaceBy(
-            Function<? super T, ? extends K> groupBy,
-            Function0<? extends V> zeroValueFactory,
-            Procedure2<? super V, ? super T> mutatingAggregator)
-    {
-        return Maps.immutable.of();
-    }
-
-    public <K, V> ImmutableMap<K, V> aggregateBy(
-            Function<? super T, ? extends K> groupBy,
-            Function0<? extends V> zeroValueFactory,
-            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
-    {
-        return Maps.immutable.of();
     }
 }

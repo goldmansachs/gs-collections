@@ -254,8 +254,9 @@ public abstract class StackIterableTestCase
     @Test
     public void collectBoolean()
     {
-        StackIterable<String> stack = this.newStackFromTopToBottom("true", "nah", "TrUe");
-        Assert.assertEquals(BooleanArrayStack.newStackFromTopToBottom(true, false, true),
+        StackIterable<String> stack = this.newStackFromTopToBottom("true", "nah", "TrUe", "false");
+        Assert.assertEquals(
+                BooleanArrayStack.newStackFromTopToBottom(true, false, true, false),
                 stack.collectBoolean(Boolean::parseBoolean));
     }
 
@@ -263,9 +264,9 @@ public abstract class StackIterableTestCase
     public void collectBooleanWithTarget()
     {
         BooleanHashSet target = new BooleanHashSet();
-        StackIterable<String> stack = this.newStackFromTopToBottom("true", "nah", "TrUe");
+        StackIterable<String> stack = this.newStackFromTopToBottom("true", "nah", "TrUe", "false");
         BooleanHashSet result = stack.collectBoolean(Boolean::parseBoolean, target);
-        Assert.assertEquals(BooleanHashSet.newSetWith(true, false, true), result);
+        Assert.assertEquals(BooleanHashSet.newSetWith(true, false, true, false), result);
         Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 

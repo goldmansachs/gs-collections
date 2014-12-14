@@ -182,9 +182,9 @@ final class ImmutableArrayList<T>
     public <P, R extends Collection<T>> R selectWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            R targetCollection)
+            R target)
     {
-        return InternalArrayIterate.selectWith(this.items, this.items.length, predicate, parameter, targetCollection);
+        return InternalArrayIterate.selectWith(this.items, this.items.length, predicate, parameter, target);
     }
 
     @Override
@@ -203,9 +203,9 @@ final class ImmutableArrayList<T>
     public <P, R extends Collection<T>> R rejectWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            R targetCollection)
+            R target)
     {
-        return InternalArrayIterate.rejectWith(this.items, this.items.length, predicate, parameter, targetCollection);
+        return InternalArrayIterate.rejectWith(this.items, this.items.length, predicate, parameter, target);
     }
 
     @Override
@@ -250,9 +250,9 @@ final class ImmutableArrayList<T>
     public <P, V, R extends Collection<V>> R collectWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter,
-            R targetCollection)
+            R target)
     {
-        return InternalArrayIterate.collectWith(this.items, this.items.length, function, parameter, targetCollection);
+        return InternalArrayIterate.collectWith(this.items, this.items.length, function, parameter, target);
     }
 
     @Override

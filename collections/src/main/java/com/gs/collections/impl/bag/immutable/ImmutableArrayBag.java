@@ -17,7 +17,6 @@
 package com.gs.collections.impl.bag.immutable;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -32,23 +31,18 @@ import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
-import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
-import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
-import com.gs.collections.impl.utility.internal.IterableIterate;
 
 /**
  * @since 1.0
@@ -247,27 +241,20 @@ public class ImmutableArrayBag<T>
         return result.toImmutable();
     }
 
-    @Override
-    public <P, R extends Collection<T>> R selectWith(
-            Predicate2<? super T, ? super P> predicate,
-            P parameter,
-            R targetCollection)
+    public ImmutableBag<T> reject(final Predicate<? super T> predicate)
     {
-        return IterableIterate.selectWith(this, predicate, parameter, targetCollection);
-    }
-
-    public ImmutableBag<T> reject(Predicate<? super T> predicate)
-    {
-        return this.select(Predicates.not(predicate));
-    }
-
-    @Override
-    public <P, R extends Collection<T>> R rejectWith(
-            Predicate2<? super T, ? super P> predicate,
-            P parameter,
-            R targetCollection)
-    {
-        return IterableIterate.rejectWith(this, predicate, parameter, targetCollection);
+        final MutableBag<T> result = HashBag.newBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                if (!predicate.accept(each))
+                {
+                    result.addOccurrences(each, occurrences);
+                }
+            }
+        });
+        return result.toImmutable();
     }
 
     public <S> ImmutableBag<S> selectInstancesOf(final Class<S> clazz)
@@ -300,10 +287,21 @@ public class ImmutableArrayBag<T>
     }
 
     public <V> ImmutableBag<V> collectIf(
-            Predicate<? super T> predicate,
-            Function<? super T, ? extends V> function)
+            final Predicate<? super T> predicate,
+            final Function<? super T, ? extends V> function)
     {
-        return ImmutableArrayBag.copyFrom(IterableIterate.collectIf(this, predicate, function, HashBag.<V>newBag()));
+        final MutableBag<V> result = HashBag.newBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                if (predicate.accept(each))
+                {
+                    result.addOccurrences(function.valueOf(each), occurrences);
+                }
+            }
+        });
+        return ImmutableArrayBag.copyFrom(result);
     }
 
     public <V> ImmutableBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
@@ -328,25 +326,9 @@ public class ImmutableArrayBag<T>
 
     public <V> ImmutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        FlatCollectProcedure<T, V> procedure = new FlatCollectProcedure<T, V>(function, HashBag.<V>newBag());
-        this.forEach(procedure);
-        return ((MutableBag<V>) procedure.getCollection()).toImmutable();
-    }
-
-    @Override
-    public <V, R extends MutableMultimap<V, T>> R groupBy(
-            Function<? super T, ? extends V> function, R target)
-    {
-        this.forEach(MultimapPutProcedure.on(target, function));
-        return target;
-    }
-
-    @Override
-    public <V, R extends MutableMultimap<V, T>> R groupByEach(
-            Function<? super T, ? extends Iterable<V>> function, R target)
-    {
-        this.forEach(MultimapEachPutProcedure.on(target, function));
-        return target;
+        MutableBag<V> result = HashBag.newBag();
+        this.flatCollect(function, result);
+        return result.toImmutable();
     }
 
     @Override
@@ -409,48 +391,52 @@ public class ImmutableArrayBag<T>
         return new ArrayBagIterator();
     }
 
-    private final class ArrayBagIterator
-            implements Iterator<T>
+    @Override
+    public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        private int position;
-        private int remainingOccurrences = -1;
+        return ArrayIterate.anySatisfy(this.keys, predicate);
+    }
 
-        private ArrayBagIterator()
-        {
-            this.remainingOccurrences = ImmutableArrayBag.this.sizeDistinct() > 0 ? ImmutableArrayBag.this.counts[0] : 0;
-        }
+    @Override
+    public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ArrayIterate.anySatisfyWith(this.keys, predicate, parameter);
+    }
 
-        public boolean hasNext()
-        {
-            return this.position != ImmutableArrayBag.this.keys.length
-                    && !(this.position == ImmutableArrayBag.this.keys.length - 1 && this.remainingOccurrences == 0);
-        }
+    @Override
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return ArrayIterate.allSatisfy(this.keys, predicate);
+    }
 
-        public T next()
-        {
-            if (!this.hasNext())
-            {
-                throw new NoSuchElementException();
-            }
+    @Override
+    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ArrayIterate.allSatisfyWith(this.keys, predicate, parameter);
+    }
 
-            T result = ImmutableArrayBag.this.keys[this.position];
+    @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return ArrayIterate.noneSatisfy(this.keys, predicate);
+    }
 
-            this.remainingOccurrences--;
-            if (this.remainingOccurrences == 0)
-            {
-                this.position++;
-                if (this.position != ImmutableArrayBag.this.keys.length)
-                {
-                    this.remainingOccurrences = ImmutableArrayBag.this.counts[this.position];
-                }
-            }
-            return result;
-        }
+    @Override
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ArrayIterate.noneSatisfyWith(this.keys, predicate, parameter);
+    }
 
-        public void remove()
-        {
-            throw new UnsupportedOperationException("Cannot remove from an ImmutableArrayBag");
-        }
+    @Override
+    public T detect(Predicate<? super T> predicate)
+    {
+        return ArrayIterate.detect(this.keys, predicate);
+    }
+
+    @Override
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ArrayIterate.detectWith(this.keys, predicate, parameter);
     }
 
     @Override
@@ -502,5 +488,49 @@ public class ImmutableArrayBag<T>
     protected Object writeReplace()
     {
         return new ImmutableBagSerializationProxy<T>(this);
+    }
+
+    private final class ArrayBagIterator
+            implements Iterator<T>
+    {
+        private int position;
+        private int remainingOccurrences = -1;
+
+        private ArrayBagIterator()
+        {
+            this.remainingOccurrences = ImmutableArrayBag.this.sizeDistinct() > 0 ? ImmutableArrayBag.this.counts[0] : 0;
+        }
+
+        public boolean hasNext()
+        {
+            return this.position != ImmutableArrayBag.this.keys.length
+                    && !(this.position == ImmutableArrayBag.this.keys.length - 1 && this.remainingOccurrences == 0);
+        }
+
+        public T next()
+        {
+            if (!this.hasNext())
+            {
+                throw new NoSuchElementException();
+            }
+
+            T result = ImmutableArrayBag.this.keys[this.position];
+
+            this.remainingOccurrences--;
+            if (this.remainingOccurrences == 0)
+            {
+                this.position++;
+                if (this.position != ImmutableArrayBag.this.keys.length)
+                {
+                    this.remainingOccurrences = ImmutableArrayBag.this.counts[this.position];
+                }
+            }
+            return result;
+        }
+
+        public void remove()
+        {
+            throw new UnsupportedOperationException("Cannot remove from an ImmutableArrayBag");
+        }
     }
 }

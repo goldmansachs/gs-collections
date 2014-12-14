@@ -38,6 +38,12 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
     }
 
     @Override
+    protected <T> ImmutableBag<T> newWith(T... littleElements)
+    {
+        return ImmutableArrayBag.newBagWith(littleElements);
+    }
+
+    @Override
     protected int numKeys()
     {
         return 4;

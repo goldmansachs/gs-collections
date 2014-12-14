@@ -218,13 +218,13 @@ final class ImmutableSingletonBag<T>
     public <P, R extends Collection<T>> R selectWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            R targetCollection)
+            R target)
     {
         if (predicate.accept(this.value, parameter))
         {
-            targetCollection.add(this.value);
+            target.add(this.value);
         }
-        return targetCollection;
+        return target;
     }
 
     public ImmutableBag<T> reject(Predicate<? super T> predicate)
@@ -242,9 +242,9 @@ final class ImmutableSingletonBag<T>
     public <P, R extends Collection<T>> R rejectWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            R targetCollection)
+            R target)
     {
-        return this.selectWith(Predicates2.not(predicate), parameter, targetCollection);
+        return this.selectWith(Predicates2.not(predicate), parameter, target);
     }
 
     public <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz)

@@ -183,9 +183,9 @@ public abstract class AbstractMutableList<T>
     public <P, R extends Collection<T>> R selectWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            R targetCollection)
+            R target)
     {
-        return ListIterate.selectWith(this, predicate, parameter, targetCollection);
+        return ListIterate.selectWith(this, predicate, parameter, target);
     }
 
     public MutableList<T> reject(Predicate<? super T> predicate)
@@ -208,9 +208,9 @@ public abstract class AbstractMutableList<T>
     public <P, R extends Collection<T>> R rejectWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            R targetCollection)
+            R target)
     {
-        return ListIterate.rejectWith(this, predicate, parameter, targetCollection);
+        return ListIterate.rejectWith(this, predicate, parameter, target);
     }
 
     @Override
@@ -318,9 +318,9 @@ public abstract class AbstractMutableList<T>
 
     @Override
     public <P, A, R extends Collection<A>> R collectWith(
-            Function2<? super T, ? super P, ? extends A> function, P parameter, R targetCollection)
+            Function2<? super T, ? super P, ? extends A> function, P parameter, R target)
     {
-        return ListIterate.collectWith(this, function, parameter, targetCollection);
+        return ListIterate.collectWith(this, function, parameter, target);
     }
 
     public <V> MutableList<V> collectIf(

@@ -64,11 +64,14 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.procedure.AppendStringProcedure;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
+import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.GroupByUniqueKeyProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
@@ -242,9 +245,11 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
     }
 
     public <P, R extends Collection<T>> R selectWith(
-            Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
+            Predicate2<? super T, ? super P> predicate,
+            P parameter,
+            R target)
     {
-        return IterableIterate.selectWith(this, predicate, parameter, targetCollection);
+        return this.select(Predicates.bind(predicate, parameter), target);
     }
 
     public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
@@ -254,9 +259,11 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
     }
 
     public <P, R extends Collection<T>> R rejectWith(
-            Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
+            Predicate2<? super T, ? super P> predicate,
+            P parameter,
+            R target)
     {
-        return IterableIterate.rejectWith(this, predicate, parameter, targetCollection);
+        return this.reject(Predicates.bind(predicate, parameter), target);
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
@@ -266,13 +273,17 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
     }
 
     public <P, V, R extends Collection<V>> R collectWith(
-            Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
+            Function2<? super T, ? super P, ? extends V> function,
+            P parameter,
+            R target)
     {
-        return IterableIterate.collectWith(this, function, parameter, targetCollection);
+        return this.collect(Functions.bind(function, parameter), target);
     }
 
     public <V, R extends Collection<V>> R collectIf(
-            Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function,
+            R target)
     {
         this.forEach(new CollectIfProcedure<T, V>(target, function, predicate));
         return target;
@@ -284,10 +295,12 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return result == null ? function.value() : result;
     }
 
-    public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate, P parameter, Function0<? extends T> function)
+    public <P> T detectWithIfNone(
+            Predicate2<? super T, ? super P> predicate,
+            P parameter,
+            Function0<? extends T> function)
     {
-        T result = this.detectWith(predicate, parameter);
-        return result == null ? function.value() : result;
+        return this.detectIfNone(Predicates.bind(predicate, parameter), function);
     }
 
     public T min(Comparator<? super T> comparator)
@@ -326,9 +339,11 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
     }
 
     public <V, R extends Collection<V>> R flatCollect(
-            Function<? super T, ? extends Iterable<V>> function, R target)
+            Function<? super T, ? extends Iterable<V>> function,
+            R target)
     {
-        return IterableIterate.flatCollect(this, function, target);
+        this.forEach(new FlatCollectProcedure<T, V>(function, target));
+        return target;
     }
 
     public T detect(Predicate<? super T> predicate)
@@ -338,7 +353,7 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IterableIterate.detectWith(this, predicate, parameter);
+        return this.detect(Predicates.bind(predicate, parameter));
     }
 
     public int count(Predicate<? super T> predicate)
@@ -348,8 +363,9 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IterableIterate.countWith(this, predicate, parameter);
+        return this.count(Predicates.bind(predicate, parameter));
     }
+
 
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
@@ -368,17 +384,17 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IterableIterate.anySatisfyWith(this, predicate, parameter);
+        return this.anySatisfy(Predicates.bind(predicate, parameter));
     }
 
     public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IterableIterate.allSatisfyWith(this, predicate, parameter);
+        return this.allSatisfy(Predicates.bind(predicate, parameter));
     }
 
     public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IterableIterate.noneSatisfyWith(this, predicate, parameter);
+        return this.noneSatisfy(Predicates.bind(predicate, parameter));
     }
 
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
@@ -457,7 +473,7 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
-        IterableIterate.forEachWith(this, procedure, parameter);
+        this.forEach(Procedures.bind(procedure, parameter));
     }
 
     public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
