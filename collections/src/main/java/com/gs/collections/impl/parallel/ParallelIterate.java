@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.parallel;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 import java.util.RandomAccess;
@@ -43,11 +45,13 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.multimap.list.SynchronizedPutFastListMultimap;
@@ -1298,6 +1302,36 @@ public final class ParallelIterate
     }
 
     /**
+     * @since 6.0
+     */
+    public static <V, T> MutableMap<V, BigDecimal> sumByBigDecimal(Iterable<T> iterable, Function<T, V> groupBy, Function<? super T, BigDecimal> function)
+    {
+        MutableMap<V, BigDecimal> result = UnifiedMap.newMap();
+        ParallelIterate.forEach(
+                iterable,
+                new SumByBigDecimalProcedure<T, V>(groupBy, function),
+                new SumByBigDecimalCombiner<T, V>(result),
+                ParallelIterate.DEFAULT_MIN_FORK_SIZE,
+                ParallelIterate.EXECUTOR_SERVICE);
+        return result;
+    }
+
+    /**
+     * @since 6.0
+     */
+    public static <V, T> MutableMap<V, BigInteger> sumByBigInteger(Iterable<T> iterable, Function<T, V> groupBy, Function<? super T, BigInteger> function)
+    {
+        MutableMap<V, BigInteger> result = UnifiedMap.newMap();
+        ParallelIterate.forEach(
+                iterable,
+                new SumByBigIntegerProcedure<T, V>(groupBy, function),
+                new SumByBigIntegerCombiner<T, V>(result),
+                ParallelIterate.DEFAULT_MIN_FORK_SIZE,
+                ParallelIterate.EXECUTOR_SERVICE);
+        return result;
+    }
+
+    /**
      * Returns a brand new ExecutorService using the specified poolName with the specified maximum thread pool size. The
      * same poolName may be used more than once resulting in multiple pools with the same name.
      * <p>
@@ -1563,6 +1597,144 @@ public final class ParallelIterate
                     public void value(V each, long value)
                     {
                         SumByIntCombiner.this.result.addToValue(each, value);
+                    }
+                });
+            }
+        }
+    }
+
+    private static final class SumByBigDecimalProcedure<T, V> implements Procedure<T>, ProcedureFactory<SumByBigDecimalProcedure<T, V>>
+    {
+        private final MutableMap<V, BigDecimal> map = UnifiedMap.newMap();
+        private final Function<T, V> groupBy;
+        private final Function<? super T, BigDecimal> function;
+
+        private SumByBigDecimalProcedure(Function<T, V> groupBy, Function<? super T, BigDecimal> function)
+        {
+            this.groupBy = groupBy;
+            this.function = function;
+        }
+
+        public void value(final T each)
+        {
+            this.map.updateValue(this.groupBy.valueOf(each), Functions0.zeroBigDecimal(), new Function<BigDecimal, BigDecimal>()
+            {
+                public BigDecimal valueOf(BigDecimal original)
+                {
+                    return original.add(SumByBigDecimalProcedure.this.function.valueOf(each));
+                }
+            });
+        }
+
+        public MutableMap<V, BigDecimal> getResult()
+        {
+            return this.map;
+        }
+
+        public SumByBigDecimalProcedure<T, V> create()
+        {
+            return new SumByBigDecimalProcedure<T, V>(this.groupBy, this.function);
+        }
+    }
+
+    private static final class SumByBigDecimalCombiner<T, V> extends AbstractProcedureCombiner<SumByBigDecimalProcedure<T, V>>
+    {
+        private final MutableMap<V, BigDecimal> result;
+
+        private SumByBigDecimalCombiner(MutableMap<V, BigDecimal> result)
+        {
+            super(true);
+            this.result = result;
+        }
+
+        public void combineOne(SumByBigDecimalProcedure<T, V> thingToCombine)
+        {
+            if (this.result.isEmpty())
+            {
+                this.result.putAll(thingToCombine.getResult());
+            }
+            else
+            {
+                thingToCombine.getResult().forEachKeyValue(new Procedure2<V, BigDecimal>()
+                {
+                    public void value(V key, final BigDecimal value)
+                    {
+                        SumByBigDecimalCombiner.this.result.updateValue(key, Functions0.zeroBigDecimal(), new Function<BigDecimal, BigDecimal>()
+                        {
+                            public BigDecimal valueOf(BigDecimal original)
+                            {
+                                return original.add(value);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    }
+
+    private static final class SumByBigIntegerProcedure<T, V> implements Procedure<T>, ProcedureFactory<SumByBigIntegerProcedure<T, V>>
+    {
+        private final MutableMap<V, BigInteger> map = UnifiedMap.newMap();
+        private final Function<T, V> groupBy;
+        private final Function<? super T, BigInteger> function;
+
+        private SumByBigIntegerProcedure(Function<T, V> groupBy, Function<? super T, BigInteger> function)
+        {
+            this.groupBy = groupBy;
+            this.function = function;
+        }
+
+        public void value(final T each)
+        {
+            this.map.updateValue(this.groupBy.valueOf(each), Functions0.zeroBigInteger(), new Function<BigInteger, BigInteger>()
+            {
+                public BigInteger valueOf(BigInteger original)
+                {
+                    return original.add(SumByBigIntegerProcedure.this.function.valueOf(each));
+                }
+            });
+        }
+
+        public MutableMap<V, BigInteger> getResult()
+        {
+            return this.map;
+        }
+
+        public SumByBigIntegerProcedure<T, V> create()
+        {
+            return new SumByBigIntegerProcedure<T, V>(this.groupBy, this.function);
+        }
+    }
+
+    private static final class SumByBigIntegerCombiner<T, V> extends AbstractProcedureCombiner<SumByBigIntegerProcedure<T, V>>
+    {
+        private final MutableMap<V, BigInteger> result;
+
+        private SumByBigIntegerCombiner(MutableMap<V, BigInteger> result)
+        {
+            super(true);
+            this.result = result;
+        }
+
+        public void combineOne(SumByBigIntegerProcedure<T, V> thingToCombine)
+        {
+            if (this.result.isEmpty())
+            {
+                this.result.putAll(thingToCombine.getResult());
+            }
+            else
+            {
+                thingToCombine.getResult().forEachKeyValue(new Procedure2<V, BigInteger>()
+                {
+                    public void value(V key, final BigInteger value)
+                    {
+                        SumByBigIntegerCombiner.this.result.updateValue(key, Functions0.zeroBigInteger(), new Function<BigInteger, BigInteger>()
+                        {
+                            public BigInteger valueOf(BigInteger original)
+                            {
+                                return original.add(value);
+                            }
+                        });
                     }
                 });
             }

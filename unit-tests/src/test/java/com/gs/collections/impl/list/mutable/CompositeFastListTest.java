@@ -23,7 +23,6 @@ import java.util.ListIterator;
 import java.util.RandomAccess;
 
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -110,23 +109,45 @@ public class CompositeFastListTest extends AbstractListTestCase
 
         Collection<Integer> evens = ParallelIterate.select(integers, IntegerPredicates.isEven());
         Verify.assertInstanceOf(CompositeFastList.class, evens);
-        Collection<Integer> evens2 = ParallelIterate.select(evens, Predicates.lessThan(100_001));
+        Collection<Integer> evens2 = ParallelIterate.select(evens, e -> e <= 100_000);
         Verify.assertInstanceOf(CompositeFastList.class, evens2);
         Verify.assertSize(50_000, evens2);
-        Collection<String> evenStrings = ParallelIterate.collect(evens2, Functions.getToString());
+        Collection<String> evenStrings = ParallelIterate.collect(evens2, Object::toString);
         Verify.assertInstanceOf(CompositeFastList.class, evenStrings);
         Verify.assertSize(50_000, evenStrings);
-        Assert.assertEquals(integers.select(Predicates.lessThan(100_001)).select(IntegerPredicates.isEven()).collect(Functions.getToString()).toList(), evenStrings);
+        Assert.assertEquals(integers.select(e -> e <= 100_000).select(IntegerPredicates.isEven()).collect(Object::toString).toList(), evenStrings);
 
         Collection<Integer> odds = ParallelIterate.select(integers, IntegerPredicates.isOdd());
         Verify.assertInstanceOf(CompositeFastList.class, odds);
-        Collection<Integer> odds2 = ParallelIterate.select(odds, Predicates.lessThan(100_001));
+        Collection<Integer> odds2 = ParallelIterate.select(odds, e -> e <= 100_000);
         Verify.assertInstanceOf(CompositeFastList.class, odds2);
         Verify.assertSize(50_000, odds2);
-        Collection<String> oddStrings = ParallelIterate.collect(odds2, Functions.getToString());
+        Collection<String> oddStrings = ParallelIterate.collect(odds2, Object::toString);
         Verify.assertInstanceOf(CompositeFastList.class, oddStrings);
         Verify.assertSize(50_000, oddStrings);
-        Assert.assertEquals(integers.select(Predicates.lessThan(100_001)).select(IntegerPredicates.isOdd()).collect(Functions.getToString()).toList(), oddStrings);
+        Assert.assertEquals(integers.select(e -> e <= 100_000).select(IntegerPredicates.isOdd()).collect(Object::toString).toList(), oddStrings);
+
+        MutableList<Integer> range = Interval.fromTo(-1_234_567, 1_234_567).toList();
+        Collections.shuffle(range);
+        Collection<Integer> positives = ParallelIterate.select(range, IntegerPredicates.isPositive());
+        Verify.assertInstanceOf(CompositeFastList.class, positives);
+        Verify.assertSize(1_234_567, positives);
+        Collection<Integer> evenPositives = ParallelIterate.select(positives, IntegerPredicates.isEven());
+        Verify.assertSize(617_283, evenPositives);
+        Assert.assertEquals(2000, ParallelIterate.count(evenPositives, e -> e <= 4000));
+        Collection<Integer> oddPositives = ParallelIterate.select(positives, IntegerPredicates.isOdd());
+        Verify.assertSize(617_284, oddPositives);
+        Assert.assertEquals(2000, ParallelIterate.count(oddPositives, e -> e <= 4000));
+
+        Collection<Integer> negatives = ParallelIterate.select(range, IntegerPredicates.isNegative());
+        Verify.assertInstanceOf(CompositeFastList.class, negatives);
+        Verify.assertSize(1_234_567, negatives);
+        Collection<Integer> evenNegatives = ParallelIterate.select(negatives, IntegerPredicates.isEven());
+        Verify.assertSize(617_283, evenNegatives);
+        Assert.assertEquals(2000, ParallelIterate.count(evenNegatives, e -> e >= -4000));
+        Collection<Integer> oddNegatives = ParallelIterate.select(negatives, IntegerPredicates.isOdd());
+        Verify.assertSize(617_284, oddNegatives);
+        Assert.assertEquals(2000, ParallelIterate.count(oddNegatives, e -> e >= -4000));
     }
 
     @Test

@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.parallel;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -64,6 +66,7 @@ import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.ArrayIterate;
+import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.LazyIterate;
 import org.junit.After;
 import org.junit.Assert;
@@ -83,6 +86,8 @@ public class ParallelIterateTest
     private static final Function<Integer, Collection<String>> INT_TO_TWO_STRINGS = integer -> Lists.fixedSize.of(integer.toString(), integer.toString());
 
     private static final Function<Integer, String> EVEN_OR_ODD = value -> value % 2 == 0 ? "Even" : "Odd";
+    private static final Function<BigDecimal, String> EVEN_OR_ODD_BD = value -> value.intValue() % 2 == 0 ? "Even" : "Odd";
+    private static final Function<BigInteger, String> EVEN_OR_ODD_BI = value -> value.intValue() % 2 == 0 ? "Even" : "Odd";
     private static final int UNEVEN_COUNT_FOR_SUMBY = 43957;
 
     private ImmutableList<RichIterable<Integer>> iterables;
@@ -626,6 +631,52 @@ public class ParallelIterateTest
         ObjectLongMap<String> smallSumByCount = ParallelIterate.sumByInt(small, EVEN_OR_ODD, i -> 1);
         Assert.assertEquals(5.0, smallSumByCount.get("Even"), 0.0);
         Assert.assertEquals(6.0, smallSumByCount.get("Odd"), 0.0);
+    }
+
+    @Test
+    public void sumByBigDecimal()
+    {
+        MutableList<BigDecimal> list = Interval.oneTo(100000).collect(BigDecimal::new).toList();
+        Collections.shuffle(list);
+        MutableMap<String, BigDecimal> sumByCount = ParallelIterate.sumByBigDecimal(list, EVEN_OR_ODD_BD, bd -> new BigDecimal(1L));
+        Assert.assertEquals(BigDecimal.valueOf(50000L), sumByCount.get("Even"));
+        Assert.assertEquals(BigDecimal.valueOf(50000L), sumByCount.get("Odd"));
+        MutableMap<String, BigDecimal> sumByValue = ParallelIterate.sumByBigDecimal(list, EVEN_OR_ODD_BD, bd -> bd);
+        Assert.assertEquals(Iterate.sumByBigDecimal(list, EVEN_OR_ODD_BD, bd -> bd), sumByValue);
+        MutableMap<Integer, BigDecimal> sumByValue2 = ParallelIterate.sumByBigDecimal(list, bd -> bd.intValue() % 1000, bd -> bd);
+        Assert.assertEquals(Iterate.sumByBigDecimal(list, bd -> bd.intValue() % 1000, bd -> bd), sumByValue2);
+        MutableList<BigDecimal> list2 = Interval.oneTo(UNEVEN_COUNT_FOR_SUMBY).collect(BigDecimal::new).toList();
+        MutableMap<String, BigDecimal> sumByValue3 = ParallelIterate.sumByBigDecimal(list2, EVEN_OR_ODD_BD, bd -> bd);
+        Assert.assertEquals(Iterate.sumByBigDecimal(list2, EVEN_OR_ODD_BD, bd -> bd), sumByValue3);
+        MutableMap<Integer, BigDecimal> sumByValue4 = ParallelIterate.sumByBigDecimal(list2, bd -> bd.intValue() % 1000, bd -> bd);
+        Assert.assertEquals(Iterate.sumByBigDecimal(list2, bd -> bd.intValue() % 1000, bd -> bd), sumByValue4);
+        Interval small = Interval.oneTo(11);
+        MutableMap<String, BigDecimal> smallSumByCount = ParallelIterate.sumByBigDecimal(small, EVEN_OR_ODD, i -> BigDecimal.valueOf(1L));
+        Assert.assertEquals(new BigDecimal(5), smallSumByCount.get("Even"));
+        Assert.assertEquals(new BigDecimal(6), smallSumByCount.get("Odd"));
+    }
+
+    @Test
+    public void sumByBigInteger()
+    {
+        MutableList<BigInteger> list = Interval.oneTo(100000).collect(Object::toString).collect(BigInteger::new).toList();
+        Collections.shuffle(list);
+        MutableMap<String, BigInteger> sumByCount = ParallelIterate.sumByBigInteger(list, EVEN_OR_ODD_BI, bi -> BigInteger.valueOf(1L));
+        Assert.assertEquals(BigInteger.valueOf(50000L), sumByCount.get("Even"));
+        Assert.assertEquals(BigInteger.valueOf(50000L), sumByCount.get("Odd"));
+        MutableMap<String, BigInteger> sumByValue = ParallelIterate.sumByBigInteger(list, EVEN_OR_ODD_BI, bi -> bi);
+        Assert.assertEquals(Iterate.sumByBigInteger(list, EVEN_OR_ODD_BI, bi -> bi), sumByValue);
+        MutableMap<Integer, BigInteger> sumByValue2 = ParallelIterate.sumByBigInteger(list, bi -> bi.intValue() % 1000, bi -> bi);
+        Assert.assertEquals(Iterate.sumByBigInteger(list, bi -> bi.intValue() % 1000, bi -> bi), sumByValue2);
+        MutableList<BigInteger> list2 = Interval.oneTo(UNEVEN_COUNT_FOR_SUMBY).collect(Object::toString).collect(BigInteger::new).toList();
+        MutableMap<String, BigInteger> sumByValue3 = ParallelIterate.sumByBigInteger(list2, EVEN_OR_ODD_BI, bi -> bi);
+        Assert.assertEquals(Iterate.sumByBigInteger(list2, EVEN_OR_ODD_BI, bi -> bi), sumByValue3);
+        MutableMap<Integer, BigInteger> sumByValue4 = ParallelIterate.sumByBigInteger(list2, bi -> bi.intValue() % 1000, bi -> bi);
+        Assert.assertEquals(Iterate.sumByBigInteger(list2, bi -> bi.intValue() % 1000, bi -> bi), sumByValue4);
+        Interval small = Interval.oneTo(11);
+        MutableMap<String, BigInteger> smallSumByCount = ParallelIterate.sumByBigInteger(small, EVEN_OR_ODD, i -> BigInteger.valueOf(1L));
+        Assert.assertEquals(new BigInteger("5"), smallSumByCount.get("Even"));
+        Assert.assertEquals(new BigInteger("6"), smallSumByCount.get("Odd"));
     }
 
     @Test
