@@ -320,7 +320,7 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
             {
                 MutableCollection<V> mutableCollection = collection.newEmpty();
                 mutableCollection.addAll(collection);
-                result.put(key, collection);
+                result.put(key, mutableCollection);
             }
         });
         return result;

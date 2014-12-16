@@ -215,6 +215,7 @@ public class HashBagMultimapWithHashingStrategyTest extends AbstractMutableBagMu
     }
 
     @Override
+    @Test
     public void toImmutable()
     {
         super.toImmutable();
@@ -229,6 +230,7 @@ public class HashBagMultimapWithHashingStrategyTest extends AbstractMutableBagMu
     }
 
     @Override
+    @Test
     public void toMutable()
     {
         super.toMutable();
@@ -242,6 +244,7 @@ public class HashBagMultimapWithHashingStrategyTest extends AbstractMutableBagMu
     }
 
     @Override
+    @Test
     public void toMap()
     {
         super.toMap();
@@ -257,6 +260,7 @@ public class HashBagMultimapWithHashingStrategyTest extends AbstractMutableBagMu
     }
 
     @Override
+    @Test
     public void toMapWithTarget()
     {
         super.toMapWithTarget();
