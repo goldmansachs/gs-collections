@@ -58,6 +58,11 @@ public interface <name>List extends Reversible<name>Iterable
     Immutable<name>List toImmutable();
 
     /**
+     * @since 6.0.
+     */
+    <name>List distinct();
+
+    /**
      * @since 5.0.
      */
     <name>List toReversed();

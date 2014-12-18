@@ -35,6 +35,11 @@ public interface Immutable<name>List extends Immutable<name>Collection, <name>Li
 
     Immutable<name>List toReversed();
 
+    /**
+     * @since 6.0.
+     */
+    Immutable<name>List distinct();
+
     Immutable<name>List subList(int fromIndex, int toIndex);
 }
 

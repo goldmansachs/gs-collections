@@ -310,6 +310,17 @@ public final class Synchronized<name>List
         }
     }
 
+    /**
+     * @since 6.0.
+     */
+    public Mutable<name>List distinct()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().distinct();
+        }
+    }
+
     public Mutable<name>List subList(int fromIndex, int toIndex)
     {
         throw new UnsupportedOperationException("subList not yet implemented!");

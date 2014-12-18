@@ -217,6 +217,14 @@ public final class Unmodifiable<name>List
         return this.getMutable<name>List().injectIntoWithIndex(injectedValue, function);
     }
 
+    /**
+     * @since 6.0.
+     */
+    public Mutable<name>List distinct()
+    {
+        return this.getMutable<name>List().distinct();
+    }
+
     public Mutable<name>List subList(int fromIndex, int toIndex)
     {
         throw new UnsupportedOperationException("subList not yet implemented!");

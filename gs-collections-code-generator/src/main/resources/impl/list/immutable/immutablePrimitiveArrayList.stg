@@ -574,6 +574,24 @@ final class Immutable<name>ArrayList
         }
     }
 
+    /**
+     * @since 6.0.
+     */
+    public Immutable<name>List distinct()
+    {
+        <name>ArrayList target = new <name>ArrayList();
+        Mutable<name>Set seenSoFar = new <name>HashSet(this.size());
+
+        for (<type> each : this.items)
+        {
+            if (seenSoFar.add(each))
+            {
+                target.add(each);
+            }
+        }
+        return target.toImmutable();
+    }
+
     public Immutable<name>List subList(int fromIndex, int toIndex)
     {
         throw new UnsupportedOperationException("subList not yet implemented!");

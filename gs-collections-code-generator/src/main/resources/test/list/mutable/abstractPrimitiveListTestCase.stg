@@ -340,6 +340,14 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
         Assert.assertEquals("[<["1", "2", "3"]:(toStringLiteral.(type))(); separator=", ">]", this.classUnderTest().toString());
     }
 
+    @Test
+    public void distinct()
+    {
+        Mutable<name>List list1 = this.newWith(<["1", "2", "2", "3", "3", "3", "4", "4", "4", "4"]:(literal.(type))(); separator=", ">).distinct();
+        Mutable<name>List list2 = this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(list1, list2);
+    }
+
     @Override
     @Test
     public void makeString()

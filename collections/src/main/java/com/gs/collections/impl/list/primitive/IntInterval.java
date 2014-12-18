@@ -460,6 +460,14 @@ public final class IntInterval
         return IntInterval.fromToBy(this.to, this.from, -this.step);
     }
 
+    /**
+     * @since 6.0
+     */
+    public ImmutableIntList distinct()
+    {
+        return this;
+    }
+
     public ImmutableIntList subList(int fromIndex, int toIndex)
     {
         throw new UnsupportedOperationException("subList not yet implemented!");

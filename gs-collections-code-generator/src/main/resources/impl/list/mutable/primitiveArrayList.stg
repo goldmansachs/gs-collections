@@ -37,6 +37,7 @@ import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.<name>Set;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
 import com.gs.collections.impl.lazy.primitive.Reverse<name>Iterable;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -761,11 +762,11 @@ public final class <name>ArrayList extends Abstract<name>Iterable
 
     public Immutable<name>List toImmutable()
     {
-        if (this.items.length == 0)
+        if (this.size == 0)
         {
-            return <name>Lists.immutable.with();
+            return <name>Lists.immutable.empty();
         }
-        if (this.items.length == 1)
+        if (this.size == 1)
         {
             return <name>Lists.immutable.with(this.items[0]);
         }
@@ -818,6 +819,22 @@ public final class <name>ArrayList extends Abstract<name>Iterable
     public <name>ArrayList toReversed()
     {
         return <name>ArrayList.newList(this.asReversed());
+    }
+
+    public Mutable<name>List distinct()
+    {
+        <name>ArrayList target = new <name>ArrayList();
+        Mutable<name>Set seenSoFar = new <name>HashSet(this.size());
+
+        for (int i = 0; i \< this.size; i++)
+        {
+            <type> each = this.items[i];
+            if (seenSoFar.add(each))
+            {
+                target.add(each);
+            }
+        }
+        return target;
     }
 
     public Mutable<name>List subList(int fromIndex, int toIndex)

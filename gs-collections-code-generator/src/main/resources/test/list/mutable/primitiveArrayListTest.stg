@@ -19,6 +19,7 @@ package com.gs.collections.impl.list.mutable.primitive;
 
 import java.lang.reflect.Field;
 
+import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.internal.primitive.<name>IterableIterate;
@@ -138,6 +139,18 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
     {
         Verify.assertClassNonInstantiable(<name>IterableIterate.class);
         Verify.assertClassNonInstantiable(<name>IteratorIterate.class);
+    }
+
+    @Override
+    @Test
+    public void toImmutable()
+    {
+        super.toImmutable();
+        <name>ArrayList list = new <name>ArrayList(1);
+        Assert.assertEquals(list, list.toImmutable());
+        list.add(<(literal.(type))("5")>);
+        list.removeAtIndex(0);
+        Assert.assertEquals(list, list.toImmutable());
     }
 }
 

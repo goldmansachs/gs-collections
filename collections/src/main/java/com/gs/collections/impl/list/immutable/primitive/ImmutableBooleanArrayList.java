@@ -345,6 +345,24 @@ final class ImmutableBooleanArrayList
         return ImmutableBooleanArrayList.newList(this.asReversed());
     }
 
+    /**
+     * @since 6.0
+     */
+    public ImmutableBooleanList distinct()
+    {
+        BooleanArrayList target = new BooleanArrayList();
+        MutableBooleanSet seenSoFar = new BooleanHashSet();
+        for (int i = 0; i < this.size; i++)
+        {
+            boolean each = this.get(i);
+            if (seenSoFar.add(each))
+            {
+                target.add(each);
+            }
+        }
+        return target.toImmutable();
+    }
+
     public ImmutableBooleanList newWith(boolean element)
     {
         BitSet newItems = (BitSet) this.items.clone();

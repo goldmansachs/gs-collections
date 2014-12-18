@@ -46,6 +46,11 @@ public interface Reversible<name>Iterable extends <name>Iterable
 
     Reversible<name>Iterable toReversed();
 
+    /**
+     * @since 6.0.
+     */
+    Reversible<name>Iterable distinct();
+
     \<T> T injectIntoWithIndex(T injectedValue, Object<name>IntToObjectFunction\<? super T, ? extends T> function);
 
     void forEachWithIndex(<name>IntProcedure procedure);

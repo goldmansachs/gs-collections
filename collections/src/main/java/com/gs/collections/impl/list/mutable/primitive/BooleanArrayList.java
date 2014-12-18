@@ -622,7 +622,7 @@ public final class BooleanArrayList
     {
         if (this.size == 0)
         {
-            return BooleanLists.immutable.with();
+            return BooleanLists.immutable.empty();
         }
         if (this.size == 1)
         {
@@ -639,6 +639,24 @@ public final class BooleanArrayList
     public BooleanArrayList toReversed()
     {
         return new BooleanArrayList(this.asReversed());
+    }
+
+    /**
+     * @since 6.0
+     */
+    public MutableBooleanList distinct()
+    {
+        BooleanArrayList target = new BooleanArrayList();
+        MutableBooleanSet seenSoFar = new BooleanHashSet();
+        for (int i = 0; i < this.size; i++)
+        {
+            boolean each = this.get(i);
+            if (seenSoFar.add(each))
+            {
+                target.add(each);
+            }
+        }
+        return target;
     }
 
     public boolean detectIfNone(BooleanPredicate predicate, boolean ifNone)

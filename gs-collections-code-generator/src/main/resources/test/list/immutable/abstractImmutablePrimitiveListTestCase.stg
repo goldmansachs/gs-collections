@@ -177,6 +177,14 @@ public abstract class AbstractImmutable<name>ListTestCase extends AbstractImmuta
     }
 
     @Test
+    public void distinct()
+    {
+        Immutable<name>List list1 = this.newWith(<["1", "2", "2", "3", "3", "3", "4", "4", "4", "4"]:(literal.(type))(); separator=", ">).distinct();
+        Immutable<name>List list2 = this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(list1, list2);
+    }
+
+    @Test
     public void toReversed()
     {
         Assert.assertEquals(Immutable<name>ArrayList.newListWith(<(literal.(type))("3")>, <(literal.(type))("1")>, <(literal.(type))("9")>, <(literal.(type))("7")>), this.newWith(<(literal.(type))("7")>, <(literal.(type))("9")>, <(literal.(type))("1")>, <(literal.(type))("3")>).toReversed());
