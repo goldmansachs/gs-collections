@@ -66,6 +66,7 @@ import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.collection.mutable.AbstractMultiReaderMutableCollection;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Iterables;
@@ -411,6 +412,32 @@ public final class MultiReaderHashBag<T>
         try
         {
             return this.delegate.flatCollect(function);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableList<ObjectIntPair<T>> topOccurrences(int count)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.topOccurrences(count);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableList<ObjectIntPair<T>> bottomOccurrences(int count)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.bottomOccurrences(count);
         }
         finally
         {
@@ -944,6 +971,16 @@ public final class MultiReaderHashBag<T>
         public <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
         {
             return this.getDelegate().flatCollect(function);
+        }
+
+        public MutableList<ObjectIntPair<T>> topOccurrences(int count)
+        {
+            return this.getDelegate().topOccurrences(count);
+        }
+
+        public MutableList<ObjectIntPair<T>> bottomOccurrences(int count)
+        {
+            return this.getDelegate().bottomOccurrences(count);
         }
 
         public <V> MutableBag<V> collectIf(

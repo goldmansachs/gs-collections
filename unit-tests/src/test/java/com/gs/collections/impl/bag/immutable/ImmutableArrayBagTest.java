@@ -17,7 +17,10 @@
 package com.gs.collections.impl.bag.immutable;
 
 import com.gs.collections.api.bag.ImmutableBag;
+import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Maps;
@@ -150,5 +153,69 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
         // Only works on bags without duplicates
         ImmutableBag<Integer> immutableBag = ImmutableArrayBag.newBagWith(1, 2, 3);
         Assert.assertEquals(Maps.immutable.of(0, 0, 1, 1, 2, 2, 3, 3), immutableBag.groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(0, 0)));
+    }
+
+    @Test
+    public void topOccurrences()
+    {
+        MutableBag<String> mutable = HashBag.newBag();
+        mutable.addOccurrences("one", 1);
+        mutable.addOccurrences("two", 2);
+        mutable.addOccurrences("three", 3);
+        mutable.addOccurrences("four", 4);
+        mutable.addOccurrences("five", 5);
+        mutable.addOccurrences("six", 6);
+        mutable.addOccurrences("seven", 7);
+        mutable.addOccurrences("eight", 8);
+        mutable.addOccurrences("nine", 9);
+        mutable.addOccurrences("ten", 10);
+        ImmutableBag<String> strings = ImmutableArrayBag.copyFrom(mutable);
+        ImmutableList<ObjectIntPair<String>> top5 = strings.topOccurrences(5);
+        Verify.assertIterableSize(5, top5);
+        Assert.assertEquals("ten", top5.getFirst().getOne());
+        Assert.assertEquals(10, top5.getFirst().getTwo());
+        Assert.assertEquals("six", top5.getLast().getOne());
+        Assert.assertEquals(6, top5.getLast().getTwo());
+        Verify.assertIterableSize(0, ImmutableArrayBag.newBagWith().topOccurrences(5));
+        Verify.assertIterableSize(3, this.newWith("one", "two", "three").topOccurrences(5));
+        Verify.assertIterableSize(3, this.newWith("one", "two", "three").topOccurrences(1));
+        Verify.assertIterableSize(3, this.newWith("one", "two", "three").topOccurrences(2));
+        Verify.assertIterableSize(3, this.newWith("one", "one", "two", "three").topOccurrences(2));
+        Verify.assertIterableSize(2, this.newWith("one", "one", "two", "two", "three").topOccurrences(1));
+        Verify.assertIterableSize(3, this.newWith(null, "one", "two").topOccurrences(5));
+        Verify.assertIterableSize(3, this.newWith(null, "one", "two").topOccurrences(1));
+        Verify.assertIterableSize(3, this.newWith("one", "one", "two", "two", "three", "three").topOccurrences(1));
+    }
+
+    @Test
+    public void bottomOccurrences()
+    {
+        MutableBag<String> mutable = HashBag.newBag();
+        mutable.addOccurrences("one", 1);
+        mutable.addOccurrences("two", 2);
+        mutable.addOccurrences("three", 3);
+        mutable.addOccurrences("four", 4);
+        mutable.addOccurrences("five", 5);
+        mutable.addOccurrences("six", 6);
+        mutable.addOccurrences("seven", 7);
+        mutable.addOccurrences("eight", 8);
+        mutable.addOccurrences("nine", 9);
+        mutable.addOccurrences("ten", 10);
+        ImmutableBag<String> strings = ImmutableArrayBag.copyFrom(mutable);
+        ImmutableList<ObjectIntPair<String>> bottom5 = strings.bottomOccurrences(5);
+        Verify.assertIterableSize(5, bottom5);
+        Assert.assertEquals("one", bottom5.getFirst().getOne());
+        Assert.assertEquals(1, bottom5.getFirst().getTwo());
+        Assert.assertEquals("five", bottom5.getLast().getOne());
+        Assert.assertEquals(5, bottom5.getLast().getTwo());
+        Verify.assertIterableSize(0, ImmutableArrayBag.newBagWith().bottomOccurrences(5));
+        Verify.assertIterableSize(3, this.newWith("one", "two", "three").bottomOccurrences(5));
+        Verify.assertIterableSize(3, this.newWith("one", "two", "three").bottomOccurrences(1));
+        Verify.assertIterableSize(3, this.newWith("one", "two", "three").bottomOccurrences(2));
+        Verify.assertIterableSize(3, this.newWith("one", "one", "two", "two", "three").bottomOccurrences(2));
+        Verify.assertIterableSize(3, this.newWith("one", "one", "two", "two", "three", "three").bottomOccurrences(1));
+        Verify.assertIterableSize(3, this.newWith(null, "one", "two").bottomOccurrences(5));
+        Verify.assertIterableSize(3, this.newWith(null, "one", "two").bottomOccurrences(1));
+        Verify.assertIterableSize(3, this.newWith("one", "one", "two", "two", "three", "three").bottomOccurrences(1));
     }
 }

@@ -35,6 +35,7 @@ import com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap;
 import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -71,6 +72,7 @@ import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.test.domain.Person;
 import com.gs.collections.impl.tuple.Tuples;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -83,6 +85,17 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 {
     @Override
     protected abstract <T> MutableSortedBag<T> newWith(T... littleElements);
+
+    protected <T> MutableSortedBag<T> newWithOccurrences(ObjectIntPair<T>... elementsWithOccurrences)
+    {
+        TreeBag<T> bag = TreeBag.newBag();
+        for (int i = 0; i < elementsWithOccurrences.length; i++)
+        {
+            ObjectIntPair<T> itemToAdd = elementsWithOccurrences[i];
+            bag.addOccurrences(itemToAdd.getOne(), itemToAdd.getTwo());
+        }
+        return bag;
+    }
 
     protected abstract <T> MutableSortedBag<T> newWith(Comparator<? super T> comparator, T... elements);
 
@@ -1682,6 +1695,64 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         RichIterable<Integer> integers = this.newWith(2, 2, 1, 1);
         MutableSortedBag<Integer> bag = integers.toSortedBagBy(String::valueOf);
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 2, 2, 1), bag);
+    }
+
+    @Test
+    public void topOccurrences()
+    {
+        MutableSortedBag<String> strings = this.newWithOccurrences(
+                PrimitiveTuples.pair("one", 1),
+                PrimitiveTuples.pair("two", 2),
+                PrimitiveTuples.pair("three", 3),
+                PrimitiveTuples.pair("four", 4),
+                PrimitiveTuples.pair("five", 5),
+                PrimitiveTuples.pair("six", 6),
+                PrimitiveTuples.pair("seven", 7),
+                PrimitiveTuples.pair("eight", 8),
+                PrimitiveTuples.pair("nine", 9),
+                PrimitiveTuples.pair("ten", 10));
+        MutableList<ObjectIntPair<String>> top5 = strings.topOccurrences(5);
+        Verify.assertSize(5, top5);
+        Assert.assertEquals("ten", top5.getFirst().getOne());
+        Assert.assertEquals(10, top5.getFirst().getTwo());
+        Assert.assertEquals("six", top5.getLast().getOne());
+        Assert.assertEquals(6, top5.getLast().getTwo());
+        Verify.assertSize(0, this.newWith().topOccurrences(5));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(5));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(1));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(2));
+        Verify.assertSize(3, this.newWith("one", "one", "two", "three").topOccurrences(2));
+        Verify.assertSize(2, this.newWith("one", "one", "two", "two", "three").topOccurrences(1));
+        Verify.assertSize(3, this.newWith("one", "one", "two", "two", "three", "three").topOccurrences(1));
+    }
+
+    @Test
+    public void bottomOccurrences()
+    {
+        MutableSortedBag<String> strings = this.newWithOccurrences(
+                PrimitiveTuples.pair("one", 1),
+                PrimitiveTuples.pair("two", 2),
+                PrimitiveTuples.pair("three", 3),
+                PrimitiveTuples.pair("four", 4),
+                PrimitiveTuples.pair("five", 5),
+                PrimitiveTuples.pair("six", 6),
+                PrimitiveTuples.pair("seven", 7),
+                PrimitiveTuples.pair("eight", 8),
+                PrimitiveTuples.pair("nine", 9),
+                PrimitiveTuples.pair("ten", 10));
+        MutableList<ObjectIntPair<String>> bottom5 = strings.bottomOccurrences(5);
+        Verify.assertSize(5, bottom5);
+        Assert.assertEquals("one", bottom5.getFirst().getOne());
+        Assert.assertEquals(1, bottom5.getFirst().getTwo());
+        Assert.assertEquals("five", bottom5.getLast().getOne());
+        Assert.assertEquals(5, bottom5.getLast().getTwo());
+        Verify.assertSize(0, this.newWith().bottomOccurrences(5));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(5));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(1));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(2));
+        Verify.assertSize(3, this.newWith("one", "one", "two", "three").topOccurrences(2));
+        Verify.assertSize(2, this.newWith("one", "one", "two", "two", "three").topOccurrences(1));
+        Verify.assertSize(3, this.newWith("one", "one", "two", "two", "three", "three").bottomOccurrences(1));
     }
 
     @Override

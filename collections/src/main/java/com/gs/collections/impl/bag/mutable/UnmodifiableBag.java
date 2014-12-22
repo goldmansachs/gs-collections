@@ -47,11 +47,13 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.collection.mutable.AbstractUnmodifiableMutableCollection;
 import com.gs.collections.impl.factory.Bags;
 
@@ -240,6 +242,16 @@ public class UnmodifiableBag<T>
     public <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.getMutableBag().flatCollect(function);
+    }
+
+    public MutableList<ObjectIntPair<T>> topOccurrences(int count)
+    {
+        return this.getMutableBag().topOccurrences(count);
+    }
+
+    public MutableList<ObjectIntPair<T>> bottomOccurrences(int count)
+    {
+        return this.getMutableBag().bottomOccurrences(count);
     }
 
     @Override

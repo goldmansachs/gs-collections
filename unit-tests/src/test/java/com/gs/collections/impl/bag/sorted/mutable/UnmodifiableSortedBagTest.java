@@ -21,6 +21,7 @@ import java.util.Iterator;
 
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
@@ -38,6 +39,13 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
     protected <T> MutableSortedBag<T> newWith(T... elements)
     {
         return TreeBag.newBagWith(elements).asUnmodifiable();
+    }
+
+    @SafeVarargs
+    @Override
+    protected final <T> MutableSortedBag<T> newWithOccurrences(ObjectIntPair<T>... elementsWithOccurrences)
+    {
+        return super.newWithOccurrences(elementsWithOccurrences).asSynchronized();
     }
 
     @Override

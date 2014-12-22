@@ -56,6 +56,7 @@ import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.collection.mutable.AbstractSynchronizedMutableCollection;
 import com.gs.collections.impl.collection.mutable.SynchronizedCollectionSerializationProxy;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
@@ -120,6 +121,22 @@ public class SynchronizedSortedBag<T>
         synchronized (this.getLock())
         {
             return this.getSortedBag().selectByOccurrences(predicate);
+        }
+    }
+
+    public MutableList<ObjectIntPair<T>> topOccurrences(int count)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getSortedBag().topOccurrences(count);
+        }
+    }
+
+    public MutableList<ObjectIntPair<T>> bottomOccurrences(int count)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getSortedBag().bottomOccurrences(count);
         }
     }
 

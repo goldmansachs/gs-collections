@@ -20,6 +20,7 @@ import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
@@ -202,5 +203,51 @@ public class UnmodifiableBagTest
         MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(1, 2, 2, 3, 3, 3));
         Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2, (short) 2, (short) 3, (short) 3, (short) 3),
                 integers.collectShort(PrimitiveFunctions.unboxIntegerToShort()));
+    }
+
+    @Test
+    public void topOccurrences()
+    {
+        MutableBag<String> mutable = HashBag.newBag();
+        mutable.addOccurrences("one", 1);
+        mutable.addOccurrences("two", 2);
+        mutable.addOccurrences("three", 3);
+        mutable.addOccurrences("four", 4);
+        mutable.addOccurrences("five", 5);
+        mutable.addOccurrences("six", 6);
+        mutable.addOccurrences("seven", 7);
+        mutable.addOccurrences("eight", 8);
+        mutable.addOccurrences("nine", 9);
+        mutable.addOccurrences("ten", 10);
+        MutableBag<String> strings = mutable.asUnmodifiable();
+        MutableList<ObjectIntPair<String>> top5 = strings.topOccurrences(5);
+        Verify.assertSize(5, top5);
+        Assert.assertEquals("ten", top5.getFirst().getOne());
+        Assert.assertEquals(10, top5.getFirst().getTwo());
+        Assert.assertEquals("six", top5.getLast().getOne());
+        Assert.assertEquals(6, top5.getLast().getTwo());
+    }
+
+    @Test
+    public void bottomOccurrences()
+    {
+        MutableBag<String> mutable = HashBag.newBag();
+        mutable.addOccurrences("one", 1);
+        mutable.addOccurrences("two", 2);
+        mutable.addOccurrences("three", 3);
+        mutable.addOccurrences("four", 4);
+        mutable.addOccurrences("five", 5);
+        mutable.addOccurrences("six", 6);
+        mutable.addOccurrences("seven", 7);
+        mutable.addOccurrences("eight", 8);
+        mutable.addOccurrences("nine", 9);
+        mutable.addOccurrences("ten", 10);
+        MutableBag<String> strings = mutable.asUnmodifiable();
+        MutableList<ObjectIntPair<String>> bottom5 = strings.bottomOccurrences(5);
+        Verify.assertSize(5, bottom5);
+        Assert.assertEquals("one", bottom5.getFirst().getOne());
+        Assert.assertEquals(1, bottom5.getFirst().getTwo());
+        Assert.assertEquals("five", bottom5.getLast().getOne());
+        Assert.assertEquals(5, bottom5.getLast().getTwo());
     }
 }

@@ -56,15 +56,19 @@ import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import com.gs.collections.impl.utility.Iterate;
 
 public abstract class AbstractMutableBag<T> extends AbstractMutableCollection<T>
 {
     public abstract void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure);
+
+    public abstract int sizeDistinct();
 
     @Override
     public <R extends Collection<T>> R select(final Predicate<? super T> predicate, final R target)
@@ -643,5 +647,53 @@ public abstract class AbstractMutableBag<T> extends AbstractMutableCollection<T>
     public MutableBag<T> toBag()
     {
         return HashBag.newBag(this);
+    }
+
+    protected MutableList<ObjectIntPair<T>> toListWithOccurrences()
+    {
+        final MutableList<ObjectIntPair<T>> result = FastList.newList(this.sizeDistinct());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int count)
+            {
+                result.add(PrimitiveTuples.pair(each, count));
+            }
+        });
+        return result;
+    }
+
+    public MutableList<ObjectIntPair<T>> topOccurrences(int n)
+    {
+        return this.occurrencesSortingBy(n, new IntFunction<ObjectIntPair<T>>()
+        {
+            public int intValueOf(ObjectIntPair<T> item)
+            {
+                return -item.getTwo();
+            }
+        });
+    }
+
+    public MutableList<ObjectIntPair<T>> bottomOccurrences(int n)
+    {
+        return this.occurrencesSortingBy(n, new IntFunction<ObjectIntPair<T>>()
+        {
+            public int intValueOf(ObjectIntPair<T> item)
+            {
+                return item.getTwo();
+            }
+        });
+    }
+
+    private MutableList<ObjectIntPair<T>> occurrencesSortingBy(int n, IntFunction<ObjectIntPair<T>> function)
+    {
+        int keySize = Math.min(n, this.sizeDistinct());
+        MutableList<ObjectIntPair<T>> sorted = this.toListWithOccurrences().sortThisByInt(function);
+        MutableList<ObjectIntPair<T>> results = sorted.subList(0, keySize).toList();
+        while (keySize < sorted.size() && results.getLast().getTwo() == sorted.get(keySize).getTwo())
+        {
+            results.add(sorted.get(keySize));
+            keySize++;
+        }
+        return results;
     }
 }

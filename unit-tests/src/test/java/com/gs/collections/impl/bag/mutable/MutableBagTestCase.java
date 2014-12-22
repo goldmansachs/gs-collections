@@ -24,6 +24,7 @@ import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.PartitionMutableCollection;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -355,5 +356,67 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
     {
         MutableBag<Integer> integers = this.newWith(1, 1, 1, 1, 2, 2, 2, 3, 3, 4);
         Assert.assertEquals(Iterables.iBag(1, 1, 1, 1, 3, 3), integers.selectByOccurrences(IntPredicates.isEven()));
+    }
+
+    @Test
+    public void topOccurrences()
+    {
+        MutableBag<String> strings = this.newWith();
+        strings.addOccurrences("one", 1);
+        strings.addOccurrences("two", 2);
+        strings.addOccurrences("three", 3);
+        strings.addOccurrences("four", 4);
+        strings.addOccurrences("five", 5);
+        strings.addOccurrences("six", 6);
+        strings.addOccurrences("seven", 7);
+        strings.addOccurrences("eight", 8);
+        strings.addOccurrences("nine", 9);
+        strings.addOccurrences("ten", 10);
+        MutableList<ObjectIntPair<String>> top5 = strings.topOccurrences(5);
+        Verify.assertSize(5, top5);
+        Assert.assertEquals("ten", top5.getFirst().getOne());
+        Assert.assertEquals(10, top5.getFirst().getTwo());
+        Assert.assertEquals("six", top5.getLast().getOne());
+        Assert.assertEquals(6, top5.getLast().getTwo());
+        Verify.assertSize(0, this.newWith().topOccurrences(5));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(5));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(1));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(2));
+        Verify.assertSize(3, this.newWith("one", "one", "two", "three").topOccurrences(2));
+        Verify.assertSize(2, this.newWith("one", "one", "two", "two", "three").topOccurrences(1));
+        Verify.assertSize(3, this.newWith(null, "one", "two").topOccurrences(5));
+        Verify.assertSize(3, this.newWith(null, "one", "two").topOccurrences(1));
+        Verify.assertSize(3, this.newWith("one", "one", "two", "two", "three", "three").topOccurrences(1));
+    }
+
+    @Test
+    public void bottomOccurrences()
+    {
+        HashBag<String> strings = HashBag.newBag();
+        strings.addOccurrences("one", 1);
+        strings.addOccurrences("two", 2);
+        strings.addOccurrences("three", 3);
+        strings.addOccurrences("four", 4);
+        strings.addOccurrences("five", 5);
+        strings.addOccurrences("six", 6);
+        strings.addOccurrences("seven", 7);
+        strings.addOccurrences("eight", 8);
+        strings.addOccurrences("nine", 9);
+        strings.addOccurrences("ten", 10);
+        MutableList<ObjectIntPair<String>> bottom5 = strings.bottomOccurrences(5);
+        Verify.assertSize(5, bottom5);
+        Assert.assertEquals("one", bottom5.getFirst().getOne());
+        Assert.assertEquals(1, bottom5.getFirst().getTwo());
+        Assert.assertEquals("five", bottom5.getLast().getOne());
+        Assert.assertEquals(5, bottom5.getLast().getTwo());
+        Verify.assertSize(0, this.newWith().bottomOccurrences(5));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(5));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(1));
+        Verify.assertSize(3, this.newWith("one", "two", "three").topOccurrences(2));
+        Verify.assertSize(3, this.newWith("one", "one", "two", "three").topOccurrences(2));
+        Verify.assertSize(2, this.newWith("one", "one", "two", "two", "three").topOccurrences(1));
+        Verify.assertSize(3, this.newWith(null, "one", "two").topOccurrences(5));
+        Verify.assertSize(3, this.newWith(null, "one", "two").topOccurrences(1));
+        Verify.assertSize(3, this.newWith("one", "one", "two", "two", "three", "three").bottomOccurrences(1));
     }
 }

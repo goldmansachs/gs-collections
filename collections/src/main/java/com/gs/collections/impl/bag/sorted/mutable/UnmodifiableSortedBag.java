@@ -53,6 +53,7 @@ import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.collection.mutable.AbstractUnmodifiableMutableCollection;
 import com.gs.collections.impl.collection.mutable.UnmodifiableCollectionSerializationProxy;
 
@@ -216,6 +217,16 @@ public class UnmodifiableSortedBag<T>
     public MutableSortedBag<T> selectByOccurrences(IntPredicate predicate)
     {
         return this.getSortedBag().selectByOccurrences(predicate);
+    }
+
+    public MutableList<ObjectIntPair<T>> topOccurrences(int count)
+    {
+        return this.getSortedBag().topOccurrences(count);
+    }
+
+    public MutableList<ObjectIntPair<T>> bottomOccurrences(int count)
+    {
+        return this.getSortedBag().bottomOccurrences(count);
     }
 
     @Override

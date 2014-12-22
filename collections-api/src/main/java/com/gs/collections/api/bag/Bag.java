@@ -26,11 +26,13 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.bag.BagMultimap;
 import com.gs.collections.api.partition.bag.PartitionBag;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 
 /**
  * A Bag is a Collection whose elements are unordered and may contain duplicate entries.  It varies from
@@ -96,6 +98,26 @@ public interface Bag<T>
      * @since 3.0
      */
     Bag<T> selectByOccurrences(IntPredicate predicate);
+
+    /**
+     * Returns the {@code count} most frequently occurring items.
+     *
+     * In the event of a tie, all of the items with the number of occurrences that match the occurrences of the last
+     * item will be returned.
+     *
+     * @since 6.0
+     */
+    ListIterable<ObjectIntPair<T>> topOccurrences(int count);
+
+    /**
+     * Returns the {@code count} most frequently occurring items.
+     *
+     * In the event of a tie, all of the items with the number of occurrences that match the occurrences of the last
+     * item will be returned.
+     *
+     * @since 6.0
+     */
+    ListIterable<ObjectIntPair<T>> bottomOccurrences(int count);
 
     /**
      * The size of the Bag when counting only distinct elements.

@@ -39,10 +39,12 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.ImmutableCollection;
+import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 
 /**
  * @since 1.0
@@ -106,4 +108,14 @@ public interface ImmutableBag<T> extends UnsortedBag<T>, ImmutableCollection<T>
     <S> ImmutableBag<Pair<T, S>> zip(Iterable<S> that);
 
     ImmutableSet<Pair<T, Integer>> zipWithIndex();
+
+    /**
+     * @since 6.0
+     */
+    ImmutableList<ObjectIntPair<T>> topOccurrences(int count);
+
+    /**
+     * @since 6.0
+     */
+    ImmutableList<ObjectIntPair<T>> bottomOccurrences(int count);
 }

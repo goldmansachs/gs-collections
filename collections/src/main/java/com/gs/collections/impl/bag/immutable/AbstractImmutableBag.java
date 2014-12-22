@@ -56,9 +56,12 @@ import com.gs.collections.api.collection.primitive.MutableFloatCollection;
 import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
+import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
@@ -72,7 +75,9 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.partition.bag.PartitionHashBag;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import com.gs.collections.impl.utility.Iterate;
 
 /**
@@ -694,5 +699,53 @@ public abstract class AbstractImmutableBag<T>
         builder.deleteCharAt(builder.length() - 1);
         builder.deleteCharAt(builder.length() - 1);
         return builder.append('}').toString();
+    }
+
+    protected MutableList<ObjectIntPair<T>> toListWithOccurrences()
+    {
+        final MutableList<ObjectIntPair<T>> result = FastList.newList(this.sizeDistinct());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int count)
+            {
+                result.add(PrimitiveTuples.pair(each, count));
+            }
+        });
+        return result;
+    }
+
+    public ImmutableList<ObjectIntPair<T>> topOccurrences(int n)
+    {
+        return this.occurrencesSortingBy(n, new IntFunction<ObjectIntPair<T>>()
+        {
+            public int intValueOf(ObjectIntPair<T> item)
+            {
+                return -item.getTwo();
+            }
+        }).toImmutable();
+    }
+
+    public ImmutableList<ObjectIntPair<T>> bottomOccurrences(int n)
+    {
+        return this.occurrencesSortingBy(n, new IntFunction<ObjectIntPair<T>>()
+        {
+            public int intValueOf(ObjectIntPair<T> item)
+            {
+                return item.getTwo();
+            }
+        }).toImmutable();
+    }
+
+    private MutableList<ObjectIntPair<T>> occurrencesSortingBy(int n, IntFunction<ObjectIntPair<T>> function)
+    {
+        int keySize = Math.min(n, this.sizeDistinct());
+        MutableList<ObjectIntPair<T>> sorted = this.toListWithOccurrences().sortThisByInt(function);
+        MutableList<ObjectIntPair<T>> results = sorted.subList(0, keySize).toList();
+        while (keySize < sorted.size() && results.getLast().getTwo() == sorted.get(keySize).getTwo())
+        {
+            results.add(sorted.get(keySize));
+            keySize++;
+        }
+        return results;
     }
 }

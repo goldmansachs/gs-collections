@@ -47,6 +47,7 @@ import com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap;
 import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 
 /**
  * @since 4.2
@@ -124,6 +125,16 @@ public interface MutableSortedBag<T>
     <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
     MutableSortedSet<T> distinct();
+
+    /**
+     * @since 6.0
+     */
+    MutableList<ObjectIntPair<T>> topOccurrences(int count);
+
+    /**
+     * @since 6.0
+     */
+    MutableList<ObjectIntPair<T>> bottomOccurrences(int count);
 
     MutableSortedBag<T> takeWhile(Predicate<? super T> predicate);
 

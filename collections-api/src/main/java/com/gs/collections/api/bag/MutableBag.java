@@ -39,10 +39,12 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 
 /**
  * A MutableBag is a Collection whose elements are unordered and may contain duplicate entries.  It varies from
@@ -117,6 +119,16 @@ public interface MutableBag<T>
     <V> MutableBag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    /**
+     * @since 6.0
+     */
+    MutableList<ObjectIntPair<T>> topOccurrences(int count);
+
+    /**
+     * @since 6.0
+     */
+    MutableList<ObjectIntPair<T>> bottomOccurrences(int count);
 
     void addOccurrences(T item, int occurrences);
 
