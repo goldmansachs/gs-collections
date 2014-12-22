@@ -559,10 +559,8 @@ abstract class AbstractImmutableList<T>
     public void forEach(
             int from, int to, Procedure<? super T> procedure)
     {
-        if (from < 0 || to < 0)
-        {
-            throw new IllegalArgumentException("Neither from nor to may be negative.");
-        }
+        ListIterate.rangeCheck(from, to, this.size());
+
         if (from <= to)
         {
             for (int i = from; i <= to; i++)
@@ -582,10 +580,8 @@ abstract class AbstractImmutableList<T>
     public void forEachWithIndex(
             int from, int to, ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        if (from < 0 || to < 0)
-        {
-            throw new IllegalArgumentException("Neither from nor to may be negative.");
-        }
+        ListIterate.rangeCheck(from, to, this.size());
+
         if (from <= to)
         {
             for (int i = from; i <= to; i++)
@@ -839,6 +835,11 @@ abstract class AbstractImmutableList<T>
     public ReverseIterable<T> asReversed()
     {
         return ReverseIterable.adapt(this);
+    }
+
+    public ImmutableList<T> toReversed()
+    {
+        return Lists.immutable.withAll(this.asReversed());
     }
 
     public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)

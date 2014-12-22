@@ -137,18 +137,6 @@ public class FastListTest extends AbstractListTestCase
 
     @Override
     @Test
-    public void forEachFromTo()
-    {
-        MutableList<Integer> result = FastList.newList();
-        MutableList<Integer> collection = FastList.newListWith(1, 2, 3, 4);
-        collection.forEach(2, 3, CollectionAddProcedure.on(result));
-        Assert.assertEquals(this.newWith(3, 4), result);
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> collection.forEach(-1, 0, CollectionAddProcedure.on(result)));
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> collection.forEach(0, -1, CollectionAddProcedure.on(result)));
-    }
-
-    @Override
-    @Test
     public void injectInto()
     {
         FastList<Integer> list = this.newWith(1, 2, 3);
@@ -207,15 +195,6 @@ public class FastListTest extends AbstractListTestCase
 
         MutableList<Integer> list = FastList.newList(Interval.oneTo(5));
         list.forEachWithIndex((object, index) -> Assert.assertEquals(index, object - 1));
-    }
-
-    @Override
-    @Test
-    public void forEachWithIndexWithFromTo()
-    {
-        MutableList<Integer> result = FastList.newList();
-        this.newWith(1, 2, 3).forEachWithIndex(1, 2, new AddToList(result));
-        Assert.assertEquals(this.newWith(2, 3), result);
     }
 
     @Test
@@ -1030,8 +1009,10 @@ public class FastListTest extends AbstractListTestCase
 
     @Override
     @Test
-    public void remove()
+    public void removeObject()
     {
+        super.removeObject();
+
         FastList<Integer> integers = this.newWith(1, 2, 3, 4);
         integers.remove(Integer.valueOf(1));
         Verify.assertStartsWith(integers, 2, 3, 4);

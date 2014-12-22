@@ -219,9 +219,9 @@ public class UnmodifiableSortedSetTest extends AbstractSortedSetTestCase
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
-    public void remove()
+    public void removeIf()
     {
-        super.remove();
+        super.removeIf();
     }
 
     @Override

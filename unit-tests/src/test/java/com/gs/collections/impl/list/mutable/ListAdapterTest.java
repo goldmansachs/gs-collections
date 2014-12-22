@@ -17,14 +17,9 @@
 package com.gs.collections.impl.list.mutable;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
-import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,12 +41,6 @@ public class ListAdapterTest extends AbstractListTestCase
         new ListAdapter<>(null);
     }
 
-    @Test
-    public void testAsSynchronized()
-    {
-        Verify.assertInstanceOf(SynchronizedMutableList.class, ListAdapter.adapt(Collections.singletonList("1")).asSynchronized());
-    }
-
     @Override
     @Test
     public void testClone()
@@ -62,21 +51,11 @@ public class ListAdapterTest extends AbstractListTestCase
     }
 
     @Test
-    public void testEqualsAndHashCode()
-    {
-        MutableList<Integer> list1 = this.newWith(1, 2, 3);
-        MutableList<Integer> list2 = this.newWith(1, 2, 3);
-        MutableList<Integer> list3 = this.newWith(2, 3, 4);
-        Assert.assertNotEquals(list1, null);
-        Verify.assertEqualsAndHashCode(list1, list1);
-        Verify.assertEqualsAndHashCode(list1, list2);
-        Assert.assertNotEquals(list2, list3);
-    }
-
-    @Test
     @Override
     public void subList()
     {
+        // Not serializable
+
         MutableList<String> list = this.newWith("A", "B", "C", "D");
         MutableList<String> sublist = list.subList(1, 3);
         Verify.assertEqualsAndHashCode(sublist, sublist);
@@ -101,97 +80,12 @@ public class ListAdapterTest extends AbstractListTestCase
         Verify.assertContainsAll(list, "A", "D");
     }
 
-    @Test
-    public void testNewListWithSize()
-    {
-        MutableList<Integer> collection = this.newWith(1, 2, 3);
-        Verify.assertContainsAll(collection, 1, 2, 3);
-    }
-
-    @Test
-    public void testSerialization()
-    {
-        MutableList<Integer> collection = this.newWith(1, 2, 3, 4, 5);
-        MutableList<Integer> deserializedCollection = SerializeTestHelper.serializeDeserialize(collection);
-        Verify.assertSize(5, deserializedCollection);
-        Verify.assertContainsAll(deserializedCollection, 1, 2, 3, 4, 5);
-        Assert.assertEquals(collection, deserializedCollection);
-    }
-
-    @Test
-    public void testForEachFromTo()
-    {
-        MutableList<Integer> result = FastList.newList();
-        MutableList<Integer> collection = new ListAdapter<>(this.newWith(1, 2, 3, 4));
-        collection.forEach(2, 3, CollectionAddProcedure.on(result));
-        Verify.assertSize(2, result);
-        Verify.assertContainsAll(result, 3, 4);
-    }
-
     @Override
     @Test
-    public void remove()
+    public void withMethods()
     {
-        MutableList<Integer> objects = this.newWith(1, 2, 3, null);
-        objects.removeIf(Predicates.isNull());
-        Verify.assertSize(3, objects);
-        Verify.assertContainsAll(objects, 1, 2, 3);
-    }
+        super.withMethods();
 
-    @Test
-    public void testRemoveIndex()
-    {
-        MutableList<Integer> objects = this.newWith(1, 2, 3);
-        objects.remove(2);
-        Verify.assertSize(2, objects);
-        Verify.assertContainsAll(objects, 1, 2);
-    }
-
-    @Test
-    public void testIndexOf()
-    {
-        MutableList<Integer> objects = this.newWith(1, 2, 3);
-        Assert.assertEquals(1, objects.indexOf(2));
-    }
-
-    @Test
-    public void testLastIndexOf()
-    {
-        MutableList<Integer> objects = this.newWith(1, 2, 3);
-        Assert.assertEquals(1, objects.lastIndexOf(2));
-    }
-
-    @Test
-    public void testSet()
-    {
-        MutableList<Integer> objects = this.newWith(1, 2, 3);
-        Assert.assertEquals(Integer.valueOf(2), objects.set(1, 4));
-        Verify.assertItemAtIndex(4, 1, objects);
-    }
-
-    @Test
-    public void testAddAtIndex()
-    {
-        MutableList<Integer> objects = this.newWith(1, 2, 3);
-        objects.add(0, 0);
-        Verify.assertSize(4, objects);
-        Verify.assertItemAtIndex(0, 0, objects);
-    }
-
-    @Test
-    public void testAddAllAtIndex()
-    {
-        MutableList<Integer> objects = this.newWith(1, 2, 3);
-        objects.addAll(0, Lists.fixedSize.of(0));
-        Verify.assertSize(4, objects);
-        Verify.assertItemAtIndex(0, 0, objects);
-    }
-
-    @Test
-    public void testWithMethods()
-    {
-        Verify.assertContainsAll(this.newWith(1), 1);
-        Verify.assertContainsAll(this.newWith(1).with(2), 1, 2);
         Verify.assertContainsAll(this.newWith(1).with(2, 3), 1, 2, 3);
         Verify.assertContainsAll(this.newWith(1).with(2, 3, 4), 1, 2, 3, 4);
         Verify.assertContainsAll(this.newWith(1).with(2, 3, 4, 5), 1, 2, 3, 4, 5);
@@ -199,23 +93,7 @@ public class ListAdapterTest extends AbstractListTestCase
 
     @Override
     @Test
-    public void newEmpty()
-    {
-        Verify.assertInstanceOf(MutableList.class, this.newWith().newEmpty());
-    }
-
-    @Test
-    public void testForEachWithIndexWithFromTo()
-    {
-        MutableList<Integer> result = Lists.mutable.of();
-        ListAdapter<Integer> integers = this.newWith();
-        integers.with(1, 2, 3).forEachWithIndex(1, 2, new AddToList(result));
-        Assert.assertEquals(FastList.newListWith(2, 3), result);
-    }
-
-    @Override
-    @Test
-    public void testGetWithArrayIndexOutOfBoundsException()
+    public void getWithArrayIndexOutOfBoundsException()
     {
         Object item = new Object();
 

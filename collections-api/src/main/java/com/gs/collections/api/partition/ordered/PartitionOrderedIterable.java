@@ -16,18 +16,19 @@
 
 package com.gs.collections.api.partition.ordered;
 
-import com.gs.collections.api.ordered.SortedIterable;
+import com.gs.collections.api.ordered.OrderedIterable;
+import com.gs.collections.api.partition.PartitionIterable;
 
 /**
- * A PartitionSortedIterable is the result of splitting a SortedIterable into two SortedIterables based on a Predicate.
+ * A PartitionOrderedIterable is the result of splitting a OrderedIterable into two OrderedIterables based on a Predicate.
  * The results that answer true for the Predicate will be returned from the getSelected() method and the results
  * that answer false for the predicate will be returned from the getRejected() method.
  *
- * @since 5.0
+ * @since 6.0
  */
-public interface PartitionSortedIterable<T> extends PartitionOrderedIterable<T>
+public interface PartitionOrderedIterable<T> extends PartitionIterable<T>
 {
-    SortedIterable<T> getSelected();
+    OrderedIterable<T> getSelected();
 
-    SortedIterable<T> getRejected();
+    OrderedIterable<T> getRejected();
 }

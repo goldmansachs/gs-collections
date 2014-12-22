@@ -223,7 +223,7 @@ public abstract class AbstractCollectionTestCase extends AbstractRichIterableTes
     }
 
     @Test
-    public void remove()
+    public void removeIf()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
         objects.add(null);

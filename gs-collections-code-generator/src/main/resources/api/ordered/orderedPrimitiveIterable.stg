@@ -6,7 +6,7 @@ import "primitiveLiteral.stg"
 
 targetPath() ::= "com/gs/collections/api/ordered/primitive"
 
-fileName(primitive) ::= "Reversible<primitive.name>Iterable"
+fileName(primitive) ::= "Ordered<primitive.name>Iterable"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
@@ -17,35 +17,32 @@ body(type, name) ::= <<
 
 package com.gs.collections.api.ordered.primitive;
 
+import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
-import com.gs.collections.api.ordered.ReversibleIterable;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
+import com.gs.collections.api.ordered.OrderedIterable;
 
 /**
- * This file was automatically generated from template file reversiblePrimitiveIterable.stg.
+ * This file was automatically generated from template file orderedPrimitiveIterable.stg.
  *
- * @since 5.0.
+ * @since 6.0.
  */
-public interface Reversible<name>Iterable extends Ordered<name>Iterable
+public interface Ordered<name>Iterable extends <name>Iterable
 {
-    <type> getLast();
+    <type> getFirst();
 
-    Lazy<name>Iterable asReversed();
+    int indexOf(<type> value);
 
     <sharedAPI(fileName(primitive), name)>
 
-    \<V> ReversibleIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
-
-    Reversible<name>Iterable toReversed();
-
-    /**
-     * @since 6.0.
-     */
-    Reversible<name>Iterable distinct();
+    \<V> OrderedIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
 
     \<T> T injectIntoWithIndex(T injectedValue, Object<name>IntToObjectFunction\<? super T, ? extends T> function);
+
+    void forEachWithIndex(<name>IntProcedure procedure);
 }
 
 >>

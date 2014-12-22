@@ -54,6 +54,7 @@ import com.gs.collections.impl.factory.primitive.FloatLists;
 import com.gs.collections.impl.factory.primitive.IntLists;
 import com.gs.collections.impl.factory.primitive.LongLists;
 import com.gs.collections.impl.factory.primitive.ShortLists;
+import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
@@ -229,16 +230,32 @@ public abstract class AbstractListTestCase
     @Test
     public void forEachFromTo()
     {
-        MutableList<Integer> result = Lists.mutable.of();
-        this.newWith(1, 2, 3, 4).forEach(2, 3, CollectionAddProcedure.on(result));
-        Assert.assertEquals(FastList.newListWith(3, 4), result);
+        MutableList<Integer> result = FastList.newList();
+        MutableList<Integer> collection = FastList.newListWith(1, 2, 3, 4);
+        collection.forEach(2, 3, result::add);
+        Assert.assertEquals(this.newWith(3, 4), result);
+
+        MutableList<Integer> result2 = FastList.newList();
+        collection.forEach(3, 2, CollectionAddProcedure.on(result2));
+        Assert.assertEquals(this.newWith(4, 3), result2);
+
+        MutableList<Integer> result3 = FastList.newList();
+        collection.forEach(0, 3, CollectionAddProcedure.on(result3));
+        Assert.assertEquals(this.newWith(1, 2, 3, 4), result3);
+
+        MutableList<Integer> result4 = FastList.newList();
+        collection.forEach(3, 0, CollectionAddProcedure.on(result4));
+        Assert.assertEquals(this.newWith(4, 3, 2, 1), result4);
+
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> collection.forEach(-1, 0, result::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> collection.forEach(0, -1, result::add));
     }
 
     @Test
     public void forEachFromToInReverse()
     {
         MutableList<Integer> result = Lists.mutable.of();
-        this.newWith(1, 2, 3, 4).forEach(3, 2, CollectionAddProcedure.on(result));
+        this.newWith(1, 2, 3, 4).forEach(3, 2, result::add);
         Assert.assertEquals(FastList.newListWith(4, 3), result);
     }
 
@@ -247,7 +264,7 @@ public abstract class AbstractListTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
-        collection.reverseForEach(CollectionAddProcedure.on(result));
+        collection.reverseForEach(result::add);
         Assert.assertEquals(FastList.newListWith(4, 3, 2, 1), result);
     }
 
@@ -256,7 +273,7 @@ public abstract class AbstractListTestCase
     {
         MutableList<Integer> integers = Lists.mutable.of();
         MutableList<Integer> results = Lists.mutable.of();
-        integers.reverseForEach(CollectionAddProcedure.on(results));
+        integers.reverseForEach(results::add);
         Assert.assertEquals(integers, results);
     }
 
@@ -289,7 +306,7 @@ public abstract class AbstractListTestCase
 
     @Override
     @Test
-    public void remove()
+    public void removeIf()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3, null);
         objects.removeIf(Predicates.isNull());
@@ -309,6 +326,8 @@ public abstract class AbstractListTestCase
     {
         MutableList<Integer> objects = this.newWith(1, 2, 2);
         Assert.assertEquals(1, objects.indexOf(2));
+        Assert.assertEquals(0, objects.indexOf(1));
+        Assert.assertEquals(-1, objects.indexOf(3));
     }
 
     @Test
@@ -316,6 +335,8 @@ public abstract class AbstractListTestCase
     {
         MutableList<Integer> objects = this.newWith(2, 2, 3);
         Assert.assertEquals(1, objects.lastIndexOf(2));
+        Assert.assertEquals(2, objects.lastIndexOf(3));
+        Assert.assertEquals(-1, objects.lastIndexOf(1));
     }
 
     @Test
@@ -350,6 +371,8 @@ public abstract class AbstractListTestCase
     public void withMethods()
     {
         Verify.assertContainsAll(this.newWith().with(1), 1);
+        Verify.assertContainsAll(this.newWith(1), 1);
+        Verify.assertContainsAll(this.newWith(1).with(2), 1, 2);
     }
 
     @Test
@@ -586,9 +609,31 @@ public abstract class AbstractListTestCase
     @Test
     public void forEachWithIndexWithFromTo()
     {
+        MutableList<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
+        StringBuilder builder = new StringBuilder();
+        integers.forEachWithIndex(5, 7, (each, index) -> builder.append(each).append(index));
+        Assert.assertEquals("353627", builder.toString());
+
+        StringBuilder builder2 = new StringBuilder();
+        integers.forEachWithIndex(5, 5, (each, index) -> builder2.append(each).append(index));
+        Assert.assertEquals("35", builder2.toString());
+
+        StringBuilder builder3 = new StringBuilder();
+        integers.forEachWithIndex(0, 9, (each, index) -> builder3.append(each).append(index));
+        Assert.assertEquals("40414243343536272819", builder3.toString());
+
+        StringBuilder builder4 = new StringBuilder();
+        integers.forEachWithIndex(7, 5, (each, index) -> builder4.append(each).append(index));
+        Assert.assertEquals("273635", builder4.toString());
+
+        StringBuilder builder5 = new StringBuilder();
+        integers.forEachWithIndex(9, 0, (each, index) -> builder5.append(each).append(index));
+        Assert.assertEquals("19282736353443424140", builder5.toString());
+
+
         MutableList<Integer> result = Lists.mutable.of();
-        this.newWith(1, 2, 3).forEachWithIndex(1, 2, new AddToList(result));
-        Assert.assertEquals(FastList.newListWith(2, 3), result);
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(-1, 0, new AddToList(result)));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(0, -1, new AddToList(result)));
     }
 
     @Test
@@ -736,7 +781,7 @@ public abstract class AbstractListTestCase
     }
 
     @Test
-    public void testGetWithIndexOutOfBoundsException()
+    public void getWithIndexOutOfBoundsException()
     {
         Object item = new Object();
 
@@ -744,7 +789,7 @@ public abstract class AbstractListTestCase
     }
 
     @Test
-    public void testGetWithArrayIndexOutOfBoundsException()
+    public void getWithArrayIndexOutOfBoundsException()
     {
         Object item = new Object();
 
@@ -896,6 +941,8 @@ public abstract class AbstractListTestCase
     @Test
     public void asReversed()
     {
+        Verify.assertInstanceOf(ReverseIterable.class, this.newWith().asReversed());
+
         Verify.assertIterablesEqual(iList(4, 3, 2, 1), this.newWith(1, 2, 3, 4).asReversed());
     }
 

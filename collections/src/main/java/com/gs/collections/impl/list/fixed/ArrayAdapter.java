@@ -27,7 +27,6 @@ import java.util.Comparator;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.FixedSizeList;
-import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.utility.Iterate;
 
@@ -187,9 +186,11 @@ public final class ArrayAdapter<T>
     }
 
     @Override
-    public MutableList<T> toReversed()
+    public FixedSizeList<T> toReversed()
     {
-        return this.clone().reverseThis();
+        ArrayAdapter<T> result = this.clone();
+        result.reverseThis();
+        return result;
     }
 
     private void writeObject(ObjectOutputStream objectOutputStream)

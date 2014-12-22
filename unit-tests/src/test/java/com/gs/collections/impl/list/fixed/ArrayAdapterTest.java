@@ -23,7 +23,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Twin;
@@ -34,10 +33,8 @@ import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.AbstractListTestCase;
-import com.gs.collections.impl.list.mutable.AddToList;
 import com.gs.collections.impl.list.mutable.ArrayListAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.list.mutable.SynchronizedMutableList;
 import com.gs.collections.impl.list.mutable.UnmodifiableMutableList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
@@ -77,20 +74,14 @@ public class ArrayAdapterTest extends AbstractListTestCase
     }
 
     @Test
-    public void testAsSynchronized()
-    {
-        Verify.assertInstanceOf(SynchronizedMutableList.class, ArrayAdapter.newArray().asSynchronized());
-    }
-
-    @Test
-    public void testAdapt()
+    public void adapt()
     {
         MutableList<Integer> collection = ArrayAdapter.newArrayWith();
         Verify.assertEmpty(collection);
     }
 
     @Test
-    public void testNewListWith()
+    public void newListWith()
     {
         MutableList<Integer> collection = ArrayAdapter.newArrayWith(1);
         Verify.assertNotEmpty(collection);
@@ -99,7 +90,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     }
 
     @Test
-    public void testNewListWithWith()
+    public void newListWithWith()
     {
         MutableList<Integer> collection = ArrayAdapter.newArrayWith(1, 2);
         Verify.assertNotEmpty(collection);
@@ -108,7 +99,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     }
 
     @Test
-    public void testNewListWithWithWith()
+    public void newListWithWithWith()
     {
         MutableList<Integer> collection = ArrayAdapter.newArrayWith(1, 2, 3);
         Verify.assertNotEmpty(collection);
@@ -117,7 +108,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     }
 
     @Test
-    public void testNewListWithVarArgs()
+    public void newListWithVarArgs()
     {
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
         Verify.assertNotEmpty(collection);
@@ -125,9 +116,12 @@ public class ArrayAdapterTest extends AbstractListTestCase
         Verify.assertContainsAll(collection, 1, 2, 3, 4);
     }
 
+    @Override
     @Test
-    public void testForEach()
+    public void forEach()
     {
+        super.forEach();
+
         List<Integer> result = new ArrayList<>();
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
         collection.forEach(CollectionAddProcedure.on(result));
@@ -135,19 +129,25 @@ public class ArrayAdapterTest extends AbstractListTestCase
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }
 
+    @Override
     @Test
-    public void testForEachFromTo()
+    public void forEachFromTo()
     {
+        super.forEachFromTo();
+
         MutableList<Integer> result = Lists.mutable.of();
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
-        collection.forEach(2, 3, CollectionAddProcedure.on(result));
+        collection.forEach(2, 3, result::add);
         Verify.assertSize(2, result);
         Verify.assertContainsAll(result, 3, 4);
     }
 
+    @Override
     @Test
-    public void testForEachWithIndex()
+    public void forEachWithIndex()
     {
+        super.forEachWithIndex();
+
         List<Integer> result = new ArrayList<>();
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
         collection.forEachWithIndex((object, index) -> result.add(object + index));
@@ -155,63 +155,57 @@ public class ArrayAdapterTest extends AbstractListTestCase
     }
 
     @Test
-    public void testAdd()
+    public void add()
     {
         MutableList<String> collection = ArrayAdapter.newArray();
         Verify.assertThrows(UnsupportedOperationException.class, () -> collection.add(null));
     }
 
+    @Override
     @Test
-    public void testAddAtIndex()
+    public void allSatisfy()
     {
-        MutableList<String> collection = ArrayAdapter.newArray();
-        Verify.assertThrows(UnsupportedOperationException.class, () -> collection.add(0, null));
-    }
+        super.allSatisfy();
 
-    @Test
-    public void testAddAll()
-    {
-        MutableList<String> collection = ArrayAdapter.newArray();
-        Verify.assertThrows(UnsupportedOperationException.class, () -> collection.addAll(Lists.fixedSize.of("")));
-    }
-
-    @Test
-    public void testAddAllAtIndex()
-    {
-        MutableList<String> collection = ArrayAdapter.newArray();
-        Verify.assertThrows(UnsupportedOperationException.class, () -> collection.addAll(0, Lists.fixedSize.of("")));
-    }
-
-    @Test
-    public void testAllSatisfy()
-    {
         Assert.assertTrue(this.newWith(1, 2, 3).allSatisfy(Integer.class::isInstance));
         Assert.assertFalse(this.newWith(1, 2, 3).allSatisfy(Integer.valueOf(1)::equals));
     }
 
+    @Override
     @Test
-    public void testAnySatisfy()
+    public void anySatisfy()
     {
+        super.anySatisfy();
+
         Assert.assertFalse(this.newWith(1, 2, 3).anySatisfy(String.class::isInstance));
         Assert.assertTrue(this.newWith(1, 2, 3).anySatisfy(Integer.class::isInstance));
     }
 
+    @Override
     @Test
-    public void testNoneSatisfy()
+    public void noneSatisfy()
     {
+        super.noneSatisfy();
+
         Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfy(String.class::isInstance));
         Assert.assertFalse(this.newWith(1, 2, 3).noneSatisfy(Integer.valueOf(1)::equals));
     }
 
+    @Override
     @Test
-    public void testCount()
+    public void count()
     {
+        super.count();
+
         Assert.assertEquals(3, this.newWith(1, 2, 3).count(Integer.class::isInstance));
     }
 
+    @Override
     @Test
-    public void testCollectIf()
+    public void collectIf()
     {
+        super.collectIf();
+
         Verify.assertContainsAll(this.newWith(1, 2, 3).collectIf(
                 Integer.class::isInstance,
                 String::valueOf), "1", "2", "3");
@@ -221,49 +215,43 @@ public class ArrayAdapterTest extends AbstractListTestCase
                 new ArrayList<>()), "1", "2", "3");
     }
 
+    @Override
     @Test
-    public void testGetFirst()
+    public void getFirst()
     {
+        super.getFirst();
+
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getFirst());
         Assert.assertNotEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getFirst());
     }
 
+    @Override
     @Test
-    public void testGetLast()
+    public void getLast()
     {
+        super.getLast();
+
         Assert.assertNotEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getLast());
     }
 
+    @Override
     @Test
-    public void testIsEmpty()
+    public void isEmpty()
     {
+        super.isEmpty();
+
         Verify.assertEmpty(this.newArray());
         Verify.assertNotEmpty(this.newWith(1, 2));
         Assert.assertTrue(this.newWith(1, 2).notEmpty());
     }
 
+    @Override
     @Test
-    public void testRemoveAll()
+    public void iterator()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newWith(1, 2, 3).removeAll(Lists.fixedSize.of(1, 2)));
-    }
+        super.iterator();
 
-    @Test
-    public void testRetainAll()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newWith(1, 2, 3).retainAll(Lists.fixedSize.of(1, 2)));
-    }
-
-    @Test
-    public void testClear()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newWith(1, 2, 3).clear());
-    }
-
-    @Test
-    public void testIterator()
-    {
         MutableList<Integer> objects = this.newWith(1, 2, 3);
         Iterator<Integer> iterator = objects.iterator();
         for (int i = objects.size(); i-- > 0; )
@@ -273,17 +261,23 @@ public class ArrayAdapterTest extends AbstractListTestCase
         }
     }
 
+    @Override
     @Test
-    public void testInjectInto()
+    public void injectInto()
     {
+        super.injectInto();
+
         MutableList<Integer> objects = this.newWith(1, 2, 3);
         Integer result = objects.injectInto(1, AddFunction.INTEGER);
         Assert.assertEquals(Integer.valueOf(7), result);
     }
 
+    @Override
     @Test
-    public void testToArray()
+    public void toArray()
     {
+        super.toArray();
+
         MutableList<Integer> objects = this.newWith(1, 2, 3);
         Object[] array = objects.toArray();
         Verify.assertSize(3, array);
@@ -297,64 +291,76 @@ public class ArrayAdapterTest extends AbstractListTestCase
         Assert.assertArrayEquals(expected, array3);
     }
 
+    @Override
     @Test
-    public void testRemoveObject()
+    public void selectAndRejectWith()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, () -> this.newWith(1, 2, 3).remove(3));
-    }
+        super.selectAndRejectWith();
 
-    @Test
-    public void testSelectAndRejectWith()
-    {
         MutableList<Integer> objects = this.newWith(1, 2);
         Twin<MutableList<Integer>> result = objects.selectAndRejectWith(Object::equals, 1);
         Verify.assertSize(1, result.getOne());
         Verify.assertSize(1, result.getTwo());
     }
 
+    @Override
     @Test
-    public void testRemove()
+    public void removeIf()
     {
         Verify.assertThrows(UnsupportedOperationException.class, () -> ArrayAdapter.newArrayWith(1, 2, 3, null).removeIf(Predicates.isNull()));
     }
 
+    @Override
     @Test
-    public void testRemoveAtIndex()
+    public void removeIndex()
     {
         Verify.assertThrows(UnsupportedOperationException.class, () -> ArrayAdapter.newArrayWith(1, 2, 3, null).remove(0));
     }
 
+    @Override
     @Test
-    public void testRemoveIfWith()
+    public void removeIfWith()
     {
         Verify.assertThrows(UnsupportedOperationException.class, () -> ArrayAdapter.newArrayWith(1, 2, 3, null).removeIfWith((each, ignored) -> each == null, null));
     }
 
+    @Override
     @Test
-    public void testIndexOf()
+    public void indexOf()
     {
+        super.indexOf();
+
         MutableList<Integer> objects = ArrayAdapter.newArrayWith(1, 2, 3);
         Assert.assertEquals(1, objects.indexOf(2));
     }
 
+    @Override
     @Test
-    public void testLastIndexOf()
+    public void lastIndexOf()
     {
+        super.lastIndexOf();
+
         MutableList<Integer> objects = ArrayAdapter.newArrayWith(1, 2, 3);
         Assert.assertEquals(1, objects.lastIndexOf(2));
     }
 
+    @Override
     @Test
-    public void testSet()
+    public void set()
     {
+        super.set();
+
         MutableList<Integer> objects = ArrayAdapter.newArrayWith(1, 2, 3);
         Assert.assertEquals(Integer.valueOf(2), objects.set(1, 4));
         Assert.assertEquals(FastList.newListWith(1, 4, 3), objects);
     }
 
+    @Override
     @Test
-    public void testEqualsAndHashCode()
+    public void equalsAndHashCode()
     {
+        super.equalsAndHashCode();
+
         ArrayAdapter<Integer> array1 = ArrayAdapter.newArrayWith(1, 2, 3, 4);
         ArrayAdapter<Integer> array2 = ArrayAdapter.newArrayWith(1, 2, 3, 4);
         ArrayAdapter<Integer> array3 = ArrayAdapter.newArrayWith(2, 3, 4);
@@ -370,9 +376,12 @@ public class ArrayAdapterTest extends AbstractListTestCase
         Assert.assertNotEquals(array1, new LinkedList<>(array4));
     }
 
+    @Override
     @Test
-    public void testForEachWith()
+    public void forEachWith()
     {
+        super.forEachWith();
+
         List<Integer> result = new ArrayList<>();
         MutableList<Integer> collection = ArrayAdapter.newArrayWith(1, 2, 3, 4);
         collection.forEachWith((argument1, argument2) -> result.add(argument1 + argument2), 0);
@@ -380,9 +389,12 @@ public class ArrayAdapterTest extends AbstractListTestCase
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }
 
+    @Override
     @Test
-    public void testSelectWith()
+    public void selectWith()
     {
+        super.selectWith();
+
         Verify.assertContainsAll(ArrayAdapter.newArrayWith(1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(),
                 3), 1, 2);
         Verify.denyContainsAny(ArrayAdapter.newArrayWith(-1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(),
@@ -392,9 +404,12 @@ public class ArrayAdapterTest extends AbstractListTestCase
                 UnifiedSet.<Integer>newSet()), 1, 2);
     }
 
+    @Override
     @Test
-    public void testRejectWith()
+    public void rejectWith()
     {
+        super.rejectWith();
+
         Verify.assertContainsAll(ArrayAdapter.newArrayWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(), 3),
                 3,
                 4);
@@ -420,42 +435,56 @@ public class ArrayAdapterTest extends AbstractListTestCase
         Assert.assertEquals(Integer.valueOf(10000), list.detectWithIfNone(Object::equals, 6, new PassThruFunction0<>(Integer.valueOf(10000))));
     }
 
+    @Override
     @Test
-    public void testAllSatisfyWith()
+    public void allSatisfyWith()
     {
+        super.allSatisfyWith();
+
         Assert.assertTrue(ArrayAdapter.newArrayWith(1, 2, 3).allSatisfyWith(Predicates2.instanceOf(),
                 Integer.class));
         Assert.assertFalse(ArrayAdapter.newArrayWith(1, 2, 3).allSatisfyWith(Object::equals, 1));
     }
 
+    @Override
     @Test
-    public void testAnySatisfyWith()
+    public void anySatisfyWith()
     {
+        super.anySatisfyWith();
         Assert.assertFalse(ArrayAdapter.newArrayWith(1, 2, 3).anySatisfyWith(Predicates2.instanceOf(),
                 String.class));
         Assert.assertTrue(ArrayAdapter.newArrayWith(1, 2, 3).anySatisfyWith(Predicates2.instanceOf(),
                 Integer.class));
     }
 
+    @Override
     @Test
-    public void testNoneSatisfyWith()
+    public void noneSatisfyWith()
     {
+        super.noneSatisfyWith();
+
         Assert.assertTrue(ArrayAdapter.newArrayWith(1, 2, 3).noneSatisfyWith(Predicates2.instanceOf(),
                 String.class));
         Assert.assertFalse(ArrayAdapter.newArrayWith(1, 2, 3).noneSatisfyWith(Object::equals, 1));
     }
 
+    @Override
     @Test
-    public void testCountWith()
+    public void countWith()
     {
+        super.countWith();
+
         Assert.assertEquals(
                 3,
                 ArrayAdapter.newArrayWith(1, 2, 3).countWith(Predicates2.instanceOf(), Integer.class));
     }
 
+    @Override
     @Test
-    public void testCollectWith()
+    public void collectWith()
     {
+        super.collectWith();
+
         Function2<Integer, Integer, Integer> addBlock = (each, parameter) -> each + parameter;
         Assert.assertEquals(
                 FastList.newListWith(2, 3, 4),
@@ -465,17 +494,23 @@ public class ArrayAdapterTest extends AbstractListTestCase
                 ArrayAdapter.newArrayWith(1, 2, 3).collectWith(addBlock, 1, FastList.<Integer>newList()));
     }
 
+    @Override
     @Test
-    public void testInjectIntoWith()
+    public void injectIntoWith()
     {
+        super.injectIntoWith();
+
         MutableList<Integer> objects = ArrayAdapter.newArrayWith(1, 2, 3);
         Integer result = objects.injectIntoWith(1, (injectedValued, item, parameter) -> injectedValued + item + parameter, 0);
         Assert.assertEquals(Integer.valueOf(7), result);
     }
 
+    @Override
     @Test
-    public void testSerialization()
+    public void serialization()
     {
+        super.serialization();
+
         MutableList<Integer> collection = ArrayAdapter.newArrayWith(1, 2, 3, 4, 5);
         MutableList<Integer> deserializedCollection = SerializeTestHelper.serializeDeserialize(collection);
         Verify.assertSize(5, deserializedCollection);
@@ -502,6 +537,8 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testToString()
     {
+        // ArrayAdapter doesn't support add and cannot contain itself
+
         Assert.assertEquals(
                 FastList.newList(this.newWith(1, 2, 3, 4)).toString(),
                 this.newWith(1, 2, 3, 4).toString());
@@ -511,6 +548,8 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void makeString()
     {
+        // ArrayAdapter doesn't support add and cannot contain itself
+
         Assert.assertEquals(
                 FastList.newList(this.newWith(1, 2, 3, 4)).makeString(),
                 this.newWith(1, 2, 3, 4).makeString());
@@ -520,6 +559,8 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void appendString()
     {
+        // ArrayAdapter doesn't support add and cannot contain itself
+
         StringBuilder stringBuilder = new StringBuilder();
         this.newWith(1, 2, 3, 4).appendString(stringBuilder);
 
@@ -528,26 +569,14 @@ public class ArrayAdapterTest extends AbstractListTestCase
                 stringBuilder.toString());
     }
 
-    @Override
-    @Test
-    public void asSynchronized()
-    {
-        Verify.assertInstanceOf(SynchronizedMutableList.class, this.newWith().asSynchronized());
-    }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableMutableList.class, this.newWith().asUnmodifiable());
-    }
+        super.asUnmodifiable();
 
-    @Test
-    public void testForEachWithIndexWithFromTo()
-    {
-        MutableList<Integer> result = Lists.mutable.of();
-        this.newWith(1, 2, 3).forEachWithIndex(1, 2, new AddToList(result));
-        Assert.assertEquals(FastList.newListWith(2, 3), result);
+        Verify.assertInstanceOf(UnmodifiableMutableList.class, this.newWith().asUnmodifiable());
     }
 
     @Override
@@ -590,27 +619,6 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void removeObject()
     {
         this.newArray().remove(null);
-    }
-
-    @Override
-    @Test(expected = UnsupportedOperationException.class)
-    public void removeIndex()
-    {
-        this.newArray().remove(0);
-    }
-
-    @Override
-    @Test(expected = UnsupportedOperationException.class)
-    public void remove()
-    {
-        this.newArray().removeIf((Predicate<Integer>) ignored -> false);
-    }
-
-    @Override
-    @Test(expected = UnsupportedOperationException.class)
-    public void removeIfWith()
-    {
-        this.newArray().removeIfWith((ignored1, ignored2) -> false, null);
     }
 
     @Override

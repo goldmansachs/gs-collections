@@ -57,6 +57,7 @@ import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
@@ -105,7 +106,10 @@ public interface
      * this method, the first element could be any element from the Set.
      *
      * @since 1.0
+     *
+     * @deprecated in 6.0. Use {@link OrderedIterable#getFirst()} instead.
      */
+    @Deprecated
     T getFirst();
 
     /**
@@ -118,7 +122,10 @@ public interface
      * this method, the last element could be any element from the Set.
      *
      * @since 1.0
+     *
+     * @deprecated in 6.0. Use {@link OrderedIterable#getLast()} instead.
      */
+    @Deprecated
     T getLast();
 
     /**
@@ -1432,14 +1439,20 @@ public interface
      * RichIterable} and that. The length of the returned {@code RichIterable} is the minimum of the lengths of
      * this {@code RichIterable} and that.
      * @since 1.0
+     *
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
      */
+    @Deprecated
     <S> RichIterable<Pair<T, S>> zip(Iterable<S> that);
 
     /**
      * Same as {@link #zip(Iterable)} but uses {@code target} for output.
      *
      * @since 1.0
+     *
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable, Collection)} instead;
      */
+    @Deprecated
     <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target);
 
     /**
@@ -1449,14 +1462,20 @@ public interface
      * paired with their index. Indices start at 0.
      * @see #zip(Iterable)
      * @since 1.0
+     *
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
      */
+    @Deprecated
     RichIterable<Pair<T, Integer>> zipWithIndex();
 
     /**
      * Same as {@link #zipWithIndex()} but uses {@code target} for output.
      *
      * @since 1.0
+     *
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex(Collection)} instead.
      */
+    @Deprecated
     <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target);
 
     /**

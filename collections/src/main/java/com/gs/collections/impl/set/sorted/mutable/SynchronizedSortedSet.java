@@ -38,6 +38,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -425,6 +426,14 @@ public class SynchronizedSortedSet<T>
         }
     }
 
+    public int indexOf(Object object)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getSortedSet().indexOf(object);
+        }
+    }
+
     public MutableSortedSet<T> takeWhile(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
@@ -446,6 +455,22 @@ public class SynchronizedSortedSet<T>
         synchronized (this.getLock())
         {
             return this.getSortedSet().distinct();
+        }
+    }
+
+    public void forEach(int startIndex, int endIndex, Procedure<? super T> procedure)
+    {
+        synchronized (this.getLock())
+        {
+            this.getSortedSet().forEach(startIndex, endIndex, procedure);
+        }
+    }
+
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
+    {
+        synchronized (this.getLock())
+        {
+            this.getSortedSet().forEachWithIndex(fromIndex, toIndex, objectIntProcedure);
         }
     }
 

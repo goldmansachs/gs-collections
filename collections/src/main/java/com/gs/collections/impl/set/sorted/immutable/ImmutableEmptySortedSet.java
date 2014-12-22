@@ -36,6 +36,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.EmptyIterator;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
+import com.gs.collections.impl.utility.ListIterate;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -49,6 +50,7 @@ final class ImmutableEmptySortedSet<T>
     static final ImmutableSortedSet<?> INSTANCE = new ImmutableEmptySortedSet<Object>();
 
     private static final long serialVersionUID = 2L;
+
     private final Comparator<? super T> comparator;
 
     ImmutableEmptySortedSet()
@@ -135,9 +137,19 @@ final class ImmutableEmptySortedSet<T>
     {
     }
 
+    public void forEach(int startIndex, int endIndex, Procedure<? super T> procedure)
+    {
+        ListIterate.rangeCheck(startIndex, endIndex, 0);
+    }
+
     @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
+    }
+
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
+    {
+        ListIterate.rangeCheck(fromIndex, toIndex, 0);
     }
 
     @Override
@@ -242,6 +254,11 @@ final class ImmutableEmptySortedSet<T>
     public T last()
     {
         throw new NoSuchElementException();
+    }
+
+    public int indexOf(Object object)
+    {
+        return -1;
     }
 
     public Comparator<? super T> comparator()

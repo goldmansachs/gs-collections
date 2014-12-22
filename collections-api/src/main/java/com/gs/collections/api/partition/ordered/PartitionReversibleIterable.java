@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.gs.collections.api.partition.ordered;
 
 import com.gs.collections.api.ordered.ReversibleIterable;
-import com.gs.collections.api.partition.PartitionIterable;
 
 /**
  * A PartitionReversibleIterable is the result of splitting a ReversibleIterable into two ReversibleIterables based on a Predicate.
@@ -26,7 +25,7 @@ import com.gs.collections.api.partition.PartitionIterable;
  *
  * @since 5.0
  */
-public interface PartitionReversibleIterable<T> extends PartitionIterable<T>
+public interface PartitionReversibleIterable<T> extends PartitionOrderedIterable<T>
 {
     ReversibleIterable<T> getSelected();
 

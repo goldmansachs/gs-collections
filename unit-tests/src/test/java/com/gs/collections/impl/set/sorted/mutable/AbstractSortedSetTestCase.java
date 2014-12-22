@@ -44,8 +44,10 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.AddToList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -130,7 +132,7 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
 
     @Override
     @Test
-    public void remove()
+    public void removeIf()
     {
         MutableSortedSet<Integer> objects = this.newWith(4, 1, 3, 2);
         objects.removeIf(Predicates.equal(2));
@@ -584,7 +586,7 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
     }
 
     @Test
-    public void testFirstLast()
+    public void firstLast()
     {
         MutableSortedSet<Integer> set = this.newWith(1, 2, 3, 4, 5);
         Assert.assertEquals(Integer.valueOf(1), set.first());
@@ -745,5 +747,66 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
     public void max_null_safe()
     {
         super.max_null_safe();
+    }
+
+    @Test
+    public void forEachWithIndexWithFromTo()
+    {
+        MutableSortedSet<Integer> integers = this.newWith(Comparators.reverseNaturalOrder(), 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
+        StringBuilder builder = new StringBuilder();
+        integers.forEachWithIndex(5, 7, (each, index) -> builder.append(each).append(index));
+        Assert.assertEquals("453627", builder.toString());
+
+        StringBuilder builder2 = new StringBuilder();
+        integers.forEachWithIndex(5, 5, (each, index) -> builder2.append(each).append(index));
+        Assert.assertEquals("45", builder2.toString());
+
+        StringBuilder builder3 = new StringBuilder();
+        integers.forEachWithIndex(0, 9, (each, index) -> builder3.append(each).append(index));
+        Assert.assertEquals("90817263544536271809", builder3.toString());
+
+        MutableList<Integer> result = Lists.mutable.of();
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(-1, 0, new AddToList(result)));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(0, -1, new AddToList(result)));
+        Verify.assertThrows(IllegalArgumentException.class, () -> integers.forEachWithIndex(7, 5, new AddToList(result)));
+    }
+
+    @Test
+    public void forEachWithIndexOnRange()
+    {
+        MutableSortedSet<Integer> set = this.newWith(Comparators.reverseNaturalOrder(), 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
+
+        this.validateForEachWithIndexOnRange(set, 0, 0, SortedSets.mutable.with(Comparators.reverseNaturalOrder(), 9));
+        this.validateForEachWithIndexOnRange(set, 3, 5, SortedSets.mutable.with(Comparators.reverseNaturalOrder(), 6, 5, 4));
+        this.validateForEachWithIndexOnRange(set, 9, 9, SortedSets.mutable.with(Comparators.reverseNaturalOrder(), 0));
+        this.validateForEachWithIndexOnRange(set, 0, 9, SortedSets.mutable.with(Comparators.reverseNaturalOrder(), 9, 8, 7, 6, 5, 4, 3, 2, 1, 0));
+        Verify.assertThrows(
+                IndexOutOfBoundsException.class,
+                () -> this.validateForEachWithIndexOnRange(set, 10, 10, SortedSets.mutable.with(Comparators.reverseNaturalOrder())));
+
+        Verify.assertThrows(
+                IllegalArgumentException.class,
+                () -> this.validateForEachWithIndexOnRange(set, 9, 0, SortedSets.mutable.with(Comparators.reverseNaturalOrder(), 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)));
+    }
+
+    protected void validateForEachWithIndexOnRange(
+            MutableSortedSet<Integer> set,
+            int from,
+            int to,
+            MutableSortedSet<Integer> expectedOutput)
+    {
+        MutableSortedSet<Integer> outputSet = SortedSets.mutable.of(Comparators.reverseNaturalOrder());
+        set.forEach(from, to, outputSet::add);
+        Verify.assertSortedSetsEqual(expectedOutput, outputSet);
+    }
+
+    @Test
+    public void indexOf()
+    {
+        MutableSortedSet<Integer> objects = this.newWith(Comparators.reverseNaturalOrder(), 3, 2, 1);
+        Assert.assertEquals(0, objects.indexOf(3));
+        Assert.assertEquals(1, objects.indexOf(2));
+        Assert.assertEquals(2, objects.indexOf(1));
+        Assert.assertEquals(-1, objects.indexOf(0));
     }
 }

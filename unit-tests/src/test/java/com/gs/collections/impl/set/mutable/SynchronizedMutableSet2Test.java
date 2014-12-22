@@ -80,7 +80,7 @@ public class SynchronizedMutableSet2Test extends AbstractMutableSetTestCase
 
     @Override
     @Test
-    public void remove()
+    public void removeIf()
     {
         MutableSet<Integer> integers = this.newWith(1, 2, 3, 4);
         integers.remove(3);

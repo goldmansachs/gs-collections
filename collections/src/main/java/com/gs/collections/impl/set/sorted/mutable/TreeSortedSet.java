@@ -43,6 +43,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -98,6 +99,7 @@ import com.gs.collections.impl.partition.set.sorted.PartitionTreeSortedSet;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.ListIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 import com.gs.collections.impl.utility.internal.SetIterables;
 import com.gs.collections.impl.utility.internal.SetIterate;
@@ -523,6 +525,56 @@ public class TreeSortedSet<T> extends AbstractMutableCollection<T>
         return TreeSortedSet.newSet(this);
     }
 
+    public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
+    {
+        ListIterate.rangeCheck(fromIndex, toIndex, this.size());
+
+        if (fromIndex > toIndex)
+        {
+            throw new IllegalArgumentException("fromIndex must not be greater than toIndex");
+        }
+
+        Iterator<T> iterator = this.iterator();
+        int i = 0;
+        while (iterator.hasNext())
+        {
+            if (i < fromIndex)
+            {
+                iterator.next();
+            }
+            if (i >= fromIndex && i <= toIndex)
+            {
+                procedure.value(iterator.next());
+            }
+            i++;
+        }
+    }
+
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
+    {
+        ListIterate.rangeCheck(fromIndex, toIndex, this.size());
+
+        if (fromIndex > toIndex)
+        {
+            throw new IllegalArgumentException("fromIndex must not be greater than toIndex");
+        }
+
+        Iterator<T> iterator = this.iterator();
+        int i = 0;
+        while (iterator.hasNext())
+        {
+            if (i < fromIndex)
+            {
+                iterator.next();
+            }
+            if (i >= fromIndex && i <= toIndex)
+            {
+                objectIntProcedure.value(iterator.next(), i);
+            }
+            i++;
+        }
+    }
+
     @Override
     public boolean removeAllIterable(Iterable<?> iterable)
     {
@@ -557,6 +609,15 @@ public class TreeSortedSet<T> extends AbstractMutableCollection<T>
     public T last()
     {
         return this.treeSet.last();
+    }
+
+    public int indexOf(Object object)
+    {
+        if (this.treeSet.contains(object))
+        {
+            return this.treeSet.headSet((T) object).size();
+        }
+        return -1;
     }
 
     public T getFirst()

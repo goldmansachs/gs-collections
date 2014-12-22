@@ -152,16 +152,16 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
     }
 
     @Test
-    public void testForEachFromTo()
+    public void forEachFromTo()
     {
         MutableList<String> result = Lists.mutable.of();
         MutableList<String> source = Lists.fixedSize.of("1", "2", "3");
-        source.forEach(0, 2, CollectionAddProcedure.on(result));
+        source.forEach(0, 2, result::add);
         Assert.assertEquals(FastList.newListWith("1", "2", "3"), result);
     }
 
     @Test
-    public void testForEachWithIndex()
+    public void forEachWithIndex()
     {
         int[] indexSum = new int[1];
         MutableList<String> result = Lists.mutable.of();
@@ -175,7 +175,7 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
     }
 
     @Test
-    public void testForEachWithIndexFromTo()
+    public void forEachWithIndexFromTo()
     {
         int[] indexSum = new int[1];
         MutableList<String> result = Lists.mutable.of();
@@ -193,7 +193,7 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
     {
         MutableList<String> result = Lists.mutable.of();
         MutableList<String> source = Lists.fixedSize.of("1", "2", "3");
-        source.forEachWith(Procedures2.fromProcedure(CollectionAddProcedure.on(result)), null);
+        source.forEachWith(Procedures2.fromProcedure(result::add), null);
         Assert.assertEquals(FastList.newListWith("1", "2", "3"), result);
     }
 
@@ -296,7 +296,7 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
     }
 
     @Test
-    public void testSubListForEach()
+    public void subListForEach()
     {
         MutableList<String> list = Lists.fixedSize.of("1", "2", "3");
         MutableList<String> source = list.subList(1, 3);
@@ -326,7 +326,7 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
         MutableList<String> list = Lists.fixedSize.of("1", "2", "3");
         MutableList<String> source = list.subList(1, 3);
         MutableList<String> result = Lists.mutable.of();
-        source.forEachWith(Procedures2.fromProcedure(CollectionAddProcedure.on(result)), null);
+        source.forEachWith(Procedures2.fromProcedure(result::add), null);
         Assert.assertEquals(FastList.newListWith("2", "3"), result);
     }
 

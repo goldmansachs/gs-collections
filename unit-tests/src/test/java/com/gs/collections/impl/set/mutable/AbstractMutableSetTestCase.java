@@ -369,9 +369,9 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
 
     @Override
     @Test
-    public void remove()
+    public void removeIf()
     {
-        super.remove();
+        super.removeIf();
 
         MutableSet<IntegerWithCast> set = this.newWith();
         MutableList<IntegerWithCast> collisions = COLLISIONS.collect(IntegerWithCast::new);

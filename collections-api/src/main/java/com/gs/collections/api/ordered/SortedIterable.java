@@ -19,7 +19,6 @@ package com.gs.collections.api.ordered;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -37,7 +36,7 @@ import com.gs.collections.api.tuple.Pair;
  *
  * @since 5.0
  */
-public interface SortedIterable<T> extends RichIterable<T>
+public interface SortedIterable<T> extends OrderedIterable<T>
 {
     /**
      * Returns the comparator used to order the elements in this container, or null if this container uses the natural

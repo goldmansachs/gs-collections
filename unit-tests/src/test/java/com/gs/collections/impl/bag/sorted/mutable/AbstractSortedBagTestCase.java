@@ -52,6 +52,7 @@ import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.AddToList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
@@ -94,7 +95,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     }
 
     @Test(expected = ClassCastException.class)
-    public void testToString_with_collection_containing_self()
+    public void toString_with_collection_containing_self()
     {
         MutableCollection<Object> collection = this.newWith(1);
         collection.add(collection);
@@ -130,7 +131,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.addAll();
 
         TreeBag<Integer> expected = TreeBag.newBag(Comparators.reverseNaturalOrder(), FastList.newListWith(1, 1, 2, 3));
-        MutableSortedBag<Integer> collection = this.newWith(Comparators.reverseNaturalOrder());
+        MutableSortedBag<Integer> collection = this.newWith(Comparators.<Integer>reverseNaturalOrder());
 
         Assert.assertTrue(collection.addAll(FastList.newListWith(3, 2, 1, 1)));
         Verify.assertSortedBagsEqual(expected, collection);
@@ -143,7 +144,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.addAllIterable();
 
         TreeBag<Integer> expected = TreeBag.newBag(Collections.reverseOrder(), FastList.newListWith(2, 1, 2, 3));
-        MutableSortedBag<Integer> collection = this.newWith(Collections.reverseOrder());
+        MutableSortedBag<Integer> collection = this.newWith(Collections.<Integer>reverseOrder());
 
         Assert.assertTrue(collection.addAllIterable(FastList.newListWith(3, 2, 1, 2)));
         Verify.assertSortedBagsEqual(expected, collection);
@@ -233,8 +234,10 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 
     @Override
     @Test
-    public void remove()
+    public void removeObject()
     {
+        super.removeObject();
+
         MutableSortedBag<String> bag = this.newWith(Collections.reverseOrder(), "5", "1", "2", "2", "3");
         Assert.assertFalse(bag.remove("7"));
         Assert.assertTrue(bag.remove("1"));
@@ -243,9 +246,12 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Collections.reverseOrder(), "5", "3", "2"), bag);
     }
 
+    @Override
     @Test
     public void removeIf()
     {
+        // Sorted containers don't support null
+
         MutableSortedBag<Integer> objects = this.newWith(Comparators.reverseNaturalOrder(), 4, 1, 3, 3, 2);
         objects.removeIf(Predicates.equal(2));
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 3, 3, 4), objects);
@@ -582,7 +588,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     @Override
     public void selectInstancesOf()
     {
-        MutableSortedBag<Number> numbers = this.<Number>newWith((o1, o2) -> Double.compare(o2.doubleValue(), o1.doubleValue()), 5, 4.0, 3, 2.0, 1, 1);
+        MutableSortedBag<Number> numbers = this.<Number>newWith((Number o1, Number o2) -> Double.compare(o2.doubleValue(), o1.doubleValue()), 5, 4.0, 3, 2.0, 1, 1);
         MutableSortedBag<Integer> integers = numbers.selectInstancesOf(Integer.class);
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.<Integer>reverseNaturalOrder(), 5, 3, 1, 1), integers);
     }
@@ -727,6 +733,50 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     }
 
     @Test
+    public void forEachFromTo()
+    {
+        MutableSortedBag<Integer> integers = this.newWith(Comparators.reverseNaturalOrder(), 4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
+
+        MutableList<Integer> result = Lists.mutable.empty();
+        integers.forEach(5, 7, result::add);
+        Assert.assertEquals(Lists.immutable.with(3, 3, 2), result);
+
+        MutableList<Integer> result2 = Lists.mutable.empty();
+        integers.forEach(5, 5, result2::add);
+        Assert.assertEquals(Lists.immutable.with(3), result2);
+
+        MutableList<Integer> result3 = Lists.mutable.empty();
+        integers.forEach(0, 9, result3::add);
+        Assert.assertEquals(Lists.immutable.with(4, 4, 4, 4, 3, 3, 3, 2, 2, 1), result3);
+
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(-1, 0, result::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(0, -1, result::add));
+        Verify.assertThrows(IllegalArgumentException.class, () -> integers.forEach(7, 5, result::add));
+    }
+
+    @Test
+    public void forEachWithIndexWithFromTo()
+    {
+        MutableSortedBag<Integer> integers = this.newWith(Comparators.reverseNaturalOrder(), 4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
+        StringBuilder builder = new StringBuilder();
+        integers.forEachWithIndex(5, 7, (each, index) -> builder.append(each).append(index));
+        Assert.assertEquals("353627", builder.toString());
+
+        StringBuilder builder2 = new StringBuilder();
+        integers.forEachWithIndex(5, 5, (each, index) -> builder2.append(each).append(index));
+        Assert.assertEquals("35", builder2.toString());
+
+        StringBuilder builder3 = new StringBuilder();
+        integers.forEachWithIndex(0, 9, (each, index) -> builder3.append(each).append(index));
+        Assert.assertEquals("40414243343536272819", builder3.toString());
+
+        MutableList<Integer> result = Lists.mutable.of();
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(-1, 0, new AddToList(result)));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(0, -1, new AddToList(result)));
+        Verify.assertThrows(IllegalArgumentException.class, () -> integers.forEachWithIndex(7, 5, new AddToList(result)));
+    }
+
+    @Test
     public void forEachWithOccurrences()
     {
         MutableSortedBag<Integer> bag = this.newWith(Collections.reverseOrder(), 3, 3, 3, 2, 2, 1);
@@ -785,6 +835,17 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     }
 
     @Test
+    public void indexOf()
+    {
+        MutableSortedBag<Integer> integers = this.newWith(Comparators.reverseNaturalOrder(), 4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
+        Assert.assertEquals(0, integers.indexOf(4));
+        Assert.assertEquals(4, integers.indexOf(3));
+        Assert.assertEquals(7, integers.indexOf(2));
+        Assert.assertEquals(9, integers.indexOf(1));
+        Assert.assertEquals(-1, integers.indexOf(0));
+    }
+
+    @Test
     public void occurrencesOf()
     {
         MutableSortedBag<Integer> bag = this.newWith(Collections.reverseOrder(), 1, 1, 2);
@@ -804,7 +865,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         bag.addOccurrences(1, 2);
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(0, 0, 0, 0, 0, 0, 1, 1, 1, 1), bag);
 
-        MutableSortedBag<Integer> revBag = this.newWith(Collections.reverseOrder());
+        MutableSortedBag<Integer> revBag = this.newWith(Collections.<Integer>reverseOrder());
         revBag.addOccurrences(2, 3);
         revBag.addOccurrences(3, 2);
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Collections.reverseOrder(), 3, 3, 2, 2, 2), revBag);

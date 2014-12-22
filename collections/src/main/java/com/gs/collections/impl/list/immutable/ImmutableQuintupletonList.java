@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,6 +90,12 @@ final class ImmutableQuintupletonList<T>
 
     public ImmutableList<T> newWith(T newItem)
     {
-        return Lists.immutable.of(this.get(0), this.get(1), this.get(2), this.get(3), this.get(4), newItem);
+        return Lists.immutable.of(
+                this.element1,
+                this.element2,
+                this.element3,
+                this.element4,
+                this.element5,
+                newItem);
     }
 }

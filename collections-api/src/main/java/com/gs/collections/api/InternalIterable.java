@@ -19,6 +19,7 @@ package com.gs.collections.api;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.ordered.OrderedIterable;
 
 /**
  * The base interface for all GS Collections.  All GS Collections are internally iterable, and this interface provides
@@ -60,7 +61,10 @@ public interface InternalIterable<T>
      *     }
      * });
      * </pre>
+     *
+     * @deprecated in 6.0. Use {@link OrderedIterable#forEachWithIndex(ObjectIntProcedure)} instead.
      */
+    @Deprecated
     void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure);
 
     /**

@@ -22,30 +22,26 @@ import java.util.List;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.MaxSizeFunction;
 import com.gs.collections.impl.block.function.MinSizeFunction;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.DoNothingProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.AddToList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
-import com.gs.collections.impl.utility.ListIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -53,13 +49,13 @@ import static com.gs.collections.impl.factory.Iterables.*;
 
 public class RandomAccessListIterateTest
 {
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void forEachWithNegativeFroms()
     {
         RandomAccessListIterate.forEach(FastList.newList(), -1, 1, DoNothingProcedure.DO_NOTHING);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = IndexOutOfBoundsException.class)
     public void forEachWithNegativeTos()
     {
         RandomAccessListIterate.forEach(FastList.newList(), 1, -1, DoNothingProcedure.DO_NOTHING);
@@ -212,57 +208,54 @@ public class RandomAccessListIterateTest
     }
 
     @Test
-    public void forEachUsingFromTo()
+    public void forEachFromTo()
     {
-        MutableList<Integer> integers = Interval.oneTo(5).toList();
+        MutableList<Integer> integers = Lists.mutable.with(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
 
-        this.assertForEachUsingFromTo(integers);
-        MutableList<Integer> reverseResults = Lists.mutable.of();
-        this.assertReverseForEachUsingFromTo(integers, reverseResults, reverseResults::add);
-    }
+        MutableList<Integer> result = Lists.mutable.empty();
+        RandomAccessListIterate.forEach(integers, 5, 7, result::add);
+        Assert.assertEquals(Lists.immutable.with(3, 3, 2), result);
 
-    private void assertForEachUsingFromTo(List<Integer> integers)
-    {
-        MutableList<Integer> results = Lists.mutable.of();
-        RandomAccessListIterate.forEach(integers, 0, 4, results::add);
-        Assert.assertEquals(integers, results);
-        MutableList<Integer> reverseResults = Lists.mutable.of();
+        MutableList<Integer> result2 = Lists.mutable.empty();
+        RandomAccessListIterate.forEach(integers, 5, 5, result2::add);
+        Assert.assertEquals(Lists.immutable.with(3), result2);
 
-        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEach(integers, 4, -1, reverseResults::add));
-        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEach(integers, -1, 4, reverseResults::add));
-    }
+        MutableList<Integer> result3 = Lists.mutable.empty();
+        RandomAccessListIterate.forEach(integers, 0, 9, result3::add);
+        Assert.assertEquals(Lists.immutable.with(4, 4, 4, 4, 3, 3, 3, 2, 2, 1), result3);
 
-    private void assertReverseForEachUsingFromTo(List<Integer> integers, MutableList<Integer> reverseResults, Procedure<Integer> procedure)
-    {
-        RandomAccessListIterate.forEach(integers, 4, 0, procedure);
-        Assert.assertEquals(ListIterate.reverseThis(integers), reverseResults);
+        MutableList<Integer> result4 = Lists.mutable.empty();
+        RandomAccessListIterate.forEach(integers, 7, 5, result4::add);
+        Assert.assertEquals(Lists.immutable.with(2, 3, 3), result4);
+
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> RandomAccessListIterate.forEach(integers, -1, 0, result::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> RandomAccessListIterate.forEach(integers, 0, -1, result::add));
     }
 
     @Test
-    public void forEachWithIndexUsingFromTo()
+    public void forEachWithIndexWithFromTo()
     {
-        MutableList<Integer> integers = Interval.oneTo(5).toList();
-        this.assertForEachWithIndexUsingFromTo(integers);
-        MutableList<Integer> reverseResults = Lists.mutable.of();
-        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
-        this.assertReverseForEachIndexUsingFromTo(integers, reverseResults, objectIntProcedure);
-    }
+        MutableList<Integer> integers = Lists.mutable.with(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
 
-    private void assertForEachWithIndexUsingFromTo(List<Integer> integers)
-    {
-        MutableList<Integer> results = Lists.mutable.of();
-        RandomAccessListIterate.forEachWithIndex(integers, 0, 4, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(results)));
-        Assert.assertEquals(integers, results);
-        MutableList<Integer> reverseResults = Lists.mutable.of();
-        ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResults));
-        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEachWithIndex(integers, 4, -1, objectIntProcedure));
-        Verify.assertThrows(IllegalArgumentException.class, () -> RandomAccessListIterate.forEachWithIndex(integers, -1, 4, objectIntProcedure));
-    }
+        StringBuilder builder = new StringBuilder();
+        RandomAccessListIterate.forEachWithIndex(integers, 5, 7, (each, index) -> builder.append(each).append(index));
+        Assert.assertEquals("353627", builder.toString());
 
-    private void assertReverseForEachIndexUsingFromTo(MutableList<Integer> integers, MutableList<Integer> reverseResults, ObjectIntProcedure<Integer> objectIntProcedure)
-    {
-        RandomAccessListIterate.forEachWithIndex(integers, 4, 0, objectIntProcedure);
-        Assert.assertEquals(ListIterate.reverseThis(integers), reverseResults);
+        StringBuilder builder2 = new StringBuilder();
+        RandomAccessListIterate.forEachWithIndex(integers, 5, 5, (each, index) -> builder2.append(each).append(index));
+        Assert.assertEquals("35", builder2.toString());
+
+        StringBuilder builder3 = new StringBuilder();
+        RandomAccessListIterate.forEachWithIndex(integers, 0, 9, (each, index) -> builder3.append(each).append(index));
+        Assert.assertEquals("40414243343536272819", builder3.toString());
+
+        StringBuilder builder4 = new StringBuilder();
+        RandomAccessListIterate.forEachWithIndex(integers, 7, 5, (each, index) -> builder4.append(each).append(index));
+        Assert.assertEquals("273635", builder4.toString());
+
+        MutableList<Integer> result = Lists.mutable.of();
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> RandomAccessListIterate.forEachWithIndex(integers, -1, 0, new AddToList(result)));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> RandomAccessListIterate.forEachWithIndex(integers, 0, -1, new AddToList(result)));
     }
 
     @Test

@@ -130,4 +130,6 @@ public interface ImmutableList<T>
      * @since 6.0
      */
     ImmutableList<T> subList(int fromIndex, int toIndex);
+
+    ImmutableList<T> toReversed();
 }

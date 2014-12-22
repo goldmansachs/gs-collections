@@ -92,8 +92,8 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
         MutableList<Integer> result = Lists.mutable.of();
         MutableList<Integer> reverseResult = Lists.mutable.of();
         ImmutableList<Integer> list = this.classUnderTest();
-        Verify.assertThrows(IllegalArgumentException.class, () -> list.forEach(0, list.size() - 1, CollectionAddProcedure.on(result)));
-        Verify.assertThrows(IllegalArgumentException.class, () -> list.forEach(list.size() - 1, 0, CollectionAddProcedure.on(reverseResult)));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> list.forEach(0, list.size() - 1, CollectionAddProcedure.on(result)));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> list.forEach(list.size() - 1, 0, CollectionAddProcedure.on(reverseResult)));
     }
 
     @Override
@@ -103,8 +103,8 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
         MutableList<Integer> result = Lists.mutable.of();
         MutableList<Integer> reverseResult = Lists.mutable.of();
         ImmutableList<Integer> list = this.classUnderTest();
-        Verify.assertThrows(IllegalArgumentException.class, () -> list.forEachWithIndex(0, list.size() - 1, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(result))));
-        Verify.assertThrows(IllegalArgumentException.class, () -> list.forEachWithIndex(list.size() - 1, 0, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResult))));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> list.forEachWithIndex(0, list.size() - 1, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(result))));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> list.forEachWithIndex(list.size() - 1, 0, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResult))));
     }
 
     @Override

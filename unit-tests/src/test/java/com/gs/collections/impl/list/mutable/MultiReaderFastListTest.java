@@ -30,7 +30,6 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.AddFunction;
@@ -88,16 +87,6 @@ public class MultiReaderFastListTest extends AbstractListTestCase
         MutableList<Integer> collection = MultiReaderFastList.newListWith(1, 2, 3, 4);
         collection.forEach(CollectionAddProcedure.on(result));
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), result);
-    }
-
-    @Override
-    @Test
-    public void forEachFromTo()
-    {
-        MutableList<Integer> result = FastList.newList();
-        MutableList<Integer> collection = MultiReaderFastList.newListWith(1, 2, 3, 4);
-        collection.forEach(2, 3, CollectionAddProcedure.on(result));
-        Assert.assertEquals(FastList.newListWith(3, 4), result);
     }
 
     @Override
@@ -160,15 +149,6 @@ public class MultiReaderFastListTest extends AbstractListTestCase
 
         MutableList<Integer> list = MultiReaderFastList.newList(Interval.oneTo(5));
         list.forEachWithIndex((object, index) -> Assert.assertEquals(index, object - 1));
-    }
-
-    @Override
-    @Test
-    public void forEachWithIndexWithFromTo()
-    {
-        MutableList<Integer> result = MultiReaderFastList.newList();
-        MultiReaderFastList.newListWith(1, 2, 3).forEachWithIndex(1, 2, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(result)));
-        Assert.assertEquals(FastList.newListWith(2, 3), result);
     }
 
     @Test
@@ -857,8 +837,10 @@ public class MultiReaderFastListTest extends AbstractListTestCase
 
     @Override
     @Test
-    public void remove()
+    public void removeObject()
     {
+        super.removeObject();
+
         MutableList<Integer> integers = this.newWith(1, 2, 3, 4);
         Integer doesExist = 1;
         integers.remove(doesExist);

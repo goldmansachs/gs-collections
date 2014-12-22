@@ -56,9 +56,9 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
-    public void testToString_with_collection_containing_self()
+    public void toString_with_collection_containing_self()
     {
-        super.testToString_with_collection_containing_self();
+        super.toString_with_collection_containing_self();
 
         MutableCollection<Object> collection = this.newWith(1);
         collection.add(collection);
@@ -183,9 +183,9 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
-    public void remove()
+    public void removeIf()
     {
-        super.remove();
+        super.removeIf();
     }
 
     @Override
@@ -239,9 +239,9 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
-    public void removeIf()
+    public void removeObject()
     {
-        super.removeIf();
+        super.removeObject();
     }
 
     @Override
@@ -249,13 +249,6 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
     public void removeOccurrences()
     {
         super.removeOccurrences();
-    }
-
-    @Override
-    @Test(expected = UnsupportedOperationException.class)
-    public void removeObject()
-    {
-        super.removeObject();
     }
 
     @Override

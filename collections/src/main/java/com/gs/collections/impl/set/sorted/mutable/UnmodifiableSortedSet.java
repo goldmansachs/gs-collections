@@ -37,6 +37,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -411,6 +412,21 @@ public class UnmodifiableSortedSet<T>
     public MutableStack<T> toStack()
     {
         return this.getSortedSet().toStack();
+    }
+
+    public int indexOf(Object object)
+    {
+        return this.getSortedSet().indexOf(object);
+    }
+
+    public void forEach(int startIndex, int endIndex, Procedure<? super T> procedure)
+    {
+        this.getSortedSet().forEach(startIndex, endIndex, procedure);
+    }
+
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
+    {
+        this.getSortedSet().forEachWithIndex(fromIndex, toIndex, objectIntProcedure);
     }
 
     @Override

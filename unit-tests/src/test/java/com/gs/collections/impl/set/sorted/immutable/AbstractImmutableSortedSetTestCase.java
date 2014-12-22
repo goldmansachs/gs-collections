@@ -49,6 +49,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.AddToList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.set.sorted.TreeSortedSetMultimap;
@@ -943,6 +944,54 @@ public abstract class AbstractImmutableSortedSetTestCase
         Assert.assertSame(set1, set1.distinct());
         ImmutableSortedSet<Integer> set2 = this.classUnderTest(Comparators.reverseNaturalOrder());
         Assert.assertSame(set2, set2.distinct());
+    }
+
+    @Test
+    public void indexOf()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder());
+        Assert.assertEquals(0, integers.indexOf(4));
+        Assert.assertEquals(1, integers.indexOf(3));
+        Assert.assertEquals(2, integers.indexOf(2));
+        Assert.assertEquals(3, integers.indexOf(1));
+        Assert.assertEquals(-1, integers.indexOf(0));
+        Assert.assertEquals(-1, integers.indexOf(5));
+    }
+
+    @Test
+    public void forEachFromTo()
+    {
+        MutableList<Integer> result = FastList.newList();
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder());
+        integers.forEach(1, 2, result::add);
+        Assert.assertEquals(Lists.immutable.with(3, 2), result);
+
+        MutableList<Integer> result2 = FastList.newList();
+        integers.forEach(0, 3, result2::add);
+        Assert.assertEquals(Lists.immutable.with(4, 3, 2, 1), result2);
+
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(-1, 0, result::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(0, -1, result::add));
+
+        Verify.assertThrows(IllegalArgumentException.class, () -> integers.forEach(2, 1, result::add));
+    }
+
+    @Test
+    public void forEachWithIndexWithFromTo()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder());
+        StringBuilder builder = new StringBuilder();
+        integers.forEachWithIndex(1, 2, (each, index) -> builder.append(each).append(index));
+        Assert.assertEquals("3122", builder.toString());
+
+        MutableList<Integer> result2 = Lists.mutable.of();
+        integers.forEachWithIndex(0, 3, new AddToList(result2));
+        Assert.assertEquals(Lists.immutable.with(4, 3, 2, 1), result2);
+
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(-1, 0, new AddToList(result2)));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(0, -1, new AddToList(result2)));
+
+        Verify.assertThrows(IllegalArgumentException.class, () -> integers.forEachWithIndex(2, 1, new AddToList(result2)));
     }
 
     @Test

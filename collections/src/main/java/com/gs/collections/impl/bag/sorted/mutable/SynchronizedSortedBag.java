@@ -516,6 +516,30 @@ public class SynchronizedSortedBag<T>
         }
     }
 
+    public int indexOf(Object object)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getSortedBag().indexOf(object);
+        }
+    }
+
+    public void forEach(int startIndex, int endIndex, Procedure<? super T> procedure)
+    {
+        synchronized (this.getLock())
+        {
+            this.getSortedBag().forEach(startIndex, endIndex, procedure);
+        }
+    }
+
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
+    {
+        synchronized (this.getLock())
+        {
+            this.getSortedBag().forEachWithIndex(fromIndex, toIndex, objectIntProcedure);
+        }
+    }
+
     @Override
     public MutableSortedBag<T> with(T element)
     {

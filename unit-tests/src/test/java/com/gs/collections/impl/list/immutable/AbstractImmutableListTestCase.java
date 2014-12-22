@@ -204,10 +204,13 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         MutableList<Integer> result = Lists.mutable.of();
         MutableList<Integer> reverseResult = Lists.mutable.of();
         ImmutableList<Integer> list = this.classUnderTest();
-        list.forEach(0, list.size() - 1, CollectionAddProcedure.on(result));
+        list.forEach(0, list.size() - 1, result::add);
         Assert.assertEquals(list, result);
-        list.forEach(list.size() - 1, 0, CollectionAddProcedure.on(reverseResult));
+        list.forEach(list.size() - 1, 0, reverseResult::add);
         Assert.assertEquals(ListIterate.reverseThis(FastList.newList(list)), reverseResult);
+
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> list.forEach(-1, 0, result::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> list.forEach(0, -1, result::add));
     }
 
     @Test
@@ -216,10 +219,13 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         MutableList<Integer> result = Lists.mutable.of();
         MutableList<Integer> reverseResult = Lists.mutable.of();
         ImmutableList<Integer> list = this.classUnderTest();
-        list.forEachWithIndex(0, list.size() - 1, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(result)));
+        list.forEachWithIndex(0, list.size() - 1, ObjectIntProcedures.fromProcedure(result::add));
         Assert.assertEquals(list, result);
-        list.forEachWithIndex(list.size() - 1, 0, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResult)));
+        list.forEachWithIndex(list.size() - 1, 0, ObjectIntProcedures.fromProcedure(reverseResult::add));
         Assert.assertEquals(ListIterate.reverseThis(FastList.newList(list)), reverseResult);
+
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> list.forEachWithIndex(-1, 0, result::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> list.forEachWithIndex(0, -1, result::add));
     }
 
     @Test
@@ -550,6 +556,21 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     public void asReversed()
     {
         Verify.assertIterablesEqual(this.classUnderTest().toList().toReversed(), this.classUnderTest().asReversed());
+    }
+
+    @Test
+    public void toReversed()
+    {
+        ImmutableList<Integer> immutableList = this.classUnderTest();
+        Assert.assertEquals(immutableList.toReversed().toReversed(), immutableList);
+        if (immutableList.size() <= 1)
+        {
+            Assert.assertSame(immutableList.toReversed(), immutableList);
+        }
+        else
+        {
+            Assert.assertNotEquals(immutableList.toReversed(), immutableList);
+        }
     }
 
     @Test

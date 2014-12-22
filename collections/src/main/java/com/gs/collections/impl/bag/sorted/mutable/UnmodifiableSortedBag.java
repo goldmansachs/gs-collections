@@ -289,9 +289,24 @@ public class UnmodifiableSortedBag<T>
         return this.getSortedBag().distinct();
     }
 
+    public void forEach(int startIndex, int endIndex, Procedure<? super T> procedure)
+    {
+        this.getSortedBag().forEach(startIndex, endIndex, procedure);
+    }
+
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
+    {
+        this.getSortedBag().forEachWithIndex(fromIndex, toIndex, objectIntProcedure);
+    }
+
     public MutableStack<T> toStack()
     {
         return this.getSortedBag().toStack();
+    }
+
+    public int indexOf(Object object)
+    {
+        return this.getSortedBag().indexOf(object);
     }
 
     public MutableSortedBag<T> takeWhile(Predicate<? super T> predicate)

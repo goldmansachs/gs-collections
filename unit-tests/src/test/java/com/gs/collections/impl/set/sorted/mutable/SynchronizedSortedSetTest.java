@@ -56,7 +56,7 @@ public class SynchronizedSortedSetTest extends AbstractSynchronizedCollectionTes
 
     @Override
     @Test
-    public void remove()
+    public void removeIf()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3, 4);
         objects.removeIf(Predicates.equal(2));

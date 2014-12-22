@@ -48,6 +48,8 @@ import com.gs.collections.impl.lazy.parallel.set.sorted.SortedSetBatch;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
+import com.gs.collections.impl.utility.ArrayIterate;
+import com.gs.collections.impl.utility.ListIterate;
 import net.jcip.annotations.Immutable;
 
 @Immutable
@@ -451,5 +453,40 @@ final class ImmutableTreeSet<T>
         {
             return this;
         }
+    }
+
+    public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
+    {
+        ListIterate.rangeCheck(fromIndex, toIndex, this.size());
+
+        if (fromIndex > toIndex)
+        {
+            throw new IllegalArgumentException("fromIndex must not be greater than toIndex");
+        }
+
+        for (int i = fromIndex; i <= toIndex; i++)
+        {
+            procedure.value(this.delegate[i]);
+        }
+    }
+
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
+    {
+        ListIterate.rangeCheck(fromIndex, toIndex, this.size());
+
+        if (fromIndex > toIndex)
+        {
+            throw new IllegalArgumentException("fromIndex must not be greater than toIndex");
+        }
+
+        for (int i = fromIndex; i <= toIndex; i++)
+        {
+            objectIntProcedure.value(this.delegate[i], i);
+        }
+    }
+
+    public int indexOf(Object object)
+    {
+        return ArrayIterate.indexOf(this.delegate, object);
     }
 }

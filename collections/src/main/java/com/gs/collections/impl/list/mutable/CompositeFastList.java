@@ -41,12 +41,10 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.lazy.parallel.list.NonParallelListIterable;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.utility.Iterate;
-import com.gs.collections.impl.utility.ListIterate;
 
 /**
  * CompositeFastList behaves like a list, but is composed of at least one list.
@@ -224,70 +222,6 @@ public final class CompositeFastList<E>
                 each.reverseForEach(procedure);
             }
         });
-    }
-
-    @Override
-    public void forEach(int fromIndex, int toIndex, Procedure<? super E> procedure)
-    {
-        ListIterate.rangeCheck(fromIndex, toIndex, this.size());
-
-        if (fromIndex > toIndex)
-        {
-            super.forEach(fromIndex, toIndex, procedure);
-        }
-        else
-        {
-            this.optimizedForwardForEach(procedure, fromIndex, toIndex);
-        }
-    }
-
-    private void optimizedForwardForEach(Procedure<? super E> procedure, int fromIndex, int toIndex)
-    {
-        toIndex++;
-        int outerIndex = 0;
-        int size;
-        // Find first list in the range
-        FastList<FastList<E>> fastList = this.lists;
-        Object[] items = fastList.items;
-        while ((size = ((FastList<E>) items[outerIndex]).size()) <= fromIndex)
-        {
-            fromIndex -= size;
-            toIndex -= size;
-            outerIndex++;
-        }
-        while (true)
-        {
-            FastList<E> list = (FastList<E>) items[outerIndex++];
-            int end = list.size();
-            if (toIndex < end)
-            {
-                end = toIndex;
-            }
-            for (int j = fromIndex; j < end; j++)
-            {
-                procedure.value(list.items[j]);
-            }
-            toIndex -= end;
-            if (toIndex == 0)
-            {
-                return;
-            }
-            fromIndex = 0;
-        }
-    }
-
-    @Override
-    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super E> objectIntProcedure)
-    {
-        ListIterate.rangeCheck(fromIndex, toIndex, this.size());
-        if (fromIndex > toIndex)
-        {
-            super.forEachWithIndex(fromIndex, toIndex, objectIntProcedure);
-        }
-        else
-        {
-            this.optimizedForwardForEach(Procedures.fromObjectIntProcedure(objectIntProcedure), fromIndex, toIndex);
-        }
     }
 
     @Override

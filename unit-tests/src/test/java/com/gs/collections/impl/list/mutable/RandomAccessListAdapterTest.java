@@ -23,7 +23,6 @@ import java.util.LinkedList;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
@@ -41,9 +40,12 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
         return new RandomAccessListAdapter<>(Collections.synchronizedList(new ArrayList<>(FastList.newListWith(littleElements))));
     }
 
+    @Override
     @Test
-    public void testAsSynchronized()
+    public void asSynchronized()
     {
+        super.asSynchronized();
+
         Verify.assertInstanceOf(SynchronizedMutableList.class, RandomAccessListAdapter.adapt(Collections.singletonList("1")).asSynchronized());
     }
 
@@ -56,9 +58,12 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
         Verify.assertListsEqual(list, list2);
     }
 
+    @Override
     @Test
-    public void testEqualsAndHashCode()
+    public void equalsAndHashCode()
     {
+        super.equalsAndHashCode();
+
         MutableList<Integer> list1 = this.newWith(1, 2, 3);
         MutableList<Integer> list2 = this.newWith(1, 2, 3);
         MutableList<Integer> list3 = this.newWith(2, 3, 4);
@@ -96,17 +101,23 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
         Verify.assertContainsAll(list, "A", "D");
     }
 
+    @Override
     @Test
-    public void testNewListWithSize()
+    public void newListWithSize()
     {
+        super.newListWithSize();
+
         MutableList<Integer> collection = this.newWith(1, 2, 3);
         Verify.assertContainsAll(collection, 1, 2, 3);
         Verify.assertThrows(IllegalArgumentException.class, () -> new RandomAccessListAdapter<>(new LinkedList<>()));
     }
 
+    @Override
     @Test
-    public void testSerialization()
+    public void serialization()
     {
+        super.serialization();
+
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4, 5);
         MutableList<Integer> deserializedCollection = SerializeTestHelper.serializeDeserialize(collection);
         Verify.assertSize(5, deserializedCollection);
@@ -114,20 +125,25 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
         Assert.assertEquals(collection, deserializedCollection);
     }
 
+    @Override
     @Test
-    public void testForEachFromTo()
+    public void forEachFromTo()
     {
+        super.forEachFromTo();
+
         MutableList<Integer> result = Lists.mutable.of();
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
-        collection.forEach(2, 3, CollectionAddProcedure.on(result));
+        collection.forEach(2, 3, result::add);
         Verify.assertSize(2, result);
         Verify.assertContainsAll(result, 3, 4);
     }
 
     @Override
     @Test
-    public void remove()
+    public void removeIf()
     {
+        super.removeIf();
+
         MutableList<Integer> objects = this.newWith(1, 2, 3, null);
         objects.removeIf(Predicates.isNull());
         Verify.assertSize(3, objects);
@@ -143,16 +159,22 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
         Verify.assertContainsAll(objects, 1, 2);
     }
 
+    @Override
     @Test
-    public void testIndexOf()
+    public void indexOf()
     {
+        super.indexOf();
+
         MutableList<Integer> objects = this.newWith(1, 2, 3);
         Assert.assertEquals(1, objects.indexOf(2));
     }
 
+    @Override
     @Test
-    public void testLastIndexOf()
+    public void lastIndexOf()
     {
+        super.lastIndexOf();
+
         MutableList<Integer> objects = this.newWith(1, 2, 3);
         Assert.assertEquals(1, objects.lastIndexOf(2));
     }
@@ -198,15 +220,6 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
     public void newEmpty()
     {
         Verify.assertInstanceOf(MutableList.class, this.newWith().newEmpty());
-    }
-
-    @Test
-    public void testForEachWithIndexWithFromTo()
-    {
-        MutableList<Integer> result = Lists.mutable.of();
-        RandomAccessListAdapter<Integer> integers = this.newWith();
-        integers.with(1, 2, 3).forEachWithIndex(1, 2, new AddToList(result));
-        Assert.assertEquals(FastList.newListWith(2, 3), result);
     }
 
     @Test

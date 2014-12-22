@@ -93,6 +93,7 @@ import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.ListIterate;
 
 /**
  * The ListIterate class provides a few of the methods from the Smalltalk Collection Protocol for use with ArrayLists.
@@ -623,10 +624,7 @@ public final class RandomAccessListIterate
      */
     public static <T> void forEach(List<T> list, int from, int to, Procedure<? super T> procedure)
     {
-        if (from < 0 || to < 0)
-        {
-            throw new IllegalArgumentException("Neither from nor to may be negative.");
-        }
+        ListIterate.rangeCheck(from, to, list.size());
         if (from <= to)
         {
             for (int i = from; i <= to; i++)
@@ -664,10 +662,7 @@ public final class RandomAccessListIterate
      */
     public static <T> void forEachWithIndex(List<T> list, int from, int to, ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        if (from < 0 || to < 0)
-        {
-            throw new IllegalArgumentException("Neither from nor to may be negative.");
-        }
+        ListIterate.rangeCheck(from, to, list.size());
         if (from <= to)
         {
             for (int i = from; i <= to; i++)

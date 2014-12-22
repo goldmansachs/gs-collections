@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.ExecutorService;
 
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
@@ -36,8 +35,6 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.ByteList;
 import com.gs.collections.api.list.primitive.CharList;
@@ -61,44 +58,6 @@ import com.gs.collections.api.tuple.Pair;
 public interface ListIterable<T>
         extends ReversibleIterable<T>
 {
-    /**
-     * Iterates over the section of the list covered by the specified inclusive indexes.  The indexes are
-     * both inclusive.
-     * <p>
-     * <pre>e.g.
-     * ListIterable<People> people = FastList.newListWith(ted, mary, bob, sally)
-     * people.forEach(0, 1, new Procedure<Person>()
-     * {
-     *     public void value(Person person)
-     *     {
-     *          LOGGER.info(person.getName());
-     *     }
-     * });
-     * </pre>
-     * <p>
-     * This code would output ted and mary's names.
-     */
-    void forEach(int startIndex, int endIndex, Procedure<? super T> procedure);
-
-    /**
-     * Iterates over the section of the list covered by the specified inclusive indexes.  The indexes are
-     * both inclusive.
-     * <p>
-     * <pre>e.g.
-     * ListIterable<People> people = FastList.newListWith(ted, mary, bob, sally)
-     * people.forEachWithIndex(0, 1, new ObjectIntProcedure<Person>()
-     * {
-     *     public void value(Person person, int index)
-     *     {
-     *          LOGGER.info(person.getName());
-     *     }
-     * });
-     * </pre>
-     * <p>
-     * This code would output ted and mary's names.
-     */
-    void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure);
-
     /**
      * Returns the item at the specified position in this list iterable.
      */
@@ -235,12 +194,7 @@ public interface ListIterable<T>
      */
     PartitionList<T> partitionWhile(Predicate<? super T> predicate);
 
-    /**
-     * Returns a reversed view of this ListIterable.
-     *
-     * @since 3.0
-     */
-    LazyIterable<T> asReversed();
+    ListIterable<T> toReversed();
 
     /**
      * Returns a parallel iterable of this ListIterable.

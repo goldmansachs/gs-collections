@@ -17,7 +17,6 @@
 package com.gs.collections.api.ordered;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -41,7 +40,6 @@ import com.gs.collections.api.ordered.primitive.ReversibleIntIterable;
 import com.gs.collections.api.ordered.primitive.ReversibleLongIterable;
 import com.gs.collections.api.ordered.primitive.ReversibleShortIterable;
 import com.gs.collections.api.partition.ordered.PartitionReversibleIterable;
-import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -51,7 +49,7 @@ import com.gs.collections.api.tuple.Pair;
  *
  * @since 5.0
  */
-public interface ReversibleIterable<T> extends RichIterable<T>
+public interface ReversibleIterable<T> extends OrderedIterable<T>
 {
     /**
      * Evaluates the procedure for each element of the list iterating in reverse order.
@@ -74,10 +72,11 @@ public interface ReversibleIterable<T> extends RichIterable<T>
     LazyIterable<T> asReversed();
 
     /**
-     * Returns the index of the first occurrence of the specified item
-     * in this list, or -1 if this list does not contain the item.
+     * Returns a new ReversibleIterable in reverse order.
+     *
+     * @since 6.0.0
      */
-    int indexOf(Object o);
+    ReversibleIterable<T> toReversed();
 
     /**
      * Returns the first {@code count} elements of the iterable
@@ -112,26 +111,9 @@ public interface ReversibleIterable<T> extends RichIterable<T>
      */
     ReversibleIterable<T> dropWhile(Predicate<? super T> predicate);
 
-    /**
-     * Returns a Partition of the initial elements that satisfy the Predicate and the remaining elements. Short circuits at the first element which does
-     * satisfy the Predicate.
-     */
     PartitionReversibleIterable<T> partitionWhile(Predicate<? super T> predicate);
 
-    /**
-     * Returns a new {@code ReversibleIterable} containing the distinct elements in this iterable.
-     * <p>
-     * Conceptually similar to {@link #toSet()}.{@link #toList()} but retains the original order. If an element appears
-     * multiple times in this iterable, the first one will be copied into the result.
-     *
-     * @return {@code ReversibleIterable} of distinct elements
-     */
     ReversibleIterable<T> distinct();
-
-    /**
-     * Converts the ReversibleIterable to a mutable MutableStack implementation.
-     */
-    MutableStack<T> toStack();
 
     ReversibleIterable<T> select(Predicate<? super T> predicate);
 
@@ -142,6 +124,8 @@ public interface ReversibleIterable<T> extends RichIterable<T>
     <P> ReversibleIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     PartitionReversibleIterable<T> partition(Predicate<? super T> predicate);
+
+    <P> PartitionReversibleIterable<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     <S> ReversibleIterable<S> selectInstancesOf(Class<S> clazz);
 

@@ -118,9 +118,12 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         Verify.assertThrows(IllegalStateException.class, iterator::remove);
     }
 
+    @Override
     @Test
     public void removeIf()
     {
+        super.removeIf();
+
         MutableBag<Integer> objects = this.newWith(4, 1, 3, 3, 2);
         objects.removeIf(Predicates.equal(2));
         Assert.assertEquals(HashBag.newBagWith(1, 3, 3, 4), objects);
@@ -290,9 +293,10 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
 
     @Override
     @Test
-    public void remove()
+    public void removeObject()
     {
-        super.remove();
+        super.removeObject();
+
         MutableBag<String> bag = this.newWith("dakimakura", "dakimakura");
         Assert.assertFalse(bag.remove("Mr. T"));
         Assert.assertTrue(bag.remove("dakimakura"));

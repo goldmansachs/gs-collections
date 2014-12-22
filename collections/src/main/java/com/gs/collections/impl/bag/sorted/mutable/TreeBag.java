@@ -86,6 +86,7 @@ import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.ListIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 
 /**
@@ -442,6 +443,102 @@ public class TreeBag<T>
         });
     }
 
+    public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
+    {
+        ListIterate.rangeCheck(fromIndex, toIndex, this.size);
+        if (fromIndex > toIndex)
+        {
+            throw new IllegalArgumentException("fromIndex must not be greater than toIndex");
+        }
+
+        Iterator<Map.Entry<T, Counter>> iterator = this.items.entrySet().iterator();
+        int i = 0;
+        while (iterator.hasNext() && i < fromIndex)
+        {
+            Map.Entry<T, Counter> entry = iterator.next();
+            Counter value = entry.getValue();
+            int count = value.getCount();
+            if (i + count < fromIndex)
+            {
+                i += count;
+            }
+            else
+            {
+                for (int j = 0; j < count; j++)
+                {
+                    if (i >= fromIndex && i <= toIndex)
+                    {
+                        procedure.value(entry.getKey());
+                    }
+                    i++;
+                }
+            }
+        }
+        while (iterator.hasNext() && i <= toIndex)
+        {
+            Map.Entry<T, Counter> entry = iterator.next();
+            Counter value = entry.getValue();
+            int count = value.getCount();
+
+            for (int j = 0; j < count; j++)
+            {
+                if (i <= toIndex)
+                {
+                    procedure.value(entry.getKey());
+                }
+                i++;
+            }
+        }
+    }
+
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
+    {
+        ListIterate.rangeCheck(fromIndex, toIndex, this.size);
+        if (fromIndex > toIndex)
+        {
+            throw new IllegalArgumentException("fromIndex must not be greater than toIndex");
+        }
+
+        Iterator<Map.Entry<T, Counter>> iterator = this.items.entrySet().iterator();
+        int i = 0;
+        while (iterator.hasNext() && i < fromIndex)
+        {
+            Map.Entry<T, Counter> entry = iterator.next();
+            Counter value = entry.getValue();
+            int count = value.getCount();
+            if (i + count < fromIndex)
+            {
+                i += count;
+            }
+            else
+            {
+                for (int j = 0; j < count; j++)
+                {
+                    if (i >= fromIndex && i <= toIndex)
+                    {
+                        objectIntProcedure.value(entry.getKey(), i);
+                    }
+                    i++;
+                }
+            }
+        }
+        while (iterator.hasNext() && i <= toIndex)
+        {
+            Map.Entry<T, Counter> entry = iterator.next();
+            Counter value = entry.getValue();
+            int count = value.getCount();
+
+            for (int j = 0; j < count; j++)
+            {
+                if (i <= toIndex)
+                {
+                    objectIntProcedure.value(entry.getKey(), i);
+                }
+                i++;
+            }
+        }
+    }
+
     @Override
     public <P> void forEachWith(final Procedure2<? super T, ? super P> procedure, final P parameter)
     {
@@ -770,6 +867,20 @@ public class TreeBag<T>
             }
         });
         return result;
+    }
+
+    public int indexOf(Object object)
+    {
+        if (this.items.containsKey(object))
+        {
+            long result = this.items.headMap((T) object).values().sumOfInt(Counter.TO_COUNT);
+            if (result > Integer.MAX_VALUE)
+            {
+                throw new IllegalStateException();
+            }
+            return (int) result;
+        }
+        return -1;
     }
 
     public T getFirst()

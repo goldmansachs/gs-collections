@@ -23,9 +23,11 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
+import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
@@ -36,6 +38,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.AddToList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
@@ -570,6 +573,42 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
 
         LazyIterable<Pair<Integer, Integer>> empty2 = this.classUnderTest().cartesianProduct(TreeSortedSet.<Integer>newSet());
         Verify.assertEmpty(empty2.toList());
+    }
+
+    @Override
+    @Test
+    public void indexOf()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder());
+        Assert.assertEquals(-1, integers.indexOf(4));
+        Assert.assertEquals(-1, integers.indexOf(3));
+        Assert.assertEquals(-1, integers.indexOf(2));
+        Assert.assertEquals(-1, integers.indexOf(1));
+        Assert.assertEquals(-1, integers.indexOf(0));
+        Assert.assertEquals(-1, integers.indexOf(5));
+    }
+
+    @Override
+    @Test
+    public void forEachFromTo()
+    {
+        MutableSortedSet<Integer> result = TreeSortedSet.<Integer>newSet(Comparators.reverseNaturalOrder());
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder());
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(-1, 0, result::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(0, -1, result::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(0, 0, result::add));
+    }
+
+    @Override
+    @Test
+    public void forEachWithIndexWithFromTo()
+    {
+        MutableList<Integer> result = Lists.mutable.of();
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder());
+
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(-1, 0, new AddToList(result)));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(0, -1, new AddToList(result)));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(0, 0, new AddToList(result)));
     }
 
     @Override
