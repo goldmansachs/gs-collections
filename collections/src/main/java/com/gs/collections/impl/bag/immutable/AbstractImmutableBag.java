@@ -75,6 +75,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.partition.bag.PartitionHashBag;
 import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
@@ -738,6 +739,14 @@ public abstract class AbstractImmutableBag<T>
 
     private MutableList<ObjectIntPair<T>> occurrencesSortingBy(int n, IntFunction<ObjectIntPair<T>> function)
     {
+        if (n < 0)
+        {
+            throw new IllegalArgumentException("Cannot use a value of n < 0");
+        }
+        if (n == 0)
+        {
+            return Lists.fixedSize.empty();
+        }
         int keySize = Math.min(n, this.sizeDistinct());
         MutableList<ObjectIntPair<T>> sorted = this.toListWithOccurrences().sortThisByInt(function);
         MutableList<ObjectIntPair<T>> results = sorted.subList(0, keySize).toList();

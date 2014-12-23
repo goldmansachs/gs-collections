@@ -160,6 +160,9 @@ public class ImmutableHashBagTest extends ImmutableBagTestCase
         Verify.assertIterableSize(3, this.newWith(null, "one", "two").topOccurrences(5));
         Verify.assertIterableSize(3, this.newWith(null, "one", "two").topOccurrences(1));
         Verify.assertIterableSize(3, this.newWith("one", "one", "two", "two", "three", "three").topOccurrences(1));
+        Verify.assertIterableSize(0, this.newWith("one").newWithout("one").topOccurrences(0));
+        Verify.assertIterableSize(0, this.newWith("one").topOccurrences(0));
+        Verify.assertThrows(IllegalArgumentException.class, () -> this.newWith("one").topOccurrences(-1));
     }
 
     @Test
@@ -192,5 +195,8 @@ public class ImmutableHashBagTest extends ImmutableBagTestCase
         Verify.assertIterableSize(3, this.newWith(null, "one", "two").bottomOccurrences(5));
         Verify.assertIterableSize(3, this.newWith(null, "one", "two").bottomOccurrences(1));
         Verify.assertIterableSize(3, this.newWith("one", "one", "two", "two", "three", "three").bottomOccurrences(1));
+        Verify.assertIterableSize(0, this.newWith("one").newWithout("one").bottomOccurrences(0));
+        Verify.assertIterableSize(0, this.newWith("one").bottomOccurrences(0));
+        Verify.assertThrows(IllegalArgumentException.class, () -> this.newWith("one").bottomOccurrences(-1));
     }
 }

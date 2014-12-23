@@ -1724,6 +1724,9 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertSize(3, this.newWith("one", "one", "two", "three").topOccurrences(2));
         Verify.assertSize(2, this.newWith("one", "one", "two", "two", "three").topOccurrences(1));
         Verify.assertSize(3, this.newWith("one", "one", "two", "two", "three", "three").topOccurrences(1));
+        Verify.assertSize(0, this.newWith().topOccurrences(0));
+        Verify.assertSize(0, this.newWith("one").topOccurrences(0));
+        Verify.assertThrows(IllegalArgumentException.class, () -> this.newWith().topOccurrences(-1));
     }
 
     @Test
@@ -1753,6 +1756,9 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertSize(3, this.newWith("one", "one", "two", "three").topOccurrences(2));
         Verify.assertSize(2, this.newWith("one", "one", "two", "two", "three").topOccurrences(1));
         Verify.assertSize(3, this.newWith("one", "one", "two", "two", "three", "three").bottomOccurrences(1));
+        Verify.assertSize(0, this.newWith().bottomOccurrences(0));
+        Verify.assertSize(0, this.newWith("one").bottomOccurrences(0));
+        Verify.assertThrows(IllegalArgumentException.class, () -> this.newWith().bottomOccurrences(-1));
     }
 
     @Override

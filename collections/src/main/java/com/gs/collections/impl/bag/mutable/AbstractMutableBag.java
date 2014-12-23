@@ -59,6 +59,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
@@ -686,6 +687,14 @@ public abstract class AbstractMutableBag<T> extends AbstractMutableCollection<T>
 
     private MutableList<ObjectIntPair<T>> occurrencesSortingBy(int n, IntFunction<ObjectIntPair<T>> function)
     {
+        if (n < 0)
+        {
+            throw new IllegalArgumentException("Cannot use a value of n < 0");
+        }
+        if (n == 0)
+        {
+            return Lists.mutable.empty();
+        }
         int keySize = Math.min(n, this.sizeDistinct());
         MutableList<ObjectIntPair<T>> sorted = this.toListWithOccurrences().sortThisByInt(function);
         MutableList<ObjectIntPair<T>> results = sorted.subList(0, keySize).toList();

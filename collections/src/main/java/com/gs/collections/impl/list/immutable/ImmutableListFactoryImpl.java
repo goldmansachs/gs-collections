@@ -151,7 +151,7 @@ public final class ImmutableListFactoryImpl implements ImmutableListFactory
     {
         if (items == null || items.length == 0)
         {
-            return this.of();
+            return this.empty();
         }
 
         switch (items.length)
@@ -187,7 +187,7 @@ public final class ImmutableListFactoryImpl implements ImmutableListFactory
         switch (items.size())
         {
             case 0:
-                return this.of();
+                return this.empty();
             case 1:
                 return this.of(items.get(0));
             case 2:
@@ -231,7 +231,7 @@ public final class ImmutableListFactoryImpl implements ImmutableListFactory
         }
         if (Iterate.isEmpty(items))
         {
-            return this.of();
+            return this.empty();
         }
         return this.of((T[]) Iterate.toArray(items));
     }
