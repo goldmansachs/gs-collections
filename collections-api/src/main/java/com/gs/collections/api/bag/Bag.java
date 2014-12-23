@@ -110,7 +110,7 @@ public interface Bag<T>
     ListIterable<ObjectIntPair<T>> topOccurrences(int count);
 
     /**
-     * Returns the {@code count} most frequently occurring items.
+     * Returns the {@code count} least frequently occurring items.
      *
      * In the event of a tie, all of the items with the number of occurrences that match the occurrences of the last
      * item will be returned.
