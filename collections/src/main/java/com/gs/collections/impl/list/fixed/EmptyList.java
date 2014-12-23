@@ -34,6 +34,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.EmptyIterator;
@@ -53,7 +54,7 @@ final class EmptyList<T>
 
     private Object readResolve()
     {
-        return Lists.fixedSize.of();
+        return Lists.fixedSize.empty();
     }
 
     @Override
@@ -244,12 +245,18 @@ final class EmptyList<T>
     @Override
     public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {
-        return Lists.fixedSize.of();
+        return Lists.fixedSize.empty();
     }
 
     @Override
     public MutableList<Pair<T, Integer>> zipWithIndex()
     {
-        return Lists.fixedSize.of();
+        return Lists.fixedSize.empty();
+    }
+
+    @Override
+    public ImmutableList<T> toImmutable()
+    {
+        return Lists.immutable.empty();
     }
 }
