@@ -221,6 +221,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return new <name>ObjectHashMap\<V>();
     }
 
+    public static \<V> <name>ObjectHashMap\<V> newMap(<name>ObjectMap\<? extends V> map)
+    {
+        return new <name>ObjectHashMap\<V>(map);
+    }
+
     public static \<V> <name>ObjectHashMap\<V> newWithKeysValues(<type> key, V value)
     {
         return new <name>ObjectHashMap\<V>(1).withKeyValue(key, value);

@@ -122,6 +122,28 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
     }
 
     @Test
+    public void newMapWith<name>ObjectMap() throws NoSuchFieldException, IllegalAccessException
+    {
+        Field keys = <name>ObjectHashMap.class.getDeclaredField("keys");
+        keys.setAccessible(true);
+        Field values = <name>ObjectHashMap.class.getDeclaredField("values");
+        values.setAccessible(true);
+
+        <name>ObjectHashMap\<Object> map = <name>ObjectHashMap.newMap();
+
+        <name>ObjectHashMap\<Object> hashMap = <name>ObjectHashMap.newMap(map);
+        Assert.assertEquals(16L, ((<type>[]) keys.get(hashMap)).length);
+        Assert.assertEquals(16L, ((Object[]) values.get(hashMap)).length);
+        Assert.assertEquals(new <name>ObjectHashMap\<>(), hashMap);
+
+        map.put(<(literal.(type))("1")>, "one");
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one"), <name>ObjectHashMap.newMap(map));
+
+        map.put(<(literal.(type))("2")>, "two");
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two"), <name>ObjectHashMap.newMap(map));
+    }
+
+    @Test
     public void putWithRehash() throws NoSuchFieldException, IllegalAccessException
     {
         <name>ObjectHashMap\<String> hashMap = <name>ObjectHashMap.newMap();
