@@ -455,15 +455,12 @@ public final class SortedSetAdapter<T>
 
         Iterator<T> iterator = this.iterator();
         int i = 0;
-        while (iterator.hasNext())
+        while (iterator.hasNext() && i <= toIndex)
         {
-            if (i < fromIndex)
+            T each = iterator.next();
+            if (i >= fromIndex)
             {
-                iterator.next();
-            }
-            if (i >= fromIndex && i <= toIndex)
-            {
-                procedure.value(iterator.next());
+                procedure.value(each);
             }
             i++;
         }
@@ -480,15 +477,12 @@ public final class SortedSetAdapter<T>
 
         Iterator<T> iterator = this.iterator();
         int i = 0;
-        while (iterator.hasNext())
+        while (iterator.hasNext() && i <= toIndex)
         {
-            if (i < fromIndex)
+            T each = iterator.next();
+            if (i >= fromIndex)
             {
-                iterator.next();
-            }
-            if (i >= fromIndex && i <= toIndex)
-            {
-                objectIntProcedure.value(iterator.next(), i);
+                objectIntProcedure.value(each, i);
             }
             i++;
         }
