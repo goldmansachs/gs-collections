@@ -351,6 +351,11 @@ public abstract class AbstractMutableList<T>
         return result == null ? function.value() : result;
     }
 
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        return ListIterate.detectIndex(this, predicate);
+    }
+
     @Override
     public T min(Comparator<? super T> comparator)
     {

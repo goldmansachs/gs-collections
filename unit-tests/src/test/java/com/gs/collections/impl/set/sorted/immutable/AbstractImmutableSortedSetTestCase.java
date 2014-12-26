@@ -485,6 +485,20 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
+    public void detectIndex()
+    {
+        ImmutableSortedSet<Integer> integers1 = this.classUnderTest();
+        Assert.assertEquals(1, integers1.detectIndex(integer -> integer % 2 == 0));
+        Assert.assertEquals(0, integers1.detectIndex(integer -> integer % 2 != 0));
+        Assert.assertEquals(-1, integers1.detectIndex(integer -> integer % 5 == 0));
+
+        ImmutableSortedSet<Integer> integers2 = this.classUnderTest(Comparators.reverseNaturalOrder());
+        Assert.assertEquals(0, integers2.detectIndex(integer -> integer % 2 == 0));
+        Assert.assertEquals(1, integers2.detectIndex(integer -> integer % 2 != 0));
+        Assert.assertEquals(-1, integers2.detectIndex(integer -> integer % 5 == 0));
+    }
+
+    @Test
     public void allSatisfy()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();

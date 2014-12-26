@@ -809,4 +809,18 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         Assert.assertEquals(2, objects.indexOf(1));
         Assert.assertEquals(-1, objects.indexOf(0));
     }
+
+    @Test
+    public void detectIndex()
+    {
+        MutableSortedSet<Integer> integers1 = this.newWith(1, 2, 3, 4);
+        Assert.assertEquals(1, integers1.detectIndex(integer -> integer % 2 == 0));
+        Assert.assertEquals(0, integers1.detectIndex(integer -> integer % 2 != 0));
+        Assert.assertEquals(-1, integers1.detectIndex(integer -> integer % 5 == 0));
+
+        MutableSortedSet<Integer> integers2 = this.newWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1);
+        Assert.assertEquals(0, integers2.detectIndex(integer -> integer % 2 == 0));
+        Assert.assertEquals(1, integers2.detectIndex(integer -> integer % 2 != 0));
+        Assert.assertEquals(-1, integers2.detectIndex(integer -> integer % 5 == 0));
+    }
 }

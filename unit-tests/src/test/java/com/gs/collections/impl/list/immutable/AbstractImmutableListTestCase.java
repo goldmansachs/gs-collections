@@ -247,6 +247,13 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     }
 
     @Test
+    public void detectIndex()
+    {
+        Assert.assertEquals(0, this.classUnderTest().detectIndex(integer -> integer == 1));
+        Assert.assertEquals(-1, this.classUnderTest().detectIndex(integer -> integer == 0));
+    }
+
+    @Test
     public void select_target()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();

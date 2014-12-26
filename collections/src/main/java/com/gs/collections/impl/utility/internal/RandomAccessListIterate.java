@@ -718,6 +718,9 @@ public final class RandomAccessListIterate
         }
     }
 
+    /**
+     * @see Iterate#detect(Iterable, Predicate)
+     */
     public static <T> T detect(List<T> list, Predicate<? super T> predicate)
     {
         int size = list.size();
@@ -732,6 +735,9 @@ public final class RandomAccessListIterate
         return null;
     }
 
+    /**
+     * @see Iterate#detectWith(Iterable, Predicate2, Object)
+     */
     public static <T, IV> T detectWith(List<T> list, Predicate2<? super T, ? super IV> predicate, IV injectedValue)
     {
         int size = list.size();
@@ -1062,7 +1068,8 @@ public final class RandomAccessListIterate
     }
 
     /**
-     * Searches for the first occurence where the predicate evaluates to true.
+     * Searches for the first occurrence where the predicate evaluates to true.
+     * @see Iterate#detectIndex(Iterable, Predicate)
      */
     public static <T> int detectIndex(List<T> list, Predicate<? super T> predicate)
     {
@@ -1078,7 +1085,8 @@ public final class RandomAccessListIterate
     }
 
     /**
-     * Searches for the first occurence where the predicate evaluates to true.
+     * Searches for the first occurrence where the predicate evaluates to true.
+     * @see Iterate#detectIndexWith(Iterable, Predicate2, Object)
      */
     public static <T, IV> int detectIndexWith(List<T> list, Predicate2<? super T, ? super IV> predicate, IV injectedValue)
     {

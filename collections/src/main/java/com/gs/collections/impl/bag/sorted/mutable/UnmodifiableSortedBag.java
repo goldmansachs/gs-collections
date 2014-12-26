@@ -344,6 +344,11 @@ public class UnmodifiableSortedBag<T>
         return this.getSortedBag().collectIf(predicate, function);
     }
 
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        return this.getSortedBag().detectIndex(predicate);
+    }
+
     @Override
     public <V> MutableSortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {

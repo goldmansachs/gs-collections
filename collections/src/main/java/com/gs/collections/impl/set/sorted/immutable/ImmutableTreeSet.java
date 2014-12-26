@@ -455,6 +455,12 @@ final class ImmutableTreeSet<T>
         }
     }
 
+    @Override
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        return ArrayIterate.detectIndex(this.delegate, predicate);
+    }
+
     public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
     {
         ListIterate.rangeCheck(fromIndex, toIndex, this.size());

@@ -272,6 +272,14 @@ public class SynchronizedMutableList<T>
         }
     }
 
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().detectIndex(predicate);
+        }
+    }
+
     @Override
     public <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {

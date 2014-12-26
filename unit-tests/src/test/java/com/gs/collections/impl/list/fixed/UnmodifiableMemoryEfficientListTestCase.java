@@ -85,4 +85,12 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
         list.add(null);
         Verify.assertContains(null, list);
     }
+
+    @Test
+    public void detectIndex()
+    {
+        MutableList<T> mutableList = this.getCollection();
+        Assert.assertEquals(0, mutableList.detectIndex(element -> Integer.valueOf(element.toString()) == 1));
+        Assert.assertEquals(-1, mutableList.detectIndex(element -> Integer.valueOf(element.toString()) == 0));
+    }
 }

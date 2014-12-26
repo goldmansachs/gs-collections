@@ -264,6 +264,14 @@ public class SynchronizedSortedSet<T>
         }
     }
 
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getSortedSet().detectIndex(predicate);
+        }
+    }
+
     @Override
     public <V> MutableSortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {

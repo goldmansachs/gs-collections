@@ -28,6 +28,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
@@ -461,5 +462,13 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
     {
         ListIterable<Integer> sortedList = this.classUnderTest();
         Assert.assertEquals(-1, sortedList.binarySearch(1, Integer::compareTo));
+    }
+
+    @Override
+    @Test
+    public void detectIndex()
+    {
+        // any predicate will result in -1
+        Assert.assertEquals(-1, this.classUnderTest().detectIndex(Predicates.alwaysTrue()));
     }
 }

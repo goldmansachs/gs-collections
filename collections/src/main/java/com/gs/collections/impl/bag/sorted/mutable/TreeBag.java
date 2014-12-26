@@ -1052,6 +1052,11 @@ public class TreeBag<T>
         return this.items.keysView().detectIfNone(predicate, function);
     }
 
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        return Iterate.detectIndex(this, predicate);
+    }
+
     @Override
     public boolean anySatisfy(Predicate<? super T> predicate)
     {

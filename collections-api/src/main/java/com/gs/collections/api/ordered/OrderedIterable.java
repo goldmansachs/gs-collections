@@ -223,6 +223,14 @@ public interface OrderedIterable<T> extends RichIterable<T>
 
     OrderedShortIterable collectShort(ShortFunction<? super T> shortFunction);
 
+    /**
+     * Returns the index of the first element of the {@code OrderedIterable} for which the {@code predicate} evaluates to true.
+     * Returns -1 if no element evaluates true for the {@code predicate}.
+     *
+     * @since 6.0
+     */
+    int detectIndex(Predicate<? super T> predicate);
+
     <V> OrderedIterableMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
     <V> OrderedIterableMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);

@@ -356,6 +356,11 @@ public class UnmodifiableMutableList<T>
         return this.getMutableList().collectIf(predicate, function);
     }
 
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        return this.getMutableList().detectIndex(predicate);
+    }
+
     @Override
     public <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {

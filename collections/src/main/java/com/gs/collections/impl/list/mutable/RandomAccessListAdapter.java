@@ -190,6 +190,11 @@ public final class RandomAccessListAdapter<T>
         return result == null ? function.value() : result;
     }
 
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        return RandomAccessListIterate.detectIndex(this.delegate, predicate);
+    }
+
     @Override
     public int count(Predicate<? super T> predicate)
     {

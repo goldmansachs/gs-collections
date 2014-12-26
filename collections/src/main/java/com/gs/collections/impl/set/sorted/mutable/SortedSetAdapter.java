@@ -386,6 +386,11 @@ public final class SortedSetAdapter<T>
         return Iterate.flatCollect(this.delegate, function, FastList.<V>newList());
     }
 
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        return Iterate.detectIndex(this.delegate, predicate);
+    }
+
     @Override
     public <V> TreeSortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {

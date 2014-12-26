@@ -81,6 +81,17 @@ public abstract class AbstractListTestCase
         Verify.assertThrows(IllegalArgumentException.class, () -> new ListAdapter<>(FastList.newListWith(1, 2, 3)));
     }
 
+    @Test
+    public void detectIndex()
+    {
+        Assert.assertEquals(1, this.newWith(1, 2, 3, 4).detectIndex(integer -> integer % 2 == 0));
+        Assert.assertEquals(0, this.newWith(1, 2, 3, 4).detectIndex(integer -> integer % 2 != 0));
+        Assert.assertEquals(-1, this.newWith(1, 2, 3, 4).detectIndex(integer -> integer % 5 == 0));
+        Assert.assertEquals(2, this.newWith(1, 1, 2, 2, 3, 3, 3, 4, 2).detectIndex(integer -> integer == 2));
+        Assert.assertEquals(0, this.newWith(1, 1, 2, 2, 3, 3, 3, 4, 2).detectIndex(integer -> integer != 2));
+        Assert.assertEquals(-1, this.newWith(1, 1, 2, 2, 3, 3, 3, 4, 2).detectIndex(integer -> integer == 5));
+    }
+
     @Override
     public void collectBoolean()
     {
@@ -629,7 +640,6 @@ public abstract class AbstractListTestCase
         StringBuilder builder5 = new StringBuilder();
         integers.forEachWithIndex(9, 0, (each, index) -> builder5.append(each).append(index));
         Assert.assertEquals("19282736353443424140", builder5.toString());
-
 
         MutableList<Integer> result = Lists.mutable.of();
         Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(-1, 0, new AddToList(result)));

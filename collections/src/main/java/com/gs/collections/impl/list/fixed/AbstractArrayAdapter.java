@@ -142,6 +142,12 @@ public abstract class AbstractArrayAdapter<T>
     }
 
     @Override
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        return InternalArrayIterate.detectIndex(this.items, this.items.length, predicate);
+    }
+
+    @Override
     public int count(Predicate<? super T> predicate)
     {
         return InternalArrayIterate.count(this.items, this.items.length, predicate);

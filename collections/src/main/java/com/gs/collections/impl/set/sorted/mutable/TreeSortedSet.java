@@ -467,6 +467,11 @@ public class TreeSortedSet<T> extends AbstractMutableCollection<T>
         return result;
     }
 
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        return Iterate.detectIndex(this, predicate);
+    }
+
     public <V> TreeSortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         return Iterate.groupBy(this.treeSet, function, TreeSortedSetMultimap.<V, T>newMultimap(this.comparator()));

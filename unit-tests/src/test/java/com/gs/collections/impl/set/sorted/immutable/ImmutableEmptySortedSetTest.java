@@ -131,6 +131,14 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
 
     @Override
     @Test
+    public void detectIndex()
+    {
+        //Any predicate will result in -1
+        Assert.assertEquals(Integer.valueOf(-1), Integer.valueOf(this.classUnderTest().detectIndex(Predicates.alwaysTrue())));
+    }
+
+    @Override
+    @Test
     public void allSatisfy()
     {
         Assert.assertTrue(this.classUnderTest().allSatisfy(Integer.class::isInstance));

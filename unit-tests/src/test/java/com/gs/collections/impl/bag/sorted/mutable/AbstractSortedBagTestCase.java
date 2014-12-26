@@ -1823,4 +1823,20 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
             return String.valueOf(this.number);
         }
     }
+
+    @Test
+    public void detectIndex()
+    {
+        MutableSortedBag<Integer> integers1 = this.newWith(1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+        Assert.assertEquals(2, integers1.detectIndex(integer -> integer % 2 == 0));
+        Assert.assertEquals(5, integers1.detectIndex(integer -> integer % 3 == 0));
+        Assert.assertEquals(0, integers1.detectIndex(integer -> integer % 2 != 0));
+        Assert.assertEquals(-1, integers1.detectIndex(integer -> integer % 5 == 0));
+
+        MutableSortedBag<Integer> integers2 = this.newWith(Comparators.reverseNaturalOrder(), 4, 4, 4, 4, 3, 3, 3, 2, 2, 1, 1);
+        Assert.assertEquals(0, integers2.detectIndex(integer -> integer % 2 == 0));
+        Assert.assertEquals(4, integers2.detectIndex(integer -> integer % 3 == 0));
+        Assert.assertEquals(9, integers2.detectIndex(integer -> integer == 1));
+        Assert.assertEquals(-1, integers2.detectIndex(integer -> integer % 5 == 0));
+    }
 }

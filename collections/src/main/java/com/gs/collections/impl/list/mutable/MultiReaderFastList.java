@@ -1129,6 +1129,11 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().collectWith(function, parameter);
         }
 
+        public int detectIndex(Predicate<? super T> predicate)
+        {
+            return this.getDelegate().detectIndex(predicate);
+        }
+
         public <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
         {
             return this.getDelegate().groupBy(function);
@@ -1498,6 +1503,19 @@ public final class MultiReaderFastList<T>
         public void becomeUseless()
         {
             this.delegate = null;
+        }
+    }
+
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().detectIndex(predicate);
+        }
+        finally
+        {
+            this.unlockReadLock();
         }
     }
 

@@ -299,6 +299,11 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return result.toImmutable();
     }
 
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        return Iterate.detectIndex(this, predicate);
+    }
+
     public <V> ImmutableSortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         return this.groupBy(function, TreeSortedSetMultimap.<V, T>newMultimap(this.comparator())).toImmutable();

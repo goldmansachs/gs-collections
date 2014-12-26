@@ -417,6 +417,11 @@ abstract class AbstractImmutableList<T>
         return result == null ? function.value() : result;
     }
 
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        return ListIterate.detectIndex(this, predicate);
+    }
+
     @Override
     public int count(Predicate<? super T> predicate)
     {
