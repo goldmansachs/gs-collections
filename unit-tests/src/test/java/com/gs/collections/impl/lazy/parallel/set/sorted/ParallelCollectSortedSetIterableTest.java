@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.parallel.set.sorted;
 
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -35,7 +36,7 @@ public class ParallelCollectSortedSetIterableTest extends ParallelListIterableTe
     protected ParallelListIterable<Integer> newWith(Integer... littleElements)
     {
         return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), littleElements)
-                .asParallel(this.executorService, 2)
+                .asParallel(this.executorService, this.batchSize)
                 .collect(i -> i / 10);
     }
 
@@ -43,5 +44,12 @@ public class ParallelCollectSortedSetIterableTest extends ParallelListIterableTe
     protected MutableList<Integer> getExpected()
     {
         return FastList.newListWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
+    }
+
+    @Override
+    protected ListIterable<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), littleElements)
+                .collect(i -> i / 10);
     }
 }

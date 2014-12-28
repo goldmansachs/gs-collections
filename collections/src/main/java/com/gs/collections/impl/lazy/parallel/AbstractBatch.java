@@ -26,6 +26,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.procedure.CountProcedure;
+import com.gs.collections.impl.block.procedure.DoubleSumResultHolder;
 import com.gs.collections.impl.block.procedure.MaxByProcedure;
 import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
 import com.gs.collections.impl.block.procedure.MinByProcedure;
@@ -96,11 +97,11 @@ public abstract class AbstractBatch<T> implements Batch<T>
         return procedure.getResult();
     }
 
-    public double sumOfFloat(FloatFunction<? super T> function)
+    public DoubleSumResultHolder sumOfFloat(FloatFunction<? super T> function)
     {
         SumOfFloatProcedure<T> procedure = new SumOfFloatProcedure<T>(function);
         this.forEach(procedure);
-        return procedure.getResult();
+        return procedure;
     }
 
     public long sumOfLong(LongFunction<? super T> function)
@@ -110,10 +111,10 @@ public abstract class AbstractBatch<T> implements Batch<T>
         return procedure.getResult();
     }
 
-    public double sumOfDouble(DoubleFunction<? super T> function)
+    public DoubleSumResultHolder sumOfDouble(DoubleFunction<? super T> function)
     {
         SumOfDoubleProcedure<T> procedure = new SumOfDoubleProcedure<T>(function);
         this.forEach(procedure);
-        return procedure.getResult();
+        return procedure;
     }
 }

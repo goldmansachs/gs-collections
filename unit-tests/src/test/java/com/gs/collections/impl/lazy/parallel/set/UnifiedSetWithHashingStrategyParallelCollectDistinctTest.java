@@ -21,6 +21,7 @@ import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 import org.junit.Assert;
 import org.junit.Test;
@@ -37,9 +38,16 @@ public class UnifiedSetWithHashingStrategyParallelCollectDistinctTest extends Pa
     protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
     {
         return (ParallelUnsortedSetIterable<Integer>) UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.defaultStrategy(), littleElements)
-                .asParallel(this.executorService, 2)
+                .asParallel(this.executorService, this.batchSize)
                 .collect(i -> i / 10)
                 .asUnique();
+    }
+
+    @Override
+    protected UnifiedSet<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.defaultStrategy(), littleElements)
+                .collect(i -> i / 10);
     }
 
     @Test

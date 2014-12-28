@@ -43,7 +43,7 @@ public class SynchronizedMutableListParallelListIterableTest extends ParallelLis
     @Override
     protected ParallelListIterable<Integer> newWith(Integer... littleElements)
     {
-        return ListAdapter.adapt(new LinkedList<>(Lists.mutable.of(littleElements))).asSynchronized().asParallel(null, 2);
+        return ListAdapter.adapt(new LinkedList<>(Lists.mutable.of(littleElements))).asSynchronized().asParallel(null, this.batchSize);
     }
 
     @Override
@@ -52,7 +52,9 @@ public class SynchronizedMutableListParallelListIterableTest extends ParallelLis
     {
         try
         {
-            this.classUnderTest().forEach(each -> { throw new RuntimeException("Execution exception"); });
+            this.classUnderTest().forEach(each -> {
+                throw new RuntimeException("Execution exception");
+            });
         }
         catch (RuntimeException e)
         {
@@ -66,7 +68,9 @@ public class SynchronizedMutableListParallelListIterableTest extends ParallelLis
     {
         try
         {
-            this.classUnderTest().collect(each -> { throw new RuntimeException("Execution exception"); }).toString();
+            this.classUnderTest().collect(each -> {
+                throw new RuntimeException("Execution exception");
+            }).toString();
         }
         catch (RuntimeException e)
         {
@@ -80,7 +84,9 @@ public class SynchronizedMutableListParallelListIterableTest extends ParallelLis
     {
         try
         {
-            this.classUnderTest().anySatisfy(each -> { throw new RuntimeException("Execution exception"); });
+            this.classUnderTest().anySatisfy(each -> {
+                throw new RuntimeException("Execution exception");
+            });
         }
         catch (RuntimeException e)
         {
@@ -94,7 +100,9 @@ public class SynchronizedMutableListParallelListIterableTest extends ParallelLis
     {
         try
         {
-            this.classUnderTest().allSatisfy(each -> { throw new RuntimeException("Execution exception"); });
+            this.classUnderTest().allSatisfy(each -> {
+                throw new RuntimeException("Execution exception");
+            });
         }
         catch (RuntimeException e)
         {
@@ -108,7 +116,9 @@ public class SynchronizedMutableListParallelListIterableTest extends ParallelLis
     {
         try
         {
-            this.classUnderTest().detect(each -> { throw new RuntimeException("Execution exception"); });
+            this.classUnderTest().detect(each -> {
+                throw new RuntimeException("Execution exception");
+            });
         }
         catch (RuntimeException e)
         {

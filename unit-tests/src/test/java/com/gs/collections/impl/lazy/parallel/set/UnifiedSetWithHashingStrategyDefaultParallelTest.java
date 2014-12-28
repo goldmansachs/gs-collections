@@ -32,7 +32,7 @@ public class UnifiedSetWithHashingStrategyDefaultParallelTest extends ParallelUn
     @Override
     protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
     {
-        return UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.defaultStrategy(), littleElements).asParallel(this.executorService, 2);
+        return UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.defaultStrategy(), littleElements).asParallel(this.executorService, this.batchSize);
     }
 
     @Test(expected = IllegalArgumentException.class)

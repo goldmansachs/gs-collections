@@ -31,6 +31,6 @@ public class CompositeListParallelListIterableTest extends NonParallelListIterab
     @Override
     protected ParallelListIterable<Integer> newWith(Integer... littleElements)
     {
-        return new CompositeFastList<Integer>().withAll(Lists.mutable.of(littleElements)).asParallel(null, 2);
+        return new CompositeFastList<Integer>().withAll(Lists.mutable.of(littleElements)).asParallel(null, this.batchSize);
     }
 }

@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -32,7 +33,14 @@ public class ParallelSelectUnsortedSetIterableTest extends ParallelUnsortedSetIt
     protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
     {
         return UnifiedSet.newSetWith(littleElements)
-                .asParallel(this.executorService, 2)
+                .asParallel(this.executorService, this.batchSize)
+                .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
+    }
+
+    @Override
+    protected MutableSet<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return UnifiedSet.newSetWith(littleElements)
                 .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
     }
 }

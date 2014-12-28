@@ -31,6 +31,6 @@ public class NonParallelUnsortedSetIterableTest extends NonParallelUnsortedSetIt
     @Override
     protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
     {
-        return new CompositeFastList<Integer>().withAll(Lists.mutable.of(littleElements)).asParallel(null, 2).asUnique();
+        return new CompositeFastList<Integer>().withAll(Lists.mutable.of(littleElements)).asParallel(null, this.batchSize).asUnique();
     }
 }

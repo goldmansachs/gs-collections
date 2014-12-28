@@ -30,6 +30,6 @@ public class SynchronizedMutableSetParallelSetIterableTest extends ParallelUnsor
     @Override
     protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
     {
-        return UnifiedSet.newSetWith(littleElements).asSynchronized().asParallel(this.executorService, 2);
+        return UnifiedSet.newSetWith(littleElements).asSynchronized().asParallel(this.executorService, this.batchSize);
     }
 }

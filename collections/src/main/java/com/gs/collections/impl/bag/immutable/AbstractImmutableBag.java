@@ -569,12 +569,18 @@ public abstract class AbstractImmutableBag<T>
     public double sumOfFloat(final FloatFunction<? super T> function)
     {
         final double[] sum = {0.0};
+        final double[] compensation = {0.0};
         this.forEachWithOccurrences(new ObjectIntProcedure<T>()
         {
             public void value(T each, int occurrences)
             {
-                double value = function.floatValueOf(each);
-                sum[0] += value * (double) occurrences;
+                for (int i = 0; i < occurrences; i++)
+                {
+                    double y = (double) function.floatValueOf(each) - compensation[0];
+                    double t = sum[0] + y;
+                    compensation[0] = t - sum[0] - y;
+                    sum[0] = t;
+                }
             }
         });
         return sum[0];
@@ -584,12 +590,18 @@ public abstract class AbstractImmutableBag<T>
     public double sumOfDouble(final DoubleFunction<? super T> function)
     {
         final double[] sum = {0.0};
+        final double[] compensation = {0.0};
         this.forEachWithOccurrences(new ObjectIntProcedure<T>()
         {
             public void value(T each, int occurrences)
             {
-                double value = function.doubleValueOf(each);
-                sum[0] += value * (double) occurrences;
+                for (int i = 0; i < occurrences; i++)
+                {
+                    double adjustedValue = function.doubleValueOf(each) - compensation[0];
+                    double nextSum = sum[0] + adjustedValue;
+                    compensation[0] = nextSum - sum[0] - adjustedValue;
+                    sum[0] = nextSum;
+                }
             }
         });
         return sum[0];

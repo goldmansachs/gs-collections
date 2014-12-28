@@ -17,7 +17,9 @@
 package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -36,9 +38,16 @@ public class ParallelCollectDistinctSetIterableTest extends ParallelUnsortedSetI
     protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
     {
         return (ParallelUnsortedSetIterable<Integer>) UnifiedSet.newSetWith(littleElements)
-                .asParallel(this.executorService, 2)
+                .asParallel(this.executorService, this.batchSize)
                 .collect(i -> i / 10)
                 .asUnique();
+    }
+
+    @Override
+    protected MutableSet<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return HashBag.newBagWith(littleElements)
+                .collect(i -> i / 10).toSet();
     }
 
     @Test

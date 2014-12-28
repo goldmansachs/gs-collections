@@ -106,7 +106,6 @@ public interface
      * this method, the first element could be any element from the Set.
      *
      * @since 1.0
-     *
      * @deprecated in 6.0. Use {@link OrderedIterable#getFirst()} instead.
      */
     @Deprecated
@@ -122,7 +121,6 @@ public interface
      * this method, the last element could be any element from the Set.
      *
      * @since 1.0
-     *
      * @deprecated in 6.0. Use {@link OrderedIterable#getLast()} instead.
      */
     @Deprecated
@@ -1236,7 +1234,7 @@ public interface
 
     /**
      * Returns the final double result of evaluating function for each element of the iterable and adding the results
-     * together.
+     * together. It uses Kahan summation algorithm to reduce numerical error.
      *
      * @since 2.0
      */
@@ -1252,7 +1250,7 @@ public interface
 
     /**
      * Returns the final double result of evaluating function for each element of the iterable and adding the results
-     * together.
+     * together. It uses Kahan summation algorithm to reduce numerical error.
      *
      * @since 2.0
      */
@@ -1439,7 +1437,6 @@ public interface
      * RichIterable} and that. The length of the returned {@code RichIterable} is the minimum of the lengths of
      * this {@code RichIterable} and that.
      * @since 1.0
-     *
      * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
      */
     @Deprecated
@@ -1449,7 +1446,6 @@ public interface
      * Same as {@link #zip(Iterable)} but uses {@code target} for output.
      *
      * @since 1.0
-     *
      * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable, Collection)} instead;
      */
     @Deprecated
@@ -1462,7 +1458,6 @@ public interface
      * paired with their index. Indices start at 0.
      * @see #zip(Iterable)
      * @since 1.0
-     *
      * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
      */
     @Deprecated
@@ -1472,7 +1467,6 @@ public interface
      * Same as {@link #zipWithIndex()} but uses {@code target} for output.
      *
      * @since 1.0
-     *
      * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex(Collection)} instead.
      */
     @Deprecated

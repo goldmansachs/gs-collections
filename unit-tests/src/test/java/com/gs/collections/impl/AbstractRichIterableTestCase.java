@@ -835,12 +835,64 @@ public abstract class AbstractRichIterableTestCase
     }
 
     @Test
+    public void sumFloatConsistentRounding1()
+    {
+        MutableList<Integer> list = Interval.oneTo(100_000).toList();
+        Collections.shuffle(list);
+
+        // The test only ensures the consistency/stability of rounding. This is not meant to test the "correctness" of the float calculation result.
+        // Indeed the lower bits of this calculation result are always incorrect due to the information loss of original float values.
+        Assert.assertEquals(
+                1.082323233761663,
+                this.newWith(list.toArray(new Integer[]{})).sumOfFloat(i -> 1.0f / (i.floatValue() * i.floatValue() * i.floatValue() * i.floatValue())),
+                1.0e-15);
+    }
+
+    @Test
+    public void sumFloatConsistentRounding2()
+    {
+        MutableList<Integer> list = Interval.oneTo(99_999).toList();
+        Collections.shuffle(list);
+
+        // The test only ensures the consistency/stability of rounding. This is not meant to test the "correctness" of the float calculation result.
+        // Indeed the lower bits of this calculation result are always incorrect due to the information loss of original float values.
+        Assert.assertEquals(
+                33333.00099340081,
+                this.newWith(list.toArray(new Integer[]{})).sumOfFloat(i -> 1.0f / 3.0f),
+                0.0);
+    }
+
+    @Test
     public void sumDouble()
     {
         RichIterable<Integer> objects = this.newWith(1, 2, 3);
         double expected = objects.injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
         double actual = objects.sumOfDouble(Integer::doubleValue);
         Assert.assertEquals(expected, actual, 0.001);
+    }
+
+    @Test
+    public void sumDoubleConsistentRounding1()
+    {
+        MutableList<Integer> list = Interval.oneTo(100_000).toList();
+        Collections.shuffle(list);
+
+        Assert.assertEquals(
+                1.082323233711138,
+                this.newWith(list.toArray(new Integer[]{})).sumOfDouble(i -> 1.0d / (i.doubleValue() * i.doubleValue() * i.doubleValue() * i.doubleValue())),
+                1.0e-15);
+    }
+
+    @Test
+    public void sumDoubleConsistentRounding2()
+    {
+        MutableList<Integer> list = Interval.oneTo(99_999).toList();
+        Collections.shuffle(list);
+
+        Assert.assertEquals(
+                33333.0,
+                this.newWith(list.toArray(new Integer[]{})).sumOfDouble(i -> 1.0d / 3.0d),
+                0.0);
     }
 
     @Test

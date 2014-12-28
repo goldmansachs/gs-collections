@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
@@ -32,7 +33,13 @@ public class MemoryEfficientMutableSetParallelSetIterableTest extends ParallelUn
     @Override
     protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
     {
-        return Sets.fixedSize.withAll(ArrayAdapter.adapt(littleElements)).asParallel(this.executorService, 2);
+        return Sets.fixedSize.withAll(ArrayAdapter.adapt(littleElements)).asParallel(this.executorService, this.batchSize);
+    }
+
+    @Override
+    protected MutableSet<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return Sets.fixedSize.withAll(ArrayAdapter.adapt(littleElements));
     }
 
     @Test(expected = IllegalArgumentException.class)

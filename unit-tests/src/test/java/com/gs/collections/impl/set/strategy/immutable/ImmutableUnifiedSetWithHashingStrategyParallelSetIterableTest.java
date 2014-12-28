@@ -46,6 +46,12 @@ public class ImmutableUnifiedSetWithHashingStrategyParallelSetIterableTest exten
         return UnifiedSetWithHashingStrategy.newSetWith(INTEGER_TO_STRING_HASHING_STRATEGY, 1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
     }
 
+    @Override
+    protected MutableSet<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return UnifiedSetWithHashingStrategy.newSetWith(INTEGER_TO_STRING_HASHING_STRATEGY, littleElements);
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void asParallel_small_batch()
     {

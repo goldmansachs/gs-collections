@@ -17,6 +17,7 @@
 package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
+import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.lazy.parallel.set.sorted.ParallelSortedSetIterableTestCase;
@@ -32,6 +33,12 @@ public class ImmutableTreeSetParallelSetIterableTest extends ParallelSortedSetIt
     @Override
     protected ParallelSortedSetIterable<Integer> newWith(Integer... littleElements)
     {
-        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), littleElements).asParallel(this.executorService, 2);
+        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), littleElements).asParallel(this.executorService, this.batchSize);
+    }
+
+    @Override
+    protected SortedSetIterable<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return SortedSets.immutable.with(Comparators.reverseNaturalOrder(), littleElements);
     }
 }

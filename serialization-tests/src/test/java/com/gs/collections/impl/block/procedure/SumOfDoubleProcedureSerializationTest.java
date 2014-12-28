@@ -25,11 +25,11 @@ public class SumOfDoubleProcedureSerializationTest
     public void serializedForm()
     {
         Verify.assertSerializedForm(
-                1L,
+                2L,
                 "rO0ABXNyADxjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5wcm9jZWR1cmUuU3VtT2ZEb3Vi\n"
-                        + "bGVQcm9jZWR1cmUAAAAAAAAAAQIAAkQABnJlc3VsdEwACGZ1bmN0aW9udABATGNvbS9ncy9jb2xs\n"
-                        + "ZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vcHJpbWl0aXZlL0RvdWJsZUZ1bmN0aW9uO3hwAAAA\n"
-                        + "AAAAAABw",
+                        + "bGVQcm9jZWR1cmUAAAAAAAAAAgIAA0QADGNvbXBlbnNhdGlvbkQABnJlc3VsdEwACGZ1bmN0aW9u\n"
+                        + "dABATGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vcHJpbWl0aXZlL0RvdWJs\n"
+                        + "ZUZ1bmN0aW9uO3hwAAAAAAAAAAAAAAAAAAAAAHA=",
                 new SumOfDoubleProcedure<Integer>(null));
     }
 }

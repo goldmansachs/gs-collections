@@ -39,6 +39,12 @@ public class ImmutableEmptySortedSetParallelTest extends NonParallelSortedSetIte
     }
 
     @Override
+    protected SortedSetIterable<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder());
+    }
+
+    @Override
     protected ParallelSortedSetIterable<Integer> classUnderTest()
     {
         return this.newWith();
@@ -47,7 +53,7 @@ public class ImmutableEmptySortedSetParallelTest extends NonParallelSortedSetIte
     @Override
     protected ParallelSortedSetIterable<Integer> newWith(Integer... littleElements)
     {
-        return SortedSets.immutable.with(Comparators.<Integer>reverseNaturalOrder()).asParallel(this.executorService, 2);
+        return SortedSets.immutable.with(Comparators.<Integer>reverseNaturalOrder()).asParallel(this.executorService, this.batchSize);
     }
 
     @Test(expected = IllegalArgumentException.class)

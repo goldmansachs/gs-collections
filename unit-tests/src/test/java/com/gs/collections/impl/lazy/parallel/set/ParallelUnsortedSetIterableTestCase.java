@@ -38,6 +38,12 @@ public abstract class ParallelUnsortedSetIterableTestCase extends ParallelIterab
     }
 
     @Override
+    protected MutableSet<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return UnifiedSet.newSetWith(littleElements);
+    }
+
+    @Override
     protected RichIterable<Integer> getExpectedCollect()
     {
         return HashBag.newBagWith(1, 2, 3, 4);

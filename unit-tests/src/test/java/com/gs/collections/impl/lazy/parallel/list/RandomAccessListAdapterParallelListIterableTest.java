@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.parallel.list;
 
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.ListAdapter;
@@ -33,7 +34,13 @@ public class RandomAccessListAdapterParallelListIterableTest extends ParallelLis
     @Override
     protected ParallelListIterable<Integer> newWith(Integer... littleElements)
     {
-        return RandomAccessListAdapter.adapt(Lists.mutable.of(littleElements)).asParallel(this.executorService, 2);
+        return RandomAccessListAdapter.adapt(Lists.mutable.of(littleElements)).asParallel(this.executorService, this.batchSize);
+    }
+
+    @Override
+    protected ListIterable<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return RandomAccessListAdapter.adapt(Lists.mutable.of(littleElements));
     }
 
     @Test(expected = IllegalArgumentException.class)

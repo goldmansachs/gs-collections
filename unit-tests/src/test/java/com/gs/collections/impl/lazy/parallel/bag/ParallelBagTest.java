@@ -31,7 +31,7 @@ public class ParallelBagTest extends ParallelBagTestCase
     @Override
     protected ParallelBag<Integer> newWith(Integer... littleElements)
     {
-        return HashBag.newBagWith(littleElements).asParallel(this.executorService, 2);
+        return HashBag.newBagWith(littleElements).asParallel(this.executorService, this.batchSize);
     }
 
     @Test(expected = IllegalArgumentException.class)

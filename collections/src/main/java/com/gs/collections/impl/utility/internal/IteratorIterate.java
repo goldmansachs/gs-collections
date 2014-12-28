@@ -1197,9 +1197,13 @@ public final class IteratorIterate
     public static <T> double sumOfFloat(Iterator<T> iterator, FloatFunction<? super T> function)
     {
         double sum = 0.0d;
+        double compensation = 0.0d;
         while (iterator.hasNext())
         {
-            sum += (double) function.floatValueOf(iterator.next());
+            double adjustedValue = (double) function.floatValueOf(iterator.next()) - compensation;
+            double nextSum = sum + adjustedValue;
+            compensation = nextSum - sum - adjustedValue;
+            sum = nextSum;
         }
         return sum;
     }
@@ -1207,9 +1211,13 @@ public final class IteratorIterate
     public static <T> double sumOfDouble(Iterator<T> iterator, DoubleFunction<? super T> function)
     {
         double sum = 0.0d;
+        double compensation = 0.0d;
         while (iterator.hasNext())
         {
-            sum += function.doubleValueOf(iterator.next());
+            double adjustedValue = function.doubleValueOf(iterator.next()) - compensation;
+            double nextSum = sum + adjustedValue;
+            compensation = nextSum - sum - adjustedValue;
+            sum = nextSum;
         }
         return sum;
     }

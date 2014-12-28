@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.parallel.list;
 
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.list.mutable.ListAdapter;
 import com.gs.collections.impl.list.mutable.MultiReaderFastList;
@@ -32,7 +33,13 @@ public class MultiReaderFastListParallelListIterableTest extends ParallelListIte
     @Override
     protected ParallelListIterable<Integer> newWith(Integer... littleElements)
     {
-        return ListAdapter.adapt(MultiReaderFastList.newListWith(littleElements)).asParallel(this.executorService, 2);
+        return ListAdapter.adapt(MultiReaderFastList.newListWith(littleElements)).asParallel(this.executorService, this.batchSize);
+    }
+
+    @Override
+    protected ListIterable<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return ListAdapter.adapt(MultiReaderFastList.newListWith(littleElements));
     }
 
     @Test(expected = IllegalArgumentException.class)

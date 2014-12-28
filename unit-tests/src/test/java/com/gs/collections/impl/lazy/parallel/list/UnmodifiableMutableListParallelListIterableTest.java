@@ -18,6 +18,7 @@ package com.gs.collections.impl.lazy.parallel.list;
 
 import java.util.ArrayList;
 
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.ArrayListAdapter;
@@ -34,7 +35,13 @@ public class UnmodifiableMutableListParallelListIterableTest extends ParallelLis
     @Override
     protected ParallelListIterable<Integer> newWith(Integer... littleElements)
     {
-        return ArrayListAdapter.adapt(new ArrayList<>(Lists.mutable.of(littleElements))).asUnmodifiable().asParallel(this.executorService, 2);
+        return ArrayListAdapter.adapt(new ArrayList<>(Lists.mutable.of(littleElements))).asUnmodifiable().asParallel(this.executorService, this.batchSize);
+    }
+
+    @Override
+    protected ListIterable<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return ArrayListAdapter.adapt(new ArrayList<>(Lists.mutable.of(littleElements))).asUnmodifiable();
     }
 
     @Test(expected = IllegalArgumentException.class)

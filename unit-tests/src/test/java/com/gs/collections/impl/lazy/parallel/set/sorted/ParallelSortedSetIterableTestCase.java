@@ -33,6 +33,11 @@ public abstract class ParallelSortedSetIterableTestCase extends ParallelIterable
         return TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1);
     }
 
+    @Override
+    protected SortedSetIterable<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), littleElements);
+    }
 
     @Override
     protected boolean isOrdered()

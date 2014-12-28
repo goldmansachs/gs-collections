@@ -829,22 +829,30 @@ public final class RandomAccessListIterate
 
     public static <T> double sumOfFloat(List<T> list, FloatFunction<? super T> function)
     {
-        double result = 0.0d;
+        double sum = 0.0d;
+        double compensation = 0.0d;
         for (int i = 0; i < list.size(); i++)
         {
-            result += (double) function.floatValueOf(list.get(i));
+            double adjustedValue = (double) function.floatValueOf(list.get(i)) - compensation;
+            double nextSum = sum + adjustedValue;
+            compensation = nextSum - sum - adjustedValue;
+            sum = nextSum;
         }
-        return result;
+        return sum;
     }
 
     public static <T> double sumOfDouble(List<T> list, DoubleFunction<? super T> function)
     {
-        double result = 0.0d;
+        double sum = 0.0d;
+        double compensation = 0.0d;
         for (int i = 0; i < list.size(); i++)
         {
-            result += function.doubleValueOf(list.get(i));
+            double adjustedValue = function.doubleValueOf(list.get(i)) - compensation;
+            double nextSum = sum + adjustedValue;
+            compensation = nextSum - sum - adjustedValue;
+            sum = nextSum;
         }
-        return result;
+        return sum;
     }
 
     public static <T> BigDecimal sumOfBigDecimal(List<T> list, Function<? super T, BigDecimal> function)

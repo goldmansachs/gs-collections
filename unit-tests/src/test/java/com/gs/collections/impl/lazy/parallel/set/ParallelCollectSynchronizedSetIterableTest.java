@@ -40,7 +40,7 @@ public class ParallelCollectSynchronizedSetIterableTest extends ParallelIterable
     {
         return UnifiedSet.newSetWith(littleElements)
                 .asSynchronized()
-                .asParallel(this.executorService, 2)
+                .asParallel(this.executorService, this.batchSize)
                 .collect(i -> i / 10);
     }
 
@@ -48,6 +48,14 @@ public class ParallelCollectSynchronizedSetIterableTest extends ParallelIterable
     protected MutableBag<Integer> getExpected()
     {
         return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected MutableBag<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return HashBag.newBagWith(littleElements)
+                .asSynchronized()
+                .collect(i -> i / 10);
     }
 
     @Override

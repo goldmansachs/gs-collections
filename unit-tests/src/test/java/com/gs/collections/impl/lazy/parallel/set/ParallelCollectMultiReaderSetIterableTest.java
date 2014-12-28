@@ -20,6 +20,7 @@ import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.mutable.MultiReaderHashBag;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.lazy.parallel.ParallelIterableTestCase;
@@ -39,7 +40,7 @@ public class ParallelCollectMultiReaderSetIterableTest extends ParallelIterableT
     protected ParallelIterable<Integer> newWith(Integer... littleElements)
     {
         return MultiReaderUnifiedSet.newSetWith(littleElements)
-                .asParallel(this.executorService, 2)
+                .asParallel(this.executorService, this.batchSize)
                 .collect(i -> i / 10);
     }
 
@@ -47,6 +48,13 @@ public class ParallelCollectMultiReaderSetIterableTest extends ParallelIterableT
     protected MutableBag<Integer> getExpected()
     {
         return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected MutableBag<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return MultiReaderHashBag.newBagWith(littleElements)
+                .collect(i -> i / 10);
     }
 
     @Override

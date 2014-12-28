@@ -829,22 +829,30 @@ public final class InternalArrayIterate
 
     public static <T> double sumOfFloat(T[] array, int size, FloatFunction<? super T> function)
     {
-        double result = 0.0d;
+        double sum = 0.0d;
+        double compensation = 0.0d;
         for (int i = 0; i < size; i++)
         {
-            result += (double) function.floatValueOf(array[i]);
+            double adjustedValue = (double) function.floatValueOf(array[i]) - compensation;
+            double nextSum = sum + adjustedValue;
+            compensation = nextSum - sum - adjustedValue;
+            sum = nextSum;
         }
-        return result;
+        return sum;
     }
 
     public static <T> double sumOfDouble(T[] array, int size, DoubleFunction<? super T> function)
     {
-        double result = 0.0d;
+        double sum = 0.0d;
+        double compensation = 0.0d;
         for (int i = 0; i < size; i++)
         {
-            result += function.doubleValueOf(array[i]);
+            double adjustedValue = function.doubleValueOf(array[i]) - compensation;
+            double nextSum = sum + adjustedValue;
+            compensation = nextSum - sum - adjustedValue;
+            sum = nextSum;
         }
-        return result;
+        return sum;
     }
 
     public static <V, T> ObjectLongMap<V> sumByInt(T[] array, int size, Function<T, V> groupBy, IntFunction<? super T> function)

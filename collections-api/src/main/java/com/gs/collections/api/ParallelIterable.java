@@ -199,12 +199,36 @@ public interface ParallelIterable<T>
 
     <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function);
 
+    /**
+     * Returns the final long result of evaluating function for each element of the iterable in parallel
+     * and adding the results together.
+     *
+     * @since 6.0
+     */
     long sumOfInt(IntFunction<? super T> function);
 
+    /**
+     * Returns the final double result of evaluating function for each element of the iterable in parallel
+     * and adding the results together. It uses Kahan summation algorithm to reduce numerical error.
+     *
+     * @since 6.0
+     */
     double sumOfFloat(FloatFunction<? super T> function);
 
+    /**
+     * Returns the final long result of evaluating function for each element of the iterable in parallel
+     * and adding the results together.
+     *
+     * @since 6.0
+     */
     long sumOfLong(LongFunction<? super T> function);
 
+    /**
+     * Returns the final double result of evaluating function for each element of the iterable in parallel
+     * and adding the results together. It uses Kahan summation algorithm to reduce numerical error.
+     *
+     * @since 6.0
+     */
     double sumOfDouble(DoubleFunction<? super T> function);
 
     String makeString();

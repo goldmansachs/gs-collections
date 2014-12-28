@@ -17,8 +17,8 @@
 package com.gs.collections.impl.lazy.parallel;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.NoSuchElementException;
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,8 +30,12 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
@@ -49,6 +53,7 @@ import com.gs.collections.impl.block.function.checked.CheckedFunction;
 import com.gs.collections.impl.block.predicate.checked.CheckedPredicate;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -59,12 +64,15 @@ import org.junit.Test;
 
 public abstract class ParallelIterableTestCase
 {
+    private static final ImmutableList<Integer> BATCH_SIZES = Lists.immutable.with(2, 5, 10, 100, 1000, 10000, 50000);
     protected ExecutorService executorService;
+    protected int batchSize = 2;
 
     @Before
     public void setUp()
     {
         this.executorService = Executors.newFixedThreadPool(10);
+        this.batchSize = 2;
         Assert.assertFalse(Thread.interrupted());
     }
 
@@ -82,6 +90,8 @@ public abstract class ParallelIterableTestCase
 
     // 1, 2, 2, 3, 3, 3, 4, 4, 4, 4
     protected abstract RichIterable<Integer> getExpected();
+
+    protected abstract RichIterable<Integer> getExpectedWith(Integer... littleElements);
 
     protected RichIterable<Integer> getExpectedCollect()
     {
@@ -869,6 +879,28 @@ public abstract class ParallelIterableTestCase
     }
 
     @Test
+    public void sumOfFloatConsistentRounding()
+    {
+        FloatFunction<Integer> roundingSensitiveElementFunction = i -> (i <= 99995) ? 1.0e-18f : 1.0f;
+
+        MutableList<Integer> list = Interval.oneTo(100_000).toList();
+        Collections.shuffle(list);
+        double baseline = this.getExpectedWith(list.toArray(new Integer[]{}))
+                .sumOfFloat(roundingSensitiveElementFunction);
+
+        for (Integer batchSize : BATCH_SIZES)
+        {
+            this.batchSize = batchSize;
+
+            ParallelIterable<Integer> testCollection = this.newWith(list.toArray(new Integer[]{}));
+            Assert.assertEquals("Batch size: " + this.batchSize,
+                    baseline,
+                    testCollection.sumOfFloat(roundingSensitiveElementFunction),
+                    1.0e-15d);
+        }
+    }
+
+    @Test
     public void sumOfDouble()
     {
         Assert.assertEquals(
@@ -880,20 +912,22 @@ public abstract class ParallelIterableTestCase
     @Test
     public void sumOfDoubleConsistentRounding()
     {
-        int collectionSize = 100;
-        Integer[] largeData = new Integer[collectionSize];
-        Random random = new Random();
-        for (int i = 0; i < collectionSize; i++)
-        {
-            largeData[i] = random.nextInt();
-        }
+        DoubleFunction<Integer> roundingSensitiveElementFunction = i -> (i <= 99995) ? 1.0e-18d : 1.0d;
 
-        double doubleBaseline = this.newWith(largeData).sumOfDouble(integer -> integer / 0.3);
+        MutableList<Integer> list = Interval.oneTo(100_000).toList();
+        Collections.shuffle(list);
+        double baseline = this.getExpectedWith(list.toArray(new Integer[]{}))
+                .sumOfDouble(roundingSensitiveElementFunction);
 
-        int trialCount = 100;
-        for (int i = 0; i < trialCount; i++)
+        for (Integer batchSize : BATCH_SIZES)
         {
-            Assert.assertEquals(doubleBaseline, this.newWith(largeData).sumOfDouble(integer -> integer / 0.3), 0.0);
+            this.batchSize = batchSize;
+
+            ParallelIterable<Integer> testCollection = this.newWith(list.toArray(new Integer[]{}));
+            Assert.assertEquals("Batch size: " + this.batchSize,
+                    baseline,
+                    testCollection.sumOfDouble(roundingSensitiveElementFunction),
+                    1.0e-15d);
         }
     }
 

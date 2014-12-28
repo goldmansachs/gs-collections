@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.parallel.list;
 
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.list.mutable.FastList;
 
@@ -31,7 +32,15 @@ public class ParallelCollectListIterableTest extends ParallelListIterableTestCas
     protected ParallelListIterable<Integer> newWith(Integer... littleElements)
     {
         return FastList.newListWith(littleElements)
-                .asParallel(this.executorService, 2)
+                .asParallel(this.executorService, this.batchSize)
+                .collect(String::valueOf)
+                .collect(string -> "null".equals(string) ? null : Integer.valueOf(string));
+    }
+
+    @Override
+    protected ListIterable<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return FastList.newListWith(littleElements)
                 .collect(String::valueOf)
                 .collect(string -> "null".equals(string) ? null : Integer.valueOf(string));
     }

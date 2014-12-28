@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.parallel.list;
 
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.lazy.parallel.ParallelIterableTestCase;
@@ -33,6 +34,12 @@ public abstract class ParallelListIterableTestCase extends ParallelIterableTestC
     protected MutableList<Integer> getExpected()
     {
         return FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+    }
+
+    @Override
+    protected ListIterable<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return FastList.newListWith(littleElements);
     }
 
     @Override

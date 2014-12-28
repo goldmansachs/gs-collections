@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.parallel.bag;
 
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.ParallelBag;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -32,7 +33,14 @@ public class ParallelSelectBagTest extends ParallelBagTestCase
     protected ParallelBag<Integer> newWith(Integer... littleElements)
     {
         return HashBag.newBagWith(littleElements)
-                .asParallel(this.executorService, 2)
+                .asParallel(this.executorService, this.batchSize)
+                .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
+    }
+
+    @Override
+    protected MutableBag<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return HashBag.newBagWith(littleElements)
                 .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
     }
 }

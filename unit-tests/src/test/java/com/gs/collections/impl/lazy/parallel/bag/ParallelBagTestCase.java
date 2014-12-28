@@ -38,6 +38,12 @@ public abstract class ParallelBagTestCase extends ParallelIterableTestCase
     }
 
     @Override
+    protected MutableBag<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return HashBag.newBagWith(littleElements);
+    }
+
+    @Override
     protected boolean isOrdered()
     {
         return false;

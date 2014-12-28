@@ -58,6 +58,7 @@ import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.procedure.DoubleSumResultHolder;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
@@ -844,9 +845,9 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
 
     public double sumOfFloat(final FloatFunction<? super T> function)
     {
-        DoubleFunction<Batch<T>> map = new DoubleFunction<Batch<T>>()
+        Function<Batch<T>, DoubleSumResultHolder> map = new Function<Batch<T>, DoubleSumResultHolder>()
         {
-            public double doubleValueOf(Batch<T> batch)
+            public DoubleSumResultHolder valueOf(Batch<T> batch)
             {
                 return batch.sumOfFloat(function);
             }
@@ -868,9 +869,9 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
 
     public double sumOfDouble(final DoubleFunction<? super T> function)
     {
-        DoubleFunction<Batch<T>> map = new DoubleFunction<Batch<T>>()
+        Function<Batch<T>, DoubleSumResultHolder> map = new Function<Batch<T>, DoubleSumResultHolder>()
         {
-            public double doubleValueOf(Batch<T> batch)
+            public DoubleSumResultHolder valueOf(Batch<T> batch)
             {
                 return batch.sumOfDouble(function);
             }
@@ -916,32 +917,37 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
         }
     }
 
-    private double sumOfDoubleOrdered(final DoubleFunction<Batch<T>> map)
+    private double sumOfDoubleOrdered(final Function<Batch<T>, DoubleSumResultHolder> map)
     {
         LazyIterable<? extends Batch<T>> chunks = this.split();
-        LazyIterable<Future<Double>> futures = chunks.collect(new Function<Batch<T>, Future<Double>>()
+        LazyIterable<Future<DoubleSumResultHolder>> futures = chunks.collect(new Function<Batch<T>, Future<DoubleSumResultHolder>>()
         {
-            public Future<Double> valueOf(final Batch<T> chunk)
+            public Future<DoubleSumResultHolder> valueOf(final Batch<T> chunk)
             {
-                return AbstractParallelIterable.this.getExecutorService().submit(new Callable<Double>()
+                return AbstractParallelIterable.this.getExecutorService().submit(new Callable<DoubleSumResultHolder>()
                 {
-                    public Double call()
+                    public DoubleSumResultHolder call()
                     {
-                        return map.doubleValueOf(chunk);
+                        return map.valueOf(chunk);
                     }
                 });
             }
         });
         // The call to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
-        MutableList<Future<Double>> futuresList = futures.toList();
+        MutableList<Future<DoubleSumResultHolder>> futuresList = futures.toList();
         try
         {
-            double result = 0.0;
+            double sum = 0.0d;
+            double compensation = 0.0d;
             for (int i = 0; i < futuresList.size(); i++)
             {
-                result += futuresList.get(i).get();
+                compensation += futuresList.get(i).get().getCompensation();
+                double adjustedValue = futuresList.get(i).get().getResult() - compensation;
+                double nextSum = sum + adjustedValue;
+                compensation = nextSum - sum - adjustedValue;
+                sum = nextSum;
             }
-            return result;
+            return sum;
         }
         catch (InterruptedException e)
         {

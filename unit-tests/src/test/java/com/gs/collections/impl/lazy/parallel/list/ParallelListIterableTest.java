@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.parallel.list;
 
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Test;
@@ -31,7 +32,13 @@ public class ParallelListIterableTest extends ParallelListIterableTestCase
     @Override
     protected ParallelListIterable<Integer> newWith(Integer... littleElements)
     {
-        return FastList.newListWith(littleElements).asParallel(this.executorService, 2);
+        return FastList.newListWith(littleElements).asParallel(this.executorService, this.batchSize);
+    }
+
+    @Override
+    protected ListIterable<Integer> getExpectedWith(Integer... littleElements)
+    {
+        return FastList.newListWith(littleElements);
     }
 
     @Test(expected = IllegalArgumentException.class)

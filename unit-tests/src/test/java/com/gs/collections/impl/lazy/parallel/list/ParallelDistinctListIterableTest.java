@@ -32,7 +32,7 @@ public class ParallelDistinctListIterableTest extends ParallelUnsortedSetIterabl
     protected ParallelUnsortedSetIterable<Integer> newWith(Integer... littleElements)
     {
         return FastList.newListWith(littleElements)
-                .asParallel(this.executorService, 2)
+                .asParallel(this.executorService, this.batchSize)
                 .asUnique();
     }
 }
