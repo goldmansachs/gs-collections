@@ -1028,8 +1028,6 @@ public abstract class ParallelIterableTestCase
     @Test
     public void forEach_interruptedException()
     {
-        final MutableCollection<Integer> actual1 = HashBag.<Integer>newBag().asSynchronized();
-
         Thread.currentThread().interrupt();
         Verify.assertThrowsWithCause(
                 RuntimeException.class,
@@ -1040,15 +1038,11 @@ public abstract class ParallelIterableTestCase
                     public void safeValue(Integer each) throws InterruptedException
                     {
                         Thread.sleep(1000);
-                        actual1.add(each);
+                        throw new AssertionError();
                     }
                 }));
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
-
-        MutableCollection<Integer> actual2 = HashBag.<Integer>newBag().asSynchronized();
-        this.classUnderTest().forEach(CollectionAddProcedure.on(actual2));
-        Assert.assertEquals(this.getExpected().toBag(), actual2);
     }
 
     @Test
@@ -1061,13 +1055,11 @@ public abstract class ParallelIterableTestCase
             public boolean safeAccept(Integer each) throws InterruptedException
             {
                 Thread.sleep(1000);
-                return each < 1;
+                throw new AssertionError();
             }
         }));
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
-
-        Assert.assertFalse(this.classUnderTest().anySatisfy(Predicates.lessThan(1)));
     }
 
     @Test
@@ -1080,13 +1072,11 @@ public abstract class ParallelIterableTestCase
             public boolean safeAccept(Integer each) throws InterruptedException
             {
                 Thread.sleep(1000);
-                return each < 5;
+                throw new AssertionError();
             }
         }));
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
-
-        Assert.assertTrue(this.classUnderTest().allSatisfy(Predicates.lessThan(5)));
     }
 
     @Test
@@ -1099,13 +1089,11 @@ public abstract class ParallelIterableTestCase
             public boolean safeAccept(Integer each) throws InterruptedException
             {
                 Thread.sleep(1000);
-                return each.intValue() == 3;
+                throw new AssertionError();
             }
         }));
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
-
-        Assert.assertEquals(Integer.valueOf(3), this.classUnderTest().detect(Integer.valueOf(3)::equals));
     }
 
     @Test
@@ -1118,15 +1106,11 @@ public abstract class ParallelIterableTestCase
             public String safeValueOf(Integer each) throws InterruptedException
             {
                 Thread.sleep(1000);
-                return String.valueOf(each);
+                throw new AssertionError();
             }
         }).toString());
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
-
-        MutableCollection<Integer> actual = HashBag.<Integer>newBag().asSynchronized();
-        this.classUnderTest().forEach(CollectionAddProcedure.on(actual));
-        Assert.assertEquals(this.getExpected().toBag(), actual);
     }
 
     @Test
