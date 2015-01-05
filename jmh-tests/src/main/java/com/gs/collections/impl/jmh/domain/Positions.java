@@ -28,7 +28,7 @@ import org.apache.commons.lang.RandomStringUtils;
 
 public class Positions
 {
-    private static final int SIZE = 3_000_000;
+    private static final int DEFAULT_SIZE = 3_000_000;
     private static final Random RANDOM = new Random(System.currentTimeMillis());
     private static final PrimitiveIterator.OfDouble DOUBLES = RANDOM.ints(1, 100).asDoubleStream().iterator();
     private static final PrimitiveIterator.OfInt INTS = RANDOM.ints(1, 100).iterator();
@@ -36,8 +36,19 @@ public class Positions
     private final Pool<Product> productPool = UnifiedSet.newSet();
     private final Pool<String> stringPool = UnifiedSet.newSet();
 
-    private final FastList<Position> gscPositions = FastList.newWithNValues(SIZE, this::createPosition);
-    private final ArrayList<Position> jdkPositions = new ArrayList<>(this.gscPositions);
+    private final FastList<Position> gscPositions;
+    private final ArrayList<Position> jdkPositions;
+
+    public Positions()
+    {
+        this(DEFAULT_SIZE);
+    }
+
+    public Positions(int size)
+    {
+        this.gscPositions = FastList.newWithNValues(size, this::createPosition);
+        this.jdkPositions = new ArrayList<>(FastList.newWithNValues(size, this::createPosition));
+    }
 
     public Positions shuffle()
     {
