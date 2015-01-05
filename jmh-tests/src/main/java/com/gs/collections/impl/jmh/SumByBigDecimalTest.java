@@ -26,21 +26,14 @@ import com.gs.collections.impl.jmh.domain.Positions;
 import com.gs.collections.impl.jmh.domain.Product;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.utility.Iterate;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.TearDown;
-import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -49,29 +42,12 @@ public class SumByBigDecimalTest
 {
     private final Positions positions = new Positions().shuffle();
 
-    @Before
-    @Setup(Level.Iteration)
-    public void setUp()
-    {
-        this.positions.shuffle();
-    }
-
-    @After
-    @TearDown(Level.Iteration)
-    public void tearDown() throws InterruptedException
-    {
-    }
-
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public MutableMap<Product, BigDecimal> sumByBigDecimalProduct_serial_eager_gsc()
     {
         return Iterate.sumByBigDecimal(this.positions.getGscPositions(), Position::getProduct, Position::getPreciseMarketValue);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public MutableMap<Product, BigDecimal> sumByBigDecimalProduct_parallel_eager_gsc()
     {
@@ -86,16 +62,12 @@ public class SumByBigDecimalTest
                 this.sumByBigDecimalProduct_serial_eager_gsc());
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public MutableMap<Account, BigDecimal> sumByBigDecimalAccount_serial_eager_gsc()
     {
         return Iterate.sumByBigDecimal(this.positions.getGscPositions(), Position::getAccount, Position::getPreciseMarketValue);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public MutableMap<Account, BigDecimal> sumByBigDecimalAccount_parallel_eager_gsc()
     {
@@ -110,16 +82,12 @@ public class SumByBigDecimalTest
                 this.sumByBigDecimalAccount_serial_eager_gsc());
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public MutableMap<String, BigDecimal> sumByBigDecimalCategory_serial_eager_gsc()
     {
         return Iterate.sumByBigDecimal(this.positions.getGscPositions(), Position::getCategory, Position::getPreciseMarketValue);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public MutableMap<String, BigDecimal> sumByBigDecimalCategory_parallel_eager_gsc()
     {

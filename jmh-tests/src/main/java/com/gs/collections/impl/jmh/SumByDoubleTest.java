@@ -26,21 +26,14 @@ import com.gs.collections.impl.jmh.domain.Position;
 import com.gs.collections.impl.jmh.domain.Positions;
 import com.gs.collections.impl.jmh.domain.Product;
 import com.gs.collections.impl.parallel.ParallelIterate;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.TearDown;
-import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -49,21 +42,6 @@ public class SumByDoubleTest
 {
     private final Positions positions = new Positions().shuffle();
 
-    @Before
-    @Setup(Level.Iteration)
-    public void setUp()
-    {
-        this.positions.shuffle();
-    }
-
-    @After
-    @TearDown(Level.Iteration)
-    public void tearDown() throws InterruptedException
-    {
-    }
-
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public Map<Product, Double> sumByProduct_serial_lazy_jdk()
     {
@@ -73,8 +51,6 @@ public class SumByDoubleTest
                         Collectors.summingDouble(Position::getMarketValue)));
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public Map<Account, Double> sumByAccount_serial_lazy_jdk()
     {
@@ -84,8 +60,6 @@ public class SumByDoubleTest
                         Collectors.summingDouble(Position::getMarketValue)));
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public Map<String, Double> sumByCategory_serial_lazy_jdk()
     {
@@ -95,8 +69,6 @@ public class SumByDoubleTest
                         Collectors.summingDouble(Position::getMarketValue)));
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public Map<Product, Double> sumByProduct_parallel_lazy_jdk()
     {
@@ -106,8 +78,6 @@ public class SumByDoubleTest
                         Collectors.summingDouble(Position::getMarketValue)));
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public Map<Account, Double> sumByAccount_parallel_lazy_jdk()
     {
@@ -117,8 +87,6 @@ public class SumByDoubleTest
                         Collectors.summingDouble(Position::getMarketValue)));
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public Map<String, Double> sumByCategory_parallel_lazy_jdk()
     {
@@ -128,16 +96,12 @@ public class SumByDoubleTest
                         Collectors.summingDouble(Position::getMarketValue)));
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public ObjectDoubleMap<Product> sumByProduct_serial_eager_gsc()
     {
         return this.positions.getGscPositions().sumByDouble(Position::getProduct, Position::getMarketValue);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public ObjectDoubleMap<Product> sumByProduct_parallel_eager_gsc()
     {
@@ -156,16 +120,12 @@ public class SumByDoubleTest
                 this.sumByProduct_serial_eager_gsc());
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public ObjectDoubleMap<Account> sumByAccount_serial_eager_gsc()
     {
         return this.positions.getGscPositions().sumByDouble(Position::getAccount, Position::getMarketValue);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public ObjectDoubleMap<Account> sumByAccount_parallel_eager_gsc()
     {
@@ -184,16 +144,12 @@ public class SumByDoubleTest
                 this.sumByAccount_serial_eager_gsc());
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public ObjectDoubleMap<String> sumByCategory_serial_eager_gsc()
     {
         return this.positions.getGscPositions().sumByDouble(Position::getCategory, Position::getMarketValue);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public ObjectDoubleMap<String> sumByCategory_parallel_eager_gsc()
     {
