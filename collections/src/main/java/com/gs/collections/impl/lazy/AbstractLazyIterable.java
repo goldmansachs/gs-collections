@@ -76,7 +76,6 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures2;
@@ -117,39 +116,6 @@ import net.jcip.annotations.Immutable;
 public abstract class AbstractLazyIterable<T>
         implements LazyIterable<T>
 {
-    protected <V> V shortCircuit(
-            Predicate<? super T> predicate,
-            boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
-    {
-        for (T each : this)
-        {
-            if (predicate.accept(each) == expected)
-            {
-                return onShortCircuit.valueOf(each);
-            }
-        }
-        return atEnd.value();
-    }
-
-    protected <P, V> V shortCircuitWith(
-            Predicate2<? super T, ? super P> predicate2,
-            P parameter,
-            boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
-    {
-        for (T each : this)
-        {
-            if (predicate2.accept(each, parameter) == expected)
-            {
-                return onShortCircuit.valueOf(each);
-            }
-        }
-        return atEnd.value();
-    }
-
     public LazyIterable<T> asLazy()
     {
         return this;
@@ -243,7 +209,7 @@ public abstract class AbstractLazyIterable<T>
 
     public T getFirst()
     {
-        return this.shortCircuit(Predicates.alwaysTrue(), true, Functions.<T>identity(), Functions0.<T>nullValue());
+        return IterableIterate.getFirst(this);
     }
 
     public T getLast()
@@ -448,12 +414,12 @@ public abstract class AbstractLazyIterable<T>
 
     public T detect(Predicate<? super T> predicate)
     {
-        return this.shortCircuit(predicate, true, Functions.<T>identity(), Functions0.<T>nullValue());
+        return IterableIterate.detect(this, predicate);
     }
 
     public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.shortCircuitWith(predicate, parameter, true, Functions.<T>identity(), Functions0.<T>nullValue());
+        return IterableIterate.detectWith(this, predicate, parameter);
     }
 
     public T min(Comparator<? super T> comparator)
@@ -512,32 +478,32 @@ public abstract class AbstractLazyIterable<T>
 
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return this.shortCircuit(predicate, true, Functions.getTrue(), Functions0.getFalse());
+        return IterableIterate.anySatisfy(this, predicate);
     }
 
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return this.shortCircuit(predicate, false, Functions.getFalse(), Functions0.getTrue());
+        return IterableIterate.allSatisfy(this, predicate);
     }
 
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
-        return this.shortCircuit(predicate, true, Functions.getFalse(), Functions0.getTrue());
+        return IterableIterate.noneSatisfy(this, predicate);
     }
 
     public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.shortCircuitWith(predicate, parameter, true, Functions.getTrue(), Functions0.getFalse());
+        return IterableIterate.anySatisfyWith(this, predicate, parameter);
     }
 
     public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.shortCircuitWith(predicate, parameter, false, Functions.getFalse(), Functions0.getTrue());
+        return IterableIterate.allSatisfyWith(this, predicate, parameter);
     }
 
     public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.shortCircuitWith(predicate, parameter, true, Functions.getFalse(), Functions0.getTrue());
+        return IterableIterate.noneSatisfyWith(this, predicate, parameter);
     }
 
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)

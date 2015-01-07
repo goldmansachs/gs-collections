@@ -268,27 +268,6 @@ final class ImmutableArrayList<T>
     }
 
     @Override
-    protected <V> V shortCircuit(
-            Predicate<? super T> predicate,
-            boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
-    {
-        return InternalArrayIterate.shortCircuit(this.items, this.items.length, predicate, expected, onShortCircuit, atEnd);
-    }
-
-    @Override
-    protected <P, V> V shortCircuitWith(
-            Predicate2<? super T, ? super P> predicate2,
-            P parameter,
-            boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
-    {
-        return InternalArrayIterate.shortCircuitWith(this.items, this.items.length, predicate2, parameter, expected, onShortCircuit, atEnd);
-    }
-
-    @Override
     public T detect(Predicate<? super T> predicate)
     {
         return InternalArrayIterate.detect(this.items, this.items.length, predicate);

@@ -27,7 +27,6 @@ import java.util.RandomAccess;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
@@ -407,43 +406,6 @@ abstract class AbstractImmutableList<T>
             }
         }
         return count;
-    }
-
-    @Override
-    protected <V> V shortCircuit(
-            Predicate<? super T> predicate,
-            boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
-    {
-        for (int i = 0; i < this.size(); i++)
-        {
-            T each = this.get(i);
-            if (predicate.accept(each) == expected)
-            {
-                return onShortCircuit.valueOf(each);
-            }
-        }
-        return atEnd.value();
-    }
-
-    @Override
-    protected <P, V> V shortCircuitWith(
-            Predicate2<? super T, ? super P> predicate2,
-            P parameter,
-            boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
-    {
-        for (int i = 0; i < this.size(); i++)
-        {
-            T each = this.get(i);
-            if (predicate2.accept(each, parameter) == expected)
-            {
-                return onShortCircuit.valueOf(each);
-            }
-        }
-        return atEnd.value();
     }
 
     @Override
