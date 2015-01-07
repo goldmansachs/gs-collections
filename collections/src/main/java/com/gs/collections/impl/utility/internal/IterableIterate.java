@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -497,25 +497,6 @@ public final class IterableIterate
     }
 
     /**
-     * @see Iterate#detect(Iterable, Predicate)
-     */
-    public static <T> T detect(Iterable<T> iterable, Predicate<? super T> predicate)
-    {
-        return IteratorIterate.detect(iterable.iterator(), predicate);
-    }
-
-    /**
-     * @see Iterate#detectWith(Iterable, Predicate2, Object)
-     */
-    public static <T, IV> T detectWith(
-            Iterable<T> iterable,
-            Predicate2<? super T, ? super IV> predicate,
-            IV injectedValue)
-    {
-        return IteratorIterate.detectWith(iterable.iterator(), predicate, injectedValue);
-    }
-
-    /**
      * @see Iterate#injectInto(Object, Iterable, Function2)
      */
     public static <T, IV> IV injectInto(
@@ -665,61 +646,44 @@ public final class IterableIterate
         return IteratorIterate.injectIntoWith(injectValue, iterable.iterator(), function, parameter);
     }
 
-    /**
-     * @see Iterate#anySatisfy(Iterable, Predicate)
-     */
     public static <T> boolean anySatisfy(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         return IteratorIterate.anySatisfy(iterable.iterator(), predicate);
     }
 
-    /**
-     * @see Iterate#anySatisfyWith(Iterable, Predicate2, Object)
-     */
-    public static <T, IV> boolean anySatisfyWith(
-            Iterable<T> iterable,
-            Predicate2<? super T, ? super IV> predicate,
-            IV injectedValue)
+    public static <T, P> boolean anySatisfyWith(Iterable<T> iterable, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IteratorIterate.anySatisfyWith(iterable.iterator(), predicate, injectedValue);
+        return IteratorIterate.anySatisfyWith(iterable.iterator(), predicate, parameter);
     }
 
-    /**
-     * @see Iterate#allSatisfy(Iterable, Predicate)
-     */
     public static <T> boolean allSatisfy(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         return IteratorIterate.allSatisfy(iterable.iterator(), predicate);
     }
 
-    /**
-     * @see Iterate#allSatisfyWith(Iterable, Predicate2, Object)
-     */
-    public static <T, IV> boolean allSatisfyWith(
-            Iterable<T> iterable,
-            Predicate2<? super T, ? super IV> predicate,
-            IV injectedValue)
+    public static <T, P> boolean allSatisfyWith(Iterable<T> iterable, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IteratorIterate.allSatisfyWith(iterable.iterator(), predicate, injectedValue);
+        return IteratorIterate.allSatisfyWith(iterable.iterator(), predicate, parameter);
     }
 
-    /**
-     * @see Iterate#allSatisfy(Iterable, Predicate)
-     */
     public static <T> boolean noneSatisfy(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         return IteratorIterate.noneSatisfy(iterable.iterator(), predicate);
     }
 
-    /**
-     * @see Iterate#noneSatisfyWith(Iterable, Predicate2, Object)
-     */
-    public static <T, IV> boolean noneSatisfyWith(
-            Iterable<T> iterable,
-            Predicate2<? super T, ? super IV> predicate,
-            IV injectedValue)
+    public static <T, P> boolean noneSatisfyWith(Iterable<T> iterable, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IteratorIterate.noneSatisfyWith(iterable.iterator(), predicate, injectedValue);
+        return IteratorIterate.noneSatisfyWith(iterable.iterator(), predicate, parameter);
+    }
+
+    public static <T> T detect(Iterable<T> iterable, Predicate<? super T> predicate)
+    {
+        return IteratorIterate.detect(iterable.iterator(), predicate);
+    }
+
+    public static <T, P> T detectWith(Iterable<T> iterable, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return IteratorIterate.detectWith(iterable.iterator(), predicate, parameter);
     }
 
     /**

@@ -1,5 +1,6 @@
 import "copyright.stg"
 import "primitiveLiteral.stg"
+import "primitiveEquals.stg"
 
 targetPath() ::= "com/gs/collections/impl/lazy/primitive"
 
@@ -31,6 +32,8 @@ import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.utility.internal.primitive.<name>IterableIterate;
 import com.gs.collections.impl.utility.primitive.Lazy<name>Iterate;
+
+import java.util.NoSuchElementException;
 
 /**
  * This file was automatically generated from template file abstractLazyPrimitiveIterable.stg.
@@ -158,7 +161,6 @@ public abstract class AbstractLazy<name>Iterable implements Lazy<name>Iterable
         return <name>IterableIterate.injectInto(this, injectedValue, function);
     }
 
-    <(arithmeticMethods.(type))()>
     public <type>[] toArray()
     {
         return this.toList().toArray();
@@ -203,6 +205,7 @@ public abstract class AbstractLazy<name>Iterable implements Lazy<name>Iterable
         return bag;
     }
 
+    <(arithmeticMethods.(type))()>
     public Lazy<name>Iterable asLazy()
     {
         return this;
@@ -219,27 +222,49 @@ arithmeticMethods ::= [
 allMethods() ::= <<
 public <wideType.(type)> sum()
 {
-    return <name>IterableIterate.sum(this);
+    <name>SumProcedure procedure = new <name>SumProcedure();
+    this.forEach(procedure);
+    return procedure.getValue();
 }
 
 public <type> max()
 {
-    return <name>IterableIterate.max(this);
+    if (this.isEmpty())
+    {
+        throw new NoSuchElementException();
+    }
+    <name>MaxProcedure procedure = new <name>MaxProcedure();
+    this.forEach(procedure);
+    return procedure.getValue();
 }
 
 public <type> maxIfEmpty(<type> ifEmpty)
 {
-    return <name>IterableIterate.maxIfEmpty(this, ifEmpty);
+    if (this.isEmpty())
+    {
+        return ifEmpty;
+    }
+    return this.max();
 }
 
 public <type> min()
 {
-    return <name>IterableIterate.min(this);
+    if (this.isEmpty())
+    {
+        throw new NoSuchElementException();
+    }
+    <name>MinProcedure procedure = new <name>MinProcedure();
+    this.forEach(procedure);
+    return procedure.getValue();
 }
 
 public <type> minIfEmpty(<type> ifEmpty)
 {
-    return <name>IterableIterate.minIfEmpty(this, ifEmpty);
+    if (this.isEmpty())
+    {
+        return ifEmpty;
+    }
+    return this.min();
 }
 
 public double average()
@@ -276,6 +301,75 @@ public <type>[] toSortedArray()
 public Mutable<name>List toSortedList()
 {
     return <name>ArrayList.newList(this).sortThis();
+}
+
+private static final class <name>MaxProcedure implements <name>Procedure
+{
+    private boolean visitedOnce;
+    private <type> max;
+
+    public void value(<type> each)
+    {
+        if (this.visitedOnce)
+        {
+            if (<(lessThan.(type))("this.max", "each")>)
+            {
+                this.max = each;
+            }
+        }
+        else
+        {
+            this.max = each;
+            this.visitedOnce = true;
+        }
+    }
+
+    public <type> getValue()
+    {
+        return this.max;
+    }
+}
+
+private static final class <name>MinProcedure implements <name>Procedure
+{
+    private boolean visitedOnce;
+    private <type> min;
+
+    public void value(<type> each)
+    {
+        if (this.visitedOnce)
+        {
+            if (<(lessThan.(type))("each", "this.min")>)
+            {
+                this.min = each;
+            }
+        }
+        else
+        {
+            this.min = each;
+            this.visitedOnce = true;
+        }
+    }
+
+    public <type> getValue()
+    {
+        return this.min;
+    }
+}
+
+private static final class <name>SumProcedure implements <name>Procedure
+{
+    private <type> sum = 0;
+
+    public void value(<type> each)
+    {
+        this.sum += each;
+    }
+
+    public <type> getValue()
+    {
+        return this.sum;
+    }
 }
 
 >>

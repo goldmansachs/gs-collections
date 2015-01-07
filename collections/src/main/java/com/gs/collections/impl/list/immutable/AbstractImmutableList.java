@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -389,34 +389,6 @@ abstract class AbstractImmutableList<T>
         return ListIterate.flatCollect(this, function, target);
     }
 
-    @Override
-    public T detect(Predicate<? super T> predicate)
-    {
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            T item = this.get(i);
-            if (predicate.accept(item))
-            {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        return ListIterate.detectWith(this, predicate, parameter);
-    }
-
-    @Override
-    public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate, P parameter, Function0<? extends T> function)
-    {
-        T result = this.detectWith(predicate, parameter);
-        return result == null ? function.value() : result;
-    }
-
     public int detectIndex(Predicate<? super T> predicate)
     {
         return ListIterate.detectIndex(this, predicate);
@@ -438,45 +410,40 @@ abstract class AbstractImmutableList<T>
     }
 
     @Override
-    public boolean anySatisfy(Predicate<? super T> predicate)
+    protected <V> V shortCircuit(
+            Predicate<? super T> predicate,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
     {
-        int size = this.size();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < this.size(); i++)
         {
-            if (predicate.accept(this.get(i)))
+            T each = this.get(i);
+            if (predicate.accept(each) == expected)
             {
-                return true;
+                return onShortCircuit.valueOf(each);
             }
         }
-        return false;
+        return atEnd.value();
     }
 
     @Override
-    public boolean allSatisfy(Predicate<? super T> predicate)
+    protected <P, V> V shortCircuitWith(
+            Predicate2<? super T, ? super P> predicate2,
+            P parameter,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
     {
-        int size = this.size();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < this.size(); i++)
         {
-            if (!predicate.accept(this.get(i)))
+            T each = this.get(i);
+            if (predicate2.accept(each, parameter) == expected)
             {
-                return false;
+                return onShortCircuit.valueOf(each);
             }
         }
-        return true;
-    }
-
-    @Override
-    public boolean noneSatisfy(Predicate<? super T> predicate)
-    {
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            if (predicate.accept(this.get(i)))
-            {
-                return false;
-            }
-        }
-        return true;
+        return atEnd.value();
     }
 
     @Override

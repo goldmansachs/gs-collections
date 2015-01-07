@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,6 +72,7 @@ import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
@@ -718,40 +719,6 @@ public final class RandomAccessListIterate
         }
     }
 
-    /**
-     * @see Iterate#detect(Iterable, Predicate)
-     */
-    public static <T> T detect(List<T> list, Predicate<? super T> predicate)
-    {
-        int size = list.size();
-        for (int i = 0; i < size; i++)
-        {
-            T item = list.get(i);
-            if (predicate.accept(item))
-            {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @see Iterate#detectWith(Iterable, Predicate2, Object)
-     */
-    public static <T, IV> T detectWith(List<T> list, Predicate2<? super T, ? super IV> predicate, IV injectedValue)
-    {
-        int size = list.size();
-        for (int i = 0; i < size; i++)
-        {
-            T item = list.get(i);
-            if (predicate.accept(item, injectedValue))
-            {
-                return item;
-            }
-        }
-        return null;
-    }
-
     public static <T, IV> IV injectInto(IV injectValue, List<T> list, Function2<? super IV, ? super T, ? extends IV> function)
     {
         IV result = injectValue;
@@ -913,82 +880,81 @@ public final class RandomAccessListIterate
         return result;
     }
 
-    public static <T> boolean anySatisfy(List<T> list, Predicate<? super T> predicate)
+    public static <T, V> V shortCircuit(
+            List<T> list,
+            Predicate<? super T> predicate,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
     {
-        int size = list.size();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < list.size(); i++)
         {
-            if (predicate.accept(list.get(i)))
+            T each = list.get(i);
+            if (predicate.accept(each) == expected)
             {
-                return true;
+                return onShortCircuit.valueOf(each);
             }
         }
-        return false;
+        return atEnd.value();
     }
 
-    public static <T, IV> boolean anySatisfyWith(List<T> list, Predicate2<? super T, ? super IV> predicate, IV injectedValue)
+    public static <T, P, V> V shortCircuitWith(
+            List<T> list,
+            Predicate2<? super T, ? super P> predicate2,
+            P parameter,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
     {
-        int size = list.size();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < list.size(); i++)
         {
-            if (predicate.accept(list.get(i), injectedValue))
+            T each = list.get(i);
+            if (predicate2.accept(each, parameter) == expected)
             {
-                return true;
+                return onShortCircuit.valueOf(each);
             }
         }
-        return false;
+        return atEnd.value();
+    }
+
+    public static <T> boolean anySatisfy(List<T> list, Predicate<? super T> predicate)
+    {
+        return RandomAccessListIterate.shortCircuit(list, predicate, true, Functions.getTrue(), Functions0.getFalse());
+    }
+
+    public static <T, P> boolean anySatisfyWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return RandomAccessListIterate.shortCircuitWith(list, predicate, parameter, true, Functions.getTrue(), Functions0.getFalse());
     }
 
     public static <T> boolean allSatisfy(List<T> list, Predicate<? super T> predicate)
     {
-        int size = list.size();
-        for (int i = 0; i < size; i++)
-        {
-            if (!predicate.accept(list.get(i)))
-            {
-                return false;
-            }
-        }
-        return true;
+        return RandomAccessListIterate.shortCircuit(list, predicate, false, Functions.getFalse(), Functions0.getTrue());
     }
 
-    public static <T, IV> boolean allSatisfyWith(List<T> list, Predicate2<? super T, ? super IV> predicate, IV injectedValue)
+    public static <T, P> boolean allSatisfyWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        int size = list.size();
-        for (int i = 0; i < size; i++)
-        {
-            if (!predicate.accept(list.get(i), injectedValue))
-            {
-                return false;
-            }
-        }
-        return true;
+        return RandomAccessListIterate.shortCircuitWith(list, predicate, parameter, false, Functions.getFalse(), Functions0.getTrue());
     }
 
     public static <T> boolean noneSatisfy(List<T> list, Predicate<? super T> predicate)
     {
-        int size = list.size();
-        for (int i = 0; i < size; i++)
-        {
-            if (predicate.accept(list.get(i)))
-            {
-                return false;
-            }
-        }
-        return true;
+        return RandomAccessListIterate.shortCircuit(list, predicate, true, Functions.getFalse(), Functions0.getTrue());
     }
 
-    public static <T, P> boolean noneSatisfyWith(List<T> list, Predicate2<? super T, ? super P> predicate, P injectedValue)
+    public static <T, P> boolean noneSatisfyWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        int size = list.size();
-        for (int i = 0; i < size; i++)
-        {
-            if (predicate.accept(list.get(i), injectedValue))
-            {
-                return false;
-            }
-        }
-        return true;
+        return RandomAccessListIterate.shortCircuitWith(list, predicate, parameter, true, Functions.getFalse(), Functions0.getTrue());
+    }
+
+    public static <T> T detect(List<T> list, Predicate<? super T> predicate)
+    {
+        return RandomAccessListIterate.shortCircuit(list, predicate, true, Functions.<T>identity(), Functions0.<T>nullValue());
+    }
+
+    public static <T, P> T detectWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return RandomAccessListIterate.shortCircuitWith(list, predicate, parameter, true, Functions.<T>identity(), Functions0.<T>nullValue());
     }
 
     public static <T, IV> Twin<MutableList<T>> selectAndRejectWith(
@@ -1077,6 +1043,7 @@ public final class RandomAccessListIterate
 
     /**
      * Searches for the first occurrence where the predicate evaluates to true.
+     *
      * @see Iterate#detectIndex(Iterable, Predicate)
      */
     public static <T> int detectIndex(List<T> list, Predicate<? super T> predicate)
@@ -1094,6 +1061,7 @@ public final class RandomAccessListIterate
 
     /**
      * Searches for the first occurrence where the predicate evaluates to true.
+     *
      * @see Iterate#detectIndexWith(Iterable, Predicate2, Object)
      */
     public static <T, IV> int detectIndexWith(List<T> list, Predicate2<? super T, ? super IV> predicate, IV injectedValue)

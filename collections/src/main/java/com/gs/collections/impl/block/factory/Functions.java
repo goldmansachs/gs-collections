@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,8 @@ public final class Functions
     private static final Function<Integer, Integer> INTEGER_PASS_THRU_FUNCTION = new IntegerPassThruFunction();
     private static final Function<Long, Long> LONG_PASS_THRU_FUNCTION = new LongPassThruFunction();
 
+    private static final Function<Object, Boolean> TRUE_FUNCTION = new TrueFunction();
+    private static final Function<Object, Boolean> FALSE_FUNCTION = new FalseFunction();
     private static final Function<?, ?> PASS_THRU_FUNCTION = new PassThruFunction<Object>();
     private static final Function<String, String> STRING_TRIM_FUNCTION = new StringTrimFunction();
     private static final Function<Object, Class<?>> CLASS_FUNCTION = new ClassFunction();
@@ -208,6 +210,22 @@ public final class Functions
     public static <T> Function<T, T> identity()
     {
         return (Function<T, T>) PASS_THRU_FUNCTION;
+    }
+
+    /**
+     * @since 6.0
+     */
+    public static Function<Object, Boolean> getTrue()
+    {
+        return TRUE_FUNCTION;
+    }
+
+    /**
+     * @since 6.0
+     */
+    public static Function<Object, Boolean> getFalse()
+    {
+        return FALSE_FUNCTION;
     }
 
     public static <T, V> Function<T, V> getFixedValue(V value)
@@ -1103,6 +1121,26 @@ public final class Functions
         public V safeValueOf(T object) throws Exception
         {
             return this.throwingFunction.safeValueOf(object);
+        }
+    }
+
+    private static class TrueFunction implements Function<Object, Boolean>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public Boolean valueOf(Object object)
+        {
+            return Boolean.TRUE;
+        }
+    }
+
+    private static class FalseFunction implements Function<Object, Boolean>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public Boolean valueOf(Object object)
+        {
+            return Boolean.FALSE;
         }
     }
 }

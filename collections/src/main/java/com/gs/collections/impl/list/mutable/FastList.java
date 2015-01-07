@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -871,6 +871,27 @@ public class FastList<T>
             R target)
     {
         return InternalArrayIterate.collectIf(this.items, this.size, predicate, function, target);
+    }
+
+    @Override
+    protected <V> V shortCircuit(
+            Predicate<? super T> predicate,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
+    {
+        return InternalArrayIterate.shortCircuit(this.items, this.size, predicate, expected, onShortCircuit, atEnd);
+    }
+
+    @Override
+    protected <P, V> V shortCircuitWith(
+            Predicate2<? super T, ? super P> predicate2,
+            P parameter,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
+    {
+        return InternalArrayIterate.shortCircuitWith(this.items, this.size, predicate2, parameter, expected, onShortCircuit, atEnd);
     }
 
     @Override

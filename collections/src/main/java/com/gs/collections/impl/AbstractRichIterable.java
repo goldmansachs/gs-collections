@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,7 @@ import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures;
@@ -346,14 +347,77 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return target;
     }
 
+    protected <V> V shortCircuit(
+            Predicate<? super T> predicate,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
+    {
+        for (T each : this)
+        {
+            if (predicate.accept(each) == expected)
+            {
+                return onShortCircuit.valueOf(each);
+            }
+        }
+        return atEnd.value();
+    }
+
+    protected <P, V> V shortCircuitWith(
+            Predicate2<? super T, ? super P> predicate2,
+            P parameter,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
+    {
+        for (T each : this)
+        {
+            if (predicate2.accept(each, parameter) == expected)
+            {
+                return onShortCircuit.valueOf(each);
+            }
+        }
+        return atEnd.value();
+    }
+
     public T detect(Predicate<? super T> predicate)
     {
-        return IterableIterate.detect(this, predicate);
+        return this.shortCircuit(predicate, true, Functions.<T>identity(), Functions0.<T>nullValue());
     }
 
     public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.detect(Predicates.bind(predicate, parameter));
+        return this.shortCircuitWith(predicate, parameter, true, Functions.<T>identity(), Functions0.<T>nullValue());
+    }
+
+    public boolean anySatisfy(Predicate<? super T> predicate)
+    {
+        return this.shortCircuit(predicate, true, Functions.getTrue(), Functions0.getFalse());
+    }
+
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return this.shortCircuit(predicate, false, Functions.getFalse(), Functions0.getTrue());
+    }
+
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return this.shortCircuit(predicate, true, Functions.getFalse(), Functions0.getTrue());
+    }
+
+    public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.shortCircuitWith(predicate, parameter, true, Functions.getTrue(), Functions0.getFalse());
+    }
+
+    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.shortCircuitWith(predicate, parameter, false, Functions.getFalse(), Functions0.getTrue());
+    }
+
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.shortCircuitWith(predicate, parameter, true, Functions.getFalse(), Functions0.getTrue());
     }
 
     public int count(Predicate<? super T> predicate)
@@ -364,37 +428,6 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
     public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this.count(Predicates.bind(predicate, parameter));
-    }
-
-
-    public boolean anySatisfy(Predicate<? super T> predicate)
-    {
-        return IterableIterate.anySatisfy(this, predicate);
-    }
-
-    public boolean allSatisfy(Predicate<? super T> predicate)
-    {
-        return IterableIterate.allSatisfy(this, predicate);
-    }
-
-    public boolean noneSatisfy(Predicate<? super T> predicate)
-    {
-        return IterableIterate.noneSatisfy(this, predicate);
-    }
-
-    public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        return this.anySatisfy(Predicates.bind(predicate, parameter));
-    }
-
-    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        return this.allSatisfy(Predicates.bind(predicate, parameter));
-    }
-
-    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        return this.noneSatisfy(Predicates.bind(predicate, parameter));
     }
 
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)

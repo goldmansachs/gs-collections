@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,8 @@ import com.gs.collections.impl.factory.Sets;
 
 public final class Functions0
 {
+    private static final TrueFunction TRUE_FUNCTION = new TrueFunction();
+    private static final FalseFunction FALSE_FUNCTION = new FalseFunction();
     private static final NewFastListFunction<?> NEW_FAST_LIST_FUNCTION = new NewFastListFunction<Object>();
     private static final NewUnifiedSetFunction<?> NEW_UNIFIED_SET_FUNCTION = new NewUnifiedSetFunction<Object>();
     private static final NewHashBagFunction<?> NEW_HASH_BAG_FUNCTION = new NewHashBagFunction<Object>();
@@ -50,6 +52,22 @@ public final class Functions0
     private Functions0()
     {
         throw new AssertionError("Suppress default constructor for noninstantiability");
+    }
+
+    /**
+     * @since 6.0
+     */
+    public static Function0<Boolean> getTrue()
+    {
+        return TRUE_FUNCTION;
+    }
+
+    /**
+     * @since 6.0
+     */
+    public static Function0<Boolean> getFalse()
+    {
+        return FALSE_FUNCTION;
     }
 
     public static <T> Function0<MutableList<T>> newFastList()
@@ -153,7 +171,7 @@ public final class Functions0
         }
     }
 
-    private static class NullFunction<T> implements Function0<T>
+    private static final class NullFunction<T> implements Function0<T>
     {
         private static final long serialVersionUID = 1L;
 
@@ -163,7 +181,7 @@ public final class Functions0
         }
     }
 
-    private static class IntegerZeroFunction implements Function0<Integer>
+    private static final class IntegerZeroFunction implements Function0<Integer>
     {
         private static final long serialVersionUID = 1L;
 
@@ -173,7 +191,7 @@ public final class Functions0
         }
     }
 
-    private static class AtomicIntegerZeroFunction implements Function0<AtomicInteger>
+    private static final class AtomicIntegerZeroFunction implements Function0<AtomicInteger>
     {
         private static final long serialVersionUID = 1L;
 
@@ -183,7 +201,7 @@ public final class Functions0
         }
     }
 
-    private static class AtomicLongZeroFunction implements Function0<AtomicLong>
+    private static final class AtomicLongZeroFunction implements Function0<AtomicLong>
     {
         private static final long serialVersionUID = 1L;
 
@@ -193,12 +211,12 @@ public final class Functions0
         }
     }
 
-    private static class ThrowingFunction0Adapter<T> extends CheckedFunction0<T>
+    private static final class ThrowingFunction0Adapter<T> extends CheckedFunction0<T>
     {
         private static final long serialVersionUID = 1L;
         private final ThrowingFunction0<T> throwingFunction0;
 
-        public ThrowingFunction0Adapter(ThrowingFunction0<T> throwingFunction0)
+        private ThrowingFunction0Adapter(ThrowingFunction0<T> throwingFunction0)
         {
             this.throwingFunction0 = throwingFunction0;
         }
@@ -209,7 +227,7 @@ public final class Functions0
         }
     }
 
-    private static class BigDecimalZeroFunction implements Function0<BigDecimal>
+    private static final class BigDecimalZeroFunction implements Function0<BigDecimal>
     {
         private static final long serialVersionUID = 1L;
 
@@ -219,13 +237,33 @@ public final class Functions0
         }
     }
 
-    private static class BigIntegerZeroFunction implements Function0<BigInteger>
+    private static final class BigIntegerZeroFunction implements Function0<BigInteger>
     {
         private static final long serialVersionUID = 1L;
 
         public BigInteger value()
         {
             return BigInteger.ZERO;
+        }
+    }
+
+    private static final class TrueFunction implements Function0<Boolean>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public Boolean value()
+        {
+            return Boolean.TRUE;
+        }
+    }
+
+    private static final class FalseFunction implements Function0<Boolean>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public Boolean value()
+        {
+            return Boolean.FALSE;
         }
     }
 }

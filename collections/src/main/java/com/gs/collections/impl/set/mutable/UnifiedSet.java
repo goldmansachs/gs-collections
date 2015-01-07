@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,6 +91,8 @@ import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures2;
@@ -594,7 +596,12 @@ public class UnifiedSet<T>
 
     public void each(Procedure<? super T> procedure)
     {
-        for (int i = 0; i < this.table.length; i++)
+        this.each(procedure, 0, this.table.length);
+    }
+
+    protected void each(Procedure<? super T> procedure, int start, int end)
+    {
+        for (int i = start; i < end; i++)
         {
             Object cur = this.table[i];
             if (cur instanceof ChainedBucket)
@@ -1059,7 +1066,12 @@ public class UnifiedSet<T>
 
     public T detect(Predicate<? super T> predicate)
     {
-        for (int i = 0; i < this.table.length; i++)
+        return this.detect(predicate, 0, this.table.length);
+    }
+
+    protected T detect(Predicate<? super T> predicate, int start, int end)
+    {
+        for (int i = start; i < end; i++)
         {
             Object cur = this.table[i];
             if (cur instanceof ChainedBucket)
@@ -1209,379 +1221,195 @@ public class UnifiedSet<T>
         return count.getCount();
     }
 
-    public boolean anySatisfy(Predicate<? super T> predicate)
+    protected <V> V shortCircuit(
+            Predicate<? super T> predicate,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
     {
-        for (int i = 0; i < this.table.length; i++)
+        return this.shortCircuit(predicate, expected, onShortCircuit, atEnd, 0, this.table.length);
+    }
+
+    protected <V> V shortCircuit(
+            Predicate<? super T> predicate,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd,
+            int start,
+            int end)
+    {
+        for (int i = start; i < end; i++)
         {
             Object cur = this.table[i];
             if (cur instanceof ChainedBucket)
             {
-                if (this.chainedAnySatisfy((ChainedBucket) cur, predicate))
+                V result = this.chainedShortCircuit((ChainedBucket) cur, predicate, expected, onShortCircuit);
+                if (result != null)
                 {
-                    return true;
+                    return result;
                 }
             }
             else if (cur != null)
             {
-                if (predicate.accept(this.nonSentinel(cur)))
+                T each = this.nonSentinel(cur);
+                if (predicate.accept(each) == expected)
                 {
-                    return true;
+                    return onShortCircuit.valueOf(each);
                 }
             }
         }
-        return false;
+        return atEnd.value();
     }
 
-    private boolean chainedAnySatisfy(ChainedBucket bucket, Predicate<? super T> predicate)
+    private <V> V chainedShortCircuit(
+            ChainedBucket bucket,
+            Predicate<? super T> predicate,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit)
     {
         do
         {
-            if (predicate.accept(this.nonSentinel(bucket.zero)))
+            if (predicate.accept(this.nonSentinel(bucket.zero)) == expected)
             {
-                return true;
+                return onShortCircuit.valueOf(this.nonSentinel(bucket.zero));
             }
             if (bucket.one == null)
             {
-                return false;
+                return null;
             }
-            if (predicate.accept(this.nonSentinel(bucket.one)))
+            if (predicate.accept(this.nonSentinel(bucket.one)) == expected)
             {
-                return true;
+                return onShortCircuit.valueOf(this.nonSentinel(bucket.one));
             }
             if (bucket.two == null)
             {
-                return false;
+                return null;
             }
-            if (predicate.accept(this.nonSentinel(bucket.two)))
+            if (predicate.accept(this.nonSentinel(bucket.two)) == expected)
             {
-                return true;
+                return onShortCircuit.valueOf(this.nonSentinel(bucket.two));
             }
             if (bucket.three == null)
             {
-                return false;
+                return null;
             }
             if (bucket.three instanceof ChainedBucket)
             {
                 bucket = (ChainedBucket) bucket.three;
                 continue;
             }
-            return predicate.accept(this.nonSentinel(bucket.three));
+            return predicate.accept(this.nonSentinel(bucket.three)) == expected ? onShortCircuit.valueOf(this.nonSentinel(bucket.three)) : null;
         }
         while (true);
+    }
+
+    protected <P, V> V shortCircuitWith(
+            Predicate2<? super T, ? super P> predicate2,
+            P parameter,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
+    {
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                V result = this.chainedShortCircuitWith((ChainedBucket) cur, predicate2, parameter, expected, onShortCircuit);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            else if (cur != null)
+            {
+                T each = this.nonSentinel(cur);
+                if (predicate2.accept(each, parameter) == expected)
+                {
+                    return onShortCircuit.valueOf(each);
+                }
+            }
+        }
+        return atEnd.value();
+    }
+
+    private <P, V> V chainedShortCircuitWith(
+            ChainedBucket bucket,
+            Predicate2<? super T, ? super P> predicate,
+            P parameter,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit)
+    {
+        do
+        {
+            if (predicate.accept(this.nonSentinel(bucket.zero), parameter) == expected)
+            {
+                return onShortCircuit.valueOf(this.nonSentinel(bucket.zero));
+            }
+            if (bucket.one == null)
+            {
+                return null;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.one), parameter) == expected)
+            {
+                return onShortCircuit.valueOf(this.nonSentinel(bucket.one));
+            }
+            if (bucket.two == null)
+            {
+                return null;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.two), parameter) == expected)
+            {
+                return onShortCircuit.valueOf(this.nonSentinel(bucket.two));
+            }
+            if (bucket.three == null)
+            {
+                return null;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            return predicate.accept(this.nonSentinel(bucket.three), parameter) == expected ? onShortCircuit.valueOf(this.nonSentinel(bucket.three)) : null;
+        }
+        while (true);
+    }
+
+    public boolean anySatisfy(Predicate<? super T> predicate)
+    {
+        return this.shortCircuit(predicate, true, Functions.getTrue(), Functions0.getFalse());
     }
 
     public <P> boolean anySatisfyWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        for (int i = 0; i < this.table.length; i++)
-        {
-            Object cur = this.table[i];
-            if (cur instanceof ChainedBucket)
-            {
-                if (this.chainedAnySatisfyWith((ChainedBucket) cur, predicate, parameter))
-                {
-                    return true;
-                }
-            }
-            else if (cur != null)
-            {
-                if (predicate.accept(this.nonSentinel(cur), parameter))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private <P> boolean chainedAnySatisfyWith(
-            ChainedBucket bucket,
-            Predicate2<? super T, ? super P> predicate,
-            P parameter)
-    {
-        do
-        {
-            if (predicate.accept(this.nonSentinel(bucket.zero), parameter))
-            {
-                return true;
-            }
-            if (bucket.one == null)
-            {
-                return false;
-            }
-            if (predicate.accept(this.nonSentinel(bucket.one), parameter))
-            {
-                return true;
-            }
-            if (bucket.two == null)
-            {
-                return false;
-            }
-            if (predicate.accept(this.nonSentinel(bucket.two), parameter))
-            {
-                return true;
-            }
-            if (bucket.three == null)
-            {
-                return false;
-            }
-            if (bucket.three instanceof ChainedBucket)
-            {
-                bucket = (ChainedBucket) bucket.three;
-                continue;
-            }
-            return predicate.accept(this.nonSentinel(bucket.three), parameter);
-        }
-        while (true);
+        return this.shortCircuitWith(predicate, parameter, true, Functions.getTrue(), Functions0.getFalse());
     }
 
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        for (int i = 0; i < this.table.length; i++)
-        {
-            Object cur = this.table[i];
-            if (cur instanceof ChainedBucket)
-            {
-                if (!this.chainedAllSatisfy((ChainedBucket) cur, predicate))
-                {
-                    return false;
-                }
-            }
-            else if (cur != null)
-            {
-                if (!predicate.accept(this.nonSentinel(cur)))
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean chainedAllSatisfy(ChainedBucket bucket, Predicate<? super T> predicate)
-    {
-        do
-        {
-            if (!predicate.accept(this.nonSentinel(bucket.zero)))
-            {
-                return false;
-            }
-            if (bucket.one == null)
-            {
-                return true;
-            }
-            if (!predicate.accept(this.nonSentinel(bucket.one)))
-            {
-                return false;
-            }
-            if (bucket.two == null)
-            {
-                return true;
-            }
-            if (!predicate.accept(this.nonSentinel(bucket.two)))
-            {
-                return false;
-            }
-            if (bucket.three == null)
-            {
-                return true;
-            }
-            if (bucket.three instanceof ChainedBucket)
-            {
-                bucket = (ChainedBucket) bucket.three;
-                continue;
-            }
-            return predicate.accept(this.nonSentinel(bucket.three));
-        }
-        while (true);
+        return this.shortCircuit(predicate, false, Functions.getFalse(), Functions0.getTrue());
     }
 
     public <P> boolean allSatisfyWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        for (int i = 0; i < this.table.length; i++)
-        {
-            Object cur = this.table[i];
-            if (cur instanceof ChainedBucket)
-            {
-                if (!this.chainedAllSatisfyWith((ChainedBucket) cur, predicate, parameter))
-                {
-                    return false;
-                }
-            }
-            else if (cur != null)
-            {
-                if (!predicate.accept(this.nonSentinel(cur), parameter))
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private <P> boolean chainedAllSatisfyWith(ChainedBucket bucket, Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        do
-        {
-            if (!predicate.accept(this.nonSentinel(bucket.zero), parameter))
-            {
-                return false;
-            }
-            if (bucket.one == null)
-            {
-                return true;
-            }
-            if (!predicate.accept(this.nonSentinel(bucket.one), parameter))
-            {
-                return false;
-            }
-            if (bucket.two == null)
-            {
-                return true;
-            }
-            if (!predicate.accept(this.nonSentinel(bucket.two), parameter))
-            {
-                return false;
-            }
-            if (bucket.three == null)
-            {
-                return true;
-            }
-            if (bucket.three instanceof ChainedBucket)
-            {
-                bucket = (ChainedBucket) bucket.three;
-                continue;
-            }
-            return predicate.accept(this.nonSentinel(bucket.three), parameter);
-        }
-        while (true);
+        return this.shortCircuitWith(predicate, parameter, false, Functions.getFalse(), Functions0.getTrue());
     }
 
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
-        for (int i = 0; i < this.table.length; i++)
-        {
-            Object cur = this.table[i];
-            if (cur instanceof ChainedBucket)
-            {
-                if (!this.chainedNoneSatisfy((ChainedBucket) cur, predicate))
-                {
-                    return false;
-                }
-            }
-            else if (cur != null)
-            {
-                if (predicate.accept(this.nonSentinel(cur)))
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean chainedNoneSatisfy(ChainedBucket bucket, Predicate<? super T> predicate)
-    {
-        do
-        {
-            if (predicate.accept(this.nonSentinel(bucket.zero)))
-            {
-                return false;
-            }
-            if (bucket.one == null)
-            {
-                return true;
-            }
-            if (predicate.accept(this.nonSentinel(bucket.one)))
-            {
-                return false;
-            }
-            if (bucket.two == null)
-            {
-                return true;
-            }
-            if (predicate.accept(this.nonSentinel(bucket.two)))
-            {
-                return false;
-            }
-            if (bucket.three == null)
-            {
-                return true;
-            }
-            if (bucket.three instanceof ChainedBucket)
-            {
-                bucket = (ChainedBucket) bucket.three;
-                continue;
-            }
-            return !predicate.accept(this.nonSentinel(bucket.three));
-        }
-        while (true);
+        return this.shortCircuit(predicate, true, Functions.getFalse(), Functions0.getTrue());
     }
 
     public <P> boolean noneSatisfyWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        for (int i = 0; i < this.table.length; i++)
-        {
-            Object cur = this.table[i];
-            if (cur instanceof ChainedBucket)
-            {
-                if (!this.chainedNoneSatisfyWith((ChainedBucket) cur, predicate, parameter))
-                {
-                    return false;
-                }
-            }
-            else if (cur != null)
-            {
-                if (predicate.accept(this.nonSentinel(cur), parameter))
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private <P> boolean chainedNoneSatisfyWith(ChainedBucket bucket, Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        do
-        {
-            if (predicate.accept(this.nonSentinel(bucket.zero), parameter))
-            {
-                return false;
-            }
-            if (bucket.one == null)
-            {
-                return true;
-            }
-            if (predicate.accept(this.nonSentinel(bucket.one), parameter))
-            {
-                return false;
-            }
-            if (bucket.two == null)
-            {
-                return true;
-            }
-            if (predicate.accept(this.nonSentinel(bucket.two), parameter))
-            {
-                return false;
-            }
-            if (bucket.three == null)
-            {
-                return true;
-            }
-            if (bucket.three instanceof ChainedBucket)
-            {
-                bucket = (ChainedBucket) bucket.three;
-                continue;
-            }
-            return !predicate.accept(this.nonSentinel(bucket.three), parameter);
-        }
-        while (true);
+        return this.shortCircuitWith(predicate, parameter, true, Functions.getFalse(), Functions0.getTrue());
     }
 
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
@@ -3226,89 +3054,22 @@ public class UnifiedSet<T>
 
         public void forEach(Procedure<? super T> procedure)
         {
-            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
-            {
-                Object cur = UnifiedSet.this.table[i];
-                if (cur instanceof ChainedBucket)
-                {
-                    UnifiedSet.this.chainedForEach((ChainedBucket) cur, procedure);
-                }
-                else if (cur != null)
-                {
-                    procedure.value(UnifiedSet.this.nonSentinel(cur));
-                }
-            }
+            UnifiedSet.this.each(procedure, this.chunkStartIndex, this.chunkEndIndex);
         }
 
         public boolean anySatisfy(Predicate<? super T> predicate)
         {
-            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
-            {
-                Object cur = UnifiedSet.this.table[i];
-                if (cur instanceof ChainedBucket)
-                {
-                    if (UnifiedSet.this.chainedAnySatisfy((ChainedBucket) cur, predicate))
-                    {
-                        return true;
-                    }
-                }
-                else if (cur != null)
-                {
-                    if (predicate.accept(UnifiedSet.this.nonSentinel(cur)))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return UnifiedSet.this.shortCircuit(predicate, true, Functions.getTrue(), Functions0.getFalse(), this.chunkStartIndex, this.chunkEndIndex);
         }
 
         public boolean allSatisfy(Predicate<? super T> predicate)
         {
-            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
-            {
-                Object cur = UnifiedSet.this.table[i];
-                if (cur instanceof ChainedBucket)
-                {
-                    if (!UnifiedSet.this.chainedAllSatisfy((ChainedBucket) cur, predicate))
-                    {
-                        return false;
-                    }
-                }
-                else if (cur != null)
-                {
-                    if (!predicate.accept(UnifiedSet.this.nonSentinel(cur)))
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
+            return UnifiedSet.this.shortCircuit(predicate, false, Functions.getFalse(), Functions0.getTrue(), this.chunkStartIndex, this.chunkEndIndex);
         }
 
         public T detect(Predicate<? super T> predicate)
         {
-            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
-            {
-                Object cur = UnifiedSet.this.table[i];
-                if (cur instanceof ChainedBucket)
-                {
-                    Object chainedDetect = UnifiedSet.this.chainedDetect((ChainedBucket) cur, predicate);
-                    if (chainedDetect != null)
-                    {
-                        return UnifiedSet.this.nonSentinel(chainedDetect);
-                    }
-                }
-                else if (cur != null)
-                {
-                    T each = UnifiedSet.this.nonSentinel(cur);
-                    if (predicate.accept(each))
-                    {
-                        return each;
-                    }
-                }
-            }
-            return null;
+            return UnifiedSet.this.detect(predicate, this.chunkStartIndex, this.chunkEndIndex);
         }
 
         public UnsortedSetBatch<T> select(Predicate<? super T> predicate)

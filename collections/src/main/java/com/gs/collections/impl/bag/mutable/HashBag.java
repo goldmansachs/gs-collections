@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -807,7 +807,6 @@ public class HashBag<T>
         return result;
     }
 
-
     public <V> HashBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, HashBagMultimap.<V, T>newMultimap());
@@ -825,6 +824,12 @@ public class HashBag<T>
     }
 
     @Override
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.items.keysView().detectWith(predicate, parameter);
+    }
+
+    @Override
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         return this.items.keysView().detectIfNone(predicate, function);
@@ -837,9 +842,21 @@ public class HashBag<T>
     }
 
     @Override
+    public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.items.keysView().anySatisfyWith(predicate, parameter);
+    }
+
+    @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
         return this.items.keysView().allSatisfy(predicate);
+    }
+
+    @Override
+    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.items.keysView().allSatisfyWith(predicate, parameter);
     }
 
     @Override
@@ -848,6 +865,11 @@ public class HashBag<T>
         return this.items.keysView().noneSatisfy(predicate);
     }
 
+    @Override
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.items.keysView().noneSatisfyWith(predicate, parameter);
+    }
 
     @Override
     public MutableSortedBag<T> toSortedBag()
@@ -918,7 +940,6 @@ public class HashBag<T>
     {
         return this.items.keysView().maxBy(function);
     }
-
 
     public HashBag<T> with(T... elements)
     {

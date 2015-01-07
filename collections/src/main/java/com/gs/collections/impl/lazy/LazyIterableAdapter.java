@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -134,5 +134,11 @@ public class LazyIterableAdapter<T>
     public int size()
     {
         return Iterate.sizeOf(this.adapted);
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return Iterate.isEmpty(this.adapted);
     }
 }

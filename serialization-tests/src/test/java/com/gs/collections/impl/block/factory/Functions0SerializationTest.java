@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,26 @@ public class Functions0SerializationTest
                         + "RnVuY3Rpb24wO3hyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mdW5jdGlvbi5jaGVj\n"
                         + "a2VkLkNoZWNrZWRGdW5jdGlvbjAAAAAAAAAAAQIAAHhwcA==",
                 Functions0.throwing(null));
+    }
+
+    @Test
+    public void getTrue()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAD1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczAk\n"
+                        + "VHJ1ZUZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
+                Functions0.getTrue());
+    }
+
+    @Test
+    public void getFalse()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAD5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczAk\n"
+                        + "RmFsc2VGdW5jdGlvbgAAAAAAAAABAgAAeHA=",
+                Functions0.getFalse());
     }
 
     @Test

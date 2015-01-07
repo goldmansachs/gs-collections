@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import java.util.RandomAccess;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -44,6 +45,8 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectIfProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectProcedure;
@@ -496,32 +499,6 @@ public final class InternalArrayIterate
         return target;
     }
 
-    public static <T> T detect(T[] array, int size, Predicate<? super T> predicate)
-    {
-        for (int i = 0; i < size; i++)
-        {
-            T item = array[i];
-            if (predicate.accept(item))
-            {
-                return item;
-            }
-        }
-        return null;
-    }
-
-    public static <T, P> T detectWith(T[] array, int size, Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        for (int i = 0; i < size; i++)
-        {
-            T item = array[i];
-            if (predicate.accept(item, parameter))
-            {
-                return item;
-            }
-        }
-        return null;
-    }
-
     public static <T> T min(T[] array, int size, Comparator<? super T> comparator)
     {
         if (size == 0)
@@ -668,76 +645,83 @@ public final class InternalArrayIterate
         return count;
     }
 
-    public static <T> boolean anySatisfy(T[] array, int size, Predicate<? super T> predicate)
+    public static <T, V> V shortCircuit(
+            T[] array,
+            int size,
+            Predicate<? super T> predicate,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
     {
         for (int i = 0; i < size; i++)
         {
-            if (predicate.accept(array[i]))
+            T each = array[i];
+            if (predicate.accept(each) == expected)
             {
-                return true;
+                return onShortCircuit.valueOf(each);
             }
         }
-        return false;
+        return atEnd.value();
+    }
+
+    public static <T, P, V> V shortCircuitWith(
+            T[] array,
+            int size,
+            Predicate2<? super T, ? super P> predicate2,
+            P parameter,
+            boolean expected,
+            Function<? super T, ? extends V> onShortCircuit,
+            Function0<? extends V> atEnd)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            T each = array[i];
+            if (predicate2.accept(each, parameter) == expected)
+            {
+                return onShortCircuit.valueOf(each);
+            }
+        }
+        return atEnd.value();
+    }
+
+    public static <T> boolean anySatisfy(T[] array, int size, Predicate<? super T> predicate)
+    {
+        return InternalArrayIterate.shortCircuit(array, size, predicate, true, Functions.getTrue(), Functions0.getFalse());
     }
 
     public static <T, P> boolean anySatisfyWith(T[] array, int size, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        for (int i = 0; i < size; i++)
-        {
-            if (predicate.accept(array[i], parameter))
-            {
-                return true;
-            }
-        }
-        return false;
+        return InternalArrayIterate.shortCircuitWith(array, size, predicate, parameter, true, Functions.getTrue(), Functions0.getFalse());
     }
 
     public static <T> boolean allSatisfy(T[] array, int size, Predicate<? super T> predicate)
     {
-        for (int i = 0; i < size; i++)
-        {
-            if (!predicate.accept(array[i]))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.shortCircuit(array, size, predicate, false, Functions.getFalse(), Functions0.getTrue());
     }
 
     public static <T, P> boolean allSatisfyWith(T[] array, int size, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        for (int i = 0; i < size; i++)
-        {
-            if (!predicate.accept(array[i], parameter))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.shortCircuitWith(array, size, predicate, parameter, false, Functions.getFalse(), Functions0.getTrue());
     }
 
     public static <T> boolean noneSatisfy(T[] array, int size, Predicate<? super T> predicate)
     {
-        for (int i = 0; i < size; i++)
-        {
-            if (predicate.accept(array[i]))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.shortCircuit(array, size, predicate, true, Functions.getFalse(), Functions0.getTrue());
     }
 
     public static <T, P> boolean noneSatisfyWith(T[] array, int size, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        for (int i = 0; i < size; i++)
-        {
-            if (predicate.accept(array[i], parameter))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InternalArrayIterate.shortCircuitWith(array, size, predicate, parameter, true, Functions.getFalse(), Functions0.getTrue());
+    }
+
+    public static <T> T detect(T[] array, int size, Predicate<? super T> predicate)
+    {
+        return InternalArrayIterate.shortCircuit(array, size, predicate, true, Functions.<T>identity(), Functions0.<T>nullValue());
+    }
+
+    public static <T, P> T detectWith(T[] array, int size, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return InternalArrayIterate.shortCircuitWith(array, size, predicate, parameter, true, Functions.<T>identity(), Functions0.<T>nullValue());
     }
 
     public static <T> void appendString(
