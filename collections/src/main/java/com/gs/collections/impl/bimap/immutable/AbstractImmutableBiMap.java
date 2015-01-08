@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.gs.collections.api.bag.ImmutableBag;
+import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.bag.primitive.ImmutableByteBag;
+import com.gs.collections.api.bag.primitive.ImmutableCharBag;
+import com.gs.collections.api.bag.primitive.ImmutableDoubleBag;
+import com.gs.collections.api.bag.primitive.ImmutableFloatBag;
+import com.gs.collections.api.bag.primitive.ImmutableIntBag;
+import com.gs.collections.api.bag.primitive.ImmutableLongBag;
+import com.gs.collections.api.bag.primitive.ImmutableShortBag;
 import com.gs.collections.api.bimap.ImmutableBiMap;
-import com.gs.collections.api.bimap.MutableBiMap;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -39,25 +47,25 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.collection.ImmutableCollection;
-import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
-import com.gs.collections.api.collection.primitive.ImmutableByteCollection;
-import com.gs.collections.api.collection.primitive.ImmutableCharCollection;
-import com.gs.collections.api.collection.primitive.ImmutableDoubleCollection;
-import com.gs.collections.api.collection.primitive.ImmutableFloatCollection;
-import com.gs.collections.api.collection.primitive.ImmutableIntCollection;
-import com.gs.collections.api.collection.primitive.ImmutableLongCollection;
-import com.gs.collections.api.collection.primitive.ImmutableShortCollection;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
-import com.gs.collections.api.partition.PartitionImmutableCollection;
+import com.gs.collections.api.partition.set.PartitionImmutableSet;
+import com.gs.collections.api.partition.set.PartitionMutableSet;
+import com.gs.collections.api.set.ImmutableSet;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bimap.AbstractBiMap;
 import com.gs.collections.impl.bimap.mutable.HashBiMap;
-import com.gs.collections.impl.factory.Maps;
+import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
+import com.gs.collections.impl.factory.BiMaps;
+import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
+import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
+import com.gs.collections.impl.partition.set.PartitionUnifiedSet;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.MapIterate;
 
 public abstract class AbstractImmutableBiMap<K, V> extends AbstractBiMap<K, V> implements ImmutableBiMap<K, V>, Map<K, V>
@@ -71,16 +79,10 @@ public abstract class AbstractImmutableBiMap<K, V> extends AbstractBiMap<K, V> i
         this.inverse = valuesToKeys;
     }
 
-    AbstractImmutableBiMap(ImmutableMap<K, V> map)
+    AbstractImmutableBiMap(ImmutableMap<K, V> map, ImmutableMap<V, K> inverse)
     {
         this.delegate = map;
-        this.inverse = new Inverse<V, K>(map.flipUniqueValues(), this);
-    }
-
-    AbstractImmutableBiMap(MutableBiMap<K, V> biMap)
-    {
-        this.delegate = Maps.immutable.ofAll(biMap);
-        this.inverse = new Inverse<V, K>(Maps.immutable.ofAll(biMap.inverse()), this);
+        this.inverse = new Inverse<V, K>(inverse, this);
     }
 
     @Override
@@ -208,10 +210,10 @@ public abstract class AbstractImmutableBiMap<K, V> extends AbstractBiMap<K, V> i
     public <K2, V2> ImmutableBiMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         ImmutableMap<K2, V2> result = this.delegate.collect(function);
-        return new ImmutableHashBiMap<K2, V2>(result);
+        return BiMaps.immutable.withAll(result);
     }
 
-    public <VV> ImmutableCollection<VV> collect(Function<? super V, ? extends VV> function)
+    public <VV> ImmutableBag<VV> collect(Function<? super V, ? extends VV> function)
     {
         return this.delegate.collect(function);
     }
@@ -219,60 +221,60 @@ public abstract class AbstractImmutableBiMap<K, V> extends AbstractBiMap<K, V> i
     public <R> ImmutableBiMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
     {
         ImmutableMap<K, R> result = this.delegate.collectValues(function);
-        return new ImmutableHashBiMap<K, R>(result);
+        return BiMaps.immutable.withAll(result);
     }
 
-    public ImmutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction)
+    public ImmutableBooleanBag collectBoolean(BooleanFunction<? super V> booleanFunction)
     {
         return this.delegate.collectBoolean(booleanFunction);
     }
 
-    public ImmutableByteCollection collectByte(ByteFunction<? super V> byteFunction)
+    public ImmutableByteBag collectByte(ByteFunction<? super V> byteFunction)
     {
         return this.delegate.collectByte(byteFunction);
     }
 
-    public ImmutableCharCollection collectChar(CharFunction<? super V> charFunction)
+    public ImmutableCharBag collectChar(CharFunction<? super V> charFunction)
     {
         return this.delegate.collectChar(charFunction);
     }
 
-    public ImmutableDoubleCollection collectDouble(DoubleFunction<? super V> doubleFunction)
+    public ImmutableDoubleBag collectDouble(DoubleFunction<? super V> doubleFunction)
     {
         return this.delegate.collectDouble(doubleFunction);
     }
 
-    public ImmutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction)
+    public ImmutableFloatBag collectFloat(FloatFunction<? super V> floatFunction)
     {
         return this.delegate.collectFloat(floatFunction);
     }
 
-    public ImmutableIntCollection collectInt(IntFunction<? super V> intFunction)
+    public ImmutableIntBag collectInt(IntFunction<? super V> intFunction)
     {
         return this.delegate.collectInt(intFunction);
     }
 
-    public ImmutableLongCollection collectLong(LongFunction<? super V> longFunction)
+    public ImmutableLongBag collectLong(LongFunction<? super V> longFunction)
     {
         return this.delegate.collectLong(longFunction);
     }
 
-    public ImmutableShortCollection collectShort(ShortFunction<? super V> shortFunction)
+    public ImmutableShortBag collectShort(ShortFunction<? super V> shortFunction)
     {
         return this.delegate.collectShort(shortFunction);
     }
 
-    public <P, VV> ImmutableCollection<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    public <P, VV> ImmutableBag<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
     {
         return this.delegate.collectWith(function, parameter);
     }
 
-    public <VV> ImmutableCollection<VV> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends VV> function)
+    public <VV> ImmutableBag<VV> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends VV> function)
     {
         return this.delegate.collectIf(predicate, function);
     }
 
-    public <VV> ImmutableCollection<VV> flatCollect(Function<? super V, ? extends Iterable<VV>> function)
+    public <VV> ImmutableBag<VV> flatCollect(Function<? super V, ? extends Iterable<VV>> function)
     {
         return this.delegate.flatCollect(function);
     }
@@ -288,14 +290,14 @@ public abstract class AbstractImmutableBiMap<K, V> extends AbstractBiMap<K, V> i
         return this;
     }
 
-    public ImmutableCollection<V> select(Predicate<? super V> predicate)
+    public ImmutableSet<V> select(Predicate<? super V> predicate)
     {
-        return this.delegate.select(predicate);
+        return this.delegate.select(predicate, Sets.mutable.<V>empty()).toImmutable();
     }
 
-    public <P> ImmutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> ImmutableSet<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
-        return this.delegate.selectWith(predicate, parameter);
+        return this.delegate.selectWith(predicate, parameter, Sets.mutable.<V>empty()).toImmutable();
     }
 
     public ImmutableBiMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
@@ -303,49 +305,51 @@ public abstract class AbstractImmutableBiMap<K, V> extends AbstractBiMap<K, V> i
         return MapIterate.rejectMapOnEntry(this, predicate, HashBiMap.<K, V>newMap()).toImmutable();
     }
 
-    public ImmutableCollection<V> reject(Predicate<? super V> predicate)
+    public ImmutableSet<V> reject(Predicate<? super V> predicate)
     {
-        return this.delegate.reject(predicate);
+        return this.delegate.reject(predicate, Sets.mutable.<V>empty()).toImmutable();
     }
 
-    public <P> ImmutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> ImmutableSet<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
-        return this.delegate.rejectWith(predicate, parameter);
+        return this.delegate.rejectWith(predicate, parameter, Sets.mutable.<V>empty()).toImmutable();
     }
 
-    public PartitionImmutableCollection<V> partition(Predicate<? super V> predicate)
+    public PartitionImmutableSet<V> partition(Predicate<? super V> predicate)
     {
-        return this.delegate.partition(predicate);
+        PartitionMutableSet<V> result = new PartitionUnifiedSet<V>();
+        this.inverse.forEachKey(new PartitionProcedure<V>(predicate, result));
+        return result.toImmutable();
     }
 
-    public <P> PartitionImmutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> PartitionImmutableSet<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
-        return this.delegate.partitionWith(predicate, parameter);
+        return this.partition(Predicates.bind(predicate, parameter));
     }
 
-    public <S> ImmutableCollection<Pair<V, S>> zip(Iterable<S> that)
+    public <S> ImmutableSet<Pair<V, S>> zip(Iterable<S> that)
     {
-        return this.delegate.zip(that);
+        return this.delegate.zip(that, new UnifiedSet<Pair<V, S>>()).toImmutable();
     }
 
-    public ImmutableCollection<Pair<V, Integer>> zipWithIndex()
+    public ImmutableSet<Pair<V, Integer>> zipWithIndex()
     {
-        return this.delegate.zipWithIndex();
+        return this.delegate.zipWithIndex(new UnifiedSet<Pair<V, Integer>>()).toImmutable();
     }
 
-    public <VV> ImmutableMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function)
+    public <VV> ImmutableSetMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function)
     {
-        return this.delegate.groupBy(function);
+        return this.delegate.groupBy(function, new UnifiedSetMultimap<VV, V>()).toImmutable();
     }
 
-    public <VV> ImmutableMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function)
+    public <VV> ImmutableSetMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function)
     {
-        return this.delegate.groupByEach(function);
+        return this.delegate.groupByEach(function, new UnifiedSetMultimap<VV, V>()).toImmutable();
     }
 
     public <VV> ImmutableBiMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function)
     {
-        return new ImmutableHashBiMap<VV, V>(this.delegate.groupByUniqueKey(function));
+        return BiMaps.immutable.withAll(this.delegate.groupByUniqueKey(function));
     }
 
     public <K2, V2> ImmutableMap<K2, V2> aggregateBy(Function<? super V, ? extends K2> groupBy, Function0<? extends V2> zeroValueFactory, Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator)
@@ -358,9 +362,11 @@ public abstract class AbstractImmutableBiMap<K, V> extends AbstractBiMap<K, V> i
         return this.delegate.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
     }
 
-    public <S> ImmutableCollection<S> selectInstancesOf(Class<S> clazz)
+    public <S> ImmutableSet<S> selectInstancesOf(Class<S> clazz)
     {
-        return this.delegate.selectInstancesOf(clazz);
+        MutableSet<S> result = new UnifiedSet<S>();
+        this.inverse.forEachKey(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result.toImmutable();
     }
 
     private static class Inverse<K, V> extends AbstractImmutableBiMap<K, V> implements Serializable

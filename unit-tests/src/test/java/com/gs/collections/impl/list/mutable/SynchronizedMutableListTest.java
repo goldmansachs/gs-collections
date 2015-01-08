@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,5 +56,21 @@ public class SynchronizedMutableListTest extends AbstractListTestCase
     {
         MutableList<Object> list = this.newWith(1, 2, 3);
         Assert.assertEquals("[1, 2, 3]", list.toString());
+    }
+
+    @Override
+    @Test
+    public void makeString()
+    {
+        Assert.assertEquals("1, 2, 3", this.newWith(1, 2, 3).makeString());
+    }
+
+    @Override
+    @Test
+    public void appendString()
+    {
+        Appendable builder = new StringBuilder();
+        this.newWith(1, 2, 3).appendString(builder);
+        Assert.assertEquals("1, 2, 3", builder.toString());
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,9 @@
 package com.gs.collections.impl.multimap.set.sorted;
 
 import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Comparator;
 
 import com.gs.collections.api.block.function.Function;
@@ -47,8 +50,8 @@ import com.gs.collections.impl.utility.Iterate;
 public final class SynchronizedPutTreeSortedSetMultimap<K, V>
         extends AbstractSynchronizedPutMultimap<K, V, MutableSortedSet<V>> implements MutableSortedSetMultimap<K, V>, Externalizable
 {
-    private static final long serialVersionUID = 1L;
-    private final Comparator<? super V> comparator;
+    private static final long serialVersionUID = 2L;
+    private Comparator<? super V> comparator;
 
     public SynchronizedPutTreeSortedSetMultimap()
     {
@@ -88,6 +91,20 @@ public final class SynchronizedPutTreeSortedSetMultimap<K, V>
                 SynchronizedPutTreeSortedSetMultimap.this.add(pair);
             }
         });
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException
+    {
+        out.writeObject(this.comparator);
+        super.writeExternal(out);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    {
+        this.comparator = (Comparator<? super V>) in.readObject();
+        super.readExternal(in);
     }
 
     public static <K, V> SynchronizedPutTreeSortedSetMultimap<K, V> newMultimap(Comparator<? super V> comparator)

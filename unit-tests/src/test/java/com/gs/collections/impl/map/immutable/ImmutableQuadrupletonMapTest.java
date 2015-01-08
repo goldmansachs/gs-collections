@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -350,18 +350,6 @@ public class ImmutableQuadrupletonMapTest extends ImmutableMemoryEfficientMapTes
         Assert.assertEquals(Tuples.pair(4, "4"), four);
 
         Assert.assertNull(map.detect((ignored1, ignored2) -> false));
-    }
-
-    @Override
-    protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
-    {
-        return new ImmutableQuadrupletonMap<>(key1, value1, key2, value2, null, null, null, null);
-    }
-
-    @Override
-    protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
-    {
-        return new ImmutableQuadrupletonMap<>(key1, value1, key2, value2, key3, value3, null, null);
     }
 
     @Override

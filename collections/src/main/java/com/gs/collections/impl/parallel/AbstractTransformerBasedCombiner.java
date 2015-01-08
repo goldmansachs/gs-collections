@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.Collection;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ListIterable;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.impl.bag.mutable.HashBag;
@@ -61,7 +62,7 @@ public abstract class AbstractTransformerBasedCombiner<V, T, BT extends Procedur
             this.setCombineOne(true);
             return UnifiedSet.newSet(initialCapacity);
         }
-        if (sourceIterable instanceof Bag)
+        if (sourceIterable instanceof Bag || sourceIterable instanceof MapIterable)
         {
             return HashBag.newBag(initialCapacity);
         }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.set.PartitionSet;
 import com.gs.collections.api.tuple.Pair;
 
@@ -110,6 +111,10 @@ public interface SetIterable<T> extends RichIterable<T>
 
     <S> SetIterable<S> selectInstancesOf(Class<S> clazz);
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
     SetIterable<Pair<T, Integer>> zipWithIndex();
 
     /**
@@ -129,4 +134,6 @@ public interface SetIterable<T> extends RichIterable<T>
      * Follows the same general contract as {@link Set#hashCode()}.
      */
     int hashCode();
+
+    ImmutableSetIterable<T> toImmutable();
 }

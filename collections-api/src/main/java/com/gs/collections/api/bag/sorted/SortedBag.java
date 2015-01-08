@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.list.primitive.LongList;
 import com.gs.collections.api.list.primitive.ShortList;
 import com.gs.collections.api.map.MapIterable;
-import com.gs.collections.api.map.sorted.MutableSortedMap;
+import com.gs.collections.api.map.sorted.SortedMapIterable;
 import com.gs.collections.api.multimap.sortedbag.SortedBagMultimap;
 import com.gs.collections.api.ordered.SortedIterable;
 import com.gs.collections.api.partition.bag.sorted.PartitionSortedBag;
@@ -63,7 +63,7 @@ public interface SortedBag<T>
 {
     SortedBag<T> selectByOccurrences(IntPredicate predicate);
 
-    MutableSortedMap<T, Integer> toMapOfItemToCount();
+    SortedMapIterable<T, Integer> toMapOfItemToCount();
 
     /**
      * Convert the SortedBag to an ImmutableSortedBag.  If the bag is immutable, it returns itself.

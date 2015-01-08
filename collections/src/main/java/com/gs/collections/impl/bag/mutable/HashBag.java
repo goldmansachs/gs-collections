@@ -64,6 +64,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.MutableObjectIntMap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
@@ -678,6 +679,10 @@ public class HashBag<T>
         return this.groupByUniqueKey(function, UnifiedMap.<V, T>newMap());
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
     public MutableSet<Pair<T, Integer>> zipWithIndex()
     {
         return this.zipWithIndex(UnifiedSet.<Pair<T, Integer>>newSet());
@@ -812,6 +817,10 @@ public class HashBag<T>
         return this.groupByEach(function, HashBagMultimap.<V, T>newMultimap());
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
     public <S> MutableBag<Pair<T, S>> zip(Iterable<S> that)
     {
         return this.zip(that, HashBag.<Pair<T, S>>newBag());

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,11 +126,6 @@ final class ImmutableEmptySortedMap<K, V>
     public ImmutableSortedMap<K, V> tap(Procedure<? super V> procedure)
     {
         return this;
-    }
-
-    @Override
-    public void forEach(Procedure<? super V> procedure)
-    {
     }
 
     public void forEachKeyValue(Procedure2<? super K, ? super V> procedure)

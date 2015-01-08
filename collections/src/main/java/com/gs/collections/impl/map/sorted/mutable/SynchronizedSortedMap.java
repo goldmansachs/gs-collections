@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 package com.gs.collections.impl.map.sorted.mutable;
 
+import java.io.Serializable;
 import java.util.Comparator;
-import java.util.Map;
 import java.util.SortedMap;
 
 import com.gs.collections.api.RichIterable;
@@ -46,8 +46,8 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
-import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.MutableMapIterable;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
@@ -55,14 +55,12 @@ import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
-import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
 import com.gs.collections.impl.factory.SortedMaps;
-import com.gs.collections.impl.map.SynchronizedMapIterable;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.list.fixed.ArrayAdapter;
+import com.gs.collections.impl.map.AbstractSynchronizedMapIterable;
+import com.gs.collections.impl.map.mutable.SynchronizedMapSerializationProxy;
 import com.gs.collections.impl.set.mutable.SynchronizedMutableSet;
-import com.gs.collections.impl.tuple.AbstractImmutableEntry;
 import com.gs.collections.impl.utility.LazyIterate;
 
 /**
@@ -71,16 +69,16 @@ import com.gs.collections.impl.utility.LazyIterate;
  * @see #SynchronizedSortedMap(MutableSortedMap)
  */
 public class SynchronizedSortedMap<K, V>
-        extends SynchronizedMapIterable<K, V> implements MutableSortedMap<K, V>
+        extends AbstractSynchronizedMapIterable<K, V> implements MutableSortedMap<K, V>, Serializable
 {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
-    protected SynchronizedSortedMap(MutableSortedMap<K, V> newMap)
+    public SynchronizedSortedMap(MutableSortedMap<K, V> newMap)
     {
         super(newMap);
     }
 
-    protected SynchronizedSortedMap(MutableSortedMap<K, V> newMap, Object lock)
+    public SynchronizedSortedMap(MutableSortedMap<K, V> newMap, Object lock)
     {
         super(newMap, lock);
     }
@@ -100,17 +98,92 @@ public class SynchronizedSortedMap<K, V>
         return new SynchronizedSortedMap<K, V>(SortedMapAdapter.adapt(map), lock);
     }
 
-    protected MutableSortedMap<K, V> getSortedMap()
+    @Override
+    protected MutableSortedMap<K, V> getDelegate()
     {
-        return (MutableSortedMap<K, V>) this.getMap();
+        return (MutableSortedMap<K, V>) super.getDelegate();
+    }
+
+    public Comparator<? super K> comparator()
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().comparator();
+        }
+    }
+
+    public MutableSortedMap<K, V> withKeyValue(K key, V value)
+    {
+        synchronized (this.lock)
+        {
+            this.put(key, value);
+            return this;
+        }
+    }
+
+    /**
+     * @deprecated in 6.0 Use {@link #withAllKeyValueArguments(Pair[])} instead. Inlineable.
+     */
+    @Deprecated
+    public MutableSortedMap<K, V> with(Pair<K, V>... pairs)
+    {
+        return this.withAllKeyValueArguments(pairs);
+    }
+
+    public MutableSortedMap<K, V> withAllKeyValueArguments(Pair<? extends K, ? extends V>... keyValuePairs)
+    {
+        return this.withAllKeyValues(ArrayAdapter.adapt(keyValuePairs));
+    }
+
+    public MutableSortedMap<K, V> withAllKeyValues(Iterable<? extends Pair<? extends K, ? extends V>> keyValues)
+    {
+        synchronized (this.lock)
+        {
+            for (Pair<? extends K, ? extends V> keyValue : keyValues)
+            {
+                this.getDelegate().put(keyValue.getOne(), keyValue.getTwo());
+            }
+            return this;
+        }
+    }
+
+    public MutableSortedMap<K, V> withoutKey(K key)
+    {
+        this.remove(key);
+        return this;
+    }
+
+    public MutableSortedMap<K, V> withoutAllKeys(Iterable<? extends K> keys)
+    {
+        synchronized (this.lock)
+        {
+            for (K key : keys)
+            {
+                this.getDelegate().removeKey(key);
+            }
+            return this;
+        }
     }
 
     public MutableSortedMap<K, V> newEmpty()
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().newEmpty();
+            return this.getDelegate().newEmpty();
         }
+    }
+
+    public MutableSortedMap<K, V> clone()
+    {
+        synchronized (this.lock)
+        {
+            return of(this.getDelegate().clone());
+        }
+    }
+
+    protected Object writeReplace()
+    {
+        return new SynchronizedMapSerializationProxy<K, V>(this.getDelegate());
     }
 
     public <E> MutableSortedMap<K, V> collectKeysAndValues(
@@ -120,414 +193,23 @@ public class SynchronizedSortedMap<K, V>
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().collectKeysAndValues(iterable, keyFunction, function);
-        }
-    }
-
-    public MapIterable<V, K> flipUniqueValues()
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().flipUniqueValues();
-        }
-    }
-
-    public V removeKey(K key)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().removeKey(key);
-        }
-    }
-
-    public V getIfAbsentPut(K key, Function0<? extends V> function)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().getIfAbsentPut(key, function);
-        }
-    }
-
-    public V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().getIfAbsentPutWithKey(key, function);
-        }
-    }
-
-    public <P> V getIfAbsentPutWith(K key, Function<? super P, ? extends V> function, P parameter)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().getIfAbsentPutWith(key, function, parameter);
-        }
-    }
-
-    public MutableSortedMap<K, V> with(Pair<K, V>... pairs)
-    {
-        synchronized (this.lock)
-        {
-            this.getSortedMap().with(pairs);
-            return this;
-        }
-    }
-
-    public MutableSortedMap<K, V> asUnmodifiable()
-    {
-        synchronized (this.lock)
-        {
-            return UnmodifiableTreeMap.of(this);
-        }
-    }
-
-    public ImmutableSortedMap<K, V> toImmutable()
-    {
-        synchronized (this.lock)
-        {
-            return SortedMaps.immutable.ofSortedMap(this);
-        }
-    }
-
-    public MutableSortedMap<K, V> asSynchronized()
-    {
-        return this;
-    }
-
-    public V put(K key, V value)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().put(key, value);
-        }
-    }
-
-    public V remove(Object key)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().remove(key);
-        }
-    }
-
-    public void putAll(Map<? extends K, ? extends V> map)
-    {
-        synchronized (this.lock)
-        {
-            this.getSortedMap().putAll(map);
-        }
-    }
-
-    public void clear()
-    {
-        synchronized (this.lock)
-        {
-            this.getSortedMap().clear();
-        }
-    }
-
-    public RichIterable<K> keysView()
-    {
-        return LazyIterate.adapt(this.keySet());
-    }
-
-    public RichIterable<V> valuesView()
-    {
-        return LazyIterate.adapt(this.values());
-    }
-
-    public RichIterable<Pair<K, V>> keyValuesView()
-    {
-        return LazyIterate.adapt(this.entrySet()).collect(AbstractImmutableEntry.<K, V>getPairFunction());
-    }
-
-    public MutableSet<Entry<K, V>> entrySet()
-    {
-        synchronized (this.lock)
-        {
-            return SynchronizedMutableSet.of(this.getSortedMap().entrySet(), this.lock);
-        }
-    }
-
-    public MutableSet<K> keySet()
-    {
-        synchronized (this.lock)
-        {
-            return SynchronizedMutableSet.of(this.getSortedMap().keySet(), this.lock);
-        }
-    }
-
-    public MutableSortedMap<K, V> headMap(K toKey)
-    {
-        synchronized (this.lock)
-        {
-            return of(this.getSortedMap().headMap(toKey), this.lock);
-        }
-    }
-
-    public MutableSortedMap<K, V> tailMap(K fromKey)
-    {
-        synchronized (this.lock)
-        {
-            return of(this.getSortedMap().tailMap(fromKey), this.lock);
-        }
-    }
-
-    public MutableSortedMap<K, V> subMap(K fromKey, K toKey)
-    {
-        synchronized (this.lock)
-        {
-            return of(this.getSortedMap().subMap(fromKey, toKey), this.lock);
-        }
-    }
-
-    public MutableCollection<V> values()
-    {
-        synchronized (this.lock)
-        {
-            return SynchronizedMutableCollection.of(this.getSortedMap().values(), this.lock);
+            return this.getDelegate().collectKeysAndValues(iterable, keyFunction, function);
         }
     }
 
     public K firstKey()
     {
-        synchronized (this.lock)
+        synchronized (this.getLock())
         {
-            return this.getSortedMap().firstKey();
+            return this.getDelegate().firstKey();
         }
     }
 
     public K lastKey()
     {
-        synchronized (this.lock)
+        synchronized (this.getLock())
         {
-            return this.getSortedMap().lastKey();
-        }
-    }
-
-    @Override
-    public int hashCode()
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().hashCode();
-        }
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().equals(obj);
-        }
-    }
-
-    public MutableSortedSetMultimap<V, K> flip()
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().flip();
-        }
-    }
-
-    @Override
-    public MutableSortedMap<K, V> clone()
-    {
-        synchronized (this.lock)
-        {
-            return of(this.getSortedMap().clone());
-        }
-    }
-
-    @Override
-    public String toString()
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().toString();
-        }
-    }
-
-    @Override
-    public String makeString()
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().makeString();
-        }
-    }
-
-    @Override
-    public String makeString(String separator)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().makeString(separator);
-        }
-    }
-
-    @Override
-    public String makeString(String start, String separator, String end)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().makeString(start, separator, end);
-        }
-    }
-
-    public Comparator<? super K> comparator()
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().comparator();
-        }
-    }
-
-    public <R> MutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collectValues(function);
-        }
-    }
-
-    public MutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().select(predicate);
-        }
-    }
-
-    public MutableSortedMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().reject(predicate);
-        }
-    }
-
-    public PartitionMutableList<V> partition(Predicate<? super V> predicate)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().partition(predicate);
-        }
-    }
-
-    public <P> PartitionMutableList<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().partitionWith(predicate, parameter);
-        }
-    }
-
-    public <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collect(function);
-        }
-    }
-
-    public <R> MutableList<R> collect(Function<? super V, ? extends R> function)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collect(function);
-        }
-    }
-
-    public MutableBooleanList collectBoolean(BooleanFunction<? super V> booleanFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collectBoolean(booleanFunction);
-        }
-    }
-
-    public MutableByteList collectByte(ByteFunction<? super V> byteFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collectByte(byteFunction);
-        }
-    }
-
-    public MutableCharList collectChar(CharFunction<? super V> charFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collectChar(charFunction);
-        }
-    }
-
-    public MutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collectDouble(doubleFunction);
-        }
-    }
-
-    public MutableFloatList collectFloat(FloatFunction<? super V> floatFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collectFloat(floatFunction);
-        }
-    }
-
-    public MutableIntList collectInt(IntFunction<? super V> intFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collectInt(intFunction);
-        }
-    }
-
-    public MutableLongList collectLong(LongFunction<? super V> longFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collectLong(longFunction);
-        }
-    }
-
-    public MutableShortList collectShort(ShortFunction<? super V> shortFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collectShort(shortFunction);
-        }
-    }
-
-    @Override
-    public <P, VV> MutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collectWith(function, parameter);
-        }
-    }
-
-    public <R> MutableList<R> collectIf(
-            Predicate<? super V> predicate,
-            Function<? super V, ? extends R> function)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().collectIf(predicate, function);
-        }
-    }
-
-    public <R> MutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().flatCollect(function);
+            return this.getDelegate().lastKey();
         }
     }
 
@@ -544,16 +226,15 @@ public class SynchronizedSortedMap<K, V>
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().select(predicate);
+            return this.getDelegate().select(predicate);
         }
     }
 
-    @Override
     public <P> MutableList<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().selectWith(predicate, parameter);
+            return this.getDelegate().selectWith(predicate, parameter);
         }
     }
 
@@ -561,32 +242,23 @@ public class SynchronizedSortedMap<K, V>
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().reject(predicate);
+            return this.getDelegate().reject(predicate);
         }
     }
 
-    @Override
     public <P> MutableList<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().rejectWith(predicate, parameter);
+            return this.getDelegate().rejectWith(predicate, parameter);
         }
     }
 
-    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    public PartitionMutableList<V> partition(Predicate<? super V> predicate)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().selectInstancesOf(clazz);
-        }
-    }
-
-    public <S> MutableList<Pair<V, S>> zip(Iterable<S> that)
-    {
-        synchronized (this.lock)
-        {
-            return this.getSortedMap().zip(that);
+            return this.getDelegate().partition(predicate);
         }
     }
 
@@ -594,7 +266,148 @@ public class SynchronizedSortedMap<K, V>
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().zipWithIndex();
+            return this.getDelegate().zipWithIndex();
+        }
+    }
+
+    public <P> PartitionMutableList<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().partitionWith(predicate, parameter);
+        }
+    }
+
+    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().selectInstancesOf(clazz);
+        }
+    }
+
+    public <R> MutableList<R> collect(Function<? super V, ? extends R> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collect(function);
+        }
+    }
+
+    public MutableBooleanList collectBoolean(BooleanFunction<? super V> booleanFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collectBoolean(booleanFunction);
+        }
+    }
+
+    public MutableByteList collectByte(ByteFunction<? super V> byteFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collectByte(byteFunction);
+        }
+    }
+
+    public MutableCharList collectChar(CharFunction<? super V> charFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collectChar(charFunction);
+        }
+    }
+
+    public MutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collectDouble(doubleFunction);
+        }
+    }
+
+    public MutableFloatList collectFloat(FloatFunction<? super V> floatFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collectFloat(floatFunction);
+        }
+    }
+
+    public MutableIntList collectInt(IntFunction<? super V> intFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collectInt(intFunction);
+        }
+    }
+
+    public MutableLongList collectLong(LongFunction<? super V> longFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collectLong(longFunction);
+        }
+    }
+
+    public MutableShortList collectShort(ShortFunction<? super V> shortFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collectShort(shortFunction);
+        }
+    }
+
+    public <P, VV> MutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collectWith(function, parameter);
+        }
+    }
+
+    public <R> MutableList<R> collectIf(
+            Predicate<? super V> predicate,
+            Function<? super V, ? extends R> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collectIf(predicate, function);
+        }
+    }
+
+    public <R> MutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().flatCollect(function);
+        }
+    }
+
+    @Override
+    public String makeString()
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().makeString();
+        }
+    }
+
+    @Override
+    public String makeString(String separator)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().makeString(separator);
+        }
+    }
+
+    @Override
+    public String makeString(String start, String separator, String end)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().makeString(start, separator, end);
         }
     }
 
@@ -602,7 +415,7 @@ public class SynchronizedSortedMap<K, V>
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().groupBy(function);
+            return this.getDelegate().groupBy(function);
         }
     }
 
@@ -610,15 +423,15 @@ public class SynchronizedSortedMap<K, V>
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().groupByEach(function);
+            return this.getDelegate().groupByEach(function);
         }
     }
 
-    public <VV> MutableMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function)
+    public <S> MutableList<Pair<V, S>> zip(Iterable<S> that)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().groupByUniqueKey(function);
+            return this.getDelegate().zip(that);
         }
     }
 
@@ -627,9 +440,10 @@ public class SynchronizedSortedMap<K, V>
             Function0<? extends V2> zeroValueFactory,
             Procedure2<? super V2, ? super V> mutatingAggregator)
     {
-        MutableMap<K2, V2> map = UnifiedMap.newMap();
-        this.forEach(new MutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, mutatingAggregator));
-        return map;
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
+        }
     }
 
     public <K2, V2> MutableMap<K2, V2> aggregateBy(
@@ -637,8 +451,136 @@ public class SynchronizedSortedMap<K, V>
             Function0<? extends V2> zeroValueFactory,
             Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator)
     {
-        MutableMap<K2, V2> map = UnifiedMap.newMap();
-        this.forEach(new NonMutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
-        return map;
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
+        }
+    }
+
+    public MutableMapIterable<V, K> flipUniqueValues()
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().flipUniqueValues();
+        }
+    }
+
+    public MutableSortedSetMultimap<V, K> flip()
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().flip();
+        }
+    }
+
+    public MutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().select(predicate);
+        }
+    }
+
+    public MutableSortedMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().reject(predicate);
+        }
+    }
+
+    public <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collect(function);
+        }
+    }
+
+    public <R> MutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().collectValues(function);
+        }
+    }
+
+    public RichIterable<K> keysView()
+    {
+        return LazyIterate.adapt(this.keySet());
+    }
+
+    public RichIterable<V> valuesView()
+    {
+        return LazyIterate.adapt(this.values());
+    }
+
+    public MutableSortedMap<K, V> asUnmodifiable()
+    {
+        synchronized (this.lock)
+        {
+            return UnmodifiableTreeMap.of(this);
+        }
+    }
+
+    public MutableSortedMap<K, V> asSynchronized()
+    {
+        return this;
+    }
+
+    public ImmutableSortedMap<K, V> toImmutable()
+    {
+        synchronized (this.lock)
+        {
+            return SortedMaps.immutable.ofSortedMap(this);
+        }
+    }
+
+    public MutableSet<K> keySet()
+    {
+        synchronized (this.lock)
+        {
+            return SynchronizedMutableSet.of(this.getDelegate().keySet(), this.lock);
+        }
+    }
+
+    public MutableCollection<V> values()
+    {
+        synchronized (this.lock)
+        {
+            return SynchronizedMutableCollection.of(this.getDelegate().values(), this.lock);
+        }
+    }
+
+    public MutableSet<Entry<K, V>> entrySet()
+    {
+        synchronized (this.lock)
+        {
+            return SynchronizedMutableSet.of(this.getDelegate().entrySet(), this.lock);
+        }
+    }
+
+    public MutableSortedMap<K, V> headMap(K toKey)
+    {
+        synchronized (this.lock)
+        {
+            return of(this.getDelegate().headMap(toKey), this.lock);
+        }
+    }
+
+    public MutableSortedMap<K, V> tailMap(K fromKey)
+    {
+        synchronized (this.lock)
+        {
+            return of(this.getDelegate().tailMap(fromKey), this.lock);
+        }
+    }
+
+    public MutableSortedMap<K, V> subMap(K fromKey, K toKey)
+    {
+        synchronized (this.lock)
+        {
+            return of(this.getDelegate().subMap(fromKey, toKey), this.lock);
+        }
     }
 }

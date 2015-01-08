@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,14 @@ import java.util.Map;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.MutableBooleanBag;
+import com.gs.collections.api.bag.primitive.MutableByteBag;
+import com.gs.collections.api.bag.primitive.MutableCharBag;
+import com.gs.collections.api.bag.primitive.MutableDoubleBag;
+import com.gs.collections.api.bag.primitive.MutableFloatBag;
+import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.bag.primitive.MutableLongBag;
+import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -45,7 +53,6 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableByteCollection;
 import com.gs.collections.api.collection.primitive.MutableCharCollection;
@@ -61,8 +68,10 @@ import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
-import com.gs.collections.api.partition.PartitionMutableCollection;
+import com.gs.collections.api.ordered.OrderedIterable;
+import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
@@ -531,7 +540,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectIf(predicate, function, target);
     }
 
-    public <P, VV> MutableCollection<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    public <P, VV> MutableBag<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
     {
         return this.getMutableMap().collectWith(function, parameter);
     }
@@ -606,7 +615,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().getLast();
     }
 
-    public <R> MutableMultimap<R, V> groupBy(Function<? super V, ? extends R> function)
+    public <R> MutableBagMultimap<R, V> groupBy(Function<? super V, ? extends R> function)
     {
         return this.getMutableMap().groupBy(function);
     }
@@ -616,7 +625,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().groupBy(function, target);
     }
 
-    public <R> MutableMultimap<R, V> groupByEach(Function<? super V, ? extends Iterable<R>> function)
+    public <R> MutableBagMultimap<R, V> groupByEach(Function<? super V, ? extends Iterable<R>> function)
     {
         return this.getMutableMap().groupByEach(function);
     }
@@ -746,31 +755,6 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().minBy(function);
     }
 
-    public <R extends Collection<V>> R reject(Predicate<? super V> predicate, R target)
-    {
-        return this.getMutableMap().reject(predicate, target);
-    }
-
-    public <P, R extends Collection<V>> R rejectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
-    {
-        return this.getMutableMap().rejectWith(predicate, parameter, targetCollection);
-    }
-
-    public <R extends Collection<V>> R select(Predicate<? super V> predicate, R target)
-    {
-        return this.getMutableMap().select(predicate, target);
-    }
-
-    public <P, R extends Collection<V>> R selectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
-    {
-        return this.getMutableMap().selectWith(predicate, parameter, targetCollection);
-    }
-
-    public <P> MutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
-    {
-        return this.getMutableMap().selectWith(predicate, parameter);
-    }
-
     public Object[] toArray()
     {
         return this.getMutableMap().toArray();
@@ -791,12 +775,12 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().zipWithIndex(target);
     }
 
-    public <R> MutableCollection<R> collect(Function<? super V, ? extends R> function)
+    public <R> MutableBag<R> collect(Function<? super V, ? extends R> function)
     {
         return this.getMutableMap().collect(function);
     }
 
-    public MutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction)
+    public MutableBooleanBag collectBoolean(BooleanFunction<? super V> booleanFunction)
     {
         return this.getMutableMap().collectBoolean(booleanFunction);
     }
@@ -806,7 +790,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectBoolean(booleanFunction, target);
     }
 
-    public MutableByteCollection collectByte(ByteFunction<? super V> byteFunction)
+    public MutableByteBag collectByte(ByteFunction<? super V> byteFunction)
     {
         return this.getMutableMap().collectByte(byteFunction);
     }
@@ -816,7 +800,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectByte(byteFunction, target);
     }
 
-    public MutableCharCollection collectChar(CharFunction<? super V> charFunction)
+    public MutableCharBag collectChar(CharFunction<? super V> charFunction)
     {
         return this.getMutableMap().collectChar(charFunction);
     }
@@ -826,7 +810,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectChar(charFunction, target);
     }
 
-    public MutableDoubleCollection collectDouble(DoubleFunction<? super V> doubleFunction)
+    public MutableDoubleBag collectDouble(DoubleFunction<? super V> doubleFunction)
     {
         return this.getMutableMap().collectDouble(doubleFunction);
     }
@@ -836,7 +820,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectDouble(doubleFunction, target);
     }
 
-    public MutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction)
+    public MutableFloatBag collectFloat(FloatFunction<? super V> floatFunction)
     {
         return this.getMutableMap().collectFloat(floatFunction);
     }
@@ -846,7 +830,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectFloat(floatFunction, target);
     }
 
-    public MutableIntCollection collectInt(IntFunction<? super V> intFunction)
+    public MutableIntBag collectInt(IntFunction<? super V> intFunction)
     {
         return this.getMutableMap().collectInt(intFunction);
     }
@@ -856,7 +840,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectInt(intFunction, target);
     }
 
-    public MutableLongCollection collectLong(LongFunction<? super V> longFunction)
+    public MutableLongBag collectLong(LongFunction<? super V> longFunction)
     {
         return this.getMutableMap().collectLong(longFunction);
     }
@@ -866,7 +850,7 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectLong(longFunction, target);
     }
 
-    public MutableShortCollection collectShort(ShortFunction<? super V> shortFunction)
+    public MutableShortBag collectShort(ShortFunction<? super V> shortFunction)
     {
         return this.getMutableMap().collectShort(shortFunction);
     }
@@ -876,52 +860,85 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectShort(shortFunction, target);
     }
 
-    public <R> MutableCollection<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
+    public <R> MutableBag<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
     {
         return this.getMutableMap().collectIf(predicate, function);
     }
 
-    public <R> MutableCollection<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
+    public <R> MutableBag<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
     {
         return this.getMutableMap().flatCollect(function);
     }
 
-    public MutableCollection<V> reject(Predicate<? super V> predicate)
-    {
-        return this.getMutableMap().reject(predicate);
-    }
-
-    public <P> MutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
-    {
-        return this.getMutableMap().rejectWith(predicate, parameter);
-    }
-
-    public MutableCollection<V> select(Predicate<? super V> predicate)
+    public MutableBag<V> select(Predicate<? super V> predicate)
     {
         return this.getMutableMap().select(predicate);
     }
 
-    public PartitionMutableCollection<V> partition(Predicate<? super V> predicate)
+    public <R extends Collection<V>> R select(Predicate<? super V> predicate, R target)
     {
-        return this.getMutableMap().partition(predicate);
+        return this.getMutableMap().select(predicate, target);
     }
 
-    public <P> PartitionMutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> MutableBag<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
-        return this.getMutableMap().partitionWith(predicate, parameter);
+        return this.getMutableMap().selectWith(predicate, parameter);
     }
 
-    public <S> MutableCollection<S> selectInstancesOf(Class<S> clazz)
+    public <P, R extends Collection<V>> R selectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
+    {
+        return this.getMutableMap().selectWith(predicate, parameter, targetCollection);
+    }
+
+    public MutableBag<V> reject(Predicate<? super V> predicate)
+    {
+        return this.getMutableMap().reject(predicate);
+    }
+
+    public <R extends Collection<V>> R reject(Predicate<? super V> predicate, R target)
+    {
+        return this.getMutableMap().reject(predicate, target);
+    }
+
+    public <P> MutableBag<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableMap().rejectWith(predicate, parameter);
+    }
+
+    public <P, R extends Collection<V>> R rejectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
+    {
+        return this.getMutableMap().rejectWith(predicate, parameter, targetCollection);
+    }
+
+    public <S> MutableBag<S> selectInstancesOf(Class<S> clazz)
     {
         return this.getMutableMap().selectInstancesOf(clazz);
     }
 
-    public <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that)
+    public PartitionMutableBag<V> partition(Predicate<? super V> predicate)
+    {
+        return this.getMutableMap().partition(predicate);
+    }
+
+    public <P> PartitionMutableBag<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableMap().partitionWith(predicate, parameter);
+    }
+
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
+    public <S> MutableBag<Pair<V, S>> zip(Iterable<S> that)
     {
         return this.getMutableMap().zip(that);
     }
 
-    public MutableCollection<Pair<V, Integer>> zipWithIndex()
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
+    public MutableSet<Pair<V, Integer>> zipWithIndex()
     {
         return this.getMutableMap().zipWithIndex();
     }

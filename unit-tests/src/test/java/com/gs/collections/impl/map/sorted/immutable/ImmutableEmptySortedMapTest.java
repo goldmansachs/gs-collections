@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,12 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     protected <K, V> MapIterable<K, V> newMap()
     {
         return SortedMaps.immutable.of();
+    }
+
+    @Override
+    protected <K, V> MapIterable<K, V> newMapWithKeyValue(K key1, V value1)
+    {
+        return SortedMaps.immutable.of(key1, value1);
     }
 
     @Override

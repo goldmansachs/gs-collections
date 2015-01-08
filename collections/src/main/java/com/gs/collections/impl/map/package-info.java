@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
  *     This package contains the following implementations:
  * <ul>
  *     <li>
- *          {@link com.gs.collections.impl.map.SynchronizedMapIterable} - a synchronized view of a map.
+ *          {@link com.gs.collections.impl.map.AbstractSynchronizedMapIterable} - a synchronized view of a map.
  *     </li>
  */
 package com.gs.collections.impl.map;

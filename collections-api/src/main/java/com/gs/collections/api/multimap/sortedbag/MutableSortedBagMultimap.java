@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.bag.MutableBagIterableMultimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.tuple.Pair;
@@ -29,7 +29,7 @@ import com.gs.collections.api.tuple.Pair;
  * @since 4.2
  */
 public interface MutableSortedBagMultimap<K, V>
-        extends MutableMultimap<K, V>, SortedBagMultimap<K, V>
+        extends MutableBagIterableMultimap<K, V>, SortedBagMultimap<K, V>
 {
     MutableSortedBag<V> replaceValues(K key, Iterable<? extends V> values);
 

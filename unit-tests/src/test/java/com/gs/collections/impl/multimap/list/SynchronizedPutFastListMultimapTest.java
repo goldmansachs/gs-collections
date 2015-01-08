@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,8 @@
 
 package com.gs.collections.impl.multimap.list;
 
-import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.multimap.bag.HashBagMultimap;
-import com.gs.collections.impl.test.Verify;
-import com.gs.collections.impl.tuple.Tuples;
-import com.gs.collections.impl.utility.Iterate;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * Test of {@link SynchronizedPutFastListMultimap}.
@@ -100,110 +93,5 @@ public class SynchronizedPutFastListMultimapTest extends AbstractMutableListMult
     protected final <V> FastList<V> createCollection(V... args)
     {
         return FastList.newListWith(args);
-    }
-
-    @Test
-    @Override
-    public void testToString()
-    {
-        MutableMultimap<String, Integer> multimap =
-                this.newMultimapWithKeysValues("One", 1, "One", 2);
-        Assert.assertEquals("{One=[1, 2]}", multimap.toString());
-    }
-
-    @Override
-    @Test
-    public void selectKeysValues()
-    {
-        SynchronizedPutFastListMultimap<String, Integer> multimap = SynchronizedPutFastListMultimap.newMultimap();
-        multimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 4));
-        multimap.putAll("Two", FastList.newListWith(2, 3, 4, 5, 3, 2));
-        FastListMultimap<String, Integer> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && (value % 2 == 0)));
-        FastListMultimap<String, Integer> expectedMultimap = FastListMultimap.newMultimap();
-        expectedMultimap.putAll("Two", FastList.newListWith(2, 4, 2));
-        Assert.assertEquals(expectedMultimap, selectedMultimap);
-        Verify.assertListsEqual(expectedMultimap.get("Two"), selectedMultimap.get("Two"));
-    }
-
-    @Override
-    @Test
-    public void rejectKeysValues()
-    {
-        SynchronizedPutFastListMultimap<String, Integer> multimap = SynchronizedPutFastListMultimap.newMultimap();
-        multimap.putAll("One", FastList.newListWith(1, 2, 3, 4, 1));
-        multimap.putAll("Two", FastList.newListWith(2, 3, 4, 5));
-        FastListMultimap<String, Integer> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
-        FastListMultimap<String, Integer> expectedMultimap = FastListMultimap.newMultimap();
-        expectedMultimap.putAll("One", FastList.newListWith(1, 3, 1));
-        Assert.assertEquals(expectedMultimap, rejectedMultimap);
-        Verify.assertListsEqual(expectedMultimap.get("One"), rejectedMultimap.get("One"));
-    }
-
-    @Override
-    @Test
-    public void selectKeysMultiValues()
-    {
-        SynchronizedPutFastListMultimap<Integer, String> multimap = SynchronizedPutFastListMultimap.newMultimap();
-        multimap.putAll(1, FastList.newListWith("1", "3", "4"));
-        multimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "2"));
-        multimap.putAll(3, FastList.newListWith("2", "3", "4", "5", "2"));
-        multimap.putAll(4, FastList.newListWith("1", "3", "4"));
-        FastListMultimap<Integer, String> selectedMultimap = multimap.selectKeysMultiValues((key, values) -> (key % 2 == 0 && Iterate.sizeOf(values) > 3));
-        FastListMultimap<Integer, String> expectedMultimap = FastListMultimap.newMultimap();
-        expectedMultimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "2"));
-        Assert.assertEquals(expectedMultimap, selectedMultimap);
-        Verify.assertListsEqual(expectedMultimap.get(2), selectedMultimap.get(2));
-    }
-
-    @Override
-    @Test
-    public void rejectKeysMultiValues()
-    {
-        SynchronizedPutFastListMultimap<Integer, String> multimap = SynchronizedPutFastListMultimap.newMultimap();
-        multimap.putAll(1, FastList.newListWith("1", "2", "3", "4", "1"));
-        multimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "1"));
-        multimap.putAll(3, FastList.newListWith("2", "3", "4", "2"));
-        multimap.putAll(4, FastList.newListWith("1", "3", "4", "5"));
-        FastListMultimap<Integer, String> rejectedMultimap = multimap.rejectKeysMultiValues((key, values) -> (key % 2 == 0 || Iterate.sizeOf(values) > 4));
-        FastListMultimap<Integer, String> expectedMultimap = FastListMultimap.newMultimap();
-        expectedMultimap.putAll(3, FastList.newListWith("2", "3", "4", "2"));
-        Assert.assertEquals(expectedMultimap, rejectedMultimap);
-        Verify.assertListsEqual(expectedMultimap.get(3), rejectedMultimap.get(3));
-    }
-
-    @Override
-    @Test
-    public void collectKeysValues()
-    {
-        SynchronizedPutFastListMultimap<String, Integer> multimap = SynchronizedPutFastListMultimap.newMultimap();
-        multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
-        multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
-        HashBagMultimap<Integer, String> collectedMultimap1 = multimap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value + "Value"));
-        HashBagMultimap<Integer, String> expectedMultimap1 = HashBagMultimap.newMultimap();
-        expectedMultimap1.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
-        expectedMultimap1.putAll(2, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
-        Assert.assertEquals(expectedMultimap1, collectedMultimap1);
-
-        HashBagMultimap<Integer, String> collectedMultimap2 = multimap.collectKeysValues((key, value) -> Tuples.pair(1, value + "Value"));
-        HashBagMultimap<Integer, String> expectedMultimap2 = HashBagMultimap.newMultimap();
-        expectedMultimap2.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
-        expectedMultimap2.putAll(1, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
-        Assert.assertEquals(expectedMultimap2, collectedMultimap2);
-    }
-
-    @Override
-    @Test
-    public void collectValues()
-    {
-        SynchronizedPutFastListMultimap<String, Integer> multimap = SynchronizedPutFastListMultimap.newMultimap();
-        multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
-        multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
-        FastListMultimap<String, String> collectedMultimap = multimap.collectValues(value -> value + "Value");
-        FastListMultimap<String, String> expectedMultimap = FastListMultimap.newMultimap();
-        expectedMultimap.putAll("1", FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
-        expectedMultimap.putAll("2", FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
-        Assert.assertEquals(expectedMultimap, collectedMultimap);
-        Verify.assertListsEqual(expectedMultimap.get("1"), collectedMultimap.get("1"));
-        Verify.assertListsEqual(expectedMultimap.get("2"), collectedMultimap.get("2"));
     }
 }

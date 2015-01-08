@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -130,20 +130,6 @@ public class ConcurrentMutableHashMapTest extends ConcurrentHashMapTestCase
 
         Assert.assertFalse(map.entrySet().removeAll(FastList.newListWith(ImmutableEntry.of("Four", 4))));
         Assert.assertEquals(UnifiedMap.newWithKeysValues("Two", 2), map);
-    }
-
-    @Override
-    @Test
-    public void removeNullFromValues()
-    {
-        // ConcurrentHashMaps do not support null values
-    }
-
-    @Override
-    @Test
-    public void removeNullFromKeySet()
-    {
-        // ConcurrentHashMaps do not support null keys
     }
 
     @Override

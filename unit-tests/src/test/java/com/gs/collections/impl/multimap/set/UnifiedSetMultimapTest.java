@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,11 @@
 package com.gs.collections.impl.multimap.set;
 
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
-import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
-import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,35 +31,35 @@ import org.junit.Test;
 public class UnifiedSetMultimapTest extends AbstractMutableSetMultimapTestCase
 {
     @Override
-    protected <K, V> UnifiedSetMultimap<K, V> newMultimap()
+    protected <K, V> MutableSetMultimap<K, V> newMultimap()
     {
         return UnifiedSetMultimap.newMultimap();
     }
 
     @Override
-    protected <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeyValue(K key, V value)
+    protected <K, V> MutableSetMultimap<K, V> newMultimapWithKeyValue(K key, V value)
     {
-        UnifiedSetMultimap<K, V> mutableMultimap = this.newMultimap();
+        MutableSetMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key, value);
         return mutableMultimap;
     }
 
     @Override
-    protected <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeysValues(K key1, V value1, K key2, V value2)
+    protected <K, V> MutableSetMultimap<K, V> newMultimapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        UnifiedSetMultimap<K, V> mutableMultimap = this.newMultimap();
+        MutableSetMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key1, value1);
         mutableMultimap.put(key2, value2);
         return mutableMultimap;
     }
 
     @Override
-    protected <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeysValues(
+    protected <K, V> MutableSetMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3)
     {
-        UnifiedSetMultimap<K, V> mutableMultimap = this.newMultimap();
+        MutableSetMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key1, value1);
         mutableMultimap.put(key2, value2);
         mutableMultimap.put(key3, value3);
@@ -68,13 +67,13 @@ public class UnifiedSetMultimapTest extends AbstractMutableSetMultimapTestCase
     }
 
     @Override
-    protected <K, V> UnifiedSetMultimap<K, V> newMultimapWithKeysValues(
+    protected <K, V> MutableSetMultimap<K, V> newMultimapWithKeysValues(
             K key1, V value1,
             K key2, V value2,
             K key3, V value3,
             K key4, V value4)
     {
-        UnifiedSetMultimap<K, V> mutableMultimap = this.newMultimap();
+        MutableSetMultimap<K, V> mutableMultimap = this.newMultimap();
         mutableMultimap.put(key1, value1);
         mutableMultimap.put(key2, value2);
         mutableMultimap.put(key3, value3);
@@ -129,104 +128,5 @@ public class UnifiedSetMultimapTest extends AbstractMutableSetMultimapTestCase
         Assert.assertEquals(FastList.newListWith("TwoTwo", "Two"), actual.get(Integer.valueOf(2)).toList());
         Assert.assertEquals(FastList.newListWith("ThreeThree", "Three"), actual.get(Integer.valueOf(3)).toList());
         Assert.assertEquals(FastList.newListWith("FourFour", "Four"), actual.get(Integer.valueOf(4)).toList());
-    }
-
-    @Override
-    @Test
-    public void selectKeysValues()
-    {
-        UnifiedSetMultimap<String, Integer> multimap = UnifiedSetMultimap.newMultimap();
-        multimap.putAll("One", FastList.newListWith(1, 1, 2, 3, 4));
-        multimap.putAll("Two", FastList.newListWith(2, 2, 3, 4, 5));
-        UnifiedSetMultimap<String, Integer> selectedMultimap = multimap.selectKeysValues((key, value) -> ("Two".equals(key) && (value % 2 == 0)));
-        UnifiedSetMultimap<String, Integer> expectedMultimap = UnifiedSetMultimap.newMultimap();
-        expectedMultimap.putAll("Two", FastList.newListWith(2, 4));
-        Assert.assertEquals(expectedMultimap, selectedMultimap);
-        Verify.assertSetsEqual(expectedMultimap.get("Two"), selectedMultimap.get("Two"));
-    }
-
-    @Override
-    @Test
-    public void rejectKeysValues()
-    {
-        UnifiedSetMultimap<String, Integer> multimap = UnifiedSetMultimap.newMultimap();
-        multimap.putAll("One", FastList.newListWith(1, 1, 2, 3, 4));
-        multimap.putAll("Two", FastList.newListWith(2, 2, 3, 4, 5));
-        UnifiedSetMultimap<String, Integer> rejectedMultimap = multimap.rejectKeysValues((key, value) -> ("Two".equals(key) || (value % 2 == 0)));
-        UnifiedSetMultimap<String, Integer> expectedMultimap = UnifiedSetMultimap.newMultimap();
-        expectedMultimap.putAll("One", FastList.newListWith(1, 3));
-        Assert.assertEquals(expectedMultimap, rejectedMultimap);
-        Verify.assertSetsEqual(expectedMultimap.get("One"), rejectedMultimap.get("One"));
-    }
-
-    @Override
-    @Test
-    public void selectKeysMultiValues()
-    {
-        UnifiedSetMultimap<Integer, String> multimap = UnifiedSetMultimap.newMultimap();
-        multimap.putAll(1, FastList.newListWith("1", "3", "4"));
-        multimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "2"));
-        multimap.putAll(3, FastList.newListWith("2", "3", "4", "5", "2"));
-        multimap.putAll(4, FastList.newListWith("1", "3", "4"));
-        UnifiedSetMultimap<Integer, String> selectedMultimap = multimap.selectKeysMultiValues((key, values) -> (key % 2 == 0 && Iterate.sizeOf(values) > 3));
-        UnifiedSetMultimap<Integer, String> expectedMultimap = UnifiedSetMultimap.newMultimap();
-        expectedMultimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "2"));
-        Assert.assertEquals(expectedMultimap, selectedMultimap);
-        Verify.assertSetsEqual(expectedMultimap.get(2), selectedMultimap.get(2));
-    }
-
-    @Override
-    @Test
-    public void rejectKeysMultiValues()
-    {
-        UnifiedSetMultimap<Integer, String> multimap = UnifiedSetMultimap.newMultimap();
-        multimap.putAll(1, FastList.newListWith("1", "2", "3", "4", "5", "1"));
-        multimap.putAll(2, FastList.newListWith("2", "3", "4", "5", "1"));
-        multimap.putAll(3, FastList.newListWith("2", "3", "4", "2"));
-        multimap.putAll(4, FastList.newListWith("1", "3", "4", "5"));
-        UnifiedSetMultimap<Integer, String> rejectedMultimap = multimap.rejectKeysMultiValues((key, values) -> (key % 2 == 0 || Iterate.sizeOf(values) > 4));
-        UnifiedSetMultimap<Integer, String> expectedMultimap = UnifiedSetMultimap.newMultimap();
-        expectedMultimap.putAll(3, FastList.newListWith("2", "3", "4", "2"));
-        Assert.assertEquals(expectedMultimap, rejectedMultimap);
-        Verify.assertSetsEqual(expectedMultimap.get(3), rejectedMultimap.get(3));
-    }
-
-    @Override
-    @Test
-    public void collectKeysValues()
-    {
-        UnifiedSetMultimap<String, Integer> multimap = UnifiedSetMultimap.newMultimap();
-        multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
-        multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
-        UnifiedSetMultimap<Integer, String> collectedMultimap1 = multimap.collectKeysValues((key, value) -> Tuples.pair(Integer.valueOf(key), value + "Value"));
-        UnifiedSetMultimap<Integer, String> expectedMultimap1 = UnifiedSetMultimap.newMultimap();
-        expectedMultimap1.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
-        expectedMultimap1.putAll(2, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
-        Assert.assertEquals(expectedMultimap1, collectedMultimap1);
-        Verify.assertSetsEqual(expectedMultimap1.get(1), collectedMultimap1.get(1));
-        Verify.assertSetsEqual(expectedMultimap1.get(2), collectedMultimap1.get(2));
-
-        UnifiedSetMultimap<Integer, String> collectedMultimap2 = multimap.collectKeysValues((key, value) -> Tuples.pair(1, value + "Value"));
-        UnifiedSetMultimap<Integer, String> expectedMultimap2 = UnifiedSetMultimap.newMultimap();
-        expectedMultimap2.putAll(1, FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
-        expectedMultimap2.putAll(1, FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
-        Assert.assertEquals(expectedMultimap2, collectedMultimap2);
-        Verify.assertSetsEqual(expectedMultimap2.get(1), collectedMultimap2.get(1));
-    }
-
-    @Override
-    @Test
-    public void collectValues()
-    {
-        UnifiedSetMultimap<String, Integer> multimap = UnifiedSetMultimap.newMultimap();
-        multimap.putAll("1", FastList.newListWith(1, 2, 3, 4, 4));
-        multimap.putAll("2", FastList.newListWith(2, 3, 4, 5, 3, 2));
-        UnifiedSetMultimap<String, String> collectedMultimap = multimap.collectValues(value -> value + "Value");
-        UnifiedSetMultimap<String, String> expectedMultimap = UnifiedSetMultimap.newMultimap();
-        expectedMultimap.putAll("1", FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
-        expectedMultimap.putAll("2", FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
-        Assert.assertEquals(expectedMultimap, collectedMultimap);
-        Verify.assertSetsEqual(expectedMultimap.get("1"), collectedMultimap.get("1"));
-        Verify.assertSetsEqual(expectedMultimap.get("2"), collectedMultimap.get("2"));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.set.PartitionImmutableSet;
 import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
 import com.gs.collections.api.set.primitive.ImmutableByteSet;
@@ -53,7 +53,7 @@ import net.jcip.annotations.Immutable;
  */
 @Immutable
 public interface ImmutableSet<T>
-        extends ImmutableCollection<T>, UnsortedSetIterable<T>
+        extends UnsortedSetIterable<T>, ImmutableSetIterable<T>
 {
     ImmutableSet<T> newWith(T element);
 
@@ -107,8 +107,16 @@ public interface ImmutableSet<T>
 
     <V> ImmutableSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
     <S> ImmutableSet<Pair<T, S>> zip(Iterable<S> that);
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
     ImmutableSet<Pair<T, Integer>> zipWithIndex();
 
     Set<T> castToSet();

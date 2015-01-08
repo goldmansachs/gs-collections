@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 
-import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
@@ -306,16 +305,6 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         this.valuesView().forEach(procedure);
     }
 
-    public <R> RichIterable<R> collect(Function<? super V, ? extends R> function)
-    {
-        return this.valuesView().collect(function);
-    }
-
-    public BooleanIterable collectBoolean(BooleanFunction<? super V> booleanFunction)
-    {
-        return this.valuesView().collectBoolean(booleanFunction);
-    }
-
     public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super V> booleanFunction, R target)
     {
         return this.valuesView().collectBoolean(booleanFunction, target);
@@ -364,11 +353,6 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
     public <R, C extends Collection<R>> C collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function, C target)
     {
         return this.valuesView().collectIf(predicate, function, target);
-    }
-
-    public <P, VV> RichIterable<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
-    {
-        return this.valuesView().collectWith(function, parameter);
     }
 
     public <P, R, C extends Collection<R>> C collectWith(Function2<? super V, ? super P, ? extends R> function, P parameter, C targetCollection)
@@ -570,11 +554,6 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().minBy(function);
     }
 
-    public <P> RichIterable<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
-    {
-        return this.valuesView().rejectWith(predicate, parameter);
-    }
-
     public <R extends Collection<V>> R reject(Predicate<? super V> predicate, R target)
     {
         return this.valuesView().reject(predicate, target);
@@ -583,11 +562,6 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
     public <P, R extends Collection<V>> R rejectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
         return this.valuesView().rejectWith(predicate, parameter, targetCollection);
-    }
-
-    public <P> RichIterable<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
-    {
-        return this.valuesView().selectWith(predicate, parameter);
     }
 
     public <R extends Collection<V>> R select(Predicate<? super V> predicate, R target)

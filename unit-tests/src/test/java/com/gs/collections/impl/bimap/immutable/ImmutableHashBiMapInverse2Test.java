@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,10 @@
 package com.gs.collections.impl.bimap.immutable;
 
 import com.gs.collections.api.bimap.ImmutableBiMap;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.impl.IntegerWithCast;
+import com.gs.collections.impl.factory.BiMaps;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.map.MapIterableTestCase;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
@@ -31,25 +33,31 @@ public class ImmutableHashBiMapInverse2Test extends MapIterableTestCase
     @Override
     protected <K, V> ImmutableBiMap<K, V> newMap()
     {
-        return new ImmutableHashBiMap<V, K>().inverse();
+        return BiMaps.immutable.<V, K>empty().inverse();
+    }
+
+    @Override
+    protected <K, V> MapIterable<K, V> newMapWithKeyValue(K key1, V value1)
+    {
+        return BiMaps.immutable.withAll(Maps.immutable.with(value1, key1)).inverse();
     }
 
     @Override
     protected <K, V> ImmutableBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableHashBiMap<>(Maps.immutable.with(value1, key1, value2, key2)).inverse();
+        return BiMaps.immutable.withAll(Maps.immutable.with(value1, key1, value2, key2)).inverse();
     }
 
     @Override
     protected <K, V> ImmutableBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableHashBiMap<>(Maps.immutable.with(value1, key1, value2, key2, value3, key3)).inverse();
+        return BiMaps.immutable.withAll(Maps.immutable.with(value1, key1, value2, key2, value3, key3)).inverse();
     }
 
     @Override
     protected <K, V> ImmutableBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new ImmutableHashBiMap<>(Maps.immutable.with(value1, key1, value2, key2, value3, key3, value4, key4)).inverse();
+        return BiMaps.immutable.withAll(Maps.immutable.with(value1, key1, value2, key2, value3, key3, value4, key4)).inverse();
     }
 
     @Override

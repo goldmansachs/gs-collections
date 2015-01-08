@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.set.PartitionImmutableSet;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
@@ -338,11 +339,19 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return target;
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
     public <S> ImmutableSet<Pair<T, S>> zip(Iterable<S> that)
     {
         return this.zip(that, UnifiedSet.<Pair<T, S>>newSet()).toImmutable();
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
     public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
         return this.zipWithIndex(UnifiedSet.<Pair<T, Integer>>newSet()).toImmutable();

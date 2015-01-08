@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,13 @@
 package com.gs.collections.api.partition.bag;
 
 import com.gs.collections.api.bag.ImmutableBag;
-import com.gs.collections.api.partition.PartitionImmutableCollection;
 
 /**
  * A PartitionImmutableBag is the result of splitting an immutable bag into two immutable bags based on a Predicate.
  * The results that answer true for the Predicate will be returned from the getSelected() method and the
  * results that answer false for the predicate will be returned from the getRejected() method.
  */
-public interface PartitionImmutableBag<T> extends PartitionImmutableCollection<T>, PartitionUnsortedBag<T>
+public interface PartitionImmutableBag<T> extends PartitionImmutableBagIterable<T>, PartitionUnsortedBag<T>
 {
     ImmutableBag<T> getSelected();
 

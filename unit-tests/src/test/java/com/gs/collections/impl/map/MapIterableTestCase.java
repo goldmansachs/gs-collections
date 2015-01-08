@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.gs.collections.impl.map;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -98,6 +99,9 @@ import static com.gs.collections.impl.factory.Iterables.*;
 public abstract class MapIterableTestCase
 {
     protected abstract <K, V> MapIterable<K, V> newMap();
+
+    protected abstract <K, V> MapIterable<K, V> newMapWithKeyValue(
+            K key1, V value1);
 
     protected abstract <K, V> MapIterable<K, V> newMapWithKeysValues(
             K key1, V value1,
@@ -261,6 +265,11 @@ public abstract class MapIterableTestCase
         MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         map.forEachKeyValue(result::put);
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3"), result);
+
+        MutableBag<String> result2 = Bags.mutable.of();
+        MapIterable<Integer, String> map2 = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three");
+        map2.forEachKeyValue((key, value) -> result2.add(key + value));
+        Assert.assertEquals(Bags.mutable.of("1One", "2Two", "3Three"), result2);
     }
 
     @Test
@@ -1402,5 +1411,89 @@ public abstract class MapIterableTestCase
                 mutableMap);
         Assert.assertEquals("Test 3", mutableMap.get(new IntegerWithCast(0)));
         Assert.assertEquals("Test 1", mutableMap.get(null));
+    }
+
+    @Test
+    public void testNewMap()
+    {
+        MapIterable<Integer, Integer> map = this.newMap();
+        Verify.assertEmpty(map);
+        Verify.assertSize(0, map);
+    }
+
+    @Test
+    public void testNewMapWithKeyValue()
+    {
+        MapIterable<Integer, String> map = this.newMapWithKeyValue(1, "One");
+        Verify.assertNotEmpty(map);
+        Verify.assertSize(1, map);
+        Verify.assertContainsKeyValue(1, "One", map);
+    }
+
+    @Test
+    public void newMapWithWith()
+    {
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two");
+        Verify.assertNotEmpty(map);
+        Verify.assertSize(2, map);
+        Verify.assertContainsAllKeyValues(map, 1, "One", 2, "Two");
+    }
+
+    @Test
+    public void newMapWithWithWith()
+    {
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three");
+        Verify.assertNotEmpty(map);
+        Verify.assertSize(3, map);
+        Verify.assertContainsAllKeyValues(map, 1, "One", 2, "Two", 3, "Three");
+    }
+
+    @Test
+    public void newMapWithWithWithWith()
+    {
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three", 4, "Four");
+        Verify.assertNotEmpty(map);
+        Verify.assertSize(4, map);
+        Verify.assertContainsAllKeyValues(map, 1, "One", 2, "Two", 3, "Three", 4, "Four");
+    }
+
+    @Test
+    public void iterator()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("One", 1, "Two", 2, "Three", 3);
+        Iterator<Integer> iterator = map.iterator();
+        Assert.assertTrue(iterator.hasNext());
+        int sum = 0;
+        while (iterator.hasNext())
+        {
+            sum += iterator.next();
+        }
+        Assert.assertFalse(iterator.hasNext());
+        Assert.assertEquals(6, sum);
+    }
+
+    @Test
+    public void keysView()
+    {
+        MutableList<Integer> keys = this.newMapWithKeysValues(1, 1, 2, 2).keysView().toSortedList();
+        Assert.assertEquals(FastList.newListWith(1, 2), keys);
+    }
+
+    @Test
+    public void valuesView()
+    {
+        MutableList<Integer> values = this.newMapWithKeysValues(1, 1, 2, 2).valuesView().toSortedList();
+        Assert.assertEquals(FastList.newListWith(1, 2), values);
+    }
+
+    @Test
+    public void test_toString()
+    {
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three");
+
+        String stringToSearch = map.toString();
+        Verify.assertContains("1=One", stringToSearch);
+        Verify.assertContains("2=Two", stringToSearch);
+        Verify.assertContains("3=Three", stringToSearch);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -189,20 +189,20 @@ public interface MapIterable<K, V> extends RichIterable<V>
     MapIterable<K, V> select(Predicate2<? super K, ? super V> predicate);
 
     /**
-     * For each key and value of the map the function is evaluated.  The results of these evaluations are returned in
-     * a new map.  The map returned will use the values projected from the function rather than the original values.
+     * For each key and value of the map the predicate is evaluated, if the result of the evaluation is false,
+     * that key and value are returned in a new map.
      * <p>
      * <pre>e.g.
-     * peopleByCity.collectValues(new Function2&lt;City, Person, String&gt;()
+     * peopleByCity.reject(new Predicate2&lt;City, Person&gt;()
      * {
-     *     public String value(City city, Person person)
+     *     public boolean accept(City city, Person person)
      *     {
-     *         return person.getFirstName() + " " + person.getLastName();
+     *         return city.getName().equals("Anytown") && person.getLastName().equals("Smith");
      *     }
      * });
      * </pre>
      */
-    <R> MapIterable<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+    MapIterable<K, V> reject(Predicate2<? super K, ? super V> predicate);
 
     /**
      * For each key and value of the map the function is evaluated.  The results of these evaluations are returned in
@@ -221,20 +221,20 @@ public interface MapIterable<K, V> extends RichIterable<V>
     <K2, V2> MapIterable<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
     /**
-     * For each key and value of the map the predicate is evaluated, if the result of the evaluation is false,
-     * that key and value are returned in a new map.
+     * For each key and value of the map the function is evaluated.  The results of these evaluations are returned in
+     * a new map.  The map returned will use the values projected from the function rather than the original values.
      * <p>
      * <pre>e.g.
-     * peopleByCity.reject(new Predicate2&lt;City, Person&gt;()
+     * peopleByCity.collectValues(new Function2&lt;City, Person, String&gt;()
      * {
-     *     public boolean accept(City city, Person person)
+     *     public String value(City city, Person person)
      *     {
-     *         return city.getName().equals("Anytown") && person.getLastName().equals("Smith");
+     *         return person.getFirstName() + " " + person.getLastName();
      *     }
      * });
      * </pre>
      */
-    MapIterable<K, V> reject(Predicate2<? super K, ? super V> predicate);
+    <R> MapIterable<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
 
     /**
      * Return the first key and value of the map for which the predicate evaluates to true when they are given
@@ -275,4 +275,6 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * @return a string representation of this MapIterable
      */
     String toString();
+
+    ImmutableMapIterable<K, V> toImmutable();
 }

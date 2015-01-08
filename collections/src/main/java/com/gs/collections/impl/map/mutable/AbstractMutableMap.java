@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,17 @@
 package com.gs.collections.impl.map.mutable;
 
 import java.util.Collection;
-import java.util.Iterator;
 
-import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.MutableBooleanBag;
+import com.gs.collections.api.bag.primitive.MutableByteBag;
+import com.gs.collections.api.bag.primitive.MutableCharBag;
+import com.gs.collections.api.bag.primitive.MutableDoubleBag;
+import com.gs.collections.api.bag.primitive.MutableFloatBag;
+import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.bag.primitive.MutableLongBag;
+import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
@@ -34,27 +40,25 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.list.primitive.MutableBooleanList;
-import com.gs.collections.api.list.primitive.MutableByteList;
-import com.gs.collections.api.list.primitive.MutableCharList;
-import com.gs.collections.api.list.primitive.MutableDoubleList;
-import com.gs.collections.api.list.primitive.MutableFloatList;
-import com.gs.collections.api.list.primitive.MutableIntList;
-import com.gs.collections.api.list.primitive.MutableLongList;
-import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
-import com.gs.collections.api.partition.list.PartitionMutableList;
+import com.gs.collections.api.ordered.OrderedIterable;
+import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
-import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
@@ -68,45 +72,15 @@ import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
-import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
-import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
-import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
-import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
-import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
-import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
-import com.gs.collections.impl.map.AbstractMapIterable;
-import com.gs.collections.impl.multimap.list.FastListMultimap;
-import com.gs.collections.impl.partition.list.PartitionFastList;
-import com.gs.collections.impl.tuple.AbstractImmutableEntry;
-import com.gs.collections.impl.utility.LazyIterate;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
+import com.gs.collections.impl.partition.bag.PartitionHashBag;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.MapIterate;
 
-public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
+public abstract class AbstractMutableMap<K, V> extends AbstractMutableMapIterable<K, V>
         implements MutableMap<K, V>
 {
-    /**
-     * Returns a string representation of this map.  The string representation
-     * consists of a list of key-value mappings in the order returned by the
-     * map's <tt>entrySet</tt> view's iterator, enclosed in braces
-     * (<tt>"{}"</tt>).  Adjacent mappings are separated by the characters
-     * <tt>", "</tt> (comma and space).  Each key-value mapping is rendered as
-     * the key followed by an equals sign (<tt>"="</tt>) followed by the
-     * associated value.  Keys and values are converted to strings as by
-     * <tt>String.valueOf(Object)</tt>.<p>
-     * <p>
-     * This implementation creates an empty string buffer, appends a left
-     * brace, and iterates over the map's <tt>entrySet</tt> view, appending
-     * the string representation of each <tt>map.entry</tt> in turn.  After
-     * appending each entry except the last, the string <tt>", "</tt> is
-     * appended.  Finally a right brace is appended.  A string is obtained
-     * from the stringbuffer, and returned.
-     *
-     * @return a String representation of this map.
-     */
-    @Override
+    @SuppressWarnings("AbstractMethodOverridesAbstractMethod")
     public abstract MutableMap<K, V> clone();
 
     /**
@@ -129,77 +103,9 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         return SynchronizedMutableMap.of(this);
     }
 
-    public RichIterable<K> keysView()
-    {
-        return LazyIterate.adapt(this.keySet());
-    }
-
-    public RichIterable<V> valuesView()
-    {
-        return LazyIterate.adapt(this.values());
-    }
-
-    public RichIterable<Pair<K, V>> keyValuesView()
-    {
-        return LazyIterate.adapt(this.entrySet()).collect(AbstractImmutableEntry.<K, V>getPairFunction());
-    }
-
-    public MutableMap<V, K> flipUniqueValues()
-    {
-        return MapIterate.flipUniqueValues(this);
-    }
-
-    public V getIfAbsentPut(K key, Function0<? extends V> function)
-    {
-        V result = this.get(key);
-        if (this.isAbsent(result, key))
-        {
-            result = function.value();
-            this.put(key, result);
-        }
-        return result;
-    }
-
     public MutableSetMultimap<V, K> flip()
     {
         return MapIterate.flip(this);
-    }
-
-    public V getIfAbsentPut(K key, V value)
-    {
-        V result = this.get(key);
-        if (this.isAbsent(result, key))
-        {
-            result = value;
-            this.put(key, result);
-        }
-        return result;
-    }
-
-    public V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function)
-    {
-        return this.getIfAbsentPutWith(key, function, key);
-    }
-
-    public <P> V getIfAbsentPutWith(K key, Function<? super P, ? extends V> function, P parameter)
-    {
-        V result = this.get(key);
-        if (this.isAbsent(result, key))
-        {
-            result = function.valueOf(parameter);
-            this.put(key, result);
-        }
-        return result;
-    }
-
-    public Iterator<V> iterator()
-    {
-        return this.values().iterator();
-    }
-
-    public <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
-    {
-        return MapIterate.collect(this, function, UnifiedMap.<K2, V2>newMap(this.size()));
     }
 
     public <R> MutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
@@ -217,93 +123,85 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         return MapIterate.rejectMapOnEntry(this, predicate, this.newEmpty());
     }
 
-    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
+    public <R> MutableBag<R> collect(Function<? super V, ? extends R> function)
     {
-        return MapIterate.detect(this, predicate);
+        return this.collect(function, HashBag.<R>newBag());
     }
 
-    @Override
-    public <R> MutableList<R> collect(Function<? super V, ? extends R> function)
+    public MutableBooleanBag collectBoolean(BooleanFunction<? super V> booleanFunction)
     {
-        return this.collect(function, FastList.<R>newList(this.size()));
-    }
-
-    @Override
-    public MutableBooleanList collectBoolean(BooleanFunction<? super V> booleanFunction)
-    {
-        BooleanArrayList result = new BooleanArrayList(this.size());
+        MutableBooleanBag result = new BooleanHashBag();
         this.forEach(new CollectBooleanProcedure<V>(booleanFunction, result));
         return result;
     }
 
-    public MutableByteList collectByte(ByteFunction<? super V> byteFunction)
+    public MutableByteBag collectByte(ByteFunction<? super V> byteFunction)
     {
-        ByteArrayList result = new ByteArrayList(this.size());
+        MutableByteBag result = new ByteHashBag();
         this.forEach(new CollectByteProcedure<V>(byteFunction, result));
         return result;
     }
 
-    public MutableCharList collectChar(CharFunction<? super V> charFunction)
+    public MutableCharBag collectChar(CharFunction<? super V> charFunction)
     {
-        CharArrayList result = new CharArrayList(this.size());
+        MutableCharBag result = new CharHashBag();
         this.forEach(new CollectCharProcedure<V>(charFunction, result));
         return result;
     }
 
-    public MutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction)
+    public MutableDoubleBag collectDouble(DoubleFunction<? super V> doubleFunction)
     {
-        DoubleArrayList result = new DoubleArrayList(this.size());
+        MutableDoubleBag result = new DoubleHashBag();
         this.forEach(new CollectDoubleProcedure<V>(doubleFunction, result));
         return result;
     }
 
-    public MutableFloatList collectFloat(FloatFunction<? super V> floatFunction)
+    public MutableFloatBag collectFloat(FloatFunction<? super V> floatFunction)
     {
-        FloatArrayList result = new FloatArrayList(this.size());
+        MutableFloatBag result = new FloatHashBag();
         this.forEach(new CollectFloatProcedure<V>(floatFunction, result));
         return result;
     }
 
-    public MutableIntList collectInt(IntFunction<? super V> intFunction)
+    public MutableIntBag collectInt(IntFunction<? super V> intFunction)
     {
-        IntArrayList result = new IntArrayList(this.size());
+        MutableIntBag result = new IntHashBag();
         this.forEach(new CollectIntProcedure<V>(intFunction, result));
         return result;
     }
 
-    public MutableLongList collectLong(LongFunction<? super V> longFunction)
+    public MutableLongBag collectLong(LongFunction<? super V> longFunction)
     {
-        LongArrayList result = new LongArrayList(this.size());
+        MutableLongBag result = new LongHashBag();
         this.forEach(new CollectLongProcedure<V>(longFunction, result));
         return result;
     }
 
-    public MutableShortList collectShort(ShortFunction<? super V> shortFunction)
+    public MutableShortBag collectShort(ShortFunction<? super V> shortFunction)
     {
-        ShortArrayList result = new ShortArrayList(this.size());
+        MutableShortBag result = new ShortHashBag();
         this.forEach(new CollectShortProcedure<V>(shortFunction, result));
         return result;
     }
 
-    @Override
-    public <P, VV> MutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    public <P, VV> MutableBag<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
     {
         return this.collect(Functions.bind(function, parameter));
     }
 
-    public <R> MutableList<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
+    public <R> MutableBag<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
     {
-        return this.collectIf(predicate, function, FastList.<R>newList(this.size()));
+        return this.collectIf(predicate, function, new HashBag<R>());
     }
 
-    public <R> MutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
+    public <R> MutableBag<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
     {
-        return this.flatCollect(function, FastList.<R>newList(this.size()));
+        return this.flatCollect(function, new HashBag<R>());
     }
 
-    public MutableList<V> reject(Predicate<? super V> predicate)
+    public MutableBag<V> select(Predicate<? super V> predicate)
     {
-        return this.reject(predicate, FastList.<V>newList(this.size()));
+        return this.select(predicate, new HashBag<V>());
     }
 
     public MutableMap<K, V> tap(Procedure<? super V> procedure)
@@ -312,58 +210,58 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         return this;
     }
 
-    public MutableList<V> select(Predicate<? super V> predicate)
-    {
-        return this.select(predicate, FastList.<V>newList(this.size()));
-    }
-
-    @Override
-    public <P> MutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> MutableBag<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         return this.select(Predicates.bind(predicate, parameter));
     }
 
-    @Override
-    public <P> MutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public MutableBag<V> reject(Predicate<? super V> predicate)
+    {
+        return this.reject(predicate, new HashBag<V>());
+    }
+
+    public <P> MutableBag<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         return this.reject(Predicates.bind(predicate, parameter));
     }
 
-    public PartitionMutableList<V> partition(Predicate<? super V> predicate)
+    public PartitionMutableBag<V> partition(Predicate<? super V> predicate)
     {
-        PartitionMutableList<V> partitionMutableList = new PartitionFastList<V>();
-        this.forEach(new PartitionProcedure<V>(predicate, partitionMutableList));
-        return partitionMutableList;
+        PartitionMutableBag<V> partitionMutableBag = new PartitionHashBag<V>();
+        this.forEach(new PartitionProcedure<V>(predicate, partitionMutableBag));
+        return partitionMutableBag;
     }
 
-    public <P> PartitionMutableList<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> PartitionMutableBag<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
-        PartitionMutableList<V> partitionMutableList = new PartitionFastList<V>();
-        this.forEach(new PartitionPredicate2Procedure<V, P>(predicate, parameter, partitionMutableList));
-        return partitionMutableList;
+        PartitionMutableBag<V> partitionMutableBag = new PartitionHashBag<V>();
+        this.forEach(new PartitionPredicate2Procedure<V, P>(predicate, parameter, partitionMutableBag));
+        return partitionMutableBag;
     }
 
-    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    public <S> MutableBag<S> selectInstancesOf(Class<S> clazz)
     {
-        FastList<S> result = FastList.newList(this.size());
+        MutableBag<S> result = HashBag.newBag();
         this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
-        result.trimToSize();
         return result;
     }
 
-    public <S> MutableList<Pair<V, S>> zip(Iterable<S> that)
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
+    public <S> MutableBag<Pair<V, S>> zip(Iterable<S> that)
     {
-        return this.zip(that, FastList.<Pair<V, S>>newList(this.size()));
+        return this.zip(that, new HashBag<Pair<V, S>>(this.size()));
     }
 
-    public MutableList<Pair<V, Integer>> zipWithIndex()
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
+    public MutableSet<Pair<V, Integer>> zipWithIndex()
     {
-        return this.zipWithIndex(FastList.<Pair<V, Integer>>newList(this.size()));
-    }
-
-    public V add(Pair<K, V> keyValuePair)
-    {
-        return this.put(keyValuePair.getOne(), keyValuePair.getTwo());
+        return this.zipWithIndex(new UnifiedSet<Pair<V, Integer>>(this.size()));
     }
 
     public MutableMap<K, V> withKeyValue(K key, V value)
@@ -418,54 +316,13 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         }
     }
 
-    public <VV> MutableMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function)
+    public <VV> MutableBagMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function)
     {
-        return this.groupBy(function, FastListMultimap.<VV, V>newMultimap());
+        return this.groupBy(function, HashBagMultimap.<VV, V>newMultimap());
     }
 
-    public <VV> MutableMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function)
+    public <VV> MutableBagMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function)
     {
-        return this.groupByEach(function, FastListMultimap.<VV, V>newMultimap());
-    }
-
-    public <V1> MutableMap<V1, V> groupByUniqueKey(Function<? super V, ? extends V1> function)
-    {
-        return this.groupByUniqueKey(function, UnifiedMap.<V1, V>newMap());
-    }
-
-    public <K2, V2> MutableMap<K2, V2> aggregateInPlaceBy(
-            Function<? super V, ? extends K2> groupBy,
-            Function0<? extends V2> zeroValueFactory,
-            Procedure2<? super V2, ? super V> mutatingAggregator)
-    {
-        MutableMap<K2, V2> map = UnifiedMap.newMap();
-        this.forEach(new MutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, mutatingAggregator));
-        return map;
-    }
-
-    public <K2, V2> MutableMap<K2, V2> aggregateBy(
-            Function<? super V, ? extends K2> groupBy,
-            Function0<? extends V2> zeroValueFactory,
-            Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator)
-    {
-        MutableMap<K2, V2> map = UnifiedMap.newMap();
-        this.forEach(new NonMutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
-        return map;
-    }
-
-    public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
-    {
-        V oldValue = this.getIfAbsent(key, factory);
-        V newValue = function.valueOf(oldValue);
-        this.put(key, newValue);
-        return newValue;
-    }
-
-    public <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter)
-    {
-        V oldValue = this.getIfAbsent(key, factory);
-        V newValue = function.value(oldValue, parameter);
-        this.put(key, newValue);
-        return newValue;
+        return this.groupByEach(function, HashBagMultimap.<VV, V>newMultimap());
     }
 }

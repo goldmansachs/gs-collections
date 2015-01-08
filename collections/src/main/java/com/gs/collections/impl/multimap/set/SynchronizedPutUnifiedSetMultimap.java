@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.ImmutableSet;
@@ -33,6 +34,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractSynchronizedPutMultimap;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
@@ -159,14 +161,14 @@ public final class SynchronizedPutUnifiedSetMultimap<K, V>
         return this.rejectKeysMultiValues(predicate, UnifiedSetMultimap.<K, V>newMultimap());
     }
 
-    public <K2, V2> UnifiedSetMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> MutableBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
-        return this.collectKeysValues(function, UnifiedSetMultimap.<K2, V2>newMultimap());
+        return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap());
     }
 
-    public <V2> UnifiedSetMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
+    public <V2> MutableBagMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
     {
-        return this.collectValues(function, UnifiedSetMultimap.<K, V2>newMultimap());
+        return this.collectValues(function, HashBagMultimap.<K, V2>newMultimap());
     }
 
     public MutableSetMultimap<V, K> flip()

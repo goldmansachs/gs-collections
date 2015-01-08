@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.gs.collections.api.partition.set;
 
-import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
 
 /**
@@ -24,7 +23,7 @@ import com.gs.collections.api.set.MutableSet;
  * The results that answer true for the Predicate will be returned from the getSelected() method and the results that answer
  * false for the predicate will be returned from the getRejected() method.
  */
-public interface PartitionMutableSet<T> extends PartitionMutableCollection<T>, PartitionUnsortedSet<T>
+public interface PartitionMutableSet<T> extends PartitionUnsortedSet<T>, PartitionMutableSetIterable<T>
 {
     MutableSet<T> getSelected();
 

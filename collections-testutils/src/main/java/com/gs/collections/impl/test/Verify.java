@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,8 +40,10 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.ImmutableMap;
+import com.gs.collections.api.map.ImmutableMapIterable;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.MutableMapIterable;
 import com.gs.collections.api.map.sorted.SortedMapIterable;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.set.ImmutableSet;
@@ -560,13 +562,13 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link Collection} is empty.
+     * Assert that the given {@link Iterable} is empty.
      */
-    public static void assertEmpty(Collection<?> actualCollection)
+    public static void assertEmpty(Iterable<?> actualIterable)
     {
         try
         {
-            Verify.assertEmpty("collection", actualCollection);
+            Verify.assertEmpty("iterable", actualIterable);
         }
         catch (AssertionError e)
         {
@@ -577,15 +579,50 @@ public final class Verify extends Assert
     /**
      * Assert that the given {@link Collection} is empty.
      */
-    public static void assertEmpty(String collectionName, Collection<?> actualCollection)
+    public static void assertEmpty(String iterableName, Iterable<?> actualIterable)
     {
         try
         {
-            Verify.assertObjectNotNull(collectionName, actualCollection);
+            Verify.assertObjectNotNull(iterableName, actualIterable);
 
-            if (!actualCollection.isEmpty())
+            if (Iterate.notEmpty(actualIterable))
             {
-                Assert.fail(collectionName + " should be empty; actual size:<" + actualCollection.size() + '>');
+                Assert.fail(iterableName + " should be empty; actual size:<" + Iterate.sizeOf(actualIterable) + '>');
+            }
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link MutableMapIterable} is empty.
+     */
+    public static void assertEmpty(MutableMapIterable<?, ?> actualMutableMapIterable)
+    {
+        try
+        {
+            Verify.assertEmpty("mutableMapIterable", actualMutableMapIterable);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link Collection} is empty.
+     */
+    public static void assertEmpty(String mutableMapIterableName, MutableMapIterable<?, ?> actualMutableMapIterable)
+    {
+        try
+        {
+            Verify.assertObjectNotNull(mutableMapIterableName, actualMutableMapIterable);
+
+            if (Iterate.notEmpty(actualMutableMapIterable))
+            {
+                Assert.fail(mutableMapIterableName + " should be empty; actual size:<" + Iterate.sizeOf(actualMutableMapIterable) + '>');
             }
         }
         catch (AssertionError e)
@@ -767,28 +804,14 @@ public final class Verify extends Assert
         }
     }
 
-    public static void assertEmpty(ImmutableMap<?, ?> actualImmutableMap)
+    /**
+     * Assert that the given {@link Iterable} is <em>not</em> empty.
+     */
+    public static void assertNotEmpty(Iterable<?> actualIterable)
     {
         try
         {
-            Verify.assertEmpty("immutable map", actualImmutableMap);
-        }
-        catch (AssertionError e)
-        {
-            Verify.throwMangledException(e);
-        }
-    }
-
-    public static void assertEmpty(String mapName, ImmutableMap<?, ?> actualImmutableMap)
-    {
-        try
-        {
-            Verify.assertObjectNotNull(mapName, actualImmutableMap);
-
-            if (!actualImmutableMap.isEmpty())
-            {
-                Assert.fail(mapName + " should be empty; actual size:<" + actualImmutableMap.size() + '>');
-            }
+            Verify.assertNotEmpty("iterable", actualIterable);
         }
         catch (AssertionError e)
         {
@@ -797,13 +820,14 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link Collection} is <em>not</em> empty.
+     * Assert that the given {@link Iterable} is <em>not</em> empty.
      */
-    public static void assertNotEmpty(Collection<?> actualCollection)
+    public static void assertNotEmpty(String iterableName, Iterable<?> actualIterable)
     {
         try
         {
-            Verify.assertNotEmpty("collection", actualCollection);
+            Verify.assertObjectNotNull(iterableName, actualIterable);
+            Assert.assertFalse(iterableName + " should be non-empty, but was empty", Iterate.isEmpty(actualIterable));
         }
         catch (AssertionError e)
         {
@@ -812,14 +836,29 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link Collection} is <em>not</em> empty.
+     * Assert that the given {@link MutableMapIterable} is <em>not</em> empty.
      */
-    public static void assertNotEmpty(String collectionName, Collection<?> actualCollection)
+    public static void assertNotEmpty(MutableMapIterable<?, ?> actualMutableMapIterable)
     {
         try
         {
-            Verify.assertObjectNotNull(collectionName, actualCollection);
-            Assert.assertFalse(collectionName + " should be non-empty, but was empty", actualCollection.isEmpty());
+            Verify.assertNotEmpty("mutableMapIterable", actualMutableMapIterable);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link MutableMapIterable} is <em>not</em> empty.
+     */
+    public static void assertNotEmpty(String mutableMapIterableName, MutableMapIterable<?, ?> actualMutableMapIterable)
+    {
+        try
+        {
+            Verify.assertObjectNotNull(mutableMapIterableName, actualMutableMapIterable);
+            Assert.assertFalse(mutableMapIterableName + " should be non-empty, but was empty", Iterate.isEmpty(actualMutableMapIterable));
         }
         catch (AssertionError e)
         {
@@ -1019,13 +1058,13 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert the size of the given {@link Collection}.
+     * Assert the size of the given {@link Iterable}.
      */
-    public static void assertSize(int expectedSize, Collection<?> actualCollection)
+    public static void assertSize(int expectedSize, Iterable<?> actualIterable)
     {
         try
         {
-            Verify.assertSize("collection", expectedSize, actualCollection);
+            Verify.assertSize("iterable", expectedSize, actualIterable);
         }
         catch (AssertionError e)
         {
@@ -1034,22 +1073,22 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert the size of the given {@link Collection}.
+     * Assert the size of the given {@link Iterable}.
      */
     public static void assertSize(
-            String collectionName,
+            String iterableName,
             int expectedSize,
-            Collection<?> actualCollection)
+            Iterable<?> actualIterable)
     {
         try
         {
-            Verify.assertObjectNotNull(collectionName, actualCollection);
+            Verify.assertObjectNotNull(iterableName, actualIterable);
 
-            int actualSize = actualCollection.size();
+            int actualSize = Iterate.sizeOf(actualIterable);
             if (actualSize != expectedSize)
             {
                 Assert.fail("Incorrect size for "
-                        + collectionName
+                        + iterableName
                         + "; expected:<"
                         + expectedSize
                         + "> but was:<"
@@ -1224,13 +1263,13 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert the size of the given {@link ImmutableMap}.
+     * Assert the size of the given {@link MutableMapIterable}.
      */
-    public static void assertSize(int expectedSize, ImmutableMap<?, ?> actualImmutableMap)
+    public static void assertSize(int expectedSize, MutableMapIterable<?, ?> mutableMapIterable)
     {
         try
         {
-            Verify.assertSize("immutable map", expectedSize, actualImmutableMap);
+            Verify.assertSize("map", expectedSize, mutableMapIterable);
         }
         catch (AssertionError e)
         {
@@ -1239,17 +1278,17 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert the size of the given {@link ImmutableMap}.
+     * Assert the size of the given {@link MutableMapIterable}.
      */
-    public static void assertSize(String immutableMapName, int expectedSize, ImmutableMap<?, ?> actualImmutableMap)
+    public static void assertSize(String mapName, int expectedSize, MutableMapIterable<?, ?> mutableMapIterable)
     {
         try
         {
-            int actualSize = actualImmutableMap.size();
+            int actualSize = mutableMapIterable.size();
             if (actualSize != expectedSize)
             {
                 Assert.fail("Incorrect size for "
-                        + immutableMapName
+                        + mapName
                         + "; expected:<"
                         + expectedSize
                         + "> but was:<"
@@ -1552,13 +1591,13 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link ImmutableMap} contains all of the given keys and values.
+     * Assert that the given {@link MapIterable} contains all of the given keys and values.
      */
-    public static void assertContainsAllKeyValues(ImmutableMap<?, ?> actualImmutableMap, Object... keyValues)
+    public static void assertContainsAllKeyValues(MapIterable<?, ?> mapIterable, Object... keyValues)
     {
         try
         {
-            Verify.assertContainsAllKeyValues("immutable map", actualImmutableMap, keyValues);
+            Verify.assertContainsAllKeyValues("map", mapIterable, keyValues);
         }
         catch (AssertionError e)
         {
@@ -1567,11 +1606,11 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link ImmutableMap} contains all of the given keys and values.
+     * Assert that the given {@link MapIterable} contains all of the given keys and values.
      */
     public static void assertContainsAllKeyValues(
-            String immutableMapName,
-            ImmutableMap<?, ?> actualImmutableMap,
+            String mapIterableName,
+            MapIterable<?, ?> mapIterable,
             Object... expectedKeyValues)
     {
         try
@@ -1583,9 +1622,93 @@ public final class Verify extends Assert
                 Assert.fail("Odd number of keys and values (every key must have a value)");
             }
 
-            Verify.assertObjectNotNull(immutableMapName, actualImmutableMap);
-            Verify.assertMapContainsKeys(immutableMapName, actualImmutableMap, expectedKeyValues);
-            Verify.assertMapContainsValues(immutableMapName, actualImmutableMap, expectedKeyValues);
+            Verify.assertObjectNotNull(mapIterableName, mapIterable);
+            Verify.assertMapContainsKeys(mapIterableName, mapIterable, expectedKeyValues);
+            Verify.assertMapContainsValues(mapIterableName, mapIterable, expectedKeyValues);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link MutableMapIterable} contains all of the given keys and values.
+     */
+    public static void assertContainsAllKeyValues(MutableMapIterable<?, ?> mutableMapIterable, Object... keyValues)
+    {
+        try
+        {
+            Verify.assertContainsAllKeyValues("map", mutableMapIterable, keyValues);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link MutableMapIterable} contains all of the given keys and values.
+     */
+    public static void assertContainsAllKeyValues(
+            String mutableMapIterableName,
+            MutableMapIterable<?, ?> mutableMapIterable,
+            Object... expectedKeyValues)
+    {
+        try
+        {
+            Verify.assertNotEmpty("Expected keys/values in assertion", expectedKeyValues);
+
+            if (expectedKeyValues.length % 2 != 0)
+            {
+                Assert.fail("Odd number of keys and values (every key must have a value)");
+            }
+
+            Verify.assertObjectNotNull(mutableMapIterableName, mutableMapIterable);
+            Verify.assertMapContainsKeys(mutableMapIterableName, mutableMapIterable, expectedKeyValues);
+            Verify.assertMapContainsValues(mutableMapIterableName, mutableMapIterable, expectedKeyValues);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link ImmutableMapIterable} contains all of the given keys and values.
+     */
+    public static void assertContainsAllKeyValues(ImmutableMapIterable<?, ?> immutableMapIterable, Object... keyValues)
+    {
+        try
+        {
+            Verify.assertContainsAllKeyValues("map", immutableMapIterable, keyValues);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link ImmutableMapIterable} contains all of the given keys and values.
+     */
+    public static void assertContainsAllKeyValues(
+            String immutableMapIterableName,
+            ImmutableMapIterable<?, ?> immutableMapIterable,
+            Object... expectedKeyValues)
+    {
+        try
+        {
+            Verify.assertNotEmpty("Expected keys/values in assertion", expectedKeyValues);
+
+            if (expectedKeyValues.length % 2 != 0)
+            {
+                Assert.fail("Odd number of keys and values (every key must have a value)");
+            }
+
+            Verify.assertObjectNotNull(immutableMapIterableName, immutableMapIterable);
+            Verify.assertMapContainsKeys(immutableMapIterableName, immutableMapIterable, expectedKeyValues);
+            Verify.assertMapContainsValues(immutableMapIterableName, immutableMapIterable, expectedKeyValues);
         }
         catch (AssertionError e)
         {
@@ -2051,8 +2174,8 @@ public final class Verify extends Assert
     }
 
     private static void assertMapContainsKeys(
-            String immutableMapName,
-            ImmutableMap<?, ?> actualImmutableMap,
+            String mapIterableName,
+            MapIterable<?, ?> mapIterable,
             Object... expectedKeyValues)
     {
         try
@@ -2065,7 +2188,7 @@ public final class Verify extends Assert
                 expectedKeys.add(expectedKeyValues[i]);
             }
 
-            Verify.assertContainsAll(immutableMapName + ".keysView()", actualImmutableMap.keysView(), expectedKeys.toArray());
+            Verify.assertContainsAll(mapIterableName + ".keysView()", mapIterable.keysView(), expectedKeys.toArray());
         }
         catch (AssertionError e)
         {
@@ -2074,8 +2197,8 @@ public final class Verify extends Assert
     }
 
     private static void assertMapContainsValues(
-            String immutableMapName,
-            ImmutableMap<?, ?> actualImmutableMap,
+            String mapIterableName,
+            MapIterable<?, ?> mapIterable,
             Object... expectedKeyValues)
     {
         try
@@ -2088,7 +2211,99 @@ public final class Verify extends Assert
                 expectedValues.add(expectedKeyValues[i]);
             }
 
-            Verify.assertContainsAll(immutableMapName + ".valuesView()", actualImmutableMap.valuesView(), expectedValues.toArray());
+            Verify.assertContainsAll(mapIterableName + ".valuesView()", mapIterable.valuesView(), expectedValues.toArray());
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    private static void assertMapContainsKeys(
+            String mutableMapIterableName,
+            MutableMapIterable<?, ?> mutableMapIterable,
+            Object... expectedKeyValues)
+    {
+        try
+        {
+            Verify.assertNotEmpty("Expected keys/values in assertion", expectedKeyValues);
+
+            MutableList<Object> expectedKeys = Lists.mutable.of();
+            for (int i = 0; i < expectedKeyValues.length; i += 2)
+            {
+                expectedKeys.add(expectedKeyValues[i]);
+            }
+
+            Verify.assertContainsAll(mutableMapIterableName + ".keysView()", mutableMapIterable.keysView(), expectedKeys.toArray());
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    private static void assertMapContainsValues(
+            String mutableMapIterableName,
+            MutableMapIterable<?, ?> mutableMapIterable,
+            Object... expectedKeyValues)
+    {
+        try
+        {
+            Verify.assertNotEmpty("Expected keys/values in assertion", expectedKeyValues);
+
+            MutableList<Object> expectedValues = Lists.mutable.of();
+            for (int i = 1; i < expectedKeyValues.length; i += 2)
+            {
+                expectedValues.add(expectedKeyValues[i]);
+            }
+
+            Verify.assertContainsAll(mutableMapIterableName + ".valuesView()", mutableMapIterable.valuesView(), expectedValues.toArray());
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    private static void assertMapContainsKeys(
+            String immutableMapIterableName,
+            ImmutableMapIterable<?, ?> immutableMapIterable,
+            Object... expectedKeyValues)
+    {
+        try
+        {
+            Verify.assertNotEmpty("Expected keys/values in assertion", expectedKeyValues);
+
+            MutableList<Object> expectedKeys = Lists.mutable.of();
+            for (int i = 0; i < expectedKeyValues.length; i += 2)
+            {
+                expectedKeys.add(expectedKeyValues[i]);
+            }
+
+            Verify.assertContainsAll(immutableMapIterableName + ".keysView()", immutableMapIterable.keysView(), expectedKeys.toArray());
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    private static void assertMapContainsValues(
+            String immutableMapIterableName,
+            ImmutableMapIterable<?, ?> immutableMapIterable,
+            Object... expectedKeyValues)
+    {
+        try
+        {
+            Verify.assertNotEmpty("Expected keys/values in assertion", expectedKeyValues);
+
+            MutableList<Object> expectedValues = Lists.mutable.of();
+            for (int i = 1; i < expectedKeyValues.length; i += 2)
+            {
+                expectedValues.add(expectedKeyValues[i]);
+            }
+
+            Verify.assertContainsAll(immutableMapIterableName + ".valuesView()", immutableMapIterable.valuesView(), expectedValues.toArray());
         }
         catch (AssertionError e)
         {
@@ -2255,13 +2470,13 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link ImmutableMap} contains an entry with the given key.
+     * Assert that the given {@link MapIterable} contains an entry with the given key.
      */
-    public static void assertContainsKey(Object expectedKey, ImmutableMap<?, ?> actualImmutableMap)
+    public static void assertContainsKey(Object expectedKey, MapIterable<?, ?> mapIterable)
     {
         try
         {
-            Verify.assertContainsKey("immutable map", expectedKey, actualImmutableMap);
+            Verify.assertContainsKey("map", expectedKey, mapIterable);
         }
         catch (AssertionError e)
         {
@@ -2270,20 +2485,96 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link ImmutableMap} contains an entry with the given key.
+     * Assert that the given {@link MapIterable} contains an entry with the given key.
      */
     public static void assertContainsKey(
-            String immutableMapName,
+            String mapIterableName,
             Object expectedKey,
-            ImmutableMap<?, ?> actualImmutableMap)
+            MapIterable<?, ?> mapIterable)
     {
         try
         {
-            Assert.assertNotNull(immutableMapName, actualImmutableMap);
+            Assert.assertNotNull(mapIterableName, mapIterable);
 
-            if (!actualImmutableMap.containsKey(expectedKey))
+            if (!mapIterable.containsKey(expectedKey))
             {
-                Assert.fail(immutableMapName + " did not contain expectedKey:<" + expectedKey + '>');
+                Assert.fail(mapIterableName + " did not contain expectedKey:<" + expectedKey + '>');
+            }
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link MutableMapIterable} contains an entry with the given key.
+     */
+    public static void assertContainsKey(Object expectedKey, MutableMapIterable<?, ?> mutableMapIterable)
+    {
+        try
+        {
+            Verify.assertContainsKey("map", expectedKey, mutableMapIterable);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link MutableMapIterable} contains an entry with the given key.
+     */
+    public static void assertContainsKey(
+            String mutableMapIterableName,
+            Object expectedKey,
+            MutableMapIterable<?, ?> mutableMapIterable)
+    {
+        try
+        {
+            Assert.assertNotNull(mutableMapIterableName, mutableMapIterable);
+
+            if (!mutableMapIterable.containsKey(expectedKey))
+            {
+                Assert.fail(mutableMapIterableName + " did not contain expectedKey:<" + expectedKey + '>');
+            }
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link ImmutableMapIterable} contains an entry with the given key.
+     */
+    public static void assertContainsKey(Object expectedKey, ImmutableMapIterable<?, ?> immutableMapIterable)
+    {
+        try
+        {
+            Verify.assertContainsKey("map", expectedKey, immutableMapIterable);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link ImmutableMapIterable} contains an entry with the given key.
+     */
+    public static void assertContainsKey(
+            String immutableMapIterableName,
+            Object expectedKey,
+            ImmutableMapIterable<?, ?> immutableMapIterable)
+    {
+        try
+        {
+            Assert.assertNotNull(immutableMapIterableName, immutableMapIterable);
+
+            if (!immutableMapIterable.containsKey(expectedKey))
+            {
+                Assert.fail(immutableMapIterableName + " did not contain expectedKey:<" + expectedKey + '>');
             }
         }
         catch (AssertionError e)
@@ -2381,16 +2672,16 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link ImmutableMap} contains an entry with the given key and value.
+     * Assert that the given {@link MapIterable} contains an entry with the given key and value.
      */
     public static void assertContainsKeyValue(
             Object expectedKey,
             Object expectedValue,
-            ImmutableMap<?, ?> actualImmutableMap)
+            MapIterable<?, ?> mapIterable)
     {
         try
         {
-            Verify.assertContainsKeyValue("immutable map", expectedKey, expectedValue, actualImmutableMap);
+            Verify.assertContainsKeyValue("map", expectedKey, expectedValue, mapIterable);
         }
         catch (AssertionError e)
         {
@@ -2399,23 +2690,129 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link ImmutableMap} contains an entry with the given key and value.
+     * Assert that the given {@link MapIterable} contains an entry with the given key and value.
      */
     public static void assertContainsKeyValue(
-            String immutableMapName,
+            String mapIterableName,
             Object expectedKey,
             Object expectedValue,
-            ImmutableMap<?, ?> actualImmutableMap)
+            MapIterable<?, ?> mapIterable)
     {
         try
         {
-            Verify.assertContainsKey(immutableMapName, expectedKey, actualImmutableMap);
+            Verify.assertContainsKey(mapIterableName, expectedKey, mapIterable);
 
-            Object actualValue = actualImmutableMap.get(expectedKey);
+            Object actualValue = mapIterable.get(expectedKey);
             if (!Comparators.nullSafeEquals(actualValue, expectedValue))
             {
                 Assert.fail(
-                        immutableMapName
+                        mapIterableName
+                                + " entry with expectedKey:<"
+                                + expectedKey
+                                + "> "
+                                + "did not contain expectedValue:<"
+                                + expectedValue
+                                + ">, "
+                                + "but had actualValue:<"
+                                + actualValue
+                                + '>');
+            }
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link MutableMapIterable} contains an entry with the given key and value.
+     */
+    public static void assertContainsKeyValue(
+            Object expectedKey,
+            Object expectedValue,
+            MutableMapIterable<?, ?> mapIterable)
+    {
+        try
+        {
+            Verify.assertContainsKeyValue("map", expectedKey, expectedValue, mapIterable);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link MutableMapIterable} contains an entry with the given key and value.
+     */
+    public static void assertContainsKeyValue(
+            String mapIterableName,
+            Object expectedKey,
+            Object expectedValue,
+            MutableMapIterable<?, ?> mutableMapIterable)
+    {
+        try
+        {
+            Verify.assertContainsKey(mapIterableName, expectedKey, mutableMapIterable);
+
+            Object actualValue = mutableMapIterable.get(expectedKey);
+            if (!Comparators.nullSafeEquals(actualValue, expectedValue))
+            {
+                Assert.fail(
+                        mapIterableName
+                                + " entry with expectedKey:<"
+                                + expectedKey
+                                + "> "
+                                + "did not contain expectedValue:<"
+                                + expectedValue
+                                + ">, "
+                                + "but had actualValue:<"
+                                + actualValue
+                                + '>');
+            }
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link ImmutableMapIterable} contains an entry with the given key and value.
+     */
+    public static void assertContainsKeyValue(
+            Object expectedKey,
+            Object expectedValue,
+            ImmutableMapIterable<?, ?> mapIterable)
+    {
+        try
+        {
+            Verify.assertContainsKeyValue("map", expectedKey, expectedValue, mapIterable);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link ImmutableMapIterable} contains an entry with the given key and value.
+     */
+    public static void assertContainsKeyValue(
+            String mapIterableName,
+            Object expectedKey,
+            Object expectedValue,
+            ImmutableMapIterable<?, ?> immutableMapIterable)
+    {
+        try
+        {
+            Verify.assertContainsKey(mapIterableName, expectedKey, immutableMapIterable);
+
+            Object actualValue = immutableMapIterable.get(expectedKey);
+            if (!Comparators.nullSafeEquals(actualValue, expectedValue))
+            {
+                Assert.fail(
+                        mapIterableName
                                 + " entry with expectedKey:<"
                                 + expectedKey
                                 + "> "

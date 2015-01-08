@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.gs.collections.impl.bimap.immutable;
 
 import com.gs.collections.api.bimap.ImmutableBiMap;
 import com.gs.collections.impl.bimap.mutable.HashBiMap;
+import com.gs.collections.impl.factory.BiMaps;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -30,31 +31,31 @@ public class ImmutableHashBiMapTest extends AbstractImmutableBiMapTestCase
     @Override
     protected ImmutableBiMap<Integer, String> classUnderTest()
     {
-        return new ImmutableHashBiMap<>(Maps.immutable.with(1, "1", 2, "2", 3, "3", 4, "4"));
+        return BiMaps.immutable.with(1, "1", 2, "2", 3, "3", 4, "4");
     }
 
     @Override
     protected ImmutableBiMap<Integer, String> newEmpty()
     {
-        return new ImmutableHashBiMap<>();
+        return BiMaps.immutable.empty();
     }
 
     @Override
     protected ImmutableBiMap<Integer, String> newWithMap()
     {
-        return new ImmutableHashBiMap<>(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
+        return BiMaps.immutable.withAll(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
     }
 
     @Override
     protected ImmutableBiMap<Integer, String> newWithHashBiMap()
     {
-        return new ImmutableHashBiMap<>(HashBiMap.newWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
+        return BiMaps.immutable.withAll(HashBiMap.newWithKeysValues(1, "1", 2, "2", 3, "3", 4, "4"));
     }
 
     @Override
     protected ImmutableBiMap<Integer, String> newWithImmutableMap()
     {
-        return new ImmutableHashBiMap<>(Maps.immutable.of(1, "1", 2, "2", 3, "3", 4, "4"));
+        return BiMaps.immutable.withAll(Maps.immutable.of(1, "1", 2, "2", 3, "3", 4, "4"));
     }
 
     @Override
@@ -67,7 +68,6 @@ public class ImmutableHashBiMapTest extends AbstractImmutableBiMapTestCase
     @Test
     public void keySet()
     {
-        ImmutableHashBiMap<Integer, String> immutableHashBiMap = new ImmutableHashBiMap<>(Maps.immutable.of(1, "1", 2, "2", 3, "3", 4, "4"));
-        Verify.assertSetsEqual(UnifiedSet.newSetWith(1, 2, 3, 4), immutableHashBiMap.keySet());
+        Verify.assertSetsEqual(UnifiedSet.newSetWith(1, 2, 3, 4), this.classUnderTest().castToMap().keySet());
     }
 }

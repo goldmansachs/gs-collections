@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,8 +48,9 @@ import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.MapIterable;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
@@ -310,17 +311,25 @@ public class UnmodifiableBag<T>
         this.getMutableBag().forEachWithOccurrences(objectIntProcedure);
     }
 
-    public MapIterable<T, Integer> toMapOfItemToCount()
+    public MutableMap<T, Integer> toMapOfItemToCount()
     {
         return this.getMutableBag().toMapOfItemToCount();
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
     @Override
     public <S> MutableBag<Pair<T, S>> zip(Iterable<S> that)
     {
         return this.getMutableBag().zip(that);
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
     @Override
     public MutableSet<Pair<T, Integer>> zipWithIndex()
     {

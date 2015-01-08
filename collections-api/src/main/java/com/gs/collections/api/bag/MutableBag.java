@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,13 +38,12 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 
 /**
  * A MutableBag is a Collection whose elements are unordered and may contain duplicate entries.  It varies from
@@ -54,8 +53,10 @@ import com.gs.collections.api.tuple.primitive.ObjectIntPair;
  * @since 1.0
  */
 public interface MutableBag<T>
-        extends UnsortedBag<T>, MutableCollection<T>
+        extends UnsortedBag<T>, MutableBagIterable<T>
 {
+    MutableMap<T, Integer> toMapOfItemToCount();
+
     MutableBag<T> selectByOccurrences(IntPredicate predicate);
 
     MutableBag<T> with(T element);
@@ -80,8 +81,16 @@ public interface MutableBag<T>
 
     <V> MutableBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
     <S> MutableBag<Pair<T, S>> zip(Iterable<S> that);
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
     MutableSet<Pair<T, Integer>> zipWithIndex();
 
     MutableBag<T> tap(Procedure<? super T> procedure);
@@ -119,20 +128,4 @@ public interface MutableBag<T>
     <V> MutableBag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
-
-    /**
-     * @since 6.0
-     */
-    MutableList<ObjectIntPair<T>> topOccurrences(int count);
-
-    /**
-     * @since 6.0
-     */
-    MutableList<ObjectIntPair<T>> bottomOccurrences(int count);
-
-    void addOccurrences(T item, int occurrences);
-
-    boolean removeOccurrences(Object item, int occurrences);
-
-    boolean setOccurrences(T item, int occurrences);
 }

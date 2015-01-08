@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.gs.collections.impl
 
-import list.mutable.FastList
+import com.gs.collections.impl.list.mutable.FastList
 import org.junit.Test
 
 trait SynchronizedCollectionTestTrait extends SynchronizedTestTrait with IterableTestTrait
@@ -144,7 +144,7 @@ trait SynchronizedCollectionTestTrait extends SynchronizedTestTrait with Iterabl
     @Test
     def equals_synchronized
     {
-        this.assertNotSynchronized
+        this.assertSynchronized
         {
             this.classUnderTest.equals(null)
         }
@@ -153,7 +153,7 @@ trait SynchronizedCollectionTestTrait extends SynchronizedTestTrait with Iterabl
     @Test
     def hashCode_synchronized
     {
-        this.assertNotSynchronized
+        this.assertSynchronized
         {
             this.classUnderTest.hashCode
         }

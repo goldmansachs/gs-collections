@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,13 @@ package com.gs.collections.api.bimap;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MapIterable;
+import com.gs.collections.api.multimap.set.SetMultimap;
+import com.gs.collections.api.partition.set.PartitionSet;
+import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -34,6 +38,8 @@ public interface BiMap<K, V> extends MapIterable<K, V>
      * Returns an inversed view of this BiMap, where the associations are in the direction of this bimap's values to keys.
      */
     BiMap<V, K> inverse();
+
+    SetMultimap<V, K> flip();
 
     BiMap<V, K> flipUniqueValues();
 
@@ -67,6 +73,28 @@ public interface BiMap<K, V> extends MapIterable<K, V>
      * @throws RuntimeException when {@code function} returns colliding values.
      */
     <R> BiMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+
+    SetIterable<V> select(Predicate<? super V> predicate);
+
+    <P> SetIterable<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
+    SetIterable<V> reject(Predicate<? super V> predicate);
+
+    <P> SetIterable<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
+    PartitionSet<V> partition(Predicate<? super V> predicate);
+
+    <P> PartitionSet<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
+    <S> SetIterable<S> selectInstancesOf(Class<S> clazz);
+
+    <S> SetIterable<Pair<V, S>> zip(Iterable<S> that);
+
+    SetIterable<Pair<V, Integer>> zipWithIndex();
+
+    <V1> SetMultimap<V1, V> groupBy(Function<? super V, ? extends V1> function);
+
+    <V1> SetMultimap<V1, V> groupByEach(Function<? super V, ? extends Iterable<V1>> function);
 
     <VV> BiMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function);
 }

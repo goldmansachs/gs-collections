@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1035,7 +1035,7 @@ public final class MapIterate
         return Iterate.count(map.values(), Predicates.attributeEqual(function, object));
     }
 
-    public static <K, V> MutableSetMultimap<V, K> flip(UnsortedMapIterable<K, V> iMap)
+    public static <K, V> MutableSetMultimap<V, K> flip(MapIterable<K, V> iMap)
     {
         final MutableSetMultimap<V, K> result = Multimaps.mutable.set.with();
         iMap.forEachKeyValue(new Procedure2<K, V>()

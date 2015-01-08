@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,6 +70,8 @@ public class SynchronizedMutableList<T>
         extends AbstractSynchronizedMutableCollection<T>
         implements MutableList<T>, Serializable
 {
+    private static final long serialVersionUID = 2L;
+
     SynchronizedMutableList(MutableList<T> newCollection)
     {
         super(newCollection);
@@ -105,52 +107,43 @@ public class SynchronizedMutableList<T>
         return new SynchronizedMutableList<E>(mutableList, lock);
     }
 
+    @Override
     @GuardedBy("getLock()")
-    private MutableList<T> getMutableList()
+    protected MutableList<T> getDelegate()
     {
-        return (MutableList<T>) this.getCollection();
+        return (MutableList<T>) super.getDelegate();
     }
 
-    @Override
-    public boolean equals(Object obj)
+    public MutableList<T> with(T element)
     {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().equals(obj);
-        }
-    }
-
-    @Override
-    public int hashCode()
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().hashCode();
-        }
-    }
-
-    @Override
-    public MutableList<T> asUnmodifiable()
-    {
-        synchronized (this.getLock())
-        {
-            return UnmodifiableMutableList.of(this);
-        }
-    }
-
-    @Override
-    public ImmutableList<T> toImmutable()
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().toImmutable();
-        }
-    }
-
-    @Override
-    public MutableList<T> asSynchronized()
-    {
+        this.add(element);
         return this;
+    }
+
+    public MutableList<T> without(T element)
+    {
+        this.remove(element);
+        return this;
+    }
+
+    public MutableList<T> withAll(Iterable<? extends T> elements)
+    {
+        this.addAllIterable(elements);
+        return this;
+    }
+
+    public MutableList<T> withoutAll(Iterable<? extends T> elements)
+    {
+        this.removeAllIterable(elements);
+        return this;
+    }
+
+    public MutableList<T> newEmpty()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().newEmpty().asSynchronized();
+        }
     }
 
     @Override
@@ -158,424 +151,20 @@ public class SynchronizedMutableList<T>
     {
         synchronized (this.getLock())
         {
-            return SynchronizedMutableList.of(this.getMutableList().clone());
+            return SynchronizedMutableList.of(this.getDelegate().clone());
         }
     }
 
-    @Override
-    public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
+    protected Object writeReplace()
     {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().collect(function);
-        }
-    }
-
-    @Override
-    public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().collectBoolean(booleanFunction);
-        }
-    }
-
-    @Override
-    public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().collectByte(byteFunction);
-        }
-    }
-
-    @Override
-    public MutableCharList collectChar(CharFunction<? super T> charFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().collectChar(charFunction);
-        }
-    }
-
-    @Override
-    public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().collectDouble(doubleFunction);
-        }
-    }
-
-    @Override
-    public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().collectFloat(floatFunction);
-        }
-    }
-
-    @Override
-    public MutableIntList collectInt(IntFunction<? super T> intFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().collectInt(intFunction);
-        }
-    }
-
-    @Override
-    public MutableLongList collectLong(LongFunction<? super T> longFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().collectLong(longFunction);
-        }
-    }
-
-    @Override
-    public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().collectShort(shortFunction);
-        }
-    }
-
-    @Override
-    public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().flatCollect(function);
-        }
-    }
-
-    @Override
-    public <V> MutableList<V> collectIf(
-            Predicate<? super T> predicate,
-            Function<? super T, ? extends V> function)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().collectIf(predicate, function);
-        }
-    }
-
-    @Override
-    public <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().collectWith(function, parameter);
-        }
-    }
-
-    public int detectIndex(Predicate<? super T> predicate)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().detectIndex(predicate);
-        }
-    }
-
-    @Override
-    public <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().groupBy(function);
-        }
-    }
-
-    @Override
-    public <V> MutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().groupByEach(function);
-        }
-    }
-
-    @Override
-    public MutableList<T> tap(Procedure<? super T> procedure)
-    {
-        synchronized (this.getLock())
-        {
-            this.forEach(procedure);
-            return this;
-        }
-    }
-
-    public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().forEach(fromIndex, toIndex, procedure);
-        }
-    }
-
-    public void reverseForEach(Procedure<? super T> procedure)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().reverseForEach(procedure);
-        }
-    }
-
-    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().forEachWithIndex(fromIndex, toIndex, objectIntProcedure);
-        }
-    }
-
-    @Override
-    public MutableList<T> newEmpty()
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().newEmpty().asSynchronized();
-        }
-    }
-
-    @Override
-    public MutableList<T> reject(Predicate<? super T> predicate)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().reject(predicate);
-        }
-    }
-
-    @Override
-    public <P> MutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().rejectWith(predicate, parameter);
-        }
-    }
-
-    @Override
-    public MutableList<T> select(Predicate<? super T> predicate)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().select(predicate);
-        }
-    }
-
-    @Override
-    public <P> MutableList<T> selectWith(
-            Predicate2<? super T, ? super P> predicate,
-            P parameter)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().selectWith(predicate, parameter);
-        }
-    }
-
-    @Override
-    public PartitionMutableList<T> partition(Predicate<? super T> predicate)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().partition(predicate);
-        }
-    }
-
-    @Override
-    public <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().partitionWith(predicate, parameter);
-        }
-    }
-
-    @Override
-    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().selectInstancesOf(clazz);
-        }
-    }
-
-    public MutableList<T> distinct()
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().distinct();
-        }
-    }
-
-    public MutableList<T> sortThis()
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().sortThis();
-            return this;
-        }
-    }
-
-    public MutableList<T> sortThis(Comparator<? super T> comparator)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().sortThis(comparator);
-            return this;
-        }
-    }
-
-    public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().sortThisBy(function);
-            return this;
-        }
-    }
-
-    public MutableList<T> sortThisByInt(IntFunction<? super T> function)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().sortThisByInt(function);
-            return this;
-        }
-    }
-
-    public MutableList<T> sortThisByBoolean(BooleanFunction<? super T> function)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().sortThisByBoolean(function);
-            return this;
-        }
-    }
-
-    public MutableList<T> sortThisByChar(CharFunction<? super T> function)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().sortThisByChar(function);
-            return this;
-        }
-    }
-
-    public MutableList<T> sortThisByByte(ByteFunction<? super T> function)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().sortThisByByte(function);
-            return this;
-        }
-    }
-
-    public MutableList<T> sortThisByShort(ShortFunction<? super T> function)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().sortThisByShort(function);
-            return this;
-        }
-    }
-
-    public MutableList<T> sortThisByFloat(FloatFunction<? super T> function)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().sortThisByFloat(function);
-            return this;
-        }
-    }
-
-    public MutableList<T> sortThisByLong(LongFunction<? super T> function)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().sortThisByLong(function);
-            return this;
-        }
-    }
-
-    public MutableList<T> sortThisByDouble(DoubleFunction<? super T> function)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().sortThisByDouble(function);
-            return this;
-        }
-    }
-
-    public MutableList<T> subList(int fromIndex, int toIndex)
-    {
-        synchronized (this.getLock())
-        {
-            return SynchronizedMutableList.of(this.getMutableList().subList(fromIndex, toIndex), this.getLock());
-        }
-    }
-
-    public void add(int index, T element)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutableList().add(index, element);
-        }
+        return new SynchronizedCollectionSerializationProxy<T>(this.getDelegate());
     }
 
     public boolean addAll(int index, Collection<? extends T> collection)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().addAll(index, collection);
-        }
-    }
-
-    public T get(int index)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().get(index);
-        }
-    }
-
-    public int indexOf(Object o)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().indexOf(o);
-        }
-    }
-
-    public int lastIndexOf(Object o)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().lastIndexOf(o);
-        }
-    }
-
-    public ListIterator<T> listIterator()
-    {
-        return this.getMutableList().listIterator();
-    }
-
-    public ListIterator<T> listIterator(int index)
-    {
-        return this.getMutableList().listIterator(index);
-    }
-
-    public T remove(int index)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().remove(index);
+            return this.getDelegate().addAll(index, collection);
         }
     }
 
@@ -583,122 +172,63 @@ public class SynchronizedMutableList<T>
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().set(index, element);
+            return this.getDelegate().set(index, element);
         }
     }
 
-    @Override
-    public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
+    public void add(int index, T element)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().zip(that);
+            this.getDelegate().add(index, element);
         }
     }
 
-    @Override
-    public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
+    public T remove(int index)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().zip(that, target);
+            return this.getDelegate().remove(index);
         }
     }
 
-    @Override
-    public MutableList<Pair<T, Integer>> zipWithIndex()
+    public MutableList<T> subList(int fromIndex, int toIndex)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().zipWithIndex();
+            return SynchronizedMutableList.of(this.getDelegate().subList(fromIndex, toIndex), this.getLock());
         }
     }
 
-    public MutableList<T> toReversed()
+    public T get(int index)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().toReversed();
+            return this.getDelegate().get(index);
         }
     }
 
-    public MutableList<T> reverseThis()
+    public int lastIndexOf(Object o)
     {
         synchronized (this.getLock())
         {
-            this.getMutableList().reverseThis();
-            return this;
+            return this.getDelegate().lastIndexOf(o);
         }
     }
 
-    public MutableStack<T> toStack()
+    public ListIterator<T> listIterator()
     {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().toStack();
-        }
+        return this.getDelegate().listIterator();
     }
 
-    @Override
-    public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
+    public ListIterator<T> listIterator(int index)
     {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().zipWithIndex(target);
-        }
-    }
-
-    public MutableList<T> take(int count)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().take(count);
-        }
-    }
-
-    public MutableList<T> takeWhile(Predicate<? super T> predicate)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().takeWhile(predicate);
-        }
-    }
-
-    public MutableList<T> drop(int count)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().drop(count);
-        }
-    }
-
-    public MutableList<T> dropWhile(Predicate<? super T> predicate)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().dropWhile(predicate);
-        }
-    }
-
-    public PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getMutableList().partitionWhile(predicate);
-        }
-    }
-
-    public LazyIterable<T> asReversed()
-    {
-        synchronized (this.getLock())
-        {
-            return ReverseIterable.adapt(this);
-        }
+        return this.getDelegate().listIterator(index);
     }
 
     public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
-        return new SynchronizedParallelListIterable<T>(this.getMutableList().asParallel(executorService, batchSize), this.getLock());
+        return new SynchronizedParallelListIterable<T>(this.getDelegate().asParallel(executorService, batchSize), this.getLock());
     }
 
     public int binarySearch(T key, Comparator<? super T> comparator)
@@ -717,36 +247,441 @@ public class SynchronizedMutableList<T>
         }
     }
 
-    @Override
-    public MutableList<T> with(T element)
+    public int indexOf(Object o)
     {
-        this.add(element);
-        return this;
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().indexOf(o);
+        }
     }
 
-    @Override
-    public MutableList<T> without(T element)
+    public MutableList<T> distinct()
     {
-        this.remove(element);
-        return this;
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().distinct();
+        }
     }
 
-    @Override
-    public MutableList<T> withAll(Iterable<? extends T> elements)
+    public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
     {
-        this.addAllIterable(elements);
-        return this;
+        synchronized (this.getLock())
+        {
+            this.getDelegate().forEach(fromIndex, toIndex, procedure);
+        }
     }
 
-    @Override
-    public MutableList<T> withoutAll(Iterable<? extends T> elements)
+    public MutableList<T> takeWhile(Predicate<? super T> predicate)
     {
-        this.removeAllIterable(elements);
-        return this;
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().takeWhile(predicate);
+        }
     }
 
-    protected Object writeReplace()
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        return new SynchronizedCollectionSerializationProxy<T>(this.getMutableList());
+        synchronized (this.getLock())
+        {
+            this.getDelegate().forEachWithIndex(fromIndex, toIndex, objectIntProcedure);
+        }
+    }
+
+    public MutableList<T> dropWhile(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().dropWhile(predicate);
+        }
+    }
+
+    public PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().partitionWhile(predicate);
+        }
+    }
+
+    public int detectIndex(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().detectIndex(predicate);
+        }
+    }
+
+    public MutableList<T> take(int count)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().take(count);
+        }
+    }
+
+    public MutableList<T> drop(int count)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().drop(count);
+        }
+    }
+
+    public void reverseForEach(Procedure<? super T> procedure)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().reverseForEach(procedure);
+        }
+    }
+
+    public MutableList<T> sortThis(Comparator<? super T> comparator)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().sortThis(comparator);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThis()
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().sortThis();
+            return this;
+        }
+    }
+
+    public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().sortThisBy(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByInt(IntFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().sortThisByInt(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByBoolean(BooleanFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().sortThisByBoolean(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByChar(CharFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().sortThisByChar(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByByte(ByteFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().sortThisByByte(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByShort(ShortFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().sortThisByShort(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByFloat(FloatFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().sortThisByFloat(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByLong(LongFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().sortThisByLong(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> sortThisByDouble(DoubleFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().sortThisByDouble(function);
+            return this;
+        }
+    }
+
+    public MutableList<T> reverseThis()
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().reverseThis();
+            return this;
+        }
+    }
+
+    public LazyIterable<T> asReversed()
+    {
+        synchronized (this.getLock())
+        {
+            return ReverseIterable.adapt(this);
+        }
+    }
+
+    public MutableList<T> toReversed()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().toReversed();
+        }
+    }
+
+    public MutableStack<T> toStack()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().toStack();
+        }
+    }
+
+    public ImmutableList<T> toImmutable()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().toImmutable();
+        }
+    }
+
+    public MutableList<T> tap(Procedure<? super T> procedure)
+    {
+        synchronized (this.getLock())
+        {
+            this.forEach(procedure);
+            return this;
+        }
+    }
+
+    public MutableList<T> select(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().select(predicate);
+        }
+    }
+
+    public <P> MutableList<T> selectWith(
+            Predicate2<? super T, ? super P> predicate,
+            P parameter)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().selectWith(predicate, parameter);
+        }
+    }
+
+    public MutableList<T> reject(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().reject(predicate);
+        }
+    }
+
+    public <P> MutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().rejectWith(predicate, parameter);
+        }
+    }
+
+    public PartitionMutableList<T> partition(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().partition(predicate);
+        }
+    }
+
+    public <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().partitionWith(predicate, parameter);
+        }
+    }
+
+    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().selectInstancesOf(clazz);
+        }
+    }
+
+    public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectBoolean(booleanFunction);
+        }
+    }
+
+    public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectByte(byteFunction);
+        }
+    }
+
+    public MutableCharList collectChar(CharFunction<? super T> charFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectChar(charFunction);
+        }
+    }
+
+    public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectDouble(doubleFunction);
+        }
+    }
+
+    public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectFloat(floatFunction);
+        }
+    }
+
+    public MutableIntList collectInt(IntFunction<? super T> intFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectInt(intFunction);
+        }
+    }
+
+    public MutableLongList collectLong(LongFunction<? super T> longFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectLong(longFunction);
+        }
+    }
+
+    public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectShort(shortFunction);
+        }
+    }
+
+    public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collect(function);
+        }
+    }
+
+    public <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectWith(function, parameter);
+        }
+    }
+
+    public <V> MutableList<V> collectIf(
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectIf(predicate, function);
+        }
+    }
+
+    public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().flatCollect(function);
+        }
+    }
+
+    public <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().groupBy(function);
+        }
+    }
+
+    public <V> MutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().groupByEach(function);
+        }
+    }
+
+    public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().zip(that);
+        }
+    }
+
+    public MutableList<Pair<T, Integer>> zipWithIndex()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().zipWithIndex();
+        }
+    }
+
+    public MutableList<T> asUnmodifiable()
+    {
+        synchronized (this.getLock())
+        {
+            return UnmodifiableMutableList.of(this);
+        }
+    }
+
+    public MutableList<T> asSynchronized()
+    {
+        return this;
     }
 }

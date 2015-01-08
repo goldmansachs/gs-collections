@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ import com.gs.collections.api.list.primitive.ImmutableIntList;
 import com.gs.collections.api.list.primitive.ImmutableLongList;
 import com.gs.collections.api.list.primitive.ImmutableShortList;
 import com.gs.collections.api.map.ImmutableMap;
+import com.gs.collections.api.map.ImmutableMapIterable;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
@@ -55,8 +56,10 @@ import net.jcip.annotations.Immutable;
  */
 @Immutable
 public interface ImmutableSortedMap<K, V>
-        extends SortedMapIterable<K, V>
+        extends SortedMapIterable<K, V>, ImmutableMapIterable<K, V>
 {
+    SortedMap<K, V> castToMap();
+
     SortedMap<K, V> castToSortedMap();
 
     ImmutableSortedSetMultimap<V, K> flip();

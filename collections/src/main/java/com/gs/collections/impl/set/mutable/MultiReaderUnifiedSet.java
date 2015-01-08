@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
@@ -837,11 +838,19 @@ public final class MultiReaderUnifiedSet<T>
             return iterator;
         }
 
+        /**
+         * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+         */
+        @Deprecated
         public <S> MutableSet<Pair<T, S>> zip(Iterable<S> that)
         {
             return this.getDelegate().zip(that);
         }
 
+        /**
+         * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+         */
+        @Deprecated
         public MutableSet<Pair<T, Integer>> zipWithIndex()
         {
             return this.getDelegate().zipWithIndex();
@@ -988,6 +997,10 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
     public <S> MutableSet<Pair<T, S>> zip(Iterable<S> that)
     {
         this.acquireReadLock();
@@ -1001,6 +1014,10 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
     public MutableSet<Pair<T, Integer>> zipWithIndex()
     {
         this.acquireReadLock();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -139,6 +139,11 @@ public class UnmodifiableSortedBag<T>
     public boolean removeOccurrences(Object item, int occurrences)
     {
         throw new UnsupportedOperationException("Cannot call removeOccurences() on " + this.getClass().getSimpleName());
+    }
+
+    public boolean setOccurrences(T item, int occurrences)
+    {
+        throw new UnsupportedOperationException("Cannot call setOccurrences() on " + this.getClass().getSimpleName());
     }
 
     @Override

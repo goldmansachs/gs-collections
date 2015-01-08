@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,6 @@ import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
@@ -60,10 +59,6 @@ import static com.gs.collections.impl.factory.Iterables.*;
 
 public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTestCase
 {
-    protected abstract <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2);
-
-    protected abstract <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3);
-
     protected abstract <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
 
     @Test
@@ -722,60 +717,23 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
     }
 
     @Test
-    public void flatten_value()
+    public void flatCollect()
     {
-        ImmutableMap<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two");
+        ImmutableMap<Integer, Integer> map = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3, 4, 4);
 
-        Function<String, Iterable<Character>> function = object -> {
-            MutableList<Character> result = Lists.mutable.of();
-            if (object != null)
-            {
-                char[] chars = object.toCharArray();
-                for (char aChar : chars)
-                {
-                    result.add(Character.valueOf(aChar));
-                }
-            }
-            return result;
-        };
-
-        RichIterable<Character> blob = map.flatCollect(function);
-        RichIterable<Character> blobFromTarget = map.flatCollect(function, FastList.<Character>newList());
-
-        switch (map.size())
+        if (map.isEmpty())
         {
-            case 1:
-                Assert.assertTrue(blob.containsAllArguments(
-                        Character.valueOf('O'),
-                        Character.valueOf('n'),
-                        Character.valueOf('e')));
-                Assert.assertTrue(blobFromTarget.containsAllArguments(
-                        Character.valueOf('O'),
-                        Character.valueOf('n'),
-                        Character.valueOf('e')));
-                break;
-            case 2:
-            case 3:
-            case 4:
-                Assert.assertTrue(blob.containsAllArguments(
-                        Character.valueOf('O'),
-                        Character.valueOf('n'),
-                        Character.valueOf('e'),
-                        Character.valueOf('T'),
-                        Character.valueOf('w'),
-                        Character.valueOf('o')));
-                Assert.assertTrue(blobFromTarget.containsAllArguments(
-                        Character.valueOf('O'),
-                        Character.valueOf('n'),
-                        Character.valueOf('e'),
-                        Character.valueOf('T'),
-                        Character.valueOf('w'),
-                        Character.valueOf('o')));
-                break;
-            default:
-                Assert.assertEquals(0, blob.size());
-                Assert.assertEquals(0, blobFromTarget.size());
-                break;
+            Function<Integer, Iterable<Object>> fail = each -> {
+                throw new AssertionError();
+            };
+            Assert.assertEquals(Bags.immutable.empty(), map.flatCollect(fail));
+            Assert.assertEquals(Bags.immutable.empty(), map.flatCollect(fail, HashBag.newBag()));
+        }
+        else
+        {
+            MutableBag<Integer> expected = Interval.oneTo(map.size()).flatCollect(each -> Interval.oneTo(each)).toBag();
+            Assert.assertEquals(expected, map.flatCollect(each -> Interval.oneTo(each)));
+            Assert.assertEquals(expected, map.flatCollect(each -> Interval.oneTo(each), HashBag.newBag()));
         }
     }
 

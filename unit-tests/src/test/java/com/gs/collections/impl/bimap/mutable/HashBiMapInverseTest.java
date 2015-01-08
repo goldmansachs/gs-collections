@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.gs.collections.impl.bimap.mutable;
 
 import com.gs.collections.api.bimap.MutableBiMap;
-import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.test.domain.Key;
 import org.junit.Test;
@@ -47,6 +46,12 @@ public class HashBiMapInverseTest extends AbstractMutableBiMapTestCase
     }
 
     @Override
+    protected <K, V> MutableBiMap<K, V> newMapWithKeyValue(K key, V value)
+    {
+        return HashBiMap.newWithKeysValues(value, key).inverse();
+    }
+
+    @Override
     protected <K, V> MutableBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
         return HashBiMap.newWithKeysValues(value1, key1, value2, key2).inverse();
@@ -62,12 +67,6 @@ public class HashBiMapInverseTest extends AbstractMutableBiMapTestCase
     protected <K, V> MutableBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
         return HashBiMap.newWithKeysValues(value1, key1, value2, key2, value3, key3, value4, key4).inverse();
-    }
-
-    @Override
-    protected <K, V> MutableMap<K, V> newMapWithKeyValue(K key, V value)
-    {
-        return HashBiMap.newWithKeysValues(key, value);
     }
 
     @Override

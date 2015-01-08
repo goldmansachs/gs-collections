@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +26,11 @@ public class SynchronizedSortedMapSerializationTest
     public void serializedForm()
     {
         Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuc29ydGVkLm11dGFibGUuU3luY2hy\n"
-                        + "b25pemVkU29ydGVkTWFwAAAAAAAAAAECAAB4cgAzY29tLmdzLmNvbGxlY3Rpb25zLmltcGwubWFw\n"
-                        + "LlN5bmNocm9uaXplZE1hcEl0ZXJhYmxlAAAAAAAAAAECAAJMAARsb2NrdAASTGphdmEvbGFuZy9P\n"
-                        + "YmplY3Q7TAALbWFwSXRlcmFibGV0AChMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9tYXAvTWFwSXRl\n"
-                        + "cmFibGU7eHBxAH4ABHNyADhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuc29ydGVkLm11dGFi\n"
-                        + "bGUuVHJlZVNvcnRlZE1hcAAAAAAAAAABDAAAeHBwdwQAAAAAeA==",
+                2L,
+                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5TeW5jaHJvbml6ZWRN\n"
+                        + "YXBTZXJpYWxpemF0aW9uUHJveHkAAAAAAAAAAQwAAHhwc3IAOGNvbS5ncy5jb2xsZWN0aW9ucy5p\n"
+                        + "bXBsLm1hcC5zb3J0ZWQubXV0YWJsZS5UcmVlU29ydGVkTWFwAAAAAAAAAAEMAAB4cHB3BAAAAAB4\n"
+                        + "eA==",
                 SynchronizedSortedMap.of(SortedMaps.mutable.of()));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,12 +30,20 @@ public class ImmutableHashBiMapSerializationTest
     @Test
     public void serializedForm()
     {
-        Verify.assertSerializedForm(1L, SERIALIZED_FORM, new ImmutableHashBiMap<Integer, Character>(Maps.immutable.with(1, 'a')));
+        ImmutableHashBiMap<Integer, Character> biMap = new ImmutableHashBiMap<Integer, Character>(
+                Maps.immutable.with(1, 'a'),
+                Maps.immutable.with('a', 1));
+
+        Verify.assertSerializedForm(1L, SERIALIZED_FORM, biMap);
     }
 
     @Test
     public void inverse()
     {
-        Verify.assertSerializedForm(1L, SERIALIZED_FORM, new ImmutableHashBiMap<Character, Integer>(Maps.immutable.with('a', 1)).inverse());
+        ImmutableHashBiMap<Character, Integer> biMap = new ImmutableHashBiMap<Character, Integer>(
+                Maps.immutable.with('a', 1),
+                Maps.immutable.with(1, 'a'));
+
+        Verify.assertSerializedForm(1L, SERIALIZED_FORM, biMap.inverse());
     }
 }

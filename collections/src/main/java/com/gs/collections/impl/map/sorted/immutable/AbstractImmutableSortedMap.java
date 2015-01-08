@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,6 +91,11 @@ public abstract class AbstractImmutableSortedMap<K, V>
         extends AbstractMapIterable<K, V>
         implements ImmutableSortedMap<K, V>, SortedMap<K, V>
 {
+    public SortedMap<K, V> castToMap()
+    {
+        return this;
+    }
+
     public SortedMap<K, V> castToSortedMap()
     {
         return this;
@@ -191,7 +196,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return this.select(predicate, FastList.<V>newList(this.size())).toImmutable();
     }
 
-    @Override
     public <P> ImmutableList<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         return this.select(Predicates.bind(predicate, parameter));
@@ -218,7 +222,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return this.reject(predicate, FastList.<V>newList(this.size())).toImmutable();
     }
 
-    @Override
     public <P> ImmutableList<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         return this.reject(Predicates.bind(predicate, parameter));
@@ -261,13 +264,11 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return result.toImmutable();
     }
 
-    @Override
     public <R> ImmutableList<R> collect(Function<? super V, ? extends R> function)
     {
         return this.collect(function, FastList.<R>newList(this.size())).toImmutable();
     }
 
-    @Override
     public ImmutableBooleanList collectBoolean(BooleanFunction<? super V> booleanFunction)
     {
         BooleanArrayList result = new BooleanArrayList(this.size());
@@ -337,7 +338,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return collectedMap.toImmutable();
     }
 
-    @Override
     public <P, VV> ImmutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
     {
         return this.collect(Functions.bind(function, parameter));
@@ -370,18 +370,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
                 return predicate.accept(each.getOne(), each.getTwo());
             }
         });
-    }
-
-    @Override
-    public <P> V detectWith(Predicate2<? super V, ? super P> predicate, P parameter)
-    {
-        return this.detect(Predicates.bind(predicate, parameter));
-    }
-
-    @Override
-    public <P> V detectWithIfNone(Predicate2<? super V, ? super P> predicate, P parameter, Function0<? extends V> function)
-    {
-        return this.detectIfNone(Predicates.bind(predicate, parameter), function);
     }
 
     public <R> ImmutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)

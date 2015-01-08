@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -240,7 +240,7 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
 
     @Override
     @Test
-    public void putAllFromCollection()
+    public void collectKeysAndValues()
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "2");
         Verify.assertThrows(UnsupportedOperationException.class, () -> map.collectKeysAndValues(null, null, null));
@@ -353,28 +353,28 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
     @Override
     public void updateValue()
     {
-        super.updateValue();
+        this.<Integer, Integer>newMap().updateValue(0, () -> 0, Functions.identity());
     }
 
     @Test(expected = UnsupportedOperationException.class)
     @Override
     public void updateValue_collisions()
     {
-        super.updateValue_collisions();
+        this.<Integer, Integer>newMap().updateValue(0, () -> 0, Functions.identity());
     }
 
     @Test(expected = UnsupportedOperationException.class)
     @Override
     public void updateValueWith()
     {
-        super.updateValueWith();
+        this.<Integer, Integer>newMap().updateValueWith(0, () -> 0, (integer, parameter) -> 0, "test");
     }
 
     @Test(expected = UnsupportedOperationException.class)
     @Override
     public void updateValueWith_collisions()
     {
-        super.updateValueWith_collisions();
+        this.<Integer, Integer>newMap().updateValueWith(0, () -> 0, (integer, parameter) -> 0, "test");
     }
 
     @Override

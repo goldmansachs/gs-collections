@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.set.UnsortedSetMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.ByteSet;
 import com.gs.collections.api.set.primitive.CharSet;
@@ -99,8 +100,16 @@ public interface UnsortedSetIterable<T>
 
     <S> UnsortedSetIterable<S> selectInstancesOf(Class<S> clazz);
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
     <S> UnsortedSetIterable<Pair<T, S>> zip(Iterable<S> that);
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
     UnsortedSetIterable<Pair<T, Integer>> zipWithIndex();
 
     /**

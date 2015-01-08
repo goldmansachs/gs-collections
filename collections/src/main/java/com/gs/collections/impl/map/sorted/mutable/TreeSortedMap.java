@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -191,6 +191,7 @@ public final class TreeSortedMap<K, V>
         return this;
     }
 
+    @Override
     public TreeSortedMap<K, V> with(Pair<K, V>... pairs)
     {
         ArrayIterate.forEach(pairs, new MapCollectProcedure<Pair<K, V>, K, V>(this, Functions.<K>firstOfPair(), Functions.<V>secondOfPair()));
@@ -215,9 +216,7 @@ public final class TreeSortedMap<K, V>
     @Override
     public TreeSortedMap<K, V> clone()
     {
-        TreeSortedMap<K, V> clone = (TreeSortedMap<K, V>) super.clone();
-        clone.treeMap = (TreeMap<K, V>) this.treeMap.clone();
-        return clone;
+        return new TreeSortedMap<K, V>(this);
     }
 
     @Override

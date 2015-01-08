@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,13 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
     @Override
     protected final <T> MutableSortedBag<T> newWithOccurrences(ObjectIntPair<T>... elementsWithOccurrences)
     {
-        return super.newWithOccurrences(elementsWithOccurrences).asSynchronized();
+        MutableSortedBag<T> bag = TreeBag.newBag();
+        for (int i = 0; i < elementsWithOccurrences.length; i++)
+        {
+            ObjectIntPair<T> itemToAdd = elementsWithOccurrences[i];
+            bag.addOccurrences(itemToAdd.getOne(), itemToAdd.getTwo());
+        }
+        return bag.asUnmodifiable();
     }
 
     @Override
@@ -264,6 +270,20 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
     public void removeOccurrences_throws()
     {
         super.removeOccurrences_throws();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void setOccurrences()
+    {
+        super.setOccurrences();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void setOccurrences_throws()
+    {
+        super.setOccurrences_throws();
     }
 
     @Override

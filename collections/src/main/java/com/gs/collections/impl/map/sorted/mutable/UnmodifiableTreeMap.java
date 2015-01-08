@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,8 +63,8 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
-import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.MutableMapIterable;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
@@ -119,6 +119,11 @@ public class UnmodifiableTreeMap<K, V>
         return new UnmodifiableTreeMap<K, V>(SortedMapAdapter.adapt(map));
     }
 
+    public V add(Pair<K, V> keyValuePair)
+    {
+        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
+    }
+
     public V removeKey(K key)
     {
         throw new UnsupportedOperationException("Cannot call removeKey() on " + this.getClass().getSimpleName());
@@ -127,6 +132,45 @@ public class UnmodifiableTreeMap<K, V>
     public MutableSortedMap<K, V> with(Pair<K, V>... pairs)
     {
         throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableSortedMap<K, V> withKeyValue(K key, V value)
+    {
+        throw new UnsupportedOperationException("Cannot call withKeyValue() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableSortedMap<K, V> withAllKeyValues(Iterable<? extends Pair<? extends K, ? extends V>> keyValues)
+    {
+        throw new UnsupportedOperationException("Cannot call withAllKeyValues() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableSortedMap<K, V> withAllKeyValueArguments(Pair<? extends K, ? extends V>... keyValuePairs)
+    {
+        throw new UnsupportedOperationException("Cannot call withAllKeyValueArguments() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableSortedMap<K, V> withoutKey(K key)
+    {
+        throw new UnsupportedOperationException("Cannot call withoutKey() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableSortedMap<K, V> withoutAllKeys(Iterable<? extends K> keys)
+    {
+        throw new UnsupportedOperationException("Cannot call withoutAllKeys() on " + this.getClass().getSimpleName());
+    }
+
+    public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
+    {
+        throw new UnsupportedOperationException("Cannot call updateValue() on " + this.getClass().getSimpleName());
+    }
+
+    public <P> V updateValueWith(
+            K key,
+            Function0<? extends V> factory,
+            Function2<? super V, ? super P, ? extends V> function,
+            P parameter)
+    {
+        throw new UnsupportedOperationException("Cannot call updateValueWith() on " + this.getClass().getSimpleName());
     }
 
     public <E> MutableSortedMap<K, V> collectKeysAndValues(
@@ -138,6 +182,16 @@ public class UnmodifiableTreeMap<K, V>
     }
 
     public V getIfAbsentPut(K key, Function0<? extends V> function)
+    {
+        V result = this.get(key);
+        if (this.isAbsent(result, key))
+        {
+            throw new UnsupportedOperationException("Cannot mutate " + this.getClass().getSimpleName());
+        }
+        return result;
+    }
+
+    public V getIfAbsentPut(K key, V value)
     {
         V result = this.get(key);
         if (this.isAbsent(result, key))
@@ -291,7 +345,7 @@ public class UnmodifiableTreeMap<K, V>
         this.getMutableSortedMap().forEachKeyValue(procedure);
     }
 
-    public MapIterable<V, K> flipUniqueValues()
+    public MutableMapIterable<V, K> flipUniqueValues()
     {
         return this.getMutableSortedMap().flipUniqueValues();
     }

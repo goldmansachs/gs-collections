@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,15 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.MutableBooleanBag;
+import com.gs.collections.api.bag.primitive.MutableByteBag;
+import com.gs.collections.api.bag.primitive.MutableCharBag;
+import com.gs.collections.api.bag.primitive.MutableDoubleBag;
+import com.gs.collections.api.bag.primitive.MutableFloatBag;
+import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.bag.primitive.MutableLongBag;
+import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.bimap.ImmutableBiMap;
 import com.gs.collections.api.bimap.MutableBiMap;
 import com.gs.collections.api.block.function.Function;
@@ -44,27 +53,21 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
-import com.gs.collections.api.collection.primitive.MutableByteCollection;
-import com.gs.collections.api.collection.primitive.MutableCharCollection;
-import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
-import com.gs.collections.api.collection.primitive.MutableFloatCollection;
-import com.gs.collections.api.collection.primitive.MutableIntCollection;
-import com.gs.collections.api.collection.primitive.MutableLongCollection;
-import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
-import com.gs.collections.api.partition.PartitionMutableCollection;
+import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bimap.AbstractBiMap;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
-import com.gs.collections.impl.block.procedure.MapCollectProcedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.factory.BiMaps;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
+import com.gs.collections.impl.partition.set.PartitionUnifiedSet;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.MapIterate;
@@ -170,7 +173,7 @@ abstract class AbstractMutableBiMap<K, V> extends AbstractBiMap<K, V> implements
         return this;
     }
 
-    public MutableMap<K, V> withoutAllKeys(Iterable<? extends K> keys)
+    public MutableBiMap<K, V> withoutAllKeys(Iterable<? extends K> keys)
     {
         for (K key : keys)
         {
@@ -401,99 +404,6 @@ abstract class AbstractMutableBiMap<K, V> extends AbstractBiMap<K, V> implements
         return new HashBiMap<K, V>(this);
     }
 
-    public <E> MutableMap<K, V> collectKeysAndValues(Iterable<E> iterable, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> valueFunction)
-    {
-        Iterate.forEach(iterable, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
-        return this;
-    }
-
-    public <K2, V2> HashBiMap<K2, V2> collect(final Function2<? super K, ? super V, Pair<K2, V2>> function)
-    {
-        final HashBiMap<K2, V2> result = HashBiMap.newMap();
-        this.delegate.forEachKeyValue(new Procedure2<K, V>()
-        {
-            public void value(K key, V value)
-            {
-                Pair<K2, V2> pair = function.value(key, value);
-                result.put(pair.getOne(), pair.getTwo());
-            }
-        });
-        return result;
-    }
-
-    public <VV> MutableCollection<VV> collect(Function<? super V, ? extends VV> function)
-    {
-        return this.delegate.collect(function);
-    }
-
-    public <R> HashBiMap<K, R> collectValues(final Function2<? super K, ? super V, ? extends R> function)
-    {
-        final HashBiMap<K, R> result = HashBiMap.newMap();
-        this.delegate.forEachKeyValue(new Procedure2<K, V>()
-        {
-            public void value(K key, V value)
-            {
-                result.put(key, function.value(key, value));
-            }
-        });
-        return result;
-    }
-
-    public MutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction)
-    {
-        return this.delegate.collectBoolean(booleanFunction);
-    }
-
-    public MutableByteCollection collectByte(ByteFunction<? super V> byteFunction)
-    {
-        return this.delegate.collectByte(byteFunction);
-    }
-
-    public MutableCharCollection collectChar(CharFunction<? super V> charFunction)
-    {
-        return this.delegate.collectChar(charFunction);
-    }
-
-    public MutableDoubleCollection collectDouble(DoubleFunction<? super V> doubleFunction)
-    {
-        return this.delegate.collectDouble(doubleFunction);
-    }
-
-    public MutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction)
-    {
-        return this.delegate.collectFloat(floatFunction);
-    }
-
-    public MutableIntCollection collectInt(IntFunction<? super V> intFunction)
-    {
-        return this.delegate.collectInt(intFunction);
-    }
-
-    public MutableLongCollection collectLong(LongFunction<? super V> longFunction)
-    {
-        return this.delegate.collectLong(longFunction);
-    }
-
-    public MutableShortCollection collectShort(ShortFunction<? super V> shortFunction)
-    {
-        return this.delegate.collectShort(shortFunction);
-    }
-
-    public <P, VV> MutableCollection<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
-    {
-        return this.delegate.collectWith(function, parameter);
-    }
-
-    public <VV> MutableCollection<VV> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends VV> function)
-    {
-        return this.delegate.collectIf(predicate, function);
-    }
-
-    public <VV> MutableCollection<VV> flatCollect(Function<? super V, ? extends Iterable<VV>> function)
-    {
-        return this.delegate.flatCollect(function);
-    }
-
     public MutableBiMap<K, V> tap(Procedure<? super V> procedure)
     {
         this.forEach(procedure);
@@ -516,16 +426,6 @@ abstract class AbstractMutableBiMap<K, V> extends AbstractBiMap<K, V> implements
         return result;
     }
 
-    public MutableCollection<V> select(Predicate<? super V> predicate)
-    {
-        return this.delegate.select(predicate);
-    }
-
-    public <P> MutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
-    {
-        return this.delegate.selectWith(predicate, parameter);
-    }
-
     public HashBiMap<K, V> reject(final Predicate2<? super K, ? super V> predicate)
     {
         final HashBiMap<K, V> result = HashBiMap.newMap();
@@ -542,44 +442,149 @@ abstract class AbstractMutableBiMap<K, V> extends AbstractBiMap<K, V> implements
         return result;
     }
 
-    public MutableCollection<V> reject(Predicate<? super V> predicate)
+    public <K2, V2> HashBiMap<K2, V2> collect(final Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
-        return this.delegate.reject(predicate);
+        final HashBiMap<K2, V2> result = HashBiMap.newMap();
+        this.delegate.forEachKeyValue(new Procedure2<K, V>()
+        {
+            public void value(K key, V value)
+            {
+                Pair<K2, V2> pair = function.value(key, value);
+                result.put(pair.getOne(), pair.getTwo());
+            }
+        });
+        return result;
     }
 
-    public <P> MutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <R> HashBiMap<K, R> collectValues(final Function2<? super K, ? super V, ? extends R> function)
     {
-        return this.delegate.rejectWith(predicate, parameter);
+        final HashBiMap<K, R> result = HashBiMap.newMap();
+        this.delegate.forEachKeyValue(new Procedure2<K, V>()
+        {
+            public void value(K key, V value)
+            {
+                result.put(key, function.value(key, value));
+            }
+        });
+        return result;
     }
 
-    public PartitionMutableCollection<V> partition(Predicate<? super V> predicate)
+    public <VV> MutableBag<VV> collect(Function<? super V, ? extends VV> function)
     {
-        return this.delegate.partition(predicate);
+        return this.delegate.collect(function);
     }
 
-    public <P> PartitionMutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P, VV> MutableBag<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
     {
-        return this.delegate.partitionWith(predicate, parameter);
+        return this.delegate.collectWith(function, parameter);
     }
 
-    public <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that)
+    public <VV> MutableBag<VV> flatCollect(Function<? super V, ? extends Iterable<VV>> function)
     {
-        return this.delegate.zip(that);
+        return this.delegate.flatCollect(function);
     }
 
-    public MutableCollection<Pair<V, Integer>> zipWithIndex()
+    public MutableBooleanBag collectBoolean(BooleanFunction<? super V> booleanFunction)
     {
-        return this.delegate.zipWithIndex();
+        return this.delegate.collectBoolean(booleanFunction);
     }
 
-    public <VV> MutableMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function)
+    public MutableByteBag collectByte(ByteFunction<? super V> byteFunction)
     {
-        return this.delegate.groupBy(function);
+        return this.delegate.collectByte(byteFunction);
     }
 
-    public <VV> MutableMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function)
+    public MutableCharBag collectChar(CharFunction<? super V> charFunction)
     {
-        return this.delegate.groupByEach(function);
+        return this.delegate.collectChar(charFunction);
+    }
+
+    public MutableDoubleBag collectDouble(DoubleFunction<? super V> doubleFunction)
+    {
+        return this.delegate.collectDouble(doubleFunction);
+    }
+
+    public MutableFloatBag collectFloat(FloatFunction<? super V> floatFunction)
+    {
+        return this.delegate.collectFloat(floatFunction);
+    }
+
+    public MutableIntBag collectInt(IntFunction<? super V> intFunction)
+    {
+        return this.delegate.collectInt(intFunction);
+    }
+
+    public MutableLongBag collectLong(LongFunction<? super V> longFunction)
+    {
+        return this.delegate.collectLong(longFunction);
+    }
+
+    public MutableShortBag collectShort(ShortFunction<? super V> shortFunction)
+    {
+        return this.delegate.collectShort(shortFunction);
+    }
+
+    public <VV> MutableBag<VV> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends VV> function)
+    {
+        return this.delegate.collectIf(predicate, function);
+    }
+
+    public MutableSet<Pair<V, Integer>> zipWithIndex()
+    {
+        return this.delegate.zipWithIndex(new UnifiedSet<Pair<V, Integer>>());
+    }
+
+    public <VV> MutableSetMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function)
+    {
+        return this.delegate.groupBy(function, new UnifiedSetMultimap<VV, V>());
+    }
+
+    public <VV> MutableSetMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function)
+    {
+        return this.delegate.groupByEach(function, new UnifiedSetMultimap<VV, V>());
+    }
+
+    public <S> MutableSet<Pair<V, S>> zip(Iterable<S> that)
+    {
+        return this.delegate.zip(that, new UnifiedSet<Pair<V, S>>());
+    }
+
+    public MutableSet<V> select(Predicate<? super V> predicate)
+    {
+        return this.delegate.select(predicate, new UnifiedSet<V>());
+    }
+
+    public <P> MutableSet<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.delegate.selectWith(predicate, parameter, new UnifiedSet<V>());
+    }
+
+    public MutableSet<V> reject(Predicate<? super V> predicate)
+    {
+        return this.delegate.reject(predicate, new UnifiedSet<V>());
+    }
+
+    public <P> MutableSet<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.delegate.rejectWith(predicate, parameter, new UnifiedSet<V>());
+    }
+
+    public PartitionMutableSet<V> partition(Predicate<? super V> predicate)
+    {
+        PartitionMutableSet<V> result = new PartitionUnifiedSet<V>();
+        this.inverse.forEachKey(new PartitionProcedure<V>(predicate, result));
+        return result;
+    }
+
+    public <P> PartitionMutableSet<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.partition(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public void forEachValue(Procedure<? super V> procedure)
+    {
+        this.inverse.delegate.forEachKey(procedure);
     }
 
     public <VV> MutableBiMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function)
@@ -597,9 +602,11 @@ abstract class AbstractMutableBiMap<K, V> extends AbstractBiMap<K, V> implements
         return this.delegate.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
     }
 
-    public <S> MutableCollection<S> selectInstancesOf(Class<S> clazz)
+    public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)
     {
-        return this.delegate.selectInstancesOf(clazz);
+        MutableSet<S> result = new UnifiedSet<S>();
+        this.inverse.forEachKey(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result;
     }
 
     public void writeExternal(ObjectOutput out) throws IOException

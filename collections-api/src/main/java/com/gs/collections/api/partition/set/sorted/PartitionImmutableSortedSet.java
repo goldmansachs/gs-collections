@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package com.gs.collections.api.partition.set.sorted;
 
-import com.gs.collections.api.partition.PartitionImmutableCollection;
+import com.gs.collections.api.partition.set.PartitionImmutableSetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 
 /**
@@ -24,7 +24,7 @@ import com.gs.collections.api.set.sorted.ImmutableSortedSet;
  * on a Predicate.  The results that answer true for the Predicate will be returned from the getSelected() method and the
  * results that answer false for the predicate will be returned from the getRejected() method.
  */
-public interface PartitionImmutableSortedSet<T> extends PartitionImmutableCollection<T>, PartitionSortedSet<T>
+public interface PartitionImmutableSortedSet<T> extends PartitionSortedSet<T>, PartitionImmutableSetIterable<T>
 {
     ImmutableSortedSet<T> getSelected();
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,15 @@
 package com.gs.collections.impl.bimap.immutable;
 
 import com.gs.collections.api.bimap.ImmutableBiMap;
-import com.gs.collections.impl.map.immutable.ImmutableMapTestCase;
+import com.gs.collections.impl.map.immutable.ImmutableMapIterableTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
-public abstract class AbstractImmutableBiMapTestCase extends ImmutableMapTestCase
+public abstract class AbstractImmutableBiMapTestCase extends ImmutableMapIterableTestCase
 {
+    @Override
+    protected abstract ImmutableBiMap<Integer, String> classUnderTest();
+
     protected abstract ImmutableBiMap<Integer, String> newEmpty();
 
     protected abstract ImmutableBiMap<Integer, String> newWithMap();
@@ -69,15 +72,15 @@ public abstract class AbstractImmutableBiMapTestCase extends ImmutableMapTestCas
     }
 
     @Test
-    public void toImmutable()
-    {
-        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().toImmutable());
-    }
-
-    @Test
     public void containsKey()
     {
         Assert.assertTrue(this.classUnderTest().containsKey(1));
         Assert.assertFalse(this.classUnderTest().containsKey(5));
+    }
+
+    @Test
+    public void toImmutable()
+    {
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().toImmutable());
     }
 }

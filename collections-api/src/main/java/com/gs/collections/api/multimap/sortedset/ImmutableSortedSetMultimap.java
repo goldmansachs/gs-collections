@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package com.gs.collections.api.multimap.sortedset;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
+import com.gs.collections.api.multimap.set.ImmutableSetIterableMultimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
@@ -30,7 +30,7 @@ import com.gs.collections.api.tuple.Pair;
  * @since 1.0
  */
 public interface ImmutableSortedSetMultimap<K, V>
-        extends SortedSetMultimap<K, V>, ImmutableMultimap<K, V>
+        extends SortedSetMultimap<K, V>, ImmutableSetIterableMultimap<K, V>
 {
     ImmutableSortedSet<V> get(K key);
 

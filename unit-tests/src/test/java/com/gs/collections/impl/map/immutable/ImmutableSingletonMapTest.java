@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -290,18 +290,6 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
         Assert.assertEquals(Tuples.pair(1, "1"), actual);
 
         Assert.assertNull(map.detect((ignored1, ignored2) -> false));
-    }
-
-    @Override
-    protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
-    {
-        return new ImmutableSingletonMap<>(key1, value1);
-    }
-
-    @Override
-    protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
-    {
-        return new ImmutableSingletonMap<>(key1, value1);
     }
 
     @Override

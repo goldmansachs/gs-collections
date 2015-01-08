@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.bag.sorted;
 
+import com.gs.collections.api.bag.MutableBagIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -32,7 +33,6 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -43,23 +43,21 @@ import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap;
 import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 
 /**
  * @since 4.2
  */
 public interface MutableSortedBag<T>
-        extends SortedBag<T>, MutableCollection<T>, Cloneable
+        extends SortedBag<T>, MutableBagIterable<T>, Cloneable
 {
-    void addOccurrences(T item, int occurrences);
-
-    boolean removeOccurrences(Object item, int occurrences);
-
     MutableSortedBag<T> selectByOccurrences(IntPredicate predicate);
+
+    MutableSortedMap<T, Integer> toMapOfItemToCount();
 
     MutableSortedBag<T> with(T element);
 
@@ -125,16 +123,6 @@ public interface MutableSortedBag<T>
     <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
     MutableSortedSet<T> distinct();
-
-    /**
-     * @since 6.0
-     */
-    MutableList<ObjectIntPair<T>> topOccurrences(int count);
-
-    /**
-     * @since 6.0
-     */
-    MutableList<ObjectIntPair<T>> bottomOccurrences(int count);
 
     MutableSortedBag<T> takeWhile(Predicate<? super T> predicate);
 

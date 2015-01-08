@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,24 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.gs.collections.api.bag.ImmutableBag;
+import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.bag.primitive.ImmutableByteBag;
+import com.gs.collections.api.bag.primitive.ImmutableCharBag;
+import com.gs.collections.api.bag.primitive.ImmutableDoubleBag;
+import com.gs.collections.api.bag.primitive.ImmutableFloatBag;
+import com.gs.collections.api.bag.primitive.ImmutableIntBag;
+import com.gs.collections.api.bag.primitive.ImmutableLongBag;
+import com.gs.collections.api.bag.primitive.ImmutableShortBag;
+import com.gs.collections.api.bag.primitive.MutableBooleanBag;
+import com.gs.collections.api.bag.primitive.MutableByteBag;
+import com.gs.collections.api.bag.primitive.MutableCharBag;
+import com.gs.collections.api.bag.primitive.MutableDoubleBag;
+import com.gs.collections.api.bag.primitive.MutableFloatBag;
+import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.bag.primitive.MutableLongBag;
+import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -35,23 +53,25 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.collection.ImmutableCollection;
-import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
-import com.gs.collections.api.collection.primitive.ImmutableByteCollection;
-import com.gs.collections.api.collection.primitive.ImmutableCharCollection;
-import com.gs.collections.api.collection.primitive.ImmutableDoubleCollection;
-import com.gs.collections.api.collection.primitive.ImmutableFloatCollection;
-import com.gs.collections.api.collection.primitive.ImmutableIntCollection;
-import com.gs.collections.api.collection.primitive.ImmutableLongCollection;
-import com.gs.collections.api.collection.primitive.ImmutableShortCollection;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.api.multimap.ImmutableMultimap;
+import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
-import com.gs.collections.api.partition.PartitionImmutableCollection;
-import com.gs.collections.api.partition.PartitionMutableCollection;
+import com.gs.collections.api.ordered.OrderedIterable;
+import com.gs.collections.api.partition.bag.PartitionImmutableBag;
+import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
@@ -67,19 +87,10 @@ import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
-import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
-import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
-import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
-import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
-import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
-import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.AbstractMapIterable;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.multimap.list.FastListMultimap;
-import com.gs.collections.impl.partition.list.PartitionFastList;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
+import com.gs.collections.impl.partition.bag.PartitionHashBag;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.ImmutableEntry;
 import com.gs.collections.impl.utility.MapIterate;
@@ -226,83 +237,90 @@ public abstract class AbstractImmutableMap<K, V>
         return MapIterate.detect(this, predicate);
     }
 
-    @Override
-    public <R> ImmutableCollection<R> collect(Function<? super V, ? extends R> function)
+    public <R> ImmutableBag<R> collect(Function<? super V, ? extends R> function)
     {
-        return this.collect(function, FastList.<R>newList(this.size())).toImmutable();
+        return this.collect(function, new HashBag<R>()).toImmutable();
     }
 
-    @Override
-    public <P, VV> ImmutableCollection<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    public <P, VV> ImmutableBag<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
     {
         return this.collect(Functions.bind(function, parameter));
     }
 
-    @Override
-    public ImmutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction)
+    public ImmutableBooleanBag collectBoolean(BooleanFunction<? super V> booleanFunction)
     {
-        BooleanArrayList result = new BooleanArrayList(this.size());
+        MutableBooleanBag result = new BooleanHashBag();
         this.forEach(new CollectBooleanProcedure<V>(booleanFunction, result));
         return result.toImmutable();
     }
 
-    public ImmutableByteCollection collectByte(ByteFunction<? super V> byteFunction)
+    public ImmutableByteBag collectByte(ByteFunction<? super V> byteFunction)
     {
-        ByteArrayList result = new ByteArrayList(this.size());
+        MutableByteBag result = new ByteHashBag();
         this.forEach(new CollectByteProcedure<V>(byteFunction, result));
         return result.toImmutable();
     }
 
-    public ImmutableCharCollection collectChar(CharFunction<? super V> charFunction)
+    public ImmutableCharBag collectChar(CharFunction<? super V> charFunction)
     {
-        CharArrayList result = new CharArrayList(this.size());
+        MutableCharBag result = new CharHashBag();
         this.forEach(new CollectCharProcedure<V>(charFunction, result));
         return result.toImmutable();
     }
 
-    public ImmutableDoubleCollection collectDouble(DoubleFunction<? super V> doubleFunction)
+    public ImmutableDoubleBag collectDouble(DoubleFunction<? super V> doubleFunction)
     {
-        DoubleArrayList result = new DoubleArrayList(this.size());
+        MutableDoubleBag result = new DoubleHashBag();
         this.forEach(new CollectDoubleProcedure<V>(doubleFunction, result));
         return result.toImmutable();
     }
 
-    public ImmutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction)
+    public ImmutableFloatBag collectFloat(FloatFunction<? super V> floatFunction)
     {
-        FloatArrayList result = new FloatArrayList(this.size());
+        MutableFloatBag result = new FloatHashBag();
         this.forEach(new CollectFloatProcedure<V>(floatFunction, result));
         return result.toImmutable();
     }
 
-    public ImmutableIntCollection collectInt(IntFunction<? super V> intFunction)
+    public ImmutableIntBag collectInt(IntFunction<? super V> intFunction)
     {
-        IntArrayList result = new IntArrayList(this.size());
+        MutableIntBag result = new IntHashBag();
         this.forEach(new CollectIntProcedure<V>(intFunction, result));
         return result.toImmutable();
     }
 
-    public ImmutableLongCollection collectLong(LongFunction<? super V> longFunction)
+    public ImmutableLongBag collectLong(LongFunction<? super V> longFunction)
     {
-        LongArrayList result = new LongArrayList(this.size());
+        MutableLongBag result = new LongHashBag();
         this.forEach(new CollectLongProcedure<V>(longFunction, result));
         return result.toImmutable();
     }
 
-    public ImmutableShortCollection collectShort(ShortFunction<? super V> shortFunction)
+    public ImmutableShortBag collectShort(ShortFunction<? super V> shortFunction)
     {
-        ShortArrayList result = new ShortArrayList(this.size());
+        MutableShortBag result = new ShortHashBag();
         this.forEach(new CollectShortProcedure<V>(shortFunction, result));
         return result.toImmutable();
     }
 
-    public <R> ImmutableCollection<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
+    public <R> ImmutableBag<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
     {
-        return this.collectIf(predicate, function, FastList.<R>newList(this.size())).toImmutable();
+        return this.collectIf(predicate, function, new HashBag<R>()).toImmutable();
     }
 
-    public <R> ImmutableCollection<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
+    public <R> ImmutableBag<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
     {
-        return this.flatCollect(function, FastList.<R>newList(this.size())).toImmutable();
+        return this.flatCollect(function, new HashBag<R>()).toImmutable();
+    }
+
+    public ImmutableBag<V> select(Predicate<? super V> predicate)
+    {
+        return this.select(predicate, new HashBag<V>()).toImmutable();
+    }
+
+    public <P> ImmutableBag<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.select(Predicates.bind(predicate, parameter));
     }
 
     public ImmutableMap<K, V> tap(Procedure<? super V> procedure)
@@ -311,67 +329,63 @@ public abstract class AbstractImmutableMap<K, V>
         return this;
     }
 
-    public ImmutableCollection<V> select(Predicate<? super V> predicate)
+    public ImmutableBag<V> reject(Predicate<? super V> predicate)
     {
-        return this.select(predicate, FastList.<V>newList(this.size())).toImmutable();
+        return this.reject(predicate, new HashBag<V>()).toImmutable();
     }
 
-    public ImmutableCollection<V> reject(Predicate<? super V> predicate)
-    {
-        return this.reject(predicate, FastList.<V>newList(this.size())).toImmutable();
-    }
-
-    @Override
-    public <P> ImmutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
-    {
-        return this.select(Predicates.bind(predicate, parameter));
-    }
-
-    @Override
-    public <P> ImmutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> ImmutableBag<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         return this.reject(Predicates.bind(predicate, parameter));
     }
 
-    public PartitionImmutableCollection<V> partition(Predicate<? super V> predicate)
+    public PartitionImmutableBag<V> partition(Predicate<? super V> predicate)
     {
-        PartitionMutableCollection<V> partitionMutableCollection = new PartitionFastList<V>();
-        this.forEach(new PartitionProcedure<V>(predicate, partitionMutableCollection));
-        return partitionMutableCollection.toImmutable();
+        PartitionMutableBag<V> partitionMutableBag = new PartitionHashBag<V>();
+        this.forEach(new PartitionProcedure<V>(predicate, partitionMutableBag));
+        return partitionMutableBag.toImmutable();
     }
 
-    public <P> PartitionImmutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    public <P> PartitionImmutableBag<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
-        PartitionMutableCollection<V> partitionMutableCollection = new PartitionFastList<V>();
-        this.forEach(new PartitionPredicate2Procedure<V, P>(predicate, parameter, partitionMutableCollection));
-        return partitionMutableCollection.toImmutable();
+        PartitionMutableBag<V> partitionMutableBag = new PartitionHashBag<V>();
+        this.forEach(new PartitionPredicate2Procedure<V, P>(predicate, parameter, partitionMutableBag));
+        return partitionMutableBag.toImmutable();
     }
 
-    public <S> ImmutableCollection<S> selectInstancesOf(Class<S> clazz)
+    public <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz)
     {
-        FastList<S> result = FastList.newList(this.size());
+        MutableBag<S> result = HashBag.newBag();
         this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
         return result.toImmutable();
     }
 
-    public <S> ImmutableCollection<Pair<V, S>> zip(Iterable<S> that)
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
+    public <S> ImmutableBag<Pair<V, S>> zip(Iterable<S> that)
     {
-        return this.zip(that, FastList.<Pair<V, S>>newList(this.size())).toImmutable();
+        return this.zip(that, HashBag.<Pair<V, S>>newBag(this.size())).toImmutable();
     }
 
-    public ImmutableCollection<Pair<V, Integer>> zipWithIndex()
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
+    public ImmutableSet<Pair<V, Integer>> zipWithIndex()
     {
-        return this.zipWithIndex(FastList.<Pair<V, Integer>>newList(this.size())).toImmutable();
+        return this.zipWithIndex(UnifiedSet.<Pair<V, Integer>>newSet(this.size())).toImmutable();
     }
 
-    public <VV> ImmutableMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function)
+    public <VV> ImmutableBagMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function)
     {
-        return this.groupBy(function, FastListMultimap.<VV, V>newMultimap()).toImmutable();
+        return this.groupBy(function, HashBagMultimap.<VV, V>newMultimap()).toImmutable();
     }
 
-    public <VV> ImmutableMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function)
+    public <VV> ImmutableBagMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function)
     {
-        return this.groupByEach(function, FastListMultimap.<VV, V>newMultimap()).toImmutable();
+        return this.groupByEach(function, HashBagMultimap.<VV, V>newMultimap()).toImmutable();
     }
 
     public <V1> ImmutableMap<V1, V> groupByUniqueKey(Function<? super V, ? extends V1> function)

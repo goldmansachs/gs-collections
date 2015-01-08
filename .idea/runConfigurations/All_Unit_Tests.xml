@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="All Unit Tests" type="JUnit" factoryName="JUnit">
-    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" track_test_folders="true" runner="idea">
       <pattern>
-        <option name="PATTERN" value="com.gs.collections.impl.*" />
+        <option name="PATTERN" value="com.gs.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.mutable.MutableBagTestCase;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -49,7 +50,6 @@ import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
-import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
@@ -81,14 +81,14 @@ import org.junit.Test;
  *
  * @since 4.2
  */
-public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCase
+public abstract class AbstractSortedBagTestCase extends MutableBagTestCase
 {
     @Override
     protected abstract <T> MutableSortedBag<T> newWith(T... littleElements);
 
     protected <T> MutableSortedBag<T> newWithOccurrences(ObjectIntPair<T>... elementsWithOccurrences)
     {
-        TreeBag<T> bag = TreeBag.newBag();
+        MutableSortedBag<T> bag = this.newWith();
         for (int i = 0; i < elementsWithOccurrences.length; i++)
         {
             ObjectIntPair<T> itemToAdd = elementsWithOccurrences[i];
@@ -289,7 +289,8 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     @Test
     public void equalsAndHashCode()
     {
-        super.equalsAndHashCode();
+        // Sorted containers don't support null
+
         MutableSortedBag<Integer> sortedBag = this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3, 4);
         Verify.assertPostSerializedEqualsAndHashCode(sortedBag);
 
@@ -606,9 +607,12 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.<Integer>reverseNaturalOrder(), 5, 3, 1, 1), integers);
     }
 
+    @Override
     @Test
     public void toStringOfItemToCount()
     {
+        super.toStringOfItemToCount();
+
         Assert.assertEquals("{}", this.newWith().toStringOfItemToCount());
         Assert.assertEquals("{}", this.newWith(Comparators.reverseNaturalOrder()).toStringOfItemToCount());
 
@@ -616,9 +620,12 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Assert.assertEquals("{2=2, 1=1}", this.newWith(Comparators.reverseNaturalOrder(), 1, 2, 2).toStringOfItemToCount());
     }
 
+    @Override
     @Test
     public void add()
     {
+        super.add();
+
         MutableSortedBag<Integer> bag = this.newWith(Collections.<Integer>reverseOrder());
         Assert.assertTrue(bag.add(1));
         Verify.assertSortedBagsEqual(this.newWith(1), bag);
@@ -789,9 +796,12 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertThrows(IllegalArgumentException.class, () -> integers.forEachWithIndex(7, 5, new AddToList(result)));
     }
 
+    @Override
     @Test
     public void forEachWithOccurrences()
     {
+        super.forEachWithOccurrences();
+
         MutableSortedBag<Integer> bag = this.newWith(Collections.reverseOrder(), 3, 3, 3, 2, 2, 1);
         MutableList<Integer> actualItems = FastList.newList();
         MutableList<Integer> actualIndexes = FastList.newList();
@@ -858,17 +868,23 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Assert.assertEquals(-1, integers.indexOf(0));
     }
 
+    @Override
     @Test
     public void occurrencesOf()
     {
+        super.occurrencesOf();
+
         MutableSortedBag<Integer> bag = this.newWith(Collections.reverseOrder(), 1, 1, 2);
         Assert.assertEquals(2, bag.occurrencesOf(1));
         Assert.assertEquals(1, bag.occurrencesOf(2));
     }
 
+    @Override
     @Test
     public void addOccurrences()
     {
+        super.addOccurrences();
+
         MutableSortedBag<Integer> bag = this.newWith();
         bag.addOccurrences(0, 3);
         bag.addOccurrences(2, 0);
@@ -887,15 +903,12 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Collections.reverseOrder(), 3, 3, 3, 3, 2, 2, 2, 2, 2, 2), revBag);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void addOccurrences_throws()
-    {
-        this.newWith().addOccurrences(new Object(), -1);
-    }
-
+    @Override
     @Test
     public void removeOccurrences()
     {
+        super.removeOccurrences();
+
         MutableSortedBag<Integer> bag = this.newWith(Comparators.reverseNaturalOrder(), 2, 2, 1);
         MutableSortedBag<Integer> expected = TreeBag.newBag(bag);
 
@@ -909,12 +922,6 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 
         Assert.assertTrue(bag.removeOccurrences(1, 100));
         Verify.assertSortedBagsEqual(TreeBag.<String>newBag(), bag);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void removeOccurrences_throws()
-    {
-        this.newWith().removeOccurrences(new Object(), -1);
     }
 
     @Override
@@ -1068,25 +1075,35 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertSortedBagsEqual(this.newWith(), this.newWith().asUnmodifiable());
     }
 
+    @Override
     @Test
     public void serialization()
     {
+        super.serialization();
+
         MutableSortedBag<String> bag = this.newWith(Comparators.reverseNaturalOrder(), "One", "Two", "Two", "Three", "Three", "Three");
         Verify.assertPostSerializedEqualsAndHashCode(bag);
+        Assert.assertNotNull(bag.comparator());
     }
 
+    @Override
     @Test
     public void selectByOccurrences()
     {
+        super.selectByOccurrences();
+
         MutableSortedBag<Integer> integers = this.newWith(Collections.reverseOrder(), 4, 3, 3, 2, 2, 2, 1, 1, 1, 1);
         Verify.assertSortedBagsEqual(
                 TreeBag.newBagWith(Collections.reverseOrder(), 3, 3, 1, 1, 1, 1),
                 integers.selectByOccurrences(IntPredicates.isEven()));
     }
 
+    @Override
     @Test
     public void toMapOfItemToCount()
     {
+        super.toMapOfItemToCount();
+
         MutableSortedBag<Integer> bag = this.newWith(Collections.reverseOrder(), 1, 2, 2, 3, 3, 3);
         Assert.assertEquals(TreeSortedMap.newMapWith(Collections.reverseOrder(), 1, 1, 2, 2, 3, 3), bag.toMapOfItemToCount());
     }
@@ -1697,9 +1714,12 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 2, 2, 1), bag);
     }
 
+    @Override
     @Test
     public void topOccurrences()
     {
+        // Sorted containers don't support null
+
         MutableSortedBag<String> strings = this.newWithOccurrences(
                 PrimitiveTuples.pair("one", 1),
                 PrimitiveTuples.pair("two", 2),
@@ -1729,9 +1749,12 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         Verify.assertThrows(IllegalArgumentException.class, () -> this.newWith().topOccurrences(-1));
     }
 
+    @Override
     @Test
     public void bottomOccurrences()
     {
+        // Sorted containers don't support null
+
         MutableSortedBag<String> strings = this.newWithOccurrences(
                 PrimitiveTuples.pair("one", 1),
                 PrimitiveTuples.pair("two", 2),

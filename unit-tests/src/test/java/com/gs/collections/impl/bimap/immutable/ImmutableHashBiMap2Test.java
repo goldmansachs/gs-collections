@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.gs.collections.impl.bimap.immutable;
 import com.gs.collections.api.bimap.ImmutableBiMap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.impl.IntegerWithCast;
-import com.gs.collections.impl.factory.Maps;
+import com.gs.collections.impl.factory.BiMaps;
 import com.gs.collections.impl.map.MapIterableTestCase;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.tuple.Tuples;
@@ -29,36 +29,42 @@ import org.junit.Test;
 public class ImmutableHashBiMap2Test extends MapIterableTestCase
 {
     @Override
-    protected <K, V> ImmutableHashBiMap<K, V> newMap()
+    protected <K, V> ImmutableBiMap<K, V> newMap()
     {
-        return new ImmutableHashBiMap<>();
+        return BiMaps.immutable.empty();
     }
 
     @Override
-    protected <K, V> ImmutableHashBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
+    protected <K, V> ImmutableBiMap<K, V> newMapWithKeyValue(K key1, V value1)
     {
-        return new ImmutableHashBiMap<>(Maps.immutable.of(key1, value1, key2, value2));
+        return BiMaps.immutable.with(key1, value1);
     }
 
     @Override
-    protected <K, V> ImmutableHashBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
+    protected <K, V> ImmutableBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableHashBiMap<>(Maps.immutable.of(key1, value1, key2, value2, key3, value3));
+        return BiMaps.immutable.with(key1, value1, key2, value2);
     }
 
     @Override
-    protected <K, V> ImmutableHashBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
+    protected <K, V> ImmutableBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableHashBiMap<>(Maps.immutable.of(key1, value1, key2, value2, key3, value3, key4, value4));
+        return BiMaps.immutable.with(key1, value1, key2, value2, key3, value3);
+    }
+
+    @Override
+    protected <K, V> ImmutableBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
+    {
+        return BiMaps.immutable.with(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
     @Override
     @Test
     public void flipUniqueValues()
     {
-        ImmutableHashBiMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        ImmutableBiMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         ImmutableBiMap<String, Integer> result = map.flipUniqueValues();
-        ImmutableHashBiMap<String, Integer> expectedMap = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3);
+        ImmutableBiMap<String, Integer> expectedMap = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3);
         Assert.assertEquals(expectedMap, result);
     }
 
@@ -66,7 +72,7 @@ public class ImmutableHashBiMap2Test extends MapIterableTestCase
     @Test
     public void flip()
     {
-        ImmutableHashBiMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        ImmutableBiMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         ImmutableSetMultimap<String, Integer> result = map.flip();
         UnifiedSetMultimap<String, Integer> expected = UnifiedSetMultimap.<String, Integer>newMultimap(Tuples.pair("1", 1), Tuples.pair("2", 2), Tuples.pair("3", 3));
         Assert.assertEquals(expected, result);
@@ -76,7 +82,7 @@ public class ImmutableHashBiMap2Test extends MapIterableTestCase
     @Test
     public void nullCollisionWithCastInEquals()
     {
-        ImmutableHashBiMap<IntegerWithCast, String> map = this.newMapWithKeysValues(
+        ImmutableBiMap<IntegerWithCast, String> map = this.newMapWithKeysValues(
                 new IntegerWithCast(0), "Test 2",
                 null, "Test 1");
         Assert.assertEquals(

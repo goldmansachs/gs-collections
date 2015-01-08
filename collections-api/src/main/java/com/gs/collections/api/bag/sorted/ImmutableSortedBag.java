@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.bag.sorted;
 
+import com.gs.collections.api.bag.ImmutableBagIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -32,7 +33,6 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.api.list.primitive.ImmutableByteList;
@@ -43,6 +43,7 @@ import com.gs.collections.api.list.primitive.ImmutableIntList;
 import com.gs.collections.api.list.primitive.ImmutableLongList;
 import com.gs.collections.api.list.primitive.ImmutableShortList;
 import com.gs.collections.api.map.ImmutableMap;
+import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.sortedbag.ImmutableSortedBagMultimap;
 import com.gs.collections.api.partition.bag.sorted.PartitionImmutableSortedBag;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
@@ -56,7 +57,7 @@ import net.jcip.annotations.Immutable;
  */
 @Immutable
 public interface ImmutableSortedBag<T>
-        extends ImmutableCollection<T>, SortedBag<T>
+        extends ImmutableBagIterable<T>, SortedBag<T>
 {
     ImmutableSortedBag<T> newWith(T element);
 
@@ -137,4 +138,6 @@ public interface ImmutableSortedBag<T>
     <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that);
 
     ImmutableSortedSet<Pair<T, Integer>> zipWithIndex();
+
+    MutableSortedMap<T, Integer> toMapOfItemToCount();
 }

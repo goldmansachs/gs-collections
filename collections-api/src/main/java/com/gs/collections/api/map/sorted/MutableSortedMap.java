@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.MutableMapIterable;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
@@ -55,7 +56,7 @@ import com.gs.collections.api.tuple.Pair;
  * The MutableSortedMap interface additionally implements some of the methods in the Smalltalk Dictionary protocol.
  */
 public interface MutableSortedMap<K, V>
-        extends SortedMapIterable<K, V>, SortedMap<K, V>, Cloneable
+        extends MutableMapIterable<K, V>, SortedMapIterable<K, V>, SortedMap<K, V>, Cloneable
 {
     /**
      * Creates a new instance of the same type with the same internal Comparator.
@@ -73,98 +74,14 @@ public interface MutableSortedMap<K, V>
             Function<? super E, ? extends V> valueFunction);
 
     /**
-     * Remove an entry from the map at the specified {@code key}.
-     *
-     * @return The value removed from entry at key, or null if not found.
-     * @see #remove(Object)
-     */
-    V removeKey(K key);
-
-    /**
-     * Return the value in the Map that corresponds to the specified key, or if there is no value
-     * at the key, return the result of evaluating the specified Function0, and put that value in the
-     * map at the specified key.
-     */
-    V getIfAbsentPut(K key, Function0<? extends V> function);
-
-    /**
-     * Get and return the value in the Map at the specified key.  Alternatively, if there is no value in the map for that key
-     * return the result of evaluating the specified Function using the specified key, and put that value in the
-     * map at the specified key.
-     */
-    V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function);
-
-    /**
      * Return the value in the Map that corresponds to the specified key, or if there is no value
      * at the key, return the result of evaluating the specified one argument Function
      * using the specified parameter, and put that value in the map at the specified key.
      */
     <P> V getIfAbsentPutWith(K key, Function<? super P, ? extends V> function, P parameter);
 
-    MutableSortedMap<K, V> with(Pair<K, V>... pairs);
-
-    /**
-     * Returns an unmodifiable view of this map.
-     * This method allows modules to provide users with "read-only" access to internal maps.
-     * Any query operations on the returned map that "read through" to this map and attempt
-     * to modify the returned map, whether direct or via its iterator, result in an
-     * {@link UnsupportedOperationException}.
-     * <p>
-     * The returned map will be <tt>Serializable</tt> if this map is <tt>Serializable</tt>.
-     *
-     * @return an unmodifiable view of this map.
-     */
     MutableSortedMap<K, V> asUnmodifiable();
 
-    /**
-     * Returns an immutable copy of this map.
-     * If the map is immutable, it returns itself.
-     * <p>
-     * The returned map will be <tt>Serializable</tt> if this map is <tt>Serializable</tt>.
-     */
-    ImmutableSortedMap<K, V> toImmutable();
-
-    /**
-     * Returns a synchronized (thread-safe) map backed by the specified
-     * map.  In order to guarantee serial access, it is critical that
-     * <strong>all</strong> access to the backing map is accomplished
-     * through the returned map.<p>
-     * <p>
-     * It is imperative that the user manually synchronize on the returned
-     * map when iterating over any of its collection views:
-     * <pre>
-     *  MutableMap map = myMutableMap.asSynchronized();
-     *      ...
-     *  Set set = map.keySet();  // Needn't be in synchronized block
-     *      ...
-     *  synchronized(map)
-     *  {  // Synchronizing on map, not set!
-     *      Iterator i = s.iterator(); // Must be in synchronized block
-     *      while (i.hasNext())
-     *          foo(i.next());
-     *  }
-     * </pre>
-     * Failure to follow this advice may result in non-deterministic behavior.
-     * <p>
-     * The preferred way of iterating over a synchronized collection is to use the collection.forEach()
-     * method which is properly synchronized internally.
-     * <pre>
-     *  MutableMap map = myMutableMap.asSynchronized();
-     *      ...
-     *  Set set = map.keySet();  // Needn't be in synchronized block
-     *     ...
-     *  Iterate.forEach(set, new Procedure()
-     *  {
-     *      public void value(Object each)
-     *      {
-     *          ...
-     *      }
-     *  });
-     * </pre>
-     * <p>
-     * The returned map will be serializable if the specified map is
-     * serializable.
-     */
     MutableSortedMap<K, V> asSynchronized();
 
     MutableSortedSetMultimap<V, K> flip();
@@ -256,4 +173,23 @@ public interface MutableSortedMap<K, V>
             Function<? super V, ? extends K2> groupBy,
             Function0<? extends V2> zeroValueFactory,
             Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator);
+
+    // TODO
+    // OrderedMutableMap<V, K> flipUniqueValues();
+
+    MutableSortedMap<K, V> withKeyValue(K key, V value);
+
+    MutableSortedMap<K, V> withAllKeyValues(Iterable<? extends Pair<? extends K, ? extends V>> keyValues);
+
+    MutableSortedMap<K, V> withAllKeyValueArguments(Pair<? extends K, ? extends V>... keyValuePairs);
+
+    /**
+     * @deprecated in 6.0 Use {@link #withAllKeyValueArguments(Pair[])} instead. Inlineable.
+     */
+    @Deprecated
+    MutableSortedMap<K, V> with(Pair<K, V>... pairs);
+
+    MutableSortedMap<K, V> withoutKey(K key);
+
+    MutableSortedMap<K, V> withoutAllKeys(Iterable<? extends K> keys);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -165,17 +165,6 @@ final class ImmutableEmptyMapWithHashingStrategy<K, V>
     public boolean notEmpty()
     {
         return false;
-    }
-
-    @Override
-    public ImmutableMap<K, V> tap(Procedure<? super V> procedure)
-    {
-        return this;
-    }
-
-    @Override
-    public void forEach(Procedure<? super V> procedure)
-    {
     }
 
     @Override

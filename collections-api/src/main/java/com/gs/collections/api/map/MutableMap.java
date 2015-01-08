@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,15 @@
 
 package com.gs.collections.api.map;
 
-import java.util.Map;
-
+import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.MutableBooleanBag;
+import com.gs.collections.api.bag.primitive.MutableByteBag;
+import com.gs.collections.api.bag.primitive.MutableCharBag;
+import com.gs.collections.api.bag.primitive.MutableDoubleBag;
+import com.gs.collections.api.bag.primitive.MutableFloatBag;
+import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.bag.primitive.MutableLongBag;
+import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -33,18 +40,11 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
-import com.gs.collections.api.collection.primitive.MutableByteCollection;
-import com.gs.collections.api.collection.primitive.MutableCharCollection;
-import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
-import com.gs.collections.api.collection.primitive.MutableFloatCollection;
-import com.gs.collections.api.collection.primitive.MutableIntCollection;
-import com.gs.collections.api.collection.primitive.MutableLongCollection;
-import com.gs.collections.api.collection.primitive.MutableShortCollection;
-import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
-import com.gs.collections.api.partition.PartitionMutableCollection;
+import com.gs.collections.api.ordered.OrderedIterable;
+import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -52,13 +52,8 @@ import com.gs.collections.api.tuple.Pair;
  * additionally implements some of the methods in the Smalltalk Dictionary protocol.
  */
 public interface MutableMap<K, V>
-        extends UnsortedMapIterable<K, V>, Map<K, V>, Cloneable
+        extends MutableMapIterable<K, V>, UnsortedMapIterable<K, V>, Cloneable
 {
-    /**
-     * Creates a new instance of the same type, using the default capacity and growth parameters.
-     */
-    MutableMap<K, V> newEmpty();
-
     /**
      * Adds all the entries derived from {@code iterable} to {@code this}. The key and value for each entry
      * is determined by applying the {@code keyFunction} and {@code valueFunction} to each item in
@@ -70,92 +65,12 @@ public interface MutableMap<K, V>
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction);
 
-    /**
-     * Remove an entry from the map at the specified {@code key}.
-     *
-     * @return The value removed from entry at key, or null if not found.
-     * @see #remove(Object)
-     */
-    V removeKey(K key);
-
-    /**
-     * Get and return the value in the Map at the specified key.  Alternatively, if there is no value in the map at the key,
-     * return the result of evaluating the specified Function0, and put that value in the map at the specified key.
-     */
-    V getIfAbsentPut(K key, Function0<? extends V> function);
-
-    /**
-     * Get and return the value in the Map at the specified key.  Alternatively, if there is no value in the map at the key,
-     * return the specified value, and put that value in the map at the specified key.
-     *
-     * @since 5.0
-     */
-    V getIfAbsentPut(K key, V value);
-
-    /**
-     * Get and return the value in the Map at the specified key.  Alternatively, if there is no value in the map for that key
-     * return the result of evaluating the specified Function using the specified key, and put that value in the
-     * map at the specified key.
-     */
-    V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function);
-
-    /**
-     * Get and return the value in the Map at the specified key.  Alternatively, if there is no value in the map for that key
-     * return the result of evaluating the specified Function using the specified parameter, and put that value in the
-     * map at the specified key.
-     */
-    <P> V getIfAbsentPutWith(K key, Function<? super P, ? extends V> function, P parameter);
+    MutableMap<K, V> newEmpty();
 
     MutableMap<K, V> clone();
 
-    /**
-     * Returns an unmodifiable view of this map. This method allows modules to provide users with "read-only" access to
-     * internal maps. Any query operations on the returned map that "read through" to this map and attempt to modify the
-     * returned map, whether direct or via its iterator, result in an {@link UnsupportedOperationException}.
-     * The returned map will be <tt>Serializable</tt> if this map is <tt>Serializable</tt>.
-     *
-     * @return an unmodifiable view of this map.
-     */
     MutableMap<K, V> asUnmodifiable();
 
-    /**
-     * Returns a synchronized (thread-safe) map backed by the specified map.  In order to guarantee serial access, it is
-     * critical that <strong>all</strong> access to the backing map is accomplished through the returned map.<p>
-     * <p>
-     * It is imperative that the user manually synchronize on the returned map when iterating over any of its collection
-     * views:
-     * <pre>
-     *  MutableMap map = myMutableMap.asSynchronized();
-     *      ...
-     *  Set set = map.keySet();  // Needn't be in synchronized block
-     *      ...
-     *  synchronized(map)
-     *  {  // Synchronizing on map, not set!
-     *      Iterator i = s.iterator(); // Must be in synchronized block
-     *      while (i.hasNext())
-     *          foo(i.next());
-     *  }
-     * </pre>
-     * Failure to follow this advice may result in non-deterministic behavior.
-     * <p>
-     * The preferred way of iterating over a synchronized collection is to use the collection.forEach() method which is
-     * properly synchronized internally.
-     * <pre>
-     *  MutableMap map = myMutableMap.asSynchronized();
-     *      ...
-     *  Set set = map.keySet();  // Needn't be in synchronized block
-     *     ...
-     *  Iterate.forEach(set, new Procedure()
-     *  {
-     *      public void value(Object each)
-     *      {
-     *          ...
-     *      }
-     *  });
-     * </pre>
-     * <p>
-     * The returned map will be serializable if the specified map is serializable.
-     */
     MutableMap<K, V> asSynchronized();
 
     MutableSetMultimap<V, K> flip();
@@ -170,51 +85,59 @@ public interface MutableMap<K, V>
 
     MutableMap<K, V> tap(Procedure<? super V> procedure);
 
-    MutableCollection<V> select(Predicate<? super V> predicate);
+    MutableBag<V> select(Predicate<? super V> predicate);
 
-    <P> MutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter);
+    <P> MutableBag<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter);
 
-    MutableCollection<V> reject(Predicate<? super V> predicate);
+    MutableBag<V> reject(Predicate<? super V> predicate);
 
-    <P> MutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter);
+    <P> MutableBag<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter);
 
-    PartitionMutableCollection<V> partition(Predicate<? super V> predicate);
+    PartitionMutableBag<V> partition(Predicate<? super V> predicate);
 
-    <P> PartitionMutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
+    <P> PartitionMutableBag<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
 
-    <S> MutableCollection<S> selectInstancesOf(Class<S> clazz);
+    <S> MutableBag<S> selectInstancesOf(Class<S> clazz);
 
-    <R> MutableCollection<R> collect(Function<? super V, ? extends R> function);
+    <R> MutableBag<R> collect(Function<? super V, ? extends R> function);
 
-    <P, V1> MutableCollection<V1> collectWith(Function2<? super V, ? super P, ? extends V1> function, P parameter);
+    <P, V1> MutableBag<V1> collectWith(Function2<? super V, ? super P, ? extends V1> function, P parameter);
 
-    MutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction);
+    MutableBooleanBag collectBoolean(BooleanFunction<? super V> booleanFunction);
 
-    MutableByteCollection collectByte(ByteFunction<? super V> byteFunction);
+    MutableByteBag collectByte(ByteFunction<? super V> byteFunction);
 
-    MutableCharCollection collectChar(CharFunction<? super V> charFunction);
+    MutableCharBag collectChar(CharFunction<? super V> charFunction);
 
-    MutableDoubleCollection collectDouble(DoubleFunction<? super V> doubleFunction);
+    MutableDoubleBag collectDouble(DoubleFunction<? super V> doubleFunction);
 
-    MutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction);
+    MutableFloatBag collectFloat(FloatFunction<? super V> floatFunction);
 
-    MutableIntCollection collectInt(IntFunction<? super V> intFunction);
+    MutableIntBag collectInt(IntFunction<? super V> intFunction);
 
-    MutableLongCollection collectLong(LongFunction<? super V> longFunction);
+    MutableLongBag collectLong(LongFunction<? super V> longFunction);
 
-    MutableShortCollection collectShort(ShortFunction<? super V> shortFunction);
+    MutableShortBag collectShort(ShortFunction<? super V> shortFunction);
 
-    <R> MutableCollection<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
+    <R> MutableBag<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
 
-    <R> MutableCollection<R> flatCollect(Function<? super V, ? extends Iterable<R>> function);
+    <R> MutableBag<R> flatCollect(Function<? super V, ? extends Iterable<R>> function);
 
-    <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that);
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
+    <S> MutableBag<Pair<V, S>> zip(Iterable<S> that);
 
-    MutableCollection<Pair<V, Integer>> zipWithIndex();
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
+    MutableSet<Pair<V, Integer>> zipWithIndex();
 
-    <VV> MutableMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function);
+    <VV> MutableBagMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function);
 
-    <VV> MutableMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
+    <VV> MutableBagMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
 
     <V1> MutableMap<V1, V> groupByUniqueKey(Function<? super V, ? extends V1> function);
 
@@ -228,107 +151,15 @@ public interface MutableMap<K, V>
             Function0<? extends V2> zeroValueFactory,
             Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator);
 
-    /**
-     * Looks up the value associated with {@code key}, applies the {@code function} to it, and replaces the value. If there
-     * is no value associated with {@code key}, starts it off with a value supplied by {@code factory}.
-     */
-    V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function);
-
-    /**
-     * Same as {@link #updateValue(Object, Function0, Function)} with a Function2 and specified parameter which is
-     * passed to the function.
-     */
-    <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter);
-
     MutableMap<V, K> flipUniqueValues();
 
-    /**
-     * This method allows mutable map the ability to add an element in the form of Pair<K,V>.
-     *
-     * @see #put(Object, Object)
-     */
-    V add(Pair<K, V> keyValuePair);
-
-    /**
-     * This method allows mutable, fixed size, and immutable maps the ability to add elements to their existing
-     * elements.  In order to support fixed size maps, a new instance of a map would have to be returned including the
-     * keys and values of the original plus the additional key and value.  In the case of mutable maps, the original map
-     * is modified and then returned.  In order to use this method properly with mutable and fixed size maps the
-     * following approach must be taken:
-     * <p>
-     * <pre>
-     * map = map.withKeyValue("new key", "new value");
-     * </pre>
-     * In the case of FixedSizeMap, a new instance will be returned by withKeyValue, and any variables that
-     * previously referenced the original map will need to be redirected to reference the new instance.  In the case
-     * of a FastMap or UnifiedMap, you will be replacing the reference to map with map, since FastMap and UnifiedMap
-     * will both return "this" after calling put on themselves.
-     *
-     * @see #put(Object, Object)
-     */
     MutableMap<K, V> withKeyValue(K key, V value);
 
-    /**
-     * This method allows mutable, fixed size, and immutable maps the ability to add elements to their existing
-     * elements.  In order to support fixed size maps, a new instance of a map would have to be returned including the
-     * keys and values of the original plus all of the additional keys and values.  In the case of mutable maps, the
-     * original map is modified and then returned.  In order to use this method properly with mutable and fixed size
-     * maps the following approach must be taken:
-     * <p>
-     * <pre>
-     * map = map.withAllKeyValues(FastList.newListWith(PairImpl.of("new key", "new value")));
-     * </pre>
-     * In the case of FixedSizeMap, a new instance will be returned by withAllKeyValues, and any variables that
-     * previously referenced the original map will need to be redirected to reference the new instance.  In the case
-     * of a FastMap or UnifiedMap, you will be replacing the reference to map with map, since FastMap and UnifiedMap
-     * will both return "this" after calling put on themselves.
-     *
-     * @see #put(Object, Object)
-     */
     MutableMap<K, V> withAllKeyValues(Iterable<? extends Pair<? extends K, ? extends V>> keyValues);
 
-    /**
-     * Convenience var-args version of withAllKeyValues
-     *
-     * @see #withAllKeyValues(Iterable)
-     */
     MutableMap<K, V> withAllKeyValueArguments(Pair<? extends K, ? extends V>... keyValuePairs);
 
-    /**
-     * This method allows mutable, fixed size, and immutable maps the ability to remove elements from their existing
-     * elements.  In order to support fixed size maps, a new instance of a map would have to be returned including the
-     * keys and values of the original minus the key and value to be removed.  In the case of mutable maps, the original
-     * map is modified and then returned.  In order to use this method properly with mutable and fixed size maps the
-     * following approach must be taken:
-     * <p>
-     * <pre>
-     * map = map.withoutKey("key");
-     * </pre>
-     * In the case of FixedSizeMap, a new instance will be returned by withoutKey, and any variables that previously
-     * referenced the original map will need to be redirected to reference the new instance.  In the case of a FastMap
-     * or UnifiedMap, you will be replacing the reference to map with map, since FastMap and UnifiedMap will both return
-     * "this" after calling remove on themselves.
-     *
-     * @see #remove(Object)
-     */
     MutableMap<K, V> withoutKey(K key);
 
-    /**
-     * This method allows mutable, fixed size, and immutable maps the ability to remove elements from their existing
-     * elements.  In order to support fixed size maps, a new instance of a map would have to be returned including the
-     * keys and values of the original minus all of the keys and values to be removed.  In the case of mutable maps, the
-     * original map is modified and then returned.  In order to use this method properly with mutable and fixed size
-     * maps the following approach must be taken:
-     * <p>
-     * <pre>
-     * map = map.withoutAllKeys(FastList.newListWith("key1", "key2"));
-     * </pre>
-     * In the case of FixedSizeMap, a new instance will be returned by withoutAllKeys, and any variables that previously
-     * referenced the original map will need to be redirected to reference the new instance.  In the case of a FastMap
-     * or UnifiedMap, you will be replacing the reference to map with map, since FastMap and UnifiedMap will both return
-     * "this" after calling remove on themselves.
-     *
-     * @see #remove(Object)
-     */
     MutableMap<K, V> withoutAllKeys(Iterable<? extends K> keys);
 }

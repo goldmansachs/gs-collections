@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -160,17 +160,6 @@ final class ImmutableEmptyMap<K, V>
     }
 
     @Override
-    public ImmutableMap<K, V> tap(Procedure<? super V> procedure)
-    {
-        return this;
-    }
-
-    @Override
-    public void forEach(Procedure<? super V> procedure)
-    {
-    }
-
-    @Override
     public void each(Procedure<? super V> procedure)
     {
     }
@@ -230,24 +219,6 @@ final class ImmutableEmptyMap<K, V>
     public ImmutableMap<K, V> select(Predicate2<? super K, ? super V> predicate)
     {
         return this;
-    }
-
-    @Override
-    public <K2, V2> ImmutableMap<K2, V2> aggregateInPlaceBy(
-            Function<? super V, ? extends K2> groupBy,
-            Function0<? extends V2> zeroValueFactory,
-            Procedure2<? super V2, ? super V> mutatingAggregator)
-    {
-        return Maps.immutable.of();
-    }
-
-    @Override
-    public <K2, V2> ImmutableMap<K2, V2> aggregateBy(
-            Function<? super V, ? extends K2> groupBy,
-            Function0<? extends V2> zeroValueFactory,
-            Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator)
-    {
-        return Maps.immutable.of();
     }
 
     private Object writeReplace()

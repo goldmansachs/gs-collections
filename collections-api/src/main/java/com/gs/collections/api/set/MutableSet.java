@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package com.gs.collections.api.set;
 
-import java.util.Set;
-
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -31,8 +29,8 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.api.set.primitive.MutableByteSet;
@@ -48,7 +46,7 @@ import com.gs.collections.api.tuple.Pair;
  * A MutableSet is an implementation of a JCF Set which provides methods matching the Smalltalk Collection protocol.
  */
 public interface MutableSet<T>
-        extends UnsortedSetIterable<T>, MutableCollection<T>, Set<T>, Cloneable
+        extends UnsortedSetIterable<T>, MutableSetIterable<T>, Cloneable
 {
     MutableSet<T> with(T element);
 
@@ -123,8 +121,16 @@ public interface MutableSet<T>
 
     <V> MutableSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
     <S> MutableSet<Pair<T, S>> zip(Iterable<S> that);
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
     MutableSet<Pair<T, Integer>> zipWithIndex();
 
     MutableSet<T> union(SetIterable<? extends T> set);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.gs.collections.impl.multimap;
 
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
@@ -26,6 +27,7 @@ import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.multimap.set.AbstractMutableSetMultimapTestCase;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.multimap.set.strategy.UnifiedSetWithHashingStrategyMultimap;
@@ -310,6 +312,8 @@ public class UnifiedSetWithHashingStrategyMultimapTest extends AbstractMutableSe
     @Test
     public void collectKeysValues()
     {
+        super.collectKeysValues();
+
         UnifiedSetWithHashingStrategyMultimap<Integer, Person> multimap = UnifiedSetWithHashingStrategyMultimap.newMultimap(FIRST_NAME_STRATEGY);
         multimap.put(1, JANESMITH);
         multimap.put(1, JOHNDOE);
@@ -320,22 +324,23 @@ public class UnifiedSetWithHashingStrategyMultimapTest extends AbstractMutableSe
         multimap.put(2, JOHNDOE);
         multimap.put(2, JANEDOE);
 
-        UnifiedSetMultimap<String, Integer> collectedMultimap1 = multimap.collectKeysValues((key, value) -> Tuples.pair(key.toString(), key * value.getAge()));
-        UnifiedSetMultimap<String, Integer> expectedMultimap1 = UnifiedSetMultimap.newMultimap();
+        MutableBagMultimap<String, Integer> collectedMultimap1 = multimap.collectKeysValues((key, value) -> Tuples.pair(key.toString(), key * value.getAge()));
+        MutableBagMultimap<String, Integer> expectedMultimap1 = HashBagMultimap.newMultimap();
         expectedMultimap1.put("1", 100);
+        expectedMultimap1.put("1", 100);
+        expectedMultimap1.put("2", 200);
         expectedMultimap1.put("2", 200);
 
         Assert.assertEquals(expectedMultimap1, collectedMultimap1);
-        Verify.assertSetsEqual(expectedMultimap1.get("1"), collectedMultimap1.get("1"));
-        Verify.assertSetsEqual(expectedMultimap1.get("2"), collectedMultimap1.get("2"));
 
-        UnifiedSetMultimap<String, Integer> collectedMultimap2 = multimap.collectKeysValues((key, value) -> Tuples.pair("1", key * value.getAge()));
-        UnifiedSetMultimap<String, Integer> expectedMultimap2 = UnifiedSetMultimap.newMultimap();
+        MutableBagMultimap<String, Integer> collectedMultimap2 = multimap.collectKeysValues((key, value) -> Tuples.pair("1", key * value.getAge()));
+        MutableBagMultimap<String, Integer> expectedMultimap2 = HashBagMultimap.newMultimap();
         expectedMultimap2.put("1", 100);
+        expectedMultimap2.put("1", 100);
+        expectedMultimap2.put("1", 200);
         expectedMultimap2.put("1", 200);
 
         Assert.assertEquals(expectedMultimap2, collectedMultimap2);
-        Verify.assertSetsEqual(expectedMultimap2.get("1"), collectedMultimap2.get("1"));
     }
 
     @Override
@@ -352,13 +357,11 @@ public class UnifiedSetWithHashingStrategyMultimapTest extends AbstractMutableSe
         multimap.put(2, JOHNDOE);
         multimap.put(2, JANEDOE);
 
-        UnifiedSetMultimap<Integer, Integer> collectedMultimap = multimap.collectValues(Person::getAge);
-        UnifiedSetMultimap<Integer, Integer> expectedMultimap = UnifiedSetMultimap.newMultimap();
+        MutableBagMultimap<Integer, Integer> collectedMultimap = multimap.collectValues(Person::getAge);
+        MutableBagMultimap<Integer, Integer> expectedMultimap = HashBagMultimap.newMultimap();
         expectedMultimap.put(1, 100);
         expectedMultimap.put(2, 100);
 
         Assert.assertEquals(expectedMultimap, collectedMultimap);
-        Verify.assertSetsEqual(expectedMultimap.get(1), collectedMultimap.get(1));
-        Verify.assertSetsEqual(expectedMultimap.get(2), collectedMultimap.get(2));
     }
 }

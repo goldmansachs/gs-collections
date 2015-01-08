@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.gs.collections.api.partition.bag.sorted;
 
 import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
-import com.gs.collections.api.partition.PartitionImmutableCollection;
+import com.gs.collections.api.partition.bag.PartitionImmutableBagIterable;
 
 /**
  * A PartitionImmutableSortedBag is the result of splitting an immutable sorted bag into two immutable sorted bags based
@@ -26,7 +26,7 @@ import com.gs.collections.api.partition.PartitionImmutableCollection;
  *
  * @since 4.2
  */
-public interface PartitionImmutableSortedBag<T> extends PartitionImmutableCollection<T>, PartitionSortedBag<T>
+public interface PartitionImmutableSortedBag<T> extends PartitionSortedBag<T>, PartitionImmutableBagIterable<T>
 {
     ImmutableSortedBag<T> getSelected();
 

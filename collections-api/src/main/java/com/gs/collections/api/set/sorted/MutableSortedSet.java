@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -43,6 +42,7 @@ import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
+import com.gs.collections.api.set.MutableSetIterable;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.tuple.Pair;
 
@@ -53,7 +53,7 @@ import com.gs.collections.api.tuple.Pair;
  * @since 1.0
  */
 public interface MutableSortedSet<T>
-        extends SortedSetIterable<T>, MutableCollection<T>, SortedSet<T>, Cloneable
+        extends MutableSetIterable<T>, SortedSetIterable<T>, SortedSet<T>, Cloneable
 {
     MutableSortedSet<T> with(T element);
 
@@ -135,6 +135,7 @@ public interface MutableSortedSet<T>
 
     <V> MutableSortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
+    // TODO Return linked set
     <S> MutableList<Pair<T, S>> zip(Iterable<S> that);
 
     MutableSortedSet<Pair<T, Integer>> zipWithIndex();

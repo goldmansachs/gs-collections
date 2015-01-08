@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import java.util.Comparator;
 
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.bag.BagMultimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
-import com.gs.collections.api.multimap.bag.UnsortedBagMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap;
 import com.gs.collections.api.multimap.sortedbag.SortedBagMultimap;
@@ -80,7 +80,7 @@ public abstract class AbstractMutableSortedBagMultimapTestCase extends AbstractM
     public void flip()
     {
         SortedBagMultimap<String, Integer> multimap = this.newMultimapWithKeysValues("Less than 2", 1, "Less than 3", 1, "Less than 3", 2, "Less than 3", 2);
-        UnsortedBagMultimap<Integer, String> flipped = multimap.flip();
+        BagMultimap<Integer, String> flipped = multimap.flip();
         Assert.assertEquals(Bags.immutable.with("Less than 3", "Less than 3"), flipped.get(2));
         Assert.assertEquals(Bags.immutable.with("Less than 2", "Less than 3"), flipped.get(1));
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.gs.collections.impl.bag.mutable;
 
 import java.util.Collections;
 
+import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import org.junit.Assert;
@@ -26,9 +28,20 @@ import org.junit.Test;
 public class HashBagTest extends MutableBagTestCase
 {
     @Override
-    protected <T> HashBag<T> newWith(T... littleElements)
+    protected <T> MutableBag<T> newWith(T... littleElements)
     {
         return HashBag.newBagWith(littleElements);
+    }
+
+    protected <T> MutableBag<T> newWithOccurrences(ObjectIntPair<T>... elementsWithOccurrences)
+    {
+        MutableBag<T> bag = this.newWith();
+        for (int i = 0; i < elementsWithOccurrences.length; i++)
+        {
+            ObjectIntPair<T> itemToAdd = elementsWithOccurrences[i];
+            bag.addOccurrences(itemToAdd.getOne(), itemToAdd.getTwo());
+        }
+        return bag;
     }
 
     @Test

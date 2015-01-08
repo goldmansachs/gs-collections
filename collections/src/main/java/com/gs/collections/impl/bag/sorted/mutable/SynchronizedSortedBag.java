@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,6 +74,8 @@ public class SynchronizedSortedBag<T>
         extends AbstractSynchronizedMutableCollection<T>
         implements MutableSortedBag<T>, Serializable
 {
+    private static final long serialVersionUID = 2L;
+
     SynchronizedSortedBag(MutableSortedBag<T> bag)
     {
         super(bag);
@@ -94,17 +96,80 @@ public class SynchronizedSortedBag<T>
         return new SynchronizedSortedBag<E>(bag, lock);
     }
 
+    @Override
     @GuardedBy("getLock()")
-    private MutableSortedBag<T> getSortedBag()
+    protected MutableSortedBag<T> getDelegate()
     {
-        return (MutableSortedBag<T>) this.getCollection();
+        return (MutableSortedBag<T>) super.getDelegate();
+    }
+
+    public MutableSortedBag<T> with(T element)
+    {
+        this.add(element);
+        return this;
+    }
+
+    public MutableSortedBag<T> without(T element)
+    {
+        this.remove(element);
+        return this;
+    }
+
+    public MutableSortedBag<T> withAll(Iterable<? extends T> elements)
+    {
+        this.addAllIterable(elements);
+        return this;
+    }
+
+    public MutableSortedBag<T> withoutAll(Iterable<? extends T> elements)
+    {
+        this.removeAllIterable(elements);
+        return this;
+    }
+
+    public MutableSortedBag<T> newEmpty()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().newEmpty().asSynchronized();
+        }
+    }
+
+    @Override
+    public MutableSortedBag<T> clone()
+    {
+        synchronized (this.getLock())
+        {
+            return SynchronizedSortedBag.of(this.getDelegate().clone());
+        }
+    }
+
+    public Comparator<? super T> comparator()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().comparator();
+        }
+    }
+
+    public int compareTo(SortedBag<T> o)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().compareTo(o);
+        }
+    }
+
+    protected Object writeReplace()
+    {
+        return new SynchronizedCollectionSerializationProxy<T>(this.getDelegate());
     }
 
     public void addOccurrences(T item, int occurrences)
     {
         synchronized (this.getLock())
         {
-            this.getSortedBag().addOccurrences(item, occurrences);
+            this.getDelegate().addOccurrences(item, occurrences);
         }
     }
 
@@ -112,15 +177,15 @@ public class SynchronizedSortedBag<T>
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().removeOccurrences(item, occurrences);
+            return this.getDelegate().removeOccurrences(item, occurrences);
         }
     }
 
-    public MutableSortedBag<T> selectByOccurrences(IntPredicate predicate)
+    public boolean setOccurrences(T item, int occurrences)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().selectByOccurrences(predicate);
+            return this.getDelegate().setOccurrences(item, occurrences);
         }
     }
 
@@ -128,7 +193,15 @@ public class SynchronizedSortedBag<T>
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().topOccurrences(count);
+            return this.getDelegate().topOccurrences(count);
+        }
+    }
+
+    public MutableSortedBag<T> selectByOccurrences(IntPredicate predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().selectByOccurrences(predicate);
         }
     }
 
@@ -136,39 +209,7 @@ public class SynchronizedSortedBag<T>
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().bottomOccurrences(count);
-        }
-    }
-
-    public void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure)
-    {
-        synchronized (this.getLock())
-        {
-            this.getSortedBag().forEachWithOccurrences(procedure);
-        }
-    }
-
-    public int occurrencesOf(Object item)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().occurrencesOf(item);
-        }
-    }
-
-    public int sizeDistinct()
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().sizeDistinct();
-        }
-    }
-
-    public String toStringOfItemToCount()
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().toStringOfItemToCount();
+            return this.getDelegate().bottomOccurrences(count);
         }
     }
 
@@ -176,25 +217,47 @@ public class SynchronizedSortedBag<T>
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().toMapOfItemToCount();
+            return this.getDelegate().toMapOfItemToCount();
         }
     }
 
-    @Override
-    public MutableSortedBag<T> asUnmodifiable()
+    public void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure)
     {
         synchronized (this.getLock())
         {
-            return UnmodifiableSortedBag.of(this);
+            this.getDelegate().forEachWithOccurrences(procedure);
         }
     }
 
-    @Override
-    public ImmutableSortedBag<T> toImmutable()
+    public int occurrencesOf(Object item)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().toImmutable();
+            return this.getDelegate().occurrencesOf(item);
+        }
+    }
+
+    public int sizeDistinct()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().sizeDistinct();
+        }
+    }
+
+    public String toStringOfItemToCount()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().toStringOfItemToCount();
+        }
+    }
+
+    public int indexOf(Object object)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().indexOf(object);
         }
     }
 
@@ -206,128 +269,51 @@ public class SynchronizedSortedBag<T>
         }
     }
 
-    @Override
-    public MutableSortedBag<T> asSynchronized()
-    {
-        return this;
-    }
-
-    @Override
-    public MutableSortedBag<T> clone()
+    public PartitionMutableSortedBag<T> partitionWhile(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
-            return SynchronizedSortedBag.of(this.getSortedBag().clone());
+            return this.getDelegate().partitionWhile(predicate);
         }
     }
 
-    @Override
-    public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
+    public MutableSortedSet<T> distinct()
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().collect(function);
+            return this.getDelegate().distinct();
         }
     }
 
-    @Override
-    public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
+    public MutableSortedBag<T> takeWhile(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().collectBoolean(booleanFunction);
+            return this.getDelegate().takeWhile(predicate);
         }
     }
 
-    @Override
-    public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
+    public MutableSortedBag<T> dropWhile(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().collectByte(byteFunction);
+            return this.getDelegate().dropWhile(predicate);
         }
     }
 
-    @Override
-    public MutableCharList collectChar(CharFunction<? super T> charFunction)
+    public void forEach(int startIndex, int endIndex, Procedure<? super T> procedure)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().collectChar(charFunction);
+            this.getDelegate().forEach(startIndex, endIndex, procedure);
         }
     }
 
-    @Override
-    public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().collectDouble(doubleFunction);
-        }
-    }
-
-    @Override
-    public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().collectFloat(floatFunction);
-        }
-    }
-
-    @Override
-    public MutableIntList collectInt(IntFunction<? super T> intFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().collectInt(intFunction);
-        }
-    }
-
-    @Override
-    public MutableLongList collectLong(LongFunction<? super T> longFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().collectLong(longFunction);
-        }
-    }
-
-    @Override
-    public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().collectShort(shortFunction);
-        }
-    }
-
-    @Override
-    public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().flatCollect(function);
-        }
-    }
-
-    @Override
-    public <V> MutableList<V> collectIf(
-            Predicate<? super T> predicate,
-            Function<? super T, ? extends V> function)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().collectIf(predicate, function);
-        }
-    }
-
-    @Override
-    public <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().collectWith(function, parameter);
+            this.getDelegate().forEachWithIndex(fromIndex, toIndex, objectIntProcedure);
         }
     }
 
@@ -335,56 +321,10 @@ public class SynchronizedSortedBag<T>
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().detectIndex(predicate);
+            return this.getDelegate().detectIndex(predicate);
         }
     }
 
-    @Override
-    public <V> MutableSortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().groupBy(function);
-        }
-    }
-
-    @Override
-    public <V> MutableSortedBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().groupByEach(function);
-        }
-    }
-
-    @Override
-    public MutableSortedBag<T> newEmpty()
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().newEmpty().asSynchronized();
-        }
-    }
-
-    @Override
-    public MutableSortedBag<T> reject(Predicate<? super T> predicate)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().reject(predicate);
-        }
-    }
-
-    @Override
-    public <P> MutableSortedBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().rejectWith(predicate, parameter);
-        }
-    }
-
-    @Override
     public MutableSortedBag<T> tap(Procedure<? super T> procedure)
     {
         synchronized (this.getLock())
@@ -394,208 +334,211 @@ public class SynchronizedSortedBag<T>
         }
     }
 
-    @Override
     public MutableSortedBag<T> select(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().select(predicate);
+            return this.getDelegate().select(predicate);
         }
     }
 
-    @Override
     public <P> MutableSortedBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().selectWith(predicate, parameter);
+            return this.getDelegate().selectWith(predicate, parameter);
         }
     }
 
-    @Override
+    public MutableSortedBag<T> reject(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().reject(predicate);
+        }
+    }
+
+    public <P> MutableSortedBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().rejectWith(predicate, parameter);
+        }
+    }
+
     public PartitionMutableSortedBag<T> partition(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().partition(predicate);
+            return this.getDelegate().partition(predicate);
         }
     }
 
-    @Override
     public <P> PartitionMutableSortedBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().partitionWith(predicate, parameter);
+            return this.getDelegate().partitionWith(predicate, parameter);
         }
     }
 
-    public PartitionMutableSortedBag<T> partitionWhile(Predicate<? super T> predicate)
+    public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().partitionWhile(predicate);
+            return this.getDelegate().collectBoolean(booleanFunction);
         }
     }
 
-    @Override
+    public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectByte(byteFunction);
+        }
+    }
+
+    public MutableCharList collectChar(CharFunction<? super T> charFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectChar(charFunction);
+        }
+    }
+
+    public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectDouble(doubleFunction);
+        }
+    }
+
+    public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectFloat(floatFunction);
+        }
+    }
+
+    public MutableIntList collectInt(IntFunction<? super T> intFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectInt(intFunction);
+        }
+    }
+
+    public MutableLongList collectLong(LongFunction<? super T> longFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectLong(longFunction);
+        }
+    }
+
+    public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().collectShort(shortFunction);
+        }
+    }
+
     public <S> MutableSortedBag<S> selectInstancesOf(Class<S> clazz)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().selectInstancesOf(clazz);
+            return this.getDelegate().selectInstancesOf(clazz);
         }
     }
 
-    @Override
-    public boolean equals(Object obj)
+    public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().equals(obj);
+            return this.getDelegate().collect(function);
         }
     }
 
-    @Override
-    public int hashCode()
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().hashCode();
-        }
-    }
-
-    @Override
-    public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().zip(that);
-        }
-    }
-
-    @Override
-    public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
-    {
-        synchronized (this.getLock())
-        {
-            return this.getSortedBag().zip(that, target);
-        }
-    }
-
-    @Override
     public MutableSortedSet<Pair<T, Integer>> zipWithIndex()
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().zipWithIndex();
+            return this.getDelegate().zipWithIndex();
         }
     }
 
-    @Override
-    public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
+    public <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().zipWithIndex(target);
+            return this.getDelegate().collectWith(function, parameter);
         }
     }
 
-    public MutableSortedBag<T> takeWhile(Predicate<? super T> predicate)
+    public <V> MutableList<V> collectIf(
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().takeWhile(predicate);
+            return this.getDelegate().collectIf(predicate, function);
         }
     }
 
-    public MutableSortedBag<T> dropWhile(Predicate<? super T> predicate)
+    public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().dropWhile(predicate);
+            return this.getDelegate().flatCollect(function);
         }
     }
 
-    public MutableSortedSet<T> distinct()
+    public <V> MutableSortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().distinct();
+            return this.getDelegate().groupBy(function);
         }
     }
 
-    public Comparator<? super T> comparator()
+    public <V> MutableSortedBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().comparator();
+            return this.getDelegate().groupByEach(function);
         }
     }
 
-    public int compareTo(SortedBag<T> o)
+    public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().compareTo(o);
+            return this.getDelegate().zip(that);
         }
     }
 
-    public int indexOf(Object object)
+    public MutableSortedBag<T> asUnmodifiable()
     {
         synchronized (this.getLock())
         {
-            return this.getSortedBag().indexOf(object);
+            return UnmodifiableSortedBag.of(this);
         }
     }
 
-    public void forEach(int startIndex, int endIndex, Procedure<? super T> procedure)
+    public MutableSortedBag<T> asSynchronized()
     {
-        synchronized (this.getLock())
-        {
-            this.getSortedBag().forEach(startIndex, endIndex, procedure);
-        }
-    }
-
-    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
-    {
-        synchronized (this.getLock())
-        {
-            this.getSortedBag().forEachWithIndex(fromIndex, toIndex, objectIntProcedure);
-        }
-    }
-
-    @Override
-    public MutableSortedBag<T> with(T element)
-    {
-        this.add(element);
         return this;
     }
 
-    @Override
-    public MutableSortedBag<T> without(T element)
+    public ImmutableSortedBag<T> toImmutable()
     {
-        this.remove(element);
-        return this;
-    }
-
-    @Override
-    public MutableSortedBag<T> withAll(Iterable<? extends T> elements)
-    {
-        this.addAllIterable(elements);
-        return this;
-    }
-
-    @Override
-    public MutableSortedBag<T> withoutAll(Iterable<? extends T> elements)
-    {
-        this.removeAllIterable(elements);
-        return this;
-    }
-
-    protected Object writeReplace()
-    {
-        return new SynchronizedCollectionSerializationProxy<T>(this.getSortedBag());
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().toImmutable();
+        }
     }
 
     public ParallelBag<T> asParallel(ExecutorService executorService, int batchSize)

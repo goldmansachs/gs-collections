@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.ImmutableSet;
@@ -33,6 +34,7 @@ import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 import com.gs.collections.impl.multimap.ImmutableMultimapSerializationProxy;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.utility.Iterate;
 
 /**
@@ -155,13 +157,13 @@ public final class ImmutableSetMultimapImpl<K, V>
         return this.rejectKeysMultiValues(predicate, UnifiedSetMultimap.<K, V>newMultimap()).toImmutable();
     }
 
-    public <K2, V2> ImmutableSetMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> ImmutableBagMultimap<K2, V2> collectKeysValues(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
-        return this.collectKeysValues(function, UnifiedSetMultimap.<K2, V2>newMultimap()).toImmutable();
+        return this.collectKeysValues(function, HashBagMultimap.<K2, V2>newMultimap()).toImmutable();
     }
 
-    public <V2> ImmutableSetMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
+    public <V2> ImmutableBagMultimap<K, V2> collectValues(Function<? super V, ? extends V2> function)
     {
-        return this.collectValues(function, UnifiedSetMultimap.<K, V2>newMultimap()).toImmutable();
+        return this.collectValues(function, HashBagMultimap.<K, V2>newMultimap()).toImmutable();
     }
 }

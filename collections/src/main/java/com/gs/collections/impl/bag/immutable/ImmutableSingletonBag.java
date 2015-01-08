@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
@@ -393,6 +394,10 @@ final class ImmutableSingletonBag<T>
         procedure.value(this.value, parameter);
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
     public <S> ImmutableBag<Pair<T, S>> zip(Iterable<S> that)
     {
         Iterator<S> iterator = that.iterator();
@@ -403,6 +408,10 @@ final class ImmutableSingletonBag<T>
         return Bags.immutable.of(Tuples.pair(this.value, iterator.next()));
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
     public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
         return Sets.immutable.of(Tuples.pair(this.value, 0));

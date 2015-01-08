@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1146,7 +1146,7 @@ public class VerifyTest
         }
         catch (AssertionError ex)
         {
-            Verify.assertContains("map has incorrect values for keys", ex.getMessage());
+            Verify.assertContains("map.valuesView() did not contain these items:<[quaz]>", ex.getMessage());
             Verify.assertContains(VerifyTest.class.getName(), ex.getStackTrace()[0].toString());
         }
     }

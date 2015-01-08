@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,11 +50,14 @@ import com.gs.collections.api.tuple.Pair;
  * An iterable Map whose elements are sorted.
  */
 public interface SortedMapIterable<K, V>
-        extends MapIterable<K, V>
+        extends MapIterable<K, V> // TODO: OrderedIterable<V>
 {
     Comparator<? super K> comparator();
 
     SortedSetMultimap<V, K> flip();
+
+    // TODO
+    // OrderedMapIterable<V, K> flipUniqueValues();
 
     SortedMapIterable<K, V> select(Predicate2<? super K, ? super V> predicate);
 

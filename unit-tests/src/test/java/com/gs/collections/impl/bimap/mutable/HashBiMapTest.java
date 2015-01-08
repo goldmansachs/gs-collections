@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.bimap.mutable;
 
-import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -47,6 +46,12 @@ public class HashBiMapTest extends AbstractMutableBiMapTestCase
     }
 
     @Override
+    protected <K, V> HashBiMap<K, V> newMapWithKeyValue(K key, V value)
+    {
+        return HashBiMap.newWithKeysValues(key, value);
+    }
+
+    @Override
     protected <K, V> HashBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
         return HashBiMap.newWithKeysValues(key1, value1, key2, value2);
@@ -62,12 +67,6 @@ public class HashBiMapTest extends AbstractMutableBiMapTestCase
     protected <K, V> HashBiMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
         return HashBiMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4);
-    }
-
-    @Override
-    protected <K, V> MutableMap<K, V> newMapWithKeyValue(K key, V value)
-    {
-        return HashBiMap.newWithKeysValues(key, value);
     }
 
     @Test
@@ -88,24 +87,24 @@ public class HashBiMapTest extends AbstractMutableBiMapTestCase
     {
         HashBiMap<Integer, Character> map = this.getEmptyMap();
         HashBiMap<Integer, Character> map1 = map.withKeysValues(1, 'a');
-        assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a'), map1);
+        AbstractMutableBiMapTestCase.assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a'), map1);
         Assert.assertSame(map, map1);
         HashBiMap<Integer, Character> map2 = map1.withKeysValues(2, 'b');
         HashBiMap<Integer, Character> map22 = map.withKeysValues(1, 'a', 2, 'b');
-        assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b'), map2);
-        assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b'), map22);
+        AbstractMutableBiMapTestCase.assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b'), map2);
+        AbstractMutableBiMapTestCase.assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b'), map22);
         Assert.assertSame(map, map22);
         Assert.assertSame(map1, map2);
         HashBiMap<Integer, Character> map3 = map2.withKeysValues(3, 'c');
         HashBiMap<Integer, Character> map33 = map.withKeysValues(1, 'a', 2, 'b', 3, 'c');
-        assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b', 3, 'c'), map3);
-        assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b', 3, 'c'), map33);
+        AbstractMutableBiMapTestCase.assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b', 3, 'c'), map3);
+        AbstractMutableBiMapTestCase.assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b', 3, 'c'), map33);
         Assert.assertSame(map, map33);
         Assert.assertSame(map2, map3);
         HashBiMap<Integer, Character> map4 = map3.withKeysValues(4, 'd');
         HashBiMap<Integer, Character> map44 = map.withKeysValues(1, 'a', 2, 'b', 3, 'c', 4, 'd');
-        assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b', 3, 'c', 4, 'd'), map4);
-        assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b', 3, 'c', 4, 'd'), map44);
+        AbstractMutableBiMapTestCase.assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b', 3, 'c', 4, 'd'), map4);
+        AbstractMutableBiMapTestCase.assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b', 3, 'c', 4, 'd'), map44);
         Assert.assertSame(map, map44);
         Assert.assertSame(map3, map4);
     }

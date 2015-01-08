@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public interface SetMultimap<K, V>
 
     SetIterable<V> get(K key);
 
-    UnsortedSetMultimap<V, K> flip();
+    SetMultimap<V, K> flip();
 
     SetMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
 

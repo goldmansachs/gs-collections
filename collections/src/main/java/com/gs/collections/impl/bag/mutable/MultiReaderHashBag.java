@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,9 +60,9 @@ import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
@@ -626,7 +626,7 @@ public final class MultiReaderHashBag<T>
         return this;
     }
 
-    public MapIterable<T, Integer> toMapOfItemToCount()
+    public MutableMap<T, Integer> toMapOfItemToCount()
     {
         this.acquireReadLock();
         try
@@ -691,6 +691,10 @@ public final class MultiReaderHashBag<T>
         }
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
     public <S> MutableBag<Pair<T, S>> zip(Iterable<S> that)
     {
         this.acquireReadLock();
@@ -704,6 +708,10 @@ public final class MultiReaderHashBag<T>
         }
     }
 
+    /**
+     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
     public MutableSet<Pair<T, Integer>> zipWithIndex()
     {
         this.acquireReadLock();
@@ -1072,17 +1080,25 @@ public final class MultiReaderHashBag<T>
             return this.getDelegate().partitionWith(predicate, parameter);
         }
 
+        /**
+         * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+         */
+        @Deprecated
         public <S> MutableBag<Pair<T, S>> zip(Iterable<S> that)
         {
             return this.getDelegate().zip(that);
         }
 
+        /**
+         * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+         */
+        @Deprecated
         public MutableSet<Pair<T, Integer>> zipWithIndex()
         {
             return this.getDelegate().zipWithIndex();
         }
 
-        public MapIterable<T, Integer> toMapOfItemToCount()
+        public MutableMap<T, Integer> toMapOfItemToCount()
         {
             return this.getDelegate().toMapOfItemToCount();
         }
