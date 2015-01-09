@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -219,7 +219,7 @@ public class FixedSizeListFactoryTest
     {
         MutableList<String> result = Lists.mutable.of();
         MutableList<String> source = Lists.fixedSize.of("1", "2", "3", "4", "5", "6");
-        source.forEachWith(Procedures2.fromProcedure(CollectionAddProcedure.on(result)), null);
+        source.forEachWith(Procedures2.fromProcedure(result::add), null);
         Assert.assertEquals(FastList.newListWith("1", "2", "3", "4", "5", "6"), result);
     }
 

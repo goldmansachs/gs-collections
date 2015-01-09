@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,7 +159,7 @@ public class IntervalTest
     {
         List<Integer> result = new ArrayList<>();
         Interval interval = Interval.oneTo(5);
-        interval.reverseForEach(CollectionAddProcedure.on(result));
+        interval.reverseForEach(result::add);
         Verify.assertSize(5, result);
         Verify.assertContains(1, result);
         Verify.assertContains(5, result);
@@ -167,7 +167,7 @@ public class IntervalTest
         Assert.assertEquals(Integer.valueOf(1), Iterate.getLast(result));
 
         result.clear();
-        interval.reverseThis().reverseForEach(CollectionAddProcedure.on(result));
+        interval.reverseThis().reverseForEach(result::add);
         Verify.assertSize(5, result);
         Verify.assertContains(1, result);
         Verify.assertContains(5, result);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -152,7 +152,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void testForEachWith()
     {
         MutableList<String> result = Lists.mutable.of();
-        this.list.forEachWith(Procedures2.fromProcedure(CollectionAddProcedure.on(result)), null);
+        this.list.forEachWith(Procedures2.fromProcedure(result::add), null);
         Assert.assertEquals(FastList.newListWith("1", "2"), result);
     }
 
