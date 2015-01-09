@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ public final class ChunkIterator<T>
             {
                 public MutableCollection<T> value()
                 {
-                    return Lists.mutable.of();
+                    return Lists.mutable.empty();
                 }
             };
         }

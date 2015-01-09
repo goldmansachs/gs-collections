@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ public final class CaseProcedure<T> implements Procedure<T>
 {
     private static final long serialVersionUID = 1L;
 
-    private final List<Pair<Predicate<? super T>, Procedure<? super T>>> predicateProcedures = Lists.mutable.of();
+    private final List<Pair<Predicate<? super T>, Procedure<? super T>>> predicateProcedures = Lists.mutable.empty();
     private Procedure<? super T> defaultProcedure;
 
     public CaseProcedure(Procedure<? super T> defaultProcedure)

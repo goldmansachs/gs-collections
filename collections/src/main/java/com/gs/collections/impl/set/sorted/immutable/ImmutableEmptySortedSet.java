@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ import com.gs.collections.impl.utility.ListIterate;
 import net.jcip.annotations.Immutable;
 
 /**
- * This is a zero element {@link ImmutableSortedSet} which is created by calling the SortedSets.immutable.of() method.
+ * This is a zero element {@link ImmutableSortedSet} which is created by calling the SortedSets.immutable.empty() method.
  */
 @Immutable
 final class ImmutableEmptySortedSet<T>
@@ -87,13 +87,13 @@ final class ImmutableEmptySortedSet<T>
     @Override
     public ImmutableSortedSet<T> newWith(T element)
     {
-        return SortedSets.immutable.of(this.comparator, element);
+        return SortedSets.immutable.with(this.comparator, element);
     }
 
     @Override
     public ImmutableSortedSet<T> newWithAll(Iterable<? extends T> elements)
     {
-        return SortedSets.immutable.ofAll(this.comparator, elements);
+        return SortedSets.immutable.withAll(this.comparator, elements);
     }
 
     @Override

@@ -123,7 +123,7 @@ final class ImmutableSingletonBag<T>
 
     public ImmutableBag<T> newWith(T element)
     {
-        return Bags.immutable.of(this.value, element);
+        return Bags.immutable.with(this.value, element);
     }
 
     public ImmutableBag<T> newWithout(T element)
@@ -133,7 +133,7 @@ final class ImmutableSingletonBag<T>
 
     private ImmutableBag<T> emptyIfMatchesOrThis(Predicate<Object> predicate)
     {
-        return predicate.accept(this.value) ? Bags.immutable.<T>of() : this;
+        return predicate.accept(this.value) ? Bags.immutable.<T>empty() : this;
     }
 
     public ImmutableBag<T> newWithAll(Iterable<? extends T> elements)
@@ -195,14 +195,14 @@ final class ImmutableSingletonBag<T>
     {
         return predicate.accept(1)
                 ? this
-                : Bags.immutable.<T>of();
+                : Bags.immutable.<T>empty();
     }
 
     public ImmutableBag<T> select(Predicate<? super T> predicate)
     {
         return predicate.accept(this.value)
                 ? this
-                : Bags.immutable.<T>of();
+                : Bags.immutable.<T>empty();
     }
 
     @Override
@@ -252,12 +252,12 @@ final class ImmutableSingletonBag<T>
     {
         return clazz.isInstance(this.value)
                 ? (ImmutableBag<S>) this
-                : Bags.immutable.<S>of();
+                : Bags.immutable.<S>empty();
     }
 
     public <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function)
     {
-        return Bags.immutable.of(function.valueOf(this.value));
+        return Bags.immutable.with(function.valueOf(this.value));
     }
 
     public <V> ImmutableBag<V> collectIf(
@@ -265,8 +265,8 @@ final class ImmutableSingletonBag<T>
             Function<? super T, ? extends V> function)
     {
         return predicate.accept(this.value)
-                ? Bags.immutable.of(function.valueOf(this.value))
-                : Bags.immutable.<V>of();
+                ? Bags.immutable.with(function.valueOf(this.value))
+                : Bags.immutable.<V>empty();
     }
 
     @Override
@@ -403,9 +403,9 @@ final class ImmutableSingletonBag<T>
         Iterator<S> iterator = that.iterator();
         if (!iterator.hasNext())
         {
-            return Bags.immutable.of();
+            return Bags.immutable.empty();
         }
-        return Bags.immutable.of(Tuples.pair(this.value, iterator.next()));
+        return Bags.immutable.with(Tuples.pair(this.value, iterator.next()));
     }
 
     /**
@@ -414,7 +414,7 @@ final class ImmutableSingletonBag<T>
     @Deprecated
     public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
-        return Sets.immutable.of(Tuples.pair(this.value, 0));
+        return Sets.immutable.with(Tuples.pair(this.value, 0));
     }
 
     public Iterator<T> iterator()

@@ -577,7 +577,7 @@ public abstract class AbstractLazyIterable<T>
 
     public MutableList<T> toList()
     {
-        MutableList<T> list = Lists.mutable.of();
+        MutableList<T> list = Lists.mutable.empty();
         this.forEachWith(Procedures2.<T>addToCollection(), list);
         return list;
     }
@@ -625,7 +625,7 @@ public abstract class AbstractLazyIterable<T>
 
     public MutableBag<T> toBag()
     {
-        MutableBag<T> bag = Bags.mutable.of();
+        MutableBag<T> bag = Bags.mutable.empty();
         this.forEachWith(Procedures2.<T>addToCollection(), bag);
         return bag;
     }

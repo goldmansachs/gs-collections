@@ -95,7 +95,7 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMutableMapIterabl
 
     public ImmutableMap<K, V> toImmutable()
     {
-        return Maps.immutable.ofAll(this);
+        return Maps.immutable.withAll(this);
     }
 
     public MutableMap<K, V> asSynchronized()

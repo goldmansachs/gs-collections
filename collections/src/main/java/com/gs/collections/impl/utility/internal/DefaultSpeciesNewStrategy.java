@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,13 +50,13 @@ public class DefaultSpeciesNewStrategy
         }
         if (collection instanceof Proxy)
         {
-            return createNewInstanceForCollectionType(collection);
+            return DefaultSpeciesNewStrategy.createNewInstanceForCollectionType(collection);
         }
         if (ReflectionHelper.hasDefaultConstructor(collection.getClass()))
         {
             return (Collection<T>) ReflectionHelper.newInstance(collection.getClass());
         }
-        return createNewInstanceForCollectionType(collection);
+        return DefaultSpeciesNewStrategy.createNewInstanceForCollectionType(collection);
     }
 
     /**
@@ -77,7 +77,7 @@ public class DefaultSpeciesNewStrategy
                 || collection instanceof PriorityBlockingQueue
                 || collection instanceof SortedSet)
         {
-            return createNewInstanceForCollectionType(collection);
+            return DefaultSpeciesNewStrategy.createNewInstanceForCollectionType(collection);
         }
         Constructor<?> constructor = ReflectionHelper.getConstructor(collection.getClass(), SIZE_CONSTRUCTOR_TYPES);
         if (constructor != null)
@@ -93,12 +93,12 @@ public class DefaultSpeciesNewStrategy
                 || collection instanceof PriorityQueue
                 || collection instanceof PriorityBlockingQueue)
         {
-            return Lists.mutable.of();
+            return Lists.mutable.empty();
         }
         if (collection instanceof Set)
         {
-            return Sets.mutable.of();
+            return Sets.mutable.empty();
         }
-        return Lists.mutable.of();
+        return Lists.mutable.empty();
     }
 }

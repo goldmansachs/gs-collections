@@ -280,7 +280,7 @@ public class UnmodifiableTreeMap<K, V>
 
     public ImmutableSortedMap<K, V> toImmutable()
     {
-        return SortedMaps.immutable.ofSortedMap(this);
+        return SortedMaps.immutable.withSortedMap(this);
     }
 
     public Iterator<V> iterator()
@@ -967,19 +967,19 @@ public class UnmodifiableTreeMap<K, V>
     @Override
     public MutableSortedMap<K, V> headMap(K toKey)
     {
-        return of(this.getMutableSortedMap().headMap(toKey));
+        return UnmodifiableTreeMap.of(this.getMutableSortedMap().headMap(toKey));
     }
 
     @Override
     public MutableSortedMap<K, V> tailMap(K fromKey)
     {
-        return of(this.getMutableSortedMap().tailMap(fromKey));
+        return UnmodifiableTreeMap.of(this.getMutableSortedMap().tailMap(fromKey));
     }
 
     @Override
     public MutableSortedMap<K, V> subMap(K fromKey, K toKey)
     {
-        return of(this.getMutableSortedMap().subMap(fromKey, toKey));
+        return UnmodifiableTreeMap.of(this.getMutableSortedMap().subMap(fromKey, toKey));
     }
 
     @Override

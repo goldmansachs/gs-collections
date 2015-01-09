@@ -121,7 +121,7 @@ public final class SetAdapter<T>
 
     public ImmutableSet<T> toImmutable()
     {
-        return Sets.immutable.ofAll(this.delegate);
+        return Sets.immutable.withAll(this.delegate);
     }
 
     public static <E> MutableSet<E> adapt(Set<E> set)

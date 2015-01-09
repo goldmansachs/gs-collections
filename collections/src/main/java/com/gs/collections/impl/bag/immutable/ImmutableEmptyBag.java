@@ -93,14 +93,13 @@ import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.partition.bag.PartitionHashBag;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.LazyIterate;
 import net.jcip.annotations.Immutable;
 
 /**
- * This is a zero element {@link ImmutableBag} which is created by calling the Bags.immutable.of().
+ * This is a zero element {@link ImmutableBag} which is created by calling the Bags.immutable.empty().
  *
  * @since 1.0
  */
@@ -149,7 +148,7 @@ final class ImmutableEmptyBag<T>
 
     public MutableMap<T, Integer> toMapOfItemToCount()
     {
-        return Maps.mutable.of();
+        return Maps.mutable.empty();
     }
 
     public ImmutableBag<T> toImmutable()
@@ -239,7 +238,7 @@ final class ImmutableEmptyBag<T>
 
     public ImmutableBag<T> newWith(T element)
     {
-        return Bags.immutable.of(element);
+        return Bags.immutable.with(element);
     }
 
     public ImmutableBag<T> newWithout(T element)
@@ -335,7 +334,7 @@ final class ImmutableEmptyBag<T>
     @Override
     public ImmutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        return BooleanBags.immutable.of();
+        return BooleanBags.immutable.empty();
     }
 
     @Override
@@ -347,7 +346,7 @@ final class ImmutableEmptyBag<T>
     @Override
     public ImmutableByteBag collectByte(ByteFunction<? super T> byteFunction)
     {
-        return ByteBags.immutable.of();
+        return ByteBags.immutable.empty();
     }
 
     @Override
@@ -359,7 +358,7 @@ final class ImmutableEmptyBag<T>
     @Override
     public ImmutableCharBag collectChar(CharFunction<? super T> charFunction)
     {
-        return CharBags.immutable.of();
+        return CharBags.immutable.empty();
     }
 
     @Override
@@ -371,7 +370,7 @@ final class ImmutableEmptyBag<T>
     @Override
     public ImmutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        return DoubleBags.immutable.of();
+        return DoubleBags.immutable.empty();
     }
 
     @Override
@@ -383,7 +382,7 @@ final class ImmutableEmptyBag<T>
     @Override
     public ImmutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
     {
-        return FloatBags.immutable.of();
+        return FloatBags.immutable.empty();
     }
 
     @Override
@@ -395,7 +394,7 @@ final class ImmutableEmptyBag<T>
     @Override
     public ImmutableIntBag collectInt(IntFunction<? super T> intFunction)
     {
-        return IntBags.immutable.of();
+        return IntBags.immutable.empty();
     }
 
     @Override
@@ -407,7 +406,7 @@ final class ImmutableEmptyBag<T>
     @Override
     public ImmutableLongBag collectLong(LongFunction<? super T> longFunction)
     {
-        return LongBags.immutable.of();
+        return LongBags.immutable.empty();
     }
 
     @Override
@@ -419,7 +418,7 @@ final class ImmutableEmptyBag<T>
     @Override
     public ImmutableShortBag collectShort(ShortFunction<? super T> shortFunction)
     {
-        return ShortBags.immutable.of();
+        return ShortBags.immutable.empty();
     }
 
     @Override
@@ -505,7 +504,7 @@ final class ImmutableEmptyBag<T>
     @Override
     public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
-        return Maps.immutable.of();
+        return Maps.immutable.empty();
     }
 
     @Override
@@ -597,37 +596,37 @@ final class ImmutableEmptyBag<T>
     @Override
     public MutableList<T> toList()
     {
-        return Lists.mutable.of();
+        return Lists.mutable.empty();
     }
 
     @Override
     public MutableList<T> toSortedList()
     {
-        return Lists.mutable.of();
+        return Lists.mutable.empty();
     }
 
     @Override
     public MutableList<T> toSortedList(Comparator<? super T> comparator)
     {
-        return Lists.mutable.of();
+        return Lists.mutable.empty();
     }
 
     @Override
     public <V extends Comparable<? super V>> MutableList<T> toSortedListBy(Function<? super T, ? extends V> function)
     {
-        return Lists.mutable.of();
+        return Lists.mutable.empty();
     }
 
     @Override
     public MutableSet<T> toSet()
     {
-        return UnifiedSet.newSet();
+        return Sets.mutable.empty();
     }
 
     @Override
     public MutableBag<T> toBag()
     {
-        return Bags.mutable.of();
+        return Bags.mutable.empty();
     }
 
     @Override
@@ -784,7 +783,7 @@ final class ImmutableEmptyBag<T>
     @Deprecated
     public <S> ImmutableBag<Pair<T, S>> zip(Iterable<S> that)
     {
-        return Bags.immutable.of();
+        return Bags.immutable.empty();
     }
 
     @Override
@@ -799,7 +798,7 @@ final class ImmutableEmptyBag<T>
     @Deprecated
     public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
-        return Sets.immutable.of();
+        return Sets.immutable.empty();
     }
 
     @Override
@@ -815,7 +814,7 @@ final class ImmutableEmptyBag<T>
         {
             throw new IllegalArgumentException("Size for groups must be positive but was: " + size);
         }
-        return Bags.immutable.of();
+        return Bags.immutable.empty();
     }
 
     private Object writeReplace()

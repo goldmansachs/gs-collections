@@ -100,8 +100,8 @@ public final class IteratorIterate
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        MutableList<T> positiveResult = Lists.mutable.of();
-        MutableList<T> negativeResult = Lists.mutable.of();
+        MutableList<T> positiveResult = Lists.mutable.empty();
+        MutableList<T> negativeResult = Lists.mutable.empty();
         while (iterator.hasNext())
         {
             T item = iterator.next();
@@ -1086,10 +1086,10 @@ public final class IteratorIterate
             throw new IllegalArgumentException("Size for groups must be positive but was: " + size);
         }
 
-        MutableList<RichIterable<T>> result = Lists.mutable.of();
+        MutableList<RichIterable<T>> result = Lists.mutable.empty();
         while (iterator.hasNext())
         {
-            MutableList<T> batch = Lists.mutable.of();
+            MutableList<T> batch = Lists.mutable.empty();
             for (int i = 0; i < size && iterator.hasNext(); i++)
             {
                 batch.add(iterator.next());

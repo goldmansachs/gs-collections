@@ -131,6 +131,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
+import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.set.CollectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.RootUnsortedSetBatch;
@@ -880,8 +881,8 @@ public class UnifiedSet<T>
             final Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        final MutableList<T> positiveResult = Lists.mutable.of();
-        final MutableList<T> negativeResult = Lists.mutable.of();
+        final MutableList<T> positiveResult = Lists.mutable.empty();
+        final MutableList<T> negativeResult = Lists.mutable.empty();
         this.forEachWith(new Procedure2<T, P>()
         {
             public void value(T each, P parm)
@@ -1591,7 +1592,7 @@ public class UnifiedSet<T>
 
     public ImmutableSet<T> toImmutable()
     {
-        return Sets.immutable.ofAll(this);
+        return Sets.immutable.withAll(this);
     }
 
     public boolean notEmpty()
@@ -3123,22 +3124,22 @@ public class UnifiedSet<T>
 
         public void forEach(Procedure<? super T> procedure)
         {
-            forEach(this, procedure);
+            AbstractParallelIterable.forEach(this, procedure);
         }
 
         public boolean anySatisfy(Predicate<? super T> predicate)
         {
-            return anySatisfy(this, predicate);
+            return AbstractParallelIterable.anySatisfy(this, predicate);
         }
 
         public boolean allSatisfy(Predicate<? super T> predicate)
         {
-            return allSatisfy(this, predicate);
+            return AbstractParallelIterable.allSatisfy(this, predicate);
         }
 
         public T detect(Predicate<? super T> predicate)
         {
-            return detect(this, predicate);
+            return AbstractParallelIterable.detect(this, predicate);
         }
 
         @Override

@@ -477,7 +477,7 @@ public class SynchronizedMutableSet<T>
     {
         synchronized (this.getLock())
         {
-            return Sets.immutable.ofAll(this.getMutableSet());
+            return Sets.immutable.withAll(this.getMutableSet());
         }
     }
 }

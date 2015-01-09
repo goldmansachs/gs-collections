@@ -105,7 +105,7 @@ public class UnmodifiableBag<T>
     @Override
     public ImmutableBag<T> toImmutable()
     {
-        return Bags.immutable.ofAll(this);
+        return Bags.immutable.withAll(this);
     }
 
     @Override

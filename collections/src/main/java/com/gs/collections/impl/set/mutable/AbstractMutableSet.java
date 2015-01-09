@@ -245,7 +245,7 @@ public abstract class AbstractMutableSet<T>
 
     public ImmutableSet<T> toImmutable()
     {
-        return Sets.immutable.ofAll(this);
+        return Sets.immutable.withAll(this);
     }
 
     /**

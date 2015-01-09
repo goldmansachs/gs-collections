@@ -332,7 +332,7 @@ public final class RandomAccessListIterate
             List<T> list,
             Function<? super T, ? extends A> function)
     {
-        return collect(list, function, FastList.<A>newList(list.size()));
+        return RandomAccessListIterate.collect(list, function, FastList.<A>newList(list.size()));
     }
 
     /**
@@ -566,7 +566,7 @@ public final class RandomAccessListIterate
             List<T> list,
             Function<? super T, ? extends Iterable<A>> function)
     {
-        return flatCollect(list, function, FastList.<A>newList(list.size()));
+        return RandomAccessListIterate.flatCollect(list, function, FastList.<A>newList(list.size()));
     }
 
     /**
@@ -962,8 +962,8 @@ public final class RandomAccessListIterate
             Predicate2<? super T, ? super IV> predicate,
             IV injectedValue)
     {
-        MutableList<T> positiveResult = Lists.mutable.of();
-        MutableList<T> negativeResult = Lists.mutable.of();
+        MutableList<T> positiveResult = Lists.mutable.empty();
+        MutableList<T> negativeResult = Lists.mutable.empty();
         int size = list.size();
         for (int i = 0; i < size; i++)
         {

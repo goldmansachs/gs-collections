@@ -52,8 +52,8 @@ public class ImmutableBiMapFactoryImpl implements ImmutableBiMapFactory
     public <K, V> ImmutableBiMap<K, V> with(K key, V value)
     {
         return new ImmutableHashBiMap<K, V>(
-                Maps.immutable.of(key, value),
-                Maps.immutable.of(value, key));
+                Maps.immutable.with(key, value),
+                Maps.immutable.with(value, key));
     }
 
     public <K, V> ImmutableBiMap<K, V> of(K key1, V value1, K key2, V value2)
@@ -64,8 +64,8 @@ public class ImmutableBiMapFactoryImpl implements ImmutableBiMapFactory
     public <K, V> ImmutableBiMap<K, V> with(K key1, V value1, K key2, V value2)
     {
         return new ImmutableHashBiMap<K, V>(
-                Maps.immutable.of(key1, value1, key2, value2),
-                Maps.immutable.of(value1, key1, value2, key2));
+                Maps.immutable.with(key1, value1, key2, value2),
+                Maps.immutable.with(value1, key1, value2, key2));
     }
 
     public <K, V> ImmutableBiMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3)
@@ -76,8 +76,8 @@ public class ImmutableBiMapFactoryImpl implements ImmutableBiMapFactory
     public <K, V> ImmutableBiMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3)
     {
         return new ImmutableHashBiMap<K, V>(
-                Maps.immutable.of(key1, value1, key2, value2, key3, value3),
-                Maps.immutable.of(value1, key1, value2, key2, value3, key3));
+                Maps.immutable.with(key1, value1, key2, value2, key3, value3),
+                Maps.immutable.with(value1, key1, value2, key2, value3, key3));
     }
 
     public <K, V> ImmutableBiMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
@@ -88,8 +88,8 @@ public class ImmutableBiMapFactoryImpl implements ImmutableBiMapFactory
     public <K, V> ImmutableBiMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
         return new ImmutableHashBiMap<K, V>(
-                Maps.immutable.of(key1, value1, key2, value2, key3, value3, key4, value4),
-                Maps.immutable.of(value1, key1, value2, key2, value3, key3, value4, key4));
+                Maps.immutable.with(key1, value1, key2, value2, key3, value3, key4, value4),
+                Maps.immutable.with(value1, key1, value2, key2, value3, key3, value4, key4));
     }
 
     public <K, V> ImmutableBiMap<K, V> ofAll(Map<K, V> map)

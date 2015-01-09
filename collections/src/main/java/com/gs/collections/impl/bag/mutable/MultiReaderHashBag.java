@@ -215,7 +215,7 @@ public final class MultiReaderHashBag<T>
         this.acquireReadLock();
         try
         {
-            return Bags.immutable.ofAll(this.delegate);
+            return Bags.immutable.withAll(this.delegate);
         }
         finally
         {
@@ -851,7 +851,7 @@ public final class MultiReaderHashBag<T>
 
         public ImmutableBag<T> toImmutable()
         {
-            return Bags.immutable.ofAll(this.getDelegate());
+            return Bags.immutable.withAll(this.getDelegate());
         }
 
         public LazyIterable<T> asLazy()

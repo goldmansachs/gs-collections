@@ -153,7 +153,7 @@ public class SynchronizedSortedSet<T>
     {
         synchronized (this.getLock())
         {
-            return of(this.getDelegate().clone());
+            return SynchronizedSortedSet.of(this.getDelegate().clone());
         }
     }
 
@@ -566,7 +566,7 @@ public class SynchronizedSortedSet<T>
     {
         synchronized (this.getLock())
         {
-            return SortedSets.immutable.ofSortedSet(this.getDelegate());
+            return SortedSets.immutable.withSortedSet(this.getDelegate());
         }
     }
 
@@ -587,7 +587,7 @@ public class SynchronizedSortedSet<T>
     {
         synchronized (this.getLock())
         {
-            return of(this.getDelegate().subSet(fromElement, toElement), this.getLock());
+            return SynchronizedSortedSet.of(this.getDelegate().subSet(fromElement, toElement), this.getLock());
         }
     }
 
@@ -595,7 +595,7 @@ public class SynchronizedSortedSet<T>
     {
         synchronized (this.getLock())
         {
-            return of(this.getDelegate().headSet(toElement), this.getLock());
+            return SynchronizedSortedSet.of(this.getDelegate().headSet(toElement), this.getLock());
         }
     }
 
@@ -603,7 +603,7 @@ public class SynchronizedSortedSet<T>
     {
         synchronized (this.getLock())
         {
-            return of(this.getDelegate().tailSet(fromElement), this.getLock());
+            return SynchronizedSortedSet.of(this.getDelegate().tailSet(fromElement), this.getLock());
         }
     }
 }

@@ -61,7 +61,7 @@ public final class ImmutableSetMultimapImpl<K, V>
     @Override
     protected ImmutableSet<V> createCollection()
     {
-        return Sets.immutable.of();
+        return Sets.immutable.empty();
     }
 
     public ImmutableSetMultimap<K, V> newEmpty()

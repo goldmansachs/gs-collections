@@ -542,7 +542,7 @@ public abstract class AbstractMutableList<T>
 
     public MutableStack<T> toStack()
     {
-        return Stacks.mutable.ofAll(this);
+        return Stacks.mutable.withAll(this);
     }
 
     public MutableList<T> asUnmodifiable()
@@ -552,7 +552,7 @@ public abstract class AbstractMutableList<T>
 
     public ImmutableList<T> toImmutable()
     {
-        return Lists.immutable.ofAll(this);
+        return Lists.immutable.withAll(this);
     }
 
     public MutableList<T> asSynchronized()
@@ -662,7 +662,7 @@ public abstract class AbstractMutableList<T>
 
     public MutableList<T> newEmpty()
     {
-        return Lists.mutable.of();
+        return Lists.mutable.empty();
     }
 
     public MutableList<T> tap(Procedure<? super T> procedure)

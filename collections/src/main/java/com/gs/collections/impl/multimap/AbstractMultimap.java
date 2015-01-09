@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -111,7 +111,7 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
 
     public Bag<K> keyBag()
     {
-        final MutableBag<K> bag = Bags.mutable.of();
+        final MutableBag<K> bag = Bags.mutable.empty();
         this.getMap().forEachKeyValue(new Procedure2<K, C>()
         {
             public void value(K key, C value)

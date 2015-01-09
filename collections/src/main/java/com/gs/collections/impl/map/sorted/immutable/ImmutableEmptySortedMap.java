@@ -42,7 +42,7 @@ import com.gs.collections.impl.utility.LazyIterate;
 import net.jcip.annotations.Immutable;
 
 /**
- * This is a zero element {@link ImmutableSortedMap} which is created by calling SortedMaps.immutable.of().
+ * This is a zero element {@link ImmutableSortedMap} which is created by calling SortedMaps.immutable.empty().
  */
 @Immutable
 final class ImmutableEmptySortedMap<K, V>
@@ -199,13 +199,13 @@ final class ImmutableEmptySortedMap<K, V>
     @Override
     public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
-        return Maps.immutable.of();
+        return Maps.immutable.empty();
     }
 
     @Override
     public <R> ImmutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
     {
-        return SortedMaps.immutable.of(this.comparator);
+        return SortedMaps.immutable.with(this.comparator);
     }
 
     @Override
@@ -243,7 +243,7 @@ final class ImmutableEmptySortedMap<K, V>
 
     public Collection<V> values()
     {
-        return Lists.immutable.<V>of().castToList();
+        return Lists.immutable.<V>empty().castToList();
     }
 
     public K firstKey()

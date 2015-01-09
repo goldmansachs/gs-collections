@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ public final class ImmutableBagMultimapImpl<K, V>
     @Override
     protected ImmutableBag<V> createCollection()
     {
-        return Bags.immutable.of();
+        return Bags.immutable.empty();
     }
 
     public ImmutableBagMultimap<K, V> newEmpty()
@@ -120,7 +120,7 @@ public final class ImmutableBagMultimapImpl<K, V>
             {
                 K key = (K) in.readObject();
                 int valuesSize = in.readInt();
-                MutableBag<V> bag = Bags.mutable.of();
+                MutableBag<V> bag = Bags.mutable.empty();
                 for (int j = 0; j < valuesSize; j++)
                 {
                     V value = (V) in.readObject();

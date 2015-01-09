@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import net.jcip.annotations.Immutable;
 
 /**
  * This is a nine element immutable List which is created by calling
- * Lists.immutable.of(one, two, three, four, five, six, seven, eight, nine) method.
+ * Lists.immutable.with(one, two, three, four, five, six, seven, eight, nine) method.
  */
 @Immutable
 final class ImmutableNonupletonList<T>
@@ -110,7 +110,7 @@ final class ImmutableNonupletonList<T>
 
     public ImmutableList<T> newWith(T newItem)
     {
-        return Lists.immutable.of(this.get(0),
+        return Lists.immutable.with(this.get(0),
                 this.get(1),
                 this.get(2),
                 this.get(3),

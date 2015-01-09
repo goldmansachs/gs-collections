@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2752,7 +2752,7 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).toArray();
         }
-        MutableList<T> result = Lists.mutable.of();
+        MutableList<T> result = Lists.mutable.empty();
         Iterate.addAllTo(iterable, result);
         return result.toArray();
     }
@@ -2770,7 +2770,7 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).toArray(target);
         }
-        MutableList<T> result = Lists.mutable.of();
+        MutableList<T> result = Lists.mutable.empty();
         Iterate.addAllTo(iterable, result);
         return result.toArray(target);
     }
@@ -3263,7 +3263,7 @@ public final class Iterate
         {
             public void value(final K key, Iterable<V> values)
             {
-                forEach(values, new Procedure<V>()
+                Iterate.forEach(values, new Procedure<V>()
                 {
                     public void value(V value)
                     {
@@ -3282,7 +3282,7 @@ public final class Iterate
         {
             public void value(final K key, Iterable<V> values)
             {
-                forEach(values, new Procedure<V>()
+                Iterate.forEach(values, new Procedure<V>()
                 {
                     public void value(V value)
                     {
@@ -3301,7 +3301,7 @@ public final class Iterate
         {
             public void value(final K key, Iterable<V> values)
             {
-                forEach(values, new Procedure<V>()
+                Iterate.forEach(values, new Procedure<V>()
                 {
                     public void value(V value)
                     {

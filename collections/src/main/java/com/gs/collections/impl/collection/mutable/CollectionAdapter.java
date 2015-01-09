@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,8 +85,8 @@ public final class CollectionAdapter<T>
     public ImmutableCollection<T> toImmutable()
     {
         return this.delegate instanceof Set
-                ? Sets.immutable.ofAll(this.delegate)
-                : Lists.immutable.ofAll(this.delegate);
+                ? Sets.immutable.withAll(this.delegate)
+                : Lists.immutable.withAll(this.delegate);
     }
 
     public static <E> MutableSet<E> wrapSet(Iterable<E> iterable)
@@ -202,6 +202,6 @@ public final class CollectionAdapter<T>
         {
             return UnifiedSet.newSet();
         }
-        return Lists.mutable.of();
+        return Lists.mutable.empty();
     }
 }

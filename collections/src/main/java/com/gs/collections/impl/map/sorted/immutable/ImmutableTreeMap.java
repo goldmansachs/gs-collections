@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -236,7 +236,7 @@ public class ImmutableTreeMap<K, V>
     public Set<Entry<K, V>> entrySet()
     {
         int length = this.keys.length;
-        MutableSortedSet<Entry<K, V>> entrySet = SortedSets.mutable.of(new EntryComparator<K, V>(this.comparator));
+        MutableSortedSet<Entry<K, V>> entrySet = SortedSets.mutable.with(new EntryComparator<K, V>(this.comparator));
         for (int index = 0; index < length; index++)
         {
             entrySet.add(ImmutableEntry.of(this.keys[index], this.values[index]));

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -121,7 +121,7 @@ public final class RandomAccessListAdapter<T>
 
     public ImmutableList<T> toImmutable()
     {
-        return Lists.immutable.ofAll(this.delegate);
+        return Lists.immutable.withAll(this.delegate);
     }
 
     public MutableList<T> asUnmodifiable()
@@ -146,7 +146,7 @@ public final class RandomAccessListAdapter<T>
     @Deprecated
     public MutableList<T> newEmpty()
     {
-        return Lists.mutable.of();
+        return Lists.mutable.empty();
     }
 
     @Override

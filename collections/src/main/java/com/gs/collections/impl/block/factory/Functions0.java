@@ -137,7 +137,7 @@ public final class Functions0
 
         public MutableList<T> value()
         {
-            return Lists.mutable.of();
+            return Lists.mutable.empty();
         }
     }
 
@@ -147,7 +147,7 @@ public final class Functions0
 
         public MutableMap<K, V> value()
         {
-            return Maps.mutable.of();
+            return Maps.mutable.empty();
         }
     }
 
@@ -157,7 +157,7 @@ public final class Functions0
 
         public MutableSet<T> value()
         {
-            return Sets.mutable.of();
+            return Sets.mutable.empty();
         }
     }
 
@@ -167,7 +167,7 @@ public final class Functions0
 
         public MutableBag<T> value()
         {
-            return Bags.mutable.of();
+            return Bags.mutable.empty();
         }
     }
 

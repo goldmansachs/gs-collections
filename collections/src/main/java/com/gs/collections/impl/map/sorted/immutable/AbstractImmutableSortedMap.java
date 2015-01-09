@@ -203,7 +203,7 @@ public abstract class AbstractImmutableSortedMap<K, V>
 
     public ImmutableSortedMap<K, V> select(final Predicate2<? super K, ? super V> predicate)
     {
-        final MutableSortedMap<K, V> selectedMap = SortedMaps.mutable.of(this.comparator());
+        final MutableSortedMap<K, V> selectedMap = SortedMaps.mutable.with(this.comparator());
         this.forEachKeyValue(new Procedure2<K, V>()
         {
             public void value(K key, V value)
@@ -229,7 +229,7 @@ public abstract class AbstractImmutableSortedMap<K, V>
 
     public ImmutableSortedMap<K, V> reject(final Predicate2<? super K, ? super V> predicate)
     {
-        final MutableSortedMap<K, V> rejectedMap = SortedMaps.mutable.of(this.comparator());
+        final MutableSortedMap<K, V> rejectedMap = SortedMaps.mutable.with(this.comparator());
         this.forEachKeyValue(new Procedure2<K, V>()
         {
             public void value(K key, V value)
@@ -350,7 +350,7 @@ public abstract class AbstractImmutableSortedMap<K, V>
 
     public <R> ImmutableSortedMap<K, R> collectValues(final Function2<? super K, ? super V, ? extends R> function)
     {
-        final MutableSortedMap<K, R> collectedMap = SortedMaps.mutable.of(this.comparator());
+        final MutableSortedMap<K, R> collectedMap = SortedMaps.mutable.with(this.comparator());
         this.forEachKeyValue(new Procedure2<K, V>()
         {
             public void value(K key, V value)

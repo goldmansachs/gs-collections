@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,6 @@ import com.gs.collections.impl.collection.mutable.primitive.UnmodifiableBooleanC
 import com.gs.collections.impl.factory.primitive.BooleanLists;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.primitive.AbstractBooleanIterable;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 
@@ -230,7 +229,7 @@ public abstract class AbstractMutableBooleanValuesMap extends AbstractBooleanIte
 
     public MutableBooleanCollection select(BooleanPredicate predicate)
     {
-        BooleanArrayList result = new BooleanArrayList();
+        MutableBooleanList result = BooleanLists.mutable.empty();
 
         if (this.getSentinelValues() != null)
         {
@@ -256,7 +255,7 @@ public abstract class AbstractMutableBooleanValuesMap extends AbstractBooleanIte
 
     public MutableBooleanCollection reject(BooleanPredicate predicate)
     {
-        BooleanArrayList result = new BooleanArrayList();
+        MutableBooleanList result = BooleanLists.mutable.empty();
         if (this.getSentinelValues() != null)
         {
             if (this.getSentinelValues().containsZeroKey && !predicate.accept(this.getSentinelValues().zeroValue))

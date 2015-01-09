@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1212,8 +1212,8 @@ public final class ArrayListIterate
         int size = list.size();
         if (ArrayListIterate.isOptimizableArrayList(list, size))
         {
-            MutableList<T> positiveResult = Lists.mutable.of();
-            MutableList<T> negativeResult = Lists.mutable.of();
+            MutableList<T> positiveResult = Lists.mutable.empty();
+            MutableList<T> negativeResult = Lists.mutable.empty();
             T[] elements = ArrayListIterate.getInternalArray(list);
             for (int i = 0; i < size; i++)
             {
@@ -1415,7 +1415,7 @@ public final class ArrayListIterate
                     currentFilledIndex++;
                 }
             }
-            wipeAndResetTheEnd(currentFilledIndex, size, elements, list);
+            ArrayListIterate.wipeAndResetTheEnd(currentFilledIndex, size, elements, list);
         }
         else
         {
@@ -1449,7 +1449,7 @@ public final class ArrayListIterate
                     currentFilledIndex++;
                 }
             }
-            wipeAndResetTheEnd(currentFilledIndex, size, elements, list);
+            ArrayListIterate.wipeAndResetTheEnd(currentFilledIndex, size, elements, list);
         }
         else
         {

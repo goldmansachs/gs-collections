@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ import com.gs.collections.impl.partition.list.PartitionFastList;
 import net.jcip.annotations.Immutable;
 
 /**
- * This is a zero element {@link ImmutableList} which is created by calling the Lists.immutable.of() method.
+ * This is a zero element {@link ImmutableList} which is created by calling the Lists.immutable.empty() method.
  */
 @Immutable
 final class ImmutableEmptyList<T>
@@ -121,7 +121,7 @@ final class ImmutableEmptyList<T>
 
     public ImmutableList<T> newWith(T newItem)
     {
-        return Lists.immutable.of(newItem);
+        return Lists.immutable.with(newItem);
     }
 
     @Override
@@ -163,7 +163,7 @@ final class ImmutableEmptyList<T>
     @Override
     public <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that)
     {
-        return Lists.immutable.of();
+        return Lists.immutable.empty();
     }
 
     @Override
@@ -175,13 +175,13 @@ final class ImmutableEmptyList<T>
     @Override
     public ImmutableList<Pair<T, Integer>> zipWithIndex()
     {
-        return Lists.immutable.of();
+        return Lists.immutable.empty();
     }
 
     @Override
     public MutableStack<T> toStack()
     {
-        return Stacks.mutable.of();
+        return Stacks.mutable.empty();
     }
 
     @Override
@@ -223,13 +223,13 @@ final class ImmutableEmptyList<T>
     @Override
     public <V> ImmutableList<V> collect(Function<? super T, ? extends V> function)
     {
-        return Lists.immutable.of();
+        return Lists.immutable.empty();
     }
 
     @Override
     public <V> ImmutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        return Lists.immutable.of();
+        return Lists.immutable.empty();
     }
 
     @Override
@@ -241,7 +241,7 @@ final class ImmutableEmptyList<T>
     @Override
     public <V> ImmutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        return Lists.immutable.of();
+        return Lists.immutable.empty();
     }
 
     @Override

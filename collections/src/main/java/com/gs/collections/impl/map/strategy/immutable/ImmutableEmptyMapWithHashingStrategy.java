@@ -41,7 +41,7 @@ import net.jcip.annotations.Immutable;
 
 /**
  * This is a zero element {@link ImmutableUnifiedMapWithHashingStrategy} which is created by calling
- * the HashingStrategyMaps.immutable.of() method.
+ * the HashingStrategyMaps.immutable.empty() method.
  */
 @Immutable
 final class ImmutableEmptyMapWithHashingStrategy<K, V>
@@ -99,7 +99,7 @@ final class ImmutableEmptyMapWithHashingStrategy<K, V>
 
     public Collection<V> values()
     {
-        return Lists.immutable.<V>of().castToList();
+        return Lists.immutable.<V>empty().castToList();
     }
 
     @Override
@@ -197,7 +197,7 @@ final class ImmutableEmptyMapWithHashingStrategy<K, V>
     @Override
     public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
-        return Maps.immutable.of();
+        return Maps.immutable.empty();
     }
 
     @Override

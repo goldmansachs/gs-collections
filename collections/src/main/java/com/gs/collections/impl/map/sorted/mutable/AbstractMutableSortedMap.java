@@ -132,7 +132,7 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMutableMapI
 
     public ImmutableSortedMap<K, V> toImmutable()
     {
-        return SortedMaps.immutable.ofSortedMap(this);
+        return SortedMaps.immutable.withSortedMap(this);
     }
 
     public MutableSortedMap<K, V> asSynchronized()

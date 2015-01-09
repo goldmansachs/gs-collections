@@ -104,7 +104,7 @@ public class UnmodifiableMutableSet<T>
     @Override
     public ImmutableSet<T> toImmutable()
     {
-        return Sets.immutable.ofAll(this.getMutableSet());
+        return Sets.immutable.withAll(this.getMutableSet());
     }
 
     @Override

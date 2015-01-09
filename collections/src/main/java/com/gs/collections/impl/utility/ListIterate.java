@@ -598,7 +598,7 @@ public final class ListIterate
             List<T> list,
             Function<? super T, ? extends Iterable<A>> function)
     {
-        return flatCollect(list, function, FastList.<A>newList(list.size()));
+        return ListIterate.flatCollect(list, function, FastList.<A>newList(list.size()));
     }
 
     /**
@@ -1540,10 +1540,10 @@ public final class ListIterate
         }
 
         Iterator<T> iterator = list.iterator();
-        MutableList<RichIterable<T>> result = Lists.mutable.of();
+        MutableList<RichIterable<T>> result = Lists.mutable.empty();
         while (iterator.hasNext())
         {
-            MutableCollection<T> batch = Lists.mutable.of();
+            MutableCollection<T> batch = Lists.mutable.empty();
             for (int i = 0; i < size && iterator.hasNext(); i++)
             {
                 batch.add(iterator.next());

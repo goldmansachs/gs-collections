@@ -38,7 +38,7 @@ import com.gs.collections.impl.utility.LazyIterate;
 import net.jcip.annotations.Immutable;
 
 /**
- * This is a zero element {@link ImmutableMap} which is created by calling the Maps.immutable.of() method.
+ * This is a zero element {@link ImmutableMap} which is created by calling the Maps.immutable.empty() method.
  */
 @Immutable
 final class ImmutableEmptyMap<K, V>
@@ -91,7 +91,7 @@ final class ImmutableEmptyMap<K, V>
 
     public Collection<V> values()
     {
-        return Lists.immutable.<V>of().castToList();
+        return Lists.immutable.<V>empty().castToList();
     }
 
     @Override
@@ -194,13 +194,13 @@ final class ImmutableEmptyMap<K, V>
     @Override
     public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
-        return Maps.immutable.of();
+        return Maps.immutable.empty();
     }
 
     @Override
     public <R> ImmutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
     {
-        return Maps.immutable.of();
+        return Maps.immutable.empty();
     }
 
     @Override

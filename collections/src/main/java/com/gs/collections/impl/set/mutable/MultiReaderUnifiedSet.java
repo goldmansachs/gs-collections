@@ -210,7 +210,7 @@ public final class MultiReaderUnifiedSet<T>
         this.acquireReadLock();
         try
         {
-            return Sets.immutable.ofAll(this.delegate);
+            return Sets.immutable.withAll(this.delegate);
         }
         finally
         {
@@ -646,7 +646,7 @@ public final class MultiReaderUnifiedSet<T>
 
         public ImmutableSet<T> toImmutable()
         {
-            return Sets.immutable.ofAll(this.getDelegate());
+            return Sets.immutable.withAll(this.getDelegate());
         }
 
         public LazyIterable<T> asLazy()

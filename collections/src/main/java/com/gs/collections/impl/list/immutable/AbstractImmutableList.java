@@ -195,7 +195,7 @@ abstract class AbstractImmutableList<T>
                 results[currentIndex++] = item;
             }
         }
-        return Lists.immutable.of(results);
+        return Lists.immutable.with(results);
     }
 
     public ImmutableList<T> newWithAll(Iterable<? extends T> elements)
@@ -211,7 +211,7 @@ abstract class AbstractImmutableList<T>
                 array[oldSize + index] = each;
             }
         });
-        return Lists.immutable.of(array);
+        return Lists.immutable.with(array);
     }
 
     public ImmutableList<T> newWithoutAll(Iterable<? extends T> elements)
@@ -233,7 +233,7 @@ abstract class AbstractImmutableList<T>
 
     public ImmutableList<T> select(Predicate<? super T> predicate)
     {
-        MutableList<T> result = Lists.mutable.of();
+        MutableList<T> result = Lists.mutable.empty();
         this.forEach(new SelectProcedure<T>(predicate, result));
         return result.toImmutable();
     }
@@ -254,7 +254,7 @@ abstract class AbstractImmutableList<T>
 
     public ImmutableList<T> reject(Predicate<? super T> predicate)
     {
-        MutableList<T> result = Lists.mutable.of();
+        MutableList<T> result = Lists.mutable.empty();
         this.forEach(new RejectProcedure<T>(predicate, result));
         return result.toImmutable();
     }
@@ -292,49 +292,49 @@ abstract class AbstractImmutableList<T>
 
     public <V> ImmutableList<V> collect(Function<? super T, ? extends V> function)
     {
-        MutableList<V> result = Lists.mutable.of();
+        MutableList<V> result = Lists.mutable.empty();
         this.forEach(new CollectProcedure<T, V>(function, result));
         return result.toImmutable();
     }
 
     public ImmutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        BooleanArrayList result = new BooleanArrayList();
+        BooleanArrayList result = new BooleanArrayList(this.size());
         this.forEach(new CollectBooleanProcedure<T>(booleanFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableByteList collectByte(ByteFunction<? super T> byteFunction)
     {
-        ByteArrayList result = new ByteArrayList();
+        ByteArrayList result = new ByteArrayList(this.size());
         this.forEach(new CollectByteProcedure<T>(byteFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableCharList collectChar(CharFunction<? super T> charFunction)
     {
-        CharArrayList result = new CharArrayList();
+        CharArrayList result = new CharArrayList(this.size());
         this.forEach(new CollectCharProcedure<T>(charFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        DoubleArrayList result = new DoubleArrayList();
+        DoubleArrayList result = new DoubleArrayList(this.size());
         this.forEach(new CollectDoubleProcedure<T>(doubleFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
-        FloatArrayList result = new FloatArrayList();
+        FloatArrayList result = new FloatArrayList(this.size());
         this.forEach(new CollectFloatProcedure<T>(floatFunction, result));
         return result.toImmutable();
     }
 
     public ImmutableIntList collectInt(IntFunction<? super T> intFunction)
     {
-        IntArrayList result = new IntArrayList();
+        IntArrayList result = new IntArrayList(this.size());
         this.forEach(new CollectIntProcedure<T>(intFunction, result));
         return result.toImmutable();
     }
@@ -348,7 +348,7 @@ abstract class AbstractImmutableList<T>
 
     public ImmutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
-        ShortArrayList result = new ShortArrayList();
+        ShortArrayList result = new ShortArrayList(this.size());
         this.forEach(new CollectShortProcedure<T>(shortFunction, result));
         return result.toImmutable();
     }
@@ -362,7 +362,7 @@ abstract class AbstractImmutableList<T>
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        MutableList<V> result = Lists.mutable.of();
+        MutableList<V> result = Lists.mutable.empty();
         this.forEach(new CollectIfProcedure<T, V>(result, function, predicate));
         return result.toImmutable();
     }
@@ -376,7 +376,7 @@ abstract class AbstractImmutableList<T>
 
     public <V> ImmutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        MutableList<V> result = Lists.mutable.of();
+        MutableList<V> result = Lists.mutable.empty();
         this.forEach(new FlatCollectProcedure<T, V>(function, result));
         return result.toImmutable();
     }
@@ -639,7 +639,7 @@ abstract class AbstractImmutableList<T>
 
     public ImmutableList<T> distinct()
     {
-        MutableList<T> result = Lists.mutable.of();
+        MutableList<T> result = Lists.mutable.empty();
         ListIterate.distinct(this.castToList(), result);
         return result.toImmutable();
     }
@@ -843,12 +843,12 @@ abstract class AbstractImmutableList<T>
             T[] array = (T[]) new Object[oldSize + 1];
             this.toArray(array);
             array[oldSize] = newItem;
-            return Lists.immutable.of(array);
+            return Lists.immutable.with(array);
         }
 
         protected Object writeReplace()
         {
-            return Lists.immutable.ofAll(this);
+            return Lists.immutable.withAll(this);
         }
 
         @Override

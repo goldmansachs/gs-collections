@@ -159,7 +159,7 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public MutableList<T> toList()
     {
-        return Lists.mutable.ofAll(this);
+        return Lists.mutable.withAll(this);
     }
 
     public MutableList<T> toSortedList()

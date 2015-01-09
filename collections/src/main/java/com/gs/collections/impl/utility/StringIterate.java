@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,7 +124,7 @@ public final class StringIterate
      */
     public static MutableList<String> tokensToList(String string, String separator)
     {
-        MutableList<String> list = Lists.mutable.of();
+        MutableList<String> list = Lists.mutable.empty();
         for (StringTokenizer stringTokenizer = new StringTokenizer(string, separator); stringTokenizer.hasMoreTokens(); )
         {
             String token = stringTokenizer.nextToken();

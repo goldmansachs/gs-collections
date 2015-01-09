@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -228,7 +228,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && (!other.containsKey(this.toNonSentinel(this.keys[i])) || this.values.get(i) != other.getOrThrow(this.toNonSentinel(this.keys[i]))))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]) && (!other.containsKey(this.toNonSentinel(this.keys[i])) || this.values.get(i) != other.getOrThrow(this.toNonSentinel(this.keys[i]))))
             {
                 return false;
             }
@@ -243,7 +243,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]))
             {
                 result += (this.toNonSentinel(this.keys[i]) == null ? 0 : this.keys[i].hashCode()) ^ (this.values.get(i) ? 1231 : 1237);
             }
@@ -263,7 +263,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         for (int i = 0; i < this.keys.length; i++)
         {
             Object key = this.keys[i];
-            if (isNonSentinel(key))
+            if (ObjectBooleanHashMap.isNonSentinel(key))
             {
                 if (!first)
                 {
@@ -331,7 +331,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             for (int i = 0; i < this.keys.length; i++)
             {
                 Object key = this.keys[i];
-                if (isNonSentinel(key))
+                if (ObjectBooleanHashMap.isNonSentinel(key))
                 {
                     if (!first)
                     {
@@ -360,7 +360,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         int index = 0;
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]))
             {
                 result[index] = this.values.get(i);
                 index++;
@@ -400,7 +400,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     {
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
             {
                 return this.values.get(i);
             }
@@ -410,10 +410,10 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
     public MutableBooleanCollection select(BooleanPredicate predicate)
     {
-        BooleanArrayList result = new BooleanArrayList();
+        MutableBooleanList result = BooleanLists.mutable.empty();
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
             {
                 result.add(this.values.get(i));
             }
@@ -426,7 +426,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         int count = 0;
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
             {
                 count++;
             }
@@ -436,10 +436,10 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
     public MutableBooleanCollection reject(BooleanPredicate predicate)
     {
-        BooleanArrayList result = new BooleanArrayList();
+        MutableBooleanList result = BooleanLists.mutable.empty();
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values.get(i)))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]) && !predicate.accept(this.values.get(i)))
             {
                 result.add(this.values.get(i));
             }
@@ -451,7 +451,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     {
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
             {
                 return true;
             }
@@ -463,7 +463,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     {
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values.get(i)))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]) && !predicate.accept(this.values.get(i)))
             {
                 return false;
             }
@@ -476,7 +476,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         MutableList<V> result = FastList.newList(this.size());
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]))
             {
                 result.add(function.valueOf(this.values.get(i)));
             }
@@ -488,7 +488,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     {
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
             {
                 return false;
             }
@@ -501,7 +501,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         MutableBooleanList result = new BooleanArrayList(this.size());
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]))
             {
                 result.add(this.values.get(i));
             }
@@ -514,7 +514,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         MutableBooleanSet result = new BooleanHashSet();
         for (int i = 0; result.size() < 2 && i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]))
             {
                 result.add(this.values.get(i));
             }
@@ -527,7 +527,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         MutableBooleanBag result = new BooleanHashBag();
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]))
             {
                 result.add(this.values.get(i));
             }
@@ -546,7 +546,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]))
             {
                 result = function.valueOf(result, this.values.get(i));
             }
@@ -567,7 +567,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     {
         int index = this.probe(key);
 
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        if (ObjectBooleanHashMap.isNonSentinel(this.keys[index]) && ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             // key already present in map
             this.values.set(index, value);
@@ -591,7 +591,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     public void removeKey(K key)
     {
         int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        if (ObjectBooleanHashMap.isNonSentinel(this.keys[index]) && ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             this.keys[index] = REMOVED_KEY;
             this.values.set(index, EMPTY_VALUE);
@@ -612,7 +612,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     public boolean removeKeyIfAbsent(K key, boolean value)
     {
         int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        if (ObjectBooleanHashMap.isNonSentinel(this.keys[index]) && ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             this.keys[index] = REMOVED_KEY;
             boolean oldValue = this.values.get(index);
@@ -632,7 +632,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     public boolean getIfAbsentPut(K key, boolean value)
     {
         int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        if (ObjectBooleanHashMap.isNonSentinel(this.keys[index]) && ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             return this.values.get(index);
         }
@@ -643,7 +643,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     public boolean getIfAbsentPut(K key, BooleanFunction0 function)
     {
         int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        if (ObjectBooleanHashMap.isNonSentinel(this.keys[index]) && ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             return this.values.get(index);
         }
@@ -655,7 +655,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     public boolean getIfAbsentPutWithKey(K key, BooleanFunction<? super K> function)
     {
         int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        if (ObjectBooleanHashMap.isNonSentinel(this.keys[index]) && ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             return this.values.get(index);
         }
@@ -667,7 +667,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     public <P> boolean getIfAbsentPutWith(K key, BooleanFunction<? super P> function, P parameter)
     {
         int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        if (ObjectBooleanHashMap.isNonSentinel(this.keys[index]) && ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             return this.values.get(index);
         }
@@ -679,7 +679,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     public boolean updateValue(K key, boolean initialValueIfAbsent, BooleanToBooleanFunction function)
     {
         int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        if (ObjectBooleanHashMap.isNonSentinel(this.keys[index]) && ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             this.values.set(index, function.valueOf(this.values.get(index)));
             return this.values.get(index);
@@ -728,7 +728,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     public boolean getOrThrow(Object key)
     {
         int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]))
+        if (ObjectBooleanHashMap.isNonSentinel(this.keys[index]))
         {
             return this.values.get(index);
         }
@@ -738,7 +738,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     public boolean getIfAbsent(Object key, boolean ifAbsent)
     {
         int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        if (ObjectBooleanHashMap.isNonSentinel(this.keys[index]) && ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             return this.values.get(index);
         }
@@ -748,14 +748,14 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     public boolean containsKey(Object key)
     {
         int index = this.probe(key);
-        return isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key);
+        return ObjectBooleanHashMap.isNonSentinel(this.keys[index]) && ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[index]), key);
     }
 
     public boolean containsValue(boolean value)
     {
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && this.values.get(i) == value)
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]) && this.values.get(i) == value)
             {
                 return true;
             }
@@ -767,7 +767,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     {
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]))
             {
                 procedure.value(this.values.get(i));
             }
@@ -778,7 +778,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     {
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]))
             {
                 procedure.value(this.toNonSentinel(this.keys[i]));
             }
@@ -789,7 +789,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     {
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]))
             {
                 procedure.value(this.toNonSentinel(this.keys[i]), this.values.get(i));
             }
@@ -801,7 +801,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         ObjectBooleanHashMap<K> result = ObjectBooleanHashMap.newMap();
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.toNonSentinel(this.keys[i]), this.values.get(i)))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]) && predicate.accept(this.toNonSentinel(this.keys[i]), this.values.get(i)))
             {
                 result.put(this.toNonSentinel(this.keys[i]), this.values.get(i));
             }
@@ -814,7 +814,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         ObjectBooleanHashMap<K> result = ObjectBooleanHashMap.newMap();
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.toNonSentinel(this.keys[i]), this.values.get(i)))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]) && !predicate.accept(this.toNonSentinel(this.keys[i]), this.values.get(i)))
             {
                 result.put(this.toNonSentinel(this.keys[i]), this.values.get(i));
             }
@@ -856,7 +856,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         out.writeFloat(DEFAULT_LOAD_FACTOR);
         for (int i = 0; i < this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(this.keys[i]))
             {
                 out.writeObject(this.toNonSentinel(this.keys[i]));
                 out.writeBoolean(this.values.get(i));
@@ -885,12 +885,12 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         int index = this.spread(element);
 
         int removedIndex = -1;
-        if (isRemovedKey(this.keys[index]))
+        if (ObjectBooleanHashMap.isRemovedKey(this.keys[index]))
         {
             removedIndex = index;
         }
 
-        else if (this.keys[index] == null || nullSafeEquals(this.toNonSentinel(this.keys[index]), element))
+        else if (this.keys[index] == null || ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[index]), element))
         {
             return index;
         }
@@ -906,14 +906,14 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             probe += 17;
             nextIndex &= this.keys.length - 1;
 
-            if (isRemovedKey(this.keys[nextIndex]))
+            if (ObjectBooleanHashMap.isRemovedKey(this.keys[nextIndex]))
             {
                 if (removedIndex == -1)
                 {
                     removedIndex = nextIndex;
                 }
             }
-            else if (nullSafeEquals(this.toNonSentinel(this.keys[nextIndex]), element))
+            else if (ObjectBooleanHashMap.nullSafeEquals(this.toNonSentinel(this.keys[nextIndex]), element))
             {
                 return nextIndex;
             }
@@ -968,7 +968,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         {
             --this.occupiedWithSentinels;
         }
-        this.keys[index] = toSentinelIfNull(key);
+        this.keys[index] = ObjectBooleanHashMap.toSentinelIfNull(key);
         this.values.set(index, value);
         ++this.occupiedWithData;
         if (this.occupiedWithData > this.maxOccupiedWithData())
@@ -1005,7 +1005,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
         for (int i = 0; i < oldLength; i++)
         {
-            if (isNonSentinel(old[i]))
+            if (ObjectBooleanHashMap.isNonSentinel(old[i]))
             {
                 this.put(this.toNonSentinel(old[i]), oldValues.get(i));
             }
@@ -1020,7 +1020,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
     private static <K> boolean isNonSentinel(K key)
     {
-        return key != null && !isRemovedKey(key);
+        return key != null && !ObjectBooleanHashMap.isRemovedKey(key);
     }
 
     private void rehash()
@@ -1226,7 +1226,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             }
             this.count++;
             Object[] keys = ObjectBooleanHashMap.this.keys;
-            while (!isNonSentinel(keys[this.position]))
+            while (!ObjectBooleanHashMap.isNonSentinel(keys[this.position]))
             {
                 this.position++;
             }
@@ -1246,7 +1246,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             this.isCurrentKeySet = false;
             this.count--;
 
-            if (isNonSentinel(this.currentKey))
+            if (ObjectBooleanHashMap.isNonSentinel(this.currentKey))
             {
                 int index = this.position - 1;
                 ObjectBooleanHashMap.this.keys[index] = REMOVED_KEY;
@@ -1533,7 +1533,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
                 for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)
                 {
                     Object key = ObjectBooleanHashMap.this.keys[i];
-                    if (isNonSentinel(key))
+                    if (ObjectBooleanHashMap.isNonSentinel(key))
                     {
                         if (!first)
                         {
@@ -1570,7 +1570,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             }
 
             Object[] keys = ObjectBooleanHashMap.this.keys;
-            while (!isNonSentinel(keys[this.position]))
+            while (!ObjectBooleanHashMap.isNonSentinel(keys[this.position]))
             {
                 this.position++;
             }
@@ -1582,7 +1582,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
         public void remove()
         {
-            if (this.position == 0 || !isNonSentinel(ObjectBooleanHashMap.this.keys[this.position - 1]))
+            if (this.position == 0 || !ObjectBooleanHashMap.isNonSentinel(ObjectBooleanHashMap.this.keys[this.position - 1]))
             {
                 throw new IllegalStateException();
             }
@@ -1650,7 +1650,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
                 }
 
                 Object[] keys = ObjectBooleanHashMap.this.keys;
-                while (!isNonSentinel(keys[this.position]))
+                while (!ObjectBooleanHashMap.isNonSentinel(keys[this.position]))
                 {
                     this.position++;
                 }
@@ -1732,7 +1732,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
                 }
 
                 Object[] keys = ObjectBooleanHashMap.this.keys;
-                while (!isNonSentinel(keys[this.position]))
+                while (!ObjectBooleanHashMap.isNonSentinel(keys[this.position]))
                 {
                     this.position++;
                 }

@@ -46,7 +46,7 @@ import com.gs.collections.impl.partition.set.PartitionUnifiedSet;
 import net.jcip.annotations.Immutable;
 
 /**
- * This is a zero element {@link ImmutableSet} which is created by calling the Sets.immutable.of() method.
+ * This is a zero element {@link ImmutableSet} which is created by calling the Sets.immutable.empty() method.
  */
 @Immutable
 final class ImmutableEmptySet<T>
@@ -77,13 +77,13 @@ final class ImmutableEmptySet<T>
     @Override
     public ImmutableSet<T> newWith(T element)
     {
-        return Sets.immutable.of(element);
+        return Sets.immutable.with(element);
     }
 
     @Override
     public ImmutableSet<T> newWithAll(Iterable<? extends T> elements)
     {
-        return Sets.immutable.ofAll(elements);
+        return Sets.immutable.withAll(elements);
     }
 
     @Override
@@ -191,7 +191,7 @@ final class ImmutableEmptySet<T>
     @Override
     public <S> ImmutableSet<Pair<T, S>> zip(Iterable<S> that)
     {
-        return Sets.immutable.of();
+        return Sets.immutable.empty();
     }
 
     @Override
@@ -207,7 +207,7 @@ final class ImmutableEmptySet<T>
     @Override
     public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
-        return Sets.immutable.of();
+        return Sets.immutable.empty();
     }
 
     @Override
@@ -237,19 +237,19 @@ final class ImmutableEmptySet<T>
     @Override
     public <V> ImmutableSet<V> collect(Function<? super T, ? extends V> function)
     {
-        return Sets.immutable.of();
+        return Sets.immutable.empty();
     }
 
     @Override
     public <V> ImmutableSet<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        return Sets.immutable.of();
+        return Sets.immutable.empty();
     }
 
     @Override
     public <V> ImmutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        return Sets.immutable.of();
+        return Sets.immutable.empty();
     }
 
     @Override

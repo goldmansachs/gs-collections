@@ -439,6 +439,6 @@ public class SynchronizedBag<T>
 
     public ImmutableBag<T> toImmutable()
     {
-        return Bags.immutable.ofAll(this);
+        return Bags.immutable.withAll(this);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -200,7 +200,7 @@ public class TreeSortedSet<T> extends AbstractMutableCollection<T>
 
     public ImmutableSortedSet<T> toImmutable()
     {
-        return SortedSets.immutable.ofSortedSet(this);
+        return SortedSets.immutable.withSortedSet(this);
     }
 
     public MutableStack<T> toStack()

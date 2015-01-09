@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1489,10 +1489,10 @@ public final class ArrayIterate
             throw new IllegalArgumentException("Size for groups must be positive but was: " + size);
         }
         int index = 0;
-        MutableList<RichIterable<T>> result = Lists.mutable.of();
+        MutableList<RichIterable<T>> result = Lists.mutable.empty();
         while (index < array.length)
         {
-            MutableList<T> batch = Lists.mutable.of();
+            MutableList<T> batch = Lists.mutable.empty();
             for (int i = 0; i < size && index < array.length; i++)
             {
                 batch.add(array[i]);

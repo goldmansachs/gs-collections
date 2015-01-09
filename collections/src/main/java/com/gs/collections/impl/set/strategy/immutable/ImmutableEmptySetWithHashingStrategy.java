@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import com.gs.collections.impl.set.immutable.AbstractImmutableSet;
 import net.jcip.annotations.Immutable;
 
 /**
- * This is a zero element {@link ImmutableUnifiedSetWithHashingStrategy} which is created by calling the HashingStrategySets.immutable.of() method.
+ * This is a zero element {@link ImmutableUnifiedSetWithHashingStrategy} which is created by calling the HashingStrategySets.immutable.empty() method.
  */
 @Immutable
 final class ImmutableEmptySetWithHashingStrategy<T>
@@ -70,13 +70,13 @@ final class ImmutableEmptySetWithHashingStrategy<T>
     @Override
     public ImmutableSet<T> newWith(T element)
     {
-        return HashingStrategySets.immutable.of(this.hashingStrategy, element);
+        return HashingStrategySets.immutable.with(this.hashingStrategy, element);
     }
 
     @Override
     public ImmutableSet<T> newWithAll(Iterable<? extends T> elements)
     {
-        return HashingStrategySets.immutable.ofAll(this.hashingStrategy, elements);
+        return HashingStrategySets.immutable.withAll(this.hashingStrategy, elements);
     }
 
     @Override

@@ -164,7 +164,7 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
     {
         MutableList<T> intermediateResult = FastList.newList();
         this.forEach(new SelectProcedure<T>(predicate, intermediateResult));
-        return Sets.immutable.ofAll(intermediateResult);
+        return Sets.immutable.withAll(intermediateResult);
     }
 
     public <P> ImmutableSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
@@ -176,7 +176,7 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
     {
         MutableList<T> intermediateResult = FastList.newList();
         this.forEach(new RejectProcedure<T>(predicate, intermediateResult));
-        return Sets.immutable.ofAll(intermediateResult);
+        return Sets.immutable.withAll(intermediateResult);
     }
 
     public <P> ImmutableSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)

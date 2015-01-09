@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ import com.gs.collections.impl.lazy.ZipWithIndexIterable;
  */
 public final class LazyIterate
 {
-    private static final LazyIterable<?> EMPTY_ITERABLE = Lists.immutable.of().asLazy();
+    private static final LazyIterable<?> EMPTY_ITERABLE = Lists.immutable.empty().asLazy();
 
     private LazyIterate()
     {

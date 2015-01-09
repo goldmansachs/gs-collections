@@ -72,7 +72,7 @@ public class ImmutableArrayBag<T>
 
     public static <T> ImmutableArrayBag<T> newBagWith(T... elements)
     {
-        return ImmutableArrayBag.copyFrom(Bags.mutable.of(elements));
+        return ImmutableArrayBag.copyFrom(Bags.mutable.with(elements));
     }
 
     public static <T> ImmutableArrayBag<T> copyFrom(Bag<T> bag)
@@ -202,7 +202,7 @@ public class ImmutableArrayBag<T>
 
     public ImmutableBag<T> newWithAll(Iterable<? extends T> elements)
     {
-        return Bags.immutable.ofAll(Iterate.addAllTo(elements, HashBag.newBag(this)));
+        return Bags.immutable.withAll(Iterate.addAllTo(elements, HashBag.newBag(this)));
     }
 
     public ImmutableBag<T> newWithoutAll(Iterable<? extends T> elements)

@@ -168,7 +168,7 @@ public class SynchronizedMutableMap<K, V>
     {
         synchronized (this.lock)
         {
-            return of(this.getDelegate().clone());
+            return SynchronizedMutableMap.of(this.getDelegate().clone());
         }
     }
 
@@ -516,7 +516,7 @@ public class SynchronizedMutableMap<K, V>
     {
         synchronized (this.lock)
         {
-            return Maps.immutable.ofAll(this);
+            return Maps.immutable.withAll(this);
         }
     }
 }

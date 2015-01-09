@@ -177,7 +177,7 @@ public class SynchronizedSortedMap<K, V>
     {
         synchronized (this.lock)
         {
-            return of(this.getDelegate().clone());
+            return SynchronizedSortedMap.of(this.getDelegate().clone());
         }
     }
 
@@ -532,7 +532,7 @@ public class SynchronizedSortedMap<K, V>
     {
         synchronized (this.lock)
         {
-            return SortedMaps.immutable.ofSortedMap(this);
+            return SortedMaps.immutable.withSortedMap(this);
         }
     }
 
@@ -564,7 +564,7 @@ public class SynchronizedSortedMap<K, V>
     {
         synchronized (this.lock)
         {
-            return of(this.getDelegate().headMap(toKey), this.lock);
+            return SynchronizedSortedMap.of(this.getDelegate().headMap(toKey), this.lock);
         }
     }
 
@@ -572,7 +572,7 @@ public class SynchronizedSortedMap<K, V>
     {
         synchronized (this.lock)
         {
-            return of(this.getDelegate().tailMap(fromKey), this.lock);
+            return SynchronizedSortedMap.of(this.getDelegate().tailMap(fromKey), this.lock);
         }
     }
 
@@ -580,7 +580,7 @@ public class SynchronizedSortedMap<K, V>
     {
         synchronized (this.lock)
         {
-            return of(this.getDelegate().subMap(fromKey, toKey), this.lock);
+            return SynchronizedSortedMap.of(this.getDelegate().subMap(fromKey, toKey), this.lock);
         }
     }
 }

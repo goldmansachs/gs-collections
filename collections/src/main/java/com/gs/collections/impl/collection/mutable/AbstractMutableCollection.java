@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ public abstract class AbstractMutableCollection<T>
         }
 
         Iterator<T> iterator = this.iterator();
-        MutableList<RichIterable<T>> result = Lists.mutable.of();
+        MutableList<RichIterable<T>> result = Lists.mutable.empty();
         while (iterator.hasNext())
         {
             MutableCollection<T> batch = this.newEmpty();
@@ -171,7 +171,6 @@ public abstract class AbstractMutableCollection<T>
         return this.size() != oldSize;
     }
 
-    @Override
     public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
         return Iterate.groupByUniqueKey(this, function);

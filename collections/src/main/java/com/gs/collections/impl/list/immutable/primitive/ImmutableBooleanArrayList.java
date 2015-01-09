@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -215,7 +215,7 @@ final class ImmutableBooleanArrayList
 
     public ImmutableBooleanList select(BooleanPredicate predicate)
     {
-        BooleanArrayList result = new BooleanArrayList();
+        MutableBooleanList result = BooleanLists.mutable.empty();
         for (int i = 0; i < this.size; i++)
         {
             boolean item = this.items.get(i);
@@ -229,7 +229,7 @@ final class ImmutableBooleanArrayList
 
     public ImmutableBooleanList reject(BooleanPredicate predicate)
     {
-        BooleanArrayList result = new BooleanArrayList();
+        MutableBooleanList result = BooleanLists.mutable.empty();
         for (int i = 0; i < this.size; i++)
         {
             boolean item = this.items.get(i);

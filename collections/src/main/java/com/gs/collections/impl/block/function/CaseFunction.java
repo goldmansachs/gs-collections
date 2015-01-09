@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public class CaseFunction<T extends Comparable<? super T>, V> implements Functio
 {
     private static final long serialVersionUID = 1L;
 
-    private final MutableList<Pair<Predicate<? super T>, Function<? super T, ? extends V>>> predicateFunctions = Lists.mutable.of();
+    private final MutableList<Pair<Predicate<? super T>, Function<? super T, ? extends V>>> predicateFunctions = Lists.mutable.empty();
     private Function<? super T, ? extends V> defaultFunction;
 
     public CaseFunction()

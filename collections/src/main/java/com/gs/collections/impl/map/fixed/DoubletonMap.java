@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,7 +125,7 @@ final class DoubletonMap<K, V>
     @Override
     public ImmutableMap<K, V> toImmutable()
     {
-        return Maps.immutable.of(this.key1, this.value1, this.key2, this.value2);
+        return Maps.immutable.with(this.key1, this.value1, this.key2, this.value2);
     }
 
     public boolean containsKey(Object key)

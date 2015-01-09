@@ -331,8 +331,8 @@ public final class InternalArrayIterate
     @Deprecated
     public static <T, P> Twin<MutableList<T>> selectAndRejectWith(T[] objectArray, int size, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        MutableList<T> positiveResult = Lists.mutable.of();
-        MutableList<T> negativeResult = Lists.mutable.of();
+        MutableList<T> positiveResult = Lists.mutable.empty();
+        MutableList<T> negativeResult = Lists.mutable.empty();
         for (int i = 0; i < size; i++)
         {
             T each = objectArray[i];

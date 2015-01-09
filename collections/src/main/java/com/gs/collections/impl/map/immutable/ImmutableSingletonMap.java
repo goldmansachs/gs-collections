@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,17 +57,17 @@ final class ImmutableSingletonMap<K, V>
 
     public RichIterable<K> keysView()
     {
-        return Lists.immutable.of(this.key1).asLazy();
+        return Lists.immutable.with(this.key1).asLazy();
     }
 
     public RichIterable<V> valuesView()
     {
-        return Lists.immutable.of(this.value1).asLazy();
+        return Lists.immutable.with(this.value1).asLazy();
     }
 
     public RichIterable<Pair<K, V>> keyValuesView()
     {
-        return Lists.immutable.of(Tuples.pair(this.key1, this.value1)).asLazy();
+        return Lists.immutable.with(Tuples.pair(this.key1, this.value1)).asLazy();
     }
 
     public boolean containsKey(Object key)
@@ -92,12 +92,12 @@ final class ImmutableSingletonMap<K, V>
 
     public Set<K> keySet()
     {
-        return Sets.immutable.of(this.key1).castToSet();
+        return Sets.immutable.with(this.key1).castToSet();
     }
 
     public Collection<V> values()
     {
-        return Lists.immutable.of(this.value1).castToList();
+        return Lists.immutable.with(this.value1).castToList();
     }
 
     @Override
@@ -165,7 +165,7 @@ final class ImmutableSingletonMap<K, V>
         {
             return this;
         }
-        return Maps.immutable.of();
+        return Maps.immutable.empty();
     }
 
     @Override
@@ -173,7 +173,7 @@ final class ImmutableSingletonMap<K, V>
     {
         if (predicate.accept(this.key1, this.value1))
         {
-            return Maps.immutable.of();
+            return Maps.immutable.empty();
         }
         return this;
     }
@@ -182,13 +182,13 @@ final class ImmutableSingletonMap<K, V>
     public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         Pair<K2, V2> pair = function.value(this.key1, this.value1);
-        return Maps.immutable.of(pair.getOne(), pair.getTwo());
+        return Maps.immutable.with(pair.getOne(), pair.getTwo());
     }
 
     @Override
     public <R> ImmutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
     {
-        return Maps.immutable.of(this.key1, function.value(this.key1, this.value1));
+        return Maps.immutable.with(this.key1, function.value(this.key1, this.value1));
     }
 
     @Override

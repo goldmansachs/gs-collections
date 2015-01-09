@@ -67,7 +67,7 @@ public class ImmutableHashBag<T>
 
     public ImmutableHashBag()
     {
-        this.delegate = Bags.mutable.of();
+        this.delegate = Bags.mutable.empty();
     }
 
     public ImmutableHashBag(Iterable<? extends T> source)

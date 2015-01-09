@@ -385,7 +385,7 @@ abstract class AbstractMutableBiMap<K, V> extends AbstractBiMap<K, V> implements
 
     public ImmutableBiMap<K, V> toImmutable()
     {
-        return BiMaps.immutable.ofAll(this.delegate);
+        return BiMaps.immutable.withAll(this.delegate);
     }
 
     public MutableBiMap<K, V> asSynchronized()

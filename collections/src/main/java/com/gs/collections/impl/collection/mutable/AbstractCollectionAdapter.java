@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -589,7 +589,7 @@ public abstract class AbstractCollectionAdapter<T>
 
     public MutableList<T> toList()
     {
-        return Lists.mutable.ofAll(this.getDelegate());
+        return Lists.mutable.withAll(this.getDelegate());
     }
 
     public MutableList<T> toSortedList()
