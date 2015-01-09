@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import com.gs.collections.api.bag.primitive.MutableLongBag;
 import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -499,9 +500,10 @@ public abstract class AbstractMutableBag<T> extends AbstractMutableCollection<T>
         {
             public void value(T each, int occurrences)
             {
+                float f = function.floatValueOf(each);
                 for (int i = 0; i < occurrences; i++)
                 {
-                    double adjustedValue = function.floatValueOf(each) - compensation[0];
+                    double adjustedValue = f - compensation[0];
                     double nextSum = sum[0] + adjustedValue;
                     compensation[0] = nextSum - sum[0] - adjustedValue;
                     sum[0] = nextSum;
@@ -535,9 +537,10 @@ public abstract class AbstractMutableBag<T> extends AbstractMutableCollection<T>
         {
             public void value(T each, int occurrences)
             {
+                double d = function.doubleValueOf(each);
                 for (int i = 0; i < occurrences; i++)
                 {
-                    double y = function.doubleValueOf(each) - compensation[0];
+                    double y = d - compensation[0];
                     double t = sum[0] + y;
                     compensation[0] = t - sum[0] - y;
                     sum[0] = t;
@@ -558,6 +561,23 @@ public abstract class AbstractMutableBag<T> extends AbstractMutableCollection<T>
                 for (int i = 0; i < occurrences; i++)
                 {
                     result[0] = function.value(result[0], each);
+                }
+            }
+        });
+        return result[0];
+    }
+
+    @Override
+    public <IV, P> IV injectIntoWith(IV injectedValue, final Function3<? super IV, ? super T, ? super P, ? extends IV> function, final P parameter)
+    {
+        final IV[] result = (IV[]) new Object[]{injectedValue};
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                for (int i = 0; i < occurrences; i++)
+                {
+                    result[0] = function.value(result[0], each, parameter);
                 }
             }
         });

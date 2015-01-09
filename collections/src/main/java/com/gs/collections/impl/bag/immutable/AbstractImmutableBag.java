@@ -574,9 +574,10 @@ public abstract class AbstractImmutableBag<T>
         {
             public void value(T each, int occurrences)
             {
+                float f = function.floatValueOf(each);
                 for (int i = 0; i < occurrences; i++)
                 {
-                    double y = (double) function.floatValueOf(each) - compensation[0];
+                    double y = (double) f - compensation[0];
                     double t = sum[0] + y;
                     compensation[0] = t - sum[0] - y;
                     sum[0] = t;
@@ -595,9 +596,10 @@ public abstract class AbstractImmutableBag<T>
         {
             public void value(T each, int occurrences)
             {
+                double d = function.doubleValueOf(each);
                 for (int i = 0; i < occurrences; i++)
                 {
-                    double adjustedValue = function.doubleValueOf(each) - compensation[0];
+                    double adjustedValue = d - compensation[0];
                     double nextSum = sum[0] + adjustedValue;
                     compensation[0] = nextSum - sum[0] - adjustedValue;
                     sum[0] = nextSum;
