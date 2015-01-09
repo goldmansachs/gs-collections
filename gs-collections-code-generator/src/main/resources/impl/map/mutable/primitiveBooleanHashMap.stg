@@ -529,16 +529,14 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             if (this.sentinelValues == null)
             {
                 this.sentinelValues = new SentinelValues();
-                this.getSentinelValues().containsZeroKey = true;
-                this.getSentinelValues().zeroValue = value;
+                this.addEmptyKeyValue(value);
                 return value;
             }
             if (this.getSentinelValues().containsZeroKey)
             {
                 return this.getSentinelValues().zeroValue;
             }
-            this.getSentinelValues().containsZeroKey = true;
-            this.getSentinelValues().zeroValue = value;
+            this.addEmptyKeyValue(value);
             return value;
         }
         if (isRemovedKey(key))
@@ -546,16 +544,14 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             if (this.sentinelValues == null)
             {
                 this.sentinelValues = new SentinelValues();
-                this.getSentinelValues().containsOneKey = true;
-                this.getSentinelValues().oneValue = value;
+                this.addRemovedKeyValue(value);
                 return value;
             }
             if (this.getSentinelValues().containsOneKey)
             {
                 return this.getSentinelValues().oneValue;
             }
-            this.getSentinelValues().containsOneKey = true;
-            this.getSentinelValues().oneValue = value;
+            this.addRemovedKeyValue(value);
             return value;
         }
         int index = this.probe(key);
@@ -575,8 +571,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.value();
                 this.sentinelValues = new SentinelValues();
-                this.getSentinelValues().containsZeroKey = true;
-                this.getSentinelValues().zeroValue = value;
+                this.addEmptyKeyValue(value);
                 return value;
             }
             if (this.getSentinelValues().containsZeroKey)
@@ -584,8 +579,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 return this.getSentinelValues().zeroValue;
             }
             boolean value = function.value();
-            this.getSentinelValues().containsZeroKey = true;
-            this.getSentinelValues().zeroValue = value;
+            this.addEmptyKeyValue(value);
             return value;
         }
         if (isRemovedKey(key))
@@ -594,8 +588,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.value();
                 this.sentinelValues = new SentinelValues();
-                this.getSentinelValues().containsOneKey = true;
-                this.getSentinelValues().oneValue = value;
+                this.addRemovedKeyValue(value);
                 return value;
             }
             if (this.getSentinelValues().containsOneKey)
@@ -603,8 +596,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 return this.getSentinelValues().oneValue;
             }
             boolean value = function.value();
-            this.getSentinelValues().containsOneKey = true;
-            this.getSentinelValues().oneValue = value;
+            this.addRemovedKeyValue(value);
             return value;
         }
         int index = this.probe(key);
@@ -625,8 +617,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.booleanValueOf(parameter);
                 this.sentinelValues = new SentinelValues();
-                this.getSentinelValues().containsZeroKey = true;
-                this.getSentinelValues().zeroValue = value;
+                this.addEmptyKeyValue(value);
                 return value;
             }
             if (this.getSentinelValues().containsZeroKey)
@@ -634,8 +625,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 return this.getSentinelValues().zeroValue;
             }
             boolean value = function.booleanValueOf(parameter);
-            this.getSentinelValues().containsZeroKey = true;
-            this.getSentinelValues().zeroValue = value;
+            this.addEmptyKeyValue(value);
             return value;
         }
         if (isRemovedKey(key))
@@ -644,8 +634,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.booleanValueOf(parameter);
                 this.sentinelValues = new SentinelValues();
-                this.getSentinelValues().containsOneKey = true;
-                this.getSentinelValues().oneValue = value;
+                this.addRemovedKeyValue(value);
                 return value;
             }
             if (this.getSentinelValues().containsOneKey)
@@ -653,8 +642,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 return this.getSentinelValues().oneValue;
             }
             boolean value = function.booleanValueOf(parameter);
-            this.getSentinelValues().containsOneKey = true;
-            this.getSentinelValues().oneValue = value;
+            this.addRemovedKeyValue(value);
             return value;
         }
         int index = this.probe(key);
@@ -675,8 +663,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.valueOf(key);
                 this.sentinelValues = new SentinelValues();
-                this.getSentinelValues().containsZeroKey = true;
-                this.getSentinelValues().zeroValue = value;
+                this.addEmptyKeyValue(value);
                 return value;
             }
             if (this.getSentinelValues().containsZeroKey)
@@ -684,8 +671,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 return this.getSentinelValues().zeroValue;
             }
             boolean value = function.valueOf(key);
-            this.getSentinelValues().containsZeroKey = true;
-            this.getSentinelValues().zeroValue = value;
+            this.addEmptyKeyValue(value);
             return value;
         }
         if (isRemovedKey(key))
@@ -694,8 +680,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 boolean value = function.valueOf(key);
                 this.sentinelValues = new SentinelValues();
-                this.getSentinelValues().containsOneKey = true;
-                this.getSentinelValues().oneValue = value;
+                this.addRemovedKeyValue(value);
                 return value;
             }
             if (this.getSentinelValues().containsOneKey)
@@ -703,8 +688,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 return this.getSentinelValues().oneValue;
             }
             boolean value = function.valueOf(key);
-            this.getSentinelValues().containsOneKey = true;
-            this.getSentinelValues().oneValue = value;
+            this.addRemovedKeyValue(value);
             return value;
         }
         int index = this.probe(key);
@@ -724,8 +708,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             if (this.sentinelValues == null)
             {
                 this.sentinelValues = new SentinelValues();
-                this.getSentinelValues().containsZeroKey = true;
-                this.getSentinelValues().zeroValue = function.valueOf(initialValueIfAbsent);
+                this.addEmptyKeyValue(function.valueOf(initialValueIfAbsent));
             }
             else if (this.getSentinelValues().containsZeroKey)
             {
@@ -733,8 +716,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             }
             else
             {
-                this.getSentinelValues().containsZeroKey = true;
-                this.getSentinelValues().zeroValue = function.valueOf(initialValueIfAbsent);
+                this.addEmptyKeyValue(function.valueOf(initialValueIfAbsent));
             }
             return this.getSentinelValues().zeroValue;
         }
@@ -743,8 +725,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             if (this.sentinelValues == null)
             {
                 this.sentinelValues = new SentinelValues();
-                this.getSentinelValues().containsOneKey = true;
-                this.getSentinelValues().oneValue = function.valueOf(initialValueIfAbsent);
+                this.addRemovedKeyValue(function.valueOf(initialValueIfAbsent));
             }
             else if (this.getSentinelValues().containsOneKey)
             {
@@ -752,8 +733,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             }
             else
             {
-                this.getSentinelValues().containsOneKey = true;
-                this.getSentinelValues().oneValue = function.valueOf(initialValueIfAbsent);
+                this.addRemovedKeyValue(function.valueOf(initialValueIfAbsent));
             }
             return this.getSentinelValues().oneValue;
         }
@@ -791,15 +771,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 return;
             }
-            if (this.getSentinelValues().containsOneKey)
-            {
-                this.getSentinelValues().containsZeroKey = false;
-                this.getSentinelValues().zeroValue = this.getEmptyValue();
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
+            this.removeEmptyKey();
             return;
         }
         if (isRemovedKey(key))
@@ -808,15 +780,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             {
                 return;
             }
-            if (this.getSentinelValues().containsZeroKey)
-            {
-                this.getSentinelValues().containsOneKey = false;
-                this.getSentinelValues().oneValue = this.getEmptyValue();
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
+            this.removeRemovedKey();
             return;
         }
         int index = this.probe(key);
@@ -847,15 +811,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 return value;
             }
             boolean oldValue = this.getSentinelValues().zeroValue;
-            if (this.getSentinelValues().containsOneKey)
-            {
-                this.getSentinelValues().containsZeroKey = false;
-                this.getSentinelValues().zeroValue = this.getEmptyValue();
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
+            this.removeEmptyKey();
             return oldValue;
         }
         if (isRemovedKey(key))
@@ -865,15 +821,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 return value;
             }
             boolean oldValue = this.getSentinelValues().oneValue;
-            if (this.getSentinelValues().containsZeroKey)
-            {
-                this.getSentinelValues().containsOneKey = false;
-                this.getSentinelValues().oneValue = this.getEmptyValue();
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
+            this.removeRemovedKey();
             return oldValue;
         }
         int index = this.probe(key);
