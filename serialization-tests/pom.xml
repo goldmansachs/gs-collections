@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2014 Goldman Sachs.
+  ~ Copyright 2015 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -82,6 +82,11 @@
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
+                    <fork>true</fork>
+                    <compilerArguments>
+                        <J-Xmx2048m />
+                    </compilerArguments>
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
 

@@ -4,7 +4,7 @@
     "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 
 <!--
-  ~ Copyright 2014 Goldman Sachs.
+  ~ Copyright 2015 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -228,7 +228,7 @@
 
         <module name="AvoidStaticImport">
             <property name="excludes"
-                value="org.junit.Assert.*,org.hamcrest.CoreMatchers.*,com.gs.collections.impl.test.Verify.*,com.gs.collections.impl.factory.Iterables.*" />
+                value="org.junit.Assert.*,org.hamcrest.CoreMatchers.*,org.hamcrest.Matchers.*,com.gs.collections.impl.test.Verify.*,com.gs.collections.impl.factory.Iterables.*,com.gs.collections.test.IterableTestCase.*" />
         </module>
 
         <module name="MissingDeprecated" />

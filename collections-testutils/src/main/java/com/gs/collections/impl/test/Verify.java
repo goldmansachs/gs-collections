@@ -34,6 +34,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.Callable;
 
+import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.PrimitiveIterable;
 import com.gs.collections.api.bag.sorted.SortedBag;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -50,8 +51,10 @@ import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.ImmutableEntry;
@@ -1877,7 +1880,22 @@ public final class Verify extends Assert
     {
         try
         {
-            Verify.assertIterablesEqual(listName, expectedList, actualList);
+            if (expectedList == null && actualList == null)
+            {
+                return;
+            }
+            Assert.assertNotNull(expectedList);
+            Assert.assertNotNull(actualList);
+            Assert.assertEquals(listName + " size", expectedList.size(), actualList.size());
+            for (int index = 0; index < actualList.size(); index++)
+            {
+                Object eachExpected = expectedList.get(index);
+                Object eachActual = actualList.get(index);
+                if (!Comparators.nullSafeEquals(eachExpected, eachActual))
+                {
+                    junit.framework.Assert.failNotEquals(listName + " first differed at element [" + index + "];", eachExpected, eachActual);
+                }
+            }
         }
         catch (AssertionError e)
         {
@@ -1952,6 +1970,7 @@ public final class Verify extends Assert
     {
         try
         {
+            Assert.assertEquals(setName, expectedSet, actualSet);
             Verify.assertIterablesEqual(setName, expectedSet, actualSet);
         }
         catch (AssertionError e)
@@ -1976,6 +1995,7 @@ public final class Verify extends Assert
     {
         try
         {
+            Assert.assertEquals(bagName, expectedBag, actualBag);
             Verify.assertIterablesEqual(bagName, expectedBag, actualBag);
         }
         catch (AssertionError e)
@@ -2000,6 +2020,7 @@ public final class Verify extends Assert
     {
         try
         {
+            Assert.assertEquals(mapName, expectedMap, actualMap);
             Verify.assertIterablesEqual(mapName, expectedMap, actualMap);
         }
         catch (AssertionError e)
@@ -2032,33 +2053,40 @@ public final class Verify extends Assert
 
             Verify.assertObjectNotNull(iterableName, actualIterable);
 
-            if (expectedIterable.equals(actualIterable))
+            if (expectedIterable instanceof InternalIterable<?> && actualIterable instanceof InternalIterable<?>)
             {
-                return;
+                MutableList<Object> expectedList = FastList.newList();
+                MutableList<Object> actualList = FastList.newList();
+                ((InternalIterable<?>) expectedIterable).forEach(CollectionAddProcedure.on(expectedList));
+                ((InternalIterable<?>) actualIterable).forEach(CollectionAddProcedure.on(actualList));
+                Verify.assertListsEqual(iterableName, expectedList, actualList);
             }
-            Iterator<?> expectedIterator = expectedIterable.iterator();
-            Iterator<?> actualIterator = actualIterable.iterator();
-            int index = 0;
-
-            while (expectedIterator.hasNext() && actualIterator.hasNext())
+            else
             {
-                Object eachExpected = expectedIterator.next();
-                Object eachActual = actualIterator.next();
+                Iterator<?> expectedIterator = expectedIterable.iterator();
+                Iterator<?> actualIterator = actualIterable.iterator();
+                int index = 0;
 
-                if (!Comparators.nullSafeEquals(eachExpected, eachActual))
+                while (expectedIterator.hasNext() && actualIterator.hasNext())
                 {
-                    //noinspection UseOfObsoleteAssert
-                    junit.framework.Assert.failNotEquals(iterableName + " first differed at element [" + index + "];", eachExpected, eachActual);
-                }
-                index++;
-            }
+                    Object eachExpected = expectedIterator.next();
+                    Object eachActual = actualIterator.next();
 
-            Assert.assertFalse("Actual " + iterableName + " had " + index + " elements but expected " + iterableName + " had more.", expectedIterator.hasNext());
-            Assert.assertFalse("Expected " + iterableName + " had " + index + " elements but actual " + iterableName + " had more.", actualIterator.hasNext());
+                    if (!Comparators.nullSafeEquals(eachExpected, eachActual))
+                    {
+                        //noinspection UseOfObsoleteAssert
+                        junit.framework.Assert.failNotEquals(iterableName + " first differed at element [" + index + "];", eachExpected, eachActual);
+                    }
+                    index++;
+                }
+
+                Assert.assertFalse("Actual " + iterableName + " had " + index + " elements but expected " + iterableName + " had more.", expectedIterator.hasNext());
+                Assert.assertFalse("Expected " + iterableName + " had " + index + " elements but actual " + iterableName + " had more.", actualIterator.hasNext());
+            }
         }
         catch (AssertionError e)
         {
-            throwMangledException(e);
+            Verify.throwMangledException(e);
         }
     }
 
@@ -3214,7 +3242,7 @@ public final class Verify extends Assert
             Assert.assertEquals(
                     "Serialization was broken.",
                     expectedBase64Form,
-                    encodeObject(actualObject));
+                    Verify.encodeObject(actualObject));
         }
         catch (AssertionError e)
         {

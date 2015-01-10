@@ -13,12 +13,13 @@
       <module fileurl="file://$PROJECT_DIR$/collections-testutils/gs-collections-testutils.iml" filepath="$PROJECT_DIR$/collections-testutils/gs-collections-testutils.iml" />
       <module fileurl="file://$PROJECT_DIR$/jmh-scala-tests/jmh-scala-tests.iml" filepath="$PROJECT_DIR$/jmh-scala-tests/jmh-scala-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/jmh-tests/jmh-tests.iml" filepath="$PROJECT_DIR$/jmh-tests/jmh-tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/junit-trait-runner/junit-trait-runner.iml" filepath="$PROJECT_DIR$/junit-trait-runner/junit-trait-runner.iml" />
       <module fileurl="file://$PROJECT_DIR$/memory-tests/memory-tests.iml" filepath="$PROJECT_DIR$/memory-tests/memory-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/performance-tests/performance-tests.iml" filepath="$PROJECT_DIR$/performance-tests/performance-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/scala-unit-tests/scala-unit-tests.iml" filepath="$PROJECT_DIR$/scala-unit-tests/scala-unit-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/serialization-tests/serialization-tests.iml" filepath="$PROJECT_DIR$/serialization-tests/serialization-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/unit-tests/unit-tests.iml" filepath="$PROJECT_DIR$/unit-tests/unit-tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/unit-tests-java8/unit-tests-java8.iml" filepath="$PROJECT_DIR$/unit-tests-java8/unit-tests-java8.iml" />
     </modules>
   </component>
 </project>
-

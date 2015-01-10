@@ -212,6 +212,7 @@
       <option name="CHECK_METHOD_BODY" value="true" />
     </inspection_tool>
     <inspection_tool class="DefaultNotLastCaseInSwitch" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="Dependency" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="DeprecatedClassUsageInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="Deprecation" enabled="true" level="INFO" enabled_by_default="true" />
     <inspection_tool class="DisjointPackage" enabled="true" level="WARNING" enabled_by_default="false" />
@@ -1365,7 +1366,15 @@
     </inspection_tool>
     <inspection_tool class="StaticFieldReferenceOnSubclass" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="StaticGuardedByInstance" enabled="true" level="INSPECTION" enabled_by_default="true" />
-    <inspection_tool class="StaticImport" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="StaticImport" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="allowedClasses">
+        <set>
+          <option value="com.gs.collections.impl.test.Verify" />
+          <option value="org.hamcrest.Matchers" />
+          <option value="org.junit.Assert" />
+        </set>
+      </option>
+    </inspection_tool>
     <inspection_tool class="StaticInheritance" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="StaticMethodNamingConvention" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="m_regex" value="[a-z][A-Za-z\d]*" />

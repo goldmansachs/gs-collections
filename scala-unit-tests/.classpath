@@ -8,7 +8,7 @@
 	<classpathentry kind="src" path="src/test/scala"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/collections"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/collections-testutils"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: junit:junit:4.11"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: junit:junit:4.12"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: org.scala-lang:scala-library:2.11.0"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
