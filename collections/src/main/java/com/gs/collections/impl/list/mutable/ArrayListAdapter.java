@@ -437,6 +437,11 @@ public final class ArrayListAdapter<T>
         return ArrayListIterate.detectIndex(this.delegate, predicate);
     }
 
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        return ArrayListIterate.detectLastIndex(this.delegate, predicate);
+    }
+
     @Override
     public <V> FastListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {

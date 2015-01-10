@@ -1315,6 +1315,27 @@ public final class ArrayListIterate
     }
 
     /**
+     * @see ListIterate#detectLastIndex(List, Predicate)
+     */
+    public static <T> int detectLastIndex(ArrayList<T> list, Predicate<? super T> predicate)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = size - 1; i >= 0; i--)
+            {
+                if (predicate.accept(elements[i]))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        return RandomAccessListIterate.detectLastIndex(list, predicate);
+    }
+
+    /**
      * @see Iterate#injectIntoWith(Object, Iterable, Function3, Object)
      */
     public static <T, IV, P> IV injectIntoWith(

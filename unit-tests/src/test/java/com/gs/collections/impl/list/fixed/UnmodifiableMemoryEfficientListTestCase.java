@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,5 +92,13 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
         MutableList<T> mutableList = this.getCollection();
         Assert.assertEquals(0, mutableList.detectIndex(element -> Integer.valueOf(element.toString()) == 1));
         Assert.assertEquals(-1, mutableList.detectIndex(element -> Integer.valueOf(element.toString()) == 0));
+    }
+
+    @Test
+    public void detectLastIndex()
+    {
+        MutableList<T> mutableList = this.getCollection();
+        Assert.assertEquals(0, mutableList.detectLastIndex(element -> Integer.valueOf(element.toString()) == 1));
+        Assert.assertEquals(-1, mutableList.detectLastIndex(element -> Integer.valueOf(element.toString()) == 0));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ import com.gs.collections.impl.utility.ListIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iList;
 
 public abstract class AbstractImmutableListTestCase extends AbstractImmutableCollectionTestCase
 {
@@ -251,6 +251,13 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Assert.assertEquals(0, this.classUnderTest().detectIndex(integer -> integer == 1));
         Assert.assertEquals(-1, this.classUnderTest().detectIndex(integer -> integer == 0));
+    }
+
+    @Test
+    public void detectLastIndex()
+    {
+        Assert.assertEquals(0, this.classUnderTest().detectLastIndex(integer -> integer == 1));
+        Assert.assertEquals(-1, this.classUnderTest().detectLastIndex(integer -> integer == 0));
     }
 
     @Test

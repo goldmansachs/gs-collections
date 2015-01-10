@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -145,6 +145,12 @@ public abstract class AbstractArrayAdapter<T>
     public int detectIndex(Predicate<? super T> predicate)
     {
         return InternalArrayIterate.detectIndex(this.items, this.items.length, predicate);
+    }
+
+    @Override
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        return InternalArrayIterate.detectLastIndex(this.items, this.items.length, predicate);
     }
 
     @Override

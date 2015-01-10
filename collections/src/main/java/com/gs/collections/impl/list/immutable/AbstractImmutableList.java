@@ -393,6 +393,11 @@ abstract class AbstractImmutableList<T>
         return ListIterate.detectIndex(this, predicate);
     }
 
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        return ListIterate.detectLastIndex(this, predicate);
+    }
+
     @Override
     public int count(Predicate<? super T> predicate)
     {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -359,6 +359,11 @@ public class UnmodifiableMutableList<T>
     public int detectIndex(Predicate<? super T> predicate)
     {
         return this.getMutableList().detectIndex(predicate);
+    }
+
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        return this.getMutableList().detectLastIndex(predicate);
     }
 
     @Override

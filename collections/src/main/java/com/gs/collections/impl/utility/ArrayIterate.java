@@ -1146,6 +1146,19 @@ public final class ArrayIterate
     }
 
     /**
+     * Returns the last index where the predicate evaluates to true.
+     * Returns -1 for no matches.
+     */
+    public static <T> int detectLastIndex(T[] objectArray, Predicate<? super T> predicate)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a detectLastIndex on null");
+        }
+        return InternalArrayIterate.detectLastIndex(objectArray, objectArray.length, predicate);
+    }
+
+    /**
      * A null safe form of isEmpty.  Null or length of zero returns true.
      */
     public static boolean isEmpty(Object[] array)

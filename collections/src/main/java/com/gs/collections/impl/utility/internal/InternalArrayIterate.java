@@ -768,6 +768,18 @@ public final class InternalArrayIterate
         return -1;
     }
 
+    public static <T> int detectLastIndex(T[] objectArray, int size, Predicate<? super T> predicate)
+    {
+        for (int i = size - 1; i >= 0; i--)
+        {
+            if (predicate.accept(objectArray[i]))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public static <T> void forEachWithIndex(T[] objectArray, int size, ObjectIntProcedure<? super T> objectIntProcedure)
     {
         for (int i = 0; i < size; i++)

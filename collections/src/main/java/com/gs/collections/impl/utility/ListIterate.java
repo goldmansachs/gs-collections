@@ -1225,6 +1225,30 @@ public final class ListIterate
         return IterableIterate.detectIndexWith(list, predicate, parameter);
     }
 
+    /**
+     * Returns the last index where the predicate evaluates to true.
+     * Returns -1 for no matches.
+     */
+    public static <T> int detectLastIndex(List<T> list, Predicate<? super T> predicate)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.detectLastIndex(list, predicate);
+        }
+        int size = list.size();
+        int i = size - 1;
+        ListIterator<T> reverseIterator = list.listIterator(size);
+        while (reverseIterator.hasPrevious())
+        {
+            if (predicate.accept(reverseIterator.previous()))
+            {
+                return i;
+            }
+            i--;
+        }
+        return -1;
+    }
+
     public static <T, IV, P> IV injectIntoWith(IV injectedValue, List<T> list, Function3<? super IV, ? super T, ? super P, ? extends IV> function, P parameter)
     {
         if (list instanceof RandomAccess)

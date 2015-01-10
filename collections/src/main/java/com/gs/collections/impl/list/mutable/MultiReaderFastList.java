@@ -79,7 +79,7 @@ import com.gs.collections.impl.lazy.parallel.list.MultiReaderParallelListIterabl
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.LazyIterate;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.mList;
 
 /**
  * MultiReadFastList provides a thread-safe wrapper around a FastList, using a ReentrantReadWriteLock.  In order to
@@ -1134,6 +1134,11 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().detectIndex(predicate);
         }
 
+        public int detectLastIndex(Predicate<? super T> predicate)
+        {
+            return this.getDelegate().detectLastIndex(predicate);
+        }
+
         public <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
         {
             return this.getDelegate().groupBy(function);
@@ -1512,6 +1517,19 @@ public final class MultiReaderFastList<T>
         try
         {
             return this.getDelegate().detectIndex(predicate);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().detectLastIndex(predicate);
         }
         finally
         {

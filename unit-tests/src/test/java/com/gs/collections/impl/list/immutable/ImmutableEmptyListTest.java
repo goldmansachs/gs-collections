@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -470,5 +470,13 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
     {
         // any predicate will result in -1
         Assert.assertEquals(-1, this.classUnderTest().detectIndex(Predicates.alwaysTrue()));
+    }
+
+    @Override
+    @Test
+    public void detectLastIndex()
+    {
+        // any predicate will result in -1
+        Assert.assertEquals(-1, this.classUnderTest().detectLastIndex(Predicates.alwaysTrue()));
     }
 }

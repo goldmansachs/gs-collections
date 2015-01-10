@@ -167,6 +167,11 @@ public final class ListAdapter<T>
         return ListIterate.detectIndex(this.delegate, predicate);
     }
 
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        return ListIterate.detectLastIndex(this.delegate, predicate);
+    }
+
     @Override
     public int count(Predicate<? super T> predicate)
     {

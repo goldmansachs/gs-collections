@@ -356,6 +356,11 @@ public abstract class AbstractMutableList<T>
         return ListIterate.detectIndex(this, predicate);
     }
 
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        return ListIterate.detectLastIndex(this, predicate);
+    }
+
     @Override
     public T min(Comparator<? super T> comparator)
     {

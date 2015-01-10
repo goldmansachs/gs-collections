@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,6 +77,14 @@ public interface ReversibleIterable<T> extends OrderedIterable<T>
      * @since 6.0.0
      */
     ReversibleIterable<T> toReversed();
+
+    /**
+     * Returns the index of the last element of the {@code ReversibleIterable} for which the {@code predicate} evaluates to true.
+     * Returns -1 if no element evaluates true for the {@code predicate}.
+     *
+     * @since 6.0
+     */
+    int detectLastIndex(Predicate<? super T> predicate);
 
     /**
      * Returns the first {@code count} elements of the iterable

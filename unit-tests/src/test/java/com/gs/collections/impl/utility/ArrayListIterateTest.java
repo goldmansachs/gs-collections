@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,8 @@ import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iList;
+import static com.gs.collections.impl.factory.Iterables.mList;
 
 /**
  * JUnit test for {@link ArrayListIterate}.
@@ -1135,7 +1136,11 @@ public class ArrayListIterateTest
     public void detectIndexOver100()
     {
         ArrayList<Integer> list = new ArrayList<>(Interval.toReverseList(1, 101));
+        list.add(3);
+        list.add(2);
         Assert.assertEquals(100, ArrayListIterate.detectIndex(list, Integer.valueOf(1)::equals));
+        Assert.assertEquals(99, ArrayListIterate.detectIndex(list, Integer.valueOf(2)::equals));
+        Assert.assertEquals(98, ArrayListIterate.detectIndex(list, Integer.valueOf(3)::equals));
         Assert.assertEquals(0, Iterate.detectIndex(list, Integer.valueOf(101)::equals));
         Assert.assertEquals(-1, Iterate.detectIndex(list, Integer.valueOf(200)::equals));
     }
@@ -1144,9 +1149,39 @@ public class ArrayListIterateTest
     public void detectIndexSmallList()
     {
         ArrayList<Integer> list = new ArrayList<>(Interval.toReverseList(1, 5));
+        list.add(3);
+        list.add(2);
         Assert.assertEquals(4, ArrayListIterate.detectIndex(list, Integer.valueOf(1)::equals));
+        Assert.assertEquals(3, ArrayListIterate.detectIndex(list, Integer.valueOf(2)::equals));
+        Assert.assertEquals(2, ArrayListIterate.detectIndex(list, Integer.valueOf(3)::equals));
         Assert.assertEquals(0, Iterate.detectIndex(list, Integer.valueOf(5)::equals));
         Assert.assertEquals(-1, Iterate.detectIndex(list, Integer.valueOf(10)::equals));
+    }
+
+    @Test
+    public void detectLastIndexOver100()
+    {
+        ArrayList<Integer> list = new ArrayList<>(Interval.toReverseList(1, 101));
+        list.add(3);
+        list.add(2);
+        Assert.assertEquals(100, ArrayListIterate.detectLastIndex(list, Integer.valueOf(1)::equals));
+        Assert.assertEquals(102, ArrayListIterate.detectLastIndex(list, Integer.valueOf(2)::equals));
+        Assert.assertEquals(101, ArrayListIterate.detectLastIndex(list, Integer.valueOf(3)::equals));
+        Assert.assertEquals(0, ArrayListIterate.detectLastIndex(list, Integer.valueOf(101)::equals));
+        Assert.assertEquals(-1, ArrayListIterate.detectLastIndex(list, Integer.valueOf(200)::equals));
+    }
+
+    @Test
+    public void detectLastIndexSmallList()
+    {
+        ArrayList<Integer> list = new ArrayList<>(Interval.toReverseList(1, 5));
+        list.add(3);
+        list.add(2);
+        Assert.assertEquals(4, ArrayListIterate.detectLastIndex(list, Integer.valueOf(1)::equals));
+        Assert.assertEquals(6, ArrayListIterate.detectLastIndex(list, Integer.valueOf(2)::equals));
+        Assert.assertEquals(5, ArrayListIterate.detectLastIndex(list, Integer.valueOf(3)::equals));
+        Assert.assertEquals(0, ArrayListIterate.detectLastIndex(list, Integer.valueOf(5)::equals));
+        Assert.assertEquals(-1, ArrayListIterate.detectLastIndex(list, Integer.valueOf(10)::equals));
     }
 
     @Test

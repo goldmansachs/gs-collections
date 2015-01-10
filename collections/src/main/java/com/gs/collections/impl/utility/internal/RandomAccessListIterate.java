@@ -1077,6 +1077,19 @@ public final class RandomAccessListIterate
         return -1;
     }
 
+    public static <T> int detectLastIndex(List<T> list, Predicate<? super T> predicate)
+    {
+        int size = list.size();
+        for (int i = size - 1; i >= 0; i--)
+        {
+            if (predicate.accept(list.get(i)))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public static <T, IV, P> IV injectIntoWith(
             IV injectedValue,
             List<T> list,

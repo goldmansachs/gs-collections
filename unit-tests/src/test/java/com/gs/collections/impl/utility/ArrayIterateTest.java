@@ -948,6 +948,21 @@ public class ArrayIterateTest
     }
 
     @Test
+    public void detectLastIndex()
+    {
+        Integer[] array = {1, 2, 2, 3, 3, 3, 4, 2};
+        Assert.assertEquals(7, ArrayIterate.detectLastIndex(array, integer -> integer == 2));
+        Assert.assertEquals(6, ArrayIterate.detectLastIndex(array, integer -> integer != 2));
+        Assert.assertEquals(-1, ArrayIterate.detectLastIndex(array, integer -> integer == 5));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void detectLastIndex_throws()
+    {
+        ArrayIterate.detectLastIndex(null, Predicates.alwaysTrue());
+    }
+
+    @Test
     public void take()
     {
         Assert.assertEquals(

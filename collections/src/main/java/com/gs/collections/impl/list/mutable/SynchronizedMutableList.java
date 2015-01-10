@@ -311,6 +311,14 @@ public class SynchronizedMutableList<T>
         }
     }
 
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().detectLastIndex(predicate);
+        }
+    }
+
     public MutableList<T> take(int count)
     {
         synchronized (this.getLock())

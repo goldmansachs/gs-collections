@@ -195,6 +195,11 @@ public final class RandomAccessListAdapter<T>
         return RandomAccessListIterate.detectIndex(this.delegate, predicate);
     }
 
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        return RandomAccessListIterate.detectLastIndex(this.delegate, predicate);
+    }
+
     @Override
     public int count(Predicate<? super T> predicate)
     {

@@ -893,6 +893,12 @@ public class FastList<T>
     }
 
     @Override
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        return InternalArrayIterate.detectLastIndex(this.items, this.size, predicate);
+    }
+
+    @Override
     public T min(Comparator<? super T> comparator)
     {
         return InternalArrayIterate.min(this.items, this.size, comparator);
