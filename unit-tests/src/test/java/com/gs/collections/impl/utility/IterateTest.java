@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
@@ -89,6 +90,7 @@ import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
+import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -96,7 +98,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iBag;
+import static com.gs.collections.impl.factory.Iterables.iList;
+import static com.gs.collections.impl.factory.Iterables.iSet;
+import static com.gs.collections.impl.factory.Iterables.mList;
 
 public class IterateTest
 {
@@ -175,10 +180,19 @@ public class IterateTest
     @Test
     public void removeAllIterableFrom()
     {
-        MutableList<Integer> sourceFastList = FastList.newListWith(1, 2, 3, 4, 5, 6);
-        MutableList<Integer> removeFastList = FastList.newListWith(1, 3, 5);
-        Assert.assertTrue(Iterate.removeAllIterable(removeFastList, sourceFastList));
-        Assert.assertEquals(Lists.immutable.with(2, 4, 6), sourceFastList);
+        MutableList<Integer> sourceFastList1 = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        MutableList<Integer> removeFastList1 = FastList.newListWith(1, 3, 5);
+        Assert.assertTrue(Iterate.removeAllIterable(removeFastList1, sourceFastList1));
+        Assert.assertEquals(Lists.immutable.with(2, 4, 6), sourceFastList1);
+        Assert.assertFalse(Iterate.removeAllIterable(FastList.newListWith(0), sourceFastList1));
+        Assert.assertEquals(Lists.immutable.with(2, 4, 6), sourceFastList1);
+
+        MutableList<Integer> sourceFastList2 = FastList.newListWith(1, 2, 3, 4, 5, 6);
+        MutableSetMultimap<Integer, Integer> multimap = UnifiedSetMultimap.newMultimap(Tuples.pair(1, 1), Tuples.pair(1, 3), Tuples.pair(1, 5));
+        Assert.assertTrue(Iterate.removeAllIterable(multimap.valuesView(), sourceFastList2));
+        Assert.assertEquals(Lists.immutable.with(2, 4, 6), sourceFastList2);
+        Assert.assertFalse(Iterate.removeAllIterable(UnifiedSetMultimap.newMultimap(Tuples.pair(0, 0)).valuesView(), sourceFastList2));
+        Assert.assertEquals(Lists.immutable.with(2, 4, 6), sourceFastList2);
     }
 
     @Test

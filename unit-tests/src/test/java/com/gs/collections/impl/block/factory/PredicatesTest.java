@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -80,7 +81,9 @@ public class PredicatesTest
         Verify.assertThrowsWithCause(
                 RuntimeException.class,
                 IOException.class,
-                () -> Predicates.throwing(e -> { throw new IOException(); }).accept(null));
+                () -> Predicates.throwing(e -> {
+                    throw new IOException();
+                }).accept(null));
     }
 
     @Test
@@ -119,7 +122,6 @@ public class PredicatesTest
     {
         Predicate<Object> predicate = Predicates.synchronizedEach(Predicates.alwaysTrue());
         assertAccepts(predicate, new Object());
-        assertToString(predicate);
     }
 
     @Test
@@ -233,8 +235,6 @@ public class PredicatesTest
 
         assertAccepts("test"::equals, "test");
         assertRejects("test"::equals, "production");
-
-        assertToString(Integer.valueOf(1)::equals);
     }
 
     @Test
@@ -499,8 +499,6 @@ public class PredicatesTest
         Predicate<Iterable<Object>> allIntegers = Predicates.allSatisfy(Predicates.instanceOf(Integer.class));
         assertAccepts(allIntegers, FastList.newListWith(1, 2, 3));
         assertRejects(allIntegers, FastList.newListWith(Boolean.TRUE, Boolean.FALSE));
-
-        assertToString(allIntegers);
     }
 
     @Test
@@ -509,7 +507,6 @@ public class PredicatesTest
         Predicates<Iterable<Object>> anyIntegers = Predicates.anySatisfy(Predicates.instanceOf(Integer.class));
         assertAccepts(anyIntegers, FastList.newListWith(1, 2, 3));
         assertRejects(anyIntegers, FastList.newListWith(Boolean.TRUE, Boolean.FALSE));
-        assertToString(anyIntegers);
     }
 
     @Test
@@ -518,7 +515,6 @@ public class PredicatesTest
         Predicates<Iterable<Object>> anyIntegers = Predicates.noneSatisfy(Predicates.instanceOf(Integer.class));
         assertRejects(anyIntegers, FastList.newListWith(1, 2, 3));
         assertAccepts(anyIntegers, FastList.newListWith(Boolean.TRUE, Boolean.FALSE));
-        assertToString(anyIntegers);
     }
 
     @Test
@@ -562,17 +558,23 @@ public class PredicatesTest
     @Test
     public void in_Set()
     {
-        Predicate<Object> predicate = Predicates.in(new HashSet<>(Arrays.asList(1, 2, 3)));
+        Set<Integer> set = new HashSet<>(Arrays.asList(1, 2, 3));
+        Predicate<Object> predicate = Predicates.in(set);
         assertAccepts(predicate, 1, 2, 3);
         assertRejects(predicate, 0, 4, null);
+        assertToString(predicate);
+        Assert.assertTrue(predicate.toString().contains(set.toString()));
     }
 
     @Test
     public void notIn_Set()
     {
-        Predicate<Object> predicate = Predicates.notIn(new HashSet<>(Arrays.asList(1, 2, 3)));
+        Set<Integer> set = new HashSet<>(Arrays.asList(1, 2, 3));
+        Predicate<Object> predicate = Predicates.notIn(set);
         assertAccepts(predicate, 0, 4, null);
         assertRejects(predicate, 1, 2, 3);
+        assertToString(predicate);
+        Assert.assertTrue(predicate.toString().contains(set.toString()));
     }
 
     @Test
@@ -600,15 +602,15 @@ public class PredicatesTest
         assertRejects(inList, "2");
         assertAccepts(Predicates.in(list1.toArray()), "1");
         assertRejects(Predicates.in(list1.toArray()), "2");
-        assertAccepts(
-                Predicates.in(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").toArray()),
-                "1");
-        assertRejects(
-                Predicates.in(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").toArray()),
-                "0");
+        Object[] array = Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").toArray();
+        Predicates<Object> predicate = Predicates.in(array);
+        assertAccepts(predicate, "1");
+        assertRejects(predicate, "0");
 
         Assert.assertEquals(FastList.newListWith("1"), ListIterate.select(Lists.fixedSize.of("1", "2"), inList));
         assertToString(inList);
+        Assert.assertTrue(inList.toString().contains(list1.toString()));
+        assertToString(predicate);
     }
 
     @Test
@@ -634,18 +636,24 @@ public class PredicatesTest
     public void notIn()
     {
         MutableList<String> odds = Lists.fixedSize.of("1", "3");
-        Predicate<Object> predicate = Predicates.notIn(odds);
-        assertAccepts(predicate, "2");
-        assertRejects(predicate, "1");
+        Predicate<Object> predicate1 = Predicates.notIn(odds);
+        assertAccepts(predicate1, "2");
+        assertRejects(predicate1, "1");
         assertAccepts(Predicates.notIn(odds.toArray()), "2");
         assertRejects(Predicates.notIn(odds.toArray()), "1");
-        assertAccepts(Predicates.notIn(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")), "0");
-        assertRejects(Predicates.notIn(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")), "1");
-        assertAccepts(Predicates.notIn(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").toArray()), "0");
-        assertRejects(Predicates.notIn(Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").toArray()), "1");
 
-        Assert.assertEquals(FastList.newListWith("2"), ListIterate.select(Lists.fixedSize.of("1", "2"), predicate));
-        assertToString(predicate);
+        MutableList<String> list = Lists.mutable.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+        assertAccepts(Predicates.notIn(list), "0");
+        assertRejects(Predicates.notIn(list), "1");
+
+        Predicates<Object> predicate2 = Predicates.notIn(list.toArray());
+        assertAccepts(predicate2, "0");
+        assertRejects(predicate2, "1");
+
+        Assert.assertEquals(FastList.newListWith("2"), ListIterate.select(Lists.fixedSize.of("1", "2"), predicate1));
+        assertToString(predicate1);
+        assertToString(predicate2);
+        Assert.assertTrue(predicate1.toString().contains(odds.toString()));
     }
 
     @Test
@@ -734,7 +742,8 @@ public class PredicatesTest
 
     private static void assertToString(Predicate<?> predicate)
     {
-        Assert.assertNotNull(predicate.toString());
+        String toString = predicate.toString();
+        Assert.assertTrue(toString.startsWith("Predicates"));
     }
 
     private static <T> void assertAccepts(Predicate<? super T> predicate, T... elements)
@@ -764,7 +773,6 @@ public class PredicatesTest
     {
         assertRejects(oneToThree, 0, 4);
         assertAccepts(oneToThree, 1, 2, 3);
-        assertToString(oneToThree);
     }
 
     @Test
@@ -778,7 +786,6 @@ public class PredicatesTest
     {
         assertRejects(oneToThree, "0", "4");
         assertAccepts(oneToThree, "1", "2", "3");
-        assertToString(oneToThree);
     }
 
     @Test
@@ -792,7 +799,6 @@ public class PredicatesTest
     {
         assertRejects(oneToThree, 0, 3, 4);
         assertAccepts(oneToThree, 1, 2);
-        assertToString(oneToThree);
     }
 
     @Test
@@ -806,7 +812,6 @@ public class PredicatesTest
     {
         assertRejects(oneToThree, "0", "3", "4");
         assertAccepts(oneToThree, "1", "2");
-        assertToString(oneToThree);
     }
 
     @Test
@@ -820,7 +825,6 @@ public class PredicatesTest
     {
         assertRejects(oneToThree, 0, 1, 4);
         assertAccepts(oneToThree, 2, 3);
-        assertToString(oneToThree);
     }
 
     @Test
@@ -834,7 +838,6 @@ public class PredicatesTest
     {
         assertRejects(oneToThree, "0", "1", "4");
         assertAccepts(oneToThree, "2", "3");
-        assertToString(oneToThree);
     }
 
     @Test
@@ -848,7 +851,6 @@ public class PredicatesTest
     {
         assertRejects(oneToThree, 0, 1, 3, 4);
         assertAccepts(oneToThree, 2);
-        assertToString(oneToThree);
     }
 
     @Test
@@ -862,7 +864,6 @@ public class PredicatesTest
     {
         assertRejects(oneToThree, "0", "1", "3", "4");
         assertAccepts(oneToThree, "2");
-        assertToString(oneToThree);
     }
 
     @Test

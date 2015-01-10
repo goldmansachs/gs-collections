@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -213,6 +213,14 @@ public class IterateNullTest
         Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.partition(null, null));
 
         Verify.assertThrows(IllegalArgumentException.class, () -> ArrayIterate.partition(null, null));
+    }
+
+    @Test
+    public void partitionWith()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.partitionWith(null, null, null));
+
+        Verify.assertThrows(IllegalArgumentException.class, () -> ArrayIterate.partitionWith(null, null, null));
     }
 
     @Test
@@ -527,5 +535,53 @@ public class IterateNullTest
     public void dropIterable()
     {
         Verify.assertThrows(NullPointerException.class, () -> IterableIterate.drop(null, 0));
+    }
+
+    @Test
+    public void removeAllIterable()
+    {
+        Verify.assertThrows(NullPointerException.class, () -> Iterate.removeAllIterable(null, null));
+    }
+
+    @Test
+    public void sumOfBigInteger()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumOfBigInteger(null, null));
+    }
+
+    @Test
+    public void sumByBigDecimal()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumByBigDecimal(null, null, null));
+    }
+
+    @Test
+    public void sumByBigInteger()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumByBigInteger(null, null, null));
+    }
+
+    @Test
+    public void sumByInt()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumByInt(null, null, null));
+    }
+
+    @Test
+    public void sumByLong()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumByLong(null, null, null));
+    }
+
+    @Test
+    public void sumByFloat()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumByFloat(null, null, null));
+    }
+
+    @Test
+    public void sumByDouble()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, () -> Iterate.sumByDouble(null, null, null));
     }
 }
