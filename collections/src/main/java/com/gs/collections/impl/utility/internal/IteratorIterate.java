@@ -62,7 +62,6 @@ import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
@@ -669,7 +668,15 @@ public final class IteratorIterate
      */
     public static <T> T detect(Iterator<T> iterator, Predicate<? super T> predicate)
     {
-        return IteratorIterate.shortCircuit(iterator, predicate, true, Functions.<T>identity(), Functions0.<T>nullValue());
+        while (iterator.hasNext())
+        {
+            T each = iterator.next();
+            if (predicate.accept(each))
+            {
+                return each;
+            }
+        }
+        return null;
     }
 
     /**
@@ -677,7 +684,15 @@ public final class IteratorIterate
      */
     public static <T, P> T detectWith(Iterator<T> iterator, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IteratorIterate.shortCircuitWith(iterator, predicate, parameter, true, Functions.<T>identity(), Functions0.<T>nullValue());
+        while (iterator.hasNext())
+        {
+            T each = iterator.next();
+            if (predicate.accept(each, parameter))
+            {
+                return each;
+            }
+        }
+        return null;
     }
 
     /**
@@ -773,41 +788,41 @@ public final class IteratorIterate
         return result;
     }
 
-    public static <T, V> V shortCircuit(
+    public static <T> boolean shortCircuit(
             Iterator<T> iterator,
             Predicate<? super T> predicate,
             boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
+            boolean onShortCircuit,
+            boolean atEnd)
     {
         while (iterator.hasNext())
         {
             T each = iterator.next();
             if (predicate.accept(each) == expected)
             {
-                return onShortCircuit.valueOf(each);
+                return onShortCircuit;
             }
         }
-        return atEnd.value();
+        return atEnd;
     }
 
-    public static <T, P, V> V shortCircuitWith(
+    public static <T, P> boolean shortCircuitWith(
             Iterator<T> iterator,
             Predicate2<? super T, ? super P> predicate2,
             P parameter,
             boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
+            boolean onShortCircuit,
+            boolean atEnd)
     {
         while (iterator.hasNext())
         {
             T each = iterator.next();
             if (predicate2.accept(each, parameter) == expected)
             {
-                return onShortCircuit.valueOf(each);
+                return onShortCircuit;
             }
         }
-        return atEnd.value();
+        return atEnd;
     }
 
     /**
@@ -815,7 +830,7 @@ public final class IteratorIterate
      */
     public static <T> boolean anySatisfy(Iterator<T> iterator, Predicate<? super T> predicate)
     {
-        return IteratorIterate.shortCircuit(iterator, predicate, true, Functions.getTrue(), Functions0.getFalse());
+        return IteratorIterate.shortCircuit(iterator, predicate, true, true, false);
     }
 
     /**
@@ -823,7 +838,7 @@ public final class IteratorIterate
      */
     public static <T, P> boolean anySatisfyWith(Iterator<T> iterator, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IteratorIterate.shortCircuitWith(iterator, predicate, parameter, true, Functions.getTrue(), Functions0.getFalse());
+        return IteratorIterate.shortCircuitWith(iterator, predicate, parameter, true, true, false);
     }
 
     /**
@@ -831,7 +846,7 @@ public final class IteratorIterate
      */
     public static <T> boolean allSatisfy(Iterator<T> iterator, Predicate<? super T> predicate)
     {
-        return IteratorIterate.shortCircuit(iterator, predicate, false, Functions.getFalse(), Functions0.getTrue());
+        return IteratorIterate.shortCircuit(iterator, predicate, false, false, true);
     }
 
     /**
@@ -839,7 +854,7 @@ public final class IteratorIterate
      */
     public static <T, P> boolean allSatisfyWith(Iterator<T> iterator, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IteratorIterate.shortCircuitWith(iterator, predicate, parameter, false, Functions.getFalse(), Functions0.getTrue());
+        return IteratorIterate.shortCircuitWith(iterator, predicate, parameter, false, false, true);
     }
 
     /**
@@ -847,7 +862,7 @@ public final class IteratorIterate
      */
     public static <T> boolean noneSatisfy(Iterator<T> iterator, Predicate<? super T> predicate)
     {
-        return IteratorIterate.shortCircuit(iterator, predicate, true, Functions.getFalse(), Functions0.getTrue());
+        return IteratorIterate.shortCircuit(iterator, predicate, true, false, true);
     }
 
     /**
@@ -855,7 +870,7 @@ public final class IteratorIterate
      */
     public static <T, P> boolean noneSatisfyWith(Iterator<T> iterator, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IteratorIterate.shortCircuitWith(iterator, predicate, parameter, true, Functions.getFalse(), Functions0.getTrue());
+        return IteratorIterate.shortCircuitWith(iterator, predicate, parameter, true, false, true);
     }
 
     /**

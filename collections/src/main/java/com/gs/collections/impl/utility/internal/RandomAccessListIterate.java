@@ -72,7 +72,6 @@ import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
@@ -880,81 +879,99 @@ public final class RandomAccessListIterate
         return result;
     }
 
-    public static <T, V> V shortCircuit(
+    public static <T> boolean shortCircuit(
             List<T> list,
             Predicate<? super T> predicate,
             boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
+            boolean onShortCircuit,
+            boolean atEnd)
     {
-        for (int i = 0; i < list.size(); i++)
+        int size = list.size();
+        for (int i = 0; i < size; i++)
         {
-            T each = list.get(i);
-            if (predicate.accept(each) == expected)
+            if (predicate.accept(list.get(i)) == expected)
             {
-                return onShortCircuit.valueOf(each);
+                return onShortCircuit;
             }
         }
-        return atEnd.value();
+        return atEnd;
     }
 
-    public static <T, P, V> V shortCircuitWith(
+    public static <T, P> boolean shortCircuitWith(
             List<T> list,
             Predicate2<? super T, ? super P> predicate2,
             P parameter,
             boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
+            boolean onShortCircuit,
+            boolean atEnd)
     {
-        for (int i = 0; i < list.size(); i++)
+        int size = list.size();
+        for (int i = 0; i < size; i++)
         {
-            T each = list.get(i);
-            if (predicate2.accept(each, parameter) == expected)
+            if (predicate2.accept(list.get(i), parameter) == expected)
             {
-                return onShortCircuit.valueOf(each);
+                return onShortCircuit;
             }
         }
-        return atEnd.value();
+        return atEnd;
     }
 
     public static <T> boolean anySatisfy(List<T> list, Predicate<? super T> predicate)
     {
-        return RandomAccessListIterate.shortCircuit(list, predicate, true, Functions.getTrue(), Functions0.getFalse());
+        return RandomAccessListIterate.shortCircuit(list, predicate, true, true, false);
     }
 
     public static <T, P> boolean anySatisfyWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return RandomAccessListIterate.shortCircuitWith(list, predicate, parameter, true, Functions.getTrue(), Functions0.getFalse());
+        return RandomAccessListIterate.shortCircuitWith(list, predicate, parameter, true, true, false);
     }
 
     public static <T> boolean allSatisfy(List<T> list, Predicate<? super T> predicate)
     {
-        return RandomAccessListIterate.shortCircuit(list, predicate, false, Functions.getFalse(), Functions0.getTrue());
+        return RandomAccessListIterate.shortCircuit(list, predicate, false, false, true);
     }
 
     public static <T, P> boolean allSatisfyWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return RandomAccessListIterate.shortCircuitWith(list, predicate, parameter, false, Functions.getFalse(), Functions0.getTrue());
+        return RandomAccessListIterate.shortCircuitWith(list, predicate, parameter, false, false, true);
     }
 
     public static <T> boolean noneSatisfy(List<T> list, Predicate<? super T> predicate)
     {
-        return RandomAccessListIterate.shortCircuit(list, predicate, true, Functions.getFalse(), Functions0.getTrue());
+        return RandomAccessListIterate.shortCircuit(list, predicate, true, false, true);
     }
 
     public static <T, P> boolean noneSatisfyWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return RandomAccessListIterate.shortCircuitWith(list, predicate, parameter, true, Functions.getFalse(), Functions0.getTrue());
+        return RandomAccessListIterate.shortCircuitWith(list, predicate, parameter, true, false, true);
     }
 
     public static <T> T detect(List<T> list, Predicate<? super T> predicate)
     {
-        return RandomAccessListIterate.shortCircuit(list, predicate, true, Functions.<T>identity(), Functions0.<T>nullValue());
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            T each = list.get(i);
+            if (predicate.accept(each))
+            {
+                return each;
+            }
+        }
+        return null;
     }
 
     public static <T, P> T detectWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return RandomAccessListIterate.shortCircuitWith(list, predicate, parameter, true, Functions.<T>identity(), Functions0.<T>nullValue());
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            T each = list.get(i);
+            if (predicate.accept(each, parameter))
+            {
+                return each;
+            }
+        }
+        return null;
     }
 
     public static <T, IV> Twin<MutableList<T>> selectAndRejectWith(

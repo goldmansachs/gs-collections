@@ -26,7 +26,6 @@ import java.util.RandomAccess;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -45,8 +44,6 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectIfProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectProcedure;
@@ -645,83 +642,99 @@ public final class InternalArrayIterate
         return count;
     }
 
-    public static <T, V> V shortCircuit(
+    public static <T> boolean shortCircuit(
             T[] array,
             int size,
             Predicate<? super T> predicate,
             boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
+            boolean onShortCircuit,
+            boolean atEnd)
     {
         for (int i = 0; i < size; i++)
         {
             T each = array[i];
             if (predicate.accept(each) == expected)
             {
-                return onShortCircuit.valueOf(each);
+                return onShortCircuit;
             }
         }
-        return atEnd.value();
+        return atEnd;
     }
 
-    public static <T, P, V> V shortCircuitWith(
+    public static <T, P> boolean shortCircuitWith(
             T[] array,
             int size,
             Predicate2<? super T, ? super P> predicate2,
             P parameter,
             boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
+            boolean onShortCircuit,
+            boolean atEnd)
     {
         for (int i = 0; i < size; i++)
         {
             T each = array[i];
             if (predicate2.accept(each, parameter) == expected)
             {
-                return onShortCircuit.valueOf(each);
+                return onShortCircuit;
             }
         }
-        return atEnd.value();
+        return atEnd;
     }
 
     public static <T> boolean anySatisfy(T[] array, int size, Predicate<? super T> predicate)
     {
-        return InternalArrayIterate.shortCircuit(array, size, predicate, true, Functions.getTrue(), Functions0.getFalse());
+        return InternalArrayIterate.shortCircuit(array, size, predicate, true, true, false);
     }
 
     public static <T, P> boolean anySatisfyWith(T[] array, int size, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return InternalArrayIterate.shortCircuitWith(array, size, predicate, parameter, true, Functions.getTrue(), Functions0.getFalse());
+        return InternalArrayIterate.shortCircuitWith(array, size, predicate, parameter, true, true, false);
     }
 
     public static <T> boolean allSatisfy(T[] array, int size, Predicate<? super T> predicate)
     {
-        return InternalArrayIterate.shortCircuit(array, size, predicate, false, Functions.getFalse(), Functions0.getTrue());
+        return InternalArrayIterate.shortCircuit(array, size, predicate, false, false, true);
     }
 
     public static <T, P> boolean allSatisfyWith(T[] array, int size, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return InternalArrayIterate.shortCircuitWith(array, size, predicate, parameter, false, Functions.getFalse(), Functions0.getTrue());
+        return InternalArrayIterate.shortCircuitWith(array, size, predicate, parameter, false, false, true);
     }
 
     public static <T> boolean noneSatisfy(T[] array, int size, Predicate<? super T> predicate)
     {
-        return InternalArrayIterate.shortCircuit(array, size, predicate, true, Functions.getFalse(), Functions0.getTrue());
+        return InternalArrayIterate.shortCircuit(array, size, predicate, true, false, true);
     }
 
     public static <T, P> boolean noneSatisfyWith(T[] array, int size, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return InternalArrayIterate.shortCircuitWith(array, size, predicate, parameter, true, Functions.getFalse(), Functions0.getTrue());
+        return InternalArrayIterate.shortCircuitWith(array, size, predicate, parameter, true, false, true);
     }
 
     public static <T> T detect(T[] array, int size, Predicate<? super T> predicate)
     {
-        return InternalArrayIterate.shortCircuit(array, size, predicate, true, Functions.<T>identity(), Functions0.<T>nullValue());
+        for (int i = 0; i < size; i++)
+        {
+            T each = array[i];
+            if (predicate.accept(each))
+            {
+                return each;
+            }
+        }
+        return null;
     }
 
     public static <T, P> T detectWith(T[] array, int size, Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return InternalArrayIterate.shortCircuitWith(array, size, predicate, parameter, true, Functions.<T>identity(), Functions0.<T>nullValue());
+        for (int i = 0; i < size; i++)
+        {
+            T each = array[i];
+            if (predicate.accept(each, parameter))
+            {
+                return each;
+            }
+        }
+        return null;
     }
 
     public static <T> void appendString(

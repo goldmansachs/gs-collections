@@ -93,8 +93,6 @@ import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures2;
@@ -1247,20 +1245,20 @@ public class UnifiedSetWithHashingStrategy<T>
         return count.getCount();
     }
 
-    protected <V> V shortCircuit(
+    protected boolean shortCircuit(
             Predicate<? super T> predicate,
             boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
+            boolean onShortCircuit,
+            boolean atEnd)
     {
         return this.shortCircuit(predicate, expected, onShortCircuit, atEnd, 0, this.table.length);
     }
 
-    protected <V> V shortCircuit(
+    protected boolean shortCircuit(
             Predicate<? super T> predicate,
             boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd,
+            boolean onShortCircuit,
+            boolean atEnd,
             int start,
             int end)
     {
@@ -1269,10 +1267,9 @@ public class UnifiedSetWithHashingStrategy<T>
             Object cur = this.table[i];
             if (cur instanceof ChainedBucket)
             {
-                V result = this.chainedShortCircuit((ChainedBucket) cur, predicate, expected, onShortCircuit);
-                if (result != null)
+                if (this.chainedShortCircuit((ChainedBucket) cur, predicate, expected))
                 {
-                    return result;
+                    return onShortCircuit;
                 }
             }
             else if (cur != null)
@@ -1280,71 +1277,69 @@ public class UnifiedSetWithHashingStrategy<T>
                 T each = this.nonSentinel(cur);
                 if (predicate.accept(each) == expected)
                 {
-                    return onShortCircuit.valueOf(each);
+                    return onShortCircuit;
                 }
             }
         }
-        return atEnd.value();
+        return atEnd;
     }
 
-    private <V> V chainedShortCircuit(
+    private boolean chainedShortCircuit(
             ChainedBucket bucket,
             Predicate<? super T> predicate,
-            boolean expected,
-            Function<? super T, ? extends V> onShortCircuit)
+            boolean expected)
     {
         do
         {
             if (predicate.accept(this.nonSentinel(bucket.zero)) == expected)
             {
-                return onShortCircuit.valueOf(this.nonSentinel(bucket.zero));
+                return true;
             }
             if (bucket.one == null)
             {
-                return null;
+                return false;
             }
             if (predicate.accept(this.nonSentinel(bucket.one)) == expected)
             {
-                return onShortCircuit.valueOf(this.nonSentinel(bucket.one));
+                return true;
             }
             if (bucket.two == null)
             {
-                return null;
+                return false;
             }
             if (predicate.accept(this.nonSentinel(bucket.two)) == expected)
             {
-                return onShortCircuit.valueOf(this.nonSentinel(bucket.two));
+                return true;
             }
             if (bucket.three == null)
             {
-                return null;
+                return false;
             }
             if (bucket.three instanceof ChainedBucket)
             {
                 bucket = (ChainedBucket) bucket.three;
                 continue;
             }
-            return predicate.accept(this.nonSentinel(bucket.three)) == expected ? onShortCircuit.valueOf(this.nonSentinel(bucket.three)) : null;
+            return predicate.accept(this.nonSentinel(bucket.three)) == expected;
         }
         while (true);
     }
 
-    protected <P, V> V shortCircuitWith(
+    protected <P> boolean shortCircuitWith(
             Predicate2<? super T, ? super P> predicate2,
             P parameter,
             boolean expected,
-            Function<? super T, ? extends V> onShortCircuit,
-            Function0<? extends V> atEnd)
+            boolean onShortCircuit,
+            boolean atEnd)
     {
         for (int i = 0; i < this.table.length; i++)
         {
             Object cur = this.table[i];
             if (cur instanceof ChainedBucket)
             {
-                V result = this.chainedShortCircuitWith((ChainedBucket) cur, predicate2, parameter, expected, onShortCircuit);
-                if (result != null)
+                if (this.chainedShortCircuitWith((ChainedBucket) cur, predicate2, parameter, expected))
                 {
-                    return result;
+                    return onShortCircuit;
                 }
             }
             else if (cur != null)
@@ -1352,90 +1347,89 @@ public class UnifiedSetWithHashingStrategy<T>
                 T each = this.nonSentinel(cur);
                 if (predicate2.accept(each, parameter) == expected)
                 {
-                    return onShortCircuit.valueOf(each);
+                    return onShortCircuit;
                 }
             }
         }
-        return atEnd.value();
+        return atEnd;
     }
 
-    private <P, V> V chainedShortCircuitWith(
+    private <P> boolean chainedShortCircuitWith(
             ChainedBucket bucket,
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            boolean expected,
-            Function<? super T, ? extends V> onShortCircuit)
+            boolean expected)
     {
         do
         {
             if (predicate.accept(this.nonSentinel(bucket.zero), parameter) == expected)
             {
-                return onShortCircuit.valueOf(this.nonSentinel(bucket.zero));
+                return true;
             }
             if (bucket.one == null)
             {
-                return null;
+                return false;
             }
             if (predicate.accept(this.nonSentinel(bucket.one), parameter) == expected)
             {
-                return onShortCircuit.valueOf(this.nonSentinel(bucket.one));
+                return true;
             }
             if (bucket.two == null)
             {
-                return null;
+                return false;
             }
             if (predicate.accept(this.nonSentinel(bucket.two), parameter) == expected)
             {
-                return onShortCircuit.valueOf(this.nonSentinel(bucket.two));
+                return true;
             }
             if (bucket.three == null)
             {
-                return null;
+                return false;
             }
             if (bucket.three instanceof ChainedBucket)
             {
                 bucket = (ChainedBucket) bucket.three;
                 continue;
             }
-            return predicate.accept(this.nonSentinel(bucket.three), parameter) == expected ? onShortCircuit.valueOf(this.nonSentinel(bucket.three)) : null;
+            return predicate.accept(this.nonSentinel(bucket.three), parameter) == expected;
         }
         while (true);
     }
 
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return this.shortCircuit(predicate, true, Functions.getTrue(), Functions0.getFalse());
+        return this.shortCircuit(predicate, true, true, false);
     }
 
     public <P> boolean anySatisfyWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return this.shortCircuitWith(predicate, parameter, true, Functions.getTrue(), Functions0.getFalse());
+        return this.shortCircuitWith(predicate, parameter, true, true, false);
     }
 
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return this.shortCircuit(predicate, false, Functions.getFalse(), Functions0.getTrue());
+        return this.shortCircuit(predicate, false, false, true);
     }
 
     public <P> boolean allSatisfyWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return this.shortCircuitWith(predicate, parameter, false, Functions.getFalse(), Functions0.getTrue());
+        return this.shortCircuitWith(predicate, parameter, false, false, true);
     }
 
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
-        return this.shortCircuit(predicate, true, Functions.getFalse(), Functions0.getTrue());
+        return this.shortCircuit(predicate, true, false, true);
     }
 
     public <P> boolean noneSatisfyWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return this.shortCircuitWith(predicate, parameter, true, Functions.getFalse(), Functions0.getTrue());
+        return this.shortCircuitWith(predicate, parameter, true, false, true);
     }
 
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
@@ -3138,12 +3132,12 @@ public class UnifiedSetWithHashingStrategy<T>
 
         public boolean anySatisfy(Predicate<? super T> predicate)
         {
-            return UnifiedSetWithHashingStrategy.this.shortCircuit(predicate, true, Functions.getTrue(), Functions0.getFalse(), this.chunkStartIndex, this.chunkEndIndex);
+            return UnifiedSetWithHashingStrategy.this.shortCircuit(predicate, true, true, false, this.chunkStartIndex, this.chunkEndIndex);
         }
 
         public boolean allSatisfy(Predicate<? super T> predicate)
         {
-            return UnifiedSetWithHashingStrategy.this.shortCircuit(predicate, false, Functions.getFalse(), Functions0.getTrue(), this.chunkStartIndex, this.chunkEndIndex);
+            return UnifiedSetWithHashingStrategy.this.shortCircuit(predicate, false, false, true, this.chunkStartIndex, this.chunkEndIndex);
         }
 
         public T detect(Predicate<? super T> predicate)
