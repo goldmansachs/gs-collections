@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.multimap;
 
-import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -27,10 +26,7 @@ import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.impl.block.procedure.checked.MultimapKeyValuesSerializingProcedure;
 
 public abstract class ImmutableMultimapSerializationProxy<K, V, R extends RichIterable<V>>
-        implements Externalizable
 {
-    private static final long serialVersionUID = 1L;
-
     private Multimap<K, V> multimapToReadInto;
     private ImmutableMap<K, R> mapToWrite;
 

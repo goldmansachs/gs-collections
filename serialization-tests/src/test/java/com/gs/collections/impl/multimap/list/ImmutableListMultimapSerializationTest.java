@@ -33,8 +33,6 @@ public class ImmutableListMultimapSerializationTest
     {
         return "rO0ABXNyAGdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tdWx0aW1hcC5saXN0LkltbXV0YWJsZUxp\n"
                 + "c3RNdWx0aW1hcEltcGwkSW1tdXRhYmxlTGlzdE11bHRpbWFwU2VyaWFsaXphdGlvblByb3h5AAAA\n"
-                + "AAAAAAEMAAB4cgBEY29tLmdzLmNvbGxlY3Rpb25zLmltcGwubXVsdGltYXAuSW1tdXRhYmxlTXVs\n"
-                + "dGltYXBTZXJpYWxpemF0aW9uUHJveHkAAAAAAAAAAQwAAHhwdwQAAAACdAABQXcEAAAAA3EAfgAD\n"
-                + "dAABQnEAfgAEcQB+AAR3BAAAAAFxAH4AA3g=";
+                + "AAAAAAEMAAB4cHcEAAAAAnQAAUF3BAAAAANxAH4AAnQAAUJxAH4AA3EAfgADdwQAAAABcQB+AAJ4\n";
     }
 }

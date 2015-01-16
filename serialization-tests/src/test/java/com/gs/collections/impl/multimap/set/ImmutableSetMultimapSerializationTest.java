@@ -32,8 +32,6 @@ public class ImmutableSetMultimapSerializationTest extends ImmutableMultimapSeri
     {
         return "rO0ABXNyAGRjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tdWx0aW1hcC5zZXQuSW1tdXRhYmxlU2V0\n"
                 + "TXVsdGltYXBJbXBsJEltbXV0YWJsZVNldE11bHRpbWFwU2VyaWFsaXphdGlvblByb3h5AAAAAAAA\n"
-                + "AAEMAAB4cgBEY29tLmdzLmNvbGxlY3Rpb25zLmltcGwubXVsdGltYXAuSW1tdXRhYmxlTXVsdGlt\n"
-                + "YXBTZXJpYWxpemF0aW9uUHJveHkAAAAAAAAAAQwAAHhwdwQAAAACdAABQXcEAAAAAnEAfgADdAAB\n"
-                + "QnEAfgAEdwQAAAABcQB+AAN4";
+                + "AAEMAAB4cHcEAAAAAnQAAUF3BAAAAAJxAH4AAnQAAUJxAH4AA3cEAAAAAXEAfgACeA==";
     }
 }

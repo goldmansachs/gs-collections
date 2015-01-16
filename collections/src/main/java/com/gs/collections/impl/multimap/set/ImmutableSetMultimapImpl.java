@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.multimap.set;
 
+import java.io.Externalizable;
 import java.io.Serializable;
 
 import com.gs.collections.api.block.function.Function;
@@ -86,7 +87,7 @@ public final class ImmutableSetMultimapImpl<K, V>
     }
 
     private static final class ImmutableSetMultimapSerializationProxy<K, V>
-            extends ImmutableMultimapSerializationProxy<K, V, ImmutableSet<V>>
+            extends ImmutableMultimapSerializationProxy<K, V, ImmutableSet<V>> implements Externalizable
     {
         private static final long serialVersionUID = 1L;
 

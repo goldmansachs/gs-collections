@@ -32,8 +32,7 @@ public class ImmutableSortedSetMultimapSerializationTest extends ImmutableMultim
     {
         return "rO0ABXNyAHdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tdWx0aW1hcC5zZXQuc29ydGVkLkltbXV0\n"
                 + "YWJsZVNvcnRlZFNldE11bHRpbWFwSW1wbCRJbW11dGFibGVTb3J0ZWRTZXRNdWx0aW1hcFNlcmlh\n"
-                + "bGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHIARGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLm11bHRp\n"
-                + "bWFwLkltbXV0YWJsZU11bHRpbWFwU2VyaWFsaXphdGlvblByb3h5AAAAAAAAAAEMAAB4cHB3BAAA\n"
-                + "AAJ0AAFBdwQAAAACcQB+AAN0AAFCcQB+AAR3BAAAAAFxAH4AA3g=";
+                + "bGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHBwdwQAAAACdAABQXcEAAAAAnEAfgACdAABQnEAfgAD\n"
+                + "dwQAAAABcQB+AAJ4";
     }
 }

@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.multimap.set.sorted;
 
+import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -113,7 +114,7 @@ public final class ImmutableSortedSetMultimapImpl<K, V>
     }
 
     private static final class ImmutableSortedSetMultimapSerializationProxy<K, V>
-            extends ImmutableMultimapSerializationProxy<K, V, ImmutableSortedSet<V>>
+            extends ImmutableMultimapSerializationProxy<K, V, ImmutableSortedSet<V>> implements Externalizable
     {
         private static final long serialVersionUID = 1L;
         private Comparator<? super V> comparator;
