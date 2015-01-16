@@ -475,6 +475,31 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     }
 
     @Override
+    @Test
+    public void collectValues()
+    {
+        super.collectValues();
+
+        UnifiedMap<String, Integer> map = UnifiedMap.<String, Integer>newMap().withKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+        Assert.assertEquals(
+                UnifiedMap.<String, String>newMap(5).withKeysValues("1", "11", "2", "22", "3", "33", "4", "44"),
+                map.collectValues((key, value) -> key + value));
+
+        UnifiedMap<Integer, Integer> collisions = UnifiedMap.<Integer, Integer>newMap().withKeysValues(COLLISION_1, 1, COLLISION_2, 2, COLLISION_3, 3, 1, 4);
+        Assert.assertEquals(
+                UnifiedMap.<Integer, Integer>newMap().withKeysValues(COLLISION_1, COLLISION_1 + 1, COLLISION_2, COLLISION_2 + 2, COLLISION_3, COLLISION_3 + 3, 1, 5),
+                collisions.collectValues((key, value) -> key + value));
+
+        UnifiedMap<Integer, Integer> nulls = UnifiedMap.<Integer, Integer>newMap().withKeysValues(null, 10, 1, null, 2, 11, 3, 12);
+        Assert.assertEquals(
+                UnifiedMap.<Integer, Boolean>newMap().withKeysValues(null, true, 1, true, 2, false, 3, false),
+                nulls.collectValues((key, value) -> key == null || value == null));
+
+        UnifiedMap<Integer, Integer> empty = UnifiedMap.<Integer, Integer>newMap();
+        Verify.assertEmpty(empty.collectValues((key, value) -> key + value));
+    }
+
+    @Override
     protected UnifiedMap<Integer, Integer> mapWithCollisionsOfSize(int size)
     {
         UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(size);

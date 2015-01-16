@@ -1504,6 +1504,41 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         }
     }
 
+    @Override
+    public <R> MutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    {
+        UnifiedMap<K, R> target = UnifiedMap.newMap();
+        target.loadFactor = this.loadFactor;
+        target.occupied = this.occupied;
+        target.allocate(this.table.length >> 1);
+
+        for (int i = 0; i < target.table.length; i += 2)
+        {
+            target.table[i] = this.table[i];
+
+            if (this.table[i] == CHAINED_KEY)
+            {
+                Object[] chainedTable = (Object[]) this.table[i + 1];
+                Object[] chainedTargetTable = new Object[chainedTable.length];
+                for (int j = 0; j < chainedTargetTable.length; j += 2)
+                {
+                    if (chainedTable[j] != null)
+                    {
+                        chainedTargetTable[j] = chainedTable[j];
+                        chainedTargetTable[j + 1] = function.value(this.nonSentinel(chainedTable[j]), (V) chainedTable[j + 1]);
+                    }
+                }
+                target.table[i + 1] = chainedTargetTable;
+            }
+            else if (this.table[i] != null)
+            {
+                target.table[i + 1] = function.value(this.nonSentinel(this.table[i]), (V) this.table[i + 1]);
+            }
+        }
+
+        return target;
+    }
+
     protected class KeySet implements Set<K>, Serializable, BatchIterable<K>
     {
         private static final long serialVersionUID = 1L;
