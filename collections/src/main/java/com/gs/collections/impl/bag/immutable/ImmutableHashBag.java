@@ -242,11 +242,6 @@ public class ImmutableHashBag<T>
         return this.delegate.toMap(keyFunction, valueFunction);
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super T> procedure)
     {
         this.delegate.forEach(procedure);

@@ -44,11 +44,6 @@ public class Collect<name>ToObjectIterable\<V>
         this.function = function;
     }
 
-    public void forEach(Procedure\<? super V> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(final Procedure\<? super V> procedure)
     {
         this.iterable.forEach(new <name>Procedure()

@@ -1593,16 +1593,12 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
     private class KeysView extends AbstractLazyIterable<K>
     {
-        public void forEach(Procedure<? super K> procedure)
-        {
-            this.each(procedure);
-        }
-
         public void each(Procedure<? super K> procedure)
         {
             ObjectBooleanHashMap.this.forEachKey(procedure);
         }
 
+        @Override
         public void forEachWithIndex(ObjectIntProcedure<? super K> objectIntProcedure)
         {
             int index = 0;
@@ -1616,6 +1612,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             }
         }
 
+        @Override
         public <P> void forEachWith(Procedure2<? super K, ? super P> procedure, P parameter)
         {
             for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)
@@ -1669,11 +1666,6 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
     private class KeyValuesView extends AbstractLazyIterable<ObjectBooleanPair<K>>
     {
-        public void forEach(Procedure<? super ObjectBooleanPair<K>> procedure)
-        {
-            this.each(procedure);
-        }
-
         public void each(Procedure<? super ObjectBooleanPair<K>> procedure)
         {
             for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)
@@ -1685,6 +1677,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             }
         }
 
+        @Override
         public void forEachWithIndex(ObjectIntProcedure<? super ObjectBooleanPair<K>> objectIntProcedure)
         {
             int index = 0;
@@ -1698,6 +1691,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             }
         }
 
+        @Override
         public <P> void forEachWith(Procedure2<? super ObjectBooleanPair<K>, ? super P> procedure, P parameter)
         {
             for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,21 +45,18 @@ public class ReverseIterable<T>
         return new ReverseIterable<T>(listIterable);
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super T> procedure)
     {
         this.adapted.reverseForEach(procedure);
     }
 
+    @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
         this.adapted.reverseForEach(Procedures.fromObjectIntProcedure(objectIntProcedure));
     }
 
+    @Override
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
         this.adapted.reverseForEach(Procedures.bind(procedure, parameter));
@@ -69,6 +66,24 @@ public class ReverseIterable<T>
     public int size()
     {
         return this.adapted.size();
+    }
+
+    @Override
+    public T getFirst()
+    {
+        return this.adapted.getLast();
+    }
+
+    @Override
+    public T getLast()
+    {
+        return this.adapted.getFirst();
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return this.adapted.isEmpty();
     }
 
     public Iterator<T> iterator()

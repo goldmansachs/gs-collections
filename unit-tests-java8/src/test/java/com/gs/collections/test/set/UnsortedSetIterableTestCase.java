@@ -107,4 +107,78 @@ public interface UnsortedSetIterableTestCase extends SetIterableTestCase, Unorde
         Object[] array = this.newWith(3, 2, 1).toArray();
         assertEquals(Bags.immutable.with(3, 2, 1), HashBag.newBagWith(array));
     }
+
+    @Override
+    @Test
+    default void RichIterable_makeString_appendString()
+    {
+        RichIterable<Integer> iterable = this.newWith(3, 2, 1);
+        assertThat(iterable.makeString(), isOneOf(
+                "3, 2, 1",
+                "3, 1, 2",
+                "2, 3, 1",
+                "2, 1, 3",
+                "1, 3, 2",
+                "1, 2, 3"));
+
+        assertThat(iterable.makeString("/"), isOneOf(
+                "3/2/1",
+                "3/1/2",
+                "2/3/1",
+                "2/1/3",
+                "1/3/2",
+                "1/2/3"));
+
+        assertThat(iterable.makeString("[", "/", "]"), isOneOf(
+                "[3/2/1]",
+                "[3/1/2]",
+                "[2/3/1]",
+                "[2/1/3]",
+                "[1/3/2]",
+                "[1/2/3]"));
+
+        StringBuilder stringBuilder1 = new StringBuilder();
+        iterable.appendString(stringBuilder1);
+        assertThat(stringBuilder1.toString(), isOneOf(
+                "3, 2, 1",
+                "3, 1, 2",
+                "2, 3, 1",
+                "2, 1, 3",
+                "1, 3, 2",
+                "1, 2, 3"));
+
+        StringBuilder stringBuilder2 = new StringBuilder();
+        iterable.appendString(stringBuilder2, "/");
+        assertThat(stringBuilder2.toString(), isOneOf(
+                "3/2/1",
+                "3/1/2",
+                "2/3/1",
+                "2/1/3",
+                "1/3/2",
+                "1/2/3"));
+
+        StringBuilder stringBuilder3 = new StringBuilder();
+        iterable.appendString(stringBuilder3, "[", "/", "]");
+        assertThat(stringBuilder3.toString(), isOneOf(
+                "[3/2/1]",
+                "[3/1/2]",
+                "[2/3/1]",
+                "[2/1/3]",
+                "[1/3/2]",
+                "[1/2/3]"));
+    }
+
+    @Override
+    @Test
+    default void RichIterable_toString()
+    {
+        RichIterable<Integer> iterable = this.newWith(3, 2, 1);
+        assertThat(iterable.toString(), isOneOf(
+                "[3, 2, 1]",
+                "[3, 1, 2]",
+                "[2, 3, 1]",
+                "[2, 1, 3]",
+                "[1, 3, 2]",
+                "[1, 2, 3]"));
+    }
 }

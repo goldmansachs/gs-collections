@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -398,6 +398,7 @@ public final class Interval
         }
     }
 
+    @Override
     public void forEachWithIndex(final ObjectIntProcedure<? super Integer> objectIntProcedure)
     {
         this.forEachWithIndex(new IntIntProcedure()
@@ -432,6 +433,7 @@ public final class Interval
         return this.from <= this.to && this.step > 0;
     }
 
+    @Override
     public <P> void forEachWith(final Procedure2<? super Integer, ? super P> procedure, P parameter)
     {
         this.forEachWith(new IntObjectProcedure<P>()
@@ -459,11 +461,6 @@ public final class Interval
                 procedure.value(i);
             }
         }
-    }
-
-    public void forEach(Procedure<? super Integer> procedure)
-    {
-        this.each(procedure);
     }
 
     public void each(final Procedure<? super Integer> procedure)

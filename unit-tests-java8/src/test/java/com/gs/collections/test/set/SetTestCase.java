@@ -22,7 +22,9 @@ import java.util.Set;
 
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.test.CollectionTestCase;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static com.gs.collections.impl.test.Verify.assertPostSerializedEqualsAndHashCode;
@@ -43,6 +45,15 @@ public interface SetTestCase extends CollectionTestCase
     default boolean allowsDuplicates()
     {
         return false;
+    }
+
+    @Override
+    @Test
+    default void Object_PostSerializedEqualsAndHashCode()
+    {
+        Iterable<Integer> iterable = this.newWith(3, 2, 1);
+        Object deserialized = SerializeTestHelper.serializeDeserialize(iterable);
+        Assert.assertNotSame(iterable, deserialized);
     }
 
     @Override

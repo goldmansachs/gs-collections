@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,11 +162,6 @@ final class EmptyList<T>
     public T getLast()
     {
         return null;
-    }
-
-    @Override
-    public void forEach(Procedure<? super T> procedure)
-    {
     }
 
     @Override

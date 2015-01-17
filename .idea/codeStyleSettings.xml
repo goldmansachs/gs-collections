@@ -3,6 +3,7 @@
   <component name="ProjectCodeStyleSettingsManager">
     <option name="PER_PROJECT_SETTINGS">
       <value>
+        <option name="AUTODETECT_INDENTS" value="false" />
         <option name="USE_FQ_CLASS_NAMES_IN_JAVADOC" value="false" />
         <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
         <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
@@ -21,6 +22,7 @@
         <option name="JD_KEEP_EMPTY_PARAMETER" value="false" />
         <option name="JD_KEEP_EMPTY_EXCEPTION" value="false" />
         <option name="JD_KEEP_EMPTY_RETURN" value="false" />
+        <option name="FORMATTER_TAGS_ENABLED" value="true" />
         <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
         <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
         <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />

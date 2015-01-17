@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iBag;
 
 public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 {
@@ -126,6 +126,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         Verify.assertIterableEmpty(partition.getRejected());
     }
 
+    @Override
     @Test
     public void selectInstancesOf()
     {
@@ -216,6 +217,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         Assert.assertTrue(strings.noneSatisfy(ERROR_THROWING_PREDICATE));
     }
 
+    @Override
     @Test
     public void allSatisfyWith()
     {
@@ -223,6 +225,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         Assert.assertTrue(strings.allSatisfyWith(ERROR_THROWING_PREDICATE_2, Integer.class));
     }
 
+    @Override
     @Test
     public void anySatisfyWith()
     {
@@ -230,6 +233,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         Assert.assertFalse(strings.anySatisfyWith(ERROR_THROWING_PREDICATE_2, Integer.class));
     }
 
+    @Override
     @Test
     public void noneSatisfyWith()
     {
@@ -372,6 +376,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         Assert.assertEquals(immutableBag.zipWithIndex(), immutableBag.zipWithIndex(UnifiedSet.<Pair<String, Integer>>newSet()));
     }
 
+    @Override
     @Test
     public void chunk()
     {
@@ -540,7 +545,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         sortedBag.addOccurrences(1, 3);
         sortedBag.addOccurrences(10, 2);
 
-        Verify.assertSortedBagsEqual(TreeBag.<Integer>newBagWith(Comparators.byFunction(function), 10, 10, 1, 1, 1), sortedBag);
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.byFunction(function), 10, 10, 1, 1, 1), sortedBag);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iBag;
 
 public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 {
@@ -577,6 +577,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
         Assert.assertEquals(1, this.newBag().sizeDistinct());
     }
 
+    @Override
     @Test
     public void selectInstancesOf()
     {

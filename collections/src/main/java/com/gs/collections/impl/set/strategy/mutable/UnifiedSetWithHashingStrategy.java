@@ -3246,30 +3246,12 @@ public class UnifiedSetWithHashingStrategy<T>
         private class UnifiedSetParallelSplitLazyIterable
                 extends AbstractLazyIterable<RootUnsortedSetBatch<T>>
         {
-            public void forEach(Procedure<? super RootUnsortedSetBatch<T>> procedure)
-            {
-                this.each(procedure);
-            }
-
             public void each(Procedure<? super RootUnsortedSetBatch<T>> procedure)
             {
                 for (RootUnsortedSetBatch<T> chunk : this)
                 {
                     procedure.value(chunk);
                 }
-            }
-
-            public <P> void forEachWith(Procedure2<? super RootUnsortedSetBatch<T>, ? super P> procedure, P parameter)
-            {
-                for (RootUnsortedSetBatch<T> chunk : this)
-                {
-                    procedure.value(chunk, parameter);
-                }
-            }
-
-            public void forEachWithIndex(ObjectIntProcedure<? super RootUnsortedSetBatch<T>> objectIntProcedure)
-            {
-                throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEachWithIndex() not implemented yet");
             }
 
             public Iterator<RootUnsortedSetBatch<T>> iterator()

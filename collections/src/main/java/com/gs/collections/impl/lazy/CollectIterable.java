@@ -51,21 +51,18 @@ public class CollectIterable<T, V>
         this.function = function;
     }
 
-    public void forEach(Procedure<? super V> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super V> procedure)
     {
         Iterate.forEach(this.adapted, Functions.bind(procedure, this.function));
     }
 
+    @Override
     public void forEachWithIndex(ObjectIntProcedure<? super V> objectIntProcedure)
     {
         Iterate.forEachWithIndex(this.adapted, Functions.bind(objectIntProcedure, this.function));
     }
 
+    @Override
     public <P> void forEachWith(Procedure2<? super V, ? super P> procedure, P parameter)
     {
         Iterate.forEachWith(this.adapted, Functions.bind(procedure, this.function), parameter);
@@ -212,5 +209,25 @@ public class CollectIterable<T, V>
                 return f.floatValueOf(intParameter, CollectIterable.this.function.valueOf(objectParameter));
             }
         });
+    }
+
+    @Override
+    public V getFirst()
+    {
+        if (this.isEmpty())
+        {
+            return null;
+        }
+        return this.function.valueOf(Iterate.getFirst(this.adapted));
+    }
+
+    @Override
+    public V getLast()
+    {
+        if (this.isEmpty())
+        {
+            return null;
+        }
+        return this.function.valueOf(Iterate.getLast(this.adapted));
     }
 }

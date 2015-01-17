@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,13 +25,12 @@ import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.list.ListMultimap;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 
 @Beta
 public final class ListIterableParallelIterable<T> extends AbstractParallelListIterable<T, RootListBatch<T>>
@@ -73,22 +72,22 @@ public final class ListIterableParallelIterable<T> extends AbstractParallelListI
 
     public void forEach(Procedure<? super T> procedure)
     {
-        forEach(this, procedure);
+        AbstractParallelIterable.forEach(this, procedure);
     }
 
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return anySatisfy(this, predicate);
+        return AbstractParallelIterable.anySatisfy(this, predicate);
     }
 
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return allSatisfy(this, predicate);
+        return AbstractParallelIterable.allSatisfy(this, predicate);
     }
 
     public T detect(Predicate<? super T> predicate)
     {
-        return detect(this, predicate);
+        return AbstractParallelIterable.detect(this, predicate);
     }
 
     @Override
@@ -165,30 +164,12 @@ public final class ListIterableParallelIterable<T> extends AbstractParallelListI
     private class ListIterableParallelBatchLazyIterable
             extends AbstractLazyIterable<RootListBatch<T>>
     {
-        public void forEach(Procedure<? super RootListBatch<T>> procedure)
-        {
-            this.each(procedure);
-        }
-
         public void each(Procedure<? super RootListBatch<T>> procedure)
         {
             for (RootListBatch<T> chunk : this)
             {
                 procedure.value(chunk);
             }
-        }
-
-        public <P> void forEachWith(Procedure2<? super RootListBatch<T>, ? super P> procedure, P parameter)
-        {
-            for (RootListBatch<T> chunk : this)
-            {
-                procedure.value(chunk, parameter);
-            }
-        }
-
-        public void forEachWithIndex(ObjectIntProcedure<? super RootListBatch<T>> objectIntProcedure)
-        {
-            throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEachWithIndex() not implemented yet");
         }
 
         public Iterator<RootListBatch<T>> iterator()

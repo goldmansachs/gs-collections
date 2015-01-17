@@ -1780,11 +1780,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     private class KeysView extends AbstractLazyIterable\<K>
     {
-        public void forEach(Procedure\<? super K> procedure)
-        {
-            this.each(procedure);
-        }
-
         public void each(Procedure\<? super K> procedure)
         {
             Object<name>HashMap.this.forEachKey(procedure);
@@ -1856,11 +1851,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     private class KeyValuesView extends AbstractLazyIterable\<Object<name>Pair\<K>\>
     {
-        public void forEach(Procedure\<? super Object<name>Pair\<K>\> procedure)
-        {
-            this.each(procedure);
-        }
-
         public void each(Procedure\<? super Object<name>Pair\<K>\> procedure)
         {
             for (int i = 0; i \< Object<name>HashMap.this.keys.length; i++)

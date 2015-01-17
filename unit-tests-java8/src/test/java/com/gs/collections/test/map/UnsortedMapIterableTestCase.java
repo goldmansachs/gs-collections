@@ -16,12 +16,22 @@
 
 package com.gs.collections.test.map;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.UnsortedBag;
 import com.gs.collections.api.map.UnsortedMapIterable;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.test.UnorderedIterableTestCase;
 import com.gs.collections.test.bag.TransformsToBagTrait;
+import org.junit.Assert;
+import org.junit.Test;
+
+import static com.gs.collections.test.IterableTestCase.assertEquals;
+import static org.hamcrest.Matchers.isOneOf;
+import static org.junit.Assert.assertThat;
 
 public interface UnsortedMapIterableTestCase extends MapIterableTestCase, UnorderedIterableTestCase, TransformsToBagTrait
 {
@@ -38,5 +48,45 @@ public interface UnsortedMapIterableTestCase extends MapIterableTestCase, Unorde
     default <T> MutableBag<T> newMutableForFilter(T... elements)
     {
         return Bags.mutable.with(elements);
+    }
+
+    @Override
+    @Test
+    default void RichIterable_makeString_appendString()
+    {
+        RichIterable<Integer> iterable = this.newWith(2, 2, 1);
+        assertThat(iterable.makeString(), isOneOf("2, 2, 1", "1, 2, 2", "2, 1, 2"));
+        assertThat(iterable.makeString("/"), isOneOf("2/2/1", "1/2/2", "2/1/2"));
+        assertThat(iterable.makeString("[", "/", "]"), isOneOf("[2/2/1]", "[1/2/2]", "[2/1/2]"));
+
+        StringBuilder builder1 = new StringBuilder();
+        iterable.appendString(builder1);
+        assertThat(builder1.toString(), isOneOf("2, 2, 1", "1, 2, 2", "2, 1, 2"));
+
+        StringBuilder builder2 = new StringBuilder();
+        iterable.appendString(builder2, "/");
+        assertThat(builder2.toString(), isOneOf("2/2/1", "1/2/2", "2/1/2"));
+
+        StringBuilder builder3 = new StringBuilder();
+        iterable.appendString(builder3, "[", "/", "]");
+        assertThat(builder3.toString(), isOneOf("[2/2/1]", "[1/2/2]", "[2/1/2]"));
+    }
+
+    @Test
+    default void RichIterable_toString()
+    {
+        String string = this.newWith(2, 2, 1).toString();
+        Pattern pattern = Pattern.compile("^\\{\\d\\.\\d+=(\\d),"
+                + " \\d\\.\\d+=(\\d),"
+                + " \\d\\.\\d+=(\\d)\\}$");
+        Matcher matcher = pattern.matcher(string);
+        Assert.assertTrue(matcher.matches());
+
+        assertEquals(
+                Bags.immutable.with("1", "2", "2"),
+                Bags.immutable.with(
+                        matcher.group(1),
+                        matcher.group(2),
+                        matcher.group(3)));
     }
 }

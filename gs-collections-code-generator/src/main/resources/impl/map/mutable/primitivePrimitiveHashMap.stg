@@ -1218,11 +1218,6 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
 
     private class KeyValuesView extends AbstractLazyIterable\<<name1><name2>Pair>
     {
-        public void forEach(Procedure\<? super <name1><name2>Pair> procedure)
-        {
-            this.each(procedure);
-        }
-
         public void each(Procedure\<? super <name1><name2>Pair> procedure)
         {
             <forEachKeyValue(template = {procedure.value(PrimitiveTuples.pair(<key>, <value>))}, innerClass = true)>

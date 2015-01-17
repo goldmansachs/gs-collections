@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iBag;
 
 public class ImmutableArrayBagTest extends ImmutableBagTestCase
 {
@@ -40,8 +40,9 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
         return ImmutableArrayBag.newBagWith("1", "2", "2", "3", "3", "3", "4", "4", "4", "4");
     }
 
+    @SafeVarargs
     @Override
-    protected <T> ImmutableBag<T> newWith(T... littleElements)
+    protected final <T> ImmutableBag<T> newWith(T... littleElements)
     {
         return ImmutableArrayBag.newBagWith(littleElements);
     }
@@ -129,9 +130,12 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
         Verify.assertThrows(IllegalArgumentException.class, () -> new ImmutableArrayBag<>(new Integer[]{2, 3}, new int[]{2}));
     }
 
+    @Override
     @Test
     public void selectInstancesOf()
     {
+        super.selectInstancesOf();
+
         ImmutableBag<Number> numbers = ImmutableArrayBag.<Number>newBagWith(1, 2.0, 2.0, 3, 3, 3, 4.0, 4.0, 4.0, 4.0);
         Assert.assertEquals(iBag(1, 3, 3, 3), numbers.selectInstancesOf(Integer.class));
         Assert.assertEquals(iBag(2.0, 2.0, 4.0, 4.0, 4.0, 4.0), numbers.selectInstancesOf(Double.class));

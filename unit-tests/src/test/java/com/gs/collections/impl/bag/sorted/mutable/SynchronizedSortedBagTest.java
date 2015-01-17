@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,9 +56,12 @@ public class SynchronizedSortedBagTest extends AbstractSortedBagTestCase
         Assert.assertSame(synchronizedBag, synchronizedBag.asSynchronized());
     }
 
+    @Override
     @Test
     public void topOccurrences()
     {
+        super.topOccurrences();
+
         MutableSortedBag<String> mutable = TreeBag.newBag();
         mutable.addOccurrences("one", 1);
         mutable.addOccurrences("two", 2);
@@ -79,9 +82,12 @@ public class SynchronizedSortedBagTest extends AbstractSortedBagTestCase
         Assert.assertEquals(6, top5.getLast().getTwo());
     }
 
+    @Override
     @Test
     public void bottomOccurrences()
     {
+        super.bottomOccurrences();
+
         MutableSortedBag<String> mutable = TreeBag.newBag();
         mutable.addOccurrences("one", 1);
         mutable.addOccurrences("two", 2);

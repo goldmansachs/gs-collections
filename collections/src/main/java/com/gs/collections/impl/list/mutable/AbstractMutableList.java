@@ -118,11 +118,6 @@ public abstract class AbstractMutableList<T>
         return this.injectInto(1, (IntObjectToIntFunction<T>) HASH_CODE_FUNCTION);
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super T> procedure)
     {
         ListIterate.forEach(this, procedure);
@@ -973,12 +968,6 @@ public abstract class AbstractMutableList<T>
         public MutableStack<T> toStack()
         {
             return ArrayStack.newStack(this);
-        }
-
-        @Override
-        public void forEach(Procedure<? super T> procedure)
-        {
-            ListIterate.forEach(this, procedure);
         }
 
         @Override

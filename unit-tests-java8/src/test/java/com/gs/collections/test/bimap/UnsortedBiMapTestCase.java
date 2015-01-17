@@ -17,13 +17,18 @@
 package com.gs.collections.test.bimap;
 
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bimap.BiMap;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
+import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.test.bag.TransformsToBagTrait;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static com.gs.collections.test.IterableTestCase.assertEquals;
@@ -100,5 +105,84 @@ public interface UnsortedBiMapTestCase extends BiMapTestCase, TransformsToBagTra
                 equalTo(new Object[]{2, 3, 1}),
                 equalTo(new Object[]{3, 1, 2}),
                 equalTo(new Object[]{3, 2, 1})));
+    }
+
+    @Override
+    @Test
+    default void RichIterable_makeString_appendString()
+    {
+        RichIterable<Integer> iterable = this.newWith(3, 2, 1);
+        assertThat(iterable.makeString(), isOneOf(
+                "3, 2, 1",
+                "3, 1, 2",
+                "2, 3, 1",
+                "2, 1, 3",
+                "1, 3, 2",
+                "1, 2, 3"));
+
+        assertThat(iterable.makeString("/"), isOneOf(
+                "3/2/1",
+                "3/1/2",
+                "2/3/1",
+                "2/1/3",
+                "1/3/2",
+                "1/2/3"));
+
+        assertThat(iterable.makeString("[", "/", "]"), isOneOf(
+                "[3/2/1]",
+                "[3/1/2]",
+                "[2/3/1]",
+                "[2/1/3]",
+                "[1/3/2]",
+                "[1/2/3]"));
+
+        StringBuilder stringBuilder1 = new StringBuilder();
+        iterable.appendString(stringBuilder1);
+        assertThat(stringBuilder1.toString(), isOneOf(
+                "3, 2, 1",
+                "3, 1, 2",
+                "2, 3, 1",
+                "2, 1, 3",
+                "1, 3, 2",
+                "1, 2, 3"));
+
+        StringBuilder stringBuilder2 = new StringBuilder();
+        iterable.appendString(stringBuilder2, "/");
+        assertThat(stringBuilder2.toString(), isOneOf(
+                "3/2/1",
+                "3/1/2",
+                "2/3/1",
+                "2/1/3",
+                "1/3/2",
+                "1/2/3"));
+
+        StringBuilder stringBuilder3 = new StringBuilder();
+        iterable.appendString(stringBuilder3, "[", "/", "]");
+        assertThat(stringBuilder3.toString(), isOneOf(
+                "[3/2/1]",
+                "[3/1/2]",
+                "[2/3/1]",
+                "[2/1/3]",
+                "[1/3/2]",
+                "[1/2/3]"));
+    }
+
+    @Override
+    @Test
+    default void RichIterable_toString()
+    {
+        String string = this.newWith(3, 2, 1).toString();
+        Pattern pattern = Pattern.compile("^\\{\\d\\.\\d+=(\\d),"
+                + " \\d\\.\\d+=(\\d),"
+                + " \\d\\.\\d+=(\\d)\\}$");
+        Matcher matcher = pattern.matcher(string);
+        Assert.assertTrue(matcher.matches());
+
+        assertEquals(
+                Bags.immutable.with("1", "2", "3"),
+                Bags.immutable.with(
+                        matcher.group(1),
+                        matcher.group(2),
+                        matcher.group(3)));
     }
 }

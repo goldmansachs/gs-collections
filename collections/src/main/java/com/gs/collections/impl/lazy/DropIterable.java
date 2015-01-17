@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,21 +49,18 @@ public class DropIterable<T> extends AbstractLazyIterable<T>
         this.count = count;
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super T> procedure)
     {
         Iterate.forEach(this.adapted, new IfProcedure<T>(new DropIterablePredicate<T>(this.count), procedure));
     }
 
+    @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
         Iterate.forEach(this.adapted, new IfObjectIntProcedure<T>(new DropIterablePredicate<T>(this.count), objectIntProcedure));
     }
 
+    @Override
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
         Iterate.forEachWith(this.adapted, new IfProcedureWith<T, P>(new DropIterablePredicate<T>(this.count), procedure), parameter);

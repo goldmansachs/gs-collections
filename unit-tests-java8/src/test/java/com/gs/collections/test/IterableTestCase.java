@@ -22,18 +22,37 @@ import java.util.NoSuchElementException;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
+import com.gs.collections.api.LazyBooleanIterable;
+import com.gs.collections.api.LazyByteIterable;
+import com.gs.collections.api.LazyCharIterable;
+import com.gs.collections.api.LazyDoubleIterable;
+import com.gs.collections.api.LazyFloatIterable;
+import com.gs.collections.api.LazyIntIterable;
+import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.LazyLongIterable;
+import com.gs.collections.api.LazyShortIterable;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.list.ListIterable;
+import com.gs.collections.api.list.primitive.BooleanList;
+import com.gs.collections.api.list.primitive.ByteList;
+import com.gs.collections.api.list.primitive.CharList;
+import com.gs.collections.api.list.primitive.DoubleList;
+import com.gs.collections.api.list.primitive.FloatList;
+import com.gs.collections.api.list.primitive.IntList;
+import com.gs.collections.api.list.primitive.LongList;
+import com.gs.collections.api.list.primitive.ShortList;
 import com.gs.collections.api.ordered.ReversibleIterable;
 import com.gs.collections.api.ordered.SortedIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.mutable.MultiReaderFastList;
+import com.gs.collections.impl.test.SerializeTestHelper;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
 import static com.gs.collections.impl.test.Verify.assertIterablesEqual;
-import static com.gs.collections.impl.test.Verify.assertPostSerializedEqualsAndHashCode;
 import static com.gs.collections.impl.test.Verify.assertThrows;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -43,8 +62,58 @@ import static org.junit.Assert.assertTrue;
 
 public interface IterableTestCase
 {
+    <T> Iterable<T> newWith(T... elements);
+
+    boolean allowsDuplicates();
+
     static void assertEquals(Object o1, Object o2)
     {
+        if (o1 instanceof ListIterable<?> && o2 instanceof LazyIterable<?>)
+        {
+            IterableTestCase.assertEquals(o1, ((LazyIterable<?>) o2).toList());
+            return;
+        }
+        if (o1 instanceof BooleanList && o2 instanceof LazyBooleanIterable)
+        {
+            IterableTestCase.assertEquals(o1, ((LazyBooleanIterable) o2).toList());
+            return;
+        }
+        if (o1 instanceof ByteList && o2 instanceof LazyByteIterable)
+        {
+            IterableTestCase.assertEquals(o1, ((LazyByteIterable) o2).toList());
+            return;
+        }
+        if (o1 instanceof CharList && o2 instanceof LazyCharIterable)
+        {
+            IterableTestCase.assertEquals(o1, ((LazyCharIterable) o2).toList());
+            return;
+        }
+        if (o1 instanceof DoubleList && o2 instanceof LazyDoubleIterable)
+        {
+            IterableTestCase.assertEquals(o1, ((LazyDoubleIterable) o2).toList());
+            return;
+        }
+        if (o1 instanceof FloatList && o2 instanceof LazyFloatIterable)
+        {
+            IterableTestCase.assertEquals(o1, ((LazyFloatIterable) o2).toList());
+            return;
+        }
+        if (o1 instanceof IntList && o2 instanceof LazyIntIterable)
+        {
+            IterableTestCase.assertEquals(o1, ((LazyIntIterable) o2).toList());
+            return;
+        }
+        if (o1 instanceof LongList && o2 instanceof LazyLongIterable)
+        {
+            IterableTestCase.assertEquals(o1, ((LazyLongIterable) o2).toList());
+            return;
+        }
+        if (o1 instanceof ShortList && o2 instanceof LazyShortIterable)
+        {
+            IterableTestCase.assertEquals(o1, ((LazyShortIterable) o2).toList());
+            return;
+        }
+
         Assert.assertEquals(o1, o2);
         IterableTestCase.checkNotSame(o1, o2);
 
@@ -97,14 +166,18 @@ public interface IterableTestCase
         }
     }
 
-    <T> Iterable<T> newWith(T... elements);
-
-    boolean allowsDuplicates();
+    @Test
+    default void Object_PostSerializedEqualsAndHashCode()
+    {
+        Iterable<Integer> iterable = this.newWith(3, 3, 3, 2, 2, 1);
+        Object deserialized = SerializeTestHelper.serializeDeserialize(iterable);
+        Assert.assertNotSame(iterable, deserialized);
+    }
 
     @Test
     default void Object_equalsAndHashCode()
     {
-        assertPostSerializedEqualsAndHashCode(this.newWith(3, 3, 3, 2, 2, 1));
+        Verify.assertEqualsAndHashCode(this.newWith(3, 3, 3, 2, 2, 1), this.newWith(3, 3, 3, 2, 2, 1));
 
         assertNotEquals(this.newWith(4, 3, 2, 1), this.newWith(3, 2, 1));
         assertNotEquals(this.newWith(3, 2, 1), this.newWith(4, 3, 2, 1));

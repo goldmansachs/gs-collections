@@ -22,6 +22,8 @@ import com.gs.collections.api.map.sorted.SortedMapIterable;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.test.OrderedIterableTestCase;
 import com.gs.collections.test.list.TransformsToListTrait;
+import org.junit.Assert;
+import org.junit.Test;
 
 public interface SortedMapIterableTestCase extends MapIterableTestCase, OrderedIterableTestCase, TransformsToListTrait
 {
@@ -38,5 +40,14 @@ public interface SortedMapIterableTestCase extends MapIterableTestCase, OrderedI
     default <T> MutableList<T> newMutableForFilter(T... elements)
     {
         return Lists.mutable.with(elements);
+    }
+
+    @Override
+    @Test
+    default void RichIterable_toString()
+    {
+        Assert.assertEquals(
+                "{10=4, 9=4, 8=4, 7=4, 6=3, 5=3, 4=3, 3=2, 2=2, 1=1}",
+                this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1).toString());
     }
 }

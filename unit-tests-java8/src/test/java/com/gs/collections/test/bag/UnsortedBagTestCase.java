@@ -16,6 +16,7 @@
 
 package com.gs.collections.test.bag;
 
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.UnsortedBag;
 import com.gs.collections.impl.factory.Bags;
@@ -23,7 +24,9 @@ import com.gs.collections.test.UnorderedIterableTestCase;
 import org.junit.Test;
 
 import static com.gs.collections.test.IterableTestCase.assertEquals;
+import static org.hamcrest.Matchers.isOneOf;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertThat;
 
 public interface UnsortedBagTestCase extends UnorderedIterableTestCase, BagTestCase, TransformsToBagTrait
 {
@@ -53,5 +56,34 @@ public interface UnsortedBagTestCase extends UnorderedIterableTestCase, BagTestC
             assertSame(sentinel, argument2);
         }, sentinel);
         assertEquals(Bags.immutable.with(3, 3, 3, 2, 2, 1), result);
+    }
+
+    @Override
+    @Test
+    default void RichIterable_makeString_appendString()
+    {
+        RichIterable<Integer> iterable = this.newWith(2, 2, 1);
+        assertThat(iterable.makeString(), isOneOf("2, 2, 1", "1, 2, 2"));
+        assertThat(iterable.makeString("/"), isOneOf("2/2/1", "1/2/2"));
+        assertThat(iterable.makeString("[", "/", "]"), isOneOf("[2/2/1]", "[1/2/2]"));
+
+        StringBuilder builder1 = new StringBuilder();
+        iterable.appendString(builder1);
+        assertThat(builder1.toString(), isOneOf("2, 2, 1", "1, 2, 2"));
+
+        StringBuilder builder2 = new StringBuilder();
+        iterable.appendString(builder2, "/");
+        assertThat(builder2.toString(), isOneOf("2/2/1", "1/2/2"));
+
+        StringBuilder builder3 = new StringBuilder();
+        iterable.appendString(builder3, "[", "/", "]");
+        assertThat(builder3.toString(), isOneOf("[2/2/1]", "[1/2/2]"));
+    }
+
+    @Override
+    @Test
+    default void RichIterable_toString()
+    {
+        assertThat(this.newWith(2, 2, 1).toString(), isOneOf("[2, 2, 1]", "[1, 2, 2]"));
     }
 }

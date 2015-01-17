@@ -3777,11 +3777,6 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
     private class KeyValuesView extends AbstractLazyIterable\<<name>ObjectPair\<V>\>
     {
-        public void forEach(Procedure\<? super <name>ObjectPair\<V>\> procedure)
-        {
-            this.each(procedure);
-        }
-
         public void each(Procedure\<? super <name>ObjectPair\<V>\> procedure)
         {
             if (<name>ObjectHashMap.this.sentinelValues != null)

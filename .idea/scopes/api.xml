@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="api" pattern="src:com.gs.collections.api..*" />
+</component>

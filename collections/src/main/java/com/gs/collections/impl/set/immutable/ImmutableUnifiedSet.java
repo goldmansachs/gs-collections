@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,11 +88,6 @@ final class ImmutableUnifiedSet<T>
     public static <T> ImmutableSet<T> newSet(Iterable<T> iterable)
     {
         return new ImmutableUnifiedSet<T>(UnifiedSet.newSet(iterable));
-    }
-
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
     }
 
     public void each(Procedure<? super T> procedure)

@@ -916,11 +916,6 @@ abstract class AbstractImmutableList<T>
 
         public void each(Procedure<? super T> procedure)
         {
-            this.forEach(procedure);
-        }
-
-        public void forEach(Procedure<? super T> procedure)
-        {
             ListIterate.forEach(this, procedure);
         }
 

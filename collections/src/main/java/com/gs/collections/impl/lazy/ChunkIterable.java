@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.Iterator;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.lazy.iterator.ChunkIterator;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 import net.jcip.annotations.Immutable;
@@ -52,23 +50,8 @@ public class ChunkIterable<T>
         return new ChunkIterator<T>(this.iterable, this.size);
     }
 
-    public void forEach(Procedure<? super RichIterable<T>> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super RichIterable<T>> procedure)
     {
         IterableIterate.forEach(this, procedure);
-    }
-
-    public void forEachWithIndex(ObjectIntProcedure<? super RichIterable<T>> objectIntProcedure)
-    {
-        IterableIterate.forEachWithIndex(this, objectIntProcedure);
-    }
-
-    public <P> void forEachWith(Procedure2<? super RichIterable<T>, ? super P> procedure, P parameter)
-    {
-        IterableIterate.forEachWith(this, procedure, parameter);
     }
 }

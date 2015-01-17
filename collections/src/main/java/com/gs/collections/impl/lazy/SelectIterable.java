@@ -47,21 +47,18 @@ public class SelectIterable<T>
         this.predicate = newPredicate;
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super T> procedure)
     {
         Iterate.forEach(this.adapted, new IfProcedure<T>(this.predicate, procedure));
     }
 
+    @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
         Iterate.forEach(this.adapted, new IfObjectIntProcedure<T>(this.predicate, objectIntProcedure));
     }
 
+    @Override
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
         Iterate.forEachWith(this.adapted, new IfProcedureWith<T, P>(this.predicate, procedure), parameter);
@@ -87,7 +84,7 @@ public class SelectIterable<T>
     @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return Iterate.allSatisfy(this.adapted, new SelectAllSatisfyPredicate<T>(this.predicate, predicate));
+        return Iterate.allSatisfy(this.adapted, new AllSatisfyPredicate<T>(this.predicate, predicate));
     }
 
     @Override
@@ -99,7 +96,7 @@ public class SelectIterable<T>
     @Override
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
-        return Iterate.noneSatisfy(this.adapted, new SelectAllSatisfyPredicate<T>(this.predicate, predicate));
+        return Iterate.noneSatisfy(this.adapted, new AllSatisfyPredicate<T>(this.predicate, predicate));
     }
 
     @Override
@@ -114,21 +111,9 @@ public class SelectIterable<T>
         return Iterate.detect(this.adapted, Predicates.and(this.predicate, predicate));
     }
 
-    private static final class SelectAllSatisfyPredicate<T> implements Predicate<T>
+    @Override
+    public T getFirst()
     {
-        private final Predicate<? super T> left;
-        private final Predicate<? super T> right;
-
-        private SelectAllSatisfyPredicate(Predicate<? super T> left, Predicate<? super T> right)
-        {
-            this.left = left;
-            this.right = right;
-        }
-
-        public boolean accept(T each)
-        {
-            boolean leftResult = this.left.accept(each);
-            return !leftResult || this.right.accept(each);
-        }
+        return Iterate.detect(this.adapted, this.predicate);
     }
 }

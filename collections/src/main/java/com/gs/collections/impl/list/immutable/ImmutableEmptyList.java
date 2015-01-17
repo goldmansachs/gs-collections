@@ -96,10 +96,6 @@ final class ImmutableEmptyList<T>
         return this;
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-    }
-
     public void each(Procedure<? super T> procedure)
     {
     }

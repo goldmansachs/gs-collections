@@ -138,11 +138,6 @@ final class ImmutableQuadrupletonSet<T>
         return this.element4;
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super T> procedure)
     {
         procedure.value(this.element1);

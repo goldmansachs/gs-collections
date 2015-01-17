@@ -43,11 +43,6 @@ public class FlatCollectIterable<T, V>
         this.function = function;
     }
 
-    public void forEach(Procedure<? super V> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(final Procedure<? super V> procedure)
     {
         Iterate.forEach(this.adapted, new Procedure<T>()
@@ -59,6 +54,7 @@ public class FlatCollectIterable<T, V>
         });
     }
 
+    @Override
     public void forEachWithIndex(ObjectIntProcedure<? super V> objectIntProcedure)
     {
         final Procedure<V> innerProcedure = new AdaptObjectIntProcedureToProcedure<V>(objectIntProcedure);
@@ -72,6 +68,7 @@ public class FlatCollectIterable<T, V>
         });
     }
 
+    @Override
     public <P> void forEachWith(final Procedure2<? super V, ? super P> procedure, final P parameter)
     {
         Iterate.forEach(this.adapted, new Procedure<T>()
@@ -81,6 +78,32 @@ public class FlatCollectIterable<T, V>
                 Iterate.forEachWith(FlatCollectIterable.this.function.valueOf(each), procedure, parameter);
             }
         });
+    }
+
+    @Override
+    public V detect(final Predicate<? super V> predicate)
+    {
+        final V[] result = (V[]) new Object[1];
+        Iterate.detect(this.adapted, new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                Iterable<V> iterable = FlatCollectIterable.this.function.valueOf(each);
+                return Iterate.anySatisfy(iterable, new Predicate<V>()
+                {
+                    public boolean accept(V each)
+                    {
+                        if (predicate.accept(each))
+                        {
+                            result[0] = each;
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+            }
+        });
+        return result[0];
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -194,9 +194,12 @@ public abstract class ImmutableSortedMapTestCase extends MapIterableTestCase
         Verify.assertListsEqual(this.expectedValues().reverseThis(), revActualValues);
     }
 
+    @Override
     @Test
     public void iterator()
     {
+        super.iterator();
+
         MutableList<String> actualValues = Lists.mutable.of();
         for (String eachValue : this.classUnderTest())
         {
@@ -371,9 +374,12 @@ public abstract class ImmutableSortedMapTestCase extends MapIterableTestCase
         Verify.assertListsEqual(this.expectedIndices(), revActualIndices);
     }
 
+    @Override
     @Test
     public void valuesView()
     {
+        super.valuesView();
+
         MutableList<String> actualValues = Lists.mutable.of();
         for (String eachValue : this.classUnderTest().valuesView())
         {
@@ -390,9 +396,12 @@ public abstract class ImmutableSortedMapTestCase extends MapIterableTestCase
         Verify.assertListsEqual(this.expectedValues().reverseThis(), revActualValues);
     }
 
+    @Override
     @Test
     public void keysView()
     {
+        super.keysView();
+
         MutableList<Integer> actualKeys = Lists.mutable.of();
         for (Integer eachKey : this.classUnderTest().keysView())
         {

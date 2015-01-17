@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,11 +50,6 @@ public final class CompositeIterable<E>
         return new CompositeIterable<T>(FastList.newListWith(iterables));
     }
 
-    public void forEach(Procedure<? super E> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(final Procedure<? super E> procedure)
     {
         this.iterables.forEach(new Procedure<Iterable<E>>()
@@ -66,6 +61,7 @@ public final class CompositeIterable<E>
         });
     }
 
+    @Override
     public void forEachWithIndex(final ObjectIntProcedure<? super E> objectIntProcedure)
     {
         final Counter index = new Counter();
@@ -85,6 +81,7 @@ public final class CompositeIterable<E>
         });
     }
 
+    @Override
     public <P> void forEachWith(final Procedure2<? super E, ? super P> procedure, final P parameter)
     {
         this.iterables.forEach(new Procedure<Iterable<E>>()

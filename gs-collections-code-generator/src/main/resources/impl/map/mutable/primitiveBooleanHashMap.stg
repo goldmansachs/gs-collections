@@ -1860,11 +1860,6 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
     private class KeyValuesView extends AbstractLazyIterable\<<name>BooleanPair>
     {
-        public void forEach(Procedure\<? super <name>BooleanPair> procedure)
-        {
-            this.each(procedure);
-        }
-
         public void each(Procedure\<? super <name>BooleanPair> procedure)
         {
             if (<name>BooleanHashMap.this.sentinelValues != null)

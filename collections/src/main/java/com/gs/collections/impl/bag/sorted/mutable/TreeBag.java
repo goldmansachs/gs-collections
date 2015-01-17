@@ -409,11 +409,6 @@ public class TreeBag<T>
         return this;
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(final Procedure<? super T> procedure)
     {
         this.items.forEachKeyValue(new Procedure2<T, Counter>()

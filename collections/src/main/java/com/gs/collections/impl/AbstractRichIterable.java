@@ -42,6 +42,7 @@ import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
@@ -61,22 +62,35 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures;
+import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.AppendStringProcedure;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
+import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.GroupByUniqueKeyProcedure;
+import com.gs.collections.impl.block.procedure.InjectIntoProcedure;
+import com.gs.collections.impl.block.procedure.MapCollectProcedure;
+import com.gs.collections.impl.block.procedure.MaxByProcedure;
+import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
+import com.gs.collections.impl.block.procedure.MaxProcedure;
+import com.gs.collections.impl.block.procedure.MinByProcedure;
+import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
+import com.gs.collections.impl.block.procedure.MinProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
+import com.gs.collections.impl.block.procedure.SumOfDoubleProcedure;
+import com.gs.collections.impl.block.procedure.SumOfFloatProcedure;
+import com.gs.collections.impl.block.procedure.SumOfIntProcedure;
+import com.gs.collections.impl.block.procedure.SumOfLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
@@ -85,13 +99,18 @@ import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
+import com.gs.collections.impl.block.procedure.primitive.InjectIntoDoubleProcedure;
+import com.gs.collections.impl.block.procedure.primitive.InjectIntoFloatProcedure;
+import com.gs.collections.impl.block.procedure.primitive.InjectIntoIntProcedure;
+import com.gs.collections.impl.block.procedure.primitive.InjectIntoLongProcedure;
+import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.factory.Maps;
+import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.factory.SortedMaps;
+import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
-import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
-import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.LazyIterate;
@@ -129,8 +148,9 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public <E> E[] toArray(E[] array)
     {
-        final E[] result = array.length < this.size()
-                ? (E[]) Array.newInstance(array.getClass().getComponentType(), this.size())
+        int size = this.size();
+        final E[] result = array.length < size
+                ? (E[]) Array.newInstance(array.getClass().getComponentType(), size)
                 : array;
 
         this.forEachWithIndex(new ObjectIntProcedure<Object>()
@@ -140,9 +160,9 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
                 result[index] = (E) each;
             }
         });
-        if (result.length > this.size())
+        if (result.length > size)
         {
-            result[this.size()] = null;
+            result[size] = null;
         }
         return result;
     }
@@ -154,12 +174,14 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public boolean notEmpty()
     {
-        return this.size() > 0;
+        return !this.isEmpty();
     }
 
     public MutableList<T> toList()
     {
-        return Lists.mutable.withAll(this);
+        MutableList<T> list = Lists.mutable.empty();
+        this.forEachWith(Procedures2.<T>addToCollection(), list);
+        return list;
     }
 
     public MutableList<T> toSortedList()
@@ -179,12 +201,16 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public MutableSortedSet<T> toSortedSet()
     {
-        return TreeSortedSet.newSet(null, this);
+        MutableSortedSet<T> treeSet = SortedSets.mutable.empty();
+        this.forEachWith(Procedures2.<T>addToCollection(), treeSet);
+        return treeSet;
     }
 
     public MutableSortedSet<T> toSortedSet(Comparator<? super T> comparator)
     {
-        return TreeSortedSet.newSet(comparator, this);
+        MutableSortedSet<T> treeSet = SortedSets.mutable.with(comparator);
+        this.forEachWith(Procedures2.<T>addToCollection(), treeSet);
+        return treeSet;
     }
 
     public <V extends Comparable<? super V>> MutableSortedSet<T> toSortedSetBy(Function<? super T, ? extends V> function)
@@ -194,22 +220,30 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public MutableSet<T> toSet()
     {
-        return UnifiedSet.newSet(this);
+        MutableSet<T> set = Sets.mutable.empty();
+        this.forEachWith(Procedures2.<T>addToCollection(), set);
+        return set;
     }
 
     public MutableBag<T> toBag()
     {
-        return HashBag.newBag(this);
+        MutableBag<T> bag = Bags.mutable.empty();
+        this.forEachWith(Procedures2.<T>addToCollection(), bag);
+        return bag;
     }
 
     public MutableSortedBag<T> toSortedBag()
     {
-        return TreeBag.newBag(null, this);
+        MutableSortedBag<T> sortedBag = TreeBag.newBag();
+        this.forEachWith(Procedures2.<T>addToCollection(), sortedBag);
+        return sortedBag;
     }
 
     public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
     {
-        return TreeBag.newBag(comparator, this);
+        MutableSortedBag<T> sortedBag = TreeBag.newBag(comparator);
+        this.forEachWith(Procedures2.<T>addToCollection(), sortedBag);
+        return sortedBag;
     }
 
     public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
@@ -221,21 +255,28 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
             Function<? super T, ? extends K> keyFunction,
             Function<? super T, ? extends V> valueFunction)
     {
-        return UnifiedMap.<K, V>newMap(this.size()).collectKeysAndValues(this, keyFunction, valueFunction);
+        MutableMap<K, V> map = Maps.mutable.empty();
+        this.forEach(new MapCollectProcedure<T, K, V>(map, keyFunction, valueFunction));
+        return map;
     }
 
     public <K, V> MutableSortedMap<K, V> toSortedMap(
             Function<? super T, ? extends K> keyFunction,
             Function<? super T, ? extends V> valueFunction)
     {
-        return TreeSortedMap.<K, V>newMap().collectKeysAndValues(this, keyFunction, valueFunction);
+        MutableSortedMap<K, V> sortedMap = SortedMaps.mutable.empty();
+        this.forEach(new MapCollectProcedure<T, K, V>(sortedMap, keyFunction, valueFunction));
+        return sortedMap;
     }
 
-    public <K, V> MutableSortedMap<K, V> toSortedMap(Comparator<? super K> comparator,
+    public <K, V> MutableSortedMap<K, V> toSortedMap(
+            Comparator<? super K> comparator,
             Function<? super T, ? extends K> keyFunction,
             Function<? super T, ? extends V> valueFunction)
     {
-        return TreeSortedMap.<K, V>newMap(comparator).collectKeysAndValues(this, keyFunction, valueFunction);
+        MutableSortedMap<K, V> sortedMap = SortedMaps.mutable.with(comparator);
+        this.forEach(new MapCollectProcedure<T, K, V>(sortedMap, keyFunction, valueFunction));
+        return sortedMap;
     }
 
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
@@ -305,32 +346,44 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public T min(Comparator<? super T> comparator)
     {
-        return Iterate.min(this, comparator);
+        MinComparatorProcedure<T> procedure = new MinComparatorProcedure<T>(comparator);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public T max(Comparator<? super T> comparator)
     {
-        return Iterate.max(this, comparator);
+        MaxComparatorProcedure<T> procedure = new MaxComparatorProcedure<T>(comparator);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public T min()
     {
-        return Iterate.min(this);
+        MinProcedure<T> procedure = new MinProcedure<T>();
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public T max()
     {
-        return Iterate.max(this);
+        MaxProcedure<T> procedure = new MaxProcedure<T>();
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return IterableIterate.minBy(this, function);
+        MinByProcedure<T, V> minByProcedure = new MinByProcedure<T, V>(function);
+        this.forEach(minByProcedure);
+        return minByProcedure.getResult();
     }
 
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return IterableIterate.maxBy(this, function);
+        MaxByProcedure<T, V> maxByProcedure = new MaxByProcedure<T, V>(function);
+        this.forEach(maxByProcedure);
+        return maxByProcedure.getResult();
     }
 
     public LazyIterable<T> asLazy()
@@ -353,7 +406,7 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IterableIterate.detectWith(this, predicate, parameter);
+        return this.detect(Predicates.bind(predicate, parameter));
     }
 
     public boolean anySatisfy(Predicate<? super T> predicate)
@@ -373,22 +426,24 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IterableIterate.anySatisfyWith(this, predicate, parameter);
+        return this.anySatisfy(Predicates.bind(predicate, parameter));
     }
 
     public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IterableIterate.allSatisfyWith(this, predicate, parameter);
+        return this.allSatisfy(Predicates.bind(predicate, parameter));
     }
 
     public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IterableIterate.noneSatisfyWith(this, predicate, parameter);
+        return this.noneSatisfy(Predicates.bind(predicate, parameter));
     }
 
     public int count(Predicate<? super T> predicate)
     {
-        return IterableIterate.count(this, predicate);
+        CountProcedure<T> procedure = new CountProcedure<T>(predicate);
+        this.forEach(procedure);
+        return procedure.getCount();
     }
 
     public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
@@ -398,47 +453,65 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        InjectIntoProcedure<IV, T> procedure = new InjectIntoProcedure<IV, T>(injectedValue, function);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        InjectIntoIntProcedure<T> procedure = new InjectIntoIntProcedure<T>(injectedValue, function);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        InjectIntoLongProcedure<T> procedure = new InjectIntoLongProcedure<T>(injectedValue, function);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        InjectIntoDoubleProcedure<T> procedure = new InjectIntoDoubleProcedure<T>(injectedValue, function);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        InjectIntoFloatProcedure<T> procedure = new InjectIntoFloatProcedure<T>(injectedValue, function);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public long sumOfInt(IntFunction<? super T> function)
     {
-        return IterableIterate.sumOfInt(this, function);
+        SumOfIntProcedure<T> procedure = new SumOfIntProcedure<T>(function);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public double sumOfFloat(FloatFunction<? super T> function)
     {
-        return IterableIterate.sumOfFloat(this, function);
+        SumOfFloatProcedure<T> procedure = new SumOfFloatProcedure<T>(function);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public long sumOfLong(LongFunction<? super T> function)
     {
-        return IterableIterate.sumOfLong(this, function);
+        SumOfLongProcedure<T> procedure = new SumOfLongProcedure<T>(function);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public double sumOfDouble(DoubleFunction<? super T> function)
     {
-        return IterableIterate.sumOfDouble(this, function);
+        SumOfDoubleProcedure<T> procedure = new SumOfDoubleProcedure<T>(function);
+        this.forEach(procedure);
+        return procedure.getResult();
     }
 
     public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
@@ -468,6 +541,11 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
         IterableIterate.forEachWithIndex(this, objectIntProcedure);
+    }
+
+    public final void forEach(Procedure<? super T> procedure)
+    {
+        this.each(procedure);
     }
 
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)

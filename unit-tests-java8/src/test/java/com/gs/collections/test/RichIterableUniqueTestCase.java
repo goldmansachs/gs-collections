@@ -33,6 +33,7 @@ import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.test.SerializeTestHelper;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -48,6 +49,15 @@ public interface RichIterableUniqueTestCase extends RichIterableTestCase
     default boolean allowsDuplicates()
     {
         return false;
+    }
+
+    @Override
+    @Test
+    default void Object_PostSerializedEqualsAndHashCode()
+    {
+        Iterable<Integer> iterable = this.newWith(3, 2, 1);
+        Object deserialized = SerializeTestHelper.serializeDeserialize(iterable);
+        Assert.assertNotSame(iterable, deserialized);
     }
 
     @Override
@@ -579,5 +589,34 @@ public interface RichIterableUniqueTestCase extends RichIterableTestCase
 
         Assert.assertEquals(11.0f, iterable.injectInto(1, AddFunction.INTEGER_TO_FLOAT), 0.001f);
         Assert.assertEquals(10.0f, iterable.injectInto(0, AddFunction.INTEGER_TO_FLOAT), 0.001f);
+    }
+
+    @Override
+    @Test
+    default void RichIterable_makeString_appendString()
+    {
+        RichIterable<Integer> iterable = this.newWith(4, 3, 2, 1);
+        assertEquals("4, 3, 2, 1", iterable.makeString());
+        assertEquals("4/3/2/1", iterable.makeString("/"));
+        assertEquals("[4/3/2/1]", iterable.makeString("[", "/", "]"));
+
+        StringBuilder stringBuilder1 = new StringBuilder();
+        iterable.appendString(stringBuilder1);
+        assertEquals("4, 3, 2, 1", stringBuilder1.toString());
+
+        StringBuilder stringBuilder2 = new StringBuilder();
+        iterable.appendString(stringBuilder2, "/");
+        assertEquals("4/3/2/1", stringBuilder2.toString());
+
+        StringBuilder stringBuilder3 = new StringBuilder();
+        iterable.appendString(stringBuilder3, "[", "/", "]");
+        assertEquals("[4/3/2/1]", stringBuilder3.toString());
+    }
+
+    @Override
+    @Test
+    default void RichIterable_toString()
+    {
+        assertEquals("[4, 3, 2, 1]", this.newWith(4, 3, 2, 1).toString());
     }
 }

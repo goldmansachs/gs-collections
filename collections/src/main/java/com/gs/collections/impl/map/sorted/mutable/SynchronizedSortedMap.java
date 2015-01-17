@@ -173,6 +173,7 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
+    @Override
     public MutableSortedMap<K, V> clone()
     {
         synchronized (this.lock)

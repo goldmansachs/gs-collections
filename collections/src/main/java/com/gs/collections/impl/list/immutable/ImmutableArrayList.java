@@ -131,11 +131,6 @@ final class ImmutableArrayList<T>
         return this.isEmpty() ? null : this.items[this.items.length - 1];
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super T> procedure)
     {
         for (T each : this.items)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -177,6 +177,7 @@ public class SortedMapAdapter<K, V>
         return this.delegate.remove(key);
     }
 
+    @Override
     public MutableSortedMap<K, V> with(Pair<K, V>... pairs)
     {
         ArrayIterate.forEach(pairs, new MapCollectProcedure<Pair<K, V>, K, V>(this, Functions.<K>firstOfPair(), Functions.<V>secondOfPair()));

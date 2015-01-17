@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +38,6 @@ public class CollectBooleanToObjectIterable<V> extends AbstractLazyIterable<V>
         this.function = function;
     }
 
-    public void forEach(Procedure<? super V> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(final Procedure<? super V> procedure)
     {
         this.iterable.forEach(new BooleanProcedure()
@@ -54,6 +49,7 @@ public class CollectBooleanToObjectIterable<V> extends AbstractLazyIterable<V>
         });
     }
 
+    @Override
     public void forEachWithIndex(final ObjectIntProcedure<? super V> objectIntProcedure)
     {
         this.iterable.forEach(new BooleanProcedure()
@@ -67,6 +63,7 @@ public class CollectBooleanToObjectIterable<V> extends AbstractLazyIterable<V>
         });
     }
 
+    @Override
     public <P> void forEachWith(final Procedure2<? super V, ? super P> procedure, final P parameter)
     {
         this.iterable.forEach(new BooleanProcedure()

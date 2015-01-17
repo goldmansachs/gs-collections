@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ public final class CompositeFastList<E>
 
     private static final long serialVersionUID = 2L;
     private final FastList<FastList<E>> lists = FastList.newList();
-    private int size = 0;
+    private int size;
 
     @Override
     public MutableList<E> clone()
@@ -126,12 +126,6 @@ public final class CompositeFastList<E>
         ParallelIterate.forEach(this.lists, REVERSE_LIST_PROCEDURE);
         this.lists.reverseThis();
         return this;
-    }
-
-    @Override
-    public void forEach(Procedure<? super E> procedure)
-    {
-        this.each(procedure);
     }
 
     @Override

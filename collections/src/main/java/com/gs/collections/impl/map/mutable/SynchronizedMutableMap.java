@@ -164,6 +164,7 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
+    @Override
     public MutableMap<K, V> clone()
     {
         synchronized (this.lock)

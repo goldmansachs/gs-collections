@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,11 +46,6 @@ public class TakeIterable<T> extends AbstractLazyIterable<T>
 
     // TODO: implement in terms of LazyIterate.whileDo() when it is added.
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super T> procedure)
     {
         int i = 0;
@@ -62,6 +57,7 @@ public class TakeIterable<T> extends AbstractLazyIterable<T>
         }
     }
 
+    @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> procedure)
     {
         int i = 0;
@@ -73,6 +69,7 @@ public class TakeIterable<T> extends AbstractLazyIterable<T>
         }
     }
 
+    @Override
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
         int i = 0;

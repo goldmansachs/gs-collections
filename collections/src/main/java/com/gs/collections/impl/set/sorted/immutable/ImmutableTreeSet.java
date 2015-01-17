@@ -29,7 +29,6 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.map.MapIterable;
@@ -144,11 +143,6 @@ final class ImmutableTreeSet<T>
     public Iterator<T> iterator()
     {
         return FastList.newListWith(this.delegate).asUnmodifiable().iterator();
-    }
-
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
     }
 
     public void each(Procedure<? super T> procedure)
@@ -341,30 +335,12 @@ final class ImmutableTreeSet<T>
         private class SortedSetIterableParallelBatchLazyIterable
                 extends AbstractLazyIterable<RootSortedSetBatch<T>>
         {
-            public void forEach(Procedure<? super RootSortedSetBatch<T>> procedure)
-            {
-                this.each(procedure);
-            }
-
             public void each(Procedure<? super RootSortedSetBatch<T>> procedure)
             {
                 for (RootSortedSetBatch<T> chunk : this)
                 {
                     procedure.value(chunk);
                 }
-            }
-
-            public <P> void forEachWith(Procedure2<? super RootSortedSetBatch<T>, ? super P> procedure, P parameter)
-            {
-                for (RootSortedSetBatch<T> chunk : this)
-                {
-                    procedure.value(chunk, parameter);
-                }
-            }
-
-            public void forEachWithIndex(ObjectIntProcedure<? super RootSortedSetBatch<T>> objectIntProcedure)
-            {
-                throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEachWithIndex() not implemented yet");
             }
 
             public Iterator<RootSortedSetBatch<T>> iterator()

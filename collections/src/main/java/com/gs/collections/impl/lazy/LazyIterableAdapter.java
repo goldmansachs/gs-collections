@@ -22,6 +22,7 @@ import java.util.Iterator;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -44,21 +45,18 @@ public class LazyIterableAdapter<T>
         this.adapted = newAdapted;
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super T> procedure)
     {
         Iterate.forEach(this.adapted, procedure);
     }
 
+    @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
         Iterate.forEachWithIndex(this.adapted, objectIntProcedure);
     }
 
+    @Override
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
         Iterate.forEachWith(this.adapted, procedure, parameter);
@@ -140,5 +138,65 @@ public class LazyIterableAdapter<T>
     public boolean isEmpty()
     {
         return Iterate.isEmpty(this.adapted);
+    }
+
+    @Override
+    public boolean anySatisfy(Predicate<? super T> predicate)
+    {
+        return Iterate.anySatisfy(this.adapted, predicate);
+    }
+
+    @Override
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return Iterate.allSatisfy(this.adapted, predicate);
+    }
+
+    @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return Iterate.noneSatisfy(this.adapted, predicate);
+    }
+
+    @Override
+    public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return Iterate.anySatisfyWith(this.adapted, predicate, parameter);
+    }
+
+    @Override
+    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return Iterate.allSatisfyWith(this.adapted, predicate, parameter);
+    }
+
+    @Override
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return Iterate.noneSatisfyWith(this.adapted, predicate, parameter);
+    }
+
+    @Override
+    public T getFirst()
+    {
+        return Iterate.getFirst(this.adapted);
+    }
+
+    @Override
+    public T getLast()
+    {
+        return Iterate.getLast(this.adapted);
+    }
+
+    @Override
+    public T detect(Predicate<? super T> predicate)
+    {
+        return Iterate.detect(this.adapted, predicate);
+    }
+
+    @Override
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return Iterate.detectWith(this.adapted, predicate, parameter);
     }
 }

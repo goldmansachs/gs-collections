@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.gs.collections.impl.lazy;
 
 import java.util.Iterator;
 
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -53,11 +54,7 @@ public class TapIterable<T>
         });
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
+    @Override
     public void forEachWithIndex(final ObjectIntProcedure<? super T> objectIntProcedure)
     {
         Iterate.forEachWithIndex(this.adapted, new ObjectIntProcedure<T>()
@@ -70,6 +67,7 @@ public class TapIterable<T>
         });
     }
 
+    @Override
     public <P> void forEachWith(final Procedure2<? super T, ? super P> procedure, P parameter)
     {
         Iterate.forEachWith(this.adapted, new Procedure2<T, P>()
@@ -81,6 +79,72 @@ public class TapIterable<T>
             }
         }, parameter);
     }
+
+    @Override
+    public boolean anySatisfy(final Predicate<? super T> predicate)
+    {
+        return Iterate.anySatisfy(this.adapted, new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                TapIterable.this.procedure.value(each);
+                return predicate.accept(each);
+            }
+        });
+    }
+
+    @Override
+    public boolean allSatisfy(final Predicate<? super T> predicate)
+    {
+        return Iterate.allSatisfy(this.adapted, new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                TapIterable.this.procedure.value(each);
+                return predicate.accept(each);
+            }
+        });
+    }
+
+    @Override
+    public boolean noneSatisfy(final Predicate<? super T> predicate)
+    {
+        return Iterate.noneSatisfy(this.adapted, new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                TapIterable.this.procedure.value(each);
+                return predicate.accept(each);
+            }
+        });
+    }
+
+    @Override
+    public T getFirst()
+    {
+        return Iterate.detect(this.adapted, new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                TapIterable.this.procedure.value(each);
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public T detect(final Predicate<? super T> predicate)
+    {
+        return Iterate.detect(this.adapted, new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                TapIterable.this.procedure.value(each);
+                return predicate.accept(each);
+            }
+        });
+    }
+
 
     public Iterator<T> iterator()
     {

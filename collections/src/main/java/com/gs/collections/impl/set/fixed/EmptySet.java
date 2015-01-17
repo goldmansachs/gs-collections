@@ -79,10 +79,6 @@ final class EmptySet<T>
         return null;
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-    }
-
     public void each(Procedure<? super T> procedure)
     {
     }

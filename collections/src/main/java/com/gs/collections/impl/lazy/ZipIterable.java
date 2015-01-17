@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ package com.gs.collections.impl.lazy;
 import java.util.Iterator;
 
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.lazy.iterator.ZipIterator;
 import com.gs.collections.impl.utility.internal.IterableIterate;
@@ -47,23 +45,8 @@ public class ZipIterable<X, Y>
         return new ZipIterator<X, Y>(this.xs, this.ys);
     }
 
-    public void forEach(Procedure<? super Pair<X, Y>> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super Pair<X, Y>> procedure)
     {
         IterableIterate.forEach(this, procedure);
-    }
-
-    public void forEachWithIndex(ObjectIntProcedure<? super Pair<X, Y>> objectIntProcedure)
-    {
-        IterableIterate.forEachWithIndex(this, objectIntProcedure);
-    }
-
-    public <P> void forEachWith(Procedure2<? super Pair<X, Y>, ? super P> procedure, P parameter)
-    {
-        IterableIterate.forEachWith(this, procedure, parameter);
     }
 }

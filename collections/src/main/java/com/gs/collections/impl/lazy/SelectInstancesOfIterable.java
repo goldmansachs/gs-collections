@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.gs.collections.impl.lazy;
 
 import java.util.Iterator;
 
+import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -45,24 +47,69 @@ public class SelectInstancesOfIterable<T>
         this.clazz = clazz;
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super T> procedure)
     {
         Iterate.forEach((Iterable<T>) this.adapted, new IfProcedure<T>(Predicates.instanceOf(this.clazz), procedure));
     }
 
+    @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
         Iterate.forEach((Iterable<T>) this.adapted, new IfObjectIntProcedure<T>(Predicates.instanceOf(this.clazz), objectIntProcedure));
     }
 
+    @Override
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
         Iterate.forEachWith((Iterable<T>) this.adapted, new IfProcedureWith<T, P>(Predicates.instanceOf(this.clazz), procedure), parameter);
+    }
+
+    @Override
+    public T getFirst()
+    {
+        return this.clazz.cast(Iterate.detect(this.adapted, Predicates.instanceOf(this.clazz)));
+    }
+
+    @Override
+    public boolean anySatisfy(Predicate<? super T> predicate)
+    {
+        return Iterate.anySatisfy((Iterable<T>) this.adapted, Predicates.and(Predicates.instanceOf(this.clazz), predicate));
+    }
+
+    @Override
+    public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.anySatisfy(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return Iterate.allSatisfy((Iterable<T>) this.adapted, new AllSatisfyPredicate<T>(Predicates.instanceOf(this.clazz), predicate));
+    }
+
+    @Override
+    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.allSatisfy(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return Iterate.noneSatisfy((Iterable<T>) this.adapted, new AllSatisfyPredicate<T>(Predicates.instanceOf(this.clazz), predicate));
+    }
+
+    @Override
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.noneSatisfy(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public T detect(Predicate<? super T> predicate)
+    {
+        return Iterate.detect((Iterable<T>) this.adapted, Predicates.and(Predicates.instanceOf(this.clazz), predicate));
     }
 
     public Iterator<T> iterator()

@@ -310,11 +310,6 @@ public class HashBag<T>
         return this;
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(final Procedure<? super T> procedure)
     {
         this.items.forEachKeyValue(new ObjectIntProcedure<T>()
@@ -1222,30 +1217,12 @@ public class HashBag<T>
         private class HashBagParallelBatchLazyIterable
                 extends AbstractLazyIterable<RootUnsortedBagBatch<T>>
         {
-            public void forEach(Procedure<? super RootUnsortedBagBatch<T>> procedure)
-            {
-                this.each(procedure);
-            }
-
             public void each(Procedure<? super RootUnsortedBagBatch<T>> procedure)
             {
                 for (RootUnsortedBagBatch<T> chunk : this)
                 {
                     procedure.value(chunk);
                 }
-            }
-
-            public <P> void forEachWith(Procedure2<? super RootUnsortedBagBatch<T>, ? super P> procedure, P parameter)
-            {
-                for (RootUnsortedBagBatch<T> chunk : this)
-                {
-                    procedure.value(chunk, parameter);
-                }
-            }
-
-            public void forEachWithIndex(ObjectIntProcedure<? super RootUnsortedBagBatch<T>> objectIntProcedure)
-            {
-                throw new UnsupportedOperationException("not implemented yet");
             }
 
             public Iterator<RootUnsortedBagBatch<T>> iterator()

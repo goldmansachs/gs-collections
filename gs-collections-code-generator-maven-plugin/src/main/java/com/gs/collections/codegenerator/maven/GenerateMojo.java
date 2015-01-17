@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ public class GenerateMojo extends AbstractMojo
      * @parameter expression="${skipCodeGen}"
      */
     private boolean skipCodeGen;
+
     /**
      * @parameter expression="${project.build.directory}/generated-sources"
      * @required
