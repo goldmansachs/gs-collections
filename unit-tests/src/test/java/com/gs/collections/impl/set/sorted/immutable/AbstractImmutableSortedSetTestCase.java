@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -496,6 +496,20 @@ public abstract class AbstractImmutableSortedSetTestCase
         Assert.assertEquals(0, integers2.detectIndex(integer -> integer % 2 == 0));
         Assert.assertEquals(1, integers2.detectIndex(integer -> integer % 2 != 0));
         Assert.assertEquals(-1, integers2.detectIndex(integer -> integer % 5 == 0));
+    }
+
+    @Test
+    public void corresponds()
+    {
+        ImmutableSortedSet<Integer> integers1 = this.classUnderTest();
+        Assert.assertFalse(integers1.corresponds(this.classUnderTest().newWith(100), Predicates2.alwaysTrue()));
+
+        ImmutableList<Integer> integers2 = integers1.collect(integers -> integers + 1);
+        Assert.assertTrue(integers1.corresponds(integers2, Predicates2.lessThan()));
+        Assert.assertFalse(integers1.corresponds(integers2, Predicates2.greaterThan()));
+
+        ImmutableSortedSet<Integer> integers3 = this.classUnderTest(Comparators.reverseNaturalOrder());
+        Assert.assertFalse(integers3.corresponds(integers1, Predicates2.equal()));
     }
 
     @Test

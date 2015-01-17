@@ -19,6 +19,7 @@ package com.gs.collections.impl.list.fixed;
 import java.util.ListIterator;
 
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollectionTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
@@ -84,6 +85,19 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
         MutableList<T> list = this.getCollection().newEmpty();
         list.add(null);
         Verify.assertContains(null, list);
+    }
+
+    @Test
+    public void corresponds()
+    {
+        MutableList<T> mutableList1 = this.getCollection();
+        MutableList<Integer> mutableList2 = mutableList1.collect(element -> Integer.valueOf(element.toString()) + 1);
+        Assert.assertTrue(mutableList1.corresponds(mutableList2, (argument1, argument2) -> Integer.valueOf(argument1.toString()) < argument2));
+        Assert.assertFalse(mutableList1.corresponds(mutableList2, (argument1, argument2) -> Integer.valueOf(argument1.toString()) > argument2));
+
+        MutableList<Integer> mutableList3 = this.getCollection().collect(element -> Integer.valueOf(element.toString()));
+        mutableList3.add(0);
+        Assert.assertFalse(mutableList1.corresponds(mutableList3, Predicates2.alwaysTrue()));
     }
 
     @Test

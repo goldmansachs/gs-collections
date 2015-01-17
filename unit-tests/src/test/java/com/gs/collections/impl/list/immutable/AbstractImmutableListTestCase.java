@@ -41,6 +41,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
@@ -196,6 +197,18 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         ImmutableList<Integer> list = this.classUnderTest();
         list.reverseForEach(result::add);
         Assert.assertEquals(ListIterate.reverseThis(FastList.newList(list)), result);
+    }
+
+    @Test
+    public void corresponds()
+    {
+        ImmutableList<Integer> integers1 = this.classUnderTest();
+        ImmutableList<Integer> integers2 = this.classUnderTest().newWith(Integer.valueOf(1));
+        Assert.assertFalse(integers1.corresponds(integers2, Predicates2.alwaysTrue()));
+
+        ImmutableList<Integer> integers3 = integers1.collect(integer -> integer + 1);
+        Assert.assertTrue(integers1.corresponds(integers3, Predicates2.lessThan()));
+        Assert.assertFalse(integers1.corresponds(integers3, Predicates2.greaterThan()));
     }
 
     @Test

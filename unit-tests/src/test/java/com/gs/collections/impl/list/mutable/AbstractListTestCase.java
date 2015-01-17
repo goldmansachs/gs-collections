@@ -41,6 +41,7 @@ import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
@@ -247,6 +248,29 @@ public abstract class AbstractListTestCase
         Verify.assertSize(5, deserializedCollection);
         Verify.assertContainsAll(deserializedCollection, 1, 2, 3, 4, 5);
         Assert.assertEquals(collection, deserializedCollection);
+    }
+
+    @Test
+    public void corresponds()
+    {
+        MutableList<Integer> integers1 = this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+        MutableList<Integer> integers2 = this.newWith(1, 2, 3, 4);
+        Assert.assertFalse(integers1.corresponds(integers2, Predicates2.alwaysTrue()));
+        Assert.assertFalse(integers2.corresponds(integers1, Predicates2.alwaysTrue()));
+
+        MutableList<Integer> integers3 = this.newWith(2, 3, 3, 4, 4, 4, 5, 5, 5, 5);
+        Assert.assertTrue(integers1.corresponds(integers3, Predicates2.lessThan()));
+        Assert.assertFalse(integers1.corresponds(integers3, Predicates2.greaterThan()));
+
+        MutableList<Integer> nonRandomAccess = ListAdapter.adapt(new LinkedList<>(integers3));
+        Assert.assertTrue(integers1.corresponds(nonRandomAccess, Predicates2.lessThan()));
+        Assert.assertFalse(integers1.corresponds(nonRandomAccess, Predicates2.greaterThan()));
+        Assert.assertTrue(nonRandomAccess.corresponds(integers1, Predicates2.greaterThan()));
+        Assert.assertFalse(nonRandomAccess.corresponds(integers1, Predicates2.lessThan()));
+
+        MutableList<String> nullBlanks = this.newWith(null, "", " ", null);
+        Assert.assertTrue(nullBlanks.corresponds(FastList.newListWith(null, "", " ", null), Comparators::nullSafeEquals));
+        Assert.assertFalse(nullBlanks.corresponds(FastList.newListWith("", null, " ", ""), Comparators::nullSafeEquals));
     }
 
     @Test

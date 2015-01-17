@@ -48,6 +48,7 @@ import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
@@ -422,6 +423,11 @@ public class UnmodifiableSortedSet<T>
     public int indexOf(Object object)
     {
         return this.getSortedSet().indexOf(object);
+    }
+
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        return this.getSortedSet().corresponds(other, predicate);
     }
 
     public void forEach(int startIndex, int endIndex, Procedure<? super T> procedure)

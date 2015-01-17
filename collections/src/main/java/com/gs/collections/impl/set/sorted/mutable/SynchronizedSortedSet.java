@@ -49,6 +49,7 @@ import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
@@ -239,6 +240,14 @@ public class SynchronizedSortedSet<T>
         synchronized (this.getLock())
         {
             return this.getDelegate().dropWhile(predicate);
+        }
+    }
+
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().corresponds(other, predicate);
         }
     }
 

@@ -29,6 +29,7 @@ import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
@@ -139,6 +140,18 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
     {
         ImmutableList<Integer> integers = this.classUnderTest();
         Assert.assertEquals(0, integers.countWith(ERROR_THROWING_PREDICATE_2, Integer.class));
+    }
+
+    @Override
+    @Test
+    public void corresponds()
+    {
+        //Evaluates true for all empty lists and false for all non-empty lists
+
+        Assert.assertTrue(this.classUnderTest().corresponds(Lists.mutable.of(), Predicates2.alwaysFalse()));
+
+        ImmutableList<Integer> integers = this.classUnderTest().newWith(Integer.valueOf(1));
+        Assert.assertFalse(this.classUnderTest().corresponds(integers, Predicates2.alwaysTrue()));
     }
 
     @Override

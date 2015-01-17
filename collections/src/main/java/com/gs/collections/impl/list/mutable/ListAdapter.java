@@ -26,11 +26,13 @@ import java.util.concurrent.ExecutorService;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.ParallelListIterable;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -41,6 +43,7 @@ import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
+import com.gs.collections.impl.utility.OrderedIterate;
 
 /**
  * This class provides a MutableList wrapper around a JDK Collections List interface instance.  All of the MutableList
@@ -176,6 +179,11 @@ public final class ListAdapter<T>
     public int count(Predicate<? super T> predicate)
     {
         return ListIterate.count(this.delegate, predicate);
+    }
+
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        return OrderedIterate.corresponds(this, other, predicate);
     }
 
     @Override

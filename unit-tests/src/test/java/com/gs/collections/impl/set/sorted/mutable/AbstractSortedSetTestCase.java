@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,6 +159,20 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         MutableSortedSet<Integer> revInt = this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 4, 3, 5);
         Assert.assertSame(revInt, revInt.tap(tapRevResult::add));
         Assert.assertEquals(revInt.toList(), tapRevResult);
+    }
+
+    @Test
+    public void corresponds()
+    {
+        MutableSortedSet<Integer> integers1 = this.newWith(1, 2, 3, 4);
+        Assert.assertFalse(integers1.corresponds(this.newWith(1, 2, 3, 4, 5), Predicates2.alwaysTrue()));
+
+        MutableList<Integer> integers2 = integers1.collect(integer -> integer + 1, FastList.newList());
+        Assert.assertTrue(integers1.corresponds(integers2, Predicates2.lessThan()));
+        Assert.assertFalse(integers1.corresponds(integers2, Predicates2.greaterThan()));
+
+        MutableSortedSet<Integer> integers3 = this.newWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1);
+        Assert.assertFalse(integers3.corresponds(integers1, Predicates2.equal()));
     }
 
     @Override

@@ -34,6 +34,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.list.mutable.AbstractMutableList;
@@ -157,6 +158,12 @@ public abstract class AbstractArrayAdapter<T>
     public int count(Predicate<? super T> predicate)
     {
         return InternalArrayIterate.count(this.items, this.items.length, predicate);
+    }
+
+    @Override
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        return InternalArrayIterate.corresponds(this.items, this.items.length, other, predicate);
     }
 
     @Override

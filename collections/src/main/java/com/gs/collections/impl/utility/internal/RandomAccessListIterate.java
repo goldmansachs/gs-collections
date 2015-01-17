@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.RandomAccess;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
@@ -68,6 +69,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
@@ -914,6 +916,43 @@ public final class RandomAccessListIterate
             }
         }
         return atEnd;
+    }
+
+    public static <T, P> boolean corresponds(List<T> list, OrderedIterable<P> other, Predicate2<? super T, ? super P> predicate)
+    {
+        if (!(list instanceof RandomAccess))
+        {
+            throw new IllegalArgumentException();
+        }
+
+        int size = list.size();
+        if (size != other.size())
+        {
+            return false;
+        }
+
+        if (other instanceof RandomAccess)
+        {
+            List<P> otherList = (List<P>) other;
+            for (int index = 0; index < size; index++)
+            {
+                if (!predicate.accept(list.get(index), otherList.get(index)))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        Iterator<P> iterator = other.iterator();
+        for (int index = 0; index < size; index++)
+        {
+            if (!predicate.accept(list.get(index), iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static <T> boolean anySatisfy(List<T> list, Predicate<? super T> predicate)

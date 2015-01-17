@@ -70,6 +70,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -1134,6 +1135,12 @@ public class FastList<T>
     public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return InternalArrayIterate.countWith(this.items, this.size, predicate, parameter);
+    }
+
+    @Override
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        return InternalArrayIterate.corresponds(this.items, this.size, other, predicate);
     }
 
     @Override

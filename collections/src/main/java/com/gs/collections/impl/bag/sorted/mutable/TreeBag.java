@@ -62,6 +62,7 @@ import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.MutableStack;
@@ -87,6 +88,7 @@ import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
+import com.gs.collections.impl.utility.OrderedIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 
 /**
@@ -1088,6 +1090,11 @@ public class TreeBag<T>
     public int detectIndex(Predicate<? super T> predicate)
     {
         return Iterate.detectIndex(this, predicate);
+    }
+
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        return OrderedIterate.corresponds(this, other, predicate);
     }
 
     @Override

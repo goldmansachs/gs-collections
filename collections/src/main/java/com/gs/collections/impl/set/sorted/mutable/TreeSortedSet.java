@@ -53,6 +53,7 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
@@ -100,6 +101,7 @@ import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
+import com.gs.collections.impl.utility.OrderedIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 import com.gs.collections.impl.utility.internal.SetIterables;
 import com.gs.collections.impl.utility.internal.SetIterate;
@@ -528,6 +530,11 @@ public class TreeSortedSet<T> extends AbstractMutableCollection<T>
     public MutableSortedSet<T> distinct()
     {
         return TreeSortedSet.newSet(this);
+    }
+
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        return OrderedIterate.corresponds(this, other, predicate);
     }
 
     public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)

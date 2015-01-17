@@ -68,6 +68,7 @@ import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
@@ -889,6 +890,19 @@ public final class MultiReaderFastList<T>
         }
     }
 
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.corresponds(other, predicate);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public void forEach(int startIndex, int endIndex, Procedure<? super T> procedure)
     {
         this.acquireReadLock();
@@ -1152,6 +1166,11 @@ public final class MultiReaderFastList<T>
         public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
         {
             return this.getDelegate().groupByUniqueKey(function);
+        }
+
+        public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+        {
+            return this.getDelegate().corresponds(other, predicate);
         }
 
         public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)

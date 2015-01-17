@@ -47,6 +47,7 @@ import com.gs.collections.api.list.primitive.ImmutableIntList;
 import com.gs.collections.api.list.primitive.ImmutableLongList;
 import com.gs.collections.api.list.primitive.ImmutableShortList;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
 import com.gs.collections.api.set.SetIterable;
@@ -92,6 +93,7 @@ import com.gs.collections.impl.partition.set.sorted.PartitionTreeSortedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.OrderedIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 import com.gs.collections.impl.utility.internal.SetIterables;
 import com.gs.collections.impl.utility.internal.SortedSetIterables;
@@ -220,6 +222,11 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
     {
         this.forEach(procedure);
         return this;
+    }
+
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        return OrderedIterate.corresponds(this, other, predicate);
     }
 
     public ImmutableSortedSet<T> select(Predicate<? super T> predicate)

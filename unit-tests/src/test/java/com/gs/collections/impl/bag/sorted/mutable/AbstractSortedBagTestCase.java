@@ -1375,6 +1375,20 @@ public abstract class AbstractSortedBagTestCase extends MutableBagTestCase
                         function));
     }
 
+    @Test
+    public void corresponds()
+    {
+        Assert.assertFalse(this.newWith(1, 2, 3, 4, 5).corresponds(this.newWith(1, 2, 3, 4), Predicates2.alwaysTrue()));
+
+        MutableSortedBag<Integer> integers1 = this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+        MutableSortedBag<Integer> integers2 = this.newWith(2, 3, 3, 4, 4, 4, 5, 5, 5, 5);
+        Assert.assertTrue(integers1.corresponds(integers2, Predicates2.lessThan()));
+        Assert.assertFalse(integers1.corresponds(integers2, Predicates2.greaterThan()));
+
+        MutableSortedBag<Integer> integers3 = this.newWith(Comparators.reverseNaturalOrder(), 4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
+        Assert.assertFalse(integers3.corresponds(integers1, Predicates2.equal()));
+    }
+
     @Override
     @Test
     public void allSatisfy()

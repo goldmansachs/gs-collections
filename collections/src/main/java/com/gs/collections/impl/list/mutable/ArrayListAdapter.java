@@ -46,6 +46,7 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -64,6 +65,7 @@ import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.ArrayListIterate;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.internal.RandomAccessListIterate;
 
 /**
  * This class provides a MutableList wrapper around a JDK Collections ArrayList instance.  All of the MutableList
@@ -180,6 +182,11 @@ public final class ArrayListAdapter<T>
     public int count(Predicate<? super T> predicate)
     {
         return ArrayListIterate.count(this.delegate, predicate);
+    }
+
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        return RandomAccessListIterate.corresponds(this.delegate, other, predicate);
     }
 
     @Override

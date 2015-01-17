@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.gs.collections.impl.utility.internal;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.gs.collections.api.RichIterable;
@@ -454,6 +455,12 @@ public class RandomAccessListIterateTest
     public void drop_target_throws()
     {
         RandomAccessListIterate.drop(this.getIntegerList(), -1, FastList.newList());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void corresponds_throws_nonRandomAccess()
+    {
+        RandomAccessListIterate.corresponds(new LinkedList<>(), FastList.newList(), Predicates2.alwaysTrue());
     }
 
     private static class FailProcedure2 implements Procedure2<Object, Integer>

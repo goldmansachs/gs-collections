@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,14 @@ import java.util.concurrent.ExecutorService;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
@@ -50,6 +52,7 @@ import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.ListIterate;
+import com.gs.collections.impl.utility.internal.InternalArrayIterate;
 import net.jcip.annotations.Immutable;
 
 @Immutable
@@ -58,6 +61,7 @@ final class ImmutableTreeSet<T>
         implements Serializable
 {
     private static final long serialVersionUID = 2L;
+
     private final T[] delegate;
     private final Comparator<? super T> comparator;
 
@@ -459,6 +463,12 @@ final class ImmutableTreeSet<T>
     public int detectIndex(Predicate<? super T> predicate)
     {
         return ArrayIterate.detectIndex(this.delegate, predicate);
+    }
+
+    @Override
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        return InternalArrayIterate.corresponds(this.delegate, this.size(), other, predicate);
     }
 
     public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)

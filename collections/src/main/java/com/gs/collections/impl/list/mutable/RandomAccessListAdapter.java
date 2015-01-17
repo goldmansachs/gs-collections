@@ -47,6 +47,7 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -204,6 +205,11 @@ public final class RandomAccessListAdapter<T>
     public int count(Predicate<? super T> predicate)
     {
         return RandomAccessListIterate.count(this.delegate, predicate);
+    }
+
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        return RandomAccessListIterate.corresponds(this.delegate, other, predicate);
     }
 
     @Override

@@ -52,6 +52,7 @@ import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.MutableStack;
@@ -298,6 +299,14 @@ public class SynchronizedSortedBag<T>
         synchronized (this.getLock())
         {
             return this.getDelegate().dropWhile(predicate);
+        }
+    }
+
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().corresponds(other, predicate);
         }
     }
 

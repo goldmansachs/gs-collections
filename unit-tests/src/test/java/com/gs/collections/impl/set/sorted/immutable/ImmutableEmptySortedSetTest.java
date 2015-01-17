@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,6 +135,19 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     {
         //Any predicate will result in -1
         Assert.assertEquals(Integer.valueOf(-1), Integer.valueOf(this.classUnderTest().detectIndex(Predicates.alwaysTrue())));
+    }
+
+    @Override
+    @Test
+    public void corresponds()
+    {
+        //Evaluates true for all empty sets and false for all non-empty sets
+
+        ImmutableSortedSet<Integer> integers1 = this.classUnderTest();
+        Assert.assertTrue(integers1.corresponds(Lists.mutable.of(), Predicates2.alwaysFalse()));
+
+        ImmutableSortedSet<Integer> integers2 = integers1.newWith(Integer.valueOf(1));
+        Assert.assertFalse(integers2.corresponds(integers1, Predicates2.alwaysTrue()));
     }
 
     @Override

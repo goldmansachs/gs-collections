@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,6 +106,17 @@ public interface OrderedIterable<T> extends RichIterable<T>
      * @return {@code OrderedIterable} of distinct elements
      */
     OrderedIterable<T> distinct();
+
+    /**
+     * Returns true if both OrderedIterables have the same length
+     * and {@code predicate} returns true for all corresponding elements e1 of
+     * this {@code OrderedIterable} and e2 of {@code other}.
+     * The {@code predicate} is evaluated for each element at the same position of each {@code OrderedIterable} in a forward iteration order.
+     * This is a short circuit pattern.
+     *
+     * @since 6.0
+     */
+    <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super T, ? super S> predicate);
 
     /**
      * Iterates over the section of the iterable covered by the specified inclusive indexes.  The indexes are
