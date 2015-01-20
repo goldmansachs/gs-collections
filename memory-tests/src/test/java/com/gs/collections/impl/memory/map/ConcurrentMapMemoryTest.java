@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import com.gs.collections.impl.memory.TestDataFactory;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.collection.concurrent.TrieMap;
 
 public class ConcurrentMapMemoryTest
 {
@@ -35,9 +36,10 @@ public class ConcurrentMapMemoryTest
     @Test
     public void memoryForScaledConcurrentMaps()
     {
-        LOGGER.info("Comparing Items: JDK {}, GSC {}",
+        LOGGER.info("Comparing Items: JDK {}, GSC {}, Scala {}",
                 ConcurrentHashMap.class.getSimpleName(),
-                com.gs.collections.impl.map.mutable.ConcurrentHashMap.class.getSimpleName());
+                com.gs.collections.impl.map.mutable.ConcurrentHashMap.class.getSimpleName(),
+                TrieMap.class.getSimpleName());
         for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledConcurrentMaps(size);
@@ -51,11 +53,13 @@ public class ConcurrentMapMemoryTest
                 .printContainerMemoryUsage("ConcurrentMap", size, new JDKConcurrentMapFactory(size));
         MemoryTestBench.on(com.gs.collections.impl.map.mutable.ConcurrentHashMap.class)
                 .printContainerMemoryUsage("ConcurrentMap", size, new GSCConcurrentMapFactory(size));
+        MemoryTestBench.on(TrieMap.class)
+                .printContainerMemoryUsage("ConcurrentMap", size, new ScalaCtrieFactory(size));
     }
 
     public abstract static class SizedConcurrentMapFactory
     {
-        private final ImmutableList<Integer> data;
+        protected final ImmutableList<Integer> data;
 
         protected SizedConcurrentMapFactory(int size)
         {
@@ -104,6 +108,30 @@ public class ConcurrentMapMemoryTest
         public com.gs.collections.impl.map.mutable.ConcurrentHashMap<Integer, String> value()
         {
             return this.fill(new com.gs.collections.impl.map.mutable.ConcurrentHashMap<Integer, String>());
+        }
+    }
+
+    public static class ScalaCtrieFactory
+            extends SizedConcurrentMapFactory
+            implements Function0<TrieMap<Integer, String>>
+    {
+        protected ScalaCtrieFactory(int size)
+        {
+            super(size);
+        }
+
+        @Override
+        public TrieMap<Integer, String> value()
+        {
+            final TrieMap<Integer, String> map = new TrieMap<Integer, String>();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
+                {
+                    map.put(each, "dummy");
+                }
+            });
+            return map;
         }
     }
 }

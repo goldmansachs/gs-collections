@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,31 +17,43 @@
 package com.gs.collections.impl.memory.list;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.collection.immutable.$colon$colon;
+import scala.collection.immutable.List$;
 import scala.collection.mutable.ArrayBuffer;
 import scala.collection.mutable.ListBuffer;
+import scala.collection.mutable.MutableList;
 
-public class ListAddMemoryTest
+public class ListMemoryTest
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ListAddMemoryTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListMemoryTest.class);
 
     @Test
     public void memoryForScaledLists()
     {
-        LOGGER.info("Comparing Items: Scala {}, JDK {}, GSC {}, Scala {}, JDK {}",
+        LOGGER.info("Comparing Items: Scala {}, JDK {}, GSC {}, Scala {}, JDK {}, Scala {}, JDK {}, GSC {}, Guava {}, Scala {}",
+                //mutable
                 ArrayBuffer.class.getSimpleName(),
                 ArrayList.class.getSimpleName(),
                 FastList.class.getSimpleName(),
                 ListBuffer.class.getSimpleName(),
-                LinkedList.class.getSimpleName());
+                LinkedList.class.getSimpleName(),
+                MutableList.class.getSimpleName(),
+                //immutable
+                ArrayList.class.getSimpleName() + " (unmodifiable)",
+                com.gs.collections.api.list.ImmutableList.class.getSimpleName(),
+                ImmutableList.class.getSimpleName(),
+                scala.collection.immutable.List.class.getSimpleName());
         for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledLists(size);
@@ -51,6 +63,7 @@ public class ListAddMemoryTest
 
     public void memoryForScaledLists(int size)
     {
+        //mutable
         MemoryTestBench.on(ArrayBuffer.class)
                 .printContainerMemoryUsage("ListAdd", size, new ArrayBufferFactory(size));
         MemoryTestBench.on(ArrayList.class)
@@ -61,6 +74,17 @@ public class ListAddMemoryTest
                 .printContainerMemoryUsage("ListAdd", size, new ListBufferFactory(size));
         MemoryTestBench.on(LinkedList.class)
                 .printContainerMemoryUsage("ListAdd", size, new LinkedListFactory(size));
+        MemoryTestBench.on(MutableList.class)
+                .printContainerMemoryUsage("ListAdd", size, new MutableListFactory(size));
+        //immutable
+        MemoryTestBench.on(ArrayList.class)
+                .printContainerMemoryUsage("ListAdd", size, new SizedUnmodifiableArrayListFactory(size));
+        MemoryTestBench.on(com.gs.collections.api.list.ImmutableList.class)
+                .printContainerMemoryUsage("ListAdd", size, new SizedImmutableGscListFactory(size));
+        MemoryTestBench.on(ImmutableList.class)
+                .printContainerMemoryUsage("ListAdd", size, new SizedImmutableGuavaListFactory(size));
+        MemoryTestBench.on(scala.collection.immutable.List.class)
+                .printContainerMemoryUsage("ListAdd", size, new SizedImmutableScalaListFactory(size));
     }
 
     private abstract static class SizedListFactory
@@ -169,6 +193,105 @@ public class ListAddMemoryTest
                 list.$plus$eq("dummy");
             }
             return list;
+        }
+    }
+
+    private static final class MutableListFactory
+            extends SizedListFactory
+            implements Function0<MutableList<String>>
+    {
+        private MutableListFactory(int size)
+        {
+            super(size);
+        }
+
+        @Override
+        public MutableList<String> value()
+        {
+            MutableList<String> list = new MutableList<String>();
+            for (int i = 0; i < this.size; i++)
+            {
+                list.$plus$eq("dummy");
+            }
+            return list;
+        }
+    }
+
+    private static final class SizedImmutableGscListFactory implements Function0<com.gs.collections.api.list.ImmutableList<String>>
+    {
+        private final int size;
+
+        private SizedImmutableGscListFactory(int size)
+        {
+            this.size = size;
+        }
+
+        @Override
+        public com.gs.collections.api.list.ImmutableList<String> value()
+        {
+            return FastList.newList(Collections.nCopies(this.size, "dummy")).toImmutable();
+        }
+    }
+
+    private static final class SizedImmutableGuavaListFactory implements Function0<ImmutableList<String>>
+    {
+        private final int size;
+
+        private SizedImmutableGuavaListFactory(int size)
+        {
+            this.size = size;
+        }
+
+        @Override
+        public ImmutableList<String> value()
+        {
+            return ImmutableList.<String>builder().addAll(Collections.nCopies(this.size, "dummy")).build();
+        }
+    }
+
+    private static final class SizedUnmodifiableArrayListFactory implements Function0<List<String>>
+    {
+        private final int size;
+
+        private SizedUnmodifiableArrayListFactory(int size)
+        {
+            this.size = size;
+        }
+
+        @Override
+        public List<String> value()
+        {
+            if (this.size == 0)
+            {
+                return Collections.emptyList();
+            }
+            if (this.size == 1)
+            {
+                return Collections.singletonList("dummy");
+            }
+            return Collections.unmodifiableList(new ArrayList<>(Collections.nCopies(this.size, "dummy")));
+        }
+    }
+
+    private static final class SizedImmutableScalaListFactory implements Function0<scala.collection.immutable.List<String>>
+    {
+        private final int size;
+
+        private SizedImmutableScalaListFactory(int size)
+        {
+            this.size = size;
+        }
+
+        @Override
+        public scala.collection.immutable.List<String> value()
+        {
+            scala.collection.immutable.List<String> list = List$.MODULE$.empty();
+            for (int i = 0; i < this.size; i++)
+            {
+                list = new $colon$colon<>("dummy", list);
+            }
+
+            return list.toList();
         }
     }
 }

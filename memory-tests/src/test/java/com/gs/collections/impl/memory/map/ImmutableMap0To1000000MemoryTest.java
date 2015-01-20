@@ -14,30 +14,43 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.memory.set;
+package com.gs.collections.impl.memory.map;
+
+import java.util.Random;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.list.primitive.IntList;
-import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.list.primitive.IntInterval;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 
-public class ImmutableSet0To10MemoryTest extends AbstractImmutableSetMemoryTest
+public class ImmutableMap0To1000000MemoryTest extends AbstractImmutableMapMemoryTest
 {
+    private final Random random = new Random();
+
     @Override
     protected IntList getData()
     {
-        return IntInterval.zeroTo(10);
+        return IntInterval.fromToBy(0, 1000000, 25000);
     }
 
     @Override
     protected String getTestType()
     {
-        return "ImmutableMap_0to10";
+        return "ImmutableMap_0to1000000";
     }
 
     @Override
     protected Function<Integer, ? extends Object> getKeyFactory()
     {
-        return Functions.getIntegerPassThru();
+        return new Function<Integer, Object>()
+        {
+            @Override
+            public Object valueOf(Integer integer)
+            {
+                return PrimitiveTuples.pair(
+                        ImmutableMap0To1000000MemoryTest.this.random.nextInt(),
+                        ImmutableMap0To1000000MemoryTest.this.random.nextInt());
+            }
+        };
     }
 }
