@@ -20,6 +20,7 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.UnsortedBag;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.test.UnorderedIterableTestCase;
 import org.junit.Test;
 
@@ -85,5 +86,17 @@ public interface UnsortedBagTestCase extends UnorderedIterableTestCase, BagTestC
     default void RichIterable_toString()
     {
         assertThat(this.newWith(2, 2, 1).toString(), isOneOf("[2, 2, 1]", "[1, 2, 2]"));
+    }
+
+    @Override
+    @Test
+    default void RichIterable_toList()
+    {
+        assertThat(
+                this.newWith(2, 2, 1).toList(),
+                isOneOf(
+                        Lists.immutable.with(2, 2, 1),
+                        Lists.immutable.with(1, 2, 2),
+                        Lists.immutable.with(2, 1, 2)));
     }
 }

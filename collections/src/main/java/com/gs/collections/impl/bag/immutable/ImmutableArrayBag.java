@@ -24,21 +24,30 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.set.ImmutableSet;
+import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.factory.SortedSets;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -180,6 +189,134 @@ public class ImmutableArrayBag<T>
             return new ImmutableArrayBag<T>(newKeys, newCounts);
         }
         return this;
+    }
+
+    @Override
+    public MutableList<T> toList()
+    {
+        final MutableList<T> result = FastList.newList(this.size());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                for (int i = 0; i < occurrences; i++)
+                {
+                    result.add(each);
+                }
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableList<T> toSortedList(final Comparator<? super T> comparator)
+    {
+        MutableList<ObjectIntPair<T>> sorted = this.toListWithOccurrences().sortThis(new Comparator<ObjectIntPair<T>>()
+        {
+            public int compare(ObjectIntPair<T> o1, ObjectIntPair<T> o2)
+            {
+                return comparator.compare(o1.getOne(), o2.getOne());
+            }
+        });
+
+        final MutableList<T> result = FastList.newList(this.size());
+        sorted.forEach(new Procedure<ObjectIntPair<T>>()
+        {
+            public void value(ObjectIntPair<T> each)
+            {
+                T object = each.getOne();
+                int occurrences = each.getTwo();
+                for (int i = 0; i < occurrences; i++)
+                {
+                    result.add(object);
+                }
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableSet<T> toSet()
+    {
+        final MutableSet<T> result = Sets.mutable.empty();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.add(each);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableSortedSet<T> toSortedSet()
+    {
+        final MutableSortedSet<T> result = SortedSets.mutable.empty();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.add(each);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableSortedSet<T> toSortedSet(Comparator<? super T> comparator)
+    {
+        final MutableSortedSet<T> result = SortedSets.mutable.with(comparator);
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.add(each);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableBag<T> toBag()
+    {
+        final MutableBag<T> result = HashBag.newBag(this.sizeDistinct());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(each, occurrences);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableSortedBag<T> toSortedBag()
+    {
+        final MutableSortedBag<T> result = TreeBag.newBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(each, occurrences);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
+    {
+        final MutableSortedBag<T> result = TreeBag.newBag(comparator);
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(each, occurrences);
+            }
+        });
+        return result;
     }
 
     public MutableMap<T, Integer> toMapOfItemToCount()

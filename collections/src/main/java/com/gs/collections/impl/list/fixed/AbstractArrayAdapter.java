@@ -301,12 +301,6 @@ public abstract class AbstractArrayAdapter<T>
     }
 
     @Override
-    public boolean add(T item)
-    {
-        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
-    }
-
-    @Override
     public boolean remove(Object o)
     {
         throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());

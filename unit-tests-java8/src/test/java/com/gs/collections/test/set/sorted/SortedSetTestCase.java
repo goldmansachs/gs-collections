@@ -36,12 +36,6 @@ public interface SortedSetTestCase extends CollectionTestCase
     <T> SortedSet<T> newWith(T... elements);
 
     @Override
-    default boolean allowsDuplicates()
-    {
-        return false;
-    }
-
-    @Override
     @Test
     default void Iterable_next()
     {

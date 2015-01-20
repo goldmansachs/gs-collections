@@ -28,12 +28,6 @@ public interface MutableSortedSetTestCase extends SortedSetIterableTestCase, Mut
     <T> MutableSortedSet<T> newWith(T... elements);
 
     @Override
-    default boolean allowsDuplicates()
-    {
-        return false;
-    }
-
-    @Override
     default void Iterable_remove()
     {
         // Both implementations are the same

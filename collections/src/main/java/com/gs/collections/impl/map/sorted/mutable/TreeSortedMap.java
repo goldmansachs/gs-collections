@@ -37,7 +37,7 @@ import com.gs.collections.impl.set.mutable.SetAdapter;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.MapIterate;
 
-public final class TreeSortedMap<K, V>
+public class TreeSortedMap<K, V>
         extends AbstractMutableSortedMap<K, V>
         implements Externalizable
 {

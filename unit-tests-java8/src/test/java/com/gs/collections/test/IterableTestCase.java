@@ -16,6 +16,7 @@
 
 package com.gs.collections.test;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -129,7 +130,12 @@ public interface IterableTestCase
             assertIterablesEqual((Iterable<?>) o1, (Iterable<?>) o2);
             if (o1 instanceof SortedIterable<?> || o2 instanceof SortedIterable<?>)
             {
-                assertSame(((SortedIterable<?>) o1).comparator(), ((SortedIterable<?>) o2).comparator());
+                Comparator<?> comparator1 = ((SortedIterable<?>) o1).comparator();
+                Comparator<?> comparator2 = ((SortedIterable<?>) o2).comparator();
+                if (comparator1 != null && comparator2 != null)
+                {
+                    assertSame(comparator1.getClass(), comparator2.getClass());
+                }
             }
         }
         else if (o1 instanceof SortedMap<?, ?> || o2 instanceof SortedMap<?, ?>)

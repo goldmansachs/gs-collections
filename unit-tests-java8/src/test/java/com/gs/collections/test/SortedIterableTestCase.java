@@ -39,25 +39,7 @@ public interface SortedIterableTestCase extends OrderedIterableTestCase
     }
 
     @Override
-    default void RichIterable_min_non_comparable()
-    {
-        assertThrows(ClassCastException.class, () -> this.newWith(new Object()));
-    }
-
-    @Override
-    default void RichIterable_max_non_comparable()
-    {
-        assertThrows(ClassCastException.class, () -> this.newWith(new Object()));
-    }
-
-    @Override
-    default void RichIterable_min_comparator_non_comparable()
-    {
-        assertThrows(ClassCastException.class, () -> this.newWith(new Object()));
-    }
-
-    @Override
-    default void RichIterable_max_comparator_non_comparable()
+    default void RichIterable_min_max_non_comparable()
     {
         assertThrows(ClassCastException.class, () -> this.newWith(new Object()));
     }

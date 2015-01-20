@@ -235,12 +235,6 @@ public <type>[] toSortedArray()
     return this.adapted.toSortedArray();
 }
 
-@Override
-public Mutable<name>List toSortedList()
-{
-    return <name>ArrayList.newList(this).sortThis();
-}
-
 >>
 
 noMethods(name, type) ::= ""

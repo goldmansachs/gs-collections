@@ -160,12 +160,6 @@ public final class Unmodifiable<name>List
     }
 
     @Override
-    public Lazy<name>Iterable asLazy()
-    {
-        return new Lazy<name>IterableAdapter(this);
-    }
-
-    @Override
     public Mutable<name>List asUnmodifiable()
     {
         return this;

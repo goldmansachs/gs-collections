@@ -131,12 +131,6 @@ public final class Unmodifiable<name>Bag
     }
 
     @Override
-    public Lazy<name>Iterable asLazy()
-    {
-        return new Lazy<name>IterableAdapter(this);
-    }
-
-    @Override
     public Mutable<name>Bag asUnmodifiable()
     {
         return this;

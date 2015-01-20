@@ -117,12 +117,6 @@ public final class Unmodifiable<name>Set
     }
 
     @Override
-    public Lazy<name>Iterable asLazy()
-    {
-        return new Lazy<name>IterableAdapter(this);
-    }
-
-    @Override
     public Mutable<name>Set asUnmodifiable()
     {
         return this;

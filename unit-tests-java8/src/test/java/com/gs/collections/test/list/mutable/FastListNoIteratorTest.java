@@ -16,11 +16,7 @@
 
 package com.gs.collections.test.list.mutable;
 
-import java.util.Iterator;
-import java.util.ListIterator;
-
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.test.IterableTestCase;
 import com.gs.collections.test.NoIteratorTestCase;
 import com.gs.junit.runners.Java8Runner;
@@ -36,27 +32,6 @@ public class FastListNoIteratorTest implements MutableListTestCase, NoIteratorTe
         MutableList<T> result = new FastListNoIterator<T>();
         IterableTestCase.addAllTo(elements, result);
         return result;
-    }
-
-    public static final class FastListNoIterator<T> extends FastList<T>
-    {
-        @Override
-        public Iterator<T> iterator()
-        {
-            throw new AssertionError("No iteration patterns should delegate to iterator()");
-        }
-
-        @Override
-        public ListIterator<T> listIterator()
-        {
-            throw new AssertionError("No iteration patterns should delegate to listIterator()");
-        }
-
-        @Override
-        public ListIterator<T> listIterator(int index)
-        {
-            throw new AssertionError("No iteration patterns should delegate to listIterator()");
-        }
     }
 
     @Override

@@ -49,6 +49,12 @@ public class UnifiedMapKeySetTest implements SetTestCase
     }
 
     @Override
+    public boolean allowsDuplicates()
+    {
+        return false;
+    }
+
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void Collection_add()
     {

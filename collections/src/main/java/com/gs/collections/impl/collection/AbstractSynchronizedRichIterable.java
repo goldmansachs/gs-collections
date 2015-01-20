@@ -63,7 +63,6 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.utility.LazyIterate;
 import net.jcip.annotations.GuardedBy;
 
@@ -553,7 +552,7 @@ public abstract class AbstractSynchronizedRichIterable<T> implements RichIterabl
     {
         synchronized (this.lock)
         {
-            return TreeSortedSet.newSet(null, this);
+            return this.delegate.toSortedSet();
         }
     }
 
@@ -561,7 +560,7 @@ public abstract class AbstractSynchronizedRichIterable<T> implements RichIterabl
     {
         synchronized (this.lock)
         {
-            return TreeSortedSet.newSet(comparator, this);
+            return this.delegate.toSortedSet(comparator);
         }
     }
 
@@ -569,7 +568,7 @@ public abstract class AbstractSynchronizedRichIterable<T> implements RichIterabl
     {
         synchronized (this.lock)
         {
-            return this.toSortedSet(Comparators.byFunction(function));
+            return this.delegate.toSortedSetBy(function);
         }
     }
 
@@ -738,81 +737,81 @@ public abstract class AbstractSynchronizedRichIterable<T> implements RichIterabl
 
     public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
     {
-        synchronized (this.getLock())
+        synchronized (this.lock)
         {
-            return this.getDelegate().sumByInt(groupBy, function);
+            return this.delegate.sumByInt(groupBy, function);
         }
     }
 
     public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
     {
-        synchronized (this.getLock())
+        synchronized (this.lock)
         {
-            return this.getDelegate().sumByFloat(groupBy, function);
+            return this.delegate.sumByFloat(groupBy, function);
         }
     }
 
     public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
     {
-        synchronized (this.getLock())
+        synchronized (this.lock)
         {
-            return this.getDelegate().sumByLong(groupBy, function);
+            return this.delegate.sumByLong(groupBy, function);
         }
     }
 
     public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
     {
-        synchronized (this.getLock())
+        synchronized (this.lock)
         {
-            return this.getDelegate().sumByDouble(groupBy, function);
+            return this.delegate.sumByDouble(groupBy, function);
         }
     }
 
     public String makeString()
     {
-        synchronized (this.getLock())
+        synchronized (this.lock)
         {
-            return this.getDelegate().makeString();
+            return this.delegate.makeString();
         }
     }
 
     public String makeString(String separator)
     {
-        synchronized (this.getLock())
+        synchronized (this.lock)
         {
-            return this.getDelegate().makeString(separator);
+            return this.delegate.makeString(separator);
         }
     }
 
     public String makeString(String start, String separator, String end)
     {
-        synchronized (this.getLock())
+        synchronized (this.lock)
         {
-            return this.getDelegate().makeString(start, separator, end);
+            return this.delegate.makeString(start, separator, end);
         }
     }
 
     public void appendString(Appendable appendable)
     {
-        synchronized (this.getLock())
+        synchronized (this.lock)
         {
-            this.getDelegate().appendString(appendable);
+            this.delegate.appendString(appendable);
         }
     }
 
     public void appendString(Appendable appendable, String separator)
     {
-        synchronized (this.getLock())
+        synchronized (this.lock)
         {
-            this.getDelegate().appendString(appendable, separator);
+            this.delegate.appendString(appendable, separator);
         }
     }
 
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
-        synchronized (this.getLock())
+        synchronized (this.lock)
         {
-            this.getDelegate().appendString(appendable, start, separator, end);
+            this.delegate.appendString(appendable, start, separator, end);
         }
     }
 
@@ -840,7 +839,7 @@ public abstract class AbstractSynchronizedRichIterable<T> implements RichIterabl
     {
         synchronized (this.lock)
         {
-            return this.getDelegate().groupByUniqueKey(function, UnifiedMap.<V, T>newMap());
+            return this.delegate.groupByUniqueKey(function, UnifiedMap.<V, T>newMap());
         }
     }
 

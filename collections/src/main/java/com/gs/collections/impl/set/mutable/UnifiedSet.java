@@ -23,7 +23,6 @@ import java.io.ObjectOutput;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -32,8 +31,6 @@ import java.util.concurrent.ExecutorService;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.annotation.Beta;
-import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -42,33 +39,17 @@ import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
-import com.gs.collections.api.collection.primitive.MutableByteCollection;
-import com.gs.collections.api.collection.primitive.MutableCharCollection;
-import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
-import com.gs.collections.api.collection.primitive.MutableFloatCollection;
-import com.gs.collections.api.collection.primitive.MutableIntCollection;
-import com.gs.collections.api.collection.primitive.MutableLongCollection;
-import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.api.map.primitive.ObjectDoubleMap;
-import com.gs.collections.api.map.primitive.ObjectLongMap;
-import com.gs.collections.api.map.sorted.MutableSortedMap;
-import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
@@ -85,46 +66,15 @@ import com.gs.collections.api.set.primitive.MutableFloatSet;
 import com.gs.collections.api.set.primitive.MutableIntSet;
 import com.gs.collections.api.set.primitive.MutableLongSet;
 import com.gs.collections.api.set.primitive.MutableShortSet;
-import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.Counter;
-import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
-import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.AbstractRichIterable;
 import com.gs.collections.impl.block.factory.Procedures2;
-import com.gs.collections.impl.block.procedure.AppendStringProcedure;
-import com.gs.collections.impl.block.procedure.CollectIfProcedure;
-import com.gs.collections.impl.block.procedure.CollectProcedure;
-import com.gs.collections.impl.block.procedure.CountProcedure;
-import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
-import com.gs.collections.impl.block.procedure.GroupByUniqueKeyProcedure;
-import com.gs.collections.impl.block.procedure.MaxByProcedure;
-import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
-import com.gs.collections.impl.block.procedure.MaxProcedure;
-import com.gs.collections.impl.block.procedure.MinByProcedure;
-import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
-import com.gs.collections.impl.block.procedure.MinProcedure;
-import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
-import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
-import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
-import com.gs.collections.impl.block.procedure.SelectProcedure;
-import com.gs.collections.impl.block.procedure.ZipWithIndexProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
@@ -135,11 +85,7 @@ import com.gs.collections.impl.lazy.parallel.set.CollectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.RootUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.SelectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
-import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
-import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.partition.set.PartitionUnifiedSet;
@@ -151,11 +97,8 @@ import com.gs.collections.impl.set.mutable.primitive.FloatHashSet;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import com.gs.collections.impl.set.mutable.primitive.LongHashSet;
 import com.gs.collections.impl.set.mutable.primitive.ShortHashSet;
-import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.tuple.Tuples;
-import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
-import com.gs.collections.impl.utility.LazyIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 import com.gs.collections.impl.utility.internal.MutableCollectionIterate;
 import com.gs.collections.impl.utility.internal.SetIterables;
@@ -163,6 +106,7 @@ import net.jcip.annotations.NotThreadSafe;
 
 @NotThreadSafe
 public class UnifiedSet<T>
+        extends AbstractRichIterable<T>
         implements MutableSet<T>, Externalizable, Pool<T>, BatchIterable<T>
 {
     protected static final Object NULL_KEY = new Object()
@@ -502,6 +446,7 @@ public class UnifiedSet<T>
         }
     }
 
+    @Override
     public boolean contains(Object key)
     {
         int index = this.index(key);
@@ -589,11 +534,6 @@ public class UnifiedSet<T>
         return this;
     }
 
-    public void forEach(Procedure<? super T> procedure)
-    {
-        this.each(procedure);
-    }
-
     public void each(Procedure<? super T> procedure)
     {
         this.each(procedure, 0, this.table.length);
@@ -645,6 +585,7 @@ public class UnifiedSet<T>
         while (true);
     }
 
+    @Override
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
         for (int i = 0; i < this.table.length; i++)
@@ -694,6 +635,7 @@ public class UnifiedSet<T>
         while (true);
     }
 
+    @Override
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
         int count = 0;
@@ -808,12 +750,6 @@ public class UnifiedSet<T>
         return this.select(predicate, this.newEmpty());
     }
 
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
-    {
-        this.forEach(new SelectProcedure<T>(predicate, target));
-        return target;
-    }
-
     public <P> UnifiedSet<T> selectWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
@@ -821,33 +757,9 @@ public class UnifiedSet<T>
         return this.selectWith(predicate, parameter, this.newEmpty());
     }
 
-    public <P, R extends Collection<T>> R selectWith(
-            final Predicate2<? super T, ? super P> predicate,
-            P parameter,
-            final R targetCollection)
-    {
-        this.forEachWith(new Procedure2<T, P>()
-        {
-            public void value(T each, P parm)
-            {
-                if (predicate.accept(each, parm))
-                {
-                    targetCollection.add(each);
-                }
-            }
-        }, parameter);
-        return targetCollection;
-    }
-
     public UnifiedSet<T> reject(Predicate<? super T> predicate)
     {
         return this.reject(predicate, this.newEmpty());
-    }
-
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
-    {
-        this.forEach(new RejectProcedure<T>(predicate, target));
-        return target;
     }
 
     public <P> UnifiedSet<T> rejectWith(
@@ -855,24 +767,6 @@ public class UnifiedSet<T>
             P parameter)
     {
         return this.rejectWith(predicate, parameter, this.newEmpty());
-    }
-
-    public <P, R extends Collection<T>> R rejectWith(
-            final Predicate2<? super T, ? super P> predicate,
-            P parameter,
-            final R targetCollection)
-    {
-        this.forEachWith(new Procedure2<T, P>()
-        {
-            public void value(T each, P parm)
-            {
-                if (!predicate.accept(each, parm))
-                {
-                    targetCollection.add(each);
-                }
-            }
-        }, parameter);
-        return targetCollection;
     }
 
     public <P> Twin<MutableList<T>> selectAndRejectWith(
@@ -932,21 +826,9 @@ public class UnifiedSet<T>
         return this.collectBoolean(booleanFunction, new BooleanHashSet());
     }
 
-    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
-    {
-        this.forEach(new CollectBooleanProcedure<T>(booleanFunction, target));
-        return target;
-    }
-
     public MutableByteSet collectByte(ByteFunction<? super T> byteFunction)
     {
         return this.collectByte(byteFunction, new ByteHashSet());
-    }
-
-    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
-    {
-        this.forEach(new CollectByteProcedure<T>(byteFunction, target));
-        return target;
     }
 
     public MutableCharSet collectChar(CharFunction<? super T> charFunction)
@@ -954,21 +836,9 @@ public class UnifiedSet<T>
         return this.collectChar(charFunction, new CharHashSet());
     }
 
-    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
-    {
-        this.forEach(new CollectCharProcedure<T>(charFunction, target));
-        return target;
-    }
-
     public MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return this.collectDouble(doubleFunction, new DoubleHashSet());
-    }
-
-    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
-    {
-        this.forEach(new CollectDoubleProcedure<T>(doubleFunction, target));
-        return target;
     }
 
     public MutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
@@ -976,21 +846,9 @@ public class UnifiedSet<T>
         return this.collectFloat(floatFunction, new FloatHashSet());
     }
 
-    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
-    {
-        this.forEach(new CollectFloatProcedure<T>(floatFunction, target));
-        return target;
-    }
-
     public MutableIntSet collectInt(IntFunction<? super T> intFunction)
     {
         return this.collectInt(intFunction, new IntHashSet());
-    }
-
-    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
-    {
-        this.forEach(new CollectIntProcedure<T>(intFunction, target));
-        return target;
     }
 
     public MutableLongSet collectLong(LongFunction<? super T> longFunction)
@@ -998,27 +856,9 @@ public class UnifiedSet<T>
         return this.collectLong(longFunction, new LongHashSet());
     }
 
-    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
-    {
-        this.forEach(new CollectLongProcedure<T>(longFunction, target));
-        return target;
-    }
-
     public MutableShortSet collectShort(ShortFunction<? super T> shortFunction)
     {
         return this.collectShort(shortFunction, new ShortHashSet());
-    }
-
-    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
-    {
-        this.forEach(new CollectShortProcedure<T>(shortFunction, target));
-        return target;
-    }
-
-    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
-    {
-        this.forEach(new CollectProcedure<T, V>(function, target));
-        return target;
     }
 
     public <V> UnifiedSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
@@ -1026,29 +866,9 @@ public class UnifiedSet<T>
         return this.flatCollect(function, UnifiedSet.<V>newSet());
     }
 
-    public <V, R extends Collection<V>> R flatCollect(
-            Function<? super T, ? extends Iterable<V>> function, R target)
-    {
-        this.forEach(new FlatCollectProcedure<T, V>(function, target));
-        return target;
-    }
-
     public <P, A> UnifiedSet<A> collectWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
     {
         return this.collectWith(function, parameter, UnifiedSet.<A>newSet());
-    }
-
-    public <P, A, R extends Collection<A>> R collectWith(
-            final Function2<? super T, ? super P, ? extends A> function, P parameter, final R targetCollection)
-    {
-        this.forEachWith(new Procedure2<T, P>()
-        {
-            public void value(T each, P parm)
-            {
-                targetCollection.add(function.value(each, parm));
-            }
-        }, parameter);
-        return targetCollection;
     }
 
     public <V> UnifiedSet<V> collectIf(
@@ -1057,13 +877,7 @@ public class UnifiedSet<T>
         return this.collectIf(predicate, function, UnifiedSet.<V>newSet());
     }
 
-    public <V, R extends Collection<V>> R collectIf(
-            Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
-    {
-        this.forEach(new CollectIfProcedure<T, V>(target, function, predicate));
-        return target;
-    }
-
+    @Override
     public T detect(Predicate<? super T> predicate)
     {
         return this.detect(predicate, 0, this.table.length);
@@ -1134,91 +948,6 @@ public class UnifiedSet<T>
             return null;
         }
         while (true);
-    }
-
-    public T min(Comparator<? super T> comparator)
-    {
-        MinComparatorProcedure<T> procedure = new MinComparatorProcedure<T>(comparator);
-        this.forEach(procedure);
-        return procedure.getResult();
-    }
-
-    public T max(Comparator<? super T> comparator)
-    {
-        MaxComparatorProcedure<T> procedure = new MaxComparatorProcedure<T>(comparator);
-        this.forEach(procedure);
-        return procedure.getResult();
-    }
-
-    public T min()
-    {
-        MinProcedure<T> procedure = new MinProcedure<T>();
-        this.forEach(procedure);
-        return procedure.getResult();
-    }
-
-    public T max()
-    {
-        MaxProcedure<T> procedure = new MaxProcedure<T>();
-        this.forEach(procedure);
-        return procedure.getResult();
-    }
-
-    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
-    {
-        MinByProcedure<T, V> minByProcedure = new MinByProcedure<T, V>(function);
-        this.forEach(minByProcedure);
-        return minByProcedure.getResult();
-    }
-
-    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
-    {
-        MaxByProcedure<T, V> maxByProcedure = new MaxByProcedure<T, V>(function);
-        this.forEach(maxByProcedure);
-        return maxByProcedure.getResult();
-    }
-
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
-    {
-        T result = this.detect(predicate);
-        return result == null ? function.value() : result;
-    }
-
-    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        return IterableIterate.detectWith(this, predicate, parameter);
-    }
-
-    public <P> T detectWithIfNone(
-            Predicate2<? super T, ? super P> predicate,
-            P parameter,
-            Function0<? extends T> function)
-    {
-        T result = this.detectWith(predicate, parameter);
-        return result == null ? function.value() : result;
-    }
-
-    public int count(Predicate<? super T> predicate)
-    {
-        CountProcedure<T> procedure = new CountProcedure<T>(predicate);
-        this.forEach(procedure);
-        return procedure.getCount();
-    }
-
-    public <P> int countWith(final Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        final Counter count = new Counter();
-        this.forEachWith(new Procedure2<T, P>()
-        {
-            public void value(T each, P parm)
-            {
-                if (predicate.accept(each, parm))
-                {
-                    count.increment();
-                }
-            }
-        }, parameter);
-        return count.getCount();
     }
 
     protected boolean shortCircuit(
@@ -1372,11 +1101,13 @@ public class UnifiedSet<T>
         while (true);
     }
 
+    @Override
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
         return this.shortCircuit(predicate, true, true, false);
     }
 
+    @Override
     public <P> boolean anySatisfyWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
@@ -1384,11 +1115,13 @@ public class UnifiedSet<T>
         return this.shortCircuitWith(predicate, parameter, true, true, false);
     }
 
+    @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
         return this.shortCircuit(predicate, false, false, true);
     }
 
+    @Override
     public <P> boolean allSatisfyWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
@@ -1396,11 +1129,13 @@ public class UnifiedSet<T>
         return this.shortCircuitWith(predicate, parameter, false, false, true);
     }
 
+    @Override
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
         return this.shortCircuit(predicate, true, false, true);
     }
 
+    @Override
     public <P> boolean noneSatisfyWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
@@ -1408,170 +1143,18 @@ public class UnifiedSet<T>
         return this.shortCircuitWith(predicate, parameter, true, false, true);
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
-    {
-        return IterableIterate.injectInto(injectedValue, this, function);
-    }
-
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
-    {
-        return IterableIterate.injectInto(injectedValue, this, function);
-    }
-
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
-    {
-        return IterableIterate.injectInto(injectedValue, this, function);
-    }
-
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
-    {
-        return IterableIterate.injectInto(injectedValue, this, function);
-    }
-
-    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function)
-    {
-        return IterableIterate.injectInto(injectedValue, this, function);
-    }
-
-    public long sumOfInt(IntFunction<? super T> function)
-    {
-        return IterableIterate.sumOfInt(this, function);
-    }
-
-    public double sumOfFloat(FloatFunction<? super T> function)
-    {
-        return IterableIterate.sumOfFloat(this, function);
-    }
-
-    public long sumOfLong(LongFunction<? super T> function)
-    {
-        return IterableIterate.sumOfLong(this, function);
-    }
-
-    public double sumOfDouble(DoubleFunction<? super T> function)
-    {
-        return IterableIterate.sumOfDouble(this, function);
-    }
-
-    public <V> ObjectLongMap<V> sumByInt(Function<T, V> groupBy, IntFunction<? super T> function)
-    {
-        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
-        return this.injectInto(result, PrimitiveFunctions.sumByIntFunction(groupBy, function));
-    }
-
-    public <V> ObjectDoubleMap<V> sumByFloat(Function<T, V> groupBy, FloatFunction<? super T> function)
-    {
-        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
-        return this.injectInto(result, PrimitiveFunctions.sumByFloatFunction(groupBy, function));
-    }
-
-    public <V> ObjectLongMap<V> sumByLong(Function<T, V> groupBy, LongFunction<? super T> function)
-    {
-        ObjectLongHashMap<V> result = ObjectLongHashMap.newMap();
-        return this.injectInto(result, PrimitiveFunctions.sumByLongFunction(groupBy, function));
-    }
-
-    public <V> ObjectDoubleMap<V> sumByDouble(Function<T, V> groupBy, DoubleFunction<? super T> function)
-    {
-        ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
-        return this.injectInto(result, PrimitiveFunctions.sumByDoubleFunction(groupBy, function));
-    }
-
     public <IV, P> IV injectIntoWith(
             IV injectValue,
-            Function3<? super IV, ? super T, ? super P, ? extends IV> function,
-            P parameter)
+            final Function3<? super IV, ? super T, ? super P, ? extends IV> function,
+            final P parameter)
     {
-        return IterableIterate.injectIntoWith(injectValue, this, function, parameter);
-    }
-
-    public MutableList<T> toList()
-    {
-        return FastList.newList(this);
-    }
-
-    public MutableList<T> toSortedList()
-    {
-        return FastList.newList(this).sortThis();
-    }
-
-    public MutableList<T> toSortedList(Comparator<? super T> comparator)
-    {
-        return FastList.newList(this).sortThis(comparator);
-    }
-
-    public <V extends Comparable<? super V>> MutableList<T> toSortedListBy(
-            Function<? super T, ? extends V> function)
-    {
-        return this.toSortedList(Comparators.byFunction(function));
-    }
-
-    public MutableSortedSet<T> toSortedSet()
-    {
-        return TreeSortedSet.newSet(null, this);
-    }
-
-    public MutableSortedSet<T> toSortedSet(Comparator<? super T> comparator)
-    {
-        return TreeSortedSet.newSet(comparator, this);
-    }
-
-    public <V extends Comparable<? super V>> MutableSortedSet<T> toSortedSetBy(Function<? super T, ? extends V> function)
-    {
-        return this.toSortedSet(Comparators.byFunction(function));
-    }
-
-    public UnifiedSet<T> toSet()
-    {
-        return UnifiedSet.newSet(this);
-    }
-
-    public MutableBag<T> toBag()
-    {
-        return HashBag.newBag(this);
-    }
-
-    public MutableSortedBag<T> toSortedBag()
-    {
-        return TreeBag.newBag(this);
-    }
-
-    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
-    {
-        return TreeBag.newBag(comparator, this);
-    }
-
-    public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(
-            Function<? super T, ? extends V> function)
-    {
-        return this.toSortedBag(Comparators.byFunction(function));
-    }
-
-    public <NK, NV> MutableMap<NK, NV> toMap(
-            Function<? super T, ? extends NK> keyFunction,
-            Function<? super T, ? extends NV> valueFunction)
-    {
-        return UnifiedMap.<NK, NV>newMap(this.size()).collectKeysAndValues(this, keyFunction, valueFunction);
-    }
-
-    public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(
-            Function<? super T, ? extends NK> keyFunction,
-            Function<? super T, ? extends NV> valueFunction)
-    {
-        return TreeSortedMap.<NK, NV>newMap().collectKeysAndValues(this, keyFunction, valueFunction);
-    }
-
-    public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(
-            Comparator<? super NK> comparator,
-            Function<? super T, ? extends NK> keyFunction,
-            Function<? super T, ? extends NV> valueFunction)
-    {
-        return TreeSortedMap.<NK, NV>newMap(comparator).collectKeysAndValues(this, keyFunction, valueFunction);
-    }
-
-    public LazyIterable<T> asLazy()
-    {
-        return LazyIterate.adapt(this);
+        return this.injectInto(injectValue, new Function2<IV, T, IV>()
+        {
+            public IV value(IV argument1, T argument2)
+            {
+                return function.value(argument1, argument2, parameter);
+            }
+        });
     }
 
     public MutableSet<T> asUnmodifiable()
@@ -1587,16 +1170,6 @@ public class UnifiedSet<T>
     public ImmutableSet<T> toImmutable()
     {
         return Sets.immutable.withAll(this);
-    }
-
-    public boolean notEmpty()
-    {
-        return !this.isEmpty();
-    }
-
-    public boolean isEmpty()
-    {
-        return this.occupied == 0;
     }
 
     public UnifiedSet<T> with(T element)
@@ -1924,12 +1497,6 @@ public class UnifiedSet<T>
         while (true);
     }
 
-    @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
     {
         int size = in.readInt();
@@ -1990,21 +1557,6 @@ public class UnifiedSet<T>
             return;
         }
         while (true);
-    }
-
-    public boolean containsAll(Collection<?> collection)
-    {
-        return Iterate.allSatisfyWith(collection, Predicates2.in(), this);
-    }
-
-    public boolean containsAllIterable(Iterable<?> source)
-    {
-        return Iterate.allSatisfyWith(source, Predicates2.in(), this);
-    }
-
-    public boolean containsAllArguments(Object... elements)
-    {
-        return ArrayIterate.allSatisfyWith(elements, Predicates2.in(), this);
     }
 
     public boolean removeAll(Collection<?> collection)
@@ -2142,6 +1694,7 @@ public class UnifiedSet<T>
         return new UnifiedSet<T>(this);
     }
 
+    @Override
     public Object[] toArray()
     {
         Object[] result = new Object[this.occupied];
@@ -2202,6 +1755,7 @@ public class UnifiedSet<T>
         return count;
     }
 
+    @Override
     public <T> T[] toArray(T[] array)
     {
         int size = this.size();
@@ -2523,61 +2077,10 @@ public class UnifiedSet<T>
         }
     }
 
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        AppendStringProcedure<T> appendStringProcedure = new AppendStringProcedure<T>(appendable, separator);
-        this.forEach(appendStringProcedure);
-    }
-
-    public void appendString(Appendable appendable, String start, String separator, String end)
-    {
-        AppendStringProcedure<T> appendStringProcedure = new AppendStringProcedure<T>(appendable, separator);
-        try
-        {
-            appendable.append(start);
-            this.forEach(appendStringProcedure);
-            appendable.append(end);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
     public <V> UnifiedSetMultimap<V, T> groupBy(
             Function<? super T, ? extends V> function)
     {
         return this.groupBy(function, UnifiedSetMultimap.<V, T>newMultimap());
-    }
-
-    public <V, R extends MutableMultimap<V, T>> R groupBy(
-            Function<? super T, ? extends V> function,
-            R target)
-    {
-        this.forEach(new MultimapPutProcedure<V, T>(target, function));
-        return target;
     }
 
     public <V> UnifiedSetMultimap<V, T> groupByEach(
@@ -2586,26 +2089,10 @@ public class UnifiedSet<T>
         return this.groupByEach(function, UnifiedSetMultimap.<V, T>newMultimap());
     }
 
-    public <V, R extends MutableMultimap<V, T>> R groupByEach(
-            Function<? super T, ? extends Iterable<V>> function,
-            R target)
-    {
-        this.forEach(new MultimapEachPutProcedure<V, T>(target, function));
-        return target;
-    }
-
     public <V> MutableMap<V, T> groupByUniqueKey(
             Function<? super T, ? extends V> function)
     {
         return this.groupByUniqueKey(function, UnifiedMap.<V, T>newMap());
-    }
-
-    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
-            Function<? super T, ? extends V> function,
-            R target)
-    {
-        this.forEach(new GroupByUniqueKeyProcedure<T, V>(target, function));
-        return target;
     }
 
     /**
@@ -2617,11 +2104,6 @@ public class UnifiedSet<T>
         return this.zip(that, UnifiedSet.<Pair<T, S>>newSet());
     }
 
-    public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
-    {
-        return IterableIterate.zip(this, that, target);
-    }
-
     /**
      * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
      */
@@ -2629,12 +2111,6 @@ public class UnifiedSet<T>
     public MutableSet<Pair<T, Integer>> zipWithIndex()
     {
         return this.zipWithIndex(UnifiedSet.<Pair<T, Integer>>newSet());
-    }
-
-    public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
-    {
-        this.forEach(ZipWithIndexProcedure.create(target));
-        return target;
     }
 
     public RichIterable<RichIterable<T>> chunk(int size)

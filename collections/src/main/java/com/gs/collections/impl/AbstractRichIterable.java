@@ -66,6 +66,7 @@ import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.Procedures2;
@@ -91,6 +92,7 @@ import com.gs.collections.impl.block.procedure.SumOfDoubleProcedure;
 import com.gs.collections.impl.block.procedure.SumOfFloatProcedure;
 import com.gs.collections.impl.block.procedure.SumOfIntProcedure;
 import com.gs.collections.impl.block.procedure.SumOfLongProcedure;
+import com.gs.collections.impl.block.procedure.ZipWithIndexProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
@@ -120,17 +122,17 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 {
     public boolean contains(Object object)
     {
-        return this.anySatisfy(Predicates.equal(object));
+        return this.anySatisfyWith(Predicates2.equal(), object);
     }
 
     public boolean containsAllIterable(Iterable<?> source)
     {
-        return Iterate.allSatisfy(source, Predicates.in(this));
+        return Iterate.allSatisfyWith(source, Predicates2.in(), this);
     }
 
     public boolean containsAllArguments(Object... elements)
     {
-        return ArrayIterate.allSatisfy(elements, Predicates.in(this));
+        return ArrayIterate.allSatisfyWith(elements, Predicates2.in(), this);
     }
 
     public Object[] toArray()
@@ -560,7 +562,8 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
 
     public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
     {
-        return IterableIterate.zipWithIndex(this, target);
+        this.forEach(ZipWithIndexProcedure.create(target));
+        return target;
     }
 
     /**

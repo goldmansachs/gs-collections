@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1477,10 +1477,10 @@ public final class ConcurrentHashMap<K, V>
 
     private abstract class HashIterator<E> implements Iterator<E>
     {
-        private List<IteratorState> todo = null;
+        private List<IteratorState> todo;
         private IteratorState currentState;
         private Entry<K, V> next;
-        private int index = 0;
+        private int index;
         private Entry<K, V> current;
 
         protected HashIterator()
@@ -1921,12 +1921,6 @@ public final class ConcurrentHashMap<K, V>
     public boolean notEmpty()
     {
         return !this.isEmpty();
-    }
-
-    @Override
-    public void forEach(Procedure<? super V> procedure)
-    {
-        IterableIterate.forEach(this.values(), procedure);
     }
 
     @Override

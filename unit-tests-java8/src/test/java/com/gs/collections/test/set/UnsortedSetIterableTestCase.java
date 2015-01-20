@@ -16,39 +16,19 @@
 
 package com.gs.collections.test.set;
 
-import java.util.Iterator;
-
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
-import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Sets;
-import com.gs.collections.test.UnorderedIterableTestCase;
 import org.junit.Test;
 
-import static com.gs.collections.test.IterableTestCase.assertEquals;
 import static org.hamcrest.Matchers.isOneOf;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
-public interface UnsortedSetIterableTestCase extends SetIterableTestCase, UnorderedIterableTestCase, TransformsToUnsortedSetTrait
+public interface UnsortedSetIterableTestCase extends SetIterableTestCase, TransformsToUnsortedSetTrait, UnsortedSetLikeTestTrait
 {
     @Override
     <T> UnsortedSetIterable<T> newWith(T... elements);
-
-    @Override
-    default <T> UnsortedSetIterable<T> getExpectedFiltered(T... elements)
-    {
-        return Sets.immutable.with(elements);
-    }
-
-    @Override
-    default <T> MutableSet<T> newMutableForFilter(T... elements)
-    {
-        return Sets.mutable.with(elements);
-    }
 
     @Override
     default <T> UnsortedSetIterable<T> getExpectedTransformed(T... elements)
@@ -64,112 +44,6 @@ public interface UnsortedSetIterableTestCase extends SetIterableTestCase, Unorde
 
     @Override
     @Test
-    default void Iterable_next()
-    {
-        Iterable<Integer> iterable = this.newWith(3, 2, 1);
-
-        MutableCollection<Integer> mutableCollection = this.newMutableForFilter();
-
-        Iterator<Integer> iterator = iterable.iterator();
-        while (iterator.hasNext())
-        {
-            Integer integer = iterator.next();
-            mutableCollection.add(integer);
-        }
-
-        assertEquals(this.getExpectedFiltered(3, 2, 1), mutableCollection);
-        assertFalse(iterator.hasNext());
-    }
-
-    @Override
-    @Test
-    default void RichIterable_getFirst()
-    {
-        RichIterable<Integer> integers = this.newWith(3, 2, 1);
-        Integer first = integers.getFirst();
-        assertThat(first, isOneOf(3, 2, 1));
-        assertEquals(integers.iterator().next(), first);
-    }
-
-    @Override
-    @Test
-    default void RichIterable_getLast()
-    {
-        RichIterable<Integer> integers = this.newWith(3, 2, 1);
-        Integer last = integers.getLast();
-        assertThat(last, isOneOf(3, 2, 1));
-    }
-
-    @Override
-    @Test
-    default void RichIterable_toArray()
-    {
-        Object[] array = this.newWith(3, 2, 1).toArray();
-        assertEquals(Bags.immutable.with(3, 2, 1), HashBag.newBagWith(array));
-    }
-
-    @Override
-    @Test
-    default void RichIterable_makeString_appendString()
-    {
-        RichIterable<Integer> iterable = this.newWith(3, 2, 1);
-        assertThat(iterable.makeString(), isOneOf(
-                "3, 2, 1",
-                "3, 1, 2",
-                "2, 3, 1",
-                "2, 1, 3",
-                "1, 3, 2",
-                "1, 2, 3"));
-
-        assertThat(iterable.makeString("/"), isOneOf(
-                "3/2/1",
-                "3/1/2",
-                "2/3/1",
-                "2/1/3",
-                "1/3/2",
-                "1/2/3"));
-
-        assertThat(iterable.makeString("[", "/", "]"), isOneOf(
-                "[3/2/1]",
-                "[3/1/2]",
-                "[2/3/1]",
-                "[2/1/3]",
-                "[1/3/2]",
-                "[1/2/3]"));
-
-        StringBuilder stringBuilder1 = new StringBuilder();
-        iterable.appendString(stringBuilder1);
-        assertThat(stringBuilder1.toString(), isOneOf(
-                "3, 2, 1",
-                "3, 1, 2",
-                "2, 3, 1",
-                "2, 1, 3",
-                "1, 3, 2",
-                "1, 2, 3"));
-
-        StringBuilder stringBuilder2 = new StringBuilder();
-        iterable.appendString(stringBuilder2, "/");
-        assertThat(stringBuilder2.toString(), isOneOf(
-                "3/2/1",
-                "3/1/2",
-                "2/3/1",
-                "2/1/3",
-                "1/3/2",
-                "1/2/3"));
-
-        StringBuilder stringBuilder3 = new StringBuilder();
-        iterable.appendString(stringBuilder3, "[", "/", "]");
-        assertThat(stringBuilder3.toString(), isOneOf(
-                "[3/2/1]",
-                "[3/1/2]",
-                "[2/3/1]",
-                "[2/1/3]",
-                "[1/3/2]",
-                "[1/2/3]"));
-    }
-
-    @Override
-    @Test
     default void RichIterable_toString()
     {
         RichIterable<Integer> iterable = this.newWith(3, 2, 1);
@@ -180,5 +54,12 @@ public interface UnsortedSetIterableTestCase extends SetIterableTestCase, Unorde
                 "[2, 1, 3]",
                 "[1, 3, 2]",
                 "[1, 2, 3]"));
+    }
+
+    @Override
+    @Test
+    default void RichIterable_toArray()
+    {
+        UnsortedSetLikeTestTrait.super.RichIterable_toArray();
     }
 }

@@ -21,10 +21,8 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.factory.Bags;
 import org.junit.Test;
 
 import static com.gs.collections.impl.test.Verify.assertThrows;
@@ -87,13 +85,6 @@ public interface UnorderedIterableTestCase extends RichIterableTestCase
         assertNotEquals(integers.getFirst(), last);
     }
 
-    @Test
-    default void RichIterable_toArray()
-    {
-        Object[] array = this.newWith(3, 3, 3, 2, 2, 1).toArray();
-        IterableTestCase.assertEquals(Bags.immutable.with(3, 3, 3, 2, 2, 1), HashBag.newBagWith(array));
-    }
-
     @Override
     @Test
     default void RichIterable_detect()
@@ -107,12 +98,7 @@ public interface UnorderedIterableTestCase extends RichIterableTestCase
         assertThat(this.newWith(3, 2, 1).detect(Predicates.lessThan(2)), is(1));
         assertThat(this.newWith(3, 2, 1).detect(Predicates.lessThan(3)), isOneOf(2, 1));
         assertThat(this.newWith(3, 2, 1).detect(Predicates.lessThan(4)), isOneOf(3, 2, 1));
-    }
 
-    @Override
-    @Test
-    default void RichIterable_detectWith()
-    {
         assertThat(this.newWith(3, 2, 1).detectWith(Predicates2.greaterThan(), 0), isOneOf(3, 2, 1));
         assertThat(this.newWith(3, 2, 1).detectWith(Predicates2.greaterThan(), 1), isOneOf(3, 2));
         assertThat(this.newWith(3, 2, 1).detectWith(Predicates2.greaterThan(), 2), is(3));
@@ -122,12 +108,7 @@ public interface UnorderedIterableTestCase extends RichIterableTestCase
         assertThat(this.newWith(3, 2, 1).detectWith(Predicates2.lessThan(), 2), is(1));
         assertThat(this.newWith(3, 2, 1).detectWith(Predicates2.lessThan(), 3), isOneOf(2, 1));
         assertThat(this.newWith(3, 2, 1).detectWith(Predicates2.lessThan(), 4), isOneOf(3, 2, 1));
-    }
 
-    @Override
-    @Test
-    default void RichIterable_detectIfNone()
-    {
         assertThat(this.newWith(3, 2, 1).detectIfNone(Predicates.greaterThan(0), () -> 4), isOneOf(3, 2, 1));
         assertThat(this.newWith(3, 2, 1).detectIfNone(Predicates.greaterThan(1), () -> 4), isOneOf(3, 2));
         assertThat(this.newWith(3, 2, 1).detectIfNone(Predicates.greaterThan(2), () -> 4), is(3));
@@ -137,12 +118,7 @@ public interface UnorderedIterableTestCase extends RichIterableTestCase
         assertThat(this.newWith(3, 2, 1).detectIfNone(Predicates.lessThan(2), () -> 4), is(1));
         assertThat(this.newWith(3, 2, 1).detectIfNone(Predicates.lessThan(3), () -> 4), isOneOf(2, 1));
         assertThat(this.newWith(3, 2, 1).detectIfNone(Predicates.lessThan(4), () -> 4), isOneOf(3, 2, 1));
-    }
 
-    @Override
-    @Test
-    default void RichIterable_detectWithIfNone()
-    {
         assertThat(this.newWith(3, 2, 1).detectWithIfNone(Predicates2.greaterThan(), 0, () -> 4), isOneOf(3, 2, 1));
         assertThat(this.newWith(3, 2, 1).detectWithIfNone(Predicates2.greaterThan(), 1, () -> 4), isOneOf(3, 2));
         assertThat(this.newWith(3, 2, 1).detectWithIfNone(Predicates2.greaterThan(), 2, () -> 4), is(3));
@@ -156,26 +132,21 @@ public interface UnorderedIterableTestCase extends RichIterableTestCase
 
     @Override
     @Test
-    default void RichIterable_minBy()
+    default void RichIterable_minBy_maxBy()
     {
         // Without an ordering, min can be either ca or da
-        RichIterable<String> iterable = this.newWith("ed", "da", "ca", "bc", "ab");
-        String actualMin = iterable.minBy(string -> string.charAt(string.length() - 1));
+        RichIterable<String> minIterable = this.newWith("ed", "da", "ca", "bc", "ab");
+        String actualMin = minIterable.minBy(string -> string.charAt(string.length() - 1));
         assertThat(actualMin, isOneOf("ca", "da"));
-        IterableTestCase.assertEquals(iterable.detect(each -> each.equals("ca") || each.equals("da")), actualMin);
+        IterableTestCase.assertEquals(minIterable.detect(each -> each.equals("ca") || each.equals("da")), actualMin);
 
         assertThrows(NoSuchElementException.class, () -> this.<String>newWith().minBy(string -> string.charAt(string.length() - 1)));
-    }
 
-    @Override
-    @Test
-    default void RichIterable_maxBy()
-    {
         // Without an ordering, max can be either ca or da
-        RichIterable<String> iterable = this.newWith("ew", "dz", "cz", "bx", "ay");
-        String actualMax = iterable.maxBy(string -> string.charAt(string.length() - 1));
+        RichIterable<String> maxIterable = this.newWith("ew", "dz", "cz", "bx", "ay");
+        String actualMax = maxIterable.maxBy(string -> string.charAt(string.length() - 1));
         assertThat(actualMax, isOneOf("cz", "dz"));
-        IterableTestCase.assertEquals(iterable.detect(each -> each.equals("cz") || each.equals("dz")), actualMax);
+        IterableTestCase.assertEquals(maxIterable.detect(each -> each.equals("cz") || each.equals("dz")), actualMax);
 
         assertThrows(NoSuchElementException.class, () -> this.<String>newWith().maxBy(string -> string.charAt(string.length() - 1)));
     }

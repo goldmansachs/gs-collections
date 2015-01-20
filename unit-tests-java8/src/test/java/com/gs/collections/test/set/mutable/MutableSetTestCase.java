@@ -28,12 +28,6 @@ public interface MutableSetTestCase extends SetTestCase, UnsortedSetIterableTest
     <T> MutableSet<T> newWith(T... elements);
 
     @Override
-    default boolean allowsDuplicates()
-    {
-        return false;
-    }
-
-    @Override
     default void Object_PostSerializedEqualsAndHashCode()
     {
         UnsortedSetIterableTestCase.super.Object_PostSerializedEqualsAndHashCode();

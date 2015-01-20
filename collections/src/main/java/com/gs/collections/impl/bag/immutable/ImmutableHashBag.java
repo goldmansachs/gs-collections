@@ -42,12 +42,14 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.bag.mutable.HashBag;
@@ -327,6 +329,30 @@ public class ImmutableHashBag<T>
     public MutableList<T> toSortedList(Comparator<? super T> comparator)
     {
         return this.delegate.toSortedList(comparator);
+    }
+
+    @Override
+    public MutableSortedSet<T> toSortedSet()
+    {
+        return this.delegate.toSortedSet();
+    }
+
+    @Override
+    public MutableSortedSet<T> toSortedSet(Comparator<? super T> comparator)
+    {
+        return this.delegate.toSortedSet(comparator);
+    }
+
+    @Override
+    public <K, V> MutableSortedMap<K, V> toSortedMap(Function<? super T, ? extends K> keyFunction, Function<? super T, ? extends V> valueFunction)
+    {
+        return this.delegate.toSortedMap(keyFunction, valueFunction);
+    }
+
+    @Override
+    public <K, V> MutableSortedMap<K, V> toSortedMap(Comparator<? super K> comparator, Function<? super T, ? extends K> keyFunction, Function<? super T, ? extends V> valueFunction)
+    {
+        return this.delegate.toSortedMap(comparator, keyFunction, valueFunction);
     }
 
     @Override

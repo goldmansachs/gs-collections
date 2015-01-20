@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1598,10 +1598,10 @@ public class ConcurrentHashMapUnsafe<K, V>
 
     private abstract class HashIterator<E> implements Iterator<E>
     {
-        private List<IteratorState> todo = null;
+        private List<IteratorState> todo;
         private IteratorState currentState;
         private Entry<K, V> next;
-        private int index = 0;
+        private int index;
         private Entry<K, V> current;
 
         protected HashIterator()
@@ -1617,14 +1617,14 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             while (this.index < this.currentState.end)
             {
-                Object o = arrayAt(this.currentState.currentTable, this.index);
+                Object o = ConcurrentHashMapUnsafe.arrayAt(this.currentState.currentTable, this.index);
                 if (o == RESIZED || o == RESIZING)
                 {
                     Object[] nextArray = ConcurrentHashMapUnsafe.this.helpWithResizeWhileCurrentIndex(this.currentState.currentTable, this.index);
                     int endResized = this.index + 1;
                     while (endResized < this.currentState.end)
                     {
-                        if (arrayAt(this.currentState.currentTable, endResized) != RESIZED)
+                        if (ConcurrentHashMapUnsafe.arrayAt(this.currentState.currentTable, endResized) != RESIZED)
                         {
                             break;
                         }
@@ -2042,12 +2042,6 @@ public class ConcurrentHashMapUnsafe<K, V>
     public boolean notEmpty()
     {
         return !this.isEmpty();
-    }
-
-    @Override
-    public void forEach(Procedure<? super V> procedure)
-    {
-        IterableIterate.forEach(this.values(), procedure);
     }
 
     @Override

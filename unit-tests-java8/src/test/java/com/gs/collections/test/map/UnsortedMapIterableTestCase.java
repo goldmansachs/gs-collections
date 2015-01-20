@@ -24,6 +24,7 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.UnsortedBag;
 import com.gs.collections.api.map.UnsortedMapIterable;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.test.UnorderedIterableTestCase;
 import com.gs.collections.test.bag.TransformsToBagTrait;
 import org.junit.Assert;
@@ -72,6 +73,7 @@ public interface UnsortedMapIterableTestCase extends MapIterableTestCase, Unorde
         assertThat(builder3.toString(), isOneOf("[2/2/1]", "[1/2/2]", "[2/1/2]"));
     }
 
+    @Override
     @Test
     default void RichIterable_toString()
     {
@@ -88,5 +90,17 @@ public interface UnsortedMapIterableTestCase extends MapIterableTestCase, Unorde
                         matcher.group(1),
                         matcher.group(2),
                         matcher.group(3)));
+    }
+
+    @Override
+    @Test
+    default void RichIterable_toList()
+    {
+        assertThat(
+                this.newWith(2, 2, 1).toList(),
+                isOneOf(
+                        Lists.immutable.with(2, 2, 1),
+                        Lists.immutable.with(1, 2, 2),
+                        Lists.immutable.with(2, 1, 2)));
     }
 }

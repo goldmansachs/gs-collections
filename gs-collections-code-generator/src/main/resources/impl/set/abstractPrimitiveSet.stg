@@ -46,18 +46,6 @@ public abstract class Abstract<name>Set extends Abstract<name>Iterable implement
     @SuppressWarnings("AbstractMethodOverridesAbstractMethod")
     @Override
     public abstract int hashCode();
-
-    @Override
-    public boolean isEmpty()
-    {
-        return this.size() == 0;
-    }
-
-    @Override
-    public boolean notEmpty()
-    {
-        return this.size() != 0;
-    }
 }
 
 >>
