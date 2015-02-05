@@ -24,6 +24,7 @@ import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutable<name>CollectionTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.math.Mutable<wrapperName>;
+import com.gs.collections.impl.stack.mutable.primitive.<name>ArrayStack;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -180,9 +181,10 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
         Mutable<name>List list = this.classUnderTest();
         Assert.assertFalse(list.addAllAtIndex(1));
         Assert.assertTrue(list.addAll(<name>ArrayList.newListWith(<["4", "5", "6"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(this.newMutableCollectionWith(<["1", "2", "3", "4", "5", "6"]:(literal.(type))(); separator=", ">), list);
+        Assert.assertTrue(list.addAll(<name>ArrayStack.newStackWith(<["8", "7"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(this.newMutableCollectionWith(<["1", "2", "3", "4", "5", "6", "7", "8"]:(literal.(type))(); separator=", ">), list);
         Assert.assertTrue(list.addAllAtIndex(4, <name>ArrayList.newListWith(<["5", "6"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(this.newMutableCollectionWith(<["1", "2", "3", "4", "5", "6", "5", "6"]:(literal.(type))(); separator=", ">), list);
+        Assert.assertEquals(this.newMutableCollectionWith(<["1", "2", "3", "4", "5", "6", "5", "6", "7", "8"]:(literal.(type))(); separator=", ">), list);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)

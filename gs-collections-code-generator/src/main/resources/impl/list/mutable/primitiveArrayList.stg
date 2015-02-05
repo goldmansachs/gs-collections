@@ -249,17 +249,31 @@ public final class <name>ArrayList extends Abstract<name>Iterable
         {
             return false;
         }
-        int sourceSize = source.length;
-        int newSize = this.size + sourceSize;
-        this.ensureCapacity(newSize);
-        System.arraycopy(source, 0, this.items, this.size, sourceSize);
-        this.size = newSize;
+        this.copyItems(source.length, source);
         return true;
     }
 
     public boolean addAll(<name>Iterable source)
     {
+        if (source instanceof <name>ArrayList)
+        {
+            if (source.isEmpty())
+            {
+                return false;
+            }
+            <name>ArrayList other = (<name>ArrayList) source;
+            this.copyItems(other.size(), other.items);
+            return true;
+        }
         return this.addAll(source.toArray());
+    }
+
+    private void copyItems(int sourceSize, <type>[] source)
+    {
+        int newSize = this.size + sourceSize;
+        this.ensureCapacity(newSize);
+        System.arraycopy(source, 0, this.items, this.size, sourceSize);
+        this.size = newSize;
     }
 
     private void throwOutOfBounds(int index)
