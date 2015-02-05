@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,11 @@ public class SelectListBatch<T> extends AbstractBatch<T> implements ListBatch<T>
     public <V> ListBatch<V> collect(Function<? super T, ? extends V> function)
     {
         return new CollectListBatch<T, V>(this, function);
+    }
+
+    public <V> ListBatch<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    {
+        return new FlatCollectListBatch<T, V>(this, function);
     }
 
     public UnsortedSetBatch<T> distinct(ConcurrentHashMap<T, Boolean> distinct)

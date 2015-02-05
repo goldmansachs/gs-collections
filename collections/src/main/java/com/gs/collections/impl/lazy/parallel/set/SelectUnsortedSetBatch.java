@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,9 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
+import com.gs.collections.impl.lazy.parallel.bag.CollectUnsortedBagBatch;
+import com.gs.collections.impl.lazy.parallel.bag.FlatCollectUnsortedBagBatch;
+import com.gs.collections.impl.lazy.parallel.bag.UnsortedBagBatch;
 
 @Beta
 public class SelectUnsortedSetBatch<T> extends AbstractBatch<T> implements UnsortedSetBatch<T>
@@ -52,8 +55,13 @@ public class SelectUnsortedSetBatch<T> extends AbstractBatch<T> implements Unsor
         return new SelectUnsortedSetBatch<T>(this, predicate);
     }
 
-    public <V> UnsortedSetBatch<V> collect(Function<? super T, ? extends V> function)
+    public <V> UnsortedBagBatch<V> collect(Function<? super T, ? extends V> function)
     {
-        return new CollectUnsortedSetBatch<T, V>(this, function);
+        return new CollectUnsortedBagBatch<T, V>(this, function);
+    }
+
+    public <V> UnsortedBagBatch<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    {
+        return new FlatCollectUnsortedBagBatch<T, V>(this, function);
     }
 }

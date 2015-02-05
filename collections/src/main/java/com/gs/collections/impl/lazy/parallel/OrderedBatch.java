@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ public interface OrderedBatch<T> extends Batch<T>
     OrderedBatch<T> select(Predicate<? super T> predicate);
 
     <V> ListBatch<V> collect(Function<? super T, ? extends V> function);
+
+    <V> ListBatch<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
     Batch<T> distinct(ConcurrentHashMap<T, Boolean> distinct);
 }

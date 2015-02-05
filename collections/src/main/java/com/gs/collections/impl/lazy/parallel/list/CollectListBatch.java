@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,11 @@ public class CollectListBatch<T, V> extends AbstractBatch<V> implements ListBatc
     {
         // return new CollectListBatch<T, VV>(this.listBatch, Functions.chain(this.function, function));
         return new CollectListBatch<V, VV>(this, function);
+    }
+
+    public <VV> ListBatch<VV> flatCollect(Function<? super V, ? extends Iterable<VV>> function)
+    {
+        return new FlatCollectListBatch<V, VV>(this, function);
     }
 
     public UnsortedSetBatch<V> distinct(ConcurrentHashMap<V, Boolean> distinct)

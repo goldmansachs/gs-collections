@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,8 +87,7 @@ public abstract class AbstractParallelUnsortedSetIterable<T, B extends UnsortedS
 
     public <V> ParallelIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        // TODO: Implement in parallel
-        return this.toSet().asParallel(this.getExecutorService(), this.getBatchSize()).flatCollect(function);
+        return new ParallelFlatCollectIterable<T, V>(this, function);
     }
 
     public <V> UnsortedSetMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)

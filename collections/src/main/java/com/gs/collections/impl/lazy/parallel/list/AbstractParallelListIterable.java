@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,8 +85,7 @@ public abstract class AbstractParallelListIterable<T, B extends ListBatch<T>> ex
 
     public <V> ParallelListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        // TODO: Implement in parallel
-        return this.toList().flatCollect(function).asParallel(this.getExecutorService(), this.getBatchSize());
+        return new ParallelFlatCollectListIterable<T, V>(this, function);
     }
 
     public <V> ListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)

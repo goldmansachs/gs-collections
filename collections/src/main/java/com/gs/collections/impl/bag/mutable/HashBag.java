@@ -88,6 +88,7 @@ import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 import com.gs.collections.impl.lazy.parallel.bag.AbstractParallelUnsortedBag;
 import com.gs.collections.impl.lazy.parallel.bag.CollectUnsortedBagBatch;
+import com.gs.collections.impl.lazy.parallel.bag.FlatCollectUnsortedBagBatch;
 import com.gs.collections.impl.lazy.parallel.bag.NonParallelUnsortedBag;
 import com.gs.collections.impl.lazy.parallel.bag.RootUnsortedBagBatch;
 import com.gs.collections.impl.lazy.parallel.bag.SelectUnsortedBagBatch;
@@ -1107,6 +1108,11 @@ public class HashBag<T>
         public <V> UnsortedBagBatch<V> collect(Function<? super T, ? extends V> function)
         {
             return new CollectUnsortedBagBatch<T, V>(this, function);
+        }
+
+        public <V> UnsortedBagBatch<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+        {
+            return new FlatCollectUnsortedBagBatch<T, V>(this, function);
         }
     }
 

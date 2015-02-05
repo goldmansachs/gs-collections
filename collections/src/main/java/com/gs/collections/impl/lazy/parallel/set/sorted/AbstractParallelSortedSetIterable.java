@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 import com.gs.collections.impl.lazy.parallel.list.ParallelCollectListIterable;
+import com.gs.collections.impl.lazy.parallel.list.ParallelFlatCollectListIterable;
 import com.gs.collections.impl.multimap.set.sorted.SynchronizedPutTreeSortedSetMultimap;
 
 @Beta
@@ -89,8 +90,7 @@ public abstract class AbstractParallelSortedSetIterable<T, B extends SortedSetBa
 
     public <V> ParallelListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        // TODO: Implement in parallel
-        return this.toList().flatCollect(function).asParallel(this.getExecutorService(), this.getBatchSize());
+        return new ParallelFlatCollectListIterable<T, V>(this, function);
     }
 
     public <V> SortedSetMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)

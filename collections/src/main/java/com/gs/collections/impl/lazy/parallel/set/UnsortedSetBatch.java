@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,17 @@
 package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.annotation.Beta;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.impl.lazy.parallel.Batch;
+import com.gs.collections.impl.lazy.parallel.bag.UnsortedBagBatch;
 
 @Beta
 public interface UnsortedSetBatch<T> extends Batch<T>
 {
     UnsortedSetBatch<T> select(Predicate<? super T> predicate);
+
+    <V> UnsortedBagBatch<V> collect(Function<? super T, ? extends V> function);
+
+    <V> UnsortedBagBatch<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 }

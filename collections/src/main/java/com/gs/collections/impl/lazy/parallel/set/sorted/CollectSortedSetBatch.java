@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.list.CollectListBatch;
 import com.gs.collections.impl.lazy.parallel.list.DistinctBatch;
+import com.gs.collections.impl.lazy.parallel.list.FlatCollectListBatch;
 import com.gs.collections.impl.lazy.parallel.list.ListBatch;
 import com.gs.collections.impl.lazy.parallel.list.SelectListBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
@@ -61,6 +62,11 @@ public class CollectSortedSetBatch<T, V> extends AbstractBatch<V> implements Lis
     public <VV> ListBatch<VV> collect(Function<? super V, ? extends VV> function)
     {
         return new CollectListBatch<V, VV>(this, function);
+    }
+
+    public <VV> ListBatch<VV> flatCollect(Function<? super V, ? extends Iterable<VV>> function)
+    {
+        return new FlatCollectListBatch<V, VV>(this, function);
     }
 
     public UnsortedSetBatch<V> distinct(ConcurrentHashMap<V, Boolean> distinct)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.lazy.parallel.set.ParallelCollectIterable;
+import com.gs.collections.impl.lazy.parallel.set.ParallelFlatCollectIterable;
 import com.gs.collections.impl.multimap.bag.SynchronizedPutHashBagMultimap;
 
 @Beta
@@ -83,6 +84,11 @@ public abstract class AbstractParallelIterableImpl<T, B extends Batch<T>> extend
     public <V> ParallelIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
         return this.select(predicate).collect(function);
+    }
+
+    public <V> ParallelIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    {
+        return new ParallelFlatCollectIterable<T, V>(this, function);
     }
 
     public <V> UnsortedBagMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)

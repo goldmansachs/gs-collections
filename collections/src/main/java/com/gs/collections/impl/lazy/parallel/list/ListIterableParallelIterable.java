@@ -93,8 +93,7 @@ public final class ListIterableParallelIterable<T> extends AbstractParallelListI
     @Override
     public <V> ParallelListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        // TODO: Implement in parallel
-        return this.delegate.flatCollect(function).asParallel(this.executorService, this.batchSize);
+        return new ParallelFlatCollectListIterable<T, V>(this, function);
     }
 
     @Override

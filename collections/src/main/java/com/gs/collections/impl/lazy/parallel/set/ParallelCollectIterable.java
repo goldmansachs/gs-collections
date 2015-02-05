@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,6 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableImpl;
 import com.gs.collections.impl.lazy.parallel.Batch;
-import com.gs.collections.impl.lazy.parallel.bag.NonParallelUnsortedBag;
 
 @Beta
 public class ParallelCollectIterable<T, V> extends AbstractParallelIterableImpl<V, Batch<V>>
@@ -90,10 +89,10 @@ public class ParallelCollectIterable<T, V> extends AbstractParallelIterableImpl<
         return resultItem == null ? null : this.function.valueOf(resultItem);
     }
 
+    @Override
     public <V1> ParallelIterable<V1> flatCollect(Function<? super V, ? extends Iterable<V1>> function)
     {
-        // TODO: Implement in parallel
-        return new NonParallelUnsortedBag<V1>(this.delegate.toBag().collect(this.function).flatCollect(function));
+        return new ParallelFlatCollectIterable<V, V1>(this, function);
     }
 
     @Override

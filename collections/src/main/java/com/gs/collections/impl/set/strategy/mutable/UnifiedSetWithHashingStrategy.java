@@ -81,8 +81,10 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
+import com.gs.collections.impl.lazy.parallel.bag.CollectUnsortedBagBatch;
+import com.gs.collections.impl.lazy.parallel.bag.FlatCollectUnsortedBagBatch;
+import com.gs.collections.impl.lazy.parallel.bag.UnsortedBagBatch;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
-import com.gs.collections.impl.lazy.parallel.set.CollectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.RootUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.SelectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
@@ -2624,9 +2626,14 @@ public class UnifiedSetWithHashingStrategy<T>
             return new SelectUnsortedSetBatch<T>(this, predicate);
         }
 
-        public <V> UnsortedSetBatch<V> collect(Function<? super T, ? extends V> function)
+        public <V> UnsortedBagBatch<V> collect(Function<? super T, ? extends V> function)
         {
-            return new CollectUnsortedSetBatch<T, V>(this, function);
+            return new CollectUnsortedBagBatch<T, V>(this, function);
+        }
+
+        public <V> UnsortedBagBatch<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+        {
+            return new FlatCollectUnsortedBagBatch<T, V>(this, function);
         }
     }
 

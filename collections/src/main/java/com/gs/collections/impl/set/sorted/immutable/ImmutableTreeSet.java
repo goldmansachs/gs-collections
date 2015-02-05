@@ -30,7 +30,6 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.ordered.OrderedIterable;
@@ -43,6 +42,7 @@ import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 import com.gs.collections.impl.lazy.parallel.list.ListBatch;
 import com.gs.collections.impl.lazy.parallel.set.sorted.AbstractParallelSortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.set.sorted.CollectSortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.sorted.FlatCollectSortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.sorted.RootSortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.sorted.SelectSortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.sorted.SortedSetBatch;
@@ -261,13 +261,6 @@ final class ImmutableTreeSet<T>
         }
 
         @Override
-        public <V> ParallelListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
-        {
-            // TODO: Implement in parallel
-            return ImmutableTreeSet.this.flatCollect(function).asParallel(this.executorService, this.batchSize);
-        }
-
-        @Override
         public Object[] toArray()
         {
             // TODO: Implement in parallel
@@ -427,6 +420,11 @@ final class ImmutableTreeSet<T>
         public <V> ListBatch<V> collect(Function<? super T, ? extends V> function)
         {
             return new CollectSortedSetBatch<T, V>(this, function);
+        }
+
+        public <V> ListBatch<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+        {
+            return new FlatCollectSortedSetBatch<T, V>(this, function);
         }
 
         public SortedSetBatch<T> distinct(ConcurrentHashMap<T, Boolean> distinct)

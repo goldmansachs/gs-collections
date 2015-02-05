@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,4 +30,6 @@ public interface UnsortedBagBatch<T> extends Batch<T>
     UnsortedBagBatch<T> select(Predicate<? super T> predicate);
 
     <V> UnsortedBagBatch<V> collect(Function<? super T, ? extends V> function);
+
+    <V> UnsortedBagBatch<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 }

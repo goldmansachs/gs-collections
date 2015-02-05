@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,12 @@ package com.gs.collections.impl.lazy.parallel;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
-import com.gs.collections.impl.lazy.parallel.bag.NonParallelUnsortedBag;
 
 @Beta
 public class ParallelSelectIterable<T> extends AbstractParallelIterableImpl<T, Batch<T>>
@@ -82,12 +80,6 @@ public class ParallelSelectIterable<T> extends AbstractParallelIterableImpl<T, B
     public T detect(Predicate<? super T> predicate)
     {
         return this.parallelIterable.detect(Predicates.and(this.predicate, predicate));
-    }
-
-    public <V> ParallelIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
-    {
-        // TODO: Implement in parallel
-        return new NonParallelUnsortedBag<V>(this.parallelIterable.toBag().select(this.predicate).flatCollect(function));
     }
 
     @Override
