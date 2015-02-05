@@ -14,53 +14,31 @@
  * limitations under the License.
  */
 
-package com.gs.collections.test.bag.mutable;
+package com.gs.collections.test.bag.mutable.sorted;
 
-import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.MutableBagIterable;
 import com.gs.collections.impl.test.Verify;
-import com.gs.collections.test.UnmodifiableMutableCollectionTestCase;
+import com.gs.collections.test.collection.mutable.MutableCollectionTestCase;
 import org.junit.Test;
 
-public interface UnmodifiableBagTestCase extends UnmodifiableMutableCollectionTestCase, MutableBagTestCase
+public interface MutableBagIterableTestCase extends MutableCollectionTestCase
 {
     @Override
-    @Test
-    default void Iterable_remove()
-    {
-        UnmodifiableMutableCollectionTestCase.super.Iterable_remove();
-    }
+    <T> MutableBagIterable<T> newWith(T... elements);
 
-    @Override
     @Test
     default void MutableBag_addOccurrences_throws()
     {
         Verify.assertThrows(
-                UnsupportedOperationException.class,
+                IllegalArgumentException.class,
                 () -> this.newWith(1, 2, 2, 3, 3, 3).addOccurrences(4, -1));
     }
 
-    @Override
     @Test
     default void MutableBag_removeOccurrences_throws()
     {
         Verify.assertThrows(
-                UnsupportedOperationException.class,
+                IllegalArgumentException.class,
                 () -> this.newWith(1, 2, 2, 3, 3, 3).removeOccurrences(4, -1));
-    }
-
-    @Override
-    @Test(expected = UnsupportedOperationException.class)
-    default void MutableBag_addOccurrences()
-    {
-        MutableBag<Integer> mutableBag = this.newWith(1, 2, 2, 3, 3, 3);
-        mutableBag.addOccurrences(4, 4);
-    }
-
-    @Override
-    @Test(expected = UnsupportedOperationException.class)
-    default void MutableBag_removeOccurrences()
-    {
-        MutableBag<Integer> mutableBag = this.newWith(1, 2, 2, 3, 3, 3);
-        mutableBag.removeOccurrences(4, 4);
     }
 }

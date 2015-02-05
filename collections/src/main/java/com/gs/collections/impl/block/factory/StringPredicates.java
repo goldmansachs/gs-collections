@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -213,9 +213,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "empty"
-                    : "StringPredicates.empty()";
+            return "StringPredicates.empty()";
         }
     }
 
@@ -231,9 +229,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "not empty"
-                    : "StringPredicates.notEmpty()";
+            return "StringPredicates.notEmpty()";
         }
     }
 
@@ -249,9 +245,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "has letters"
-                    : "StringPredicates.hasLetters()";
+            return "StringPredicates.hasLetters()";
         }
     }
 
@@ -267,9 +261,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "has digits"
-                    : "StringPredicates.hasDigits()";
+            return "StringPredicates.hasDigits()";
         }
     }
 
@@ -285,9 +277,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "has letters or digits"
-                    : "StringPredicates.hasLettersOrDigits()";
+            return "StringPredicates.hasLettersOrDigits()";
         }
     }
 
@@ -320,9 +310,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "has letters and digits"
-                    : "StringPredicates.hasLettersAndDigits()";
+            return "StringPredicates.hasLettersAndDigits()";
         }
     }
 
@@ -338,9 +326,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "has spaces"
-                    : "StringPredicates.hasSpaces()";
+            return "StringPredicates.hasSpaces()";
         }
     }
 
@@ -356,9 +342,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "has uppercase"
-                    : "StringPredicates.hasUpperCase()";
+            return "StringPredicates.hasUpperCase()";
         }
     }
 
@@ -374,9 +358,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "has lowercase"
-                    : "StringPredicates.hasLowerCase()";
+            return "StringPredicates.hasLowerCase()";
         }
     }
 
@@ -392,9 +374,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "has undefined"
-                    : "StringPredicates.hasUndefined()";
+            return "StringPredicates.hasUndefined()";
         }
     }
 
@@ -410,9 +390,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "is numeric"
-                    : "StringPredicates.isNumeric()";
+            return "StringPredicates.isNumeric()";
         }
     }
 
@@ -428,9 +406,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "is alphanumeric"
-                    : "StringPredicates.isAlphanumeric()";
+            return "StringPredicates.isAlphanumeric()";
         }
     }
 
@@ -446,9 +422,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "is blank"
-                    : "StringPredicates.isBlank()";
+            return "StringPredicates.isBlank()";
         }
     }
 
@@ -464,9 +438,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "not blank"
-                    : "StringPredicates.notBlank()";
+            return "StringPredicates.notBlank()";
         }
     }
 
@@ -482,9 +454,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "is alpha"
-                    : "StringPredicates.isAlpha()";
+            return "StringPredicates.isAlpha()";
         }
     }
 
@@ -506,9 +476,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "contains [" + this.otherString + ']'
-                    : "StringPredicates.contains(\"" + this.otherString + "\")";
+            return "StringPredicates.contains(\"" + this.otherString + "\")";
         }
     }
 
@@ -530,9 +498,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "not contains [" + this.otherString + ']'
-                    : "StringPredicates.notContains(\"" + this.otherString + "\")";
+            return "StringPredicates.notContains(\"" + this.otherString + "\")";
         }
     }
 
@@ -554,9 +520,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "contains [" + this.character + ']'
-                    : "StringPredicates.contains(\"" + this.character + "\")";
+            return "StringPredicates.contains(\"" + this.character + "\")";
         }
     }
 
@@ -578,9 +542,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "starts with [" + this.substring + ']'
-                    : "StringPredicates.startsWith(\"" + this.substring + "\")";
+            return "StringPredicates.startsWith(\"" + this.substring + "\")";
         }
     }
 
@@ -602,9 +564,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "ends with [" + this.substring + ']'
-                    : "StringPredicates.endsWith(\"" + this.substring + "\")";
+            return "StringPredicates.endsWith(\"" + this.substring + "\")";
         }
     }
 
@@ -626,9 +586,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "size = " + this.size
-                    : "StringPredicates.size(" + this.size + ')';
+            return "StringPredicates.size(" + this.size + ')';
         }
     }
 
@@ -650,9 +608,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "= (ignore case) [" + this.otherString + ']'
-                    : "StringPredicates.equalsIgnoreCase(\"" + this.otherString + "\")";
+            return "StringPredicates.equalsIgnoreCase(\"" + this.otherString + "\")";
         }
     }
 
@@ -674,9 +630,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "matches [" + this.regex + ']'
-                    : "StringPredicates.matches(\"" + this.regex + "\")";
+            return "StringPredicates.matches(\"" + this.regex + "\")";
         }
     }
 
@@ -698,9 +652,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "< " + this.string
-                    : "StringPredicates.lessThan(\"" + this.string + "\")";
+            return "StringPredicates.lessThan(\"" + this.string + "\")";
         }
     }
 
@@ -722,9 +674,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "<= " + this.string
-                    : "StringPredicates.lessThanOrEqualTo(\"" + this.string + "\")";
+            return "StringPredicates.lessThanOrEqualTo(\"" + this.string + "\")";
         }
     }
 
@@ -746,9 +696,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? "> " + this.string
-                    : "StringPredicates.greaterThan(\"" + this.string + "\")";
+            return "StringPredicates.greaterThan(\"" + this.string + "\")";
         }
     }
 
@@ -770,9 +718,7 @@ public final class StringPredicates
         @Override
         public String toString()
         {
-            return false
-                    ? ">= " + this.string
-                    : "StringPredicates.greaterThanOrEqualTo(\"" + this.string + "\")";
+            return "StringPredicates.greaterThanOrEqualTo(\"" + this.string + "\")";
         }
     }
 }

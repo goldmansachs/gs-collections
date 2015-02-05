@@ -18,7 +18,11 @@ package com.gs.collections.test;
 
 import java.util.Iterator;
 
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.tuple.Tuples;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static com.gs.collections.test.IterableTestCase.assertEquals;
@@ -77,5 +81,43 @@ public interface OrderedIterableTestCase extends RichIterableTestCase
         Holder<Integer> first = new Holder<>(-1);
         Holder<Integer> second = new Holder<>(-1);
         assertSame(first, this.newWith(new Holder<>(2), first, new Holder<>(0), second).max(Comparators.reverseNaturalOrder()));
+    }
+
+    @Test
+    default void OrderedIterable_zipWithIndex()
+    {
+        RichIterable<Integer> iterable = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
+        Assert.assertEquals(
+                Lists.immutable.with(
+                        Tuples.pair(4, 0),
+                        Tuples.pair(4, 1),
+                        Tuples.pair(4, 2),
+                        Tuples.pair(4, 3),
+                        Tuples.pair(3, 4),
+                        Tuples.pair(3, 5),
+                        Tuples.pair(3, 6),
+                        Tuples.pair(2, 7),
+                        Tuples.pair(2, 8),
+                        Tuples.pair(1, 9)),
+                iterable.zipWithIndex().toList());
+    }
+
+    @Test
+    default void OrderedIterable_zipWithIndex_target()
+    {
+        RichIterable<Integer> iterable = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
+        Assert.assertEquals(
+                Lists.immutable.with(
+                        Tuples.pair(4, 0),
+                        Tuples.pair(4, 1),
+                        Tuples.pair(4, 2),
+                        Tuples.pair(4, 3),
+                        Tuples.pair(3, 4),
+                        Tuples.pair(3, 5),
+                        Tuples.pair(3, 6),
+                        Tuples.pair(2, 7),
+                        Tuples.pair(2, 8),
+                        Tuples.pair(1, 9)),
+                iterable.zipWithIndex(Lists.mutable.empty()));
     }
 }

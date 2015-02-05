@@ -1402,13 +1402,15 @@ public interface RichIterableTestCase extends IterableTestCase
     {
         RichIterable<Integer> iterable = this.newWith(13, 13, 12, 12, 11, 11, 3, 3, 2, 2, 1, 1);
 
-        Pair<String, Integer>[] pairs = new Pair[]{
-                Tuples.pair("13", 3),
-                Tuples.pair("12", 2),
-                Tuples.pair("11", 1),
-                Tuples.pair("3", 3),
-                Tuples.pair("2", 2),
-                Tuples.pair("1", 1)};
+        Pair<String, Integer>[] pairs = new Pair[]
+                {
+                        Tuples.pair("13", 3),
+                        Tuples.pair("12", 2),
+                        Tuples.pair("11", 1),
+                        Tuples.pair("3", 3),
+                        Tuples.pair("2", 2),
+                        Tuples.pair("1", 1)
+                };
         assertEquals(
                 TreeSortedMap.newMapWith(pairs),
                 iterable.toSortedMap(Object::toString, each -> each % 10));

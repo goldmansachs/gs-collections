@@ -14,29 +14,28 @@
  * limitations under the License.
  */
 
-package com.gs.collections.test;
+package com.gs.collections.test.bag.mutable.sorted;
 
-import com.gs.collections.api.ordered.SortedIterable;
-import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.api.bag.sorted.MutableSortedBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
+import com.gs.junit.runners.Java8Runner;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import static com.gs.collections.impl.test.Verify.assertThrows;
-import static org.junit.Assert.assertSame;
-
-public interface SortedIterableTestCase extends OrderedIterableTestCase
+@RunWith(Java8Runner.class)
+public class TreeBagNoComparatorTest implements MutableSortedBagNoComparatorTestCase
 {
+    @SafeVarargs
     @Override
-    <T> SortedIterable<T> newWith(T... elements);
-
-    @Test
-    default void SortedIterable_comparator()
+    public final <T> MutableSortedBag<T> newWith(T... elements)
     {
-        assertSame(Comparators.reverseNaturalOrder(), this.newWith().comparator());
+        return TreeBag.newBagWith(elements);
     }
 
     @Override
-    default void RichIterable_min_max_non_comparable()
+    @Test(expected = UnsupportedOperationException.class)
+    public void MutableCollection_toImmutable()
     {
-        assertThrows(ClassCastException.class, () -> this.newWith(new Object()));
+        MutableSortedBagNoComparatorTestCase.super.MutableCollection_toImmutable();
     }
 }

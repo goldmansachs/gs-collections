@@ -69,6 +69,7 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.AbstractMutableBag;
+import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -914,7 +915,19 @@ public class TreeBag<T>
 
     public MutableSortedSet<Pair<T, Integer>> zipWithIndex()
     {
-        return this.zipWithIndex(TreeSortedSet.<Pair<T, Integer>>newSet());
+        final Comparator<? super T> comparator = this.items.comparator();
+        return this.zipWithIndex(TreeSortedSet.newSet(new Comparator<Pair<T, Integer>>()
+        {
+            public int compare(Pair<T, Integer> o1, Pair<T, Integer> o2)
+            {
+                int compare = comparator == null ? Comparators.nullSafeCompare(o1, o2) : comparator.compare(o1.getOne(), o2.getOne());
+                if (compare != 0)
+                {
+                    return compare;
+                }
+                return o1.getTwo().compareTo(o2.getTwo());
+            }
+        }));
     }
 
     public T getLast()

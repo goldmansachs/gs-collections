@@ -20,14 +20,14 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.test.MutableUnorderedIterableTestCase;
 import com.gs.collections.test.bag.UnsortedBagTestCase;
-import com.gs.collections.test.collection.mutable.MutableCollectionTestCase;
+import com.gs.collections.test.bag.mutable.sorted.MutableBagIterableTestCase;
 import org.junit.Test;
 
 import static com.gs.collections.test.IterableTestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public interface MutableBagTestCase extends UnsortedBagTestCase, MutableCollectionTestCase, MutableUnorderedIterableTestCase
+public interface MutableBagTestCase extends UnsortedBagTestCase, MutableUnorderedIterableTestCase, MutableBagIterableTestCase
 {
     @Override
     <T> MutableBag<T> newWith(T... elements);

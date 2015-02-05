@@ -82,7 +82,7 @@ public interface UnsortedMapIterableTestCase extends MapIterableTestCase, Unorde
                 + " \\d\\.\\d+=(\\d),"
                 + " \\d\\.\\d+=(\\d)\\}$");
         Matcher matcher = pattern.matcher(string);
-        Assert.assertTrue(matcher.matches());
+        Assert.assertTrue(string, matcher.matches());
 
         assertEquals(
                 Bags.immutable.with("1", "2", "2"),

@@ -18,16 +18,20 @@ package com.gs.collections.test.set.sorted;
 
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.SortedSets;
+import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.test.SortedIterableTestCase;
 import com.gs.collections.test.domain.A;
 import com.gs.collections.test.domain.B;
 import com.gs.collections.test.domain.C;
 import com.gs.collections.test.list.TransformsToListTrait;
 import com.gs.collections.test.set.SetIterableTestCase;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static com.gs.collections.test.IterableTestCase.assertEquals;
@@ -127,5 +131,31 @@ public interface SortedSetIterableTestCase extends SetIterableTestCase, SortedIt
     default void OrderedIterable_max_comparator()
     {
         // Cannot contain duplicates
+    }
+
+    @Test
+    default void OrderedIterable_zipWithIndex()
+    {
+        RichIterable<Integer> iterable = this.newWith(4, 3, 2, 1);
+        Assert.assertEquals(
+                Lists.immutable.with(
+                        Tuples.pair(4, 0),
+                        Tuples.pair(3, 1),
+                        Tuples.pair(2, 2),
+                        Tuples.pair(1, 3)),
+                iterable.zipWithIndex().toList());
+    }
+
+    @Test
+    default void OrderedIterable_zipWithIndex_target()
+    {
+        RichIterable<Integer> iterable = this.newWith(4, 3, 2, 1);
+        Assert.assertEquals(
+                Lists.immutable.with(
+                        Tuples.pair(4, 0),
+                        Tuples.pair(3, 1),
+                        Tuples.pair(2, 2),
+                        Tuples.pair(1, 3)),
+                iterable.zipWithIndex(Lists.mutable.empty()));
     }
 }
