@@ -52,15 +52,16 @@ import net.jcip.annotations.NotThreadSafe;
  * @since 3.0.
  */
 @NotThreadSafe
-public final class <name>ArrayList extends Abstract<name>Iterable
+public class <name>ArrayList extends Abstract<name>Iterable
         implements Mutable<name>List, Externalizable
 {
     private static final long serialVersionUID = 1L;
     private static final <type>[] DEFAULT_SIZED_EMPTY_ARRAY = {};
     private static final <type>[] ZERO_SIZED_ARRAY = {};
     private static final int MAXIMUM_ARRAY_SIZE = Integer.MAX_VALUE - 8;
-    private int size;
-    private transient <type>[] items = DEFAULT_SIZED_EMPTY_ARRAY;
+
+    protected int size;
+    protected transient <type>[] items = DEFAULT_SIZED_EMPTY_ARRAY;
 
     public <name>ArrayList()
     {
