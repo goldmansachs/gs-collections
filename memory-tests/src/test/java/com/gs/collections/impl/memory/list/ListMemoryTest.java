@@ -50,7 +50,6 @@ public class ListMemoryTest
                 LinkedList.class.getSimpleName(),
                 MutableList.class.getSimpleName(),
                 //immutable
-                ArrayList.class.getSimpleName() + " (unmodifiable)",
                 com.gs.collections.api.list.ImmutableList.class.getSimpleName(),
                 ImmutableList.class.getSimpleName(),
                 scala.collection.immutable.List.class.getSimpleName());
@@ -77,8 +76,6 @@ public class ListMemoryTest
         MemoryTestBench.on(MutableList.class)
                 .printContainerMemoryUsage("ListAdd", size, new MutableListFactory(size));
         //immutable
-        MemoryTestBench.on(ArrayList.class)
-                .printContainerMemoryUsage("ListAdd", size, new SizedUnmodifiableArrayListFactory(size));
         MemoryTestBench.on(com.gs.collections.api.list.ImmutableList.class)
                 .printContainerMemoryUsage("ListAdd", size, new SizedImmutableGscListFactory(size));
         MemoryTestBench.on(ImmutableList.class)
@@ -246,30 +243,6 @@ public class ListMemoryTest
         public ImmutableList<String> value()
         {
             return ImmutableList.<String>builder().addAll(Collections.nCopies(this.size, "dummy")).build();
-        }
-    }
-
-    private static final class SizedUnmodifiableArrayListFactory implements Function0<List<String>>
-    {
-        private final int size;
-
-        private SizedUnmodifiableArrayListFactory(int size)
-        {
-            this.size = size;
-        }
-
-        @Override
-        public List<String> value()
-        {
-            if (this.size == 0)
-            {
-                return Collections.emptyList();
-            }
-            if (this.size == 1)
-            {
-                return Collections.singletonList("dummy");
-            }
-            return Collections.unmodifiableList(new ArrayList<>(Collections.nCopies(this.size, "dummy")));
         }
     }
 
