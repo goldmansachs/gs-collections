@@ -33,15 +33,22 @@ public final class MemoryTestBench
     private static final GCAndSleepProcedure GC_AND_SLEEP_PROCEDURE = new GCAndSleepProcedure();
     private static final Interval GC_INTERVAL = Interval.oneTo(20);
     private final Class<?> clazz;
+    private final String suffix;
 
-    private MemoryTestBench(Class<?> clazz)
+    private MemoryTestBench(Class<?> clazz, String suffix)
     {
         this.clazz = clazz;
+        this.suffix = suffix;
     }
 
     public static MemoryTestBench on(Class<?> clazz)
     {
-        return new MemoryTestBench(clazz);
+        return MemoryTestBench.on(clazz, "");
+    }
+
+    public static MemoryTestBench on(Class<?> clazz, String suffix)
+    {
+        return new MemoryTestBench(clazz, suffix);
     }
 
     /**
@@ -88,7 +95,7 @@ public final class MemoryTestBench
     {
         String memoryUsedInBytes = NumberFormat.getInstance().format(this.calculateMemoryUsage(factory));
         String sizeFormatted = NumberFormat.getInstance().format(size);
-        LOGGER.info("{} {} size {} bytes {}", category, this.clazz.getName(), sizeFormatted, memoryUsedInBytes);
+        LOGGER.info("{} {}{} size {} bytes {}", category, this.clazz.getName(), this.suffix, sizeFormatted, memoryUsedInBytes);
     }
 
     private static class GCAndSleepProcedure implements IntProcedure
