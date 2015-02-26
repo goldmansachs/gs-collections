@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMapUnsafe;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import org.junit.Test;
@@ -36,10 +37,11 @@ public class ConcurrentMapMemoryTest
     @Test
     public void memoryForScaledConcurrentMaps()
     {
-        LOGGER.info("Comparing Items: JDK {}, GSC {}, Scala {}",
+        LOGGER.info("Comparing Items: JDK {}, GSC {}, Scala {}, GSC {}",
                 ConcurrentHashMap.class.getSimpleName(),
                 com.gs.collections.impl.map.mutable.ConcurrentHashMap.class.getSimpleName(),
-                TrieMap.class.getSimpleName());
+                TrieMap.class.getSimpleName(),
+                ConcurrentHashMapUnsafe.class.getSimpleName());
         for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledConcurrentMaps(size);
@@ -55,6 +57,8 @@ public class ConcurrentMapMemoryTest
                 .printContainerMemoryUsage("ConcurrentMap", size, new GSCConcurrentMapFactory(size));
         MemoryTestBench.on(TrieMap.class)
                 .printContainerMemoryUsage("ConcurrentMap", size, new ScalaCtrieFactory(size));
+        MemoryTestBench.on(ConcurrentHashMapUnsafe.class)
+                .printContainerMemoryUsage("ConcurrentMap", size, new ConcurrentHashMapUnsafeFactory(size));
     }
 
     public abstract static class SizedConcurrentMapFactory
@@ -132,6 +136,22 @@ public class ConcurrentMapMemoryTest
                 }
             });
             return map;
+        }
+    }
+
+    public static class ConcurrentHashMapUnsafeFactory
+            extends SizedConcurrentMapFactory
+            implements Function0<ConcurrentHashMapUnsafe<Integer, String>>
+    {
+        protected ConcurrentHashMapUnsafeFactory(int size)
+        {
+            super(size);
+        }
+
+        @Override
+        public ConcurrentHashMapUnsafe<Integer, String> value()
+        {
+            return this.fill(new ConcurrentHashMapUnsafe<Integer, String>());
         }
     }
 }
