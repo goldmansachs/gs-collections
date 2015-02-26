@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.memory.set;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import gnu.trove.impl.Constants;
 import gnu.trove.set.hash.THashSet;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -52,17 +54,30 @@ public class SetMemoryTest
     private void memoryForScaledSets(int size)
     {
         MemoryTestBench.on(scala.collection.mutable.HashSet.class).printContainerMemoryUsage("Set", size, new ScalaMutableSetFactory(size));
-        MemoryTestBench.on(THashSet.class).printContainerMemoryUsage("Set", size, new THashSetFactory(size));
-        MemoryTestBench.on(UnifiedSet.class).printContainerMemoryUsage("Set", size, new UnifiedSetFactory(size));
-        MemoryTestBench.on(HashSet.class).printContainerMemoryUsage("Set", size, new HashSetFactory(size));
+        Float[] chainingLoadFactors = {0.70f, 0.75f, 0.80f};
+        for (Float loadFactor : chainingLoadFactors)
+        {
+            String suffix = "_loadFactor=" + loadFactor;
+
+            MemoryTestBench.on(THashSet.class, suffix).printContainerMemoryUsage("Set", size, new THashSetFactory(size, loadFactor));
+            MemoryTestBench.on(UnifiedSet.class, suffix).printContainerMemoryUsage("Set", size, new UnifiedSetFactory(size, loadFactor));
+            MemoryTestBench.on(HashSet.class, suffix).printContainerMemoryUsage("Set", size, new HashSetFactory(size, loadFactor));
+        }
     }
 
     public abstract static class SizedSetFactory
     {
+        protected final float loadFactor;
         protected final ImmutableList<Integer> data;
 
         protected SizedSetFactory(int size)
         {
+            this(size, 0.75f);
+        }
+
+        protected SizedSetFactory(int size, float loadFactor)
+        {
+            this.loadFactor = loadFactor;
             this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
@@ -83,15 +98,21 @@ public class SetMemoryTest
             extends SizedSetFactory
             implements Function0<HashSet<Integer>>
     {
-        private HashSetFactory(int size)
+        private HashSetFactory(int size, float loadFactor)
         {
-            super(size);
+            super(size, loadFactor);
         }
 
         @Override
         public HashSet<Integer> value()
         {
-            return this.fill(new HashSet<Integer>());
+            /**
+             * Backing <tt>HashMap</tt> instance for HashSet has
+             * default initial capacity (16)
+             * @see HashMap#DEFAULT_INITIAL_CAPACITY
+             */
+            int defaultInitialCapacity = 16;
+            return this.fill(new HashSet<Integer>(defaultInitialCapacity, this.loadFactor));
         }
     }
 
@@ -99,15 +120,15 @@ public class SetMemoryTest
             extends SizedSetFactory
             implements Function0<THashSet<Integer>>
     {
-        private THashSetFactory(int size)
+        private THashSetFactory(int size, float loadFactor)
         {
-            super(size);
+            super(size, loadFactor);
         }
 
         @Override
         public THashSet<Integer> value()
         {
-            return this.fill(new THashSet<Integer>());
+            return this.fill(new THashSet<Integer>(Constants.DEFAULT_CAPACITY, this.loadFactor));
         }
     }
 
@@ -115,15 +136,19 @@ public class SetMemoryTest
             extends SizedSetFactory
             implements Function0<UnifiedSet<Integer>>
     {
-        private UnifiedSetFactory(int size)
+        private UnifiedSetFactory(int size, float loadFactor)
         {
-            super(size);
+            super(size, loadFactor);
         }
 
         @Override
         public UnifiedSet<Integer> value()
         {
-            return this.fill(new UnifiedSet<Integer>());
+            /**
+             * @see UnifiedSet#DEFAULT_INITIAL_CAPACITY
+             */
+            int defaultInitialCapacity = 8;
+            return this.fill(new UnifiedSet<Integer>(defaultInitialCapacity, this.loadFactor));
         }
     }
 
