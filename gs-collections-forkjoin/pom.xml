@@ -237,6 +237,9 @@
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
+                    <fork>true</fork>
+                    <maxmem>2048m</maxmem>
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
 

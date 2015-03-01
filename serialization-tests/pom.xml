@@ -83,9 +83,7 @@
                     <source>1.6</source>
                     <target>1.6</target>
                     <fork>true</fork>
-                    <compilerArguments>
-                        <J-Xmx2048m />
-                    </compilerArguments>
+                    <maxmem>2048m</maxmem>
                     <verbose>true</verbose>
                 </configuration>
             </plugin>

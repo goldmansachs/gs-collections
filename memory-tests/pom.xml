@@ -125,9 +125,7 @@
                     <source>1.7</source>
                     <target>1.7</target>
                     <fork>true</fork>
-                    <compilerArguments>
-                        <J-Xmx2048m />
-                    </compilerArguments>
+                    <maxmem>2048m</maxmem>
                     <verbose>true</verbose>
                 </configuration>
             </plugin>
