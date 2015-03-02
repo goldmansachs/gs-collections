@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
@@ -32,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.collection.immutable.HashMap$;
 
+@SuppressWarnings("UnnecessaryFullyQualifiedName")
 public abstract class AbstractImmutableMapMemoryTest
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractImmutableMapMemoryTest.class);
@@ -49,7 +49,7 @@ public abstract class AbstractImmutableMapMemoryTest
                 scala.collection.immutable.Map.class.getSimpleName(),
                 Map.class.getSimpleName(),
                 com.gs.collections.api.map.ImmutableMap.class.getSimpleName(),
-                ImmutableMap.class.getSimpleName());
+                com.google.common.collect.ImmutableMap.class.getSimpleName());
         IntProcedure procedure = new IntProcedure()
         {
             public void value(int size)
@@ -69,7 +69,7 @@ public abstract class AbstractImmutableMapMemoryTest
                 .printContainerMemoryUsage(this.getTestType(), size, new SizedUnmodifiableHashMapFactory(size));
         MemoryTestBench.on(com.gs.collections.api.map.ImmutableMap.class)
                 .printContainerMemoryUsage(this.getTestType(), size, new SizedImmutableGscMapFactory(size));
-        MemoryTestBench.on(ImmutableMap.class)
+        MemoryTestBench.on(com.google.common.collect.ImmutableMap.class)
                 .printContainerMemoryUsage(this.getTestType(), size, new SizedImmutableGuavaMapFactory(size));
     }
 
@@ -94,7 +94,7 @@ public abstract class AbstractImmutableMapMemoryTest
         }
     }
 
-    private final class SizedImmutableGuavaMapFactory implements Function0<ImmutableMap<? extends Object, String>>
+    private final class SizedImmutableGuavaMapFactory implements Function0<com.google.common.collect.ImmutableMap<? extends Object, String>>
     {
         private final int size;
 
@@ -104,9 +104,9 @@ public abstract class AbstractImmutableMapMemoryTest
         }
 
         @Override
-        public ImmutableMap<? extends Object, String> value()
+        public com.google.common.collect.ImmutableMap<? extends Object, String> value()
         {
-            ImmutableMap.Builder<Object, String> builder = ImmutableMap.builder();
+            com.google.common.collect.ImmutableMap.Builder<Object, String> builder = com.google.common.collect.ImmutableMap.builder();
             for (int i = 0; i < this.size; i++)
             {
                 builder.put(AbstractImmutableMapMemoryTest.this.getKeyFactory().valueOf(i), "dummy");

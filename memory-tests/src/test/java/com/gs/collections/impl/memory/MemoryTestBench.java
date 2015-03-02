@@ -63,7 +63,7 @@ public final class MemoryTestBench
         Object container = factory.value();
         if (!this.clazz.isInstance(container))
         {
-            throw new RuntimeException();
+            throw new RuntimeException(container.getClass().getCanonicalName());
         }
         long memory = this.currentUsedMemory();
         //noinspection UnusedAssignment,ReuseOfLocalVariable

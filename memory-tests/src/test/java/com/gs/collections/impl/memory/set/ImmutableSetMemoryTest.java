@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +36,10 @@ public class ImmutableSetMemoryTest
     @Test
     public void memoryForScaledSets()
     {
-        LOGGER.info("Comparing Items: Scala {}, GSC {}",
+        LOGGER.info("Comparing Items: Scala {}, GSC {}, Guava {}",
                 HashSet.class.getSimpleName(),
-                ImmutableSet.class.getSimpleName());
+                ImmutableSet.class.getSimpleName(),
+                com.google.common.collect.ImmutableSet.class.getSimpleName());
         for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledSets(size);
@@ -50,6 +51,7 @@ public class ImmutableSetMemoryTest
     {
         MemoryTestBench.on(HashSet.class).printContainerMemoryUsage("Set", size, new ScalaImmutableSetFactory(size));
         MemoryTestBench.on(ImmutableSet.class).printContainerMemoryUsage("Set", size, new ImmutableSetFactory(size));
+        MemoryTestBench.on(com.google.common.collect.ImmutableSet.class).printContainerMemoryUsage("Set", size, new GuavaImmutableSetFactory(size));
     }
 
     private static final class ImmutableSetFactory
@@ -100,6 +102,32 @@ public class ImmutableSetMemoryTest
                 }
             });
             return set[0];
+        }
+    }
+
+    private static final class GuavaImmutableSetFactory
+            implements Function0<com.google.common.collect.ImmutableSet<Integer>>
+    {
+        private final ImmutableList<Integer> data;
+
+        private GuavaImmutableSetFactory(int size)
+        {
+            this.data = TestDataFactory.createRandomImmutableList(size);
+        }
+
+        @Override
+        public com.google.common.collect.ImmutableSet<Integer> value()
+        {
+            final com.google.common.collect.ImmutableSet.Builder<Integer> builder = com.google.common.collect.ImmutableSet.builder();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                @Override
+                public void value(Integer each)
+                {
+                    builder.add(each);
+                }
+            });
+            return builder.build();
         }
     }
 }
