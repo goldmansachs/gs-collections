@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -232,5 +232,40 @@ public class ConcurrentHashMapAcceptanceTest
         {
             return key;
         }
+    }
+
+    @Test
+    public void size()
+    {
+        ConcurrentHashMap<Integer, Integer> map = ConcurrentHashMap.newMap();
+        ParallelIterate.forEach(Interval.oneTo(10_000), each -> map.put(each, each));
+        Assert.assertEquals(10_000, map.size());
+        Assert.assertEquals(10_000, map.keySet().size());
+        Assert.assertEquals(10_000, map.values().size());
+        Assert.assertEquals(10_000, map.entrySet().size());
+    }
+
+    @Test
+    public void size_entrySet()
+    {
+        ConcurrentHashMap<Integer, Integer> map = ConcurrentHashMap.newMap();
+        ParallelIterate.forEach(Interval.oneTo(10_000), each -> map.put(each, each));
+        Assert.assertEquals(10_000, map.entrySet().size());
+    }
+
+    @Test
+    public void size_keySet()
+    {
+        ConcurrentHashMap<Integer, Integer> map = ConcurrentHashMap.newMap();
+        ParallelIterate.forEach(Interval.oneTo(10_000), each -> map.put(each, each));
+        Assert.assertEquals(10_000, map.keySet().size());
+    }
+
+    @Test
+    public void size_values()
+    {
+        ConcurrentHashMap<Integer, Integer> map = ConcurrentHashMap.newMap();
+        ParallelIterate.forEach(Interval.oneTo(10_000), each -> map.put(each, each));
+        Assert.assertEquals(10_000, map.values().size());
     }
 }

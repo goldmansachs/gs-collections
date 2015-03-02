@@ -1610,7 +1610,7 @@ public final class ConcurrentHashMap<K, V>
         @Override
         public int size()
         {
-            return ConcurrentHashMap.this.size;
+            return ConcurrentHashMap.this.size();
         }
 
         @Override
@@ -1643,7 +1643,7 @@ public final class ConcurrentHashMap<K, V>
         @Override
         public int size()
         {
-            return ConcurrentHashMap.this.size;
+            return ConcurrentHashMap.this.size();
         }
 
         @Override
@@ -1693,7 +1693,7 @@ public final class ConcurrentHashMap<K, V>
         @Override
         public int size()
         {
-            return ConcurrentHashMap.this.size;
+            return ConcurrentHashMap.this.size();
         }
 
         @Override

@@ -627,6 +627,30 @@ public final class Verify extends Assert
             {
                 Assert.fail(mutableMapIterableName + " should be empty; actual size:<" + Iterate.sizeOf(actualMutableMapIterable) + '>');
             }
+            if (!actualMutableMapIterable.isEmpty())
+            {
+                Assert.fail(mutableMapIterableName + " should be empty; actual size:<" + Iterate.sizeOf(actualMutableMapIterable) + '>');
+            }
+            if (actualMutableMapIterable.notEmpty())
+            {
+                Assert.fail(mutableMapIterableName + " should be empty; actual size:<" + Iterate.sizeOf(actualMutableMapIterable) + '>');
+            }
+            if (actualMutableMapIterable.size() != 0)
+            {
+                Assert.fail(mutableMapIterableName + " should be empty; actual size:<" + actualMutableMapIterable.size() + '>');
+            }
+            if (actualMutableMapIterable.keySet().size() != 0)
+            {
+                Assert.fail(mutableMapIterableName + " should be empty; actual size:<" + actualMutableMapIterable.keySet().size() + '>');
+            }
+            if (actualMutableMapIterable.values().size() != 0)
+            {
+                Assert.fail(mutableMapIterableName + " should be empty; actual size:<" + actualMutableMapIterable.values().size() + '>');
+            }
+            if (actualMutableMapIterable.entrySet().size() != 0)
+            {
+                Assert.fail(mutableMapIterableName + " should be empty; actual size:<" + actualMutableMapIterable.entrySet().size() + '>');
+            }
         }
         catch (AssertionError e)
         {
@@ -1290,13 +1314,22 @@ public final class Verify extends Assert
             int actualSize = mutableMapIterable.size();
             if (actualSize != expectedSize)
             {
-                Assert.fail("Incorrect size for "
-                        + mapName
-                        + "; expected:<"
-                        + expectedSize
-                        + "> but was:<"
-                        + actualSize
-                        + '>');
+                Assert.fail("Incorrect size for " + mapName + "; expected:<" + expectedSize + "> but was:<" + actualSize + '>');
+            }
+            int keySetSize = mutableMapIterable.keySet().size();
+            if (keySetSize != expectedSize)
+            {
+                Assert.fail("Incorrect size for " + mapName + ".keySet(); expected:<" + expectedSize + "> but was:<" + actualSize + '>');
+            }
+            int valuesSize = mutableMapIterable.values().size();
+            if (valuesSize != expectedSize)
+            {
+                Assert.fail("Incorrect size for " + mapName + ".values(); expected:<" + expectedSize + "> but was:<" + actualSize + '>');
+            }
+            int entrySetSize = mutableMapIterable.entrySet().size();
+            if (entrySetSize != expectedSize)
+            {
+                Assert.fail("Incorrect size for " + mapName + ".entrySet(); expected:<" + expectedSize + "> but was:<" + actualSize + '>');
             }
         }
         catch (AssertionError e)
