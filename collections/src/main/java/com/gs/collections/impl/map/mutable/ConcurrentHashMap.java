@@ -844,7 +844,7 @@ public final class ConcurrentHashMap<K, V>
 
     public void putAllInParallel(Map<K, V> map, int chunks, Executor executor)
     {
-        if (this.size == 0)
+        if (this.size() == 0)
         {
             int threshold = map.size();
             threshold += threshold >> 1; // threshold = length * 0.75
