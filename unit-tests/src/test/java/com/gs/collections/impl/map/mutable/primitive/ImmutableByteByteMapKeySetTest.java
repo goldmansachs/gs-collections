@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class ImmutableByteByteMapKeySetTest extends AbstractImmutableByteHashSet
         ImmutableByteByteMapKeySet set = (ImmutableByteByteMapKeySet) new ByteByteHashMap().keySet().freeze();
         for (byte i = 2; collisions.size() <= 10; i++)
         {
-            if (set.spread(i) == set.spread((byte) 2))
+            if (set.spreadAndMask(i) == set.spreadAndMask((byte) 2))
             {
                 collisions.add(i);
             }
@@ -64,8 +64,8 @@ public class ImmutableByteByteMapKeySetTest extends AbstractImmutableByteHashSet
     public void contains()
     {
         super.contains();
-        byte collision1 = generateCollisions().getFirst();
-        byte collision2 = generateCollisions().get(1);
+        byte collision1 = ImmutableByteByteMapKeySetTest.generateCollisions().getFirst();
+        byte collision2 = ImmutableByteByteMapKeySetTest.generateCollisions().get(1);
         ByteByteHashMap byteByteHashMap = ByteByteHashMap.newWithKeysValues(collision1, (byte) 0, collision2, (byte) 0);
         byteByteHashMap.removeKey(collision2);
         ByteSet byteSet = byteByteHashMap.keySet().freeze();

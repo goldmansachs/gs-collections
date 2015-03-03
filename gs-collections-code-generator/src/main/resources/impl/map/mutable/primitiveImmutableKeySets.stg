@@ -11,6 +11,7 @@ package com.gs.collections.impl.map.mutable.primitive;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.NoSuchElementException;
+import com.gs.collections.impl.SpreadFunctions;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
@@ -35,6 +36,9 @@ class <className> extends AbstractImmutable<name>Set implements Serializable
     private static final long serialVersionUID = 1L;
     private static final <type> EMPTY_KEY = <(literal.(type))("0")>;
     private static final <type> REMOVED_KEY = <(literal.(type))("1")>;
+    private static final int CACHE_LINE_SIZE = 64;
+    private static final int KEY_SIZE = <keySize.(type)>;
+    private static final int INITIAL_LINEAR_PROBE = CACHE_LINE_SIZE / KEY_SIZE / 2; /* half a cache line */
 
     private final <type>[] <keyArray>;
     private final int occupiedWithData;
@@ -282,59 +286,12 @@ class <className> extends AbstractImmutable<name>Set implements Serializable
         return new Immutable<name>SetSerializationProxy(this);
     }
 
-    // exposed for testing
-    int probe(<type> element)
-    {
-        <if(!sameTwoPrimitiveMapKeySet)>
-        int index = this.spread(element);
-        <else>
-        int index = this.spread(element) \<\< 1;
-        <endif>
-        <type> keyAtIndex = this.<keyArray>[index];
-
-        if (<(equals.(type))("keyAtIndex", "element")> || <(equals.(type))("keyAtIndex", "EMPTY_KEY")>)
-        {
-            return index;
-        }
-
-        int removedIndex = <(equals.(type))("keyAtIndex", "REMOVED_KEY")> ? index : -1;
-        int nextIndex = index;
-        <if(!sameTwoPrimitiveMapKeySet)>
-        int probe = 17;
-        <else>
-        int probe = 34;
-        <endif>
-        // loop until an empty slot is reached
-        while (true)
-        {
-            // Probe algorithm: 17*n*(n+1)/2 where n = number of collisions
-            nextIndex += probe;
-            <if(!sameTwoPrimitiveMapKeySet)>
-            probe += 17;
-            <else>
-            probe += 34;
-            <endif>
-            nextIndex &= this.<keyArray>.length - 1;
-            if (<(equals.(type))({this.<keyArray>[nextIndex]}, "element")>)
-            {
-                return nextIndex;
-            }
-            if (<(equals.(type))({this.<keyArray>[nextIndex]}, "REMOVED_KEY")>)
-            {
-                if (removedIndex == -1)
-                {
-                    removedIndex = nextIndex;
-                }
-            }
-            else if (<(equals.(type))({this.<keyArray>[nextIndex]}, "EMPTY_KEY")>)
-            {
-                return removedIndex == -1 ? nextIndex : removedIndex;
-            }
-        }
-    }
+    <(probe.(type))()>
 
     // exposed for testing
-    <(spread.(type))(type, {<keyArray>})>
+    <(spread.(type))(type)>
+
+    <(spread2.(type))(type)>
 
     private int mask(int spread)
     {
@@ -486,4 +443,138 @@ return false;
 
 count(key) ::= <<
 count++;
+>>
+
+probe8() ::= <<
+// exposed for testing
+int probe(<type> element)
+{
+    <if(!sameTwoPrimitiveMapKeySet)>
+    int index = this.spreadAndMask(element);
+    <else>
+    int index = this.spreadAndMask(element) \<\< 1;
+    <endif>
+    <type> keyAtIndex = this.<keyArray>[index];
+
+    if (<(equals.(type))("keyAtIndex", "element")> || <(equals.(type))("keyAtIndex", "EMPTY_KEY")>)
+    {
+        return index;
+    }
+
+    int removedIndex = <(equals.(type))("keyAtIndex", "REMOVED_KEY")> ? index : -1;
+    int nextIndex = index;
+    <if(!sameTwoPrimitiveMapKeySet)>
+    int probe = 17;
+    <else>
+    int probe = 34;
+    <endif>
+    // loop until an empty slot is reached
+    while (true)
+    {
+        // Probe algorithm: 17*n*(n+1)/2 where n = number of collisions
+        nextIndex += probe;
+        <if(!sameTwoPrimitiveMapKeySet)>
+        probe += 17;
+        <else>
+        probe += 34;
+        <endif>
+        nextIndex &= this.<keyArray>.length - 1;
+        if (<(equals.(type))({this.<keyArray>[nextIndex]}, "element")>)
+        {
+            return nextIndex;
+        }
+        if (<(equals.(type))({this.<keyArray>[nextIndex]}, "REMOVED_KEY")>)
+        {
+            if (removedIndex == -1)
+            {
+                removedIndex = nextIndex;
+            }
+        }
+        else if (<(equals.(type))({this.<keyArray>[nextIndex]}, "EMPTY_KEY")>)
+        {
+            return removedIndex == -1 ? nextIndex : removedIndex;
+        }
+    }
+}
+>>
+
+probe3264() ::= <<
+// exposed for testing
+int probe(<type> element)
+{
+    int index = this.spreadAndMask(element)<if(sameTwoPrimitiveMapKeySet)> \<\< 1<endif>;
+    <type> keyAtIndex = this.<keyArray>[index];
+
+    if (<(equals.(type))("keyAtIndex", "element")> || <(equals.(type))("keyAtIndex", "EMPTY_KEY")>)
+    {
+        return index;
+    }
+
+    int removedIndex = <(equals.(type))("keyAtIndex", "REMOVED_KEY")> ? index : -1;
+    for (int i = <if(sameTwoPrimitiveMapKeySet)>2<else>1<endif>; i \< INITIAL_LINEAR_PROBE; <increment>)
+    {
+        int nextIndex = (index + i) & (this.<keyArray>.length - 1);
+        keyAtIndex = this.<keyArray>[nextIndex];
+        if (<(equals.(type))("keyAtIndex", "element")>)
+        {
+            return nextIndex;
+        }
+        if (<(equals.(type))("keyAtIndex", "EMPTY_KEY")>)
+        {
+            return removedIndex == -1 ? nextIndex : removedIndex;
+        }
+        if (<(equals.(type))("keyAtIndex", "REMOVED_KEY")> && removedIndex == -1)
+        {
+            removedIndex = nextIndex;
+        }
+    }
+    return this.probeTwo(element, removedIndex);
+}
+
+int probeTwo(<type> element, int removedIndex)
+{
+    int index = this.spreadTwoAndMask(element)<if(sameTwoPrimitiveMapKeySet)> \<\< 1<endif>;
+    for (int i = 0; i \< INITIAL_LINEAR_PROBE; <increment>)
+    {
+        int nextIndex = (index + i) & (this.<keyArray>.length - 1);
+        <type> keyAtIndex = this.<keyArray>[nextIndex];
+        if (<(equals.(type))("keyAtIndex", "element")>)
+        {
+            return nextIndex;
+        }
+        if (<(equals.(type))("keyAtIndex", "EMPTY_KEY")>)
+        {
+            return removedIndex == -1 ? nextIndex : removedIndex;
+        }
+        if (<(equals.(type))("keyAtIndex", "REMOVED_KEY")> && removedIndex == -1)
+        {
+            removedIndex = nextIndex;
+        }
+    }
+    return this.probeThree(element, removedIndex);
+}
+
+int probeThree(<type> element, int removedIndex)
+{
+    int nextIndex = <(reverseSpread.(type))()>(SpreadFunctions.<type>SpreadOne(element))<if(sameTwoPrimitiveMapKeySet)> \<\< 1<endif>;
+    int spreadTwo = <(reverseSpread.(type))()>(SpreadFunctions.<type>SpreadTwo(element)) | 1;
+
+    while(true)
+    {
+        nextIndex = this.mask(<if(sameTwoPrimitiveMapKeySet)>(<endif>nextIndex<if(sameTwoPrimitiveMapKeySet)> \>> 1)<endif> + spreadTwo)<if(sameTwoPrimitiveMapKeySet)> \<\< 1<endif>;
+        <type> keyAtIndex = this.<keyArray>[nextIndex];
+        if (<(equals.(type))("keyAtIndex", "element")>)
+        {
+            return nextIndex;
+        }
+        if (<(equals.(type))("keyAtIndex", "EMPTY_KEY")>)
+        {
+            return removedIndex == -1 ? nextIndex : removedIndex;
+        }
+        if (<(equals.(type))("keyAtIndex", "REMOVED_KEY")> && removedIndex == -1)
+        {
+            removedIndex = nextIndex;
+        }
+    }
+}
 >>

@@ -67,7 +67,7 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
         <name>ObjectHashMap\<?> hashMap = new <name>ObjectHashMap\<>();
         for (<type> i = <(literal.(type))("2")>; collisions.size() \<= 10; i++)
         {
-            if (hashMap.spread(i) == hashMap.spread(<(literal.(type))("2")>))
+            if (hashMap.spreadAndMask(i) == hashMap.spreadAndMask(<(literal.(type))("2")>))
             {
                 collisions.add(i);
             }

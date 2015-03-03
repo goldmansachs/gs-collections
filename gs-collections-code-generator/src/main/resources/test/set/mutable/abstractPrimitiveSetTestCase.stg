@@ -46,7 +46,7 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
         <name>HashSet set = new <name>HashSet();
         for (<type> i = <(literal.(type))("32")>; collisions.size() \<= 10; i++)
         {
-            if (set.spread(i) == set.spread(<(literal.(type))("32")>))
+            if (set.spreadAndMask(i) == set.spreadAndMask(<(literal.(type))("32")>))
             {
                 collisions.add(i);
             }
@@ -60,7 +60,7 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
         <name>HashSet set = new <name>HashSet();
         for (<type> i = <(literal.(type))("32")>; collisions.size() \<= 10; i++)
         {
-            if (set.spread(i) != set.spread(<(literal.(type))("32")>))
+            if (set.spreadAndMask(i) != set.spreadAndMask(<(literal.(type))("32")>))
             {
                 collisions.add(i);
             }

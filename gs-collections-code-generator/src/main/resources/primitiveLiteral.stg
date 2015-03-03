@@ -305,3 +305,14 @@ article ::= [
     "int": "an",
     default: "a"
 ]
+
+keySize ::= [
+    "byte": "1",
+    "short": "2",
+    "char": "2",
+    "int": "4",
+    "long": "8",
+    "float": "4",
+    "double": "8",
+    default: "no matching key type"
+]

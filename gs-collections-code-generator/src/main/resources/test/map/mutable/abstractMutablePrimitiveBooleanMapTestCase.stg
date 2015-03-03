@@ -48,7 +48,7 @@ public abstract class AbstractMutable<name>BooleanMapTestCase extends Abstract<n
         <name>BooleanHashMap hashMap = new <name>BooleanHashMap();
         for (<type> each = <(literal.(type))("2")>; collisions.size() \<= 10; each++)
         {
-            if (hashMap.spread(each) == hashMap.spread(<(literal.(type))("2")>))
+            if (hashMap.spreadAndMask(each) == hashMap.spreadAndMask(<(literal.(type))("2")>))
             {
                 collisions.add(each);
             }

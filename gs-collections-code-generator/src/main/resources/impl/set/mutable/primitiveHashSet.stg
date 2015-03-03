@@ -39,6 +39,7 @@ import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.impl.factory.primitive.<name>Sets;
 import com.gs.collections.impl.set.immutable.primitive.Immutable<name>SetSerializationProxy;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.SpreadFunctions;
 import com.gs.collections.impl.set.immutable.primitive.AbstractImmutable<name>Set;
 import com.gs.collections.impl.set.primitive.Abstract<name>Set;
 
@@ -55,6 +56,9 @@ public final class <name>HashSet extends Abstract<name>Set implements Mutable<na
     private static final int DEFAULT_INITIAL_CAPACITY = 16;
     private static final <type> EMPTY = <(literal.(type))("0")>;
     private static final <type> REMOVED = <(literal.(type))("1")>;
+    private static final int CACHE_LINE_SIZE = 64;
+    private static final int KEY_SIZE = <keySize.(type)>;
+    private static final int INITIAL_LINEAR_PROBE = CACHE_LINE_SIZE / KEY_SIZE / 2; /* half a cache line */
 
     private <type>[] table;
     private int occupiedWithData;
@@ -893,7 +897,7 @@ public final class <name>HashSet extends Abstract<name>Set implements Mutable<na
     // exposed for testing
     int probe(<type> element)
     {
-        int index = this.spread(element);
+        int index = this.spreadAndMask(element);
         <type> valueAtIndex = this.table[index];
 
         if (<(equals.(type))("valueAtIndex", "element")> || <(equals.(type))("valueAtIndex", "EMPTY")>)
@@ -902,36 +906,77 @@ public final class <name>HashSet extends Abstract<name>Set implements Mutable<na
         }
 
         int removedIndex = <(equals.(type))("valueAtIndex", "REMOVED")> ? index : -1;
-        int nextIndex = index;
-        int probe = 17;
-
-        // loop until an empty slot is reached
-        while (true)
+        for (int i = 1; i \< INITIAL_LINEAR_PROBE; i++)
         {
-            // Probe algorithm: 17 * n * (n+1) / 2 where n = number of collisions
-            nextIndex = (nextIndex + probe) & this.table.length - 1;
-            probe += 17;
-
-            if (<(equals.(type))("this.table[nextIndex]", "element")>)
+            int nextIndex = (index + i) & (this.table.length - 1);
+            valueAtIndex = this.table[nextIndex];
+            if (<(equals.(type))("valueAtIndex", "element")>)
             {
                 return nextIndex;
             }
-            if (<(equals.(type))("this.table[nextIndex]", "REMOVED")>)
-            {
-                if (removedIndex == -1)
-                {
-                    removedIndex = nextIndex;
-                }
-            }
-            else if (<(equals.(type))("this.table[nextIndex]", "EMPTY")>)
+            if (<(equals.(type))("valueAtIndex", "EMPTY")>)
             {
                 return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+            if (<(equals.(type))("valueAtIndex", "REMOVED")> && removedIndex == -1)
+            {
+                removedIndex = nextIndex;
+            }
+        }
+        return this.probeTwo(element, removedIndex);
+    }
+
+    int probeTwo(<type> element, int removedIndex)
+    {
+        int index = this.spreadTwoAndMask(element);
+        for (int i = 0; i \< INITIAL_LINEAR_PROBE; i++)
+        {
+            int nextIndex = (index + i) & (this.table.length - 1);
+            <type> valueAtIndex = this.table[nextIndex];
+            if (<(equals.(type))("valueAtIndex", "element")>)
+            {
+                return nextIndex;
+            }
+            if (<(equals.(type))("valueAtIndex", "EMPTY")>)
+            {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+            if (<(equals.(type))("valueAtIndex", "REMOVED")> && removedIndex == -1)
+            {
+                removedIndex = nextIndex;
+            }
+        }
+        return this.probeThree(element, removedIndex);
+    }
+
+    int probeThree(<type> element, int removedIndex)
+    {
+        int nextIndex = <(reverseSpread.(type))()>(SpreadFunctions.<type>SpreadOne(element));
+        int spreadTwo = <(reverseSpread.(type))()>(SpreadFunctions.<type>SpreadTwo(element)) | 1;
+
+        while(true)
+        {
+            nextIndex = this.mask(nextIndex + spreadTwo);
+            <type> valueAtIndex = this.table[nextIndex];
+            if (<(equals.(type))("valueAtIndex", "element")>)
+            {
+                return nextIndex;
+            }
+            if (<(equals.(type))("valueAtIndex", "EMPTY")>)
+            {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+            if (<(equals.(type))("valueAtIndex", "REMOVED")> && removedIndex == -1)
+            {
+                removedIndex = nextIndex;
             }
         }
     }
 
     // exposed for testing
-    <(spread.(type))(type, "table")>
+    <(spread.(type))(type)>
+
+    <(spread2.(type))(type)>
 
     private int mask(int spread)
     {
@@ -1422,7 +1467,7 @@ public final class <name>HashSet extends Abstract<name>Set implements Mutable<na
         // exposed for testing
         int probe(<type> element)
         {
-            int index = this.spread(element);
+            int index = this.spreadAndMask(element);
             <type> valueAtIndex = this.table[index];
 
             if (<(equals.(type))("valueAtIndex", "element")> || <(equals.(type))("valueAtIndex", "EMPTY")>)
@@ -1431,36 +1476,77 @@ public final class <name>HashSet extends Abstract<name>Set implements Mutable<na
             }
 
             int removedIndex = <(equals.(type))("valueAtIndex", "REMOVED")> ? index : -1;
-            int nextIndex = index;
-            int probe = 17;
-
-            // loop until an empty slot is reached
-            while (true)
+            for (int i = 1; i \< INITIAL_LINEAR_PROBE; i++)
             {
-                // Probe algorithm: 17 * n * (n+1) / 2 where n = number of collisions
-                nextIndex = (nextIndex + probe) & this.table.length - 1;
-                probe += 17;
-
-                if (<(equals.(type))("this.table[nextIndex]", "element")>)
+                int nextIndex = (index + i) & (this.table.length - 1);
+                valueAtIndex = this.table[nextIndex];
+                if (<(equals.(type))("valueAtIndex", "element")>)
                 {
                     return nextIndex;
                 }
-                if (<(equals.(type))("this.table[nextIndex]", "REMOVED")>)
-                {
-                    if (removedIndex == -1)
-                    {
-                        removedIndex = nextIndex;
-                    }
-                }
-                else if (<(equals.(type))("this.table[nextIndex]", "EMPTY")>)
+                if (<(equals.(type))("valueAtIndex", "EMPTY")>)
                 {
                     return removedIndex == -1 ? nextIndex : removedIndex;
+                }
+                if (<(equals.(type))("valueAtIndex", "REMOVED")> && removedIndex == -1)
+                {
+                    removedIndex = nextIndex;
+                }
+            }
+            return this.probeTwo(element, removedIndex);
+        }
+
+        int probeTwo(<type> element, int removedIndex)
+        {
+            int index = this.spreadTwoAndMask(element);
+            for (int i = 0; i \< INITIAL_LINEAR_PROBE; i++)
+            {
+                int nextIndex = (index + i) & (this.table.length - 1);
+                <type> valueAtIndex = this.table[nextIndex];
+                if (<(equals.(type))("valueAtIndex", "element")>)
+                {
+                    return nextIndex;
+                }
+                if (<(equals.(type))("valueAtIndex", "EMPTY")>)
+                {
+                    return removedIndex == -1 ? nextIndex : removedIndex;
+                }
+                if (<(equals.(type))("valueAtIndex", "REMOVED")> && removedIndex == -1)
+                {
+                    removedIndex = nextIndex;
+                }
+            }
+            return this.probeThree(element, removedIndex);
+        }
+
+        int probeThree(<type> element, int removedIndex)
+        {
+            int nextIndex = <(reverseSpread.(type))()>(SpreadFunctions.<type>SpreadOne(element));
+            int spreadTwo = <(reverseSpread.(type))()>(SpreadFunctions.<type>SpreadTwo(element)) | 1;
+
+            while(true)
+            {
+                nextIndex = this.mask(nextIndex + spreadTwo);
+                <type> valueAtIndex = this.table[nextIndex];
+                if (<(equals.(type))("valueAtIndex", "element")>)
+                {
+                    return nextIndex;
+                }
+                if (<(equals.(type))("valueAtIndex", "EMPTY")>)
+                {
+                    return removedIndex == -1 ? nextIndex : removedIndex;
+                }
+                if (<(equals.(type))("valueAtIndex", "REMOVED")> && removedIndex == -1)
+                {
+                    removedIndex = nextIndex;
                 }
             }
         }
 
         // exposed for testing
-        <(spread.(type))(type, "table")>
+        <(spread.(type))(type)>
+
+        <(spread2.(type))(type)>
 
         private int mask(int spread)
         {

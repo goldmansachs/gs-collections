@@ -60,36 +60,86 @@ spread ::= [
     default: "no matching spread function"
 ]
 
-spread8(type, table) ::= <<
-int spread(<type> element)
+spread2 ::= [
+    "byte": "spread28",
+    "short": "spread232",
+    "char": "spread232",
+    "int": "spread232",
+    "long": "spread264",
+    "float": "spread232",
+    "double": "spread264",
+    default: "no matching spread function"
+]
+
+reverseSpread ::= [
+    "byte": "integerReverse",
+    "short": "integerReverse",
+    "char": "integerReverse",
+    "int": "integerReverse",
+    "long": "longReverse",
+    "float": "integerReverse",
+    "double": "longReverse",
+    default: "no matching spread function"
+]
+
+integerReverse() ::= <<
+Integer.reverse
+>>
+
+longReverse() ::= <<
+(int) Long.reverse
+>>
+
+spread8(type) ::= <<
+int spreadAndMask(<type> element)
 {
     // No spreading necessary for 8-bit types
     return this.mask(element);
 }
 >>
 
-spread32(type, table) ::= <<
-int spread(<type> element)
+spread28(type) ::= <<
+>>
+
+spread32(type) ::= <<
+int spreadAndMask(<type> element)
 {
-    int code = <(bits.(type))("element")>;
-    code ^= code >\>> 15;
-    code *= 1854960195;
-    code ^= code >\>> 13;
-    code *= -75769267;
-    code ^= code >\>> 11;
+    int code = SpreadFunctions.<type>SpreadOne(element);
     return this.mask(code);
 }
 >>
 
-spread64(type, table) ::= <<
-int spread(<type> element)
+spread232(type) ::= <<
+int spreadTwoAndMask(<type> element)
 {
-    long code = <(bits.(type))("element")>;
-    code ^= code >\>> 23;
-    code *= -6261870919139520145L;
-    code ^= code >\>> 39;
-    code *= 2747051607443084853L;
-    code ^= code >\>> 37;
+    int code = SpreadFunctions.<type>SpreadTwo(element);
+    return this.mask(code);
+}
+>>
+
+spread64(type) ::= <<
+int spreadAndMask(<type> element)
+{
+    long code = SpreadFunctions.<type>SpreadOne(element);
     return this.mask((int) code);
 }
 >>
+
+spread264(type) ::= <<
+int spreadTwoAndMask(<type> element)
+{
+    long code = SpreadFunctions.<type>SpreadTwo(element);
+    return this.mask((int) code);
+}
+>>
+
+probe ::= [
+    "byte": "probe8",
+    "short": "probe3264",
+    "char": "probe3264",
+    "int": "probe3264",
+    "float": "probe3264",
+    "long": "probe3264",
+    "double": "probe3264",
+    default: "no matching probe function"
+]

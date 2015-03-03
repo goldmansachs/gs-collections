@@ -203,7 +203,7 @@ public abstract class AbstractMutable<name1><name2>MapTestCase extends Abstract<
         <name1><name2>HashMap hashMap = new <name1><name2>HashMap();
         for (<type1> each = <(literal.(type1))("2")>; collisions.size() \<= 10; each++)
         {
-            if (hashMap.spread(each) == hashMap.spread(<(literal.(type1))("2")>))
+            if (hashMap.spreadAndMask(each) == hashMap.spreadAndMask(<(literal.(type1))("2")>))
             {
                 collisions.add(each);
             }

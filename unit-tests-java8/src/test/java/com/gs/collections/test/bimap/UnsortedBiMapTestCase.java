@@ -65,7 +65,7 @@ public interface UnsortedBiMapTestCase extends BiMapTestCase, TransformsToBagTra
                 + " \\d\\.\\d+=(\\d),"
                 + " \\d\\.\\d+=(\\d)\\}$");
         Matcher matcher = pattern.matcher(string);
-        Assert.assertTrue(matcher.matches());
+        Assert.assertTrue(string, matcher.matches());
 
         assertEquals(
                 Bags.immutable.with("1", "2", "3"),

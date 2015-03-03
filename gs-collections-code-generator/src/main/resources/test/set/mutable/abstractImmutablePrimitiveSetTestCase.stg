@@ -64,7 +64,7 @@ public abstract class AbstractImmutable<name>HashSetTestCase extends AbstractImm
         <name>HashSet set = new <name>HashSet();
         for (<type> i = <(literal.(type))("32")>; collisions.size() \<= 10; i++)
         {
-            if (set.spread(i) == set.spread(<(literal.(type))("32")>))
+            if (set.spreadAndMask(i) == set.spreadAndMask(<(literal.(type))("32")>))
             {
                 collisions.add(i);
             }
