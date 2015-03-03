@@ -16,11 +16,11 @@
 
 package com.gs.collections.impl.jmh.map;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import gnu.trove.map.TMap;
-import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -34,7 +34,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class TroveMapGetTest
+public class JdkMutableMapGetTest
 {
     private static final int RANDOM_COUNT = 9;
 
@@ -44,21 +44,21 @@ public class TroveMapGetTest
             "9250000", "9500000", "9750000", "10000000"})
     public int size;
     private String[] elements;
-    private TMap<String, String> troveMap;
+    private Map<String, String> jdkMap;
 
     @Setup
     public void setUp()
     {
-        Random random = new Random(12345L);
+        Random random = new Random(123456789012345L);
 
         this.elements = new String[this.size];
-        this.troveMap = new THashMap<>(this.size);
+        this.jdkMap = new HashMap<>(this.size);
 
         for (int i = 0; i < this.size; i++)
         {
             String element = RandomStringUtils.random(RANDOM_COUNT, 0, 0, false, true, null, random);
             this.elements[i] = element;
-            this.troveMap.put(element, "dummy");
+            this.jdkMap.put(element, "dummy");
         }
     }
 
@@ -67,11 +67,11 @@ public class TroveMapGetTest
     {
         int localSize = this.size;
         String[] localElements = this.elements;
-        TMap<String, String> localTroveMap = this.troveMap;
+        Map<String, String> localJdkMap = this.jdkMap;
 
         for (int i = 0; i < localSize; i++)
         {
-            if (localTroveMap.get(localElements[i]) == null)
+            if (localJdkMap.get(localElements[i]) == null)
             {
                 throw new AssertionError(i);
             }

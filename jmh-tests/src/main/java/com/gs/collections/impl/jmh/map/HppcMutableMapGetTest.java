@@ -19,8 +19,8 @@ package com.gs.collections.impl.jmh.map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.carrotsearch.hppc.ObjectObjectMap;
+import com.carrotsearch.hppc.ObjectObjectOpenHashMap;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -34,7 +34,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class GscMapGetTest
+public class HppcMutableMapGetTest
 {
     private static final int RANDOM_COUNT = 9;
 
@@ -44,21 +44,21 @@ public class GscMapGetTest
             "9250000", "9500000", "9750000", "10000000"})
     public int size;
     private String[] elements;
-    private MutableMap<String, String> gscMap;
+    private ObjectObjectMap<String, String> hppcMap;
 
     @Setup
     public void setUp()
     {
-        Random random = new Random(12345L);
+        Random random = new Random(123456789012345L);
 
         this.elements = new String[this.size];
-        this.gscMap = UnifiedMap.newMap(this.size);
+        this.hppcMap = new ObjectObjectOpenHashMap<>(this.size);
 
         for (int i = 0; i < this.size; i++)
         {
             String element = RandomStringUtils.random(RANDOM_COUNT, 0, 0, false, true, null, random);
             this.elements[i] = element;
-            this.gscMap.put(element, "dummy");
+            this.hppcMap.put(element, "dummy");
         }
     }
 
@@ -67,11 +67,11 @@ public class GscMapGetTest
     {
         int localSize = this.size;
         String[] localElements = this.elements;
-        MutableMap<String, String> localGscMap = this.gscMap;
+        ObjectObjectMap<String, String> localHppcMap = this.hppcMap;
 
         for (int i = 0; i < localSize; i++)
         {
-            if (localGscMap.get(localElements[i]) == null)
+            if (localHppcMap.get(localElements[i]) == null)
             {
                 throw new AssertionError(i);
             }

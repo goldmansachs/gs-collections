@@ -33,7 +33,7 @@ import scala.collection.mutable.Map;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class ScalaMapGetTest
+public class ScalaMutableMapGetTest
 {
     private static final int RANDOM_COUNT = 9;
 
@@ -48,7 +48,7 @@ public class ScalaMapGetTest
     @Setup
     public void setUp()
     {
-        Random random = new Random(12345L);
+        Random random = new Random(123456789012345L);
 
         this.elements = new String[this.size];
         this.scalaMap = new PresizableHashMap<>(this.size, 750);
@@ -70,7 +70,7 @@ public class ScalaMapGetTest
 
         for (int i = 0; i < localSize; i++)
         {
-            if (localScalaMap.get(localElements[i]) == null)
+            if (!localScalaMap.get(localElements[i]).isDefined())
             {
                 throw new AssertionError(i);
             }

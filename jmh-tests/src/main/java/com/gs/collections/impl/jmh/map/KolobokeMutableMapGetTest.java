@@ -16,11 +16,11 @@
 
 package com.gs.collections.impl.jmh.map;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import net.openhft.koloboke.collect.map.ObjObjMap;
+import net.openhft.koloboke.collect.map.hash.HashObjObjMaps;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -34,7 +34,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class JdkMapGetTest
+public class KolobokeMutableMapGetTest
 {
     private static final int RANDOM_COUNT = 9;
 
@@ -44,21 +44,21 @@ public class JdkMapGetTest
             "9250000", "9500000", "9750000", "10000000"})
     public int size;
     private String[] elements;
-    private Map<String, String> jdkMap;
+    private ObjObjMap<String, String> kolobokeMap;
 
     @Setup
     public void setUp()
     {
-        Random random = new Random(12345L);
+        Random random = new Random(123456789012345L);
 
         this.elements = new String[this.size];
-        this.jdkMap = new HashMap<>(this.size);
+        this.kolobokeMap = HashObjObjMaps.newMutableMap(this.size);
 
         for (int i = 0; i < this.size; i++)
         {
             String element = RandomStringUtils.random(RANDOM_COUNT, 0, 0, false, true, null, random);
             this.elements[i] = element;
-            this.jdkMap.put(element, "dummy");
+            this.kolobokeMap.put(element, "dummy");
         }
     }
 
@@ -67,11 +67,11 @@ public class JdkMapGetTest
     {
         int localSize = this.size;
         String[] localElements = this.elements;
-        Map<String, String> localJdkMap = this.jdkMap;
+        ObjObjMap<String, String> localKolobokeMap = this.kolobokeMap;
 
         for (int i = 0; i < localSize; i++)
         {
-            if (localJdkMap.get(localElements[i]) == null)
+            if (localKolobokeMap.get(localElements[i]) == null)
             {
                 throw new AssertionError(i);
             }

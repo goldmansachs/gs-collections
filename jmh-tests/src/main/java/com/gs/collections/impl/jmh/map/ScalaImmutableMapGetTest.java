@@ -19,8 +19,6 @@ package com.gs.collections.impl.jmh.map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import com.carrotsearch.hppc.ObjectObjectMap;
-import com.carrotsearch.hppc.ObjectObjectOpenHashMap;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -30,11 +28,13 @@ import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import scala.collection.immutable.HashMap$;
+import scala.collection.immutable.Map;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class HppcMapGetTest
+public class ScalaImmutableMapGetTest
 {
     private static final int RANDOM_COUNT = 9;
 
@@ -44,22 +44,24 @@ public class HppcMapGetTest
             "9250000", "9500000", "9750000", "10000000"})
     public int size;
     private String[] elements;
-    private ObjectObjectMap<String, String> hppcMap;
+    private Map<String, String> scalaMap;
 
     @Setup
     public void setUp()
     {
-        Random random = new Random(12345L);
+        Random random = new Random(123456789012345L);
 
         this.elements = new String[this.size];
-        this.hppcMap = new ObjectObjectOpenHashMap<>(this.size);
+        Map<String, String> map = HashMap$.MODULE$.empty();
 
         for (int i = 0; i < this.size; i++)
         {
             String element = RandomStringUtils.random(RANDOM_COUNT, 0, 0, false, true, null, random);
             this.elements[i] = element;
-            this.hppcMap.put(element, "dummy");
+            map = map.updated(element, "dummy");
         }
+
+        this.scalaMap = map;
     }
 
     @Benchmark
@@ -67,11 +69,11 @@ public class HppcMapGetTest
     {
         int localSize = this.size;
         String[] localElements = this.elements;
-        ObjectObjectMap<String, String> localHppcMap = this.hppcMap;
+        Map<String, String> localScalaMap = this.scalaMap;
 
         for (int i = 0; i < localSize; i++)
         {
-            if (localHppcMap.get(localElements[i]) == null)
+            if (!localScalaMap.get(localElements[i]).isDefined())
             {
                 throw new AssertionError(i);
             }
