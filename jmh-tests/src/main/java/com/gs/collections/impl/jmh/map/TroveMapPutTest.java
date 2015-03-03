@@ -53,7 +53,7 @@ public class TroveMapPutTest
     @Setup
     public void setUp()
     {
-        Random random = new Random(12345L);
+        Random random = new Random(123456789012345L);
 
         this.elements = new String[this.size];
 
