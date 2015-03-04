@@ -142,16 +142,16 @@ public class LongLongMapSmallStressTest
 
     private MutableLongList getKolobokeCollisions(int number, int lower, int upper)
     {
-        MutableLongList kolobokeBadNumbers = new LongArrayList();
-        for (int i = lower; i < upper && kolobokeBadNumbers.size() < KEY_COUNT; i++)
+        MutableLongList kolobokeCollidingNumbers = new LongArrayList();
+        for (int i = lower; i < upper && kolobokeCollidingNumbers.size() < KEY_COUNT; i++)
         {
             int index = this.kolobokeIndex(i);
             if (index >= number && index <= number + 100)
             {
-                kolobokeBadNumbers.add(i);
+                kolobokeCollidingNumbers.add(i);
             }
         }
-        return kolobokeBadNumbers;
+        return kolobokeCollidingNumbers;
     }
 
     @Benchmark

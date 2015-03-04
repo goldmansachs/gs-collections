@@ -62,11 +62,11 @@ public class IntIntMapProbeTest
     public void nonRandomNumbers_get()
     {
         MutableIntIntMap intIntMapSmall = new IntIntHashMap(1_000);
-        int[] intKeysForSmallMap = this.getSmallBadNumbers().toArray();
+        int[] intKeysForSmallMap = this.getSmallCollidingNumbers().toArray();
         this.testNonRandomGet(intIntMapSmall, SMALL_COLLIDING_KEY_COUNT, intKeysForSmallMap);
 
         MutableIntIntMap intIntMapLarge = new IntIntHashMap(1_000_000);
-        int[] intKeysForLargeMap = this.getLargeBadNumbers().toArray();
+        int[] intKeysForLargeMap = this.getLargeCollidingNumbers().toArray();
         this.testNonRandomGet(intIntMapLarge, LARGE_COLLIDING_KEY_COUNT, intKeysForLargeMap);
     }
 
@@ -74,19 +74,19 @@ public class IntIntMapProbeTest
     public void nonRandomNumbers_remove()
     {
         MutableIntIntMap intIntMapSmallNonPresized = new IntIntHashMap();
-        int[] intKeysForMap = this.getSmallBadNumbers().toArray();
+        int[] intKeysForMap = this.getSmallCollidingNumbers().toArray();
         this.testNonRandomRemove(intIntMapSmallNonPresized, SMALL_COLLIDING_KEY_COUNT, intKeysForMap);
 
         MutableIntIntMap intIntMapSmallPresized = new IntIntHashMap(1_000);
-        int[] intKeysForMap2 = this.getSmallBadNumbers().toArray();
+        int[] intKeysForMap2 = this.getSmallCollidingNumbers().toArray();
         this.testNonRandomRemove(intIntMapSmallPresized, SMALL_COLLIDING_KEY_COUNT, intKeysForMap2);
 
         MutableIntIntMap intIntMapLargeNonPresized = new IntIntHashMap();
-        int[] intKeysForMap3 = this.getLargeBadNumbers().toArray();
+        int[] intKeysForMap3 = this.getLargeCollidingNumbers().toArray();
         this.testNonRandomRemove(intIntMapLargeNonPresized, LARGE_COLLIDING_KEY_COUNT, intKeysForMap3);
 
         MutableIntIntMap intIntMapLargePresized = new IntIntHashMap(1_000_000);
-        int[] intKeysForMap4 = this.getLargeBadNumbers().toArray();
+        int[] intKeysForMap4 = this.getLargeCollidingNumbers().toArray();
         this.testNonRandomRemove(intIntMapLargePresized, LARGE_COLLIDING_KEY_COUNT, intKeysForMap4);
     }
 
@@ -193,39 +193,39 @@ public class IntIntMapProbeTest
         }
     }
 
-    private MutableIntList getSmallBadNumbers()
+    private MutableIntList getSmallCollidingNumbers()
     {
         int lower = Integer.MIN_VALUE;
         int upper = Integer.MAX_VALUE;
 
-        MutableIntList badNumbers = new IntArrayList();
+        MutableIntList collidingNumbers = new IntArrayList();
         int numberOne = this.smallMask(SpreadFunctions.intSpreadOne(0xABCDEF1));
         int numberTwo = this.smallMask(SpreadFunctions.intSpreadTwo(0xABCDEF1));
-        for (int i = lower; i < upper && badNumbers.size() < SMALL_COLLIDING_KEY_COUNT; i++)
+        for (int i = lower; i < upper && collidingNumbers.size() < SMALL_COLLIDING_KEY_COUNT; i++)
         {
             if (this.smallMask(SpreadFunctions.intSpreadOne(i)) == numberOne && this.smallMask(SpreadFunctions.intSpreadTwo(i)) == numberTwo)
             {
-                badNumbers.add(i);
+                collidingNumbers.add(i);
             }
         }
-        return badNumbers;
+        return collidingNumbers;
     }
 
-    private MutableIntList getLargeBadNumbers()
+    private MutableIntList getLargeCollidingNumbers()
     {
         int lower = Integer.MIN_VALUE;
         int upper = Integer.MAX_VALUE;
         int number = 23;
-        MutableIntList badNumbers = new IntArrayList();
-        for (int i = lower; i < upper && badNumbers.size() < LARGE_COLLIDING_KEY_COUNT; i++)
+        MutableIntList collidingNumbers = new IntArrayList();
+        for (int i = lower; i < upper && collidingNumbers.size() < LARGE_COLLIDING_KEY_COUNT; i++)
         {
             int index = this.largeMask(SpreadFunctions.intSpreadOne(i));
             if (index >= number && index <= number + 100)
             {
-                badNumbers.add(i);
+                collidingNumbers.add(i);
             }
         }
-        return badNumbers;
+        return collidingNumbers;
     }
 
     public void shuffle(int[] array, Random rnd)
