@@ -78,18 +78,18 @@ public interface UnsortedMapIterableTestCase extends MapIterableTestCase, Unorde
     default void RichIterable_toString()
     {
         String string = this.newWith(2, 2, 1).toString();
-        Pattern pattern = Pattern.compile("^\\{\\d\\.\\d+=(\\d),"
-                + " \\d\\.\\d+=(\\d),"
-                + " \\d\\.\\d+=(\\d)\\}$");
+        Pattern pattern = Pattern.compile("^\\{\\d\\.\\d+(E-\\d)?=(\\d),"
+                + " \\d\\.\\d+(E-\\d)?=(\\d),"
+                + " \\d\\.\\d+(E-\\d)?=(\\d)\\}$");
         Matcher matcher = pattern.matcher(string);
         Assert.assertTrue(string, matcher.matches());
 
         assertEquals(
                 Bags.immutable.with("1", "2", "2"),
                 Bags.immutable.with(
-                        matcher.group(1),
                         matcher.group(2),
-                        matcher.group(3)));
+                        matcher.group(4),
+                        matcher.group(6)));
     }
 
     @Override
