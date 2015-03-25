@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,26 +21,6 @@ import org.junit.Test;
 
 public class AbstractImmutableEntrySerializationTest
 {
-    @Test
-    public void getKeyFunction()
-    {
-        Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC50dXBsZS5BYnN0cmFjdEltbXV0YWJsZUVu\n"
-                        + "dHJ5JEtleUZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
-                AbstractImmutableEntry.getKeyFunction());
-    }
-
-    @Test
-    public void getValueFunction()
-    {
-        Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyAEJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC50dXBsZS5BYnN0cmFjdEltbXV0YWJsZUVu\n"
-                        + "dHJ5JFZhbHVlRnVuY3Rpb24AAAAAAAAAAQIAAHhw",
-                AbstractImmutableEntry.getValueFunction());
-    }
-
     @Test
     public void getPairFunction()
     {

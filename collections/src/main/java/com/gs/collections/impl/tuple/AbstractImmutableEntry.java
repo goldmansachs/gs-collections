@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,11 @@ import java.util.Map;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Functions;
 
 public class AbstractImmutableEntry<K, V> implements Map.Entry<K, V>, Serializable
 {
     private static final long serialVersionUID = 1L;
-    private static final KeyFunction<?> TO_KEY = new KeyFunction<Object>();
-    private static final ValueFunction<?> TO_VALUE = new ValueFunction<Object>();
     private static final PairFunction<?, ?> TO_PAIR = new PairFunction<Object, Object>();
 
     protected final K key;
@@ -38,14 +37,22 @@ public class AbstractImmutableEntry<K, V> implements Map.Entry<K, V>, Serializab
         this.value = value;
     }
 
+    /**
+     * @deprecated Since 6.2 - Use {@link Functions#getKeyFunction()} instead.
+     */
+    @Deprecated
     public static <K> Function<Map.Entry<K, ?>, K> getKeyFunction()
     {
-        return (Function<Map.Entry<K, ?>, K>) (Function<?, ?>) TO_KEY;
+        return Functions.getKeyFunction();
     }
 
+    /**
+     * @deprecated Since 6.2 - Use {@link Functions#getValueFunction()} instead.
+     */
+    @Deprecated
     public static <V> Function<Map.Entry<?, V>, V> getValueFunction()
     {
-        return (Function<Map.Entry<?, V>, V>) (Function<?, ?>) TO_VALUE;
+        return Functions.getValueFunction();
     }
 
     public static <K, V> Function<Map.Entry<K, V>, Pair<K, V>> getPairFunction()
@@ -83,6 +90,10 @@ public class AbstractImmutableEntry<K, V> implements Map.Entry<K, V>, Serializab
         return this.key + "=" + this.value;
     }
 
+    /**
+     * @deprecated Since 6.2 - Kept for serialization compatibility only.
+     */
+    @Deprecated
     private static class KeyFunction<K> implements Function<Map.Entry<K, ?>, K>
     {
         private static final long serialVersionUID = 1L;
@@ -93,6 +104,10 @@ public class AbstractImmutableEntry<K, V> implements Map.Entry<K, V>, Serializab
         }
     }
 
+    /**
+     * @deprecated Since 6.2 - Kept for serialization compatibility only.
+     */
+    @Deprecated
     private static class ValueFunction<V> implements Function<Map.Entry<?, V>, V>
     {
         private static final long serialVersionUID = 1L;
