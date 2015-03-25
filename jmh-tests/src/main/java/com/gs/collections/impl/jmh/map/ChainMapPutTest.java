@@ -129,7 +129,10 @@ public class ChainMapPutTest
     public scala.collection.mutable.HashMap<String, String> scala()
     {
         int localSize = this.size;
-        int localLoadFactor = (int) (this.loadFactor * 1000);
+        if (Float.compare(this.loadFactor, 0.75f) != 0)
+        {
+            throw new IllegalArgumentException();
+        }
         String[] localElements = this.elements;
 
         /**
@@ -137,7 +140,7 @@ public class ChainMapPutTest
          */
         int defaultInitialSize = 16;
 
-        scala.collection.mutable.HashMap<String, String> scala = this.isPresized ? new PresizableHashMap<>(localSize, localLoadFactor) : new PresizableHashMap<>(defaultInitialSize, localLoadFactor);
+        scala.collection.mutable.HashMap<String, String> scala = this.isPresized ? new PresizableHashMap<>(localSize) : new PresizableHashMap<>(defaultInitialSize);
 
         for (int i = 0; i < localSize; i++)
         {

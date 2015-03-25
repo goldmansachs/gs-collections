@@ -51,7 +51,7 @@ public class ScalaMutableMapGetTest
         Random random = new Random(123456789012345L);
 
         this.elements = new String[this.size];
-        this.scalaMap = new PresizableHashMap<>(this.size, 750);
+        this.scalaMap = new PresizableHashMap<>(this.size);
 
         for (int i = 0; i < this.size; i++)
         {

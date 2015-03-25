@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.set.primitive.IntSet;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import gnu.trove.set.hash.TIntHashSet;
 import org.junit.Test;
@@ -56,6 +57,10 @@ public class IntSetMemoryTest
                 .printContainerMemoryUsage("IntSet", size, new IntHashSetFactory(size));
         MemoryTestBench.on(HashSet.class)
                 .printContainerMemoryUsage("IntSet", size, new IntegerHashSetFactory(size));
+        MemoryTestBench.on(UnifiedSet.class)
+                .printContainerMemoryUsage("IntSet", size, new IntegerUnifiedSetFactory(size));
+        MemoryTestBench.on(scala.collection.mutable.HashSet.class)
+                .printContainerMemoryUsage("IntSet", size, new IntegerScalaHashSetFactory(size));
     }
 
     public static class IntHashSetFactory implements Function0<IntHashSet>
@@ -119,6 +124,54 @@ public class IntSetMemoryTest
         public HashSet<Integer> value()
         {
             final HashSet<Integer> set = new HashSet<>();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    set.add(each);
+                }
+            });
+            return set;
+        }
+    }
+
+    public static class IntegerUnifiedSetFactory implements Function0<UnifiedSet<Integer>>
+    {
+        private final IntSet data;
+
+        public IntegerUnifiedSetFactory(int size)
+        {
+            this.data = TestDataFactory.createRandomSet(size);
+        }
+
+        @Override
+        public UnifiedSet<Integer> value()
+        {
+            final UnifiedSet<Integer> set = new UnifiedSet<>();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    set.add(each);
+                }
+            });
+            return set;
+        }
+    }
+
+    public static class IntegerScalaHashSetFactory implements Function0<scala.collection.mutable.HashSet<Integer>>
+    {
+        private final IntSet data;
+
+        public IntegerScalaHashSetFactory(int size)
+        {
+            this.data = TestDataFactory.createRandomSet(size);
+        }
+
+        @Override
+        public scala.collection.mutable.HashSet<Integer> value()
+        {
+            final scala.collection.mutable.HashSet<Integer> set = new scala.collection.mutable.HashSet<>();
             this.data.forEach(new IntProcedure()
             {
                 public void value(int each)

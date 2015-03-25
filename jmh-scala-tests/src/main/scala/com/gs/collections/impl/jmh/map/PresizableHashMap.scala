@@ -16,12 +16,15 @@
 
 package com.gs.collections.impl.jmh.map
 
-class PresizableHashMap[K, V](override val initialSize: Int, loadFactor: Int) extends scala.collection.mutable.HashMap[K, V]
+class PresizableHashMap[K, V](val _initialSize: Int) extends scala.collection.mutable.HashMap[K, V]
 {
-    _loadFactor = loadFactor
-    threshold = ((initialCapacity.toLong * loadFactor) / 1000).toInt
+    private def initialCapacity =
+        if (_initialSize == 0) 1
+        else smallestPowerOfTwoGreaterThan((_initialSize.toLong * 1000 / _loadFactor).asInstanceOf[Int])
 
-    private def initialCapacity = if (initialSize == 0) 1 else smallestPowerOfTwoGreaterThan(initialSize)
+    private def smallestPowerOfTwoGreaterThan(n: Int): Int =
+        if (n > 1) Integer.highestOneBit(n - 1) << 1 else 1
 
-    private def smallestPowerOfTwoGreaterThan(n: Int): Int = if (n > 1) Integer.highestOneBit(n - 1) << 1 else 1
+    table = new Array(initialCapacity)
+    threshold = ((initialCapacity.toLong * _loadFactor) / 1000).toInt
 }
