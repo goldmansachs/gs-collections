@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2013 Goldman Sachs.
+  ~ Copyright 2015 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@
             rev="${build.version.full}"
             conf="compile"
             changing="true" />
-        <dependency org="org.apache.ant" name="ant" rev="1.9.2" conf="compile" />
+        <dependency org="org.apache.ant" name="ant" rev="1.9.4" conf="compile" />
 
     </dependencies>
 

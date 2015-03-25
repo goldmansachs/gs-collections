@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2014 Goldman Sachs.
+  ~ Copyright 2015 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@
             conf="compile->default,optional"
             changing="true" />
 
-        <dependency org="commons-codec" name="commons-codec" rev="1.9" conf="compile" />
+        <dependency org="commons-codec" name="commons-codec" rev="1.10" conf="compile" />
 
         <dependency org="junit" name="junit" rev="${junit.version}" conf="compile" />
         <dependency org="org.hamcrest" name="hamcrest-core" rev="1.3" conf="compile" />

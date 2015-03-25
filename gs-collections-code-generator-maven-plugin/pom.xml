@@ -32,7 +32,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <clover.version>4.0.2</clover.version>
-        <checkstyle.version>2.13</checkstyle.version>
+        <checkstyle.version>2.15</checkstyle.version>
 
         <!-- this setting is needed for TeamCity -->
         <maven.deploy.skip>${build.is.personal}</maven.deploy.skip>
@@ -233,7 +233,7 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>6.1</version>
+                        <version>6.4.1</version>
                     </dependency>
                 </dependencies>
             </plugin>

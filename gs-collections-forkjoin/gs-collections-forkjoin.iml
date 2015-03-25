@@ -17,7 +17,7 @@
     <orderEntry type="module" module-name="gs-collections-api" />
     <orderEntry type="module" module-name="gs-collections" />
     <orderEntry type="module" module-name="gs-collections-testutils" scope="TEST" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-codec:commons-codec:1.9" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: commons-codec:commons-codec:1.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
   </component>

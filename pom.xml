@@ -90,10 +90,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <slf4j.version>1.7.7</slf4j.version>
+        <slf4j.version>1.7.10</slf4j.version>
         <clover.version>4.0.2</clover.version>
-        <checkstyle.version>2.13</checkstyle.version>
-        <scala.version>2.11.5</scala.version>
+        <checkstyle.version>2.15</checkstyle.version>
+        <scala.version>2.11.6</scala.version>
         <!--Sonar settings-->
         <sonar.language>java</sonar.language>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -191,7 +191,7 @@
 
                 <plugin>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>2.6</version>
                 </plugin>
 
                 <plugin>
@@ -299,7 +299,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>6.1</version>
+                            <version>6.4.1</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -339,7 +339,7 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>6.1</version>
+                        <version>6.4.1</version>
                     </dependency>
                 </dependencies>
             </plugin>
