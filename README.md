@@ -1,7 +1,9 @@
 # GS Collections
 
-## Build Status
-[![Build Status](https://travis-ci.org/goldmansachs/gs-collections.svg?branch=master)](https://travis-ci.org/goldmansachs/gs-collections)
+[![][travis img]][travis]
+[![][maven img]][maven]
+[![][release img]][release]
+[![][license img]][license]
 
 GS Collections is a collections framework for Java. It has JDK-compatible List, Set and Map implementations with a rich API and set of utility classes that work with any JDK compatible Collections, Arrays, Maps or Strings. The iteration protocol was inspired by the Smalltalk collection framework.
 
@@ -70,3 +72,15 @@ We currently do all development in an internal Subversion repository and are not
 
 ### Does Goldman Sachs use GS Collections?
 Yes, we use GS Collections in many of our internal applications.
+
+[travis]:https://travis-ci.org/goldmansachs/gs-collections
+[travis img]:https://travis-ci.org/goldmansachs/gs-collections.svg?branch=master
+
+[maven]:http://search.maven.org/#search|gav|1|g:"com.goldmansachs"%20AND%20a:"gs-collections"
+[maven img]:https://maven-badges.herokuapp.com/maven-central/com.goldmansachs/gs-collections/badge.svg
+
+[release]:https://github.com/goldmansachs/gs-collections/releases
+[release img]:https://img.shields.io/github/release/goldmansachs/gs-collections.svg
+
+[license]:LICENSE-2.0.txt
+[license img]:https://img.shields.io/badge/License-Apache%202-blue.svg
