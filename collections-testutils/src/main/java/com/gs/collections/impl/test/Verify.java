@@ -592,6 +592,14 @@ public final class Verify extends Assert
             {
                 Assert.fail(iterableName + " should be empty; actual size:<" + Iterate.sizeOf(actualIterable) + '>');
             }
+            if (!Iterate.isEmpty(actualIterable))
+            {
+                Assert.fail(iterableName + " should be empty; actual size:<" + Iterate.sizeOf(actualIterable) + '>');
+            }
+            if (Iterate.sizeOf(actualIterable) != 0)
+            {
+                Assert.fail(iterableName + " should be empty; actual size:<" + Iterate.sizeOf(actualIterable) + '>');
+            }
         }
         catch (AssertionError e)
         {
@@ -624,6 +632,10 @@ public final class Verify extends Assert
             Verify.assertObjectNotNull(mutableMapIterableName, actualMutableMapIterable);
 
             if (Iterate.notEmpty(actualMutableMapIterable))
+            {
+                Assert.fail(mutableMapIterableName + " should be empty; actual size:<" + Iterate.sizeOf(actualMutableMapIterable) + '>');
+            }
+            if (!Iterate.isEmpty(actualMutableMapIterable))
             {
                 Assert.fail(mutableMapIterableName + " should be empty; actual size:<" + Iterate.sizeOf(actualMutableMapIterable) + '>');
             }
@@ -682,7 +694,15 @@ public final class Verify extends Assert
         {
             Verify.assertObjectNotNull(iterableName, primitiveIterable);
 
+            if (primitiveIterable.notEmpty())
+            {
+                Assert.fail(iterableName + " should be empty; actual size:<" + primitiveIterable.size() + '>');
+            }
             if (!primitiveIterable.isEmpty())
+            {
+                Assert.fail(iterableName + " should be empty; actual size:<" + primitiveIterable.size() + '>');
+            }
+            if (primitiveIterable.size() != 0)
             {
                 Assert.fail(iterableName + " should be empty; actual size:<" + primitiveIterable.size() + '>');
             }
@@ -717,7 +737,15 @@ public final class Verify extends Assert
         {
             Verify.assertObjectNotNull(iterableName, iterable);
 
+            if (Iterate.notEmpty(iterable))
+            {
+                Assert.fail(iterableName + " should be empty; actual size:<" + Iterate.sizeOf(iterable) + '>');
+            }
             if (!Iterate.isEmpty(iterable))
+            {
+                Assert.fail(iterableName + " should be empty; actual size:<" + Iterate.sizeOf(iterable) + '>');
+            }
+            if (Iterate.sizeOf(iterable) != 0)
             {
                 Assert.fail(iterableName + " should be empty; actual size:<" + Iterate.sizeOf(iterable) + '>');
             }
@@ -800,9 +828,41 @@ public final class Verify extends Assert
         {
             Verify.assertObjectNotNull(multimapName, actualMultimap);
 
+            if (actualMultimap.notEmpty())
+            {
+                Assert.fail(multimapName + " should be empty; actual size:<" + actualMultimap.size() + '>');
+            }
             if (!actualMultimap.isEmpty())
             {
                 Assert.fail(multimapName + " should be empty; actual size:<" + actualMultimap.size() + '>');
+            }
+            if (actualMultimap.size() != 0)
+            {
+                Assert.fail(multimapName + " should be empty; actual size:<" + actualMultimap.size() + '>');
+            }
+            if (actualMultimap.sizeDistinct() != 0)
+            {
+                Assert.fail(multimapName + " should be empty; actual size:<" + actualMultimap.size() + '>');
+            }
+            if (actualMultimap.keyBag().size() != 0)
+            {
+                Assert.fail(multimapName + " should be empty; actual size:<" + actualMultimap.keyBag().size() + '>');
+            }
+            if (actualMultimap.keysView().size() != 0)
+            {
+                Assert.fail(multimapName + " should be empty; actual size:<" + actualMultimap.keysView().size() + '>');
+            }
+            if (actualMultimap.valuesView().size() != 0)
+            {
+                Assert.fail(multimapName + " should be empty; actual size:<" + actualMultimap.valuesView().size() + '>');
+            }
+            if (actualMultimap.keyValuePairsView().size() != 0)
+            {
+                Assert.fail(multimapName + " should be empty; actual size:<" + actualMultimap.keyValuePairsView().size() + '>');
+            }
+            if (actualMultimap.keyMultiValuePairsView().size() != 0)
+            {
+                Assert.fail(multimapName + " should be empty; actual size:<" + actualMultimap.keyMultiValuePairsView().size() + '>');
             }
         }
         catch (AssertionError e)
@@ -823,6 +883,22 @@ public final class Verify extends Assert
             if (!actualMap.isEmpty())
             {
                 Assert.fail(mapName + " should be empty; actual size:<" + actualMap.size() + '>');
+            }
+            if (actualMap.size() != 0)
+            {
+                Assert.fail(mapName + " should be empty; actual size:<" + actualMap.size() + '>');
+            }
+            if (actualMap.keySet().size() != 0)
+            {
+                Assert.fail(mapName + " should be empty; actual size:<" + actualMap.keySet().size() + '>');
+            }
+            if (actualMap.values().size() != 0)
+            {
+                Assert.fail(mapName + " should be empty; actual size:<" + actualMap.values().size() + '>');
+            }
+            if (actualMap.entrySet().size() != 0)
+            {
+                Assert.fail(mapName + " should be empty; actual size:<" + actualMap.entrySet().size() + '>');
             }
         }
         catch (AssertionError e)
@@ -855,6 +931,8 @@ public final class Verify extends Assert
         {
             Verify.assertObjectNotNull(iterableName, actualIterable);
             Assert.assertFalse(iterableName + " should be non-empty, but was empty", Iterate.isEmpty(actualIterable));
+            Assert.assertTrue(iterableName + " should be non-empty, but was empty", Iterate.notEmpty(actualIterable));
+            Assert.assertNotEquals(iterableName + " should be non-empty, but was empty", 0, Iterate.sizeOf(actualIterable));
         }
         catch (AssertionError e)
         {
@@ -886,6 +964,12 @@ public final class Verify extends Assert
         {
             Verify.assertObjectNotNull(mutableMapIterableName, actualMutableMapIterable);
             Assert.assertFalse(mutableMapIterableName + " should be non-empty, but was empty", Iterate.isEmpty(actualMutableMapIterable));
+            Assert.assertTrue(mutableMapIterableName + " should be non-empty, but was empty", Iterate.notEmpty(actualMutableMapIterable));
+            Assert.assertTrue(mutableMapIterableName + " should be non-empty, but was empty", actualMutableMapIterable.notEmpty());
+            Assert.assertNotEquals(mutableMapIterableName + " should be non-empty, but was empty", 0, actualMutableMapIterable.size());
+            Assert.assertNotEquals(mutableMapIterableName + " should be non-empty, but was empty", 0, actualMutableMapIterable.keySet().size());
+            Assert.assertNotEquals(mutableMapIterableName + " should be non-empty, but was empty", 0, actualMutableMapIterable.values().size());
+            Assert.assertNotEquals(mutableMapIterableName + " should be non-empty, but was empty", 0, actualMutableMapIterable.entrySet().size());
         }
         catch (AssertionError e)
         {
@@ -917,6 +1001,8 @@ public final class Verify extends Assert
         {
             Verify.assertObjectNotNull(iterableName, primitiveIterable);
             Assert.assertFalse(iterableName + " should be non-empty, but was empty", primitiveIterable.isEmpty());
+            Assert.assertTrue(iterableName + " should be non-empty, but was empty", primitiveIterable.notEmpty());
+            Assert.assertNotEquals(iterableName + " should be non-empty, but was empty", 0, primitiveIterable.size());
         }
         catch (AssertionError e)
         {
@@ -948,6 +1034,8 @@ public final class Verify extends Assert
         {
             Verify.assertObjectNotNull(iterableName, iterable);
             Assert.assertFalse(iterableName + " should be non-empty, but was empty", Iterate.isEmpty(iterable));
+            Assert.assertTrue(iterableName + " should be non-empty, but was empty", Iterate.notEmpty(iterable));
+            Assert.assertNotEquals(iterableName + " should be non-empty, but was empty", 0, Iterate.sizeOf(iterable));
         }
         catch (AssertionError e)
         {
@@ -979,6 +1067,10 @@ public final class Verify extends Assert
         {
             Verify.assertObjectNotNull(mapName, actualMap);
             Assert.assertFalse(mapName + " should be non-empty, but was empty", actualMap.isEmpty());
+            Assert.assertNotEquals(mapName + " should be non-empty, but was empty", 0, actualMap.size());
+            Assert.assertNotEquals(mapName + " should be non-empty, but was empty", 0, actualMap.keySet().size());
+            Assert.assertNotEquals(mapName + " should be non-empty, but was empty", 0, actualMap.values().size());
+            Assert.assertNotEquals(mapName + " should be non-empty, but was empty", 0, actualMap.entrySet().size());
         }
         catch (AssertionError e)
         {
@@ -1010,6 +1102,14 @@ public final class Verify extends Assert
         {
             Verify.assertObjectNotNull(multimapName, actualMultimap);
             Assert.assertTrue(multimapName + " should be non-empty, but was empty", actualMultimap.notEmpty());
+            Assert.assertFalse(multimapName + " should be non-empty, but was empty", actualMultimap.isEmpty());
+            Assert.assertNotEquals(multimapName + " should be non-empty, but was empty", 0, actualMultimap.size());
+            Assert.assertNotEquals(multimapName + " should be non-empty, but was empty", 0, actualMultimap.sizeDistinct());
+            Assert.assertNotEquals(multimapName + " should be non-empty, but was empty", 0, actualMultimap.keyBag().size());
+            Assert.assertNotEquals(multimapName + " should be non-empty, but was empty", 0, actualMultimap.keysView().size());
+            Assert.assertNotEquals(multimapName + " should be non-empty, but was empty", 0, actualMultimap.valuesView().size());
+            Assert.assertNotEquals(multimapName + " should be non-empty, but was empty", 0, actualMultimap.keyValuePairsView().size());
+            Assert.assertNotEquals(multimapName + " should be non-empty, but was empty", 0, actualMultimap.keyMultiValuePairsView().size());
         }
         catch (AssertionError e)
         {
