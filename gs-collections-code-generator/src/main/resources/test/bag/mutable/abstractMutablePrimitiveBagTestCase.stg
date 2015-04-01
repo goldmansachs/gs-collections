@@ -24,6 +24,7 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutable<name>CollectionTestCase;
@@ -175,6 +176,25 @@ public abstract class AbstractMutable<name>BagTestCase extends AbstractMutable<n
         Verify.assertEmpty(list);
         Assert.assertFalse(iterator.hasNext());
 
+        Verify.assertThrows(NoSuchElementException.class, iterator::next);
+    }
+
+    @Override
+    @Test
+    public void <type>Iterator_with_remove()
+    {
+        super.<type>Iterator_with_remove();
+
+        Mutable<name>Bag bag = this.newWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        Mutable<name>Iterator iterator = bag.<type>Iterator();
+        for (int i = 0; i \< 6; i++)
+        {
+            Assert.assertTrue(iterator.hasNext());
+            iterator.next();
+            iterator.remove();
+        }
+
+        Verify.assertEmpty(bag);
         Verify.assertThrows(NoSuchElementException.class, iterator::next);
     }
 

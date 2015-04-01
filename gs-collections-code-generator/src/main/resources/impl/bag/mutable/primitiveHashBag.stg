@@ -727,7 +727,15 @@ public final class <name>HashBag extends Abstract<name>Iterable implements Mutab
             {
                 throw new IllegalStateException();
             }
-            this.<type>Iterator.remove();
+            if (this.occurrences == 0)
+            {
+                this.<type>Iterator.remove();
+                <name>HashBag.this.size--;
+            }
+            else
+            {
+                <name>HashBag.this.remove(this.currentItem);
+            }
             this.canRemove = false;
         }
     }
