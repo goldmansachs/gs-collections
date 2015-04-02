@@ -122,6 +122,47 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         Verify.assertThrows(IllegalStateException.class, iterator::remove);
     }
 
+    @Test
+    public void iteratorRemove()
+    {
+        MutableBagIterable<Integer> bag = this.newWith(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4);
+        Iterator<Integer> iterator = bag.iterator();
+        iterator.next();
+        iterator.next();
+        Integer value = iterator.next();
+        Integer value2 = iterator.next();
+        Assert.assertNotEquals(value, value2);
+        iterator.remove();
+        Integer value3 = iterator.next();
+        Assert.assertNotEquals(value, value3);
+        iterator.remove();
+        Integer value4 = iterator.next();
+        Assert.assertNotEquals(value, value4);
+        iterator.remove();
+        Integer value5 = iterator.next();
+        Assert.assertNotEquals(value, value5);
+    }
+
+    @Test
+    public void iteratorRemove2()
+    {
+        MutableBagIterable<Integer> bag = this.newWith(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4);
+        Iterator<Integer> iterator = bag.iterator();
+        iterator.next();
+        iterator.next();
+        iterator.remove();
+        iterator.next();
+        iterator.next();
+        iterator.remove();
+        iterator.next();
+        iterator.remove();
+        iterator.next();
+        iterator.next();
+        iterator.remove();
+        Assert.assertEquals(4, bag.sizeDistinct());
+        Assert.assertEquals(8, bag.size());
+    }
+
     @Override
     @Test
     public void removeIf()

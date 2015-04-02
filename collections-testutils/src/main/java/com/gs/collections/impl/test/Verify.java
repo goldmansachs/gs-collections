@@ -36,8 +36,10 @@ import java.util.concurrent.Callable;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.PrimitiveIterable;
+import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.sorted.SortedBag;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
@@ -2260,6 +2262,48 @@ public final class Verify extends Assert
             }
             Verify.assertSetsEqual(mapName + " keys", expectedMap.keySet(), actualMap.keySet());
             Verify.assertSetsEqual(mapName + " entries", expectedMap.entrySet(), actualMap.entrySet());
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    public static void assertBagsEqual(Bag<?> expectedBag, Bag<?> actualBag)
+    {
+        try
+        {
+            Verify.assertBagsEqual("bag", expectedBag, actualBag);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    public static void assertBagsEqual(String bagName, Bag<?> expectedBag, final Bag<?> actualBag)
+    {
+        try
+        {
+            if (expectedBag == null)
+            {
+                Assert.assertNull(bagName + " should be null", actualBag);
+                return;
+            }
+
+            Assert.assertNotNull(bagName + " should not be null", actualBag);
+
+            Assert.assertEquals(bagName + " size", expectedBag.size(), actualBag.size());
+            Assert.assertEquals(bagName + " sizeDistinct", expectedBag.sizeDistinct(), actualBag.sizeDistinct());
+
+            expectedBag.forEachWithOccurrences(new ObjectIntProcedure<Object>()
+            {
+                public void value(Object expectedKey, int expectedValue)
+                {
+                    int actualValue = actualBag.occurrencesOf(expectedKey);
+                    Assert.assertEquals("Occurrences of " + expectedKey, expectedValue, actualValue);
+                }
+            });
         }
         catch (AssertionError e)
         {

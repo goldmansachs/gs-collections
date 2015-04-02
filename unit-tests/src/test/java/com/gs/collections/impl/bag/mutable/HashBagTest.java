@@ -33,6 +33,7 @@ public class HashBagTest extends MutableBagTestCase
         return HashBag.newBagWith(littleElements);
     }
 
+    @Override
     protected <T> MutableBag<T> newWithOccurrences(ObjectIntPair<T>... elementsWithOccurrences)
     {
         MutableBag<T> bag = this.newWith();

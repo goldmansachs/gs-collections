@@ -105,6 +105,11 @@ public final class Functions0
         return new PassThruFunction0<T>(t);
     }
 
+    public static Function0<Integer> zeroInteger()
+    {
+        return INTEGER_ZERO;
+    }
+
     public static Function0<AtomicInteger> zeroAtomicInteger()
     {
         return ATOMIC_INTEGER_ZERO;

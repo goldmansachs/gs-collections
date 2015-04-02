@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,6 +78,7 @@ import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.primitive.BooleanBags;
 import com.gs.collections.impl.factory.primitive.ByteBags;
 import com.gs.collections.impl.factory.primitive.CharBags;
@@ -722,7 +723,13 @@ public abstract class AbstractRichIterableTestCase
     {
         Assert.assertEquals(
                 Bags.mutable.of(2, 3, 4),
-                this.newWith(1, 2, 3).collectWith(AddFunction.INTEGER, 1, FastList.<Integer>newList()).toBag());
+                this.newWith(1, 2, 3).collectWith(AddFunction.INTEGER, 1, Lists.mutable.empty()).toBag());
+        Assert.assertEquals(
+                Bags.mutable.of(2, 3, 4),
+                this.newWith(1, 2, 3).collectWith(AddFunction.INTEGER, 1, Bags.mutable.empty()));
+        Assert.assertEquals(
+                Sets.mutable.of(2, 3, 4),
+                this.newWith(1, 2, 3).collectWith(AddFunction.INTEGER, 1, Sets.mutable.empty()));
     }
 
     @Test

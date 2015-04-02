@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
@@ -1219,51 +1218,45 @@ public class TreeBag<T>
 
     private class InternalIterator implements Iterator<T>
     {
-        private int position;
-        private boolean isCurrentKeySet;
-        private int currentKeyPosition;
-        private int currentKeyOccurrences;
-        private Iterator<Pair<T, Counter>> keyValueIterator = TreeBag.this.items.keyValuesView().iterator();
-        private Pair<T, Counter> currentKeyValue;
+        private final Iterator<T> iterator = TreeBag.this.items.keySet().iterator();
+
+        private T currentItem;
+        private int occurrences;
+        private boolean canRemove;
 
         public boolean hasNext()
         {
-            return this.position != TreeBag.this.size;
+            return this.occurrences > 0 || this.iterator.hasNext();
         }
 
         public T next()
         {
-            if (!this.hasNext())
+            if (this.occurrences == 0)
             {
-                throw new NoSuchElementException();
+                this.currentItem = this.iterator.next();
+                this.occurrences = TreeBag.this.occurrencesOf(this.currentItem);
             }
-            this.isCurrentKeySet = true;
-            if (this.currentKeyPosition < this.currentKeyOccurrences)
-            {
-                this.currentKeyPosition++;
-                this.position++;
-                return this.currentKeyValue.getOne();
-            }
-            this.currentKeyValue = this.keyValueIterator.next();
-            this.currentKeyPosition = 1;
-            this.currentKeyOccurrences = this.currentKeyValue.getTwo().getCount();
-            this.position++;
-            return this.currentKeyValue.getOne();
+            this.occurrences--;
+            this.canRemove = true;
+            return this.currentItem;
         }
 
         public void remove()
         {
-            if (!this.isCurrentKeySet)
+            if (!this.canRemove)
             {
                 throw new IllegalStateException();
             }
-            this.isCurrentKeySet = false;
-            this.position--;
-
-            TreeBag.this.remove(this.currentKeyValue.getOne());
-            this.keyValueIterator = TreeBag.this.items.keyValuesView().iterator();
-            this.currentKeyOccurrences--;
-            this.currentKeyPosition--;
+            if (this.occurrences == 0)
+            {
+                this.iterator.remove();
+                TreeBag.this.size--;
+            }
+            else
+            {
+                TreeBag.this.remove(this.currentItem);
+            }
+            this.canRemove = false;
         }
     }
 }

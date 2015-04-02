@@ -21,7 +21,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -44,13 +43,7 @@ import org.junit.Test;
  */
 public class ConcurrentHashMapAcceptanceTest
 {
-    private static final MutableMap<Integer, MutableBag<Integer>> BAG_MUTABLE_MAP = Interval.oneTo(1000).groupBy(new Function<Integer, Integer>()
-    {
-        public Integer valueOf(Integer each)
-        {
-            return each % 100;
-        }
-    }).toMap(HashBag::new);
+    private static final MutableMap<Integer, MutableBag<Integer>> BAG_MUTABLE_MAP = Interval.oneTo(1000).groupBy(each -> each % 100).toMap(HashBag::new);
 
     private ExecutorService executor;
 

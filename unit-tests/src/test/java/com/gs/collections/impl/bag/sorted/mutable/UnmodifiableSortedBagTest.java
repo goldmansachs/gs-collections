@@ -159,6 +159,21 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
         Verify.assertThrows(UnsupportedOperationException.class, iterator3::remove);
     }
 
+    @Override
+    @Test
+    public void iteratorRemove()
+    {
+        MutableSortedBag<Integer> bag = this.newWith(-1, 0, 1, 1, 2);
+        Iterator<Integer> iterator = bag.iterator();
+        Verify.assertThrows(UnsupportedOperationException.class, iterator::remove);
+    }
+
+    @Override
+    @Test
+    public void iteratorRemove2()
+    {
+    }
+
     @Test
     public void testAsUnmodifiable()
     {

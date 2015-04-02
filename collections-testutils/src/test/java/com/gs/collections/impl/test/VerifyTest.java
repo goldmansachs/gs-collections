@@ -22,6 +22,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Callable;
 
 import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.factory.Lists;
@@ -352,6 +353,34 @@ public class VerifyTest
             public void run()
             {
                 Verify.assertListsEqual("message", FastList.newListWith(1, 2, 3), FastList.newListWith(1, 2));
+            }
+        });
+    }
+
+    @Test
+    public void assertBagsEqual()
+    {
+        Verify.assertBagsEqual(HashBag.newBagWith(1, 1, 2, 2), HashBag.newBagWith(1, 2, 2, 1));
+        Verify.assertBagsEqual("message", HashBag.newBagWith(1, 1, 2, 2), HashBag.newBagWith(1, 1, 2, 2));
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertBagsEqual(HashBag.newBagWith(1, 1, 2, 2), HashBag.newBagWith(1, 1, 2, 2, 3, 3));
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertBagsEqual("message", HashBag.newBagWith(1, 1, 2, 2, 3, 3), HashBag.newBagWith(1, 1, 2, 2));
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertBagsEqual("message", HashBag.newBagWith(1, 1, 2, 2, 4, 4), HashBag.newBagWith(1, 1, 2, 2, 3, 3));
             }
         });
     }
