@@ -7,10 +7,6 @@
 
 GS Collections is a collections framework for Java. It has JDK-compatible List, Set and Map implementations with a rich API and set of utility classes that work with any JDK compatible Collections, Arrays, Maps or Strings. The iteration protocol was inspired by the Smalltalk collection framework.
 
-## Download
-* [Version 6.1.0](http://www.goldmansachs.com/gs-collections/binaries/gs-collections-6.1.0.zip)
-* [Older versions](https://github.com/goldmansachs/gs-collections/releases)
-
 ## Quick Example
 GS Collections puts iteration methods on the container types. Lambdas are simulated using anonymous inner classes. Here's a code example that demonstrates the usual style of programming with GS Collections.
 
@@ -72,6 +68,58 @@ We currently do all development in an internal Subversion repository and are not
 
 ### Does Goldman Sachs use GS Collections?
 Yes, we use GS Collections in many of our internal applications.
+
+## Acquiring GS Collections
+
+### Download
+* [Version 6.1.0](http://www.goldmansachs.com/gs-collections/binaries/gs-collections-6.1.0.zip)
+* [Older versions](https://github.com/goldmansachs/gs-collections/releases)
+
+### Maven
+```xml
+<dependency>
+  <groupId>com.goldmansachs</groupId>
+  <artifactId>gs-collections-api</artifactId>
+  <version>6.1.0</version>
+</dependency>
+
+<dependency>
+  <groupId>com.goldmansachs</groupId>
+  <artifactId>gs-collections</artifactId>
+  <version>6.1.0</version>
+</dependency>
+
+<dependency>
+  <groupId>com.goldmansachs</groupId>
+  <artifactId>gs-collections-testutils</artifactId>
+  <version>6.1.0</version>
+  <scope>test</scope>
+</dependency>
+
+<dependency>
+  <groupId>com.goldmansachs</groupId>
+  <artifactId>gs-collections-forkjoin</artifactId>
+  <version>6.1.0</version>
+</dependency>
+```
+
+### Gradle
+
+```groovy
+compile 'com.goldmansachs:gs-collections-api:6.1.0'
+compile 'com.goldmansachs:gs-collections:6.1.0'
+testCompile 'com.goldmansachs:gs-collections-testutils:6.1.0'
+compile 'com.goldmansachs:gs-collections-forkjoin:6.1.0'
+```
+
+### Ivy
+
+```xml
+<dependency org="com.goldmansachs" name="gs-collections-api" rev="6.1.0" />
+<dependency org="com.goldmansachs" name="gs-collections" rev="6.1.0" />
+<dependency org="com.goldmansachs" name="gs-collections-testutils" rev="6.1.0" />
+<dependency org="com.goldmansachs" name="gs-collections-forkjoin" rev="6.1.0"/>
+```
 
 [travis]:https://travis-ci.org/goldmansachs/gs-collections
 [travis img]:https://travis-ci.org/goldmansachs/gs-collections.svg?branch=master
