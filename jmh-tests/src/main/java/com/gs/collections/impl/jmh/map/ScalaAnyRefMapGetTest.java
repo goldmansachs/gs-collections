@@ -19,8 +19,6 @@ package com.gs.collections.impl.jmh.map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import net.openhft.koloboke.collect.map.ObjObjMap;
-import net.openhft.koloboke.collect.map.hash.HashObjObjMaps;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -30,11 +28,13 @@ import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import scala.collection.mutable.AnyRefMap;
+import scala.collection.mutable.Map;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class KolobokeMapPutTest
+public class ScalaAnyRefMapGetTest
 {
     private static final int RANDOM_COUNT = 9;
 
@@ -43,11 +43,8 @@ public class KolobokeMapPutTest
             "6250000", "6500000", "6750000", "7000000", "7250000", "7500000", "7750000", "8000000", "8250000", "8500000", "8750000", "9000000",
             "9250000", "9500000", "9750000", "10000000"})
     public int size;
-    @Param({"true", "false"})
-    public boolean isPresized;
-    @Param("0.75")
-    public float loadFactor; //Adding a loadFactor for only ease of data plots
     private String[] elements;
+    private Map<String, String> scalaAnyRefMap;
 
     @Setup
     public void setUp()
@@ -55,25 +52,29 @@ public class KolobokeMapPutTest
         Random random = new Random(123456789012345L);
 
         this.elements = new String[this.size];
+        this.scalaAnyRefMap = new AnyRefMap<>(this.size);
 
         for (int i = 0; i < this.size; i++)
         {
-            this.elements[i] = RandomStringUtils.random(RANDOM_COUNT, 0, 0, false, true, null, random);
+            String element = RandomStringUtils.random(RANDOM_COUNT, 0, 0, false, true, null, random);
+            this.elements[i] = element;
+            this.scalaAnyRefMap.put(element, "dummy");
         }
     }
 
     @Benchmark
-    public ObjObjMap<String, String> koloboke()
+    public void get()
     {
         int localSize = this.size;
         String[] localElements = this.elements;
-
-        ObjObjMap<String, String> koloboke = this.isPresized ? HashObjObjMaps.newMutableMap(localSize) : HashObjObjMaps.newMutableMap();
+        Map<String, String> localScalaAnyRefMap = this.scalaAnyRefMap;
 
         for (int i = 0; i < localSize; i++)
         {
-            koloboke.put(localElements[i], "dummy");
+            if (!localScalaAnyRefMap.get(localElements[i]).isDefined())
+            {
+                throw new AssertionError(i);
+            }
         }
-        return koloboke;
     }
 }

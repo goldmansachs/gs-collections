@@ -19,8 +19,6 @@ package com.gs.collections.impl.jmh.map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import net.openhft.koloboke.collect.map.ObjObjMap;
-import net.openhft.koloboke.collect.map.hash.HashObjObjMaps;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -30,11 +28,13 @@ import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import scala.collection.mutable.AnyRefMap;
+import scala.collection.mutable.Map;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class KolobokeMapPutTest
+public class ScalaAnyRefMapPutTest
 {
     private static final int RANDOM_COUNT = 9;
 
@@ -63,17 +63,17 @@ public class KolobokeMapPutTest
     }
 
     @Benchmark
-    public ObjObjMap<String, String> koloboke()
+    public Map<String, String> scalaAnyRef()
     {
         int localSize = this.size;
         String[] localElements = this.elements;
 
-        ObjObjMap<String, String> koloboke = this.isPresized ? HashObjObjMaps.newMutableMap(localSize) : HashObjObjMaps.newMutableMap();
+        Map<String, String> scalaAnyRefMap = this.isPresized ? new AnyRefMap<>(localSize) : new AnyRefMap<>();
 
         for (int i = 0; i < localSize; i++)
         {
-            koloboke.put(localElements[i], "dummy");
+            scalaAnyRefMap.put(localElements[i], "dummy");
         }
-        return koloboke;
+        return scalaAnyRefMap;
     }
 }
