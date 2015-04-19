@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package com.gs.collections.impl
 
-import org.junit.Assert
 import java.util.concurrent.TimeUnit
+
+import org.junit.Assert
 
 trait SynchronizedTestTrait
 {
@@ -29,12 +30,12 @@ trait SynchronizedTestTrait
 
         def open()
         {
-            this.latch.countDown
+            this.latch.countDown()
         }
 
         def await()
         {
-            this.latch.await
+            this.latch.await()
         }
     }
 
@@ -83,9 +84,9 @@ trait SynchronizedTestTrait
                     Thread.sleep(java.lang.Long.MAX_VALUE)
                 }
                 catch
-                {
-                    case ignore: InterruptedException => Thread.currentThread.interrupt
-                }
+                    {
+                        case ignore: InterruptedException => Thread.currentThread.interrupt
+                    }
             }
         }
 
@@ -102,7 +103,7 @@ trait SynchronizedTestTrait
             threadSafe,
             measuredTime >= millisTimeout)
 
-        lockHolderThread.interrupt
-        lockHolderThread.join
+        lockHolderThread.interrupt()
+        lockHolderThread.join()
     }
 }

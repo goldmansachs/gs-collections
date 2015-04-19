@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,31 +16,23 @@
 
 package com.gs.collections.impl.bag.mutable
 
-import com.gs.collections.impl.Prelude._
 import com.gs.collections.api.bag.MutableBag
-import com.gs.collections.impl.ThreadSafetyTestTrait
+import com.gs.collections.impl.MultiReaderThreadSafetyTestTrait
+import com.gs.collections.impl.Prelude._
 
-trait MultiReaderHashBagTestTrait extends ThreadSafetyTestTrait
+trait MultiReaderHashBagTestTrait extends MultiReaderThreadSafetyTestTrait
 {
-    val classUnderTest: MultiReaderHashBag[_]
+    val classUnderTest: MultiReaderHashBag[Int]
 
     def createReadLockHolderThread(gate: Gate): Thread =
-    {
         spawn
         {
-            this.classUnderTest.withReadLockAndDelegate({
-                _: MutableBag[_] => sleep(gate)
-            })
+            this.classUnderTest.withReadLockAndDelegate((_: MutableBag[_]) => sleep(gate))
         }
-    }
 
     def createWriteLockHolderThread(gate: Gate): Thread =
-    {
         spawn
         {
-            this.classUnderTest.withWriteLockAndDelegate({
-                _: MutableBag[_] => sleep(gate)
-            })
+            this.classUnderTest.withWriteLockAndDelegate((_: MutableBag[_]) => sleep(gate))
         }
-    }
 }

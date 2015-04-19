@@ -284,17 +284,17 @@
 
     <module name="RegexpMultiline">
         <property name="format" value="\r\r[ ]*\}" />
-        <property name="message" value="Last line before closing a scope bay not be blank." />
+        <property name="message" value="Last line before closing a scope may not be blank." />
     </module>
 
     <module name="RegexpMultiline">
         <property name="format" value="\n\n[ ]*\}" />
-        <property name="message" value="Last line before closing a scope bay not be blank." />
+        <property name="message" value="Last line before closing a scope may not be blank." />
     </module>
 
     <module name="RegexpMultiline">
         <property name="format" value="\r\n\r\n[ ]*\}" />
-        <property name="message" value="Last line before closing a scope bay not be blank." />
+        <property name="message" value="Last line before closing a scope may not be blank." />
     </module>
 
 </module>
