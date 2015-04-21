@@ -60,13 +60,7 @@ public class IntIntMapLargeStressTest
 
     int gscIndex(int element)
     {
-        int code = element;
-        code ^= code >>> 15;
-        code *= 0xACAB2A4D;
-        code ^= code >>> 15;
-        code *= 0x5CC7DF53;
-        code ^= code >>> 12;
-        return this.mask(code);
+        return this.mask(element);
     }
 
     private int mask(int spread)
@@ -102,12 +96,12 @@ public class IntIntMapLargeStressTest
 
     protected int[] getGSCArray(int number, int lower, int upper, Random random)
     {
-        int[] gscCollisions = this.getGSCCollisions(number, lower, upper).toArray();
+        int[] gscCollisions = this.getGSCSequenceCollisions(number, lower, upper).toArray();
         this.shuffle(gscCollisions, random);
         return gscCollisions;
     }
 
-    protected MutableIntList getGSCCollisions(int number, int lower, int upper)
+    protected MutableIntList getGSCSequenceCollisions(int number, int lower, int upper)
     {
         MutableIntList gscCollidingNumbers = new IntArrayList();
         for (int i = lower; i < upper && gscCollidingNumbers.size() < KEY_COUNT; i++)
@@ -123,12 +117,12 @@ public class IntIntMapLargeStressTest
 
     protected int[] getKolobokeArray(int number, int lower, int upper, Random random)
     {
-        int[] kolobokeCollisions = this.getKolobokeCollisions(number, lower, upper).toArray();
+        int[] kolobokeCollisions = this.getKolobokeSequenceCollisions(number, lower, upper).toArray();
         this.shuffle(kolobokeCollisions, random);
         return kolobokeCollisions;
     }
 
-    protected MutableIntList getKolobokeCollisions(int number, int lower, int upper)
+    protected MutableIntList getKolobokeSequenceCollisions(int number, int lower, int upper)
     {
         MutableIntList kolobokeCollidingNumbers = new IntArrayList();
         for (int i = lower; i < upper && kolobokeCollidingNumbers.size() < KEY_COUNT; i++)
@@ -219,6 +213,40 @@ public class IntIntMapLargeStressTest
                 newMap.put(this.gscIntKeysForMap[i], 4);
             }
             if (newMap.size() != KEY_COUNT)
+            {
+                throw new AssertionError("size is " + newMap.size());
+            }
+        }
+    }
+
+    @Benchmark
+    public void gscRemove()
+    {
+        for (int j = 0; j < LOOP_COUNT; j++)
+        {
+            MutableIntIntMap newMap = new IntIntHashMap(this.intIntGsc);
+            for (int i = 0; i < KEY_COUNT; i++)
+            {
+                newMap.remove(this.gscIntKeysForMap[i]);
+            }
+            if (newMap.size() != 0)
+            {
+                throw new AssertionError("size is " + newMap.size());
+            }
+        }
+    }
+
+    @Benchmark
+    public void kolobokeRemove()
+    {
+        for (int i = 0; i < LOOP_COUNT; i++)
+        {
+            IntIntMap newMap = HashIntIntMaps.newMutableMap(this.intIntKoloboke);
+            for (int j = 0; j < KEY_COUNT; j++)
+            {
+                newMap.remove(this.kolobokeIntKeysForMap[j]);
+            }
+            if (newMap.size() != 0)
             {
                 throw new AssertionError("size is " + newMap.size());
             }

@@ -398,6 +398,16 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
             boolean valueEqualsOneValue = this.containsOneKey && <(equals.(type))("this.oneValue", "value")>;
             return valueEqualsZeroValue || valueEqualsOneValue;
         }
+
+        public SentinelValues copy()
+        {
+            SentinelValues sentinelValues = new SentinelValues();
+            sentinelValues.zeroValue = this.zeroValue;
+            sentinelValues.oneValue = this.oneValue;
+            sentinelValues.containsOneKey = this.containsOneKey;
+            sentinelValues.containsZeroKey = this.containsZeroKey;
+            return sentinelValues;
+        }
     }
 
     protected abstract class Abstract<name>ValuesCollection implements Mutable<name>Collection

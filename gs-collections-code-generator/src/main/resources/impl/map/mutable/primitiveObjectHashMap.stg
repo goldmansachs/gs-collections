@@ -3923,7 +3923,7 @@ probe3264() ::= <<
 // exposed for testing
 int probe(<type> element)
 {
-    int index = this.spreadAndMask(element);
+    int index = this.mask((int) element);
     <type> keyAtIndex = this.keys[index];
 
     if (<(equals.(type))("keyAtIndex", "element")> || <(equals.(type))("keyAtIndex", "EMPTY_KEY")>)
@@ -3977,7 +3977,7 @@ int probeTwo(<type> element, int removedIndex)
 
 int probeThree(<type> element, int removedIndex)
 {
-    int nextIndex = <(reverseSpread.(type))()>(SpreadFunctions.<type>SpreadOne(element));
+    int nextIndex = (int) SpreadFunctions.<type>SpreadOne(element);
     int spreadTwo = <(reverseSpread.(type))()>(SpreadFunctions.<type>SpreadTwo(element)) | 1;
 
     while(true)

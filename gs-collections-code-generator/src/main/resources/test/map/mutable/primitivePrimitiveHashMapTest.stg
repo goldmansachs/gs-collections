@@ -194,7 +194,7 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
     }
 
     @Test
-    public void removeWithRehash() throws Exception
+    public void removeWithoutRehash() throws Exception
     {
         <name1><name2>HashMap hashMap = new <name1><name2>HashMap();
         for (int i = 2; i \< 10; i++)
@@ -228,7 +228,7 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
 
         hashMap.remove(<(literal.(type1))("6")>);
         Assert.assertEquals(3, occupiedWithData.get(hashMap));
-        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(5, occupiedWithSentinels.get(hashMap));
     }
 
     @Test

@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.map.primitive.MutableIntIntMap;
 import com.gs.collections.api.set.primitive.MutableIntSet;
+import com.gs.collections.impl.SpreadFunctions;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.map.mutable.primitive.IntIntHashMap;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
@@ -60,24 +61,12 @@ public class IntIntMapSmallStressTest
 
     private int gscIndex(int element)
     {
-        int code = element;
-        code ^= code >>> 15;
-        code *= 0xACAB2A4D;
-        code ^= code >>> 15;
-        code *= 0x5CC7DF53;
-        code ^= code >>> 12;
-        return this.mask(code);
+        return this.mask(element);
     }
 
     private int gscIndexTwo(int element)
     {
-        int code = element;
-        code ^= code >>> 14;
-        code *= 0xBA1CCD33;
-        code ^= code >>> 13;
-        code *= 0x9B6296CB;
-        code ^= code >>> 12;
-        return this.mask(code);
+        return this.mask(SpreadFunctions.intSpreadTwo(element));
     }
 
     private int mask(int spread)
@@ -98,8 +87,8 @@ public class IntIntMapSmallStressTest
         int number = 23;
         int lower = Integer.MIN_VALUE;
         int upper = Integer.MAX_VALUE;
-        this.kolobokeIntKeysForMap = this.fullyRandom ? randomNumbersForMap : this.getKolobokeCollisions(number, lower, upper, random);
-        this.gscIntKeysForMap = this.fullyRandom ? randomNumbersForMap : this.getGSCCollisions(number, lower, upper, random);
+        this.kolobokeIntKeysForMap = this.fullyRandom ? randomNumbersForMap : this.getKolobokeArray(number, lower, upper, random);
+        this.gscIntKeysForMap = this.fullyRandom ? randomNumbersForMap : this.getGSCArray(number, lower, upper, random);
 
         for (int i = 0; i < KEY_COUNT; i++)
         {
@@ -111,20 +100,20 @@ public class IntIntMapSmallStressTest
         this.shuffle(this.kolobokeIntKeysForMap, random);
     }
 
-    protected int[] getGSCCollisions(int number, int lower, int upper, Random random)
+    protected int[] getGSCArray(int number, int lower, int upper, Random random)
     {
-        int[] gscCollisions = this.getGSCCollisions(number, lower, upper).toArray();
+        int[] gscCollisions = this.getGSCSequenceCollisions(number, lower, upper).toArray();
         this.shuffle(gscCollisions, random);
         return gscCollisions;
     }
 
-    protected MutableIntList getGSCCollisions(int number, int lower, int upper)
+    protected MutableIntList getGSCSequenceCollisions(int number, int lower, int upper)
     {
         MutableIntList gscCollidingNumbers = new IntArrayList();
         for (int i = lower; i < upper && gscCollidingNumbers.size() < KEY_COUNT; i++)
         {
-            int index = this.gscIndex(i);
-            if (index >= number && index <= number + 100)
+            if (this.gscIndex(i) - this.gscIndex(number) >= 0 && this.gscIndex(i) - this.gscIndex(number) < 10
+                    && (this.gscIndexTwo(i) - this.gscIndexTwo(number) >= 0) && (this.gscIndexTwo(i) - this.gscIndexTwo(number) < 10))
             {
                 gscCollidingNumbers.add(i);
             }
@@ -132,14 +121,14 @@ public class IntIntMapSmallStressTest
         return gscCollidingNumbers;
     }
 
-    protected int[] getKolobokeCollisions(int number, int lower, int upper, Random random)
+    protected int[] getKolobokeArray(int number, int lower, int upper, Random random)
     {
-        int[] kolobokeCollisions = this.getKolobokeCollisions(number, lower, upper).toArray();
+        int[] kolobokeCollisions = this.getKolobokeSequenceCollisions(number, lower, upper).toArray();
         this.shuffle(kolobokeCollisions, random);
         return kolobokeCollisions;
     }
 
-    protected MutableIntList getKolobokeCollisions(int number, int lower, int upper)
+    protected MutableIntList getKolobokeSequenceCollisions(int number, int lower, int upper)
     {
         MutableIntList kolobokeCollidingNumbers = new IntArrayList();
         for (int i = lower; i < upper && kolobokeCollidingNumbers.size() < KEY_COUNT; i++)
@@ -230,6 +219,40 @@ public class IntIntMapSmallStressTest
                 newMap.put(this.gscIntKeysForMap[i], 4);
             }
             if (newMap.size() != KEY_COUNT)
+            {
+                throw new AssertionError("size is " + newMap.size());
+            }
+        }
+    }
+
+    @Benchmark
+    public void gscRemove()
+    {
+        for (int j = 0; j < LOOP_COUNT; j++)
+        {
+            MutableIntIntMap newMap = new IntIntHashMap(this.intIntGsc);
+            for (int i = 0; i < KEY_COUNT; i++)
+            {
+                newMap.remove(this.gscIntKeysForMap[i]);
+            }
+            if (newMap.size() != 0)
+            {
+                throw new AssertionError("size is " + newMap.size());
+            }
+        }
+    }
+
+    @Benchmark
+    public void kolobokeRemove()
+    {
+        for (int j = 0; j < LOOP_COUNT; j++)
+        {
+            IntIntMap newMap = HashIntIntMaps.newMutableMap(this.intIntKoloboke);
+            for (int i = 0; i < KEY_COUNT; i++)
+            {
+                newMap.remove(this.kolobokeIntKeysForMap[i]);
+            }
+            if (newMap.size() != 0)
             {
                 throw new AssertionError("size is " + newMap.size());
             }

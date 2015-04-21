@@ -61,13 +61,7 @@ public class LongLongMapLargeStressTest
 
     private int gscIndex(int element)
     {
-        long code = element;
-        code ^= code >>> 28;
-        code *= -4254747342703917655L;
-        code ^= code >>> 43;
-        code *= -908430792394475837L;
-        code ^= code >>> 23;
-        return this.mask((int) code);
+        return this.mask(element);
     }
 
     private int mask(int spread)
@@ -114,12 +108,12 @@ public class LongLongMapLargeStressTest
 
     protected long[] getGSCArray(int number, int lower, int upper, Random random)
     {
-        long[] gscCollisions = this.getGSCCollisions(number, lower, upper).toArray();
+        long[] gscCollisions = this.getGSCSequenceCollisions(number, lower, upper).toArray();
         this.shuffle(gscCollisions, random);
         return gscCollisions;
     }
 
-    private MutableLongList getGSCCollisions(int number, int lower, int upper)
+    private MutableLongList getGSCSequenceCollisions(int number, int lower, int upper)
     {
         MutableLongList gscCollidingNumbers = new LongArrayList();
         for (int i = lower; i < upper && gscCollidingNumbers.size() < KEY_COUNT; i++)
@@ -135,12 +129,12 @@ public class LongLongMapLargeStressTest
 
     protected long[] getKolobokeArray(int number, int lower, int upper, Random random)
     {
-        long[] kolobokeCollisions = this.getKolobokeCollisions(number, lower, upper).toArray();
+        long[] kolobokeCollisions = this.getKolobokeSequenceCollisions(number, lower, upper).toArray();
         this.shuffle(kolobokeCollisions, random);
         return kolobokeCollisions;
     }
 
-    private MutableLongList getKolobokeCollisions(int number, int lower, int upper)
+    private MutableLongList getKolobokeSequenceCollisions(int number, int lower, int upper)
     {
         MutableLongList kolobokeCollidingNumbers = new LongArrayList();
         for (int i = lower; i < upper && kolobokeCollidingNumbers.size() < KEY_COUNT; i++)
@@ -220,6 +214,40 @@ public class LongLongMapLargeStressTest
                 newMap.put(this.gscLongKeysForMap[i], 4);
             }
             if (newMap.size() != KEY_COUNT)
+            {
+                throw new AssertionError("size is " + newMap.size());
+            }
+        }
+    }
+
+    @Benchmark
+    public void gscRemove()
+    {
+        for (int j = 0; j < LOOP_COUNT; j++)
+        {
+            MutableLongLongMap newMap = new LongLongHashMap(this.longLongGsc);
+            for (int i = 0; i < KEY_COUNT; i++)
+            {
+                newMap.remove(this.gscLongKeysForMap[i]);
+            }
+            if (newMap.size() != 0)
+            {
+                throw new AssertionError("size is " + newMap.size());
+            }
+        }
+    }
+
+    @Benchmark
+    public void kolobokeRemove()
+    {
+        for (int j = 0; j < LOOP_COUNT; j++)
+        {
+            LongLongMap newMap = HashLongLongMaps.newMutableMap(this.longLongKoloboke);
+            for (int i = 0; i < KEY_COUNT; i++)
+            {
+                newMap.remove(this.kolobokeLongKeysForMap[i]);
+            }
+            if (newMap.size() != 0)
             {
                 throw new AssertionError("size is " + newMap.size());
             }

@@ -134,8 +134,27 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
 
     public <name1><name2>HashMap(<name1><name2>Map map)
     {
-        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY));
-        this.putAll(map);
+        if (map instanceof <name1><name2>HashMap && ((<name1><name2>HashMap) map).occupiedWithSentinels == 0)
+        {
+            <name1><name2>HashMap hashMap = (<name1><name2>HashMap) map;
+            this.occupiedWithData = hashMap.occupiedWithData;
+            if (hashMap.sentinelValues != null)
+            {
+                this.sentinelValues = hashMap.sentinelValues.copy();
+            }
+            <if(sameTwoPrimitives)>
+            this.keysValues = Arrays.copyOf(hashMap.keysValues, hashMap.keysValues.length);
+            <else>
+            this.keys = Arrays.copyOf(hashMap.keys, hashMap.keys.length);
+            this.values = Arrays.copyOf(hashMap.values, hashMap.values.length);
+            <endif>
+        }
+        else
+        {
+            int capacity = this.smallestPowerOfTwoGreaterThan(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY) \<\< 1);
+            this.allocateTable(capacity);
+            this.putAll(map);
+        }
     }
 
     public static <name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1)
@@ -523,7 +542,7 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
         this.<keyArray>[index] = key;
         this.<valueArray>[index<valueIndex>] = value;
         this.occupiedWithData++;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
+        if (this.occupiedWithData + this.occupiedWithSentinels > this.maxOccupiedWithData())
         {
             this.rehashAndGrow();
         }
@@ -539,10 +558,6 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
         this.<valueArray>[index<valueIndex>] = EMPTY_VALUE;
         this.occupiedWithData--;
         this.occupiedWithSentinels++;
-        if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
-        {
-            this.rehash();
-        }
     }
 
     private void copyKeys()
@@ -652,6 +667,21 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
 
     public <type2> getIfAbsent(<type1> key, <type2> ifAbsent)
     {
+        if (isEmptyKey(key) || isRemovedKey(key))
+        {
+            return this.getForSentinel(key, ifAbsent);
+        }
+        <if(!primitive1.bytePrimitive)>
+        if (this.occupiedWithSentinels == 0)
+        {
+            return this.fastGetIfAbsent(key, ifAbsent);
+        }
+        <endif>
+        return this.slowGetIfAbsent(key, ifAbsent);
+    }
+
+    private <type2> getForSentinel(<type1> key, <type2> ifAbsent)
+    {
         if (isEmptyKey(key))
         {
             if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
@@ -660,14 +690,15 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
             }
             return this.sentinelValues.zeroValue;
         }
-        if (isRemovedKey(key))
+        if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
         {
-            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
-            {
-                return ifAbsent;
-            }
-            return this.sentinelValues.oneValue;
+            return ifAbsent;
         }
+        return this.sentinelValues.oneValue;
+    }
+
+    private <type2> slowGetIfAbsent(<type1> key, <type2> ifAbsent)
+    {
         int index = this.probe(key);
         if (<(equals.(type1))({this.<keyArray>[index]}, "key")>)
         {
@@ -675,6 +706,39 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
         }
         return ifAbsent;
     }
+
+<if(!primitive1.bytePrimitive)>
+    private <type2> fastGetIfAbsent(<type1> key, <type2> ifAbsent)
+    {
+        int index = this.mask((int) key)<if(sameTwoPrimitives)> \<\< 1<endif>;
+
+        for (int i = 0; i \< INITIAL_LINEAR_PROBE; i<increment>)
+        {
+            <type1> keyAtIndex = this.<keyArray>[index];
+            if (<(equals.(type1))("keyAtIndex", "key")>)
+            {
+                return this.<valueArray>[index<valueIndex>];
+            }
+            if (<(equals.(type1))("keyAtIndex", "EMPTY_KEY")>)
+            {
+                return ifAbsent;
+            }
+            index = (index<if(sameTwoPrimitives)> + 2<else> + 1<endif>) & (this.<keyArray>.length - 1);
+        }
+        return this.slowGetIfAbsentTwo(key, ifAbsent);
+    }
+
+    private <type2> slowGetIfAbsentTwo(<type1> key, <type2> ifAbsent)
+    {
+        int index = this.probeTwo(key, -1);
+        if (<(equals.(type1))({this.<keyArray>[index]}, "key")>)
+        {
+            return this.<valueArray>[index<valueIndex>];
+        }
+        return ifAbsent;
+    }
+
+<endif>
 
     public <type2> getOrThrow(<type1> key)
     {
@@ -810,11 +874,6 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
     public void compact()
     {
         this.rehash(this.smallestPowerOfTwoGreaterThan(this.size()));
-    }
-
-    private void rehash()
-    {
-        this.rehash(this.<keyArray>.length<if(sameTwoPrimitives)> >\> 1<endif>);
     }
 
     private void rehashAndGrow()
@@ -1496,7 +1555,7 @@ probe3264() ::= <<
 // exposed for testing
 int probe(<type1> element)
 {
-    int index = this.spreadAndMask(element)<if(sameTwoPrimitives)> \<\< 1<endif>;
+    int index = this.mask((int) element)<if(sameTwoPrimitives)> \<\< 1<endif>;
     <type1> keyAtIndex = this.<keyArray>[index];
 
     if (<(equals.(type1))("keyAtIndex", "element")> || <(equals.(type1))("keyAtIndex", "EMPTY_KEY")>)
@@ -1550,7 +1609,7 @@ int probeTwo(<type1> element, int removedIndex)
 
 int probeThree(<type1> element, int removedIndex)
 {
-    int nextIndex = <(reverseSpread.(type1))()>(SpreadFunctions.<type1>SpreadOne(element))<if(sameTwoPrimitives)> \<\< 1<endif>;
+    int nextIndex = (int) SpreadFunctions.<type1>SpreadOne(element)<if(sameTwoPrimitives)> \<\< 1<endif>;
     int spreadTwo = <(reverseSpread.(type1))()>(SpreadFunctions.<type1>SpreadTwo(element)) | 1;
 
     while (true)

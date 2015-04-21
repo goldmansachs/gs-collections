@@ -32,7 +32,7 @@
 
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
-        <jmh.version>1.7</jmh.version>
+        <jmh.version>1.9</jmh.version>
     </properties>
 
     <dependencies>
