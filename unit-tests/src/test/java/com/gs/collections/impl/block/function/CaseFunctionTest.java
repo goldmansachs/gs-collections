@@ -20,6 +20,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -50,6 +51,12 @@ public class CaseFunctionTest
                 Functions.getFixedValue("Patience, grasshopper"));
 
         Assert.assertEquals("Yow!", function.valueOf(new Foo("", 1.0D)));
+
+        function.setDefault(Functions.getFixedValue("Patience, young grasshopper"));
+        Assert.assertEquals("Patience, grasshopper", function.valueOf(new Foo("", 6.0D)));
+        Assert.assertEquals("Patience, young grasshopper", function.valueOf(new Foo("", 1.0D)));
+
+        Verify.assertContains("CaseFunction", function.toString());
     }
 
     public static final class Foo implements Comparable<Foo>

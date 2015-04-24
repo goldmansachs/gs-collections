@@ -35,6 +35,13 @@ public class AddFunctionTest
     }
 
     @Test
+    public void addLongFunction()
+    {
+        Function2<Long, Long, Long> longFunction = AddFunction.LONG;
+        Assert.assertEquals(Long.valueOf(3L), longFunction.value(1L, 2L));
+    }
+
+    @Test
     public void classIsNonInstantiable()
     {
         Verify.assertClassNonInstantiable(AddFunction.class);
