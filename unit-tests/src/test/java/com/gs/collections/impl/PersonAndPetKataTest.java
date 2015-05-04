@@ -16,6 +16,12 @@
 
 package com.gs.collections.impl;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
@@ -137,8 +143,8 @@ public class PersonAndPetKataTest
     @Test
     public void howManyPeopleHaveCatsUsingStreams()
     {
-        int count =
-                (int) this.people.stream().filter(person -> person.hasPet(PetType.CAT)).count();
+        long count =
+                this.people.stream().filter(person -> person.hasPet(PetType.CAT)).count();
         Assert.assertEquals(2, count);
     }
 
@@ -178,7 +184,9 @@ public class PersonAndPetKataTest
     public void getPeopleWhoDontHaveCatsUsingStreams()
     {
         List<Person> peopleWithNoCats =
-                this.people.stream().filter(person -> !person.hasPet(PetType.CAT)).collect(Collectors.toList());
+                this.people.stream()
+                        .filter(person -> !person.hasPet(PetType.CAT))
+                        .collect(Collectors.toList());
         Verify.assertSize(5, peopleWithNoCats);
     }
 
@@ -261,7 +269,7 @@ public class PersonAndPetKataTest
     public void getAllPetsUsingStreams()
     {
         Assert.assertEquals(
-                UnifiedSet.newSetWith(PetType.values()),
+                new HashSet<>(Arrays.asList(PetType.values())),
                 this.people.stream().flatMap(person -> person.getPetTypes().stream()).collect(Collectors.toSet())
         );
     }
@@ -269,14 +277,16 @@ public class PersonAndPetKataTest
     @Test
     public void groupPeopleByLastName()
     {
-        Multimap<String, Person> byLastName = this.people.groupBy(Person::getLastName);
+        Multimap<String, Person> byLastName =
+                this.people.groupBy(Person::getLastName);
         Verify.assertIterableSize(3, byLastName.get("Smith"));
     }
 
     @Test
     public void groupPeopleByLastNameUsingStreams()
     {
-        Map<String, List<Person>> byLastName = this.people.stream().collect(Collectors.groupingBy(Person::getLastName));
+        Map<String, List<Person>> byLastName =
+                this.people.stream().collect(Collectors.groupingBy(Person::getLastName));
         Verify.assertIterableSize(3, byLastName.get("Smith"));
     }
 
@@ -298,6 +308,25 @@ public class PersonAndPetKataTest
     }
 
     @Test
+    public void groupPeopleByTheirPetsUsingStreams()
+    {
+        Map<PetType, List<Person>> peopleByPets = new HashMap<>();
+        this.people.stream().forEach(
+                person -> person.getPetTypes().stream().forEach(
+                        petType -> peopleByPets.computeIfAbsent(petType, e -> new ArrayList<>()).add(person)));
+        List<Person> catPeople = peopleByPets.get(PetType.CAT);
+        Assert.assertEquals(
+                "Mary, Bob",
+                catPeople.stream().map(Person::getFirstName).collect(Collectors.joining(", "))
+        );
+        List<Person> dogPeople = peopleByPets.get(PetType.DOG);
+        Assert.assertEquals(
+                "Bob, Ted",
+                dogPeople.stream().map(Person::getFirstName).collect(Collectors.joining(", "))
+        );
+    }
+
+    @Test
     public void getTotalNumberOfPets()
     {
         long numberOfPets = this.people.sumOfInt(Person::getNumberOfPets);
@@ -314,12 +343,10 @@ public class PersonAndPetKataTest
     @Test
     public void getAgesOfPets()
     {
-        IntList sortedAges =
-                this.people
-                        .asLazy()
-                        .flatCollect(Person::getPets)
-                        .collectInt(Pet::getAge)
-                        .toSortedList();
+        IntList sortedAges = this.people.asLazy()
+                .flatCollect(Person::getPets)
+                .collectInt(Pet::getAge)
+                .toSortedList();
         IntSet uniqueAges = sortedAges.toSet();
         IntSummaryStatistics stats = new IntSummaryStatistics();
         sortedAges.forEach(stats::accept);
@@ -339,23 +366,21 @@ public class PersonAndPetKataTest
     @Test
     public void getAgesOfPetsUsingStreams()
     {
-        List<Integer> sortedAges =
-                this.people
-                        .stream()
-                        .flatMap(person -> person.getPets().stream())
-                        .map(Pet::getAge)
-                        .sorted()
-                        .collect(Collectors.toList());
-        Set<Integer> uniqueAges = UnifiedSet.newSet(sortedAges);
+        List<Integer> sortedAges = this.people.stream()
+                .flatMap(person -> person.getPets().stream())
+                .map(Pet::getAge)
+                .sorted()
+                .collect(Collectors.toList());
+        Set<Integer> uniqueAges = new HashSet<>(sortedAges);
         IntSummaryStatistics stats = sortedAges.stream().collect(Collectors.summarizingInt(i -> i));
         Assert.assertTrue(sortedAges.stream().allMatch(i -> i > 0));
         Assert.assertFalse(sortedAges.stream().anyMatch(i -> i == 0));
         Assert.assertTrue(sortedAges.stream().noneMatch(i -> i < 0));
-        Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), uniqueAges);
-        Assert.assertEquals(stats.getMin(), 1);
-        Assert.assertEquals(stats.getMax(), 4);
-        Assert.assertEquals(stats.getSum(), 17);
-        Assert.assertEquals(stats.getAverage(), 17.0d / 9.0d, 0.0);
+        Assert.assertEquals(new HashSet<>(Arrays.asList(1, 2, 3, 4)), uniqueAges);
+        Assert.assertEquals(stats.getMin(), sortedAges.stream().mapToInt(i -> i).min().getAsInt());
+        Assert.assertEquals(stats.getMax(), sortedAges.stream().mapToInt(i -> i).max().getAsInt());
+        Assert.assertEquals(stats.getSum(), sortedAges.stream().mapToInt(i -> i).sum());
+        Assert.assertEquals(stats.getAverage(), sortedAges.stream().mapToInt(i -> i).average().getAsDouble(), 0.0);
         Assert.assertEquals(stats.getCount(), sortedAges.size());
     }
 
@@ -363,8 +388,7 @@ public class PersonAndPetKataTest
     public void getCountsByPetType()
     {
         Bag<PetType> counts =
-                this.people
-                        .asLazy()
+                this.people.asLazy()
                         .flatCollect(Person::getPets)
                         .collect(Pet::getType)
                         .toBag();
@@ -380,8 +404,7 @@ public class PersonAndPetKataTest
     public void getCountsByPetTypeUsingStreams()
     {
         Map<PetType, Long> counts =
-                this.people
-                        .stream()
+                this.people.stream()
                         .flatMap(person -> person.getPets().stream())
                         .collect(Collectors.groupingBy(Pet::getType, Collectors.counting()));
         Assert.assertEquals(Long.valueOf(2L), counts.get(PetType.CAT));
@@ -396,8 +419,7 @@ public class PersonAndPetKataTest
     public void getTop3Pets()
     {
         MutableList<ObjectIntPair<PetType>> favorites =
-                this.people
-                        .asLazy()
+                this.people.asLazy()
                         .flatCollect(Person::getPets)
                         .collect(Pet::getType)
                         .toBag()
@@ -406,6 +428,24 @@ public class PersonAndPetKataTest
         Verify.assertContains(PrimitiveTuples.pair(PetType.CAT, 2), favorites);
         Verify.assertContains(PrimitiveTuples.pair(PetType.DOG, 2), favorites);
         Verify.assertContains(PrimitiveTuples.pair(PetType.HAMSTER, 2), favorites);
+    }
+
+    @Test
+    public void getTop3PetsUsingStreams()
+    {
+        List<Map.Entry<PetType, Long>> favorites =
+                this.people.stream()
+                        .flatMap(p -> p.getPets().stream())
+                        .collect(Collectors.groupingBy(Pet::getType, Collectors.counting()))
+                        .entrySet()
+                        .stream()
+                        .sorted(Comparator.comparingLong(e -> -e.getValue()))
+                        .limit(3)
+                        .collect(Collectors.toList());
+        Verify.assertSize(3, favorites);
+        Verify.assertContains(new AbstractMap.SimpleEntry<>(PetType.CAT, Long.valueOf(2)), favorites);
+        Verify.assertContains(new AbstractMap.SimpleEntry<>(PetType.DOG, Long.valueOf(2)), favorites);
+        Verify.assertContains(new AbstractMap.SimpleEntry<>(PetType.HAMSTER, Long.valueOf(2)), favorites);
     }
 
     @Test
@@ -428,8 +468,7 @@ public class PersonAndPetKataTest
     public void getCountsByPetAge()
     {
         IntBag counts =
-                this.people
-                        .asLazy()
+                this.people.asLazy()
                         .flatCollect(Person::getPets)
                         .collectInt(Pet::getAge)
                         .toBag();
@@ -444,8 +483,7 @@ public class PersonAndPetKataTest
     public void getCountsByPetAgeUsingStreams()
     {
         Map<Integer, Long> counts =
-                this.people
-                        .stream()
+                this.people.stream()
                         .flatMap(person -> person.getPets().stream())
                         .collect(Collectors.groupingBy(Pet::getAge, Collectors.counting()));
         Assert.assertEquals(Long.valueOf(4), counts.get(1));
