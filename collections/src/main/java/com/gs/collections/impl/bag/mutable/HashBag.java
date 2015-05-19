@@ -131,19 +131,17 @@ public class HashBag<T>
 
     public static <E> HashBag<E> newBag(Bag<? extends E> source)
     {
-        final HashBag<E> result = HashBag.newBag();
-        source.forEachWithOccurrences(new ObjectIntProcedure<E>()
-        {
-            public void value(E each, int occurrences)
-            {
-                result.addOccurrences(each, occurrences);
-            }
-        });
+        HashBag<E> result = HashBag.newBag(source.sizeDistinct());
+        result.addAllBag(source);
         return result;
     }
 
     public static <E> HashBag<E> newBag(Iterable<? extends E> source)
     {
+        if (source instanceof Bag)
+        {
+            return HashBag.newBag((Bag<E>) source);
+        }
         return HashBag.newBagWith((E[]) Iterate.toArray(source));
     }
 
@@ -152,6 +150,28 @@ public class HashBag<T>
         HashBag<E> result = HashBag.newBag();
         ArrayIterate.addAllTo(elements, result);
         return result;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends T> source)
+    {
+        if (source instanceof Bag)
+        {
+            return this.addAllBag((Bag<T>) source);
+        }
+        return super.addAll(source);
+    }
+
+    private boolean addAllBag(Bag<? extends T> source)
+    {
+        source.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                HashBag.this.addOccurrences(each, occurrences);
+            }
+        });
+        return source.notEmpty();
     }
 
     public void addOccurrences(T item, int occurrences)
@@ -539,10 +559,25 @@ public class HashBag<T>
     public boolean removeAllIterable(Iterable<?> iterable)
     {
         int oldSize = this.size;
-        for (Object each : iterable)
+        if (iterable instanceof Bag)
         {
-            int removed = this.items.removeKeyIfAbsent((T) each, 0);
-            this.size -= removed;
+            Bag<?> source = (Bag<?>) iterable;
+            source.forEachWithOccurrences(new ObjectIntProcedure<Object>()
+            {
+                public void value(Object each, int parameter)
+                {
+                    int removed = HashBag.this.items.removeKeyIfAbsent((T) each, 0);
+                    HashBag.this.size -= removed;
+                }
+            });
+        }
+        else
+        {
+            for (Object each : iterable)
+            {
+                int removed = this.items.removeKeyIfAbsent((T) each, 0);
+                this.size -= removed;
+            }
         }
         return this.size != oldSize;
     }
