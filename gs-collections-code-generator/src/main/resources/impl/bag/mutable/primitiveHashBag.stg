@@ -84,13 +84,7 @@ public final class <name>HashBag extends Abstract<name>Iterable implements Mutab
     public <name>HashBag(<name>HashBag bag)
     {
         this.items = new <name>IntHashMap(bag.sizeDistinct());
-        bag.forEachWithOccurrences(new <name>IntProcedure()
-        {
-            public void value(<type> item, int occurrences)
-            {
-                <name>HashBag.this.addOccurrences(item, occurrences);
-            }
-        });
+        this.addAll(bag);
     }
 
     public static <name>HashBag newBag(int size)
@@ -100,9 +94,7 @@ public final class <name>HashBag extends Abstract<name>Iterable implements Mutab
 
     public static <name>HashBag newBagWith(<type>... source)
     {
-        <name>HashBag result = new <name>HashBag();
-        result.addAll(source);
-        return result;
+        return new <name>HashBag(source);
     }
 
     public static <name>HashBag newBag(<name>Iterable source)
@@ -111,21 +103,12 @@ public final class <name>HashBag extends Abstract<name>Iterable implements Mutab
         {
             return new <name>HashBag((<name>HashBag) source);
         }
-
         return new <name>HashBag(source);
     }
 
     public static <name>HashBag newBag(<name>Bag source)
     {
-        final <name>HashBag result = new <name>HashBag();
-        source.forEachWithOccurrences(new <name>IntProcedure()
-        {
-            public void value(<type> each, int occurrences)
-            {
-                result.addOccurrences(each, occurrences);
-            }
-        });
-        return result;
+        return new <name>HashBag(source);
     }
 
     @Override
