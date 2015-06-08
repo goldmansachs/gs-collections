@@ -22,7 +22,7 @@
     <parent>
         <artifactId>gs-collections-parent</artifactId>
         <groupId>com.goldmansachs</groupId>
-        <version>6.2.0-SNAPSHOT</version>
+        <version>6.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
