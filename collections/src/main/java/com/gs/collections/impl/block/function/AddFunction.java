@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ public final class AddFunction
     public static final DoubleObjectToDoubleFunction<Integer> INTEGER_TO_DOUBLE = new AddIntegerToDoubleFunction();
     public static final FloatObjectToFloatFunction<Integer> INTEGER_TO_FLOAT = new AddIntegerToFloatFunction();
     public static final DoubleObjectToDoubleFunction<Double> DOUBLE_TO_DOUBLE = new AddDoubleToDoubleFunction();
+    public static final FloatObjectToFloatFunction<Float> FLOAT_TO_FLOAT = new AddFloatToFloatFunction();
     public static final Function2<Integer, Integer, Integer> INTEGER = new AddIntegerFunction();
     public static final Function2<Double, Double, Double> DOUBLE = new AddDoubleFunction();
     public static final Function2<Float, Float, Float> FLOAT = new AddFloatFunction();
@@ -93,6 +94,16 @@ public final class AddFunction
         public double doubleValueOf(double doubleParameter, Double objectParameter)
         {
             return doubleParameter + objectParameter;
+        }
+    }
+
+    private static class AddFloatToFloatFunction implements FloatObjectToFloatFunction<Float>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public float floatValueOf(float floatParameter, Float objectParameter)
+        {
+            return floatParameter + objectParameter;
         }
     }
 

@@ -23,7 +23,6 @@ import java.util.List;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function3;
-import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
@@ -276,8 +275,21 @@ public class ArrayListIterateTest
         list.add(1.0);
         list.add(2.0);
         list.add(3.0);
-        Assert.assertEquals(new Double(7.0),
+        Assert.assertEquals(
+                new Double(7.0),
                 ArrayListIterate.injectInto(1.0, list, AddFunction.DOUBLE));
+    }
+
+    @Test
+    public void injectIntoFloat()
+    {
+        ArrayList<Float> list = new ArrayList<>();
+        list.add(1.0f);
+        list.add(2.0f);
+        list.add(3.0f);
+        Assert.assertEquals(
+                new Float(7.0f),
+                ArrayListIterate.injectInto(1.0f, list, AddFunction.FLOAT));
     }
 
     @Test
@@ -925,7 +937,13 @@ public class ArrayListIterateTest
         ArrayList<Integer> target = new ArrayList<>();
         ArrayListIterate.distinct(list, target);
         Verify.assertListsEqual(FastList.newListWith(9, 4, 7, 5, 6, 2), target);
-        Verify.assertSize(8, list);
+        Assert.assertEquals(FastList.newListWith(9, 4, 7, 7, 5, 6, 2, 4), list);
+
+        ArrayList<Integer> list2 = new ArrayList<>(Interval.oneTo(103));
+        list2.add(103);
+        ArrayList<Integer> target2 = new ArrayList<>();
+        List<Integer> result2 = ArrayListIterate.distinct(list2, target2);
+        Assert.assertEquals(Interval.fromTo(1, 103), result2);
     }
 
     @Test
@@ -1006,13 +1024,31 @@ public class ArrayListIterateTest
     }
 
     @Test
-    public void partitionOver100()
+    public void partition()
     {
-        ArrayList<Integer> list = new ArrayList<>(Interval.oneTo(101));
-        PartitionMutableList<Integer> result =
-                ArrayListIterate.partition(list, Predicates.in(Lists.immutable.of(1)));
-        Verify.assertSize(1, result.getSelected());
-        Verify.assertSize(100, result.getRejected());
+        ArrayList<Integer> smallList = new ArrayList<>(Interval.oneTo(99));
+        PartitionMutableList<Integer> smallPartition = ArrayListIterate.partition(smallList, Predicates.in(Interval.oneToBy(99, 2)));
+        Assert.assertEquals(Interval.oneToBy(99, 2), smallPartition.getSelected());
+        Assert.assertEquals(Interval.fromToBy(2, 98, 2), smallPartition.getRejected());
+
+        ArrayList<Integer> bigList = new ArrayList<>(Interval.oneTo(101));
+        PartitionMutableList<Integer> bigPartition = ArrayListIterate.partition(bigList, Predicates.in(Interval.oneToBy(101, 2)));
+        Assert.assertEquals(Interval.oneToBy(101, 2), bigPartition.getSelected());
+        Assert.assertEquals(Interval.fromToBy(2, 100, 2), bigPartition.getRejected());
+    }
+
+    @Test
+    public void partitionWith()
+    {
+        ArrayList<Integer> smallList = new ArrayList<>(Interval.oneTo(99));
+        PartitionMutableList<Integer> smallPartition = ArrayListIterate.partitionWith(smallList, Predicates2.in(), Interval.oneToBy(99, 2));
+        Assert.assertEquals(Interval.oneToBy(99, 2), smallPartition.getSelected());
+        Assert.assertEquals(Interval.fromToBy(2, 98, 2), smallPartition.getRejected());
+
+        ArrayList<Integer> bigList = new ArrayList<>(Interval.oneTo(101));
+        PartitionMutableList<Integer> bigPartition = ArrayListIterate.partitionWith(bigList, Predicates2.in(), Interval.oneToBy(101, 2));
+        Assert.assertEquals(Interval.oneToBy(101, 2), bigPartition.getSelected());
+        Assert.assertEquals(Interval.fromToBy(2, 100, 2), bigPartition.getRejected());
     }
 
     @Test
@@ -1052,8 +1088,7 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> list = this.getIntegerList();
         Assert.assertTrue(ArrayListIterate.allSatisfyWith(list, Predicates2.instanceOf(), Integer.class));
-        Predicate2<Integer, Integer> greaterThanPredicate = Predicates2.greaterThan();
-        Assert.assertFalse(ArrayListIterate.allSatisfyWith(list, greaterThanPredicate, 2));
+        Assert.assertFalse(ArrayListIterate.allSatisfyWith(list, Predicates2.greaterThan(), 2));
     }
 
     @Test
@@ -1069,8 +1104,7 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> list = new ArrayList<>(Interval.oneTo(101));
         Assert.assertTrue(ArrayListIterate.allSatisfyWith(list, Predicates2.instanceOf(), Integer.class));
-        Predicate2<Integer, Integer> greaterThanPredicate = Predicates2.greaterThan();
-        Assert.assertFalse(ArrayListIterate.allSatisfyWith(list, greaterThanPredicate, 2));
+        Assert.assertFalse(ArrayListIterate.allSatisfyWith(list, Predicates2.greaterThan(), 2));
     }
 
     @Test
@@ -1094,8 +1128,7 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> list = new ArrayList<>(Interval.oneTo(101));
         Assert.assertFalse(ArrayListIterate.noneSatisfyWith(list, Predicates2.instanceOf(), Integer.class));
-        Predicate2<Integer, Integer> greaterThanPredicate = Predicates2.greaterThan();
-        Assert.assertTrue(ArrayListIterate.noneSatisfyWith(list, greaterThanPredicate, 150));
+        Assert.assertTrue(ArrayListIterate.noneSatisfyWith(list, Predicates2.greaterThan(), 150));
     }
 
     @Test
