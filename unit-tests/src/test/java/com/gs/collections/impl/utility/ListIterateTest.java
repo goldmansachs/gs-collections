@@ -373,6 +373,7 @@ public class ListIterateTest
         MutableList<Integer> list = this.getIntegerList();
         this.assertReverseForEachWithIndex(list);
         this.assertReverseForEachWithIndex(new LinkedList<>(list));
+        ListIterate.reverseForEachWithIndex(Lists.mutable.empty(), (ignored1, index) -> Assert.fail());
     }
 
     private void assertReverseForEachWithIndex(List<Integer> list)
