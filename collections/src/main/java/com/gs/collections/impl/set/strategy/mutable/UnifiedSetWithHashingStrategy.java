@@ -183,6 +183,15 @@ public class UnifiedSetWithHashingStrategy<T>
         {
             throw new IllegalArgumentException("initial capacity cannot be less than 0");
         }
+        if (loadFactor <= 0.0)
+        {
+            throw new IllegalArgumentException("load factor cannot be less than or equal to 0");
+        }
+        if (loadFactor > 1.0)
+        {
+            throw new IllegalArgumentException("load factor cannot be greater than 1");
+        }
+
         this.hashingStrategy = hashingStrategy;
         this.loadFactor = loadFactor;
         this.init(this.fastCeil(initialCapacity / loadFactor));

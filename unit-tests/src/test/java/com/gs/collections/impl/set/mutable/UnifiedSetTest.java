@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,10 +72,12 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
         Verify.assertEqualsAndHashCode(UnifiedSet.newSetWith("A", "1", "2", "3", "4"), list);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void newSetWithNegativeInitialCapacity()
+    @Test
+    public void newSet_throws()
     {
-        new UnifiedSet<Integer>(-1, 0.5f);
+        Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedSet<Integer>(-1, 0.5f));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedSet<Integer>(1, -0.5f));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedSet<Integer>(1, 1.5f));
     }
 
     @Test

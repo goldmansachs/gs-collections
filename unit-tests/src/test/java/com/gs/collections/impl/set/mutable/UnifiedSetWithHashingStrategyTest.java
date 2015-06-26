@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ import org.junit.Test;
  */
 public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCase
 {
-    //Not using the static factor method in order to have concrete types for test cases
+    //Not using the static factory method in order to have concrete types for test cases
     private static final HashingStrategy<Integer> INTEGER_HASHING_STRATEGY = HashingStrategies.nullSafeHashingStrategy(new HashingStrategy<Integer>()
     {
         public int computeHashCode(Integer object)
@@ -91,6 +91,14 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
     protected <T> MutableSet<T> newWith(T... littleElements)
     {
         return UnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.nullSafeHashingStrategy(HashingStrategies.<T>defaultStrategy()), littleElements);
+    }
+
+    @Test
+    public void newSet_throws()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedSetWithHashingStrategy<Integer>(INTEGER_HASHING_STRATEGY, -1, 0.5f));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedSetWithHashingStrategy<Integer>(INTEGER_HASHING_STRATEGY, 1, -0.5f));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedSetWithHashingStrategy<Integer>(INTEGER_HASHING_STRATEGY, 1, 1.5f));
     }
 
     @Override
@@ -269,7 +277,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
     }
 
     @Test
-    public void add_with_hasingStrategy()
+    public void add_with_hashingStrategy()
     {
         HashingStrategy<Integer> hashingStrategy = HashingStrategies.nullSafeHashingStrategy(new HashingStrategy<Integer>()
         {
@@ -302,7 +310,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Assert.assertTrue(caseB.add(null));
         //Setting up a chained bucked by forcing a collision
         Assert.assertTrue(caseB.add(1));
-        //Increasing the occupied to the thresh hold
+        //Increasing the occupied to the threshold
         Assert.assertTrue(caseB.add(2));
         //Forcing a rehash where the element that forced the rehash does not go in the chained bucket
         Assert.assertTrue(caseB.add(3));

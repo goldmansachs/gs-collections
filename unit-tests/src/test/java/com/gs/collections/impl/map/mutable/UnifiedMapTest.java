@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,10 +72,12 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         return UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void newMapWithNegativeInitialCapacity()
+    @Test
+    public void newMap_throws()
     {
-        new UnifiedMap<Integer, Integer>(-1, 0.5f);
+        Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedMap<Integer, Integer>(-1, 0.5f));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedMap<Integer, Integer>(1, -0.5f));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedMap<Integer, Integer>(1, 1.5f));
     }
 
     @Test
@@ -454,7 +456,9 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
         UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
         COLLISIONS.subList(0, 5).forEach(Procedures.cast(each -> {
-            Verify.assertThrows(RuntimeException.class, () -> map.getIfAbsentPut(each, () -> { throw new RuntimeException(); }));
+            Verify.assertThrows(RuntimeException.class, () -> map.getIfAbsentPut(each, () -> {
+                throw new RuntimeException();
+            }));
             map.put(each, each);
         }));
 
