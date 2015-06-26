@@ -836,6 +836,11 @@ public class <name>ArrayList extends Abstract<name>Iterable
         return <name>ArrayList.newList(this.asReversed());
     }
 
+    public int binarySearch(<type> value)
+    {
+        return Arrays.binarySearch(this.items, 0, this.size, value);
+    }
+
     public Mutable<name>List distinct()
     {
         <name>ArrayList target = new <name>ArrayList();

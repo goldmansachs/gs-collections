@@ -94,6 +94,14 @@ public class Immutable<name>SingletonListTest extends AbstractImmutable<name>Lis
 
         Assert.assertEquals(1, sum[0], <(literal.(type))("0")>);
     }
+
+    @Test
+    public void binarySearch()
+    {
+        Assert.assertEquals(-1, this.classUnderTest().binarySearch(<(literal.(type))("0")>));
+        Assert.assertEquals(0, this.classUnderTest().binarySearch(<(literal.(type))("1")>));
+        Assert.assertEquals(-2, this.classUnderTest().binarySearch(<(literal.(type))("5")>));
+    }
 }
 
 >>

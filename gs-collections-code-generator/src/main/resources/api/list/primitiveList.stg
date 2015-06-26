@@ -89,6 +89,8 @@ arithmeticMethods ::= [
 allMethods(name, type) ::=<<
 <wideType.(type)> dotProduct(<name>List list);
 
+int binarySearch(<type> value);
+
 >>
 
 noMethods(name, type) ::= ""

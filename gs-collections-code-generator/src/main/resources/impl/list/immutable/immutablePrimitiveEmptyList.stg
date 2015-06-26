@@ -373,6 +373,11 @@ public Mutable<name>List toSortedList()
     return new <name>ArrayList();
 }
 
+public int binarySearch(<type> value)
+{
+    return -1;
+}
+
 public <wideType.(type)> dotProduct(<name>List list)
 {
     if (!list.isEmpty())

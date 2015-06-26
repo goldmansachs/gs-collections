@@ -260,16 +260,19 @@ public final class Synchronized<name>List
     @Override
     public Immutable<name>List toImmutable()
     {
-        int size = this.size();
-        if (size == 0)
+        synchronized (this.getLock())
         {
-            return <name>Lists.immutable.with();
+            int size = this.size();
+            if (size == 0)
+            {
+                return <name>Lists.immutable.with();
+            }
+            if (size == 1)
+            {
+                return <name>Lists.immutable.with(this.getFirst());
+            }
+            return <name>Lists.immutable.with(this.toArray());
         }
-        if (size == 1)
-        {
-            return <name>Lists.immutable.with(this.getFirst());
-        }
-        return <name>Lists.immutable.with(this.toArray());
     }
 
     public Mutable<name>List reverseThis()
@@ -350,9 +353,20 @@ public Mutable<name>List sortThis()
     return this;
 }
 
+public int binarySearch(<type> value)
+{
+    synchronized (this.getLock())
+    {
+        return this.getMutable<name>List().binarySearch(value);
+    }
+}
+
 public <wideType.(type)> dotProduct(<name>List list)
 {
-    return this.getMutable<name>List().dotProduct(list);
+    synchronized (this.getLock())
+    {
+        return this.getMutable<name>List().dotProduct(list);
+    }
 }
 
 >>

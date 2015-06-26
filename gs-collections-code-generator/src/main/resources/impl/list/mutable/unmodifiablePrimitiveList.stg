@@ -244,6 +244,11 @@ public Mutable<name>List sortThis()
     throw new UnsupportedOperationException("Cannot call sortThis() on " + this.getClass().getSimpleName());
 }
 
+public int binarySearch(<type> value)
+{
+    return this.getMutable<name>List().binarySearch(value);
+}
+
 public <wideType.(type)> dotProduct(<name>List list)
 {
     return this.getMutable<name>List().dotProduct(list);

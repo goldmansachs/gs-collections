@@ -334,6 +334,11 @@ final class Immutable<name>ArrayList
         return <name>ArrayList.newList(this).sortThis();
     }
 
+    public int binarySearch(<type> value)
+    {
+        return Arrays.binarySearch(this.items, value);
+    }
+
     public <type>[] toArray()
     {
         <type>[] newItems = new <type>[this.items.length];

@@ -79,6 +79,22 @@ public class Immutable<name>ArrayListTest extends AbstractImmutable<name>ListTes
         Immutable<name>ArrayList list2 = Immutable<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">);
         list1.dotProduct(list2);
     }
+
+    @Test
+    public void binarySearch()
+    {
+        Immutable<name>ArrayList list = Immutable<name>ArrayList.newListWith(<["2", "3", "5", "6", "9"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(-1, list.binarySearch(<(literal.(type))("1")>));
+        Assert.assertEquals(0, list.binarySearch(<(literal.(type))("2")>));
+        Assert.assertEquals(1, list.binarySearch(<(literal.(type))("3")>));
+        Assert.assertEquals(-3, list.binarySearch(<(literal.(type))("4")>));
+        Assert.assertEquals(2, list.binarySearch(<(literal.(type))("5")>));
+        Assert.assertEquals(3, list.binarySearch(<(literal.(type))("6")>));
+        Assert.assertEquals(-5, list.binarySearch(<(literal.(type))("7")>));
+        Assert.assertEquals(-5, list.binarySearch(<(literal.(type))("8")>));
+        Assert.assertEquals(4, list.binarySearch(<(literal.(type))("9")>));
+        Assert.assertEquals(-6, list.binarySearch(<(literal.(type))("10")>));
+    }
 }
 
 >>

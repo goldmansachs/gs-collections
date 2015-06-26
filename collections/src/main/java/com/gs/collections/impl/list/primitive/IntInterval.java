@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -762,6 +762,23 @@ public final class IntInterval
             return ((double) first + (double) second) / 2.0;
         }
         return (double) sortedArray[middleIndex];
+    }
+
+    public int binarySearch(int value)
+    {
+        if (this.step > 0 && this.from > value || this.step < 0 && this.from < value)
+        {
+            return -1;
+        }
+
+        if (this.step > 0 && this.to < value || this.step < 0 && this.to > value)
+        {
+            return -1 - this.size();
+        }
+
+        int diff = value - this.from;
+        int index = diff / this.step;
+        return diff % this.step == 0 ? index : (index + 2) * -1;
     }
 
     public int[] toSortedArray()
