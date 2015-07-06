@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,12 +28,10 @@ import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.impl.list.Interval;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -44,24 +42,24 @@ public class PartitionTest
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public Map<Boolean, List<Integer>> serial_lazy_jdk()
     {
         return this.integersJDK.stream().collect(Collectors.partitioningBy(each -> each % 2 == 0));
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Benchmark
+    public Map<Boolean, List<Integer>> serial_lazy_streams_gsc()
+    {
+        return this.integersGSC.stream().collect(Collectors.partitioningBy(each -> each % 2 == 0));
+    }
+
     @Benchmark
     public PartitionMutableList<Integer> serial_eager_gsc()
     {
         return this.integersGSC.partition(each -> each % 2 == 0);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public PartitionIterable<Integer> serial_lazy_gsc()
     {

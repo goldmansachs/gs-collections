@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,10 @@ import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -50,8 +48,12 @@ public class FlatCollectTest
         List<Integer> flatMap = this.integersJDK.stream().flatMap(Collection::stream).collect(Collectors.toList());
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Benchmark
+    public void serial_lazy_streams_gsc()
+    {
+        List<Integer> flatMap = this.integersGSC.stream().flatMap(Collection::stream).collect(Collectors.toList());
+    }
+
     @Benchmark
     public void serial_eager_gsc()
     {

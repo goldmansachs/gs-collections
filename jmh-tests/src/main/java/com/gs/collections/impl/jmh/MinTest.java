@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,9 +67,21 @@ public class MinTest
     }
 
     @Benchmark
+    public int serial_lazy_streams_gsc()
+    {
+        return this.integersGSC.stream().min(Comparator.<Integer>naturalOrder()).get();
+    }
+
+    @Benchmark
     public int serial_lazy_reverse_jdk()
     {
         return this.integersJDK.stream().min(Comparator.<Integer>reverseOrder()).get();
+    }
+
+    @Benchmark
+    public int serial_lazy_reverse_streams_gsc()
+    {
+        return this.integersGSC.stream().min(Comparator.<Integer>reverseOrder()).get();
     }
 
     @Benchmark
@@ -79,9 +91,21 @@ public class MinTest
     }
 
     @Benchmark
+    public int serial_lazy_intstream_streams_gsc()
+    {
+        return this.integersGSC.stream().mapToInt(Integer::intValue).min().getAsInt();
+    }
+
+    @Benchmark
     public int parallel_lazy_jdk()
     {
         return this.integersJDK.parallelStream().min(Comparator.<Integer>naturalOrder()).get();
+    }
+
+    @Benchmark
+    public int parallel_lazy_streams_gsc()
+    {
+        return this.integersGSC.parallelStream().min(Comparator.<Integer>naturalOrder()).get();
     }
 
     @Benchmark
@@ -91,9 +115,21 @@ public class MinTest
     }
 
     @Benchmark
+    public int parallel_lazy_reverse_streams_gsc()
+    {
+        return this.integersGSC.parallelStream().min(Comparator.<Integer>reverseOrder()).get();
+    }
+
+    @Benchmark
     public int parallel_lazy_intstream_jdk()
     {
         return this.integersJDK.parallelStream().mapToInt(Integer::intValue).min().getAsInt();
+    }
+
+    @Benchmark
+    public int parallel_lazy_intstream_streams_gsc()
+    {
+        return this.integersGSC.parallelStream().mapToInt(Integer::intValue).min().getAsInt();
     }
 
     @Benchmark

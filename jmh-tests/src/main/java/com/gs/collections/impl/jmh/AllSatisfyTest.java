@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,12 @@ import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
-import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -44,7 +42,7 @@ public class AllSatisfyTest
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
-    private final FastList<Integer> integersGSC = new FastList<>(Interval.oneTo(SIZE));
+    private final FastList<Integer> integersGSC = FastList.newList(Interval.oneTo(SIZE));
 
     private ExecutorService executorService;
 
@@ -68,21 +66,29 @@ public class AllSatisfyTest
     }
 
     @Benchmark
+    public void short_circuit_middle_serial_lazy_streams_gsc()
+    {
+        Assert.assertFalse(this.integersGSC.stream().allMatch(each -> each < SIZE / 2));
+    }
+
+    @Benchmark
     public void process_all_serial_lazy_jdk()
     {
         Assert.assertTrue(this.integersJDK.stream().allMatch(each -> each > 0));
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Benchmark
+    public void process_all_serial_lazy_streams_gsc()
+    {
+        Assert.assertTrue(this.integersGSC.stream().allMatch(each -> each > 0));
+    }
+
     @Benchmark
     public void short_circuit_middle_serial_eager_gsc()
     {
         Assert.assertFalse(this.integersGSC.allSatisfy(each -> each < SIZE / 2));
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void process_all_serial_eager_gsc()
     {
@@ -108,9 +114,21 @@ public class AllSatisfyTest
     }
 
     @Benchmark
+    public void short_circuit_middle_parallel_lazy_streams_gsc()
+    {
+        Assert.assertFalse(this.integersGSC.parallelStream().allMatch(each -> each != SIZE / 2 - 1));
+    }
+
+    @Benchmark
     public void process_all_parallel_lazy_jdk()
     {
         Assert.assertTrue(this.integersJDK.parallelStream().allMatch(each -> each > 0));
+    }
+
+    @Benchmark
+    public void process_all_parallel_lazy_streams_gsc()
+    {
+        Assert.assertTrue(this.integersGSC.parallelStream().allMatch(each -> each > 0));
     }
 
     @Benchmark

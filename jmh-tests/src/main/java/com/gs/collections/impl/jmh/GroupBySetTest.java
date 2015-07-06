@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,14 +43,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
-import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -79,12 +77,19 @@ public class GroupBySetTest
         this.executorService.awaitTermination(1L, TimeUnit.SECONDS);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public Map<Boolean, Set<Integer>> groupBy_2_keys_serial_lazy_jdk()
     {
         Map<Boolean, Set<Integer>> multimap = this.integersJDK.stream()
+                .collect(Collectors.groupingBy(each -> each % 2 == 0, Collectors.toSet()));
+        Verify.assertSize(2, multimap);
+        return multimap;
+    }
+
+    @Benchmark
+    public Map<Boolean, Set<Integer>> groupBy_2_keys_serial_lazy_streams_gsc()
+    {
+        Map<Boolean, Set<Integer>> multimap = this.integersGSC.stream()
                 .collect(Collectors.groupingBy(each -> each % 2 == 0, Collectors.toSet()));
         Verify.assertSize(2, multimap);
         return multimap;
@@ -100,12 +105,28 @@ public class GroupBySetTest
         Verify.assertSetsEqual(Interval.fromToBy(1, 999_999, 2).toSet(), odds);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Test
+    public void test_groupBy_2_keys_serial_lazy_streams_gsc()
+    {
+        Map<Boolean, Set<Integer>> multimap = this.groupBy_2_keys_serial_lazy_streams_gsc();
+        Set<Integer> odds = multimap.get(false);
+        Set<Integer> evens = multimap.get(true);
+        Verify.assertSetsEqual(Interval.fromToBy(0, 999_999, 2).toSet(), evens);
+        Verify.assertSetsEqual(Interval.fromToBy(1, 999_999, 2).toSet(), odds);
+    }
+
     @Benchmark
     public Map<Integer, Set<Integer>> groupBy_100_keys_serial_lazy_jdk()
     {
         Map<Integer, Set<Integer>> multimap = this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 100, Collectors.toSet()));
+        Verify.assertSize(100, multimap);
+        return multimap;
+    }
+
+    @Benchmark
+    public Map<Integer, Set<Integer>> groupBy_100_keys_serial_lazy_streams_gsc()
+    {
+        Map<Integer, Set<Integer>> multimap = this.integersGSC.stream().collect(Collectors.groupingBy(each -> each % 100, Collectors.toSet()));
         Verify.assertSize(100, multimap);
         return multimap;
     }
@@ -122,12 +143,30 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Test
+    public void test_groupBy_100_keys_serial_lazy_streams_gsc()
+    {
+        Map<Integer, Set<Integer>> multimap = this.groupBy_100_keys_serial_lazy_streams_gsc();
+        for (int i = 0; i < 100; i++)
+        {
+            Set<Integer> integers = multimap.get(i);
+            Verify.assertSize(10_000, integers);
+            Verify.assertSetsEqual(Interval.fromToBy(i, 999_999, 100).toSet(), integers);
+        }
+    }
+
     @Benchmark
     public Map<Integer, Set<Integer>> groupBy_10000_keys_serial_lazy_jdk()
     {
         Map<Integer, Set<Integer>> multimap = this.integersJDK.stream().collect(Collectors.groupingBy(each -> each % 10_000, Collectors.toSet()));
+        Verify.assertSize(10_000, multimap);
+        return multimap;
+    }
+
+    @Benchmark
+    public Map<Integer, Set<Integer>> groupBy_10000_keys_serial_lazy_streams_gsc()
+    {
+        Map<Integer, Set<Integer>> multimap = this.integersGSC.stream().collect(Collectors.groupingBy(each -> each % 10_000, Collectors.toSet()));
         Verify.assertSize(10_000, multimap);
         return multimap;
     }
@@ -144,12 +183,30 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Test
+    public void test_groupBy_10000_keys_serial_lazy_streams_gsc()
+    {
+        Map<Integer, Set<Integer>> multimap = this.groupBy_10000_keys_serial_lazy_streams_gsc();
+        for (int i = 0; i < 10_000; i++)
+        {
+            Set<Integer> integers = multimap.get(i);
+            Verify.assertSize(100, integers);
+            Verify.assertSetsEqual(Interval.fromToBy(i, 999_999, 10_000).toSet(), integers);
+        }
+    }
+
     @Benchmark
     public Map<Boolean, Set<Integer>> groupBy_2_keys_parallel_lazy_jdk()
     {
         Map<Boolean, Set<Integer>> multimap = this.integersJDK.parallelStream().collect(Collectors.groupingBy(each -> each % 2 == 0, Collectors.toSet()));
+        Verify.assertSize(2, multimap);
+        return multimap;
+    }
+
+    @Benchmark
+    public Map<Boolean, Set<Integer>> groupBy_2_keys_parallel_lazy_streams_gsc()
+    {
+        Map<Boolean, Set<Integer>> multimap = this.integersGSC.parallelStream().collect(Collectors.groupingBy(each -> each % 2 == 0, Collectors.toSet()));
         Verify.assertSize(2, multimap);
         return multimap;
     }
@@ -164,12 +221,28 @@ public class GroupBySetTest
         Verify.assertSetsEqual(Interval.fromToBy(1, 999_999, 2).toSet(), odds);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Test
+    public void test_groupBy_2_keys_parallel_lazy_streams_gsc()
+    {
+        Map<Boolean, Set<Integer>> multimap = this.groupBy_2_keys_parallel_lazy_streams_gsc();
+        Set<Integer> odds = multimap.get(false);
+        Set<Integer> evens = multimap.get(true);
+        Verify.assertSetsEqual(Interval.fromToBy(0, 999_999, 2).toSet(), evens);
+        Verify.assertSetsEqual(Interval.fromToBy(1, 999_999, 2).toSet(), odds);
+    }
+
     @Benchmark
     public Map<Integer, Set<Integer>> groupBy_100_keys_parallel_lazy_jdk()
     {
         Map<Integer, Set<Integer>> multimap = this.integersJDK.parallelStream().collect(Collectors.groupingBy(each -> each % 100, Collectors.toSet()));
+        Verify.assertSize(100, multimap);
+        return multimap;
+    }
+
+    @Benchmark
+    public Map<Integer, Set<Integer>> groupBy_100_keys_parallel_lazy_streams_gsc()
+    {
+        Map<Integer, Set<Integer>> multimap = this.integersGSC.parallelStream().collect(Collectors.groupingBy(each -> each % 100, Collectors.toSet()));
         Verify.assertSize(100, multimap);
         return multimap;
     }
@@ -186,12 +259,30 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Test
+    public void test_groupBy_100_keys_parallel_lazy_streams_gsc()
+    {
+        Map<Integer, Set<Integer>> multimap = this.groupBy_100_keys_parallel_lazy_streams_gsc();
+        for (int i = 0; i < 100; i++)
+        {
+            Set<Integer> integers = multimap.get(i);
+            Verify.assertSize(10_000, integers);
+            Verify.assertSetsEqual(Interval.fromToBy(i, 999_999, 100).toSet(), integers);
+        }
+    }
+
     @Benchmark
     public Map<Integer, Set<Integer>> groupBy_10000_keys_parallel_lazy_jdk()
     {
         Map<Integer, Set<Integer>> multimap = this.integersJDK.parallelStream().collect(Collectors.groupingBy(each -> each % 10_000, Collectors.toSet()));
+        Verify.assertSize(10_000, multimap);
+        return multimap;
+    }
+
+    @Benchmark
+    public Map<Integer, Set<Integer>> groupBy_10000_keys_parallel_lazy_streams_gsc()
+    {
+        Map<Integer, Set<Integer>> multimap = this.integersGSC.parallelStream().collect(Collectors.groupingBy(each -> each % 10_000, Collectors.toSet()));
         Verify.assertSize(10_000, multimap);
         return multimap;
     }
@@ -208,8 +299,18 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Test
+    public void test_groupBy_10000_keys_parallel_lazy_streams_gsc()
+    {
+        Map<Integer, Set<Integer>> multimap = this.groupBy_10000_keys_parallel_lazy_streams_gsc();
+        for (int i = 0; i < 10_000; i++)
+        {
+            Set<Integer> integers = multimap.get(i);
+            Verify.assertSize(100, integers);
+            Verify.assertSetsEqual(Interval.fromToBy(i, 999_999, 10_000).toSet(), integers);
+        }
+    }
+
     @Benchmark
     public ImmutableListMultimap<Boolean, Integer> groupBy_unordered_lists_2_keys_serial_eager_guava()
     {
@@ -229,8 +330,6 @@ public class GroupBySetTest
         Verify.assertListsEqual(Interval.fromToBy(1, 999_999, 2), odds);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public ImmutableListMultimap<Integer, Integer> groupBy_unordered_lists_100_keys_serial_eager_guava()
     {
@@ -251,8 +350,6 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public ImmutableListMultimap<Integer, Integer> groupBy_unordered_lists_10000_keys_serial_eager_guava()
     {
@@ -273,8 +370,6 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public UnifiedSetMultimap<Boolean, Integer> groupBy_2_keys_serial_eager_gsc()
     {
@@ -293,8 +388,6 @@ public class GroupBySetTest
         Verify.assertSetsEqual(Interval.fromToBy(1, 999_999, 2).toSet(), odds);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public UnifiedSetMultimap<Integer, Integer> groupBy_100_keys_serial_eager_gsc()
     {
@@ -315,8 +408,6 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public UnifiedSetMultimap<Integer, Integer> groupBy_10000_keys_serial_eager_gsc()
     {
@@ -337,8 +428,6 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public Multimap<Boolean, Integer> groupBy_unordered_lists_2_keys_serial_lazy_gsc()
     {
@@ -357,8 +446,6 @@ public class GroupBySetTest
         Verify.assertSetsEqual(Interval.fromToBy(1, 999_999, 2).toSet(), odds.toSet());
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public Multimap<Integer, Integer> groupBy_unordered_lists_100_keys_serial_lazy_gsc()
     {
@@ -379,8 +466,6 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public Multimap<Integer, Integer> groupBy_unordered_lists_10000_keys_serial_lazy_gsc()
     {
@@ -401,8 +486,6 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public UnsortedSetMultimap<Boolean, Integer> groupBy_2_keys_parallel_lazy_gsc()
     {
@@ -421,8 +504,6 @@ public class GroupBySetTest
         Verify.assertSetsEqual(Interval.fromToBy(1, 999_999, 2).toSet(), (Set<?>) odds);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public UnsortedSetMultimap<Integer, Integer> groupBy_100_keys_parallel_lazy_gsc()
     {
@@ -443,8 +524,6 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public UnsortedSetMultimap<Integer, Integer> groupBy_10000_keys_parallel_lazy_gsc()
     {
@@ -465,8 +544,6 @@ public class GroupBySetTest
         }
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void groupBy_2_keys_serial_eager_scala()
     {
@@ -479,8 +556,6 @@ public class GroupBySetTest
         GroupBySetScalaTest.test_groupBy_2_keys_serial_eager_scala();
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void groupBy_100_keys_serial_eager_scala()
     {
@@ -493,8 +568,6 @@ public class GroupBySetTest
         GroupBySetScalaTest.test_groupBy_100_keys_serial_eager_scala();
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void groupBy_10000_keys_serial_eager_scala()
     {
@@ -507,8 +580,6 @@ public class GroupBySetTest
         GroupBySetScalaTest.test_groupBy_10000_keys_serial_eager_scala();
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void groupBy_2_keys_serial_lazy_scala()
     {
@@ -521,8 +592,6 @@ public class GroupBySetTest
         GroupBySetScalaTest.test_groupBy_unordered_lists_2_keys_serial_lazy_scala();
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void groupBy_100_keys_serial_lazy_scala()
     {
@@ -535,8 +604,6 @@ public class GroupBySetTest
         GroupBySetScalaTest.test_groupBy_unordered_lists_100_keys_serial_lazy_scala();
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void groupBy_10000_keys_serial_lazy_scala()
     {
@@ -549,8 +616,6 @@ public class GroupBySetTest
         GroupBySetScalaTest.test_groupBy_unordered_lists_10000_keys_serial_lazy_scala();
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void groupBy_2_keys_parallel_lazy_scala()
     {
@@ -563,8 +628,6 @@ public class GroupBySetTest
         GroupBySetScalaTest.test_groupBy_2_keys_parallel_lazy_scala();
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void groupBy_100_keys_parallel_lazy_scala()
     {
@@ -577,8 +640,6 @@ public class GroupBySetTest
         GroupBySetScalaTest.test_groupBy_100_keys_parallel_lazy_scala();
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void groupBy_10000_keys_parallel_lazy_scala()
     {

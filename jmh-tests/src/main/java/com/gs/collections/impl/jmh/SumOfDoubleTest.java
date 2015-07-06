@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,9 +69,21 @@ public class SumOfDoubleTest
     }
 
     @Benchmark
+    public double serial_lazy_collectDoubleSum_streams_gsc()
+    {
+        return this.doublesGSC.stream().mapToDouble(each -> each).sum();
+    }
+
+    @Benchmark
     public double parallel_lazy_collectDoubleSum_jdk()
     {
         return this.doublesJDK.parallelStream().mapToDouble(each -> each).sum();
+    }
+
+    @Benchmark
+    public double parallel_lazy_collectDoubleSum_streams_gsc()
+    {
+        return this.doublesGSC.parallelStream().mapToDouble(each -> each).sum();
     }
 
     @Benchmark

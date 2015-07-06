@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class ListAddAllTest
 {
     private static final int SIZE = 1000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
-    private final MutableList<Integer> integersGSC = Interval.oneTo(SIZE).toList();
+    private final MutableList<Integer> integersGSC = FastList.newList(Interval.oneTo(SIZE));
 
     @Benchmark
     public void jdk()
@@ -46,6 +46,10 @@ public class ListAddAllTest
         for (int i = 0; i < 1000; i++)
         {
             result.addAll(this.integersJDK);
+        }
+        if (result.size() != 1_000_000)
+        {
+            throw new AssertionError();
         }
     }
 
@@ -56,6 +60,10 @@ public class ListAddAllTest
         for (int i = 0; i < 1000; i++)
         {
             result.addAll(this.integersGSC);
+        }
+        if (result.size() != 1_000_000)
+        {
+            throw new AssertionError();
         }
     }
 }

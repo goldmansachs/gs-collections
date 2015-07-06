@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,12 +31,10 @@ import com.gs.collections.impl.parallel.ParallelIterate;
 import org.junit.Assert;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -49,8 +47,6 @@ public class SelectTest
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));
     private final FastList<Integer> integersGSC = FastList.newList(Interval.oneTo(SIZE));
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void serial_lazy_jdk()
     {
@@ -58,8 +54,13 @@ public class SelectTest
         Assert.assertEquals(SIZE / 2, evens.size());
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Benchmark
+    public void serial_lazy_streams_gsc()
+    {
+        List<Integer> evens = this.integersGSC.stream().filter(each -> each % 2 == 0).collect(Collectors.toList());
+        Assert.assertEquals(SIZE / 2, evens.size());
+    }
+
     @Benchmark
     public void parallel_lazy_jdk()
     {
@@ -67,8 +68,13 @@ public class SelectTest
         Assert.assertEquals(SIZE / 2, evens.size());
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Benchmark
+    public void parallel_lazy_streams_gsc()
+    {
+        List<Integer> evens = this.integersGSC.parallelStream().filter(each -> each % 2 == 0).collect(Collectors.toList());
+        Assert.assertEquals(SIZE / 2, evens.size());
+    }
+
     @Benchmark
     public void serial_eager_gsc()
     {
@@ -76,8 +82,6 @@ public class SelectTest
         Assert.assertEquals(SIZE / 2, evens.size());
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void parallel_eager_gsc()
     {
@@ -85,8 +89,6 @@ public class SelectTest
         Assert.assertEquals(SIZE / 2, evens.size());
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void serial_lazy_gsc()
     {
@@ -94,8 +96,6 @@ public class SelectTest
         Assert.assertEquals(SIZE / 2, evens.size());
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void parallel_lazy_gsc()
     {

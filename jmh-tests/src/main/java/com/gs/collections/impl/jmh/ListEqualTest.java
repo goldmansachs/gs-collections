@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,20 +45,50 @@ public class ListEqualTest
     @Benchmark
     public void jdk()
     {
-        boolean result0 = this.integersJDK1.equals(this.integersJDK1);
-        boolean result1 = this.integersJDK1.equals(this.integersJDK2);
-        boolean result2 = this.integersJDK1.equals(this.integersJDK3);
-        boolean result3 = this.integersJDK1.equals(this.integersGSC1);
-        boolean result4 = this.integersJDK1.equals(this.integersGSC3);
+        if (!this.integersJDK1.equals(this.integersJDK1))
+        {
+            throw new AssertionError();
+        }
+        if (!this.integersJDK1.equals(this.integersJDK2))
+        {
+            throw new AssertionError();
+        }
+        if (this.integersJDK1.equals(this.integersJDK3))
+        {
+            throw new AssertionError();
+        }
+        if (!this.integersJDK1.equals(this.integersGSC1))
+        {
+            throw new AssertionError();
+        }
+        if (this.integersJDK1.equals(this.integersGSC3))
+        {
+            throw new AssertionError();
+        }
     }
 
     @Benchmark
     public void gsc()
     {
-        boolean result0 = this.integersGSC1.equals(this.integersGSC1);
-        boolean result1 = this.integersGSC1.equals(this.integersGSC2);
-        boolean result2 = this.integersGSC1.equals(this.integersGSC3);
-        boolean result3 = this.integersGSC1.equals(this.integersJDK1);
-        boolean result4 = this.integersGSC1.equals(this.integersJDK3);
+        if (!this.integersGSC1.equals(this.integersGSC1))
+        {
+            throw new AssertionError();
+        }
+        if (!this.integersGSC1.equals(this.integersGSC2))
+        {
+            throw new AssertionError();
+        }
+        if (this.integersGSC1.equals(this.integersGSC3))
+        {
+            throw new AssertionError();
+        }
+        if (!this.integersGSC1.equals(this.integersJDK1))
+        {
+            throw new AssertionError();
+        }
+        if (this.integersGSC1.equals(this.integersJDK3))
+        {
+            throw new AssertionError();
+        }
     }
 }

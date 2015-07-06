@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -197,12 +197,17 @@ public class CountSetTest
         CountSetScalaTest.megamorphic(this.megamorphicWarmupLevel);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void serial_lazy_jdk()
     {
         long evens = this.integersJDK.stream().filter(each -> each % 2 == 0).count();
+        Assert.assertEquals(SIZE / 2, evens);
+    }
+
+    @Benchmark
+    public void serial_lazy_streams_gsc()
+    {
+        long evens = this.integersGSC.stream().filter(each -> each % 2 == 0).count();
         Assert.assertEquals(SIZE / 2, evens);
     }
 
@@ -215,8 +220,15 @@ public class CountSetTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Warmup(iterations = 50)
+    @Measurement(iterations = 25)
+    @Benchmark
+    public void parallel_lazy_streams_gsc()
+    {
+        long evens = this.integersGSC.parallelStream().filter(each -> each % 2 == 0).count();
+        Assert.assertEquals(SIZE / 2, evens);
+    }
+
     @Benchmark
     public void serial_eager_gsc()
     {
@@ -224,8 +236,6 @@ public class CountSetTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void serial_lazy_gsc()
     {
@@ -251,16 +261,12 @@ public class CountSetTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void serial_eager_scala()
     {
         CountSetScalaTest.serial_eager_scala();
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void serial_lazy_scala()
     {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,9 +52,27 @@ public class SumByDoubleTest
     }
 
     @Benchmark
+    public Map<Product, Double> sumByProduct_serial_lazy_streams_gsc()
+    {
+        return this.positions.getGscPositions().stream().collect(
+                Collectors.groupingBy(
+                        Position::getProduct,
+                        Collectors.summingDouble(Position::getMarketValue)));
+    }
+
+    @Benchmark
     public Map<Account, Double> sumByAccount_serial_lazy_jdk()
     {
         return this.positions.getJdkPositions().stream().collect(
+                Collectors.groupingBy(
+                        Position::getAccount,
+                        Collectors.summingDouble(Position::getMarketValue)));
+    }
+
+    @Benchmark
+    public Map<Account, Double> sumByAccount_serial_lazy_streams_gsc()
+    {
+        return this.positions.getGscPositions().stream().collect(
                 Collectors.groupingBy(
                         Position::getAccount,
                         Collectors.summingDouble(Position::getMarketValue)));
@@ -70,9 +88,27 @@ public class SumByDoubleTest
     }
 
     @Benchmark
+    public Map<String, Double> sumByCategory_serial_lazy_streams_gsc()
+    {
+        return this.positions.getGscPositions().stream().collect(
+                Collectors.groupingBy(
+                        Position::getCategory,
+                        Collectors.summingDouble(Position::getMarketValue)));
+    }
+
+    @Benchmark
     public Map<Product, Double> sumByProduct_parallel_lazy_jdk()
     {
         return this.positions.getJdkPositions().parallelStream().collect(
+                Collectors.groupingBy(
+                        Position::getProduct,
+                        Collectors.summingDouble(Position::getMarketValue)));
+    }
+
+    @Benchmark
+    public Map<Product, Double> sumByProduct_parallel_lazy_streams_gsc()
+    {
+        return this.positions.getGscPositions().parallelStream().collect(
                 Collectors.groupingBy(
                         Position::getProduct,
                         Collectors.summingDouble(Position::getMarketValue)));
@@ -88,9 +124,27 @@ public class SumByDoubleTest
     }
 
     @Benchmark
+    public Map<Account, Double> sumByAccount_parallel_lazy_streams_gsc()
+    {
+        return this.positions.getGscPositions().parallelStream().collect(
+                Collectors.groupingBy(
+                        Position::getAccount,
+                        Collectors.summingDouble(Position::getMarketValue)));
+    }
+
+    @Benchmark
     public Map<String, Double> sumByCategory_parallel_lazy_jdk()
     {
         return this.positions.getJdkPositions().parallelStream().collect(
+                Collectors.groupingBy(
+                        Position::getCategory,
+                        Collectors.summingDouble(Position::getMarketValue)));
+    }
+
+    @Benchmark
+    public Map<String, Double> sumByCategory_parallel_lazy_streams_gsc()
+    {
+        return this.positions.getGscPositions().parallelStream().collect(
                 Collectors.groupingBy(
                         Position::getCategory,
                         Collectors.summingDouble(Position::getMarketValue)));

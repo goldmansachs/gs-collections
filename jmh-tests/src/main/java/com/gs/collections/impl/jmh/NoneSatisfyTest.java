@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,12 @@ import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
-import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -68,21 +66,29 @@ public class NoneSatisfyTest
     }
 
     @Benchmark
+    public void short_circuit_middle_serial_lazy_streams_gsc()
+    {
+        Assert.assertFalse(this.integersGSC.stream().noneMatch(each -> each > SIZE / 2));
+    }
+
+    @Benchmark
     public void process_none_serial_lazy_jdk()
     {
         Assert.assertTrue(this.integersJDK.stream().noneMatch(each -> each < 0));
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
+    @Benchmark
+    public void process_none_serial_lazy_streams_gsc()
+    {
+        Assert.assertTrue(this.integersGSC.stream().noneMatch(each -> each < 0));
+    }
+
     @Benchmark
     public void short_circuit_middle_serial_eager_gsc()
     {
         Assert.assertFalse(this.integersGSC.noneSatisfy(each -> each > SIZE / 2));
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void process_none_serial_eager_gsc()
     {

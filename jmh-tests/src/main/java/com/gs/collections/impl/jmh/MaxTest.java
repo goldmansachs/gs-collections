@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,9 +73,21 @@ public class MaxTest
     }
 
     @Benchmark
+    public int serial_lazy_reverse_streams_gsc()
+    {
+        return this.integersGSC.stream().max(Comparator.<Integer>reverseOrder()).get();
+    }
+
+    @Benchmark
     public int serial_lazy_intstream_jdk()
     {
         return this.integersJDK.stream().mapToInt(Integer::intValue).max().getAsInt();
+    }
+
+    @Benchmark
+    public int serial_lazy_intstream_streams_gsc()
+    {
+        return this.integersGSC.stream().mapToInt(Integer::intValue).max().getAsInt();
     }
 
     @Benchmark
@@ -85,15 +97,33 @@ public class MaxTest
     }
 
     @Benchmark
+    public int parallel_lazy_streams_gsc()
+    {
+        return this.integersGSC.parallelStream().max(Comparator.<Integer>naturalOrder()).get();
+    }
+
+    @Benchmark
     public int parallel_lazy_reverse_jdk()
     {
         return this.integersJDK.parallelStream().max(Comparator.<Integer>reverseOrder()).get();
     }
 
     @Benchmark
+    public int parallel_lazy_reverse_streams_gsc()
+    {
+        return this.integersGSC.parallelStream().max(Comparator.<Integer>reverseOrder()).get();
+    }
+
+    @Benchmark
     public int parallel_lazy_intstream_jdk()
     {
         return this.integersJDK.parallelStream().mapToInt(Integer::intValue).max().getAsInt();
+    }
+
+    @Benchmark
+    public int parallel_lazy_intstream_streams_gsc()
+    {
+        return this.integersGSC.parallelStream().mapToInt(Integer::intValue).max().getAsInt();
     }
 
     @Benchmark

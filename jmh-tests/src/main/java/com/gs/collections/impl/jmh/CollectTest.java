@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,14 +32,12 @@ import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.test.Verify;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
-import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
@@ -66,8 +64,6 @@ public class CollectTest
         this.executorService.awaitTermination(1L, TimeUnit.SECONDS);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void serial_lazy_jdk()
     {
@@ -76,9 +72,23 @@ public class CollectTest
     }
 
     @Benchmark
+    public void serial_lazy_streams_gsc()
+    {
+        List<String> strings = this.integersGSC.stream().map(Object::toString).collect(Collectors.toList());
+        Verify.assertSize(SIZE, strings);
+    }
+
+    @Benchmark
     public void parallel_lazy_jdk()
     {
         List<String> strings = this.integersJDK.parallelStream().map(Object::toString).collect(Collectors.toList());
+        Verify.assertSize(SIZE, strings);
+    }
+
+    @Benchmark
+    public void parallel_lazy_streams_gsc()
+    {
+        List<String> strings = this.integersGSC.parallelStream().map(Object::toString).collect(Collectors.toList());
         Verify.assertSize(SIZE, strings);
     }
 
@@ -100,8 +110,6 @@ public class CollectTest
         CollectScalaTest.parallel_lazy_scala();
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void serial_eager_gsc()
     {
@@ -129,8 +137,6 @@ public class CollectTest
         Verify.assertSize(SIZE, strings);
     }
 
-    @Warmup(iterations = 20)
-    @Measurement(iterations = 10)
     @Benchmark
     public void serial_lazy_gsc()
     {

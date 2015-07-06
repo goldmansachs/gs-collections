@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,9 +69,21 @@ public class SumOfIntTest
     }
 
     @Benchmark
+    public int serial_lazy_collectIntSum_streams_gsc()
+    {
+        return this.integersGSC.stream().mapToInt(each -> each).sum();
+    }
+
+    @Benchmark
     public long serial_lazy_collectLongSum_jdk()
     {
         return this.integersJDK.stream().mapToLong(each -> each).sum();
+    }
+
+    @Benchmark
+    public long serial_lazy_collectLongSum_streams_gsc()
+    {
+        return this.integersGSC.stream().mapToLong(each -> each).sum();
     }
 
     @Benchmark
@@ -81,9 +93,21 @@ public class SumOfIntTest
     }
 
     @Benchmark
+    public int parallel_lazy_collectIntSum_streams_gsc()
+    {
+        return this.integersGSC.parallelStream().mapToInt(Integer::intValue).sum();
+    }
+
+    @Benchmark
     public long parallel_lazy_collectLongSum_jdk()
     {
         return this.integersJDK.parallelStream().mapToLong(Integer::longValue).sum();
+    }
+
+    @Benchmark
+    public long parallel_lazy_collectLongSum_streams_gsc()
+    {
+        return this.integersGSC.parallelStream().mapToLong(Integer::longValue).sum();
     }
 
     @Benchmark
