@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.map.primitive.MutableLongIntMap;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.map.mutable.primitive.LongIntHashMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -36,7 +37,7 @@ import org.openjdk.jmh.infra.Blackhole;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class LongIntMapTest
+public class LongIntMapTest extends AbstractJMHTestRunner
 {
     @Param({"1", "10", "100", "10000", "100000"})
     public int mapSizeDividedBy16000;

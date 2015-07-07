@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.carrotsearch.hppc.ObjectObjectMap;
 import com.carrotsearch.hppc.ObjectObjectOpenHashMap;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -34,7 +35,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class HppcMutableMapGetTest
+public class HppcMutableMapGetTest extends AbstractJMHTestRunner
 {
     private static final int RANDOM_COUNT = 9;
 

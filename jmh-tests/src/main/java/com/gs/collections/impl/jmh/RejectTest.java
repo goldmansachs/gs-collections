@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.Interval;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -35,7 +36,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class RejectTest
+public class RejectTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1_000_000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));

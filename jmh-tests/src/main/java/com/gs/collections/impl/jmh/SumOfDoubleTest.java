@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -38,7 +39,7 @@ import org.openjdk.jmh.annotations.TearDown;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class SumOfDoubleTest
+public class SumOfDoubleTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 3_000_000;
     private static final int BATCH_SIZE = 10_000;

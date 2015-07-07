@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.collect.Multimaps;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -36,7 +37,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class GroupByListTest
+public class GroupByListTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1_000_000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));

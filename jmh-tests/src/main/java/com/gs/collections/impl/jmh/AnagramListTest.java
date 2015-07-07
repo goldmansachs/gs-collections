@@ -32,6 +32,7 @@ import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.forkjoin.FJIterate;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import org.apache.commons.lang.RandomStringUtils;
@@ -48,7 +49,7 @@ import org.openjdk.jmh.annotations.TearDown;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class AnagramListTest
+public class AnagramListTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1_000_000;
 

@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
@@ -37,7 +38,7 @@ import org.openjdk.jmh.annotations.TearDown;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class AnySatisfyTest
+public class AnySatisfyTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;

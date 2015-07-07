@@ -20,6 +20,7 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -35,7 +36,7 @@ import scala.collection.immutable.HashMap$;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class MapGrowthTest
+public class MapGrowthTest extends AbstractJMHTestRunner
 {
     private static final int RANDOM_COUNT = 9;
 

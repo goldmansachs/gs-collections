@@ -19,6 +19,7 @@ package com.gs.collections.impl.jmh.map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import org.apache.commons.lang.RandomStringUtils;
@@ -34,7 +35,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class TroveMutableMapGetTest
+public class TroveMutableMapGetTest extends AbstractJMHTestRunner
 {
     private static final int RANDOM_COUNT = 9;
 

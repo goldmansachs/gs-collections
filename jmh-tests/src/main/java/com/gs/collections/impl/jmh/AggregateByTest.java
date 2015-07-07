@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.Pool;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -52,7 +53,7 @@ import org.openjdk.jmh.annotations.TearDown;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class AggregateByTest
+public class AggregateByTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;

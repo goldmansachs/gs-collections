@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.procedure.CountProcedure;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
@@ -42,7 +43,7 @@ import org.openjdk.jmh.annotations.TearDown;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class CountTest
+public class CountTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;

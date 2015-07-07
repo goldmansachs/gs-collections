@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -33,7 +34,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class ListAddAllTest
+public class ListAddAllTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1000;
     private final List<Integer> integersJDK = new ArrayList<>(Interval.oneTo(SIZE));

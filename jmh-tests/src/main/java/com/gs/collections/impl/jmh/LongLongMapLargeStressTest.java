@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.map.primitive.MutableLongLongMap;
 import com.gs.collections.api.set.primitive.MutableLongSet;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.map.mutable.primitive.LongLongHashMap;
 import com.gs.collections.impl.set.mutable.primitive.LongHashSet;
@@ -39,7 +40,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class LongLongMapLargeStressTest
+public class LongLongMapLargeStressTest extends AbstractJMHTestRunner
 {
     private static final int LOOP_COUNT = 1;
     private static final int KEY_COUNT = 400_000;

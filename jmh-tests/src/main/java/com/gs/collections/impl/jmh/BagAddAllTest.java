@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.Interval;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -33,7 +34,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class BagAddAllTest
+public class BagAddAllTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1000;
     private final Multiset<Integer> integersGuava = HashMultiset.create(Interval.oneTo(SIZE));

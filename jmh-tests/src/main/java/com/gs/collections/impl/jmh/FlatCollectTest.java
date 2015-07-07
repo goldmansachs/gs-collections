@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -35,7 +36,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class FlatCollectTest
+public class FlatCollectTest extends AbstractJMHTestRunner
 {
     private static final int COUNT = 10_000;
     private static final int LIST_SIZE = 100;

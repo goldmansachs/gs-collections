@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.procedure.CountProcedure;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -31,7 +32,6 @@ import org.junit.Assert;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Param;
@@ -39,12 +39,11 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
-import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class CountSetTest
+public class CountSetTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;
@@ -211,8 +210,6 @@ public class CountSetTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
-    @Warmup(iterations = 50)
-    @Measurement(iterations = 25)
     @Benchmark
     public void parallel_lazy_jdk()
     {
@@ -220,8 +217,6 @@ public class CountSetTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
-    @Warmup(iterations = 50)
-    @Measurement(iterations = 25)
     @Benchmark
     public void parallel_lazy_streams_gsc()
     {
@@ -243,8 +238,6 @@ public class CountSetTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
-    @Warmup(iterations = 50)
-    @Measurement(iterations = 25)
     @Benchmark
     public void parallel_eager_gsc()
     {
@@ -252,8 +245,6 @@ public class CountSetTest
         Assert.assertEquals(SIZE / 2, evens);
     }
 
-    @Warmup(iterations = 50)
-    @Measurement(iterations = 25)
     @Benchmark
     public void parallel_lazy_gsc()
     {
@@ -273,8 +264,6 @@ public class CountSetTest
         CountSetScalaTest.serial_lazy_scala();
     }
 
-    @Warmup(iterations = 50)
-    @Measurement(iterations = 25)
     @Benchmark
     public void parallel_lazy_scala()
     {

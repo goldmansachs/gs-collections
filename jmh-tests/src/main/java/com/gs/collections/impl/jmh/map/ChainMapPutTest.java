@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import com.carrotsearch.hppc.ObjectObjectMap;
 import com.carrotsearch.hppc.ObjectObjectOpenHashMap;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -39,7 +40,7 @@ import scala.collection.mutable.HashTable;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class ChainMapPutTest
+public class ChainMapPutTest extends AbstractJMHTestRunner
 {
     private static final int RANDOM_COUNT = 9;
 

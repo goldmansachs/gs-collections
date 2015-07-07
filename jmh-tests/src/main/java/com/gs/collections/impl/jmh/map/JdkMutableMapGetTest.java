@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -34,7 +35,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class JdkMutableMapGetTest
+public class JdkMutableMapGetTest extends AbstractJMHTestRunner
 {
     private static final int RANDOM_COUNT = 9;
 

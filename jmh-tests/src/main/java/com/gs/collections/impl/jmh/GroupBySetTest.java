@@ -32,6 +32,7 @@ import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.set.UnsortedSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -53,7 +54,7 @@ import org.openjdk.jmh.annotations.TearDown;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class GroupBySetTest
+public class GroupBySetTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;

@@ -25,6 +25,7 @@ import com.gs.collections.impl.jmh.domain.Account;
 import com.gs.collections.impl.jmh.domain.Position;
 import com.gs.collections.impl.jmh.domain.Positions;
 import com.gs.collections.impl.jmh.domain.Product;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.parallel.ParallelIterate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,7 +39,7 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class SumByDoubleTest
+public class SumByDoubleTest extends AbstractJMHTestRunner
 {
     private final Positions positions = new Positions().shuffle();
 

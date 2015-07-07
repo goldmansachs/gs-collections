@@ -35,6 +35,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.forkjoin.FJIterate;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.mutable.CompositeFastList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
@@ -54,7 +55,7 @@ import org.openjdk.jmh.annotations.TearDown;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class AnagramSetTest
+public class AnagramSetTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;

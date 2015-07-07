@@ -36,6 +36,7 @@ import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.forkjoin.FJIterate;
+import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.parallel.ParallelIterate;
@@ -53,7 +54,7 @@ import org.openjdk.jmh.annotations.TearDown;
 @State(Scope.Thread)
 @BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
-public class AnagramBagTest
+public class AnagramBagTest extends AbstractJMHTestRunner
 {
     private static final int SIZE = 1_000_000;
     private static final int BATCH_SIZE = 10_000;
