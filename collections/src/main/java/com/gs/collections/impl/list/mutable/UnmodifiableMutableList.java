@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 import java.util.RandomAccess;
 import java.util.concurrent.ExecutorService;
 
@@ -187,6 +188,16 @@ public class UnmodifiableMutableList<T>
         throw new UnsupportedOperationException("Cannot call reverseThis() on " + this.getClass().getSimpleName());
     }
 
+    public MutableList<T> shuffleThis()
+    {
+        throw new UnsupportedOperationException("Cannot call shuffleThis() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableList<T> shuffleThis(Random rnd)
+    {
+        throw new UnsupportedOperationException("Cannot call shuffleThis() on " + this.getClass().getSimpleName());
+    }
+
     public MutableStack<T> toStack()
     {
         return ArrayStack.newStack(this.getMutableList());
@@ -285,7 +296,7 @@ public class UnmodifiableMutableList<T>
     public UnmodifiableMutableList<T> subList(int fromIndex, int toIndex)
     {
         MutableList<T> subList = this.getMutableList().subList(fromIndex, toIndex);
-        return of(subList);
+        return UnmodifiableMutableList.of(subList);
     }
 
     @Override

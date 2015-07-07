@@ -368,7 +368,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     public void toSortedListBy()
     {
         MutableList<Integer> mutableList = this.classUnderTest().toList();
-        Collections.shuffle(mutableList);
+        mutableList.shuffleThis();
         ImmutableList<Integer> immutableList = mutableList.toImmutable();
         MutableList<Integer> sortedList = immutableList.toSortedListBy(Functions.getIntegerPassThru());
         Assert.assertEquals(this.classUnderTest(), sortedList);

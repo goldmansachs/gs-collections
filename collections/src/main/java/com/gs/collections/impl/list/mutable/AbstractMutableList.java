@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.RandomAccess;
 import java.util.concurrent.ExecutorService;
 
@@ -735,6 +736,18 @@ public abstract class AbstractMutableList<T>
     public MutableList<T> reverseThis()
     {
         Collections.reverse(this);
+        return this;
+    }
+
+    public MutableList<T> shuffleThis()
+    {
+        Collections.shuffle(this);
+        return this;
+    }
+
+    public MutableList<T> shuffleThis(Random rnd)
+    {
+        Collections.shuffle(this, rnd);
         return this;
     }
 

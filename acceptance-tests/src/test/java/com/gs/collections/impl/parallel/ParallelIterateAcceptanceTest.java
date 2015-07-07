@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -214,22 +214,22 @@ public class ParallelIterateAcceptanceTest
     public void testForEach()
     {
         IntegerSum sum1 = new IntegerSum(0);
-        List<Integer> list1 = createIntegerList(16);
+        List<Integer> list1 = ParallelIterateAcceptanceTest.createIntegerList(16);
         ParallelIterate.forEach(list1, new SumProcedure(sum1), new SumCombiner(sum1), 1, list1.size() / 2);
         Assert.assertEquals(16, sum1.getSum());
 
         IntegerSum sum2 = new IntegerSum(0);
-        List<Integer> list2 = createIntegerList(7);
+        List<Integer> list2 = ParallelIterateAcceptanceTest.createIntegerList(7);
         ParallelIterate.forEach(list2, new SumProcedure(sum2), new SumCombiner(sum2));
         Assert.assertEquals(7, sum2.getSum());
 
         IntegerSum sum3 = new IntegerSum(0);
-        List<Integer> list3 = createIntegerList(15);
+        List<Integer> list3 = ParallelIterateAcceptanceTest.createIntegerList(15);
         ParallelIterate.forEach(list3, new SumProcedure(sum3), new SumCombiner(sum3), 1, list3.size() / 2);
         Assert.assertEquals(15, sum3.getSum());
 
         IntegerSum sum4 = new IntegerSum(0);
-        List<Integer> list4 = createIntegerList(35);
+        List<Integer> list4 = ParallelIterateAcceptanceTest.createIntegerList(35);
         ParallelIterate.forEach(list4, new SumProcedure(sum4), new SumCombiner(sum4));
         Assert.assertEquals(35, sum4.getSum());
 
@@ -239,7 +239,7 @@ public class ParallelIterateAcceptanceTest
         Assert.assertEquals(35, sum5.getSum());
 
         IntegerSum sum6 = new IntegerSum(0);
-        List<Integer> list6 = createIntegerList(40);
+        List<Integer> list6 = ParallelIterateAcceptanceTest.createIntegerList(40);
         ParallelIterate.forEach(list6, new SumProcedure(sum6), new SumCombiner(sum6), 1, list6.size() / 2);
         Assert.assertEquals(40, sum6.getSum());
 
@@ -253,22 +253,22 @@ public class ParallelIterateAcceptanceTest
     public void testForEachImmutableList()
     {
         IntegerSum sum1 = new IntegerSum(0);
-        ImmutableList<Integer> list1 = Lists.immutable.ofAll(createIntegerList(16));
+        ImmutableList<Integer> list1 = Lists.immutable.ofAll(ParallelIterateAcceptanceTest.createIntegerList(16));
         ParallelIterate.forEach(list1, new SumProcedure(sum1), new SumCombiner(sum1), 1, list1.size() / 2);
         Assert.assertEquals(16, sum1.getSum());
 
         IntegerSum sum2 = new IntegerSum(0);
-        ImmutableList<Integer> list2 = Lists.immutable.ofAll(createIntegerList(7));
+        ImmutableList<Integer> list2 = Lists.immutable.ofAll(ParallelIterateAcceptanceTest.createIntegerList(7));
         ParallelIterate.forEach(list2, new SumProcedure(sum2), new SumCombiner(sum2));
         Assert.assertEquals(7, sum2.getSum());
 
         IntegerSum sum3 = new IntegerSum(0);
-        ImmutableList<Integer> list3 = Lists.immutable.ofAll(createIntegerList(15));
+        ImmutableList<Integer> list3 = Lists.immutable.ofAll(ParallelIterateAcceptanceTest.createIntegerList(15));
         ParallelIterate.forEach(list3, new SumProcedure(sum3), new SumCombiner(sum3), 1, list3.size() / 2);
         Assert.assertEquals(15, sum3.getSum());
 
         IntegerSum sum4 = new IntegerSum(0);
-        ImmutableList<Integer> list4 = Lists.immutable.ofAll(createIntegerList(35));
+        ImmutableList<Integer> list4 = Lists.immutable.ofAll(ParallelIterateAcceptanceTest.createIntegerList(35));
         ParallelIterate.forEach(list4, new SumProcedure(sum4), new SumCombiner(sum4));
         Assert.assertEquals(35, sum4.getSum());
 
@@ -278,7 +278,7 @@ public class ParallelIterateAcceptanceTest
         Assert.assertEquals(35, sum5.getSum());
 
         IntegerSum sum6 = new IntegerSum(0);
-        ImmutableList<Integer> list6 = Lists.immutable.ofAll(createIntegerList(40));
+        ImmutableList<Integer> list6 = Lists.immutable.ofAll(ParallelIterateAcceptanceTest.createIntegerList(40));
         ParallelIterate.forEach(list6, new SumProcedure(sum6), new SumCombiner(sum6), 1, list6.size() / 2);
         Assert.assertEquals(40, sum6.getSum());
 
@@ -292,7 +292,7 @@ public class ParallelIterateAcceptanceTest
     public void testForEachWithException()
     {
         Verify.assertThrows(RuntimeException.class, () -> ParallelIterate.forEach(
-                createIntegerList(5),
+                ParallelIterateAcceptanceTest.createIntegerList(5),
                 new PassThruProcedureFactory<>(EXCEPTION_PROCEDURE),
                 new PassThruCombiner<>(),
                 1,
@@ -353,7 +353,7 @@ public class ParallelIterateAcceptanceTest
     public void testForEachWithIndexException()
     {
         Verify.assertThrows(RuntimeException.class, () -> ParallelIterate.forEachWithIndex(
-                createIntegerList(5),
+                ParallelIterateAcceptanceTest.createIntegerList(5),
                 new PassThruObjectIntProcedureFactory<>(EXCEPTION_OBJECT_INT_PROCEDURE),
                 new PassThruCombiner<>(),
                 1,
@@ -486,7 +486,7 @@ public class ParallelIterateAcceptanceTest
     {
         FastList<Integer> iterable = FastList.newWithNValues(10000000, new Function0<Integer>()
         {
-            private int current = 0;
+            private int current;
 
             public Integer value()
             {
@@ -498,7 +498,7 @@ public class ParallelIterateAcceptanceTest
                 return Integer.valueOf(4);
             }
         });
-        Collections.shuffle(iterable);
+        iterable.shuffleThis();
         Multimap<String, Integer> expected = iterable.toBag().groupBy(String::valueOf);
         Multimap<String, Integer> expectedAsSet = iterable.toSet().groupBy(String::valueOf);
         Multimap<String, Integer> result1 = ParallelIterate.groupBy(iterable.toList(), String::valueOf, 100);
@@ -560,8 +560,8 @@ public class ParallelIterateAcceptanceTest
         MutableList<Integer> list = LazyIterate.adapt(Collections.nCopies(1000, 1))
                 .concatenate(Collections.nCopies(2000, 2))
                 .concatenate(Collections.nCopies(3000, 3))
-                .toList();
-        Collections.shuffle(list);
+                .toList()
+                .shuffleThis();
         MapIterable<String, AtomicInteger> aggregation =
                 ParallelIterate.aggregateInPlaceBy(list, String::valueOf, ATOMIC_INTEGER_NEW, AtomicInteger::addAndGet, 100);
         Assert.assertEquals(1000, aggregation.get("1").intValue());
@@ -614,7 +614,7 @@ public class ParallelIterateAcceptanceTest
 
     public static final class IntegerSum
     {
-        private int sum = 0;
+        private int sum;
 
         public IntegerSum(int newSum)
         {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     @Test
     public void sortThis()
     {
-        Collections.shuffle(this.list);
+        this.list.shuffleThis();
         MutableList<String> sortedList = this.list.sortThis();
         Assert.assertSame(this.list, sortedList);
         Assert.assertEquals(
@@ -81,7 +81,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     @Test
     public void sortThisBy()
     {
-        Collections.shuffle(this.list);
+        this.list.shuffleThis();
         Assert.assertEquals(
                 this.getNStrings(),
                 this.list.sortThisBy(Functions.getStringToInteger()));
@@ -90,7 +90,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     @Test
     public void sortThisByInt()
     {
-        Collections.shuffle(this.list);
+        this.list.shuffleThis();
         Assert.assertEquals(
                 this.getNStrings(),
                 this.list.sortThisByInt(Integer::parseInt));
@@ -107,7 +107,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     @Test
     public void sortThisByChar()
     {
-        Collections.shuffle(this.list);
+        this.list.shuffleThis();
         Assert.assertEquals(
                 this.getNStrings(),
                 this.list.sortThisByChar(string -> string.charAt(0)));
@@ -116,7 +116,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     @Test
     public void sortThisByByte()
     {
-        Collections.shuffle(this.list);
+        this.list.shuffleThis();
         Assert.assertEquals(
                 this.getNStrings(),
                 this.list.sortThisByByte(Byte::parseByte));
@@ -125,7 +125,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     @Test
     public void sortThisByShort()
     {
-        Collections.shuffle(this.list);
+        this.list.shuffleThis();
         Assert.assertEquals(
                 this.getNStrings(),
                 this.list.sortThisByShort(Short::parseShort));
@@ -134,7 +134,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     @Test
     public void sortThisByFloat()
     {
-        Collections.shuffle(this.list);
+        this.list.shuffleThis();
         Assert.assertEquals(
                 this.getNStrings(),
                 this.list.sortThisByFloat(Float::parseFloat));
@@ -143,7 +143,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     @Test
     public void sortThisByLong()
     {
-        Collections.shuffle(this.list);
+        this.list.shuffleThis();
         Assert.assertEquals(
                 this.getNStrings(),
                 this.list.sortThisByLong(Long::parseLong));
@@ -152,7 +152,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     @Test
     public void sortThisByDouble()
     {
-        Collections.shuffle(this.list);
+        this.list.shuffleThis();
         Assert.assertEquals(
                 this.getNStrings(),
                 this.list.sortThisByDouble(Double::parseDouble));

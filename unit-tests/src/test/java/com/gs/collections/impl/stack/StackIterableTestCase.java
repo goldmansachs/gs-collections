@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -977,8 +977,7 @@ public abstract class StackIterableTestCase
     @Test
     public void toSortedListBy()
     {
-        MutableList<Integer> list = FastList.newList(Interval.oneTo(10));
-        Collections.shuffle(list);
+        MutableList<Integer> list = FastList.newList(Interval.oneTo(10)).shuffleThis();
         Assert.assertEquals(
                 Interval.oneTo(10),
                 this.newStack(list).toSortedListBy(Functions.getIntegerPassThru()));

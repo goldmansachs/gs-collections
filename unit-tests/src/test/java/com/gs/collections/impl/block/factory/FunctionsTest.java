@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.gs.collections.impl.block.factory;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 
 import com.gs.collections.api.block.function.Function;
@@ -423,8 +422,7 @@ public class FunctionsTest
     @Test
     public void intValueFunctionToComparator()
     {
-        MutableList<Integer> list = Interval.oneTo(100).toList();
-        Collections.shuffle(list);
+        MutableList<Integer> list = Interval.oneTo(100).toList().shuffleThis();
         Function<Integer, Integer> function = Integer::intValue;
         list.sortThis(Comparators.byFunction(function));
         Assert.assertEquals(Interval.oneTo(100).toList(), list);
@@ -433,8 +431,7 @@ public class FunctionsTest
     @Test
     public void doubleValueFunctionToComparator()
     {
-        MutableList<Double> list = FastList.newListWith(5.0, 4.0, 3.0, 2.0, 1.0);
-        Collections.shuffle(list);
+        MutableList<Double> list = FastList.newListWith(5.0, 4.0, 3.0, 2.0, 1.0).shuffleThis();
         Function<Double, Double> function = Double::doubleValue;
         list.sortThis(Comparators.byFunction(function));
         Assert.assertEquals(FastList.newListWith(1.0, 2.0, 3.0, 4.0, 5.0), list);
@@ -443,8 +440,7 @@ public class FunctionsTest
     @Test
     public void longValueFunctionToComparator()
     {
-        MutableList<Long> list = FastList.newListWith(5L, 4L, 3L, 2L, 1L);
-        Collections.shuffle(list);
+        MutableList<Long> list = FastList.newListWith(5L, 4L, 3L, 2L, 1L).shuffleThis();
         list.sortThis(Comparators.byFunction(new LongFunctionImpl<Long>()
         {
             public long longValueOf(Long each)

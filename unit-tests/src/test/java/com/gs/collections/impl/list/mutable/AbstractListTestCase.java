@@ -431,8 +431,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThis_small()
     {
-        MutableList<Integer> actual = this.newWith(1, 2, 3);
-        Collections.shuffle(actual);
+        MutableList<Integer> actual = this.newWith(1, 2, 3).shuffleThis();
         MutableList<Integer> sorted = actual.sortThis();
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith(1, 2, 3), actual);
@@ -441,8 +440,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThis()
     {
-        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        Collections.shuffle(actual);
+        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).shuffleThis();
         MutableList<Integer> sorted = actual.sortThis();
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), actual);
@@ -451,8 +449,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThis_large()
     {
-        MutableList<Integer> actual = this.newWith(Interval.oneTo(1000).toArray());
-        Collections.shuffle(actual);
+        MutableList<Integer> actual = this.newWith(Interval.oneTo(1000).toArray()).shuffleThis();
         MutableList<Integer> sorted = actual.sortThis();
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(Interval.oneTo(1000).toList(), actual);
@@ -461,8 +458,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThis_with_comparator_small()
     {
-        MutableList<Integer> actual = this.newWith(1, 2, 3);
-        Collections.shuffle(actual);
+        MutableList<Integer> actual = this.newWith(1, 2, 3).shuffleThis();
         MutableList<Integer> sorted = actual.sortThis(Collections.<Integer>reverseOrder());
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith(3, 2, 1), actual);
@@ -471,8 +467,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThis_with_comparator()
     {
-        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        Collections.shuffle(actual);
+        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).shuffleThis();
         MutableList<Integer> sorted = actual.sortThis(Collections.<Integer>reverseOrder());
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith(10, 9, 8, 7, 6, 5, 4, 3, 2, 1), actual);
@@ -481,8 +476,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThis_with_comparator_large()
     {
-        MutableList<Integer> actual = this.newWith(Interval.oneTo(1000).toArray());
-        Collections.shuffle(actual);
+        MutableList<Integer> actual = this.newWith(Interval.oneTo(1000).toArray()).shuffleThis();
         MutableList<Integer> sorted = actual.sortThis(Collections.<Integer>reverseOrder());
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(Interval.fromToBy(1000, 1, -1).toList(), actual);
@@ -491,8 +485,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThisBy()
     {
-        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        Collections.shuffle(actual);
+        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).shuffleThis();
         MutableList<Integer> sorted = actual.sortThisBy(String::valueOf);
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith(1, 10, 2, 3, 4, 5, 6, 7, 8, 9), actual);
@@ -510,8 +503,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThisByInt()
     {
-        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-        Collections.shuffle(actual);
+        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").shuffleThis();
         MutableList<String> sorted = actual.sortThisByInt(Integer::parseInt);
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), actual);
@@ -520,8 +512,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThisByChar()
     {
-        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9");
-        Collections.shuffle(actual);
+        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9").shuffleThis();
         MutableList<String> sorted = actual.sortThisByChar(s -> s.charAt(0));
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith("1", "2", "3", "4", "5", "6", "7", "8", "9"), actual);
@@ -530,8 +521,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThisByByte()
     {
-        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-        Collections.shuffle(actual);
+        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").shuffleThis();
         MutableList<String> sorted = actual.sortThisByByte(Byte::parseByte);
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), actual);
@@ -540,8 +530,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThisByShort()
     {
-        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-        Collections.shuffle(actual);
+        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").shuffleThis();
         MutableList<String> sorted = actual.sortThisByShort(Short::parseShort);
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), actual);
@@ -550,8 +539,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThisByFloat()
     {
-        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-        Collections.shuffle(actual);
+        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").shuffleThis();
         MutableList<String> sorted = actual.sortThisByFloat(Float::parseFloat);
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), actual);
@@ -560,8 +548,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThisByLong()
     {
-        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-        Collections.shuffle(actual);
+        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").shuffleThis();
         MutableList<String> sorted = actual.sortThisByLong(Long::parseLong);
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), actual);
@@ -570,8 +557,7 @@ public abstract class AbstractListTestCase
     @Test
     public void sortThisByDouble()
     {
-        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
-        Collections.shuffle(actual);
+        MutableList<String> actual = this.newWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").shuffleThis();
         MutableList<String> sorted = actual.sortThisByDouble(Double::parseDouble);
         Assert.assertSame(actual, sorted);
         Assert.assertEquals(FastList.newListWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"), actual);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -630,8 +630,8 @@ public class FJIterateTest
         MutableList<Integer> list = LazyIterate.adapt(Collections.nCopies(100, 1))
                 .concatenate(Collections.nCopies(200, 2))
                 .concatenate(Collections.nCopies(300, 3))
-                .toList();
-        Collections.shuffle(list);
+                .toList()
+                .shuffleThis();
         MapIterable<String, AtomicInteger> aggregation =
                 FJIterate.aggregateInPlaceBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, sumAggregator, 50);
         Assert.assertEquals(100, aggregation.get("1").intValue());
@@ -672,8 +672,8 @@ public class FJIterateTest
         MutableList<Integer> list = LazyIterate.adapt(Collections.nCopies(1000, 1))
                 .concatenate(Collections.nCopies(2000, 2))
                 .concatenate(Collections.nCopies(3000, 3))
-                .toList();
-        Collections.shuffle(list);
+                .toList()
+                .shuffleThis();
         MapIterable<String, Integer> aggregation =
                 FJIterate.aggregateBy(list, Functions.getToString(), INTEGER_NEW, sumAggregator, 100);
         Assert.assertEquals(1000, aggregation.get("1").intValue());
@@ -713,7 +713,7 @@ public class FJIterateTest
 
     public static final class IntegerSum
     {
-        private int sum = 0;
+        private int sum;
 
         public IntegerSum(int newSum)
         {

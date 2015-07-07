@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,9 @@ import com.gs.collections.impl.utility.ListIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iList;
+import static com.gs.collections.impl.factory.Iterables.mList;
+import static com.gs.collections.impl.factory.Iterables.mSet;
 
 /**
  * JUnit test for {@link FastList}.
@@ -1066,7 +1068,7 @@ public class FastListTest extends AbstractListTestCase
             FastList<Integer> actual = FastList.newList(Interval.oneTo(i));
             for (int j = 0; j < 3; j++)
             {
-                Collections.shuffle(actual);
+                actual.shuffleThis();
                 Assert.assertEquals(Interval.oneTo(i), actual.sortThis());
                 Assert.assertEquals(Interval.oneTo(i).reverseThis(), actual.sortThis(Collections.<Integer>reverseOrder()));
             }

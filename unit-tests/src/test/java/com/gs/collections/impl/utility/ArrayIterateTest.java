@@ -805,8 +805,7 @@ public class ArrayIterateTest
     {
         for (int i = 1; i < 20; i++)
         {
-            MutableList<Integer> integers = Interval.oneTo(i).toList();
-            Collections.shuffle(integers);
+            MutableList<Integer> integers = Interval.oneTo(i).toList().shuffleThis();
             Integer[] array = integers.toArray(new Integer[i]);
             ArrayIterate.sort(array, array.length, null);
             Assert.assertArrayEquals(array, Interval.oneTo(i).toArray());

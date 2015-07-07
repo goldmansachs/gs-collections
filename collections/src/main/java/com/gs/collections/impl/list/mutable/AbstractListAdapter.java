@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.block.function.Function;
@@ -92,6 +93,18 @@ public abstract class AbstractListAdapter<T>
     public MutableList<T> reverseThis()
     {
         Collections.reverse(this);
+        return this;
+    }
+
+    public MutableList<T> shuffleThis()
+    {
+        Collections.shuffle(this);
+        return this;
+    }
+
+    public MutableList<T> shuffleThis(Random rnd)
+    {
+        Collections.shuffle(this, rnd);
         return this;
     }
 

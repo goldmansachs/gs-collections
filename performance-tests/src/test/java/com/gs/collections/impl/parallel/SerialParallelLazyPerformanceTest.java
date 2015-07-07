@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -380,8 +379,7 @@ public class SerialParallelLazyPerformanceTest
     private MutableList<Integer> getSizes()
     {
         MutableList<Integer> sizes = FastList.newListWith(LARGE_COUNT, MEDIUM_COUNT, SMALL_COUNT);
-        Collections.shuffle(sizes);
-        return sizes;
+        return sizes.shuffleThis();
     }
 
     private MutableList<Function0<FastList<Integer>>> getIntegerListGenerators(int count, boolean shuffle)
@@ -392,12 +390,11 @@ public class SerialParallelLazyPerformanceTest
             FastList<Integer> integers = FastList.newList(interval);
             if (shuffle)
             {
-                Collections.shuffle(integers);
+                integers.shuffleThis();
             }
             return integers;
         });
-        Collections.shuffle(generators);
-        return generators;
+        return generators.shuffleThis();
     }
 
     private void measureAlgorithmForIntegerIterable(String algorithmName, Procedure<Function0<FastList<Integer>>> algorithm, boolean shuffle)
@@ -437,7 +434,7 @@ public class SerialParallelLazyPerformanceTest
 
     private void shuffleAndRun(MutableList<Runnable> runnables)
     {
-        Collections.shuffle(runnables);
+        runnables.shuffleThis();
         runnables.forEach(Procedures.cast(Runnable::run));
     }
 

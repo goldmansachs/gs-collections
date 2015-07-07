@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
@@ -456,6 +457,24 @@ public class SynchronizedMutableList<T>
         synchronized (this.getLock())
         {
             this.getDelegate().reverseThis();
+            return this;
+        }
+    }
+
+    public MutableList<T> shuffleThis()
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().shuffleThis();
+            return this;
+        }
+    }
+
+    public MutableList<T> shuffleThis(Random rnd)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().shuffleThis(rnd);
             return this;
         }
     }

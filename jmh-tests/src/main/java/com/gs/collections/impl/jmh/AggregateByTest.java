@@ -73,7 +73,7 @@ public class AggregateByTest extends AbstractJMHTestRunner
     public void setUp()
     {
         this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        Collections.shuffle(this.gscPositions);
+        this.gscPositions.shuffleThis();
         Collections.shuffle(this.jdkPositions);
     }
 
@@ -611,7 +611,7 @@ public class AggregateByTest extends AbstractJMHTestRunner
             {
                 return false;
             }
-            return isCloseTo(that.sum, this.sum, 0.0001);
+            return AggregateByTest.isCloseTo(that.sum, this.sum, 0.0001);
         }
 
         @Override

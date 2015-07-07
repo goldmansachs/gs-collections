@@ -16,6 +16,8 @@
 
 package com.gs.collections.test.list.mutable;
 
+import java.util.Random;
+
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.test.UnmodifiableMutableCollectionTestCase;
 import com.gs.collections.test.list.UnmodifiableListTestCase;
@@ -28,6 +30,14 @@ public interface UnmodifiableMutableListTestCase extends UnmodifiableMutableColl
     default void MutableList_sortThis()
     {
         this.newWith(5, 1, 4, 2, 3).sortThis();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    default void MutableList_shuffleThis()
+    {
+        this.newWith(5, 1, 4, 2, 3).shuffleThis();
+        this.newWith(5, 1, 4, 2, 3).shuffleThis(new Random(8));
     }
 
     @Override

@@ -26,6 +26,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 import java.util.RandomAccess;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -1266,6 +1267,18 @@ public final class MultiReaderFastList<T>
             return this;
         }
 
+        public MutableList<T> shuffleThis()
+        {
+            this.getDelegate().shuffleThis();
+            return this;
+        }
+
+        public MutableList<T> shuffleThis(Random rnd)
+        {
+            this.getDelegate().shuffleThis(rnd);
+            return this;
+        }
+
         public MutableStack<T> toStack()
         {
             return ArrayStack.newStack(this.delegate);
@@ -1640,6 +1653,34 @@ public final class MultiReaderFastList<T>
         try
         {
             this.delegate.reverseThis();
+            return this;
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
+
+    public MutableList<T> shuffleThis()
+    {
+        this.acquireWriteLock();
+        try
+        {
+            this.delegate.shuffleThis();
+            return this;
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
+
+    public MutableList<T> shuffleThis(Random rnd)
+    {
+        this.acquireWriteLock();
+        try
+        {
+            this.delegate.shuffleThis(rnd);
             return this;
         }
         finally

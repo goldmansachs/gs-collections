@@ -844,8 +844,7 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void sumFloatConsistentRounding1()
     {
-        MutableList<Integer> list = Interval.oneTo(100_000).toList();
-        Collections.shuffle(list);
+        MutableList<Integer> list = Interval.oneTo(100_000).toList().shuffleThis();
 
         // The test only ensures the consistency/stability of rounding. This is not meant to test the "correctness" of the float calculation result.
         // Indeed the lower bits of this calculation result are always incorrect due to the information loss of original float values.
@@ -858,8 +857,7 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void sumFloatConsistentRounding2()
     {
-        MutableList<Integer> list = Interval.oneTo(99_999).toList();
-        Collections.shuffle(list);
+        MutableList<Integer> list = Interval.oneTo(99_999).toList().shuffleThis();
 
         // The test only ensures the consistency/stability of rounding. This is not meant to test the "correctness" of the float calculation result.
         // Indeed the lower bits of this calculation result are always incorrect due to the information loss of original float values.
@@ -881,8 +879,7 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void sumDoubleConsistentRounding1()
     {
-        MutableList<Integer> list = Interval.oneTo(100_000).toList();
-        Collections.shuffle(list);
+        MutableList<Integer> list = Interval.oneTo(100_000).toList().shuffleThis();
 
         Assert.assertEquals(
                 1.082323233711138,
@@ -893,8 +890,7 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void sumDoubleConsistentRounding2()
     {
-        MutableList<Integer> list = Interval.oneTo(99_999).toList();
-        Collections.shuffle(list);
+        MutableList<Integer> list = Interval.oneTo(99_999).toList().shuffleThis();
 
         Assert.assertEquals(
                 33333.0,
