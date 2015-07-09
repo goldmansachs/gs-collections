@@ -195,6 +195,15 @@ public final class Functions
     }
 
     /**
+     * Allows a Java 8 lambda and method reference to be used in a method taking a Function as a parameter
+     * without any ambiguity.
+     */
+    public static <T, V> Function<T, V> cast(Function<T, V> function)
+    {
+        return function;
+    }
+
+    /**
      * Alias for identity(). Inlineable.
      *
      * @see #identity()
