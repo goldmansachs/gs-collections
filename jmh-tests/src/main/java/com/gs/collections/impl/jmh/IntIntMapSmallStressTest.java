@@ -16,14 +16,19 @@
 
 package com.gs.collections.impl.jmh;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.map.primitive.MutableIntIntMap;
 import com.gs.collections.api.set.primitive.MutableIntSet;
 import com.gs.collections.impl.SpreadFunctions;
 import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.map.mutable.primitive.IntIntHashMap;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
@@ -51,8 +56,15 @@ public class IntIntMapSmallStressTest extends AbstractJMHTestRunner
     public boolean fullyRandom;
     private IntIntMap intIntKoloboke;
     private MutableIntIntMap intIntGsc;
+    private Map<Integer, Integer> integerIntegerJdk;
     private int[] gscIntKeysForMap;
     private int[] kolobokeIntKeysForMap;
+    private Integer[] jdkIntKeysForMap;
+
+    private int jdkIndex(int key)
+    {
+        return this.mask(key ^ (key >>> 16));
+    }
 
     private int kolobokeIndex(int key)
     {
@@ -80,6 +92,7 @@ public class IntIntMapSmallStressTest extends AbstractJMHTestRunner
     {
         this.intIntKoloboke = HashIntIntMaps.newMutableMap(MAP_SIZE);
         this.intIntGsc = new IntIntHashMap(MAP_SIZE);
+        this.integerIntegerJdk = new HashMap<>(MAP_SIZE);
 
         Random random = new Random(0x123456789ABCDL);
 
@@ -90,15 +103,18 @@ public class IntIntMapSmallStressTest extends AbstractJMHTestRunner
         int upper = Integer.MAX_VALUE;
         this.kolobokeIntKeysForMap = this.fullyRandom ? randomNumbersForMap : this.getKolobokeArray(number, lower, upper, random);
         this.gscIntKeysForMap = this.fullyRandom ? randomNumbersForMap : this.getGSCArray(number, lower, upper, random);
+        this.jdkIntKeysForMap = this.fullyRandom ? IntIntMapSmallStressTest.boxIntArray(randomNumbersForMap) : this.getJDKArray(lower, upper, random);
 
         for (int i = 0; i < KEY_COUNT; i++)
         {
             this.intIntKoloboke.put(this.kolobokeIntKeysForMap[i], 5);
             this.intIntGsc.put(this.gscIntKeysForMap[i], 5);
+            this.integerIntegerJdk.put(this.jdkIntKeysForMap[i], 5);
         }
 
         this.shuffle(this.gscIntKeysForMap, random);
         this.shuffle(this.kolobokeIntKeysForMap, random);
+        this.shuffle(this.jdkIntKeysForMap, random);
     }
 
     protected int[] getGSCArray(int number, int lower, int upper, Random random)
@@ -113,13 +129,44 @@ public class IntIntMapSmallStressTest extends AbstractJMHTestRunner
         MutableIntList gscCollidingNumbers = new IntArrayList();
         for (int i = lower; i < upper && gscCollidingNumbers.size() < KEY_COUNT; i++)
         {
-            if (this.gscIndex(i) - this.gscIndex(number) >= 0 && this.gscIndex(i) - this.gscIndex(number) < 10
-                    && (this.gscIndexTwo(i) - this.gscIndexTwo(number) >= 0) && (this.gscIndexTwo(i) - this.gscIndexTwo(number) < 10))
+            if (this.gscIndex(i) - this.gscIndex(number) >= 0
+                    && this.gscIndex(i) - this.gscIndex(number) < 10
+                    && (this.gscIndexTwo(i) - this.gscIndexTwo(number) >= 0)
+                    && (this.gscIndexTwo(i) - this.gscIndexTwo(number) < 10))
             {
                 gscCollidingNumbers.add(i);
             }
         }
         return gscCollidingNumbers;
+    }
+
+    protected Integer[] getJDKArray(int lower, int upper, Random random)
+    {
+        MutableList<Integer> collisions = this.getJDKSequenceCollisions(lower, upper);
+        Integer[] jdkCollision = collisions.toArray(new Integer[collisions.size()]);
+        this.shuffle(jdkCollision, random);
+        return jdkCollision;
+    }
+
+    protected MutableList<Integer> getJDKSequenceCollisions(int lower, int upper)
+    {
+        MutableList<Integer> jdkCollidingNumbers = FastList.newList();
+        int slots = 1; // slots = KEY_COUNT / (1 << 32) / (1 << MAP_SIZE) + 1;
+        MutableIntSet indices = new IntHashSet();
+        for (int i = lower; i < upper && jdkCollidingNumbers.size() < KEY_COUNT; i++)
+        {
+            int index = this.jdkIndex(i);
+            if (indices.size() < slots)
+            {
+                indices.add(index);
+                jdkCollidingNumbers.add(i);
+            }
+            else if (indices.contains(index))
+            {
+                jdkCollidingNumbers.add(i);
+            }
+        }
+        return jdkCollidingNumbers;
     }
 
     protected int[] getKolobokeArray(int number, int lower, int upper, Random random)
@@ -152,6 +199,25 @@ public class IntIntMapSmallStressTest extends AbstractJMHTestRunner
         }
 
         return set;
+    }
+
+    @Benchmark
+    public void jdkGet()
+    {
+        for (int j = 0; j < LOOP_COUNT; j++)
+        {
+            for (int i = 0; i < KEY_COUNT; i++)
+            {
+                if (this.integerIntegerJdk.get(this.jdkIntKeysForMap[i]) == null)
+                {
+                    throw new AssertionError(this.jdkIntKeysForMap[i] + " not in map");
+                }
+            }
+            if (this.integerIntegerJdk.size() != KEY_COUNT)
+            {
+                throw new AssertionError("size is " + this.integerIntegerJdk.size());
+            }
+        }
     }
 
     @Benchmark
@@ -188,6 +254,23 @@ public class IntIntMapSmallStressTest extends AbstractJMHTestRunner
             if (this.intIntGsc.size() != KEY_COUNT)
             {
                 throw new AssertionError("size is " + this.intIntGsc.size());
+            }
+        }
+    }
+
+    @Benchmark
+    public void jdkPut()
+    {
+        for (int j = 0; j < LOOP_COUNT; j++)
+        {
+            Map<Integer, Integer> newMap = new HashMap<>(MAP_SIZE);
+            for (int i = 0; i < KEY_COUNT; i++)
+            {
+                newMap.put(this.jdkIntKeysForMap[i], 4);
+            }
+            if (newMap.size() != KEY_COUNT)
+            {
+                throw new AssertionError("size is " + newMap.size());
             }
         }
     }
@@ -244,6 +327,23 @@ public class IntIntMapSmallStressTest extends AbstractJMHTestRunner
     }
 
     @Benchmark
+    public void jdkRemove()
+    {
+        for (int j = 0; j < LOOP_COUNT; j++)
+        {
+            Map<Integer, Integer> newMap = new HashMap<>(this.integerIntegerJdk);
+            for (int i = 0; i < KEY_COUNT; i++)
+            {
+                newMap.remove(this.jdkIntKeysForMap[i]);
+            }
+            if (newMap.size() != 0)
+            {
+                throw new AssertionError("size is " + newMap.size());
+            }
+        }
+    }
+
+    @Benchmark
     public void kolobokeRemove()
     {
         for (int j = 0; j < LOOP_COUNT; j++)
@@ -268,10 +368,31 @@ public class IntIntMapSmallStressTest extends AbstractJMHTestRunner
         }
     }
 
+    public void shuffle(Integer[] integerArray, Random rnd)
+    {
+        for (int i = integerArray.length; i > 1; i--)
+        {
+            IntIntMapSmallStressTest.swap(integerArray, i - 1, rnd.nextInt(i));
+        }
+    }
+
     private static void swap(int[] arr, int i, int j)
     {
         int tmp = arr[i];
         arr[i] = arr[j];
         arr[j] = tmp;
+    }
+
+    private static void swap(Integer[] arr, int i, int j)
+    {
+        Integer tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+
+    private static Integer[] boxIntArray(int[] arr)
+    {
+        MutableList<Integer> list = new IntArrayList(arr).collect((IntToObjectFunction<Integer>) Integer::valueOf);
+        return list.toArray(new Integer[arr.length]);
     }
 }
