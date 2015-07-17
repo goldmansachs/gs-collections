@@ -46,7 +46,8 @@ import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iList;
+import static com.gs.collections.impl.factory.Iterables.mList;
 
 public class RandomAccessListIterateTest
 {
@@ -414,6 +415,20 @@ public class RandomAccessListIterateTest
         Verify.assertListsEqual(FastList.newList(), RandomAccessListIterate.drop(Lists.fixedSize.of(), 0));
         Verify.assertListsEqual(FastList.newList(), RandomAccessListIterate.drop(Lists.fixedSize.of(), 2));
         Verify.assertListsEqual(integers.drop(Integer.MAX_VALUE), RandomAccessListIterate.drop(integers, Integer.MAX_VALUE));
+    }
+
+    @Test
+    public void appendString()
+    {
+        MutableList<Integer> integers = this.getIntegerList();
+        Appendable builder = new StringBuilder();
+        RandomAccessListIterate.appendString(integers, builder, "[", "~", "]");
+        Assert.assertEquals("[5~4~3~2~1]", builder.toString());
+
+        MutableList<Integer> integers2 = Lists.mutable.empty();
+        Appendable builder2 = new StringBuilder();
+        RandomAccessListIterate.appendString(integers2, builder2, "[", "~", "]");
+        Assert.assertEquals("[]", builder2.toString());
     }
 
     @Test(expected = IllegalArgumentException.class)
