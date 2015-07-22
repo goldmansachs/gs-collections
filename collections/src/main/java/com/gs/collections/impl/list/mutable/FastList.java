@@ -640,7 +640,7 @@ public class FastList<T>
     }
 
     @Override
-    public void removeIf(Predicate<? super T> predicate)
+    public boolean removeIf(Predicate<? super T> predicate)
     {
         int currentFilledIndex = 0;
         for (int i = 0; i < this.size; i++)
@@ -656,7 +656,9 @@ public class FastList<T>
                 currentFilledIndex++;
             }
         }
+        boolean changed = currentFilledIndex < this.size;
         this.wipeAndResetTheEnd(currentFilledIndex);
+        return changed;
     }
 
     private void wipeAndResetTheEnd(int newCurrentFilledIndex)
@@ -669,7 +671,7 @@ public class FastList<T>
     }
 
     @Override
-    public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> boolean removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         int currentFilledIndex = 0;
         for (int i = 0; i < this.size; i++)
@@ -685,7 +687,9 @@ public class FastList<T>
                 currentFilledIndex++;
             }
         }
+        boolean changed = currentFilledIndex < this.size;
         this.wipeAndResetTheEnd(currentFilledIndex);
+        return changed;
     }
 
     @Override

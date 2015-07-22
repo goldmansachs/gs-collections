@@ -813,13 +813,11 @@ public final class Iterate
     /**
      * Removes all elements from the iterable that evaluate to true for the specified predicate.
      */
-    public static <T> Collection<T> removeIf(Iterable<T> iterable, Predicate<? super T> predicate)
+    public static <T> boolean removeIf(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         if (iterable instanceof MutableCollection)
         {
-            MutableCollection<T> mutableCollection = (MutableCollection<T>) iterable;
-            mutableCollection.removeIf(predicate);
-            return mutableCollection;
+            return ((MutableCollection<T>) iterable).removeIf(predicate);
         }
         if (iterable instanceof ArrayList)
         {
@@ -829,16 +827,9 @@ public final class Iterate
         {
             return ListIterate.removeIf((List<T>) iterable, predicate);
         }
-        if (iterable instanceof Collection)
-        {
-            IterableIterate.removeIf(iterable, predicate);
-            return (Collection<T>) iterable;
-        }
         if (iterable != null)
         {
-            IterableIterate.removeIf(iterable, predicate);
-            // TODO: should this method return Iterable instead?  Would seem less useful if it did
-            return null;
+            return IterableIterate.removeIf(iterable, predicate);
         }
         throw new IllegalArgumentException("Cannot perform a remove on null");
     }
@@ -846,16 +837,14 @@ public final class Iterate
     /**
      * Removes all elements of the iterable that evaluate to true for the specified predicate2 and parameter.
      */
-    public static <T, P> Collection<T> removeIfWith(
+    public static <T, P> boolean removeIfWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         if (iterable instanceof MutableCollection)
         {
-            MutableCollection<T> mutableCollection = (MutableCollection<T>) iterable;
-            mutableCollection.removeIfWith(predicate, parameter);
-            return mutableCollection;
+            return ((MutableCollection<T>) iterable).removeIfWith(predicate, parameter);
         }
         if (iterable instanceof ArrayList)
         {
@@ -865,16 +854,9 @@ public final class Iterate
         {
             return ListIterate.removeIfWith((List<T>) iterable, predicate, parameter);
         }
-        if (iterable instanceof Collection)
-        {
-            IterableIterate.removeIfWith(iterable, predicate, parameter);
-            return (Collection<T>) iterable;
-        }
         if (iterable != null)
         {
-            IterableIterate.removeIfWith(iterable, predicate, parameter);
-            // TODO: should this method return Iterable instead?  Would seem less useful if it did
-            return null;
+            return IterableIterate.removeIfWith(iterable, predicate, parameter);
         }
         throw new IllegalArgumentException("Cannot perform a remove on null");
     }

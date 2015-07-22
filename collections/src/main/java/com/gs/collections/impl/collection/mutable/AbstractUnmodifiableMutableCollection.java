@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -318,12 +318,12 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
         return this.getMutableCollection().selectInstancesOf(clazz);
     }
 
-    public void removeIf(Predicate<? super T> predicate)
+    public boolean removeIf(Predicate<? super T> predicate)
     {
         throw new UnsupportedOperationException("Cannot call removeIf() on " + this.getClass().getSimpleName());
     }
 
-    public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> boolean removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         throw new UnsupportedOperationException("Cannot call removeIfWith() on " + this.getClass().getSimpleName());
     }

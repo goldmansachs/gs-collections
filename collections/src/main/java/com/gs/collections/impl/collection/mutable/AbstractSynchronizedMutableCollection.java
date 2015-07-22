@@ -99,19 +99,19 @@ public abstract class AbstractSynchronizedMutableCollection<T> extends AbstractS
         }
     }
 
-    public void removeIf(Predicate<? super T> predicate)
+    public boolean removeIf(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
         {
-            this.getDelegate().removeIf(predicate);
+            return this.getDelegate().removeIf(predicate);
         }
     }
 
-    public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> boolean removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         synchronized (this.lock)
         {
-            this.getDelegate().removeIfWith(predicate, parameter);
+            return this.getDelegate().removeIfWith(predicate, parameter);
         }
     }
 

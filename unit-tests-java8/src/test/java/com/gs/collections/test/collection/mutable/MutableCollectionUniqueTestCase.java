@@ -19,12 +19,14 @@ package com.gs.collections.test.collection.mutable;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.test.Verify;
+import com.gs.collections.test.IterableTestCase;
 import com.gs.collections.test.RichIterableUniqueTestCase;
+import org.junit.Assert;
 import org.junit.Test;
-
-import static com.gs.collections.test.IterableTestCase.assertEquals;
 
 public interface MutableCollectionUniqueTestCase extends MutableCollectionTestCase, RichIterableUniqueTestCase
 {
@@ -35,9 +37,20 @@ public interface MutableCollectionUniqueTestCase extends MutableCollectionTestCa
     @Test
     default void MutableCollection_removeIf()
     {
-        MutableCollection<Integer> collection = this.newWith(5, 4, 3, 2, 1);
-        collection.removeIf((Predicate<? super Integer>) each -> each % 2 == 0);
-        assertEquals(this.getExpectedFiltered(5, 3, 1), collection);
+        MutableCollection<Integer> collection1 = this.newWith(5, 4, 3, 2, 1);
+        Assert.assertTrue(collection1.removeIf(Predicates.cast(each -> each % 2 == 0)));
+        IterableTestCase.assertEquals(this.getExpectedFiltered(5, 3, 1), collection1);
+
+        MutableCollection<Integer> collection2 = this.newWith(1, 2, 3, 4);
+        Assert.assertFalse(collection2.removeIf(Predicates.equal(5)));
+        Assert.assertTrue(collection2.removeIf(Predicates.greaterThan(0)));
+        Assert.assertFalse(collection2.removeIf(Predicates.greaterThan(2)));
+
+        MutableCollection<Integer> collection3 = this.newWith();
+        Assert.assertFalse(collection3.removeIf(Predicates.equal(5)));
+
+        Predicate<Object> predicate = null;
+        Verify.assertThrows(NullPointerException.class, () -> this.newWith(7, 4, 5, 1).removeIf(predicate));
     }
 
     @Override
@@ -46,7 +59,17 @@ public interface MutableCollectionUniqueTestCase extends MutableCollectionTestCa
     {
         MutableCollection<Integer> collection = this.newWith(5, 4, 3, 2, 1);
         collection.removeIfWith(Predicates2.<Integer>in(), Lists.immutable.with(5, 3, 1));
-        assertEquals(this.getExpectedFiltered(4, 2), collection);
+        IterableTestCase.assertEquals(this.getExpectedFiltered(4, 2), collection);
+
+        MutableCollection<Integer> collection2 = this.newWith(1, 2, 3, 4);
+        Assert.assertFalse(collection2.removeIf(Predicates.equal(5)));
+        Assert.assertTrue(collection2.removeIf(Predicates.greaterThan(0)));
+        Assert.assertFalse(collection2.removeIf(Predicates.greaterThan(2)));
+
+        MutableCollection<Integer> collection3 = this.newWith();
+        Assert.assertFalse(collection3.removeIf(Predicates.equal(5)));
+
+        Verify.assertThrows(NullPointerException.class, () -> this.newWith(7, 4, 5, 1).removeIf(Predicates.cast(null)));
     }
 
     @Override
@@ -54,7 +77,7 @@ public interface MutableCollectionUniqueTestCase extends MutableCollectionTestCa
     default void MutableCollection_injectIntoWith()
     {
         MutableCollection<Integer> collection = this.newWith(4, 3, 2, 1);
-        assertEquals(Integer.valueOf(51), collection.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
+        IterableTestCase.assertEquals(Integer.valueOf(51), collection.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
         {
             @Override
             public Integer value(Integer argument1, Integer argument2, Integer argument3)

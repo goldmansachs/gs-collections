@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -393,7 +393,17 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void removeUsingPredicate()
     {
         MutableList<Integer> objects = MultiReaderFastList.newListWith(1, 2, 3, null);
-        objects.removeIf(Predicates.isNull());
+        Assert.assertTrue(objects.removeIf(Predicates.isNull()));
+        Verify.assertSize(3, objects);
+        Verify.assertContainsAll(objects, 1, 2, 3);
+    }
+
+    @Override
+    @Test
+    public void removeIf()
+    {
+        MutableList<Integer> objects = MultiReaderFastList.newListWith(1, 2, 3, null);
+        Assert.assertTrue(objects.removeIf(Predicates.cast(each -> each == null)));
         Verify.assertSize(3, objects);
         Verify.assertContainsAll(objects, 1, 2, 3);
     }
@@ -403,7 +413,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void removeIfWith()
     {
         MutableList<Integer> objects = MultiReaderFastList.newListWith(1, 2, 3, null);
-        objects.removeIfWith((each, ignored) -> each == null, null);
+        Assert.assertTrue(objects.removeIfWith((each, ignored) -> each == null, null));
         Verify.assertSize(3, objects);
         Verify.assertContainsAll(objects, 1, 2, 3);
     }

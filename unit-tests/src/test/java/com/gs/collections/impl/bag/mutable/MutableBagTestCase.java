@@ -170,9 +170,9 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         super.removeIf();
 
         MutableBagIterable<Integer> objects = this.newWith(4, 1, 3, 3, 2);
-        objects.removeIf(Predicates.equal(2));
+        Assert.assertTrue(objects.removeIf(Predicates.equal(2)));
         Assert.assertEquals(HashBag.newBagWith(1, 3, 3, 4), objects);
-        objects.removeIf(Predicates.equal(3));
+        Assert.assertTrue(objects.removeIf(Predicates.equal(3)));
         Assert.assertEquals(HashBag.newBagWith(1, 4), objects);
     }
 
@@ -237,7 +237,7 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
     {
         MutableBagIterable<Object> bag = this.newWith();
         bag.addOccurrences(new Object(), 0);
-        assertBagsEqual(HashBag.newBag(), bag);
+        MutableBagTestCase.assertBagsEqual(HashBag.newBag(), bag);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -253,19 +253,19 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         MutableBagIterable<String> expected = HashBag.newBag(bag);
 
         Assert.assertFalse(bag.removeOccurrences("dvd", 2));
-        assertBagsEqual(expected, bag);
+        MutableBagTestCase.assertBagsEqual(expected, bag);
 
         Assert.assertFalse(bag.removeOccurrences("dvd", 0));
-        assertBagsEqual(expected, bag);
+        MutableBagTestCase.assertBagsEqual(expected, bag);
 
         Assert.assertFalse(bag.removeOccurrences("betamax-tape", 0));
-        assertBagsEqual(expected, bag);
+        MutableBagTestCase.assertBagsEqual(expected, bag);
 
         Assert.assertTrue(bag.removeOccurrences("betamax-tape", 1));
-        assertBagsEqual(HashBag.newBagWith("betamax-tape"), bag);
+        MutableBagTestCase.assertBagsEqual(HashBag.newBagWith("betamax-tape"), bag);
 
         Assert.assertTrue(bag.removeOccurrences("betamax-tape", 10));
-        assertBagsEqual(HashBag.<String>newBag(), bag);
+        MutableBagTestCase.assertBagsEqual(HashBag.<String>newBag(), bag);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -281,19 +281,19 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         MutableBagIterable<String> expected = this.newWith("betamax-tape", "betamax-tape");
 
         Assert.assertTrue(bag.setOccurrences("betamax-tape", 2));
-        assertBagsEqual(expected, bag);
+        MutableBagTestCase.assertBagsEqual(expected, bag);
 
         Assert.assertFalse(bag.setOccurrences("betamax-tape", 2));
-        assertBagsEqual(expected, bag);
+        MutableBagTestCase.assertBagsEqual(expected, bag);
 
         Assert.assertFalse(bag.setOccurrences("dvd", 0));
-        assertBagsEqual(expected, bag);
+        MutableBagTestCase.assertBagsEqual(expected, bag);
 
         Assert.assertTrue(bag.setOccurrences("betamax-tape", 3));
-        assertBagsEqual(expected.with("betamax-tape"), bag);
+        MutableBagTestCase.assertBagsEqual(expected.with("betamax-tape"), bag);
 
         Assert.assertTrue(bag.setOccurrences("betamax-tape", 0));
-        assertBagsEqual(HashBag.<String>newBag(), bag);
+        MutableBagTestCase.assertBagsEqual(HashBag.<String>newBag(), bag);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -347,7 +347,7 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         Assert.assertTrue(bag.remove("dakimakura"));
         Assert.assertTrue(bag.remove("dakimakura"));
         Assert.assertFalse(bag.remove("dakimakura"));
-        assertBagsEqual(Bags.mutable.of(), bag);
+        MutableBagTestCase.assertBagsEqual(Bags.mutable.of(), bag);
     }
 
     @Override

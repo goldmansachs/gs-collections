@@ -235,15 +235,15 @@ public abstract class AbstractMutableList<T>
     }
 
     @Override
-    public void removeIf(Predicate<? super T> predicate)
+    public boolean removeIf(Predicate<? super T> predicate)
     {
-        ListIterate.removeIf(this, predicate);
+        return ListIterate.removeIf(this, predicate);
     }
 
     @Override
-    public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> boolean removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        ListIterate.removeIfWith(this, predicate, parameter);
+        return ListIterate.removeIfWith(this, predicate, parameter);
     }
 
     public <V> MutableList<V> collect(Function<? super T, ? extends V> function)

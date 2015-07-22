@@ -135,7 +135,7 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
     public void removeIf()
     {
         MutableSortedSet<Integer> objects = this.newWith(4, 1, 3, 2);
-        objects.removeIf(Predicates.equal(2));
+        Assert.assertTrue(objects.removeIf(Predicates.equal(2)));
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(1, 3, 4), objects);
     }
 

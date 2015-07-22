@@ -266,9 +266,9 @@ public abstract class AbstractSortedBagTestCase extends MutableBagTestCase
         // Sorted containers don't support null
 
         MutableSortedBag<Integer> objects = this.newWith(Comparators.reverseNaturalOrder(), 4, 1, 3, 3, 2);
-        objects.removeIf(Predicates.equal(2));
+        Assert.assertTrue(objects.removeIf(Predicates.equal(2)));
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 3, 3, 4), objects);
-        objects.removeIf(Predicates.equal(3));
+        Assert.assertTrue(objects.removeIf(Predicates.equal(3)));
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 4), objects);
     }
 
@@ -279,9 +279,9 @@ public abstract class AbstractSortedBagTestCase extends MutableBagTestCase
         super.removeIfWith();
 
         MutableSortedBag<Integer> objects = this.newWith(Comparators.reverseNaturalOrder(), 4, 1, 3, 3, 2);
-        objects.removeIfWith(Object::equals, 2);
+        Assert.assertTrue(objects.removeIfWith(Object::equals, 2));
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 3, 3, 4), objects);
-        objects.removeIfWith(Object::equals, 3);
+        Assert.assertTrue(objects.removeIfWith(Object::equals, 3));
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 4), objects);
     }
 

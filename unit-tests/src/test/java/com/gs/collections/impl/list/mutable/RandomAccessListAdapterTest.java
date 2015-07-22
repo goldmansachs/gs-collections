@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.util.LinkedList;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
@@ -145,7 +146,19 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
         super.removeIf();
 
         MutableList<Integer> objects = this.newWith(1, 2, 3, null);
-        objects.removeIf(Predicates.isNull());
+        Assert.assertTrue(objects.removeIf(Predicates.isNull()));
+        Verify.assertSize(3, objects);
+        Verify.assertContainsAll(objects, 1, 2, 3);
+    }
+
+    @Override
+    @Test
+    public void removeIfWith()
+    {
+        super.removeIf();
+
+        MutableList<Integer> objects = this.newWith(1, 2, 3, null);
+        Assert.assertTrue(objects.removeIfWith(Predicates2.isNull(), null));
         Verify.assertSize(3, objects);
         Verify.assertContainsAll(objects, 1, 2, 3);
     }

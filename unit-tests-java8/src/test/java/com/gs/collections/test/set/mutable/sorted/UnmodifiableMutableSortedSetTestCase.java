@@ -20,6 +20,8 @@ import com.gs.collections.test.UnmodifiableMutableCollectionTestCase;
 import com.gs.collections.test.set.sorted.UnmodifiableSortedSetTestCase;
 import org.junit.Test;
 
+import static com.gs.collections.impl.test.Verify.assertThrows;
+
 public interface UnmodifiableMutableSortedSetTestCase extends UnmodifiableMutableCollectionTestCase, UnmodifiableSortedSetTestCase, MutableSortedSetTestCase
 {
     @Override
@@ -30,14 +32,14 @@ public interface UnmodifiableMutableSortedSetTestCase extends UnmodifiableMutabl
     }
 
     @Override
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     default void MutableCollection_removeIf()
     {
         UnmodifiableMutableCollectionTestCase.super.MutableCollection_removeIf();
     }
 
     @Override
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     default void MutableCollection_removeIfWith()
     {
         UnmodifiableMutableCollectionTestCase.super.MutableCollection_removeIfWith();

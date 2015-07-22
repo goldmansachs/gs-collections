@@ -703,8 +703,9 @@ public class TreeBag<T>
     }
 
     @Override
-    public void removeIf(Predicate<? super T> predicate)
+    public boolean removeIf(Predicate<? super T> predicate)
     {
+        boolean changed = false;
         Set<Map.Entry<T, Counter>> entries = this.items.entrySet();
         for (Iterator<Map.Entry<T, Counter>> iterator = entries.iterator(); iterator.hasNext(); )
         {
@@ -713,13 +714,16 @@ public class TreeBag<T>
             {
                 this.size -= entry.getValue().getCount();
                 iterator.remove();
+                changed = true;
             }
         }
+        return changed;
     }
 
     @Override
-    public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> boolean removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
+        boolean changed = false;
         Set<Map.Entry<T, Counter>> entries = this.items.entrySet();
         for (Iterator<Map.Entry<T, Counter>> iterator = entries.iterator(); iterator.hasNext(); )
         {
@@ -728,8 +732,10 @@ public class TreeBag<T>
             {
                 this.size -= entry.getValue().getCount();
                 iterator.remove();
+                changed = true;
             }
         }
+        return changed;
     }
 
     @Override

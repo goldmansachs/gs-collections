@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
@@ -60,17 +61,16 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
 
     @Override
     @Test(expected = NullPointerException.class)
-    public void removeIfWith()
+    public void removeIf()
     {
-        this.getCollection().removeIfWith(null, null);
+        this.getCollection().removeIf(Predicates.cast(null));
     }
 
     @Override
     @Test(expected = NullPointerException.class)
-    public void removeIf()
+    public void removeIfWith()
     {
-        Predicate<Object> predicate = null;
-        this.getCollection().removeIf(predicate);
+        this.getCollection().removeIfWith(null, null);
     }
 
     @Override

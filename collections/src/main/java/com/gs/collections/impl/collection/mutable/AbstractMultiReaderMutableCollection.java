@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1072,12 +1072,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public void removeIf(Predicate<? super T> predicate)
+    public boolean removeIf(Predicate<? super T> predicate)
     {
         this.acquireWriteLock();
         try
         {
-            this.getDelegate().removeIf(predicate);
+            return this.getDelegate().removeIf(predicate);
         }
         finally
         {
@@ -1085,14 +1085,14 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <P> void removeIfWith(
+    public <P> boolean removeIfWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         this.acquireWriteLock();
         try
         {
-            this.getDelegate().removeIfWith(predicate, parameter);
+            return this.getDelegate().removeIfWith(predicate, parameter);
         }
         finally
         {
@@ -1870,16 +1870,16 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
             return this.delegate.rejectWith(predicate, parameter, targetCollection);
         }
 
-        public void removeIf(Predicate<? super T> predicate)
+        public boolean removeIf(Predicate<? super T> predicate)
         {
-            this.delegate.removeIf(predicate);
+            return this.delegate.removeIf(predicate);
         }
 
-        public <P> void removeIfWith(
+        public <P> boolean removeIfWith(
                 Predicate2<? super T, ? super P> predicate,
                 P parameter)
         {
-            this.delegate.removeIfWith(predicate, parameter);
+            return this.delegate.removeIfWith(predicate, parameter);
         }
 
         public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)

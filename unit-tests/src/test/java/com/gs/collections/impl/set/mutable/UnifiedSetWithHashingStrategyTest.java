@@ -551,7 +551,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Assert.assertFalse(integers.remove(1002));
 
         //Testing removeIf
-        integers.removeIf(IntegerPredicates.isEven());
+        Assert.assertTrue(integers.removeIf(IntegerPredicates.isEven()));
         Verify.assertEmpty(integers);
     }
 

@@ -1171,34 +1171,43 @@ public final class ListIterate
     /**
      * @see Iterate#removeIf(Iterable, Predicate)
      */
-    public static <T> List<T> removeIf(List<T> list, Predicate<? super T> predicate)
+    public static <T> boolean removeIf(List<T> list, Predicate<? super T> predicate)
     {
         if (list instanceof RandomAccess)
         {
             return RandomAccessListIterate.removeIf(list, predicate);
         }
-        return (List<T>) IterableIterate.removeIf(list, predicate);
+        return IterableIterate.removeIf(list, predicate);
     }
 
     /**
      * @see Iterate#removeIfWith(Iterable, Predicate2, Object)
      */
-    public static <T, P> List<T> removeIfWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
+    public static <T, P> boolean removeIfWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
     {
         if (list instanceof RandomAccess)
         {
             return RandomAccessListIterate.removeIfWith(list, predicate, parameter);
         }
-        return (List<T>) IterableIterate.removeIfWith(list, predicate, parameter);
+        return IterableIterate.removeIfWith(list, predicate, parameter);
     }
 
-    public static <T> List<T> removeIf(List<T> list, Predicate<? super T> predicate, Procedure<? super T> procedure)
+    public static <T> boolean removeIf(List<T> list, Predicate<? super T> predicate, Procedure<? super T> procedure)
     {
         if (list instanceof RandomAccess)
         {
             return RandomAccessListIterate.removeIf(list, predicate, procedure);
         }
-        return (List<T>) IterableIterate.removeIf(list, predicate, procedure);
+        return IterableIterate.removeIf(list, predicate, procedure);
+    }
+
+    public static <T, P> boolean removeIfWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter, Procedure<? super T> procedure)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.removeIfWith(list, predicate, parameter, procedure);
+        }
+        return IterableIterate.removeIfWith(list, predicate, parameter, procedure);
     }
 
     /**

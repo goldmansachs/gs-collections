@@ -446,17 +446,7 @@ public class FastListTest extends AbstractListTestCase
     public void testRemoveUsingPredicate()
     {
         MutableList<Integer> objects = FastList.newListWith(1, 2, 3, null);
-        objects.removeIf(Predicates.isNull());
-        Verify.assertSize(3, objects);
-        Verify.assertContainsAll(objects, 1, 2, 3);
-    }
-
-    @Override
-    @Test
-    public void removeIfWith()
-    {
-        MutableList<Integer> objects = FastList.newListWith(1, 2, 3, null);
-        objects.removeIfWith((each, ignored) -> each == null, null);
+        Assert.assertTrue(objects.removeIf(Predicates.isNull()));
         Verify.assertSize(3, objects);
         Verify.assertContainsAll(objects, 1, 2, 3);
     }

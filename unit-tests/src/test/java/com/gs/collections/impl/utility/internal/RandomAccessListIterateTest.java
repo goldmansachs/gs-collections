@@ -46,8 +46,7 @@ import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.iList;
-import static com.gs.collections.impl.factory.Iterables.mList;
+import static com.gs.collections.impl.factory.Iterables.*;
 
 public class RandomAccessListIterateTest
 {
@@ -80,8 +79,19 @@ public class RandomAccessListIterateTest
     @Test
     public void removeIf()
     {
-        List<Integer> result = RandomAccessListIterate.removeIf(FastList.newListWith(1, 2, 3), Predicates.greaterThan(1));
-        Verify.assertSize(1, result);
+        Assert.assertTrue(RandomAccessListIterate.removeIf(FastList.newListWith(1, 2, 3), Predicates.greaterThan(1)));
+        Assert.assertTrue(RandomAccessListIterate.removeIf(FastList.newListWith(1, 2, 3), Predicates.greaterThan(0)));
+        Assert.assertFalse(RandomAccessListIterate.removeIf(FastList.newListWith(1, 2, 3), Predicates.greaterThan(4)));
+        Assert.assertFalse(RandomAccessListIterate.removeIf(FastList.newList(), Predicates.greaterThan(4)));
+    }
+
+    @Test
+    public void removeIfWith()
+    {
+        Assert.assertTrue(RandomAccessListIterate.removeIfWith(FastList.newListWith(1, 2, 3), Predicates2.greaterThan(), 1));
+        Assert.assertTrue(RandomAccessListIterate.removeIfWith(FastList.newListWith(1, 2, 3), Predicates2.greaterThan(), 0));
+        Assert.assertFalse(RandomAccessListIterate.removeIfWith(FastList.newListWith(1, 2, 3), Predicates2.greaterThan(), 4));
+        Assert.assertFalse(RandomAccessListIterate.removeIfWith(FastList.newList(), Predicates2.greaterThan(), 1));
     }
 
     @Test
@@ -415,20 +425,6 @@ public class RandomAccessListIterateTest
         Verify.assertListsEqual(FastList.newList(), RandomAccessListIterate.drop(Lists.fixedSize.of(), 0));
         Verify.assertListsEqual(FastList.newList(), RandomAccessListIterate.drop(Lists.fixedSize.of(), 2));
         Verify.assertListsEqual(integers.drop(Integer.MAX_VALUE), RandomAccessListIterate.drop(integers, Integer.MAX_VALUE));
-    }
-
-    @Test
-    public void appendString()
-    {
-        MutableList<Integer> integers = this.getIntegerList();
-        Appendable builder = new StringBuilder();
-        RandomAccessListIterate.appendString(integers, builder, "[", "~", "]");
-        Assert.assertEquals("[5~4~3~2~1]", builder.toString());
-
-        MutableList<Integer> integers2 = Lists.mutable.empty();
-        Appendable builder2 = new StringBuilder();
-        RandomAccessListIterate.appendString(integers2, builder2, "[", "~", "]");
-        Assert.assertEquals("[]", builder2.toString());
     }
 
     @Test(expected = IllegalArgumentException.class)

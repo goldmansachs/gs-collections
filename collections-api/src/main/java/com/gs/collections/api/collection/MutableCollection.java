@@ -239,7 +239,7 @@ public interface MutableCollection<T>
      * return lastNames.<b>removeIf</b>(Predicates.isNull());
      * </pre>
      */
-    void removeIf(Predicate<? super T> predicate);
+    boolean removeIf(Predicate<? super T> predicate);
 
     /**
      * Removes all elements in the collection that evaluate to true for the specified predicate2 and parameter.
@@ -248,7 +248,7 @@ public interface MutableCollection<T>
      * return lastNames.<b>removeIfWith</b>(PredicatesLite.isNull(), null);
      * </pre>
      */
-    <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> boolean removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     /**
      * Returns a new MutableCollection with the results of applying the specified function to each element of the source

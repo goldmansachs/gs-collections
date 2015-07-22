@@ -52,14 +52,14 @@ public abstract class AbstractMutableCollection<T>
         return IterableIterate.selectAndRejectWith(this, predicate, parameter);
     }
 
-    public void removeIf(Predicate<? super T> predicate)
+    public boolean removeIf(Predicate<? super T> predicate)
     {
-        IterableIterate.removeIf(this, predicate);
+        return IterableIterate.removeIf(this, predicate);
     }
 
-    public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> boolean removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        IterableIterate.removeIfWith(this, predicate, parameter);
+        return IterableIterate.removeIfWith(this, predicate, parameter);
     }
 
     public <IV, P> IV injectIntoWith(

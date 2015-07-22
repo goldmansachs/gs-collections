@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.collection.mutable.AbstractSynchronizedCollectionTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
@@ -56,7 +57,17 @@ public class SynchronizedMutableSetTest extends AbstractSynchronizedCollectionTe
     public void removeIf()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3, 4);
-        objects.removeIf(Predicates.equal(2));
+        Assert.assertTrue(objects.removeIf(Predicates.equal(2)));
+        Verify.assertSize(3, objects);
+        Verify.assertContainsAll(objects, 1, 3, 4);
+    }
+
+    @Override
+    @Test
+    public void removeIfWith()
+    {
+        MutableCollection<Integer> objects = this.newWith(1, 2, 3, 4);
+        Assert.assertTrue(objects.removeIfWith(Predicates2.equal(), 2));
         Verify.assertSize(3, objects);
         Verify.assertContainsAll(objects, 1, 3, 4);
     }

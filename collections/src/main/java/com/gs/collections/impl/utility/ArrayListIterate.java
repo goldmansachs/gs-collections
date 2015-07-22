@@ -1417,8 +1417,9 @@ public final class ArrayListIterate
     /**
      * @see Iterate#removeIf(Iterable, Predicate)
      */
-    public static <T> ArrayList<T> removeIf(ArrayList<T> list, Predicate<? super T> predicate)
+    public static <T> boolean removeIf(ArrayList<T> list, Predicate<? super T> predicate)
     {
+        boolean changed;
         if (list.getClass() == ArrayList.class && ArrayListIterate.SIZE_FIELD != null)
         {
             int currentFilledIndex = 0;
@@ -1436,23 +1437,25 @@ public final class ArrayListIterate
                     currentFilledIndex++;
                 }
             }
+            changed = currentFilledIndex < size;
             ArrayListIterate.wipeAndResetTheEnd(currentFilledIndex, size, elements, list);
         }
         else
         {
-            RandomAccessListIterate.removeIf(list, predicate);
+            return RandomAccessListIterate.removeIf(list, predicate);
         }
-        return list;
+        return changed;
     }
 
     /**
      * @see Iterate#removeIfWith(Iterable, Predicate2, Object)
      */
-    public static <T, P> ArrayList<T> removeIfWith(
+    public static <T, P> boolean removeIfWith(
             ArrayList<T> list,
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
+        boolean changed;
         if (list.getClass() == ArrayList.class && ArrayListIterate.SIZE_FIELD != null)
         {
             int currentFilledIndex = 0;
@@ -1470,13 +1473,14 @@ public final class ArrayListIterate
                     currentFilledIndex++;
                 }
             }
+            changed = currentFilledIndex < size;
             ArrayListIterate.wipeAndResetTheEnd(currentFilledIndex, size, elements, list);
         }
         else
         {
-            RandomAccessListIterate.removeIfWith(list, predicate, parameter);
+            return RandomAccessListIterate.removeIfWith(list, predicate, parameter);
         }
-        return list;
+        return changed;
     }
 
     public static <T> ArrayList<T> distinct(ArrayList<T> list)

@@ -876,37 +876,42 @@ public final class IteratorIterate
     /**
      * @see Iterate#removeIf(Iterable, Predicate)
      */
-    public static <T> Iterator<T> removeIf(Iterator<T> iterator, Predicate<? super T> predicate)
+    public static <T> boolean removeIf(Iterator<T> iterator, Predicate<? super T> predicate)
     {
+        boolean changed = false;
         while (iterator.hasNext())
         {
             T each = iterator.next();
             if (predicate.accept(each))
             {
                 iterator.remove();
+                changed = true;
             }
         }
-        return iterator;
+        return changed;
     }
 
     /**
      * @see Iterate#removeIfWith(Iterable, Predicate2, Object)
      */
-    public static <T, P> Iterator<T> removeIfWith(Iterator<T> iterator, Predicate2<? super T, ? super P> predicate, P parameter)
+    public static <T, P> boolean removeIfWith(Iterator<T> iterator, Predicate2<? super T, ? super P> predicate, P parameter)
     {
+        boolean changed = false;
         while (iterator.hasNext())
         {
             T each = iterator.next();
             if (predicate.accept(each, parameter))
             {
                 iterator.remove();
+                changed = true;
             }
         }
-        return iterator;
+        return changed;
     }
 
-    public static <T> Iterator<T> removeIf(Iterator<T> iterator, Predicate<? super T> predicate, Procedure<? super T> procedure)
+    public static <T> boolean removeIf(Iterator<T> iterator, Predicate<? super T> predicate, Procedure<? super T> procedure)
     {
+        boolean changed = false;
         while (iterator.hasNext())
         {
             T each = iterator.next();
@@ -914,9 +919,26 @@ public final class IteratorIterate
             {
                 procedure.value(each);
                 iterator.remove();
+                changed = true;
             }
         }
-        return iterator;
+        return changed;
+    }
+
+    public static <T, P> boolean removeIfWith(Iterator<T> iterator, Predicate2<? super T, ? super P> predicate, P parameter, Procedure<? super T> procedure)
+    {
+        boolean changed = false;
+        while (iterator.hasNext())
+        {
+            T each = iterator.next();
+            if (predicate.accept(each, parameter))
+            {
+                procedure.value(each);
+                iterator.remove();
+                changed = true;
+            }
+        }
+        return changed;
     }
 
     /**

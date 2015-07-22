@@ -503,8 +503,9 @@ public class HashBag<T>
     }
 
     @Override
-    public void removeIf(Predicate<? super T> predicate)
+    public boolean removeIf(Predicate<? super T> predicate)
     {
+        boolean changed = false;
         for (Iterator<T> iterator = this.items.keySet().iterator(); iterator.hasNext(); )
         {
             T key = iterator.next();
@@ -512,13 +513,16 @@ public class HashBag<T>
             {
                 this.size -= this.items.get(key);
                 iterator.remove();
+                changed = true;
             }
         }
+        return changed;
     }
 
     @Override
-    public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> boolean removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
+        boolean changed = false;
         for (Iterator<T> iterator = this.items.keySet().iterator(); iterator.hasNext(); )
         {
             T key = iterator.next();
@@ -526,8 +530,10 @@ public class HashBag<T>
             {
                 this.size -= this.items.get(key);
                 iterator.remove();
+                changed = true;
             }
         }
+        return changed;
     }
 
     @Override

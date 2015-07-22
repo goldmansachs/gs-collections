@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.collection.mutable;
 
+import java.util.function.Predicate;
+
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
@@ -27,6 +29,7 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.lazy.LazyIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.utility.internal.RandomAccessListIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -225,20 +228,33 @@ public abstract class AbstractCollectionTestCase extends AbstractRichIterableTes
     @Test
     public void removeIf()
     {
-        MutableCollection<Integer> objects = this.newWith(1, 2, 3);
-        objects.add(null);
-        objects.removeIf(Predicates.isNull());
-        Verify.assertSize(3, objects);
-        Verify.assertContainsAll(objects, 1, 2, 3);
+        MutableCollection<Integer> objects1 = this.newWith(1, 2, 3);
+        objects1.add(null);
+        Assert.assertTrue(objects1.removeIf(Predicates.isNull()));
+        Verify.assertSize(3, objects1);
+        Verify.assertContainsAll(objects1, 1, 2, 3);
+
+        MutableCollection<Integer> objects2 = this.newWith(3, 4, 5);
+        Assert.assertTrue(objects2.removeIf(Predicates.equal(3)));
+        Assert.assertFalse(objects2.removeIf(Predicates.equal(6)));
+
+        MutableCollection<Integer> objects3 = this.newWith(1, 2, 3, 4, 5);
+        Assert.assertTrue(objects3.removeIf(Predicates.greaterThan(0)));
+        Assert.assertFalse(objects3.removeIf(Predicates.equal(5)));
     }
 
     @Test
     public void removeIfWith()
     {
-        MutableCollection<Integer> objects = this.newWith(1, 2, 3, 4);
-        objects.removeIfWith(Predicates2.<Integer>lessThan(), 3);
-        Verify.assertSize(2, objects);
-        Verify.assertContainsAll(objects, 3, 4);
+        MutableCollection<Integer> objects1 = this.newWith(1, 2, 3, 4);
+        Assert.assertTrue(objects1.removeIfWith(Predicates2.<Integer>lessThan(), 3));
+        Verify.assertSize(2, objects1);
+        Verify.assertContainsAll(objects1, 3, 4);
+        Assert.assertFalse(objects1.removeIfWith(Predicates2.greaterThan(), 6));
+
+        MutableCollection<Integer> objects2 = this.newWith(1, 2, 3, 4, 5);
+        Assert.assertTrue(objects2.removeIfWith(Predicates2.greaterThan(), 0));
+        Assert.assertFalse(objects2.removeIfWith(Predicates2.greaterThan(), 3));
     }
 
     @Test

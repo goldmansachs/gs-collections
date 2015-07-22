@@ -689,31 +689,37 @@ public final class IterableIterate
     /**
      * @see Iterate#removeIf(Iterable, Predicate)
      */
-    public static <T> Iterable<T> removeIf(Iterable<T> iterable, Predicate<? super T> predicate)
+    public static <T> boolean removeIf(Iterable<T> iterable, Predicate<? super T> predicate)
     {
-        IteratorIterate.removeIf(iterable.iterator(), predicate);
-        return iterable;
+        return IteratorIterate.removeIf(iterable.iterator(), predicate);
     }
 
     /**
      * @see Iterate#removeIfWith(Iterable, Predicate2, Object)
      */
-    public static <T, P> Iterable<T> removeIfWith(
+    public static <T, P> boolean removeIfWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        IteratorIterate.removeIfWith(iterable.iterator(), predicate, parameter);
-        return iterable;
+        return IteratorIterate.removeIfWith(iterable.iterator(), predicate, parameter);
     }
 
-    public static <T> Iterable<T> removeIf(
+    public static <T> boolean removeIf(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             Procedure<? super T> procedure)
     {
-        IteratorIterate.removeIf(iterable.iterator(), predicate, procedure);
-        return iterable;
+        return IteratorIterate.removeIf(iterable.iterator(), predicate, procedure);
+    }
+
+    public static <T, P> boolean removeIfWith(
+            Iterable<T> iterable,
+            Predicate2<? super T, ? super P> predicate,
+            P parameter,
+            Procedure<? super T> procedure)
+    {
+        return IteratorIterate.removeIfWith(iterable.iterator(), predicate, parameter, procedure);
     }
 
     /**
@@ -850,11 +856,11 @@ public final class IterableIterate
             Iterator<T> iterator = iterable.iterator();
             if (iterator.hasNext())
             {
-                appendable.append(stringValueOfItem(iterable, iterator.next()));
+                appendable.append(IterableIterate.stringValueOfItem(iterable, iterator.next()));
                 while (iterator.hasNext())
                 {
                     appendable.append(separator);
-                    appendable.append(stringValueOfItem(iterable, iterator.next()));
+                    appendable.append(IterableIterate.stringValueOfItem(iterable, iterator.next()));
                 }
             }
 

@@ -131,14 +131,14 @@ public abstract class AbstractCollectionAdapter<T>
         Iterate.forEachWithIndex(this.getDelegate(), objectIntProcedure);
     }
 
-    public void removeIf(Predicate<? super T> predicate)
+    public boolean removeIf(Predicate<? super T> predicate)
     {
-        Iterate.removeIf(this.getDelegate(), predicate);
+        return Iterate.removeIf(this.getDelegate(), predicate);
     }
 
-    public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> boolean removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        Iterate.removeIfWith(this.getDelegate(), predicate, parameter);
+        return Iterate.removeIfWith(this.getDelegate(), predicate, parameter);
     }
 
     public T detect(Predicate<? super T> predicate)
