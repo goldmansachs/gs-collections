@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 
 package com.gs.collections.impl.map.mutable;
+
+import java.lang.reflect.Field;
 
 import com.gs.collections.api.factory.map.MutableMapFactory;
 import com.gs.collections.api.map.MutableMap;
@@ -36,6 +38,16 @@ public final class MutableMapFactoryImpl implements MutableMapFactory
     public <K, V> MutableMap<K, V> with()
     {
         return this.empty();
+    }
+
+    public <K, V> MutableMap<K, V> ofInitialCapacity(int capacity)
+    {
+        return this.withInitialCapacity(capacity);
+    }
+
+    public <K, V> MutableMap<K, V> withInitialCapacity(int capacity)
+    {
+        return UnifiedMap.newMap(capacity);
     }
 
     public <K, V> MutableMap<K, V> of(K key, V value)

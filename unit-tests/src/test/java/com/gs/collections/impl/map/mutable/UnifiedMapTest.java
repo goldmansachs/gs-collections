@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.map.mutable;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -76,8 +77,62 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     public void newMap_throws()
     {
         Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedMap<Integer, Integer>(-1, 0.5f));
+        Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedMap<Integer, Integer>(1, 0.0f));
         Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedMap<Integer, Integer>(1, -0.5f));
         Verify.assertThrows(IllegalArgumentException.class, () -> new UnifiedMap<Integer, Integer>(1, 1.5f));
+    }
+
+    @Test
+    public void newMapTest()
+    {
+        for (int i = 1; i < 17; i++)
+        {
+            this.assertPresizedMap(i, 0.75f);
+        }
+        this.assertPresizedMap(31, 0.75f);
+        this.assertPresizedMap(32, 0.75f);
+        this.assertPresizedMap(34, 0.75f);
+        this.assertPresizedMap(60, 0.75f);
+        this.assertPresizedMap(64, 0.70f);
+        this.assertPresizedMap(68, 0.70f);
+        this.assertPresizedMap(60, 0.70f);
+        this.assertPresizedMap(1025, 0.80f);
+        this.assertPresizedMap(1024, 0.80f);
+        this.assertPresizedMap(1025, 0.80f);
+        this.assertPresizedMap(1024, 0.805f);
+    }
+
+    private void assertPresizedMap(int initialCapacity, float loadFactor)
+    {
+        try
+        {
+            Field tableField = UnifiedMap.class.getDeclaredField("table");
+            tableField.setAccessible(true);
+
+            Object[] table = (Object[]) tableField.get(UnifiedMap.newMap(initialCapacity, loadFactor));
+
+            int size = (int) Math.ceil(initialCapacity / loadFactor);
+            int capacity = 1;
+            while (capacity < size)
+            {
+                capacity <<= 1;
+            }
+            capacity <<= 1;
+
+            Assert.assertEquals(capacity, table.length);
+        }
+        catch (SecurityException ignored)
+        {
+            Assert.fail("Unable to modify the visibility of the table on UnifiedMap");
+        }
+        catch (NoSuchFieldException ignored)
+        {
+            Assert.fail("No field named table UnifiedMap");
+        }
+        catch (IllegalAccessException ignored)
+        {
+            Assert.fail("No access the field table in UnifiedMap");
+        }
     }
 
     @Test

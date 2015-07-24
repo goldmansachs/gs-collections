@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,18 @@ public interface MutableMapFactory
      * Same as {@link #empty()}.
      */
     <K, V> MutableMap<K, V> with();
+
+    /**
+     * Same as {@link #empty()}. but takes in an initial capacity
+     */
+
+    <K, V> MutableMap<K, V> ofInitialCapacity(int capacity);
+
+    /**
+     * Same as {@link #empty()}. but takes in an initial capacity
+     */
+
+    <K, V> MutableMap<K, V> withInitialCapacity(int capacity);
 
     /**
      * Same as {@link #with(Object, Object)}.

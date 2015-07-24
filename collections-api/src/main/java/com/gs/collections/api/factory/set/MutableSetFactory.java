@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,16 @@ public interface MutableSetFactory
     <T> MutableSet<T> of(T... items);
 
     <T> MutableSet<T> with(T... items);
+
+    /**
+     * Same as {@link #empty()}. but takes in initial capacity.
+     */
+    <T> MutableSet<T> ofInitialCapacity(int capacity);
+
+    /**
+     * Same as {@link #empty()}. but takes in initial capacity.
+     */
+    <T> MutableSet<T> withInitialCapacity(int capacity);
 
     /**
      * Same as {@link #withAll(Iterable)}.

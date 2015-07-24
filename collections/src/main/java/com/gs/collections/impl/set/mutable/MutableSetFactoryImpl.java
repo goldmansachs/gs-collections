@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,16 @@ public final class MutableSetFactoryImpl implements MutableSetFactory
     public <T> MutableSet<T> with()
     {
         return this.empty();
+    }
+
+    public <T> MutableSet<T> ofInitialCapacity(int capacity)
+    {
+        return this.withInitialCapacity(capacity);
+    }
+
+    public <T> MutableSet<T> withInitialCapacity(int capacity)
+    {
+        return UnifiedSet.newSet(capacity);
     }
 
     public <T> MutableSet<T> of(T... items)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.factory;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -889,5 +890,80 @@ public class SetsTest
     public void classIsNonInstantiable()
     {
         Verify.assertClassNonInstantiable(Sets.class);
+    }
+
+    @Test
+    public void ofInitialCapacity()
+    {
+        MutableSet<String> set1 = Sets.mutable.ofInitialCapacity(0);
+        this.assertPresizedSetSizeEquals(0, (UnifiedSet<String>) set1);
+
+        MutableSet<String> set2 = Sets.mutable.ofInitialCapacity(5);
+        this.assertPresizedSetSizeEquals(5, (UnifiedSet<String>) set2);
+
+        MutableSet<String> set3 = Sets.mutable.ofInitialCapacity(20);
+        this.assertPresizedSetSizeEquals(20, (UnifiedSet<String>) set3);
+
+        MutableSet<String> set4 = Sets.mutable.ofInitialCapacity(60);
+        this.assertPresizedSetSizeEquals(60, (UnifiedSet<String>) set4);
+
+        MutableSet<String> set5 = Sets.mutable.ofInitialCapacity(64);
+        this.assertPresizedSetSizeEquals(60, (UnifiedSet<String>) set5);
+
+        MutableSet<String> set6 = Sets.mutable.ofInitialCapacity(65);
+        this.assertPresizedSetSizeEquals(65, (UnifiedSet<String>) set6);
+
+        Verify.assertThrows(IllegalArgumentException.class, () -> Sets.mutable.ofInitialCapacity(-12));
+    }
+
+    @Test
+    public void withInitialCapacity()
+    {
+        MutableSet<String> set1 = Sets.mutable.withInitialCapacity(0);
+        this.assertPresizedSetSizeEquals(0, (UnifiedSet<String>) set1);
+
+        MutableSet<String> set2 = Sets.mutable.withInitialCapacity(14);
+        this.assertPresizedSetSizeEquals(14, (UnifiedSet<String>) set2);
+
+        MutableSet<String> set3 = Sets.mutable.withInitialCapacity(17);
+        this.assertPresizedSetSizeEquals(17, (UnifiedSet<String>) set3);
+
+        MutableSet<String> set4 = Sets.mutable.withInitialCapacity(25);
+        this.assertPresizedSetSizeEquals(25, (UnifiedSet<String>) set4);
+
+        MutableSet<String> set5 = Sets.mutable.withInitialCapacity(32);
+        this.assertPresizedSetSizeEquals(32, (UnifiedSet<String>) set5);
+
+        Verify.assertThrows(IllegalArgumentException.class, () -> Sets.mutable.ofInitialCapacity(-6));
+    }
+
+    private void assertPresizedSetSizeEquals(int initialCapacity, UnifiedSet<String> set)
+    {
+        try
+        {
+            Field tableField = UnifiedSet.class.getDeclaredField("table");
+            tableField.setAccessible(true);
+            Object[] table = (Object[]) tableField.get(set);
+
+            int size = (int) Math.ceil(initialCapacity / 0.75f);
+            int capacity = 1;
+            while (capacity < size)
+            {
+                capacity <<= 1;
+            }
+            Assert.assertEquals(capacity, table.length);
+        }
+        catch (SecurityException ignored)
+        {
+            Assert.fail("Unable to modify the visibility of the table on UnifiedSet");
+        }
+        catch (NoSuchFieldException ignored)
+        {
+            Assert.fail("No field named table UnifiedSet");
+        }
+        catch (IllegalAccessException ignored)
+        {
+            Assert.fail("No access the field table in UnifiedSet");
+        }
     }
 }
