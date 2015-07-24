@@ -48,6 +48,7 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -91,9 +92,11 @@ import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
+import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.primitive.<name>ObjectPair;
 import com.gs.collections.impl.SynchronizedRichIterable;
@@ -102,6 +105,7 @@ import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
 import com.gs.collections.impl.factory.primitive.<name>ObjectMaps;
 import com.gs.collections.impl.primitive.Synchronized<name>Iterable;
 import com.gs.collections.impl.set.mutable.primitive.Synchronized<name>Set;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import net.jcip.annotations.GuardedBy;
 
 /**
@@ -404,7 +408,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public PartitionMutableCollection\<V> partition(Predicate\<? super V> predicate)
+    public PartitionMutableBag\<V> partition(Predicate\<? super V> predicate)
     {
         synchronized (this.lock)
         {
@@ -412,7 +416,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<P> PartitionMutableCollection\<V> partitionWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    public \<P> PartitionMutableBag\<V> partitionWith(Predicate2\<? super V, ? super P> predicate, P parameter)
     {
         synchronized (this.lock)
         {
@@ -420,7 +424,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<S> MutableCollection\<S> selectInstancesOf(Class\<S> clazz)
+    public \<S> MutableBag\<S> selectInstancesOf(Class\<S> clazz)
     {
         synchronized (this.lock)
         {
@@ -428,11 +432,15 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public MutableList\<Pair\<V, Integer>\> zipWithIndex()
+    /**
+     * @deprecated in 7.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
+    public MutableSet\<Pair\<V, Integer>\> zipWithIndex()
     {
         synchronized (this.lock)
         {
-            return (MutableList\<Pair\<V, Integer>\>) this.map.zipWithIndex();
+            return this.map.zipWithIndex();
         }
     }
 
@@ -556,7 +564,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<VV> MutableCollection\<VV> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function)
+    public \<VV> MutableBag\<VV> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function)
     {
         synchronized (this.lock)
         {
@@ -1087,7 +1095,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<VV> MutableMultimap\<VV, V> groupBy(Function\<? super V, ? extends VV> function)
+    public \<VV> MutableBagMultimap\<VV, V> groupBy(Function\<? super V, ? extends VV> function)
     {
         synchronized (this.lock)
         {
@@ -1103,7 +1111,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<VV> MutableMultimap\<VV, V> groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function)
+    public \<VV> MutableBagMultimap\<VV, V> groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
         synchronized (this.lock)
         {
@@ -1135,7 +1143,11 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<S> MutableCollection\<Pair\<V, S>\> zip(Iterable\<S> that)
+    /**
+     * @deprecated in 7.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
+    public \<S> MutableBag\<Pair\<V, S>\> zip(Iterable\<S> that)
     {
         synchronized (this.lock)
         {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.map.primitive;
 
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -41,7 +42,11 @@ import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.PartitionMutableCollection;
+import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 
 public interface MutablePrimitiveObjectMap<V>
@@ -52,13 +57,13 @@ public interface MutablePrimitiveObjectMap<V>
 
     <K, VV> MutableMap<K, VV> aggregateBy(Function<? super V, ? extends K> groupBy, Function0<? extends VV> zeroValueFactory, Function2<? super VV, ? super V, ? extends VV> nonMutatingAggregator);
 
-    <VV> MutableMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
+    <VV> MutableBagMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
 
-    <VV> MutableMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function);
+    <VV> MutableBagMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function);
 
     <VV> MutableMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function);
 
-    <VV> MutableCollection<VV> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends VV> function);
+    <VV> MutableBag<VV> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends VV> function);
 
     <VV> MutableCollection<VV> collect(Function<? super V, ? extends VV> function);
 
@@ -80,7 +85,7 @@ public interface MutablePrimitiveObjectMap<V>
 
     <P, VV> MutableCollection<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter);
 
-    <S> MutableCollection<S> selectInstancesOf(Class<S> clazz);
+    <S> MutableBag<S> selectInstancesOf(Class<S> clazz);
 
     MutableCollection<V> select(Predicate<? super V> predicate);
 
@@ -90,11 +95,19 @@ public interface MutablePrimitiveObjectMap<V>
 
     <P> MutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter);
 
-    PartitionMutableCollection<V> partition(Predicate<? super V> predicate);
+    PartitionMutableBag<V> partition(Predicate<? super V> predicate);
 
-    <P> PartitionMutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
+    <P> PartitionMutableBag<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
 
-    <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that);
+    /**
+     * @deprecated in 7.0. Use {@link OrderedIterable#zip(Iterable)} instead.
+     */
+    @Deprecated
+    <S> MutableBag<Pair<V, S>> zip(Iterable<S> that);
 
-    MutableCollection<Pair<V, Integer>> zipWithIndex();
+    /**
+     * @deprecated in 7.0. Use {@link OrderedIterable#zipWithIndex()} instead.
+     */
+    @Deprecated
+    MutableSet<Pair<V, Integer>> zipWithIndex();
 }

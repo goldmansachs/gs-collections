@@ -188,8 +188,8 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<Number> numbers = this.\<Number>newWithKeysValues(<(literal.(type))("0")>, 0, <(literal.(type))("1")>, 1.0, <(literal.(type))("5")>, 5.0);
 
-        Assert.assertEquals(FastList.newListWith(0), numbers.selectInstancesOf(Integer.class));
-        Assert.assertEquals(FastList.newListWith(1.0, 5.0), numbers.selectInstancesOf(Double.class));
+        Assert.assertEquals(HashBag.newBagWith(0), numbers.selectInstancesOf(Integer.class));
+        Assert.assertEquals(HashBag.newBagWith(1.0, 5.0), numbers.selectInstancesOf(Double.class));
     }
 
     @Test
@@ -360,8 +360,8 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Assert.assertEquals(FastList.newListWith("ONE", "NINE"), map1.collectIf(StringPredicates.endsWith("ne"), StringFunctions.toUpperCase()));
-        Assert.assertEquals(FastList.newListWith("ZERO"), map1.collectIf(StringPredicates.endsWith("o"), StringFunctions.toUpperCase()));
+        Assert.assertEquals(HashBag.newBagWith("ONE", "NINE"), map1.collectIf(StringPredicates.endsWith("ne"), StringFunctions.toUpperCase()));
+        Assert.assertEquals(HashBag.newBagWith("ZERO"), map1.collectIf(StringPredicates.endsWith("o"), StringFunctions.toUpperCase()));
         Assert.assertEquals(FastList.newListWith("ZERO"), map1.collectIf(StringPredicates.endsWith("o"), StringFunctions.toUpperCase(), FastList.\<String>newList()));
     }
 
@@ -894,7 +894,6 @@ public abstract class Abstract<name>ObjectMapTestCase
         Assert.assertEquals(2.0d, result.get(0), 0.0);
     }
 
-
     @Test
     public void keysView()
     {
@@ -959,8 +958,8 @@ public abstract class Abstract<name>ObjectMapTestCase
 
         Predicate\<String> endsWithNe = StringPredicates.endsWith("ne");
         PartitionIterable\<String> partition = map1.partition(endsWithNe);
-        Assert.assertTrue(FastList.newListWith("one", "nine").equals(partition.getSelected()) || FastList.newListWith("nine", "one").equals(partition.getSelected()));
-        Assert.assertEquals(FastList.newListWith("zero"), partition.getRejected());
+        Assert.assertTrue(HashBag.newBagWith("one", "nine").equals(partition.getSelected()));
+        Assert.assertEquals(HashBag.newBagWith("zero"), partition.getRejected());
     }
 
     @Test
@@ -970,8 +969,8 @@ public abstract class Abstract<name>ObjectMapTestCase
 
         Predicate2\<String, String> endsWith = StringPredicates2.endsWith();
         PartitionIterable\<String> partition = map1.partitionWith(endsWith, "ne");
-        Assert.assertTrue(FastList.newListWith("one", "nine").equals(partition.getSelected()) || FastList.newListWith("nine", "one").equals(partition.getSelected()));
-        Assert.assertEquals(FastList.newListWith("zero"), partition.getRejected());
+        Assert.assertTrue(HashBag.newBagWith("one", "nine").equals(partition.getSelected()));
+        Assert.assertEquals(HashBag.newBagWith("zero"), partition.getRejected());
     }
 
     @Test
@@ -1289,10 +1288,10 @@ public abstract class Abstract<name>ObjectMapTestCase
                 .zip(FastList.newListWith(1));
         RichIterable\<Pair\<String, Integer>\> zip3 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("5")>, "five")
                 .zip(FastList.newListWith(1), FastList.\<Pair\<String, Integer>\>newList());
-        Assert.assertTrue(FastList.newListWith(Tuples.pair("zero", 0), Tuples.pair("five", 5)).equals(zip1)
-                || FastList.newListWith(Tuples.pair("five", 5), Tuples.pair("zero", 0)).equals(zip1));
-        Assert.assertTrue(FastList.newListWith(Tuples.pair("one", 1)).equals(zip2)
-                || FastList.newListWith(Tuples.pair("five", 1)).equals(zip2));
+        Assert.assertTrue(HashBag.newBagWith(Tuples.pair("zero", 0), Tuples.pair("five", 5)).equals(zip1)
+                || HashBag.newBagWith(Tuples.pair("five", 0), Tuples.pair("zero", 5)).equals(zip1));
+        Assert.assertTrue(HashBag.newBagWith(Tuples.pair("one", 1)).equals(zip2)
+                || HashBag.newBagWith(Tuples.pair("five", 1)).equals(zip2));
         Assert.assertTrue(FastList.newListWith(Tuples.pair("one", 1)).equals(zip3)
                 || FastList.newListWith(Tuples.pair("five", 1)).equals(zip3));
     }
@@ -1306,10 +1305,10 @@ public abstract class Abstract<name>ObjectMapTestCase
                 .zipWithIndex();
         RichIterable\<Pair\<String, Integer>\> zip3 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("5")>, "five")
                 .zipWithIndex(FastList.\<Pair\<String, Integer>\>newList());
-        Assert.assertTrue(FastList.newListWith(Tuples.pair("zero", 0), Tuples.pair("five", 1)).equals(zip1)
-                || FastList.newListWith(Tuples.pair("five", 0), Tuples.pair("zero", 1)).equals(zip1));
-        Assert.assertTrue(FastList.newListWith(Tuples.pair("one", 0), Tuples.pair("five", 1)).equals(zip2)
-                || FastList.newListWith(Tuples.pair("five", 0), Tuples.pair("one", 1)).equals(zip2));
+        Assert.assertTrue(UnifiedSet.newSetWith(Tuples.pair("zero", 0), Tuples.pair("five", 1)).equals(zip1)
+                || UnifiedSet.newSetWith(Tuples.pair("five", 0), Tuples.pair("zero", 1)).equals(zip1));
+        Assert.assertTrue(UnifiedSet.newSetWith(Tuples.pair("one", 0), Tuples.pair("five", 1)).equals(zip2)
+                || UnifiedSet.newSetWith(Tuples.pair("five", 0), Tuples.pair("one", 1)).equals(zip2));
         Assert.assertTrue(FastList.newListWith(Tuples.pair("one", 0), Tuples.pair("five", 1)).equals(zip3)
                 || FastList.newListWith(Tuples.pair("five", 0), Tuples.pair("one", 1)).equals(zip3));
     }
