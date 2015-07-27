@@ -40,6 +40,7 @@ import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -348,6 +349,14 @@ public abstract class AbstractListTestCase
         ListIterable<Integer> list = this.newWith(1, 4, 3, 2, 1, 4, 1);
         ListIterable<Integer> actual = list.distinct();
         Verify.assertListsEqual(FastList.newListWith(1, 4, 3, 2), actual.toList());
+    }
+
+    @Test
+    public void distinctWithHashingStrategy()
+    {
+        ListIterable<String> list = this.newWith("a", "A", "b", "C", "b", "D", "E", "e");
+        ListIterable<String> actual = list.distinct(HashingStrategies.fromFunction(String::toLowerCase));
+        Verify.assertListsEqual(FastList.newListWith("a", "b", "C", "D", "E"), actual.toList());
     }
 
     @Override

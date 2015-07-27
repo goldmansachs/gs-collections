@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -551,11 +552,31 @@ public final class IterableIterate
         return IteratorIterate.injectInto(injectValue, iterable.iterator(), function);
     }
 
-    public static <T, R extends Collection<T>> R distinct(
+    /**
+     * @deprecated in 7.0.
+     */
+    @Deprecated
+    public static <T, R extends List<T>> R distinct(
             Iterable<T> iterable,
             R targetCollection)
     {
         return IteratorIterate.distinct(iterable.iterator(), targetCollection);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public static <T> MutableList<T> distinct(Iterable<T> iterable)
+    {
+        return IteratorIterate.distinct(iterable.iterator());
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public static <T> MutableList<T> distinct(Iterable<T> iterable, HashingStrategy<? super T> hashingStrategy)
+    {
+        return IteratorIterate.distinct(iterable.iterator(), hashingStrategy);
     }
 
     /**

@@ -20,6 +20,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -104,7 +106,19 @@ public interface MutableList<T>
 
     <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
+    /**
+     * Returns a new {@code ListIterable} containing the distinct elements in this list.
+     *
+     * @since 7.0
+     */
     MutableList<T> distinct();
+
+    /**
+     * Returns a new {@code ListIterable} containing the distinct elements in this list. Takes HashingStrategy.
+     *
+     * @since 7.0
+     */
+    MutableList<T> distinct(HashingStrategy<? super T> hashingStrategy);
 
     /**
      * Sorts the internal data structure of this list and returns the list itself as a convenience.

@@ -27,6 +27,7 @@ import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -131,6 +132,15 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
     {
         ImmutableList<Integer> integers = this.classUnderTest();
         Assert.assertNotNull(integers.distinct());
+        Assert.assertTrue(integers.isEmpty());
+    }
+
+    @Override
+    @Test
+    public void distinctWithHashingStrategy()
+    {
+        ImmutableList<Integer> integers = this.classUnderTest();
+        Assert.assertNotNull(integers.distinct(HashingStrategies.defaultStrategy()));
         Assert.assertTrue(integers.isEmpty());
     }
 

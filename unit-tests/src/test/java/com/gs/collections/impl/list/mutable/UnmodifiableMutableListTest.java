@@ -28,6 +28,7 @@ import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.test.SerializeTestHelper;
@@ -277,10 +278,18 @@ public class UnmodifiableMutableListTest
     }
 
     @Test
-    public void testDistinct()
+    public void distinct()
     {
         MutableList<Integer> list = UnmodifiableMutableList.of(FastList.newListWith(3, 1, 2, 2, 1, 3));
         Verify.assertListsEqual(FastList.newListWith(3, 1, 2), list.distinct());
+    }
+
+    @Test
+    public void distinctWithHashingStrategy()
+    {
+        MutableList<String> letters = UnmodifiableMutableList.of(FastList.<String>newListWith("a", "A", "b", "C", "b", "D", "E", "e"));
+        MutableList<String> expectedLetters = UnmodifiableMutableList.of(FastList.<String>newListWith("a", "b", "C", "D", "E"));
+        Verify.assertListsEqual(letters.distinct(HashingStrategies.fromFunction(String::toLowerCase)), expectedLetters);
     }
 
     @Test

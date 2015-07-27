@@ -34,6 +34,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -73,6 +74,7 @@ import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.collection.mutable.AbstractMultiReaderMutableCollection;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ReverseIterable;
@@ -529,6 +531,19 @@ public final class MultiReaderFastList<T>
         try
         {
             return this.delegate.distinct();
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableList<T> distinct(HashingStrategy<? super T> hashingStrategy)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.distinct(hashingStrategy);
         }
         finally
         {
@@ -1202,6 +1217,11 @@ public final class MultiReaderFastList<T>
         public MutableList<T> distinct()
         {
             return this.getDelegate().distinct();
+        }
+
+        public MutableList<T> distinct(HashingStrategy<? super T> hashingStrategy)
+        {
+            return this.getDelegate().distinct(hashingStrategy);
         }
 
         public <P> MutableList<T> rejectWith(

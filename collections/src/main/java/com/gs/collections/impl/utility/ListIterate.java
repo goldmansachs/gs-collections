@@ -27,6 +27,7 @@ import java.util.ListIterator;
 import java.util.RandomAccess;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
@@ -74,6 +75,7 @@ import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -1309,13 +1311,41 @@ public final class ListIterate
         return IterableIterate.collectWith(list, function, parameter, targetCollection);
     }
 
-    public static <T, R extends Collection<T>> R distinct(List<T> list, R targetCollection)
+    /**
+     * @deprecated in 7.0.
+     */
+    @Deprecated
+    public static <T, R extends List<T>> R distinct(List<T> list, R targetList)
     {
         if (list instanceof RandomAccess)
         {
-            return RandomAccessListIterate.distinct(list, targetCollection);
+            return RandomAccessListIterate.distinct(list, targetList);
         }
-        return IterableIterate.distinct(list, targetCollection);
+        return IterableIterate.distinct(list, targetList);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public static <T> MutableList<T> distinct(List<T> list)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.distinct(list);
+        }
+        return IterableIterate.distinct(list);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public static <T> MutableList<T> distinct(List<T> list, HashingStrategy<? super T> hashingStrategy)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.distinct(list, hashingStrategy);
+        }
+        return IterableIterate.distinct(list, hashingStrategy);
     }
 
     /**

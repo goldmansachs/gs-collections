@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.gs.collections.api.list;
 
 import java.util.List;
 
+import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -108,6 +109,8 @@ public interface ImmutableList<T>
     <V> ImmutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
     ImmutableList<T> distinct();
+
+    ImmutableList<T> distinct(HashingStrategy<? super T> hashingStrategy);
 
     <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that);
 

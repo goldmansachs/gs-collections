@@ -26,6 +26,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -56,6 +57,7 @@ import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.collection.mutable.AbstractSynchronizedMutableCollection;
 import com.gs.collections.impl.collection.mutable.SynchronizedCollectionSerializationProxy;
 import com.gs.collections.impl.lazy.ReverseIterable;
@@ -262,6 +264,14 @@ public class SynchronizedMutableList<T>
         synchronized (this.getLock())
         {
             return this.getDelegate().distinct();
+        }
+    }
+
+    public MutableList<T> distinct(HashingStrategy<? super T> hashingStrategy)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().distinct(hashingStrategy);
         }
     }
 

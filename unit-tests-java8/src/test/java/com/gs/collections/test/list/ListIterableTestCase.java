@@ -18,10 +18,13 @@ package com.gs.collections.test.list;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.test.OrderedIterableWithDuplicatesTestCase;
 import org.junit.Test;
@@ -83,4 +86,16 @@ public interface ListIterableTestCase extends OrderedIterableWithDuplicatesTestC
         ListIterable<Integer> integers2 = this.newWith(1, 2, 2, null, 3, 3, 3, null, 4, 4, 4, 4);
         assertEquals(7, integers2.lastIndexOf(null));
     }
+
+    @Test
+    default void ListIterable_distinct()
+    {
+        ListIterable<String> letters = this.newWith("A", "a", "b", "c", "B", "D", "e", "e", "E", "D").distinct(HashingStrategies.fromFunction(String::toLowerCase));
+        ListIterable<String> expected = FastList.newListWith("A", "b", "c", "D", "e");
+        assertEquals(letters, expected);
+
+        ListIterable<String> empty = this.<String>newWith().distinct(HashingStrategies.fromFunction(String::toLowerCase));
+        assertEquals(empty, this.newWith());
+    }
 }
+

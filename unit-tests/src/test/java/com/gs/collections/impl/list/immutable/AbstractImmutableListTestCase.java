@@ -38,6 +38,7 @@ import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -304,6 +305,18 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         ImmutableList<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.newWith(1).distinct());
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().distinct());
+    }
+
+    @Test
+    public void distinctWithHashingStrategy()
+    {
+        FastList<String> strings = FastList.newListWith("A", "b", "a", "c", "B", "D", "e", "D", "e", "E");
+        ImmutableList<Integer> integers = this.classUnderTest();
+        ImmutableList<String> letters =
+                strings.subList(0, integers.size()).toImmutable().distinct(HashingStrategies.fromFunction(String::toLowerCase));
+        List<String> expectedLetters = strings.subList(0, integers.size()).distinct(HashingStrategies.fromFunction(String::toLowerCase));
+        Assert.assertEquals(expectedLetters, letters);
     }
 
     @Test

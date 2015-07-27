@@ -25,6 +25,7 @@ import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
@@ -45,6 +46,7 @@ import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectIfProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectProcedure;
@@ -57,6 +59,7 @@ import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
@@ -834,7 +837,11 @@ public final class InternalArrayIterate
         }
     }
 
-    public static <T, R extends Collection<T>> R distinct(T[] objectArray, int size, R targetCollection)
+    /**
+     * @deprecated in 7.0.
+     */
+    @Deprecated
+    public static <T, R extends List<T>> R distinct(T[] objectArray, int size, R targetList)
     {
         MutableSet<T> seenSoFar = UnifiedSet.newSet();
 
@@ -843,10 +850,47 @@ public final class InternalArrayIterate
             T each = objectArray[i];
             if (seenSoFar.add(each))
             {
-                targetCollection.add(each);
+                targetList.add(each);
             }
         }
-        return targetCollection;
+        return targetList;
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public static <T> FastList<T> distinct(T[] objectArray, int size)
+    {
+        MutableSet<T> seenSoFar = UnifiedSet.newSet();
+        FastList<T> result = FastList.newList();
+        for (int i = 0; i < size; i++)
+        {
+            T each = objectArray[i];
+            if (seenSoFar.add(each))
+            {
+                result.add(each);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public static <T> FastList<T> distinct(T[] objectArray, int size, HashingStrategy<? super T> hashingStrategy)
+    {
+        MutableSet<T> seenSoFar = UnifiedSetWithHashingStrategy.newSet(hashingStrategy);
+
+        FastList<T> result = FastList.newList();
+        for (int i = 0; i < size; i++)
+        {
+            T each = objectArray[i];
+            if (seenSoFar.add(each))
+            {
+                result.add(each);
+            }
+        }
+        return result;
     }
 
     public static <T> long sumOfInt(T[] array, int size, IntFunction<? super T> function)

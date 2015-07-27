@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.gs.collections.impl.list.immutable;
 
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -40,5 +41,14 @@ public class ImmutableQuadrupletonListTest extends AbstractImmutableListTestCase
         Assert.assertFalse(distinctList.isEmpty());
         Verify.assertInstanceOf(ImmutableDoubletonList.class, distinctList);
         Assert.assertEquals(FastList.newListWith(2, 1), distinctList);
+    }
+
+    @Test
+    public void distinctWithHashingStrategies()
+    {
+        ImmutableList<String> list = new ImmutableQuadrupletonList<>("a", "a", "B", "c");
+        ImmutableList<String> distinctList = list.distinct(HashingStrategies.fromFunction(String::toLowerCase));
+        Assert.assertFalse(distinctList.isEmpty());
+        Assert.assertEquals(FastList.newListWith("a", "B", "c"), distinctList);
     }
 }

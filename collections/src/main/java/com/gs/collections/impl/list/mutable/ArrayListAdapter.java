@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.RandomAccess;
 
+import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -50,6 +51,7 @@ import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ReverseIterable;
@@ -482,6 +484,11 @@ public final class ArrayListAdapter<T>
     public ArrayListAdapter<T> distinct()
     {
         return this.wrap(ArrayListIterate.distinct(this.delegate));
+    }
+
+    public ArrayListAdapter<T> distinct(HashingStrategy<? super T> hashingStrategy)
+    {
+        return this.wrap(ArrayListIterate.distinct(this.delegate, hashingStrategy));
     }
 
     @Override

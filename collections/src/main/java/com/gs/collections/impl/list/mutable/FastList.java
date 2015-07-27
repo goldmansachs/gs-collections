@@ -28,6 +28,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.RandomAccess;
 
+import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -1239,9 +1240,15 @@ public class FastList<T>
     }
 
     @Override
-    public FastList<T> distinct()
+    public MutableList<T> distinct()
     {
-        return InternalArrayIterate.distinct(this.items, this.size, FastList.<T>newList());
+        return InternalArrayIterate.distinct(this.items, this.size);
+    }
+
+    @Override
+    public MutableList<T> distinct(HashingStrategy<? super T> hashingStrategy)
+    {
+        return InternalArrayIterate.distinct(this.items, this.size, hashingStrategy);
     }
 
     @Override

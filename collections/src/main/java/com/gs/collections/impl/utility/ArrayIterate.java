@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
@@ -1040,13 +1041,37 @@ public final class ArrayIterate
         return result;
     }
 
-    public static <T, R extends Collection<T>> R distinct(T[] objectArray, R targetCollection)
+    /**
+     * @deprecated in 7.0.
+     */
+    @Deprecated
+    public static <T, R extends List<T>> R distinct(T[] objectArray, R targetList)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a distinct on null");
         }
-        return InternalArrayIterate.distinct(objectArray, objectArray.length, targetCollection);
+        return InternalArrayIterate.distinct(objectArray, objectArray.length, targetList);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public static <T> MutableList<T> distinct(T[] objectArray)
+    {
+        return ArrayIterate.distinct(objectArray, FastList.<T>newList());
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public static <T> MutableList<T> distinct(T[] objectArray, HashingStrategy<? super T> hashingStrategy)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a distinct on null");
+        }
+        return InternalArrayIterate.distinct(objectArray, objectArray.length, hashingStrategy);
     }
 
     /**

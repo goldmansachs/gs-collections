@@ -28,6 +28,7 @@ import java.util.Random;
 import java.util.RandomAccess;
 import java.util.concurrent.ExecutorService;
 
+import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -68,6 +69,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.factory.Lists;
@@ -484,7 +486,12 @@ public abstract class AbstractMutableList<T>
 
     public MutableList<T> distinct()
     {
-        return ListIterate.distinct(this, this.newEmpty());
+        return ListIterate.distinct(this);
+    }
+
+    public MutableList<T> distinct(HashingStrategy<? super T> hashingStrategy)
+    {
+        return ListIterate.distinct(this, hashingStrategy);
     }
 
     @Override
