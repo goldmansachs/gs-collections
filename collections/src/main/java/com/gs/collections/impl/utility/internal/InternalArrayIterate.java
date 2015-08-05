@@ -861,17 +861,7 @@ public final class InternalArrayIterate
      */
     public static <T> FastList<T> distinct(T[] objectArray, int size)
     {
-        MutableSet<T> seenSoFar = UnifiedSet.newSet();
-        FastList<T> result = FastList.newList();
-        for (int i = 0; i < size; i++)
-        {
-            T each = objectArray[i];
-            if (seenSoFar.add(each))
-            {
-                result.add(each);
-            }
-        }
-        return result;
+        return InternalArrayIterate.distinct(objectArray, size, FastList.<T>newList());
     }
 
     /**

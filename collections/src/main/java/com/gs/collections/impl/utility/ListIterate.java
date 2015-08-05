@@ -1329,11 +1329,7 @@ public final class ListIterate
      */
     public static <T> MutableList<T> distinct(List<T> list)
     {
-        if (list instanceof RandomAccess)
-        {
-            return RandomAccessListIterate.distinct(list);
-        }
-        return IterableIterate.distinct(list);
+        return ListIterate.distinct(list, FastList.<T>newList());
     }
 
     /**

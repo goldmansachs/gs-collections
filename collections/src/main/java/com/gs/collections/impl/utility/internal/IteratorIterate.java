@@ -1098,17 +1098,7 @@ public final class IteratorIterate
      */
     public static <T> MutableList<T> distinct(Iterator<T> iterator)
     {
-        MutableList<T> result = FastList.newList();
-        Set<T> seenSoFar = UnifiedSet.newSet();
-        while (iterator.hasNext())
-        {
-            T item = iterator.next();
-            if (seenSoFar.add(item))
-            {
-                result.add(item);
-            }
-        }
-        return result;
+        return IteratorIterate.distinct(iterator, FastList.<T>newList());
     }
 
     /**
@@ -1128,6 +1118,7 @@ public final class IteratorIterate
         }
         return result;
     }
+
     /**
      * @see Iterate#zip(Iterable, Iterable, Collection)
      */

@@ -37,6 +37,7 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -943,6 +944,20 @@ public class ArrayListIterateTest
         list2.add(103);
         ArrayList<Integer> target2 = new ArrayList<>();
         List<Integer> result2 = ArrayListIterate.distinct(list2, target2);
+        Assert.assertEquals(Interval.fromTo(1, 103), result2);
+    }
+
+    @Test
+    public void distinctWithHashingStrategy()
+    {
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(FastList.newListWith("A", "a", "b", "c", "B", "D", "e", "e", "E", "D"));
+        list = ArrayListIterate.distinct(list, HashingStrategies.fromFunction(String::toLowerCase));
+        Assert.assertEquals(FastList.newListWith("A", "b", "c", "D", "e"), list);
+
+        ArrayList<Integer> list2 = new ArrayList<>(Interval.oneTo(103));
+        list2.add(103);
+        List<Integer> result2 = ArrayListIterate.distinct(list2, HashingStrategies.fromFunction(String::valueOf));
         Assert.assertEquals(Interval.fromTo(1, 103), result2);
     }
 

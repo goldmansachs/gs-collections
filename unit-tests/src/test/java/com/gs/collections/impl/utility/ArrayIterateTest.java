@@ -39,6 +39,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions2;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -596,6 +597,23 @@ public class ArrayIterateTest
         ArrayIterate.distinct(INTEGER_ARRAY, result);
         Assert.assertEquals(FastList.newListWith(INTEGER_ARRAY), result);
 
+        MutableList<Integer> list = ArrayIterate.distinct(new Integer[]{5, 3, 1, 5, 7, 1});
+        Assert.assertEquals(FastList.newListWith(5, 3, 1, 7), list);
+    }
+
+    @Test
+    public void distinctWithHashingStrategies()
+    {
+        String[] objectArray = {"A", "a", "b", "c", "B", "D", "e", "e", "E", "D"};
+        MutableList<String> objectArrayExpected = FastList.newListWith("A", "b", "c", "D", "e");
+        Assert.assertEquals(ArrayIterate.distinct(objectArray, HashingStrategies.fromFunction(String::toLowerCase)), objectArrayExpected);
+    }
+
+    @Test
+    public void distinct_throws()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, () -> ArrayIterate.distinct(null));
+        Verify.assertThrows(IllegalArgumentException.class, () -> ArrayIterate.distinct(null, HashingStrategies.defaultStrategy()));
         Verify.assertThrows(IllegalArgumentException.class, () -> ArrayIterate.distinct(null, FastList.newList()));
     }
 

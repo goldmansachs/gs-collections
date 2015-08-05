@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -42,6 +43,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.utility.ArrayListIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
 import org.junit.Assert;
@@ -241,13 +243,34 @@ public class IterableIterateTest
     @Test
     public void distinct()
     {
-        Collection<Integer> iterable = FastList.newListWith(2, 1, 3, 2, 1, 3);
+        Collection<Integer> list = FastList.newListWith(2, 1, 3, 2, 1, 3);
         FastList<Integer> result = FastList.newList();
-        FastList<Integer> actualList = IterableIterate.distinct(iterable, result);
+        FastList<Integer> actualList = IterableIterate.distinct(list, result);
         FastList<Integer> expectedList = FastList.newListWith(2, 1, 3);
         Verify.assertListsEqual(expectedList, result);
         Verify.assertListsEqual(expectedList, actualList);
-        Verify.assertSize(6, iterable);
+        Verify.assertSize(6, list);
+
+        Iterable<Integer> iterable1 = FastList.newListWith(1, 2, 5, 7, 7, 4);
+        MutableList<Integer> result2 = IterableIterate.distinct(iterable1);
+        Assert.assertEquals(result2, FastList.newListWith(1, 2, 5, 7, 4));
+
+        Iterable<Integer> iterable2 = new IterableAdapter<>(Interval.oneTo(2));
+        MutableList<Integer> result3 = IterableIterate.distinct(iterable2);
+        Assert.assertEquals(result3, FastList.newListWith(1, 2));
+
+        Iterable<Integer> iterable3 = new IterableAdapter<>(FastList.newListWith(2, 2, 4, 5));
+        MutableList<Integer> result4 = IterableIterate.distinct(iterable3);
+        Assert.assertEquals(result4, FastList.newListWith(2, 4, 5));
+    }
+
+    @Test
+    public void distinctWithHashingStrategy()
+    {
+        MutableList<String> list = FastList.newList();
+        list.addAll(FastList.newListWith("A", "a", "b", "c", "B", "D", "e", "e", "E", "D"));
+        list = IterableIterate.distinct(list, HashingStrategies.fromFunction(String::toLowerCase));
+        Assert.assertEquals(FastList.newListWith("A", "b", "c", "D", "e"), list);
     }
 
     @Test
