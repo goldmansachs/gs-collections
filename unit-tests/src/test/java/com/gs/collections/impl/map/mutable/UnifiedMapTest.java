@@ -24,6 +24,7 @@ import java.util.Set;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -556,6 +557,160 @@ public class UnifiedMapTest extends UnifiedMapTestCase
 
         UnifiedMap<Integer, Integer> empty = UnifiedMap.<Integer, Integer>newMap();
         Verify.assertEmpty(empty.collectValues((key, value) -> key + value));
+    }
+
+    @Override
+    @Test
+    public void detect()
+    {
+        super.detect();
+
+        UnifiedMap<Integer, String> collisions = UnifiedMap.<Integer, String>newMap().withKeysValues(COLLISION_1, "one", COLLISION_2, "two", COLLISION_3, "three");
+        Assert.assertNull(collisions.detect((key, value) -> COLLISION_4.equals(key) && "four".equals(value)));
+        Assert.assertEquals(
+                Tuples.pair(COLLISION_1, "one"),
+                collisions.detect((key, value) -> COLLISION_1.equals(key) && "one".equals(value)));
+    }
+
+    @Override
+    @Test
+    public void detect_value()
+    {
+        super.detect_value();
+
+        UnifiedMap<Integer, String> collisions = UnifiedMap.<Integer, String>newMap().withKeysValues(COLLISION_1, "one", COLLISION_2, "two", COLLISION_3, "three");
+        Assert.assertNull(collisions.detect("four"::equals));
+        Assert.assertEquals("one", collisions.detect("one"::equals));
+    }
+
+    @Override
+    @Test
+    public void detectWith()
+    {
+        super.detectWith();
+
+        UnifiedMap<Integer, String> collisions = UnifiedMap.<Integer, String>newMap().withKeysValues(COLLISION_1, "one", COLLISION_2, "two", COLLISION_3, "three");
+        Assert.assertNull(
+                collisions.detectWith(
+                        (String value, String parameter) -> "value is four".equals(parameter + value),
+                        "value is "));
+        Assert.assertEquals(
+                "one",
+                collisions.detectWith(
+                        (String value, String parameter) -> "value is one".equals(parameter + value),
+                        "value is "));
+    }
+
+    @Override
+    @Test
+    public void detectIfNone_value()
+    {
+        super.detectIfNone_value();
+
+        UnifiedMap<Integer, String> collisions = UnifiedMap.<Integer, String>newMap().withKeysValues(COLLISION_1, "one", COLLISION_2, "two", COLLISION_3, "three");
+        Assert.assertEquals(
+                "if none string",
+                collisions.detectIfNone(
+                        "four"::equals,
+                        () -> "if none string"));
+        Assert.assertEquals(
+                "one",
+                collisions.detectIfNone(
+                        "one"::equals,
+                        () -> "if none string"));
+    }
+
+    @Override
+    @Test
+    public void detectWithIfNone()
+    {
+        super.detectWithIfNone();
+
+        UnifiedMap<Integer, String> collisions = UnifiedMap.<Integer, String>newMap().withKeysValues(COLLISION_1, "one", COLLISION_2, "two", COLLISION_3, "three");
+        Assert.assertEquals(
+                "if none string",
+                collisions.detectWithIfNone(
+                        (String value, String parameter) -> "value is four".equals(parameter + value),
+                        "value is ",
+                        () -> "if none string"));
+        Assert.assertEquals(
+                "one",
+                collisions.detectWithIfNone(
+                        (String value, String parameter) -> "value is one".equals(parameter + value),
+                        "value is ",
+                        () -> "if none string"));
+    }
+
+    @Override
+    @Test
+    public void anySatisfy()
+    {
+        super.anySatisfy();
+
+        UnifiedMap<Integer, String> collisions = UnifiedMap.<Integer, String>newMap().withKeysValues(COLLISION_1, "one", COLLISION_2, "two", COLLISION_3, "three");
+        Assert.assertFalse(collisions.anySatisfy("four"::equals));
+        Assert.assertTrue(collisions.anySatisfy("one"::equals));
+    }
+
+    @Override
+    @Test
+    public void anySatisfyWith()
+    {
+        super.anySatisfyWith();
+
+        UnifiedMap<Integer, String> collisions = UnifiedMap.<Integer, String>newMap().withKeysValues(COLLISION_1, "one", COLLISION_2, "two", COLLISION_3, "three");
+        Assert.assertTrue(
+                collisions.anySatisfyWith(
+                        (value, parameter) -> "value is one".equals(parameter + value),
+                        "value is "));
+        Assert.assertFalse(
+                collisions.anySatisfyWith(
+                        (value, parameter) -> "value is four".equals(parameter + value),
+                        "value is "));
+    }
+
+    @Override
+    @Test
+    public void allSatisfy()
+    {
+        super.allSatisfy();
+
+        UnifiedMap<Integer, String> collisions = UnifiedMap.<Integer, String>newMap().withKeysValues(COLLISION_1, "one", COLLISION_2, "two", COLLISION_3, "three");
+        Assert.assertTrue(collisions.allSatisfy(value -> !value.isEmpty()));
+        Assert.assertFalse(collisions.allSatisfy(value -> value.length() > 3));
+    }
+
+    @Override
+    @Test
+    public void allSatisfyWith()
+    {
+        super.allSatisfyWith();
+
+        UnifiedMap<Integer, String> collisions = UnifiedMap.<Integer, String>newMap().withKeysValues(COLLISION_1, "one", COLLISION_2, "two", COLLISION_3, "three");
+        Assert.assertTrue(collisions.allSatisfyWith(Predicates2.instanceOf(), String.class));
+        Assert.assertFalse(collisions.allSatisfyWith(String::equals, "one"));
+    }
+
+    @Override
+    @Test
+    public void noneSatisfy()
+    {
+        super.allSatisfy();
+
+        UnifiedMap<Integer, String> collisions = UnifiedMap.<Integer, String>newMap().withKeysValues(COLLISION_1, "one", COLLISION_2, "two", COLLISION_3, "three");
+        Assert.assertTrue(collisions.noneSatisfy("four"::equals));
+        Assert.assertFalse(collisions.noneSatisfy("one"::equals));
+    }
+
+    @Override
+    @Test
+    public void noneSatisfyWith()
+    {
+        super.allSatisfyWith();
+
+        UnifiedMap<Integer, String> collisions = UnifiedMap.<Integer, String>newMap().withKeysValues(COLLISION_1, "one", COLLISION_2, "two", COLLISION_3, "three");
+        Assert.assertTrue(collisions.noneSatisfyWith(String::equals, "monkey"));
+        Assert.assertFalse(collisions.allSatisfyWith(String::equals, "one"));
     }
 
     @Override

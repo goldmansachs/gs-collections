@@ -33,6 +33,8 @@ import java.util.Set;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -50,6 +52,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.ImmutableEntry;
+import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import net.jcip.annotations.NotThreadSafe;
@@ -1550,6 +1553,292 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         }
 
         return target;
+    }
+
+    @Override
+    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
+    {
+        for (int i = 0; i < this.table.length; i += 2)
+        {
+            if (this.table[i] == CHAINED_KEY)
+            {
+                Object[] chainedTable = (Object[]) this.table[i + 1];
+                for (int j = 0; j < chainedTable.length; j += 2)
+                {
+                    if (chainedTable[j] != null)
+                    {
+                        K key = this.nonSentinel(chainedTable[j]);
+                        V value = (V) chainedTable[j + 1];
+                        if (predicate.accept(key, value))
+                        {
+                            return Tuples.pair(key, value);
+                        }
+                    }
+                }
+            }
+            else if (this.table[i] != null)
+            {
+                K key = this.nonSentinel(this.table[i]);
+                V value = (V) this.table[i + 1];
+
+                if (predicate.accept(key, value))
+                {
+                    return Tuples.pair(key, value);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public V detect(Predicate<? super V> predicate)
+    {
+        for (int i = 0; i < this.table.length; i += 2)
+        {
+            if (this.table[i] == CHAINED_KEY)
+            {
+                Object[] chainedTable = (Object[]) this.table[i + 1];
+                for (int j = 0; j < chainedTable.length; j += 2)
+                {
+                    if (chainedTable[j] != null)
+                    {
+                        V value = (V) chainedTable[j + 1];
+                        if (predicate.accept(value))
+                        {
+                            return value;
+                        }
+                    }
+                }
+            }
+            else if (this.table[i] != null)
+            {
+                V value = (V) this.table[i + 1];
+
+                if (predicate.accept(value))
+                {
+                    return value;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public <P> V detectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        for (int i = 0; i < this.table.length; i += 2)
+        {
+            if (this.table[i] == CHAINED_KEY)
+            {
+                Object[] chainedTable = (Object[]) this.table[i + 1];
+                for (int j = 0; j < chainedTable.length; j += 2)
+                {
+                    if (chainedTable[j] != null)
+                    {
+                        V value = (V) chainedTable[j + 1];
+                        if (predicate.accept(value, parameter))
+                        {
+                            return value;
+                        }
+                    }
+                }
+            }
+            else if (this.table[i] != null)
+            {
+                V value = (V) this.table[i + 1];
+
+                if (predicate.accept(value, parameter))
+                {
+                    return value;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    @Override
+    public V detectIfNone(Predicate<? super V> predicate, Function0<? extends V> function)
+    {
+        for (int i = 0; i < this.table.length; i += 2)
+        {
+            if (this.table[i] == CHAINED_KEY)
+            {
+                Object[] chainedTable = (Object[]) this.table[i + 1];
+                for (int j = 0; j < chainedTable.length; j += 2)
+                {
+                    if (chainedTable[j] != null)
+                    {
+                        V value = (V) chainedTable[j + 1];
+                        if (predicate.accept(value))
+                        {
+                            return value;
+                        }
+                    }
+                }
+            }
+            else if (this.table[i] != null)
+            {
+                V value = (V) this.table[i + 1];
+
+                if (predicate.accept(value))
+                {
+                    return value;
+                }
+            }
+        }
+
+        return function.value();
+    }
+
+    @Override
+    public <P> V detectWithIfNone(
+            Predicate2<? super V, ? super P> predicate,
+            P parameter,
+            Function0<? extends V> function)
+    {
+        for (int i = 0; i < this.table.length; i += 2)
+        {
+            if (this.table[i] == CHAINED_KEY)
+            {
+                Object[] chainedTable = (Object[]) this.table[i + 1];
+                for (int j = 0; j < chainedTable.length; j += 2)
+                {
+                    if (chainedTable[j] != null)
+                    {
+                        V value = (V) chainedTable[j + 1];
+                        if (predicate.accept(value, parameter))
+                        {
+                            return value;
+                        }
+                    }
+                }
+            }
+            else if (this.table[i] != null)
+            {
+                V value = (V) this.table[i + 1];
+
+                if (predicate.accept(value, parameter))
+                {
+                    return value;
+                }
+            }
+        }
+
+        return function.value();
+    }
+
+    private boolean shortCircuit(
+            Predicate<? super V> predicate,
+            boolean expected,
+            boolean onShortCircuit,
+            boolean atEnd)
+    {
+        for (int i = 0; i < this.table.length; i += 2)
+        {
+            if (this.table[i] == CHAINED_KEY)
+            {
+                Object[] chainedTable = (Object[]) this.table[i + 1];
+                for (int j = 0; j < chainedTable.length; j += 2)
+                {
+                    if (chainedTable[j] != null)
+                    {
+                        V value = (V) chainedTable[j + 1];
+                        if (predicate.accept(value) == expected)
+                        {
+                            return onShortCircuit;
+                        }
+                    }
+                }
+            }
+            else if (this.table[i] != null)
+            {
+                V value = (V) this.table[i + 1];
+
+                if (predicate.accept(value) == expected)
+                {
+                    return onShortCircuit;
+                }
+            }
+        }
+
+        return atEnd;
+    }
+
+    private <P> boolean shortCircuitWith(
+            Predicate2<? super V, ? super P> predicate,
+            P parameter,
+            boolean expected,
+            boolean onShortCircuit,
+            boolean atEnd)
+    {
+        for (int i = 0; i < this.table.length; i += 2)
+        {
+            if (this.table[i] == CHAINED_KEY)
+            {
+                Object[] chainedTable = (Object[]) this.table[i + 1];
+                for (int j = 0; j < chainedTable.length; j += 2)
+                {
+                    if (chainedTable[j] != null)
+                    {
+                        V value = (V) chainedTable[j + 1];
+                        if (predicate.accept(value, parameter) == expected)
+                        {
+                            return onShortCircuit;
+                        }
+                    }
+                }
+            }
+            else if (this.table[i] != null)
+            {
+                V value = (V) this.table[i + 1];
+
+                if (predicate.accept(value, parameter) == expected)
+                {
+                    return onShortCircuit;
+                }
+            }
+        }
+
+        return atEnd;
+    }
+
+    @Override
+    public boolean anySatisfy(Predicate<? super V> predicate)
+    {
+        return this.shortCircuit(predicate, true, true, false);
+    }
+
+    @Override
+    public <P> boolean anySatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.shortCircuitWith(predicate, parameter, true, true, false);
+    }
+
+    @Override
+    public boolean allSatisfy(Predicate<? super V> predicate)
+    {
+        return this.shortCircuit(predicate, false, false, true);
+    }
+
+    @Override
+    public <P> boolean allSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.shortCircuitWith(predicate, parameter, false, false, true);
+    }
+
+    @Override
+    public boolean noneSatisfy(Predicate<? super V> predicate)
+    {
+        return this.shortCircuit(predicate, true, false, true);
+    }
+
+    @Override
+    public <P> boolean noneSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.shortCircuitWith(predicate, parameter, true, false, true);
     }
 
     protected class KeySet implements Set<K>, Serializable, BatchIterable<K>
