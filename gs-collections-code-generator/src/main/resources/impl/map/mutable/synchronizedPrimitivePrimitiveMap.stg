@@ -281,6 +281,14 @@ public final class Synchronized<name1><name2>Map
 
     public void forEach(<name2>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name2>Procedure procedure)
+    {
         synchronized (this.lock)
         {
             this.map.forEach(procedure);

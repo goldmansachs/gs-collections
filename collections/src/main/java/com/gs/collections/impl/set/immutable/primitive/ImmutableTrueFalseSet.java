@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,6 +88,14 @@ final class ImmutableTrueFalseSet implements ImmutableBooleanSet, Serializable
     }
 
     public void forEach(BooleanProcedure procedure)
+    {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(BooleanProcedure procedure)
     {
         procedure.value(false);
         procedure.value(true);

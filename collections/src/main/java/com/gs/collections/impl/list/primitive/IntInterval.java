@@ -325,6 +325,14 @@ public final class IntInterval
 
     public void forEach(IntProcedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(IntProcedure procedure)
+    {
         if (this.from <= this.to)
         {
             for (int i = this.from; i <= this.to; i += this.step)

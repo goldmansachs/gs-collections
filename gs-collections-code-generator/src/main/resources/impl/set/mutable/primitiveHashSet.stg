@@ -500,6 +500,14 @@ public final class <name>HashSet extends Abstract<name>Set implements Mutable<na
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
@@ -1149,6 +1157,11 @@ public final class <name>HashSet extends Abstract<name>Set implements Mutable<na
         }
 
         public void forEach(<name>Procedure procedure)
+        {
+            this.each(procedure);
+        }
+
+        public void each(<name>Procedure procedure)
         {
             int zeroToThirtyOne = this.zeroToThirtyOne;
             while (zeroToThirtyOne != 0)

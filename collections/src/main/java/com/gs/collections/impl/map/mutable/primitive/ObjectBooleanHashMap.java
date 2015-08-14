@@ -393,6 +393,14 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
     public void forEach(BooleanProcedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(BooleanProcedure procedure)
+    {
         this.forEachValue(procedure);
     }
 
@@ -1426,6 +1434,11 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         }
 
         public void forEach(BooleanProcedure procedure)
+        {
+            this.each(procedure);
+        }
+
+        public void each(BooleanProcedure procedure)
         {
             ObjectBooleanHashMap.this.forEach(procedure);
         }

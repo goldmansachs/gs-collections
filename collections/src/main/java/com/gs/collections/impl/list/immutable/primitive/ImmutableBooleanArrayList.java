@@ -150,6 +150,14 @@ final class ImmutableBooleanArrayList
 
     public void forEach(BooleanProcedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(BooleanProcedure procedure)
+    {
         for (int i = 0; i < this.size; i++)
         {
             procedure.value(this.items.get(i));

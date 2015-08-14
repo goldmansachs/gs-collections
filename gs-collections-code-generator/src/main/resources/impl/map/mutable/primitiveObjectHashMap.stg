@@ -2858,6 +2858,14 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
         public void forEach(<name>Procedure procedure)
         {
+            this.each(procedure);
+        }
+
+        /**
+         * @since 7.0.
+         */
+        public void each(<name>Procedure procedure)
+        {
             <name>ObjectHashMap.this.forEachKey(procedure);
         }
 
@@ -3749,6 +3757,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         }
 
         public void forEach(<name>Procedure procedure)
+        {
+            this.each(procedure);
+        }
+
+        public void each(<name>Procedure procedure)
         {
             <name>ObjectHashMap.this.forEachKey(procedure);
         }

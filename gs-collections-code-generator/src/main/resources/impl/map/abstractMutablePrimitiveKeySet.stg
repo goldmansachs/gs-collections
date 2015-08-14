@@ -79,6 +79,14 @@ public abstract class AbstractMutable<name>KeySet implements Mutable<name>Set
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         this.getOuter().forEachKey(procedure);
     }
 

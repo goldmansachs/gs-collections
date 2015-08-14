@@ -128,6 +128,14 @@ final class Immutable<name>SingletonSet implements Immutable<name>Set, Serializa
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         procedure.value(this.element);
     }
 

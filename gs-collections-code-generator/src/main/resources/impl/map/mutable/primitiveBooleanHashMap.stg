@@ -1211,6 +1211,14 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
 
         public void forEach(<name>Procedure procedure)
         {
+            this.each(procedure);
+        }
+
+        /**
+         * @since 7.0.
+         */
+        public void each(<name>Procedure procedure)
+        {
             <name>BooleanHashMap.this.forEachKey(procedure);
         }
 

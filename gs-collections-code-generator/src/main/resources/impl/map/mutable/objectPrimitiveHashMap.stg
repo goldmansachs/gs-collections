@@ -645,6 +645,14 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         this.forEachValue(procedure);
     }
 
@@ -1663,6 +1671,11 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
 
         public void forEach(<name>Procedure procedure)
+        {
+            this.each(procedure);
+        }
+
+        public void each(<name>Procedure procedure)
         {
             Object<name>HashMap.this.forEach(procedure);
         }

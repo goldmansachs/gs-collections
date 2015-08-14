@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,6 +72,14 @@ public class CollectBooleanIterable<T>
     }
 
     public void forEach(BooleanProcedure procedure)
+    {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(BooleanProcedure procedure)
     {
         this.iterable.forEachWith(this.booleanFunctionToProcedure, procedure);
     }

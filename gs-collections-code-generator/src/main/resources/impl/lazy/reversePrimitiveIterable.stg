@@ -58,6 +58,14 @@ public class Reverse<name>Iterable extends AbstractLazy<name>Iterable
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         <name>Iterator iterator = this.<type>Iterator();
         while (iterator.hasNext())
         {

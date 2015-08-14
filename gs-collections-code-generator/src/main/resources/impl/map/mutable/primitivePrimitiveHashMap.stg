@@ -1026,6 +1026,14 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
 
         public void forEach(<name1>Procedure procedure)
         {
+            this.each(procedure);
+        }
+
+        /**
+         * @since 7.0.
+         */
+        public void each(<name1>Procedure procedure)
+        {
             <name1><name2>HashMap.this.forEachKey(procedure);
         }
     }

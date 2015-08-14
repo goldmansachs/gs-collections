@@ -76,6 +76,14 @@ public class Collect<name>Iterable\<T>
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         this.iterable.forEachWith(this.<type>FunctionToProcedure, procedure);
     }
 

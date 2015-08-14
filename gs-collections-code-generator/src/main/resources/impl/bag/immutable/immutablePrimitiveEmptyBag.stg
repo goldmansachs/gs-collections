@@ -113,6 +113,13 @@ final class Immutable<name>EmptyBag implements Immutable<name>Bag, Serializable
     {
     }
 
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
+    }
+
     public Immutable<name>Bag select(<name>Predicate predicate)
     {
         return this;

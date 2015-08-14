@@ -161,6 +161,14 @@ final class Immutable<name1><name2>SingletonMap implements Immutable<name1><name
 
     public void forEach(<name2>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name2>Procedure procedure)
+    {
         procedure.value(this.value1);
     }
 

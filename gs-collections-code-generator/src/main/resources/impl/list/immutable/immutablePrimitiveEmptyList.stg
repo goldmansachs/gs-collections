@@ -92,6 +92,13 @@ final class Immutable<name>EmptyList implements Immutable<name>List, Serializabl
     {
     }
 
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
+    }
+
     public void forEachWithIndex(<name>IntProcedure procedure)
     {
     }

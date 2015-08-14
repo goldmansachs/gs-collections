@@ -130,6 +130,14 @@ public abstract class AbstractMutableBooleanValuesMap extends AbstractBooleanIte
 
     public void forEach(BooleanProcedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(BooleanProcedure procedure)
+    {
         this.forEachValue(procedure);
     }
 
@@ -580,6 +588,11 @@ public abstract class AbstractMutableBooleanValuesMap extends AbstractBooleanIte
         }
 
         public void forEach(BooleanProcedure procedure)
+        {
+            this.each(procedure);
+        }
+
+        public void each(BooleanProcedure procedure)
         {
             AbstractMutableBooleanValuesMap.this.forEach(procedure);
         }

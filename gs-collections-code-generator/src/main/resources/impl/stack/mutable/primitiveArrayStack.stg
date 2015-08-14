@@ -208,6 +208,14 @@ public final class <name>ArrayStack
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         this.delegate.asReversed().forEach(procedure);
     }
 

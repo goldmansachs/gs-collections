@@ -284,6 +284,14 @@ public abstract class AbstractSynchronized<name>Collection
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         synchronized (this.lock)
         {
             this.collection.forEach(procedure);

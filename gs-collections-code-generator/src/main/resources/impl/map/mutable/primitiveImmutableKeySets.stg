@@ -149,6 +149,14 @@ class <className> extends AbstractImmutable<name>Set implements Serializable
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         <forEachKey("executeProcedure")>
     }
 

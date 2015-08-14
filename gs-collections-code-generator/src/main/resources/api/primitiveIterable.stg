@@ -43,6 +43,11 @@ public interface <name>Iterable extends PrimitiveIterable
 
     void forEach(<name>Procedure procedure);
 
+    /**
+     * @since 7.0.
+     */
+    void each(<name>Procedure procedure);
+
     <name>Iterable select(<name>Predicate predicate);
 
     <name>Iterable reject(<name>Predicate predicate);

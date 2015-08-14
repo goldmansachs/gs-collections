@@ -150,6 +150,14 @@ final class Immutable<name1><name2>HashMap implements Immutable<name1><name2>Map
 
     public void forEach(<name2>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name2>Procedure procedure)
+    {
         this.delegate.forEach(procedure);
     }
 

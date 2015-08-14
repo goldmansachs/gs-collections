@@ -384,6 +384,14 @@ public final class <name>HashBag extends Abstract<name>Iterable implements Mutab
 
     public void forEach(final <name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(final <name>Procedure procedure)
+    {
         this.items.forEachKeyValue(new <name>IntProcedure()
         {
             public void value(<type> key, int occurrences)

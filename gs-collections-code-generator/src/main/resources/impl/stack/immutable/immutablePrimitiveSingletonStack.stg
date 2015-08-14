@@ -65,6 +65,14 @@ final class Immutable<name>SingletonStack implements Immutable<name>Stack, Seria
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         procedure.value(this.element1);
     }
 

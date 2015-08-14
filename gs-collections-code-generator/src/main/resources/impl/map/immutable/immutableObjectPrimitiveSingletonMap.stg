@@ -80,6 +80,14 @@ final class ImmutableObject<name>SingletonMap\<K> extends AbstractImmutableObjec
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         procedure.value(this.value1);
     }
 

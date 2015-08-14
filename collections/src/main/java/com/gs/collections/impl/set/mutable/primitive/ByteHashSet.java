@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -555,6 +555,14 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
     }
 
     public void forEach(ByteProcedure procedure)
+    {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(ByteProcedure procedure)
     {
         long bitGroup1 = this.bitGroup1;
         while (bitGroup1 != 0L)
@@ -1124,6 +1132,11 @@ public final class ByteHashSet implements MutableByteSet, Externalizable
         }
 
         public void forEach(ByteProcedure procedure)
+        {
+            this.each(procedure);
+        }
+
+        public void each(ByteProcedure procedure)
         {
             long bitGroup1 = this.bitGroup1;
             while (bitGroup1 != 0L)

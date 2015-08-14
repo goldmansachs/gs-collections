@@ -149,6 +149,13 @@ final class Immutable<name1><name2>EmptyMap implements Immutable<name1><name2>Ma
     {
     }
 
+    /**
+     * @since 7.0.
+     */
+    public void each(<name2>Procedure procedure)
+    {
+    }
+
     public int count(<name2>Predicate predicate)
     {
         return 0;

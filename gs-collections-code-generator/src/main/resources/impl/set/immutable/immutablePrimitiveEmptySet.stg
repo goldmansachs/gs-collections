@@ -114,6 +114,13 @@ final class Immutable<name>EmptySet implements Immutable<name>Set, Serializable
     {
     }
 
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
+    }
+
     public Immutable<name>Set select(<name>Predicate predicate)
     {
         return this;

@@ -220,6 +220,14 @@ public final class Unmodifiable<name1><name2>Map
 
     public void forEach(<name2>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name2>Procedure procedure)
+    {
         this.map.forEach(procedure);
     }
 

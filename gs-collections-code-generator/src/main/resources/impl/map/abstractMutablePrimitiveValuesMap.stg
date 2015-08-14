@@ -177,6 +177,14 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
 
     public void forEach(<name>Procedure procedure)
     {
+        this.each(procedure);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public void each(<name>Procedure procedure)
+    {
         this.forEachValue(procedure);
     }
 
@@ -599,7 +607,12 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
 
         public void forEach(<name>Procedure procedure)
         {
-            AbstractMutable<name>ValuesMap.this.forEach(procedure);
+            this.each(procedure);
+        }
+
+        public void each(<name>Procedure procedure)
+        {
+            AbstractMutable<name>ValuesMap.this.each(procedure);
         }
 
         public int count(<name>Predicate predicate)
