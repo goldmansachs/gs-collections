@@ -6,6 +6,7 @@
 [![][license img]][license]
 
 GS Collections is a collections framework for Java. It has JDK-compatible List, Set and Map implementations with a rich API and set of utility classes that work with any JDK compatible Collections, Arrays, Maps or Strings. The iteration protocol was inspired by the Smalltalk collection framework.
+The library modules in GS Collections are compatible with Java 5 (gs-collections-api, gs-collections, and gs-collections-testutils).
 
 ## Quick Example
 GS Collections puts iteration methods on the container types. Lambdas are simulated using anonymous inner classes. Here's a code example that demonstrates the usual style of programming with GS Collections.
@@ -47,13 +48,14 @@ MutableList<String> sortedLastNames = people.collect(Person::getLastName).sortTh
 * Provides replacements for ArrayList, HashSet, and HashMap optimized for performance and memory usage
 * Performs more "behind-the-scene" optimizations in utility classes
 * Encapsulates a lot of the structural complexity of parallel iteration and lazy evaluation
-* Adds new containers including Bag, Interval, Multimap, and immutable versions of all types
+* Adds new containers including Bag, Interval, Multimap, BiMap, and immutable versions of all types
 * Has been under active development since 2005 and is a mature library
 
 ## Documentation
 The best way to learn about GS Collections is to dive into the [code kata](https://github.com/goldmansachs/gs-collections-kata). The kata is a fun way to learn idiomatic GS Collections usage and hone your skills through practice.
+Please refer to the [wiki](https://github.com/goldmansachs/gs-collections/wiki) for more details.
 
-For more comprehensive documentation, take a look at the [Reference Guide](https://github.com/goldmansachs/gs-collections/wiki).
+For more comprehensive documentation, take a look at the [Reference Guide](http://www.goldmansachs.com/gs-collections/documents/GS%20Collections%20Reference%20Guide%205.0.0.pdf).
 
 ## Contributions
 We currently do all development in an internal Subversion repository and are not prepared to take external contributions. However, we watch the [issue tracker](https://github.com/goldmansachs/gs-collections/issues) for bug reports and feature requests.
