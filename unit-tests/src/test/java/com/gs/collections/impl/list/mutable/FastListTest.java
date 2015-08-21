@@ -685,13 +685,22 @@ public class FastListTest extends AbstractListTestCase
     {
         super.addAll();
 
-        FastList<Integer> integers = FastList.newList();
-        Assert.assertTrue(integers.addAll(mList(1, 2, 3, 4)));
-        Verify.assertContainsAll(integers, 1, 2, 3, 4);
-        Assert.assertTrue(integers.addAll(FastList.<Integer>newList(4).with(1, 2, 3, 4)));
-        Verify.assertStartsWith(integers, 1, 2, 3, 4, 1, 2, 3, 4);
-        Assert.assertTrue(integers.addAll(mSet(5)));
-        Verify.assertStartsWith(integers, 1, 2, 3, 4, 1, 2, 3, 4, 5);
+        MutableList<Integer> integers1 = FastList.newList();
+        Assert.assertTrue(integers1.addAll(mList(1, 2, 3, 4)));
+        Verify.assertListsEqual(FastList.newListWith(1, 2, 3, 4), integers1);
+        Assert.assertTrue(integers1.addAll(FastList.<Integer>newList(4).with(1, 2, 3, 4)));
+        Verify.assertListsEqual(FastList.newListWith(1, 2, 3, 4, 1, 2, 3, 4), integers1);
+        Assert.assertTrue(integers1.addAll(mSet(5)));
+        Verify.assertListsEqual(FastList.newListWith(1, 2, 3, 4, 1, 2, 3, 4, 5), integers1);
+
+        MutableList<Integer> integers2 = FastList.newListWith(0);
+        Assert.assertTrue(integers2.addAll(mList(1, 2, 3, 4)));
+        Verify.assertListsEqual(FastList.newListWith(0, 1, 2, 3, 4), integers2);
+        Assert.assertTrue(integers2.addAll(FastList.<Integer>newList(4).with(1, 2, 3, 4)));
+        Verify.assertListsEqual(FastList.newListWith(0, 1, 2, 3, 4, 1, 2, 3, 4), integers2);
+        Assert.assertTrue(integers2.addAll(mSet(5)));
+        Verify.assertListsEqual(FastList.newListWith(0, 1, 2, 3, 4, 1, 2, 3, 4, 5), integers2);
+
         Verify.assertThrows(IndexOutOfBoundsException.class, () -> FastList.newList().addAll(1, null));
     }
 
@@ -703,11 +712,11 @@ public class FastListTest extends AbstractListTestCase
 
         FastList<Integer> integers = FastList.newList();
         Assert.assertTrue(integers.addAllIterable(iList(1, 2, 3, 4)));
-        Verify.assertContainsAll(integers, 1, 2, 3, 4);
+        Verify.assertListsEqual(FastList.newListWith(1, 2, 3, 4), integers);
         Assert.assertTrue(integers.addAllIterable(FastList.<Integer>newList(4).with(1, 2, 3, 4)));
-        Verify.assertStartsWith(integers, 1, 2, 3, 4, 1, 2, 3, 4);
+        Verify.assertListsEqual(FastList.newListWith(1, 2, 3, 4, 1, 2, 3, 4), integers);
         Assert.assertTrue(integers.addAllIterable(mSet(5)));
-        Verify.assertStartsWith(integers, 1, 2, 3, 4, 1, 2, 3, 4, 5);
+        Verify.assertListsEqual(FastList.newListWith(1, 2, 3, 4, 1, 2, 3, 4, 5), integers);
     }
 
     @Test

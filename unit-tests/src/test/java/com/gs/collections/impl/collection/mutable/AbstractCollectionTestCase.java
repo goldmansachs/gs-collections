@@ -16,8 +16,6 @@
 
 package com.gs.collections.impl.collection.mutable;
 
-import java.util.function.Predicate;
-
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
@@ -28,12 +26,13 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.lazy.LazyIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
-import com.gs.collections.impl.utility.internal.RandomAccessListIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iList;
+import static com.gs.collections.impl.factory.Iterables.mSet;
 
 /**
  * Abstract JUnit test for {@link MutableCollection}s.
@@ -117,20 +116,35 @@ public abstract class AbstractCollectionTestCase extends AbstractRichIterableTes
     @Test
     public void addAllIterable()
     {
-        MutableCollection<Integer> collection = this.newWith();
-        Assert.assertTrue(collection.addAllIterable(FastList.newListWith(1, 2, 3)));
-        Verify.assertContainsAll(collection, 1, 2, 3);
+        MutableCollection<Integer> collection1 = this.newWith();
+        Assert.assertTrue(collection1.addAllIterable(FastList.newListWith(1, 2, 3)));
+        Verify.assertContainsAll(collection1, 1, 2, 3);
 
-        boolean result = collection.addAllIterable(FastList.newListWith(1, 2, 3));
-        if (collection.size() == 3)
+        boolean result1 = collection1.addAllIterable(FastList.newListWith(1, 2, 3));
+        if (collection1.size() == 3)
         {
-            Assert.assertFalse("addAllIterable did not modify the collection", result);
+            Assert.assertFalse("addAllIterable did not modify the collection", result1);
         }
         else
         {
-            Assert.assertTrue("addAllIterable modified the collection", result);
+            Assert.assertTrue("addAllIterable modified the collection", result1);
         }
-        Verify.assertContainsAll(collection, 1, 2, 3);
+        Verify.assertContainsAll(collection1, 1, 2, 3);
+
+        MutableCollection<Integer> collection2 = this.newWith();
+        Assert.assertTrue(collection2.addAllIterable(UnifiedSet.newSetWith(1, 2, 3)));
+        Verify.assertContainsAll(collection2, 1, 2, 3);
+
+        boolean result2 = collection2.addAllIterable(UnifiedSet.newSetWith(1, 2, 3));
+        if (collection1.size() == 3)
+        {
+            Assert.assertFalse("addAllIterable did not modify the collection", result2);
+        }
+        else
+        {
+            Assert.assertTrue("addAllIterable modified the collection", result2);
+        }
+        Verify.assertContainsAll(collection2, 1, 2, 3);
     }
 
     @Test

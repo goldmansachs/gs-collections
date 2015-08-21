@@ -288,6 +288,10 @@ public class FastList<T>
         {
             this.addAllArrayList((ArrayList<T>) source);
         }
+        else if (source instanceof List && source instanceof RandomAccess)
+        {
+            this.addAllRandomAccessList((List<T>) source);
+        }
         else
         {
             this.addAllCollection(source);
@@ -311,6 +315,15 @@ public class FastList<T>
         int newSize = this.size + sourceSize;
         this.ensureCapacity(newSize);
         ArrayListIterate.toArray(source, this.items, this.size, sourceSize);
+        this.size = newSize;
+    }
+
+    private void addAllRandomAccessList(List<T> source)
+    {
+        int sourceSize = source.size();
+        int newSize = this.size + sourceSize;
+        this.ensureCapacity(newSize);
+        RandomAccessListIterate.toArray(source, this.items, this.size, sourceSize);
         this.size = newSize;
     }
 
@@ -1078,6 +1091,10 @@ public class FastList<T>
         {
             this.addAllArrayListAtIndex((ArrayList<T>) source, index);
         }
+        else if (source instanceof List && source instanceof RandomAccess)
+        {
+            this.addAllRandomAccessListAtIndex((List<T>) source, index);
+        }
         else
         {
             this.addAllCollectionAtIndex(source, index);
@@ -1102,6 +1119,16 @@ public class FastList<T>
         this.ensureCapacity(newSize);
         this.shiftElementsAtIndex(index, sourceSize);
         ArrayListIterate.toArray(source, this.items, index, sourceSize);
+        this.size = newSize;
+    }
+
+    private void addAllRandomAccessListAtIndex(List<T> source, int index)
+    {
+        int sourceSize = source.size();
+        int newSize = this.size + sourceSize;
+        this.ensureCapacity(newSize);
+        this.shiftElementsAtIndex(index, sourceSize);
+        RandomAccessListIterate.toArray(source, this.items, index, sourceSize);
         this.size = newSize;
     }
 

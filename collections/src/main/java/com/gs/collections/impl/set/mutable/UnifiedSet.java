@@ -24,7 +24,9 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.RandomAccess;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 
@@ -1238,10 +1240,23 @@ public class UnifiedSet<T>
         {
             return this.copySet((UnifiedSet<?>) iterable);
         }
+
         int size = Iterate.sizeOf(iterable);
         this.ensureCapacity(size);
         int oldSize = this.size();
-        Iterate.forEachWith(iterable, Procedures2.<T>addToCollection(), this);
+
+        if (iterable instanceof List && iterable instanceof RandomAccess)
+        {
+            List<T> list = (List<T>) iterable;
+            for (int i = 0; i < size; i++)
+            {
+                this.add(list.get(i));
+            }
+        }
+        else
+        {
+            Iterate.forEachWith(iterable, Procedures2.<T>addToCollection(), this);
+        }
         return this.size() != oldSize;
     }
 
