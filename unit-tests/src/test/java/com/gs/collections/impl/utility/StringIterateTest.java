@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,13 @@ public class StringIterateTest
     }
 
     @Test
+    public void collectCodePointUnicode()
+    {
+        Assert.assertEquals("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", StringIterate.collect("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", CodePointFunction.PASS_THRU));
+        Assert.assertEquals("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", StringIterate.collect("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", CodePointFunction.PASS_THRU));
+    }
+
+    @Test
     public void englishToUpperCase()
     {
         Assert.assertEquals("ABC", StringIterate.englishToUpperCase("abc"));
@@ -109,6 +116,13 @@ public class StringIterateTest
     }
 
     @Test
+    public void selectCodePointUnicode()
+    {
+        String string = StringIterate.select("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", CodePointPredicate.IS_BMP);
+        Assert.assertEquals("あいう", string);
+    }
+
+    @Test
     public void detect()
     {
         char character = StringIterate.detect("1a2a3", CharPredicates.isLetter());
@@ -144,6 +158,13 @@ public class StringIterateTest
     }
 
     @Test
+    public void allSatisfyCodePointUnicode()
+    {
+        Assert.assertTrue(StringIterate.allSatisfy("あいう", CodePointPredicate.IS_BMP));
+        Assert.assertFalse(StringIterate.allSatisfy("\uD840\uDC00\uD840\uDC03\uD840\uDC06", CodePointPredicate.IS_BMP));
+    }
+
+    @Test
     public void anySatisfy()
     {
         Assert.assertTrue(StringIterate.anySatisfy("MARY", CharPredicates.isUpperCase()));
@@ -158,6 +179,13 @@ public class StringIterateTest
     }
 
     @Test
+    public void anySatisfyCodePointUnicode()
+    {
+        Assert.assertTrue(StringIterate.anySatisfy("あいう", CodePointPredicate.IS_BMP));
+        Assert.assertFalse(StringIterate.anySatisfy("\uD840\uDC00\uD840\uDC03\uD840\uDC06", CodePointPredicate.IS_BMP));
+    }
+
+    @Test
     public void noneSatisfy()
     {
         Assert.assertFalse(StringIterate.noneSatisfy("MaRy", CharPredicates.isUpperCase()));
@@ -169,6 +197,13 @@ public class StringIterateTest
     {
         Assert.assertFalse(StringIterate.noneSatisfy("MaRy", CodePointPredicate.IS_UPPERCASE));
         Assert.assertTrue(StringIterate.noneSatisfy("mary", CodePointPredicate.IS_UPPERCASE));
+    }
+
+    @Test
+    public void noneSatisfyCodePointUnicode()
+    {
+        Assert.assertFalse(StringIterate.noneSatisfy("あいう", CodePointPredicate.IS_BMP));
+        Assert.assertTrue(StringIterate.noneSatisfy("\uD840\uDC00\uD840\uDC03\uD840\uDC06", CodePointPredicate.IS_BMP));
     }
 
     @Test
@@ -340,6 +375,14 @@ public class StringIterateTest
     }
 
     @Test
+    public void forEachCodePointUnicode()
+    {
+        StringBuilder builder = new StringBuilder();
+        StringIterate.forEach("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", (CodePointProcedure) builder::appendCodePoint);
+        Assert.assertEquals("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", builder.toString());
+    }
+
+    @Test
     public void reverseForEach()
     {
         StringBuilder builder = new StringBuilder();
@@ -356,6 +399,15 @@ public class StringIterateTest
         StringIterate.reverseForEach("1a2b3c", (CodePointProcedure) builder::appendCodePoint);
         Assert.assertEquals("c3b2a1", builder.toString());
 
+        StringIterate.reverseForEach("", (int codePoint) -> Assert.fail());
+    }
+
+    @Test
+    public void reverseForEachCodePointUnicode()
+    {
+        StringBuilder builder = new StringBuilder();
+        StringIterate.reverseForEach("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", (CodePointProcedure) builder::appendCodePoint);
+        Assert.assertEquals("\uD840\uDC06う\uD840\uDC03い\uD840\uDC00あ", builder.toString());
         StringIterate.reverseForEach("", (int codePoint) -> Assert.fail());
     }
 

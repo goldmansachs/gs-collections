@@ -358,9 +358,11 @@ public final class StringIterate
     public static void forEachCodePoint(String string, CodePointProcedure procedure)
     {
         int size = string.length();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; )
         {
-            procedure.value(string.codePointAt(i));
+            int codePoint = string.codePointAt(i);
+            procedure.value(codePoint);
+            i += Character.charCount(codePoint);
         }
     }
 
@@ -406,11 +408,45 @@ public final class StringIterate
      */
     public static void reverseForEachCodePoint(String string, CodePointProcedure procedure)
     {
-        for (int i = string.length() - 1; i >= 0; i--)
+        for (int i = StringIterate.lastIndex(string); i >= 0; )
         {
-            procedure.value(string.codePointAt(i));
+            int codePoint = string.codePointAt(i);
+            procedure.value(codePoint);
+            if (i == 0)
+            {
+                i--;
+            }
+            else
+            {
+                i -= StringIterate.numberOfChars(string, i);
+            }
         }
     }
+
+    private static int lastIndex(String string)
+    {
+        if (StringIterate.isEmpty(string))
+        {
+            return -1;
+        }
+        int size = string.length();
+        if (size > 1)
+        {
+            return size - StringIterate.numberOfChars(string, size);
+        }
+        return 0;
+    }
+
+    public static int numberOfChars(String string, int i)
+    {
+        return StringIterate.isSurrogate(string, i) ? 2 : 1;
+    }
+
+    public static boolean isSurrogate(String string, int i)
+    {
+        return Character.isLowSurrogate(string.charAt(i - 1)) && Character.isHighSurrogate(string.charAt(i - 2));
+    }
+
 
     /**
      * Count the number of elements that return true for the specified {@code predicate}.
@@ -479,12 +515,14 @@ public final class StringIterate
     {
         int count = 0;
         int size = string.length();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; )
         {
-            if (predicate.accept(string.codePointAt(i)))
+            int codePoint = string.codePointAt(i);
+            if (predicate.accept(codePoint))
             {
                 count++;
             }
+            i += Character.charCount(codePoint);
         }
         return count;
     }
@@ -551,16 +589,18 @@ public final class StringIterate
     {
         int size = string.length();
         StringBuilder builder = new StringBuilder(size);
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; )
         {
-            builder.appendCodePoint(function.valueOf(string.codePointAt(i)));
+            int codePoint = string.codePointAt(i);
+            builder.appendCodePoint(function.valueOf(codePoint));
+            i += Character.charCount(codePoint);
         }
         return builder.toString();
     }
 
     public static String englishToUpperCase(String string)
     {
-        if (StringIterate.anySatisfy(string, CharPredicates.isLowerCase()))
+        if (StringIterate.anySatisfyChar(string, CharPredicates.isLowerCase()))
         {
             return StringIterate.collectChar(string, CharToCharFunctions.toUpperCase());
         }
@@ -569,7 +609,7 @@ public final class StringIterate
 
     public static String englishToLowerCase(String string)
     {
-        if (StringIterate.anySatisfy(string, CharPredicates.isUpperCase()))
+        if (StringIterate.anySatisfyChar(string, CharPredicates.isUpperCase()))
         {
             return StringIterate.collectChar(string, CharToCharFunctions.toLowerCase());
         }
@@ -646,7 +686,7 @@ public final class StringIterate
      */
     public static Character detectCharIfNone(String string, CharPredicate predicate, String resultIfNone)
     {
-        Character result = StringIterate.detect(string, predicate);
+        Character result = StringIterate.detectChar(string, predicate);
         return result == null ? Character.valueOf(resultIfNone.charAt(0)) : result;
     }
 
@@ -763,12 +803,14 @@ public final class StringIterate
     public static boolean anySatisfyCodePoint(String string, CodePointPredicate predicate)
     {
         int size = string.length();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; )
         {
-            if (predicate.accept(string.codePointAt(i)))
+            int codePoint = string.codePointAt(i);
+            if (predicate.accept(codePoint))
             {
                 return true;
             }
+            i += Character.charCount(codePoint);
         }
         return false;
     }
@@ -821,12 +863,14 @@ public final class StringIterate
     public static boolean allSatisfyCodePoint(String string, CodePointPredicate predicate)
     {
         int size = string.length();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; )
         {
-            if (!predicate.accept(string.codePointAt(i)))
+            int codePoint = string.codePointAt(i);
+            if (!predicate.accept(codePoint))
             {
                 return false;
             }
+            i += Character.charCount(codePoint);
         }
         return true;
     }
@@ -879,12 +923,14 @@ public final class StringIterate
     public static boolean noneSatisfyCodePoint(String string, CodePointPredicate predicate)
     {
         int size = string.length();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; )
         {
-            if (predicate.accept(string.codePointAt(i)))
+            int codePoint = string.codePointAt(i);
+            if (predicate.accept(codePoint))
             {
                 return false;
             }
+            i += Character.charCount(codePoint);
         }
         return true;
     }
@@ -940,13 +986,14 @@ public final class StringIterate
     {
         int size = string.length();
         StringBuilder buffer = new StringBuilder(string.length());
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; )
         {
             int codePoint = string.codePointAt(i);
             if (predicate.accept(codePoint))
             {
                 buffer.appendCodePoint(codePoint);
             }
+            i += Character.charCount(codePoint);
         }
         return buffer.toString();
     }
@@ -1002,13 +1049,14 @@ public final class StringIterate
     {
         int size = string.length();
         StringBuilder buffer = new StringBuilder(string.length());
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; )
         {
             int codePoint = string.codePointAt(i);
             if (!predicate.accept(codePoint))
             {
                 buffer.appendCodePoint(codePoint);
             }
+            i += Character.charCount(codePoint);
         }
         return buffer.toString();
     }

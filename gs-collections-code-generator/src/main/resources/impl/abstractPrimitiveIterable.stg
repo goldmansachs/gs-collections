@@ -182,7 +182,7 @@ public <type>[] toSortedArray()
 
 public Mutable<name>List toSortedList()
 {
-    return <name>ArrayList.newList(this).sortThis();
+    return this.toList().sortThis();
 }
 
 public Lazy<name>Iterable asLazy()
