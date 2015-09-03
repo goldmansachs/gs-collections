@@ -22,6 +22,7 @@ import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableBooleanCollectionTestCase;
@@ -73,16 +74,29 @@ public class ObjectBooleanHashMapValuesTest extends AbstractMutableBooleanCollec
     {
         MutableBooleanCollection bag = this.newWith(true, false, true, true);
         BooleanArrayList list = BooleanArrayList.newListWith(true, false, true, true);
-        BooleanIterator iterator = bag.booleanIterator();
+        BooleanIterator iterator1 = bag.booleanIterator();
         for (int i = 0; i < 4; i++)
         {
-            Assert.assertTrue(iterator.hasNext());
-            Assert.assertTrue(list.remove(iterator.next()));
+            Assert.assertTrue(iterator1.hasNext());
+            Assert.assertTrue(list.remove(iterator1.next()));
         }
         Verify.assertEmpty(list);
-        Assert.assertFalse(iterator.hasNext());
+        Assert.assertFalse(iterator1.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator1::next);
+
+        ObjectBooleanHashMap<String> map2 = new ObjectBooleanHashMap<>();
+        for (int each = 2; each < 100; each++)
+        {
+            map2.put(String.valueOf(each), each % 2 == 0);
+        }
+        MutableBooleanIterator iterator2 = map2.booleanIterator();
+        while (iterator2.hasNext())
+        {
+            iterator2.next();
+            iterator2.remove();
+        }
+        Assert.assertTrue(map2.isEmpty());
     }
 
     @Override

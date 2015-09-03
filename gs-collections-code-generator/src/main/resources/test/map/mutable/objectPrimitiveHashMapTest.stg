@@ -450,44 +450,6 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
     }
 
     @Test
-    public void removeWithRehash() throws Exception
-    {
-        Object<name>HashMap\<Float> hashMap = new Object<name>HashMap\<>();
-        for (int i = 2; i \< 10; i++)
-        {
-            hashMap.put((float) i, <(castFromInt.(type))("i")>);
-        }
-
-        Field keys = Object<name>HashMap.class.getDeclaredField("keys");
-        Field values = Object<name>HashMap.class.getDeclaredField("values");
-        keys.setAccessible(true);
-        values.setAccessible(true);
-        Assert.assertEquals(16L, ((Object[]) keys.get(hashMap)).length);
-        Assert.assertEquals(16L, ((<type>[]) values.get(hashMap)).length);
-
-        Field occupiedWithData = Object<name>HashMap.class.getDeclaredField("occupiedWithData");
-        occupiedWithData.setAccessible(true);
-        Assert.assertEquals(8, occupiedWithData.get(hashMap));
-
-        Field occupiedWithSentinels = Object<name>HashMap.class.getDeclaredField("occupiedWithSentinels");
-        occupiedWithSentinels.setAccessible(true);
-        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
-
-        for (int i = 0; i \< 4; i++)
-        {
-            hashMap.remove((float) i + 2);
-            Assert.assertEquals(7 - i, occupiedWithData.get(hashMap));
-            Assert.assertEquals(i + 1, occupiedWithSentinels.get(hashMap));
-        }
-
-        hashMap.remove(6.0f);
-        Assert.assertEquals(16L, ((Object[]) keys.get(hashMap)).length);
-        Assert.assertEquals(16L, ((<type>[]) values.get(hashMap)).length);
-        Assert.assertEquals(3, occupiedWithData.get(hashMap));
-        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
-    }
-
-    @Test
     public void testPutAll()
     {
         Object<name>HashMap\<<wrapperName>\> hashMap = Object<name>HashMap.newMap();

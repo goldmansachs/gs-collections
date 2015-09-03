@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import com.gs.collections.api.iterator.MutableBooleanIterator;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -119,36 +120,49 @@ public class ObjectBooleanHashMapKeySetTest
     @Test
     public void iterator()
     {
-        ObjectBooleanHashMap<String> map = this.newMapWithKeysValues("One", true, "Two", false, "Three", true, null, false);
-        Set<String> keySet = map.keySet();
-        Iterator<String> iterator = keySet.iterator();
+        ObjectBooleanHashMap<String> map1 = this.newMapWithKeysValues("One", true, "Two", false, "Three", true, null, false);
+        Set<String> keySet = map1.keySet();
+        Iterator<String> iterator1 = keySet.iterator();
 
         HashBag<String> expected = HashBag.newBagWith("One", "Two", "Three", null);
         HashBag<String> actual = HashBag.newBag();
-        Verify.assertThrows(IllegalStateException.class, iterator::remove);
+        Verify.assertThrows(IllegalStateException.class, iterator1::remove);
         for (int i = 0; i < 4; i++)
         {
-            Assert.assertTrue(iterator.hasNext());
-            actual.add(iterator.next());
+            Assert.assertTrue(iterator1.hasNext());
+            actual.add(iterator1.next());
         }
-        Assert.assertFalse(iterator.hasNext());
-        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator::next);
+        Assert.assertFalse(iterator1.hasNext());
+        Verify.assertThrows(NoSuchElementException.class, (Runnable) iterator1::next);
         Assert.assertEquals(expected, actual);
 
-        Iterator<String> iterator1 = keySet.iterator();
+        Iterator<String> iterator2 = keySet.iterator();
         for (int i = 4; i > 0; i--)
         {
-            Assert.assertTrue(iterator1.hasNext());
-            iterator1.next();
-            iterator1.remove();
-            Verify.assertThrows(IllegalStateException.class, iterator1::remove);
+            Assert.assertTrue(iterator2.hasNext());
+            iterator2.next();
+            iterator2.remove();
+            Verify.assertThrows(IllegalStateException.class, iterator2::remove);
             Verify.assertSize(i - 1, keySet);
-            Verify.assertSize(i - 1, map);
+            Verify.assertSize(i - 1, map1);
         }
 
-        Assert.assertFalse(iterator1.hasNext());
-        Verify.assertEmpty(map);
+        Assert.assertFalse(iterator2.hasNext());
+        Verify.assertEmpty(map1);
         Verify.assertEmpty(keySet);
+
+        ObjectBooleanHashMap<String> map3 = new ObjectBooleanHashMap<>();
+        for (int each = 2; each < 100; each++)
+        {
+            map3.put(String.valueOf(each), each % 2 == 0);
+        }
+        MutableBooleanIterator iterator3 = map3.booleanIterator();
+        while (iterator3.hasNext())
+        {
+            iterator3.next();
+            iterator3.remove();
+        }
+        Assert.assertTrue(map3.isEmpty());
     }
 
     @Test

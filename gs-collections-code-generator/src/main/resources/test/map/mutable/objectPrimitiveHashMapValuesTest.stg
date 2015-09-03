@@ -26,6 +26,7 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.iterator.Mutable<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutable<name>CollectionTestCase;
@@ -78,16 +79,29 @@ public class Object<name>HashMapValuesTest extends AbstractMutable<name>Collecti
     {
         Mutable<name>Collection bag = this.newWith(<["0", "1", "2", "3"]:(literal.(type))(); separator=", ">);
         <name>ArrayList list = <name>ArrayList.newListWith(<["0", "1", "2", "3"]:(literal.(type))(); separator=", ">);
-        <name>Iterator iterator = bag.<type>Iterator();
+        <name>Iterator iterator1 = bag.<type>Iterator();
         for (int i = 0; i \< 4; i++)
         {
-            Assert.assertTrue(iterator.hasNext());
-            Assert.assertTrue(list.remove(iterator.next()));
+            Assert.assertTrue(iterator1.hasNext());
+            Assert.assertTrue(list.remove(iterator1.next()));
         }
         Verify.assertEmpty(list);
-        Assert.assertFalse(iterator.hasNext());
+        Assert.assertFalse(iterator1.hasNext());
 
-        Verify.assertThrows(NoSuchElementException.class, iterator::next);
+        Verify.assertThrows(NoSuchElementException.class, iterator1::next);
+
+        Object<name>HashMap\<String> map2 = new Object<name>HashMap\<>();
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            map2.put(String.valueOf(each), each);
+        }
+        Mutable<name>Iterator iterator2 = map2.<type>Iterator();
+        while (iterator2.hasNext())
+        {
+            iterator2.next();
+            iterator2.remove();
+        }
+        Assert.assertTrue(map2.isEmpty());
     }
 
     @Override
