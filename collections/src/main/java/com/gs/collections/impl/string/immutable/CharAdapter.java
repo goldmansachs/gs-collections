@@ -162,7 +162,7 @@ public class CharAdapter extends AbstractCharIterable implements ImmutableCharLi
 
     public ImmutableCharList subList(int fromIndex, int toIndex)
     {
-        throw new UnsupportedOperationException("SubList is not implemented on CharStringAdapter");
+        throw new UnsupportedOperationException("SubList is not implemented on CharAdapter");
     }
 
     public char get(int index)
@@ -177,12 +177,12 @@ public class CharAdapter extends AbstractCharIterable implements ImmutableCharLi
 
     public long dotProduct(CharList list)
     {
-        throw new UnsupportedOperationException("DotProduct is not implemented on CharStringAdapter");
+        throw new UnsupportedOperationException("DotProduct is not implemented on CharAdapter");
     }
 
     public int binarySearch(char value)
     {
-        throw new UnsupportedOperationException("BinarySearch is not implemented on CharStringAdapter");
+        throw new UnsupportedOperationException("BinarySearch is not implemented on CharAdapter");
     }
 
     public int lastIndexOf(char value)
