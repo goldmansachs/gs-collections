@@ -10,16 +10,44 @@ class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
 >>
 
+collectPrimitive(fromName, fromType, toName, toType) ::= <<
+
+/**
+ * @since 7.0
+ */
+public Lazy<toName>Iterable collect<toName>(<fromName>To<toName>Function function)
+{
+    return new Collect<fromName>To<toName>Iterable(this, function);
+}
+>>
+
 body(type, name) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.<name>Iterable;
-import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.LazyBooleanIterable;
+import com.gs.collections.api.LazyByteIterable;
+import com.gs.collections.api.LazyCharIterable;
+import com.gs.collections.api.LazyDoubleIterable;
+import com.gs.collections.api.LazyFloatIterable;
+import com.gs.collections.api.LazyIntIterable;
+import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.LazyLongIterable;
+import com.gs.collections.api.LazyShortIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToBooleanFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToByteFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToCharFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToFloatFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToIntFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToLongFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToShortFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
@@ -42,6 +70,11 @@ import java.util.NoSuchElementException;
  */
 public abstract class AbstractLazy<name>Iterable implements Lazy<name>Iterable
 {
+    public void forEach(<name>Procedure procedure)
+    {
+        this.each(procedure);
+    }
+
     public int size()
     {
         return this.count(<name>Predicates.alwaysTrue());
@@ -130,6 +163,22 @@ public abstract class AbstractLazy<name>Iterable implements Lazy<name>Iterable
     {
         return Lazy<name>Iterate.collect(this, function);
     }
+
+    <collectPrimitive(name, type, "Boolean", "boolean")>
+
+    <collectPrimitive(name, type, "Byte", "byte")>
+
+    <collectPrimitive(name, type, "Char", "char")>
+
+    <collectPrimitive(name, type, "Short", "short")>
+
+    <collectPrimitive(name, type, "Int", "int")>
+
+    <collectPrimitive(name, type, "Float", "float")>
+
+    <collectPrimitive(name, type, "Long", "long")>
+
+    <collectPrimitive(name, type, "Double", "double")>
 
     public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
     {

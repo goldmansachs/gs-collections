@@ -1024,11 +1024,6 @@ public class <name1><name2>HashMap extends AbstractMutable<name2>ValuesMap imple
             return new Unmodifiable<name1>Iterator(new KeySetIterator());
         }
 
-        public void forEach(<name1>Procedure procedure)
-        {
-            this.each(procedure);
-        }
-
         /**
          * @since 7.0.
          */

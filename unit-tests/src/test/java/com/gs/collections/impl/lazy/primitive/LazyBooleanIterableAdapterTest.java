@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,14 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
+import com.gs.collections.impl.factory.primitive.BooleanLists;
+import com.gs.collections.impl.factory.primitive.ByteLists;
+import com.gs.collections.impl.factory.primitive.CharLists;
+import com.gs.collections.impl.factory.primitive.DoubleLists;
+import com.gs.collections.impl.factory.primitive.FloatLists;
+import com.gs.collections.impl.factory.primitive.IntLists;
+import com.gs.collections.impl.factory.primitive.LongLists;
+import com.gs.collections.impl.factory.primitive.ShortLists;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 import com.gs.collections.impl.test.Verify;
@@ -119,6 +127,19 @@ public class LazyBooleanIterableAdapterTest
         RichIterable<String> collect = this.iterable.collect(String::valueOf);
         Verify.assertIterableSize(3, collect);
         Assert.assertEquals("truefalsetrue", collect.makeString(""));
+    }
+
+    @Test
+    public void lazyCollectPrimitives()
+    {
+        Assert.assertEquals(BooleanLists.immutable.of(false, true, false), this.iterable.collectBoolean(e -> !e).toList());
+        Assert.assertEquals(CharLists.immutable.of((char) 1, (char) 0, (char) 1), this.iterable.asLazy().collectChar(e -> e ? (char) 1 : (char) 0).toList());
+        Assert.assertEquals(ByteLists.immutable.of((byte) 1, (byte) 0, (byte) 1), this.iterable.asLazy().collectByte(e -> e ? (byte) 1 : (byte) 0).toList());
+        Assert.assertEquals(ShortLists.immutable.of((short) 1, (short) 0, (short) 1), this.iterable.asLazy().collectShort(e -> e ? (short) 1 : (short) 0).toList());
+        Assert.assertEquals(IntLists.immutable.of(1, 0, 1), this.iterable.asLazy().collectInt(e -> e ? 1 : 0).toList());
+        Assert.assertEquals(FloatLists.immutable.of(1.0f, 0.0f, 1.0f), this.iterable.asLazy().collectFloat(e -> e ? 1.0f : 0.0f).toList());
+        Assert.assertEquals(LongLists.immutable.of(1L, 0L, 1L), this.iterable.asLazy().collectLong(e -> e ? 1L : 0L).toList());
+        Assert.assertEquals(DoubleLists.immutable.of(1.0, 0.0, 1.0), this.iterable.asLazy().collectDouble(e -> e ? 1.0 : 0.0).toList());
     }
 
     @Test

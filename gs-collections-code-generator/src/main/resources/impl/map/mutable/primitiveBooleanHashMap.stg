@@ -69,6 +69,7 @@ import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.factory.primitive.<name>BooleanMaps;
 import com.gs.collections.impl.iterator.Unmodifiable<name>Iterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.primitive.AbstractLazy<name>Iterable;
 import com.gs.collections.impl.lazy.primitive.Collect<name>ToObjectIterable;
 import com.gs.collections.impl.lazy.primitive.Select<name>Iterable;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -1159,7 +1160,7 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         }
     }
 
-    private class KeysView implements Lazy<name>Iterable
+    private class KeysView extends AbstractLazy<name>Iterable
     {
         public boolean isEmpty()
         {
@@ -1209,50 +1210,12 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             return new Unmodifiable<name>Iterator(new KeySetIterator());
         }
 
-        public void forEach(<name>Procedure procedure)
-        {
-            this.each(procedure);
-        }
-
         /**
          * @since 7.0.
          */
         public void each(<name>Procedure procedure)
         {
             <name>BooleanHashMap.this.forEachKey(procedure);
-        }
-
-        @Override
-        public String toString()
-        {
-            return this.makeString("[", ", ", "]");
-        }
-
-        public String makeString()
-        {
-            return this.makeString(", ");
-        }
-
-        public String makeString(String separator)
-        {
-            return this.makeString("", separator, "");
-        }
-
-        public String makeString(String start, String separator, String end)
-        {
-            Appendable stringBuilder = new StringBuilder();
-            this.appendString(stringBuilder, start, separator, end);
-            return stringBuilder.toString();
-        }
-
-        public void appendString(Appendable appendable)
-        {
-            this.appendString(appendable, ", ");
-        }
-
-        public void appendString(Appendable appendable, String separator)
-        {
-            this.appendString(appendable, "", separator, "");
         }
 
         public void appendString(Appendable appendable, String start, String separator, String end)
@@ -1373,16 +1336,6 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             return !this.anySatisfy(predicate);
         }
 
-        public Lazy<name>Iterable select(<name>Predicate predicate)
-        {
-            return new Select<name>Iterable(this, predicate);
-        }
-
-        public Lazy<name>Iterable reject(<name>Predicate predicate)
-        {
-            return new Select<name>Iterable(this, <name>Predicates.not(predicate));
-        }
-
         public <type> detectIfNone(<name>Predicate predicate, <type> value)
         {
             if (<name>BooleanHashMap.this.sentinelValues != null)
@@ -1404,11 +1357,6 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
                 }
             }
             return value;
-        }
-
-        public \<V> LazyIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
-        {
-            return new Collect<name>ToObjectIterable\<V>(this, function);
         }
 
         public <wideType.(type)> sum()
@@ -1475,50 +1423,6 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             return min;
         }
 
-        public <type> minIfEmpty(<type> defaultValue)
-        {
-            if (this.isEmpty())
-            {
-                return defaultValue;
-            }
-            return this.min();
-        }
-
-        public <type> maxIfEmpty(<type> defaultValue)
-        {
-            if (this.isEmpty())
-            {
-                return defaultValue;
-            }
-            return this.max();
-        }
-
-        public double average()
-        {
-            if (this.isEmpty())
-            {
-                throw new ArithmeticException();
-            }
-            return <castSum.(type)>this.sum() / (double) this.size();
-        }
-
-        public double median()
-        {
-            if (this.isEmpty())
-            {
-                throw new ArithmeticException();
-            }
-            <type>[] sortedArray = this.toSortedArray();
-            int middleIndex = sortedArray.length >\> 1;
-            if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-            {
-                <type> first = sortedArray[middleIndex];
-                <type> second = sortedArray[middleIndex - 1];
-                return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
-            }
-            return <castDouble.(type)>sortedArray[middleIndex];
-        }
-
         public <type>[] toSortedArray()
         {
             <type>[] array = this.toArray();
@@ -1572,11 +1476,6 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
             return <name>ArrayList.newList(this);
         }
 
-        public Mutable<name>List toSortedList()
-        {
-            return <name>ArrayList.newList(this).sortThis();
-        }
-
         public Mutable<name>Set toSet()
         {
             return <name>HashSet.newSet(this);
@@ -1585,11 +1484,6 @@ public class <name>BooleanHashMap extends AbstractMutableBooleanValuesMap implem
         public Mutable<name>Bag toBag()
         {
             return <name>HashBag.newBag(this);
-        }
-
-        public Lazy<name>Iterable asLazy()
-        {
-            return this;
         }
     }
 

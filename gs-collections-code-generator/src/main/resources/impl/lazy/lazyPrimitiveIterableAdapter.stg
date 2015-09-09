@@ -45,11 +45,6 @@ public class Lazy<name>IterableAdapter
         return this.delegate.<type>Iterator();
     }
 
-    public void forEach(<name>Procedure procedure)
-    {
-        this.each(procedure);
-    }
-
     /**
      * @since 7.0.
      */

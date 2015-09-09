@@ -9,12 +9,29 @@ class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
 >>
 
+collectPrimitive(fromName, fromType, toName, toType) ::= <<
+
+/**
+ * @since 7.0
+ */
+Lazy<toName>Iterable collect<toName>(<fromName>To<toName>Function function);
+>>
+
+
 body(type, name) ::= <<
 <copyright()>
 
 package com.gs.collections.api;
 
+import com.gs.collections.api.block.function.primitive.<name>ToBooleanFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToByteFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToCharFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToFloatFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToIntFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToLongFunction;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToShortFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 
 /**
@@ -27,6 +44,22 @@ public interface Lazy<name>Iterable extends <name>Iterable
     Lazy<name>Iterable reject(<name>Predicate predicate);
 
     \<V> LazyIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
+
+    <collectPrimitive(name, type, "Boolean", "boolean")>
+
+    <collectPrimitive(name, type, "Byte", "byte")>
+
+    <collectPrimitive(name, type, "Char", "char")>
+
+    <collectPrimitive(name, type, "Short", "short")>
+
+    <collectPrimitive(name, type, "Int", "int")>
+
+    <collectPrimitive(name, type, "Float", "float")>
+
+    <collectPrimitive(name, type, "Long", "long")>
+
+    <collectPrimitive(name, type, "Double", "double")>
 }
 
 >>

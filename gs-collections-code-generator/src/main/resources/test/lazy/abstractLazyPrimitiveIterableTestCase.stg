@@ -27,6 +27,14 @@ import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.factory.primitive.BooleanLists;
+import com.gs.collections.impl.factory.primitive.ByteLists;
+import com.gs.collections.impl.factory.primitive.CharLists;
+import com.gs.collections.impl.factory.primitive.DoubleLists;
+import com.gs.collections.impl.factory.primitive.FloatLists;
+import com.gs.collections.impl.factory.primitive.IntLists;
+import com.gs.collections.impl.factory.primitive.LongLists;
+import com.gs.collections.impl.factory.primitive.ShortLists;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.test.Verify;
@@ -180,6 +188,19 @@ public abstract class AbstractLazy<name>IterableTestCase
     public void collect()
     {
         Verify.assertIterableSize(3, this.classUnderTest().collect(String::valueOf));
+    }
+
+    @Test
+    public void lazyCollectPrimitives()
+    {
+        Assert.assertEquals(BooleanLists.immutable.of(false, true, false), this.classUnderTest().collectBoolean(e -> e % 2 == 0).toList());
+        Assert.assertEquals(CharLists.immutable.of((char) 2, (char) 3, (char) 4), this.classUnderTest().asLazy().collectChar(e -> (char) (e + 1)).toList());
+        Assert.assertEquals(ByteLists.immutable.of((byte) 2, (byte) 3, (byte) 4), this.classUnderTest().asLazy().collectByte(e -> (byte) (e + 1)).toList());
+        Assert.assertEquals(ShortLists.immutable.of((short) 2, (short) 3, (short) 4), this.classUnderTest().asLazy().collectShort(e -> (short) (e + 1)).toList());
+        Assert.assertEquals(IntLists.immutable.of(2, 3, 4), this.classUnderTest().asLazy().collectInt(e -> (int) (e + 1)).toList());
+        Assert.assertEquals(FloatLists.immutable.of(2.0f, 3.0f, 4.0f), this.classUnderTest().asLazy().collectFloat(e -> (float) (e + 1)).toList());
+        Assert.assertEquals(LongLists.immutable.of(2L, 3L, 4L), this.classUnderTest().asLazy().collectLong(e -> (long) (e + 1)).toList());
+        Assert.assertEquals(DoubleLists.immutable.of(2.0, 3.0, 4.0), this.classUnderTest().asLazy().collectDouble(e -> (double) (e + 1)).toList());
     }
 
     @Test
