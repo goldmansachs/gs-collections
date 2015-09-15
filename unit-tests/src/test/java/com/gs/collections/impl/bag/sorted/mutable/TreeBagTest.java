@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import org.junit.Test;
  *
  * @since 4.2
  */
-public class TreeBagTest extends AbstractSortedBagTestCase
+public class TreeBagTest extends AbstractMutableSortedBagTestCase
 {
     @Override
     protected <T> MutableSortedBag<T> newWith(T... littleElements)

@@ -14,21 +14,25 @@
  * limitations under the License.
  */
 
-package com.gs.collections.test.bag.mutable.sorted;
+package com.gs.collections.test.bag.immutable.sorted;
 
+import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
-import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.factory.SortedBags;
+import com.gs.collections.test.IterableTestCase;
 import com.gs.junit.runners.Java8Runner;
 import org.junit.runner.RunWith;
 
 @RunWith(Java8Runner.class)
-public class TreeBagTest implements MutableSortedBagTestCase
+public class ImmutableSortedBagImplTest implements ImmutableSortedBagTestCase
 {
     @SafeVarargs
     @Override
-    public final <T> MutableSortedBag<T> newWith(T... elements)
+    public final <T> ImmutableSortedBag<T> newWith(T... elements)
     {
-        return TreeBag.newBagWith(Comparators.reverseNaturalOrder(), elements);
+        MutableSortedBag<T> result = SortedBags.mutable.with(Comparators.reverseNaturalOrder());
+        IterableTestCase.addAllTo(elements, result);
+        return result.toImmutable();
     }
 }

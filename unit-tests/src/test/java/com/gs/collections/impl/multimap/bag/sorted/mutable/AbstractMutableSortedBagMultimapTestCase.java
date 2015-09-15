@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.multimap.bag.sorted;
+package com.gs.collections.impl.multimap.bag.sorted.mutable;
 
 import java.util.Comparator;
 
@@ -23,6 +23,7 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.BagMultimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.api.multimap.sortedbag.ImmutableSortedBagMultimap;
 import com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap;
 import com.gs.collections.api.multimap.sortedbag.SortedBagMultimap;
 import com.gs.collections.api.tuple.Pair;
@@ -42,10 +43,7 @@ import org.junit.Test;
 
 /**
  * Test of {@link TreeBagMultimap}.
- *
- * @deprecated in 7.0
  */
-@Deprecated
 public abstract class AbstractMutableSortedBagMultimapTestCase extends AbstractMutableMultimapTestCase
 {
     protected abstract <K, V> MutableSortedBagMultimap<K, V> newMultimap(Comparator<V> comparator);
@@ -89,6 +87,15 @@ public abstract class AbstractMutableSortedBagMultimapTestCase extends AbstractM
         BagMultimap<Integer, String> flipped = multimap.flip();
         Assert.assertEquals(Bags.immutable.with("Less than 3", "Less than 3"), flipped.get(2));
         Assert.assertEquals(Bags.immutable.with("Less than 2", "Less than 3"), flipped.get(1));
+    }
+
+    @Override
+    @Test
+    public void toImmutable()
+    {
+        Verify.assertInstanceOf(MutableSortedBagMultimap.class, this.newMultimap());
+        Verify.assertInstanceOf(ImmutableSortedBagMultimap.class, this.newMultimap().toImmutable());
+        Assert.assertFalse(this.newMultimap().toImmutable() instanceof MutableSortedBagMultimap);
     }
 
     @Override
@@ -177,7 +184,7 @@ public abstract class AbstractMutableSortedBagMultimapTestCase extends AbstractM
         expectedMultimap.putAll(3, FastList.newListWith(4, 3, 1, 1));
         Assert.assertEquals(expectedMultimap, selectedMultimap);
         Verify.assertSortedBagsEqual(expectedMultimap.get(3), selectedMultimap.get(3));
-        Assert.assertEquals(expectedMultimap.comparator(), selectedMultimap.comparator());
+        Assert.assertSame(expectedMultimap.comparator(), selectedMultimap.comparator());
     }
 
     @Override

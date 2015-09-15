@@ -223,6 +223,7 @@
             <Class name="com.gs.collections.impl.multimap.set.ImmutableSetMultimapImpl" />
             <Class name="com.gs.collections.impl.multimap.bag.ImmutableBagMultimapImpl" />
             <Class name="com.gs.collections.impl.multimap.set.sorted.ImmutableSortedSetMultimapImpl" />
+            <Class name="com.gs.collections.impl.multimap.bag.sorted.immutable.ImmutableSortedBagMultimapImpl" />
             <Class name="com.gs.collections.impl.bimap.immutable.ImmutableHashBiMap" />
             <Class name="com.gs.collections.impl.bimap.immutable.AbstractImmutableBiMap$Inverse" />
             <Class name="com.gs.collections.impl.bag.mutable.SynchronizedBag" />

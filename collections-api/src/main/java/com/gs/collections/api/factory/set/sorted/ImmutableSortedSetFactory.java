@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,11 @@ public interface ImmutableSortedSetFactory
      * @since 6.0
      */
     <T> ImmutableSortedSet<T> empty();
+
+    /**
+     * @since 7.0
+     */
+    <T> ImmutableSortedSet<T> empty(Comparator<? super T> comparator);
 
     /**
      * Same as {@link #empty()}.

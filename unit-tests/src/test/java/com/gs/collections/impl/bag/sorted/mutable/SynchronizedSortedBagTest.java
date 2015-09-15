@@ -28,7 +28,7 @@ import org.junit.Test;
 /**
  * JUnit test for {@link SynchronizedSortedBag}.
  */
-public class SynchronizedSortedBagTest extends AbstractSortedBagTestCase
+public class SynchronizedSortedBagTest extends AbstractMutableSortedBagTestCase
 {
     @Override
     protected <T> MutableSortedBag<T> newWith(T... littleElements)

@@ -33,7 +33,7 @@ import org.junit.Test;
  *
  * @since 4.2
  */
-public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
+public class UnmodifiableSortedBagTest extends AbstractMutableSortedBagTestCase
 {
     @Override
     protected <T> MutableSortedBag<T> newWith(T... elements)

@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.multimap.bag.sorted;
+package com.gs.collections.impl.multimap.bag.sorted.mutable;
 
 import java.util.Collections;
 import java.util.Comparator;
 
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
+import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
+import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Test of {@link TreeBagMultimap}.
- *
- * @deprecated in 7.0
  */
-@Deprecated
 public class TreeBagMultimapTest extends AbstractMutableSortedBagMultimapTestCase
 {
     @Override
@@ -174,5 +174,30 @@ public class TreeBagMultimapTest extends AbstractMutableSortedBagMultimapTestCas
         Verify.assertMapsEqual(expected.toMap(), actual.toMap());
         Verify.assertSortedBagsEqual(expected.get(1), actual.get(1));
         Verify.assertSortedBagsEqual(expected.get(2), actual.get(2));
+    }
+
+    @Override
+    @Test
+    public void serialization()
+    {
+        TreeBagMultimap<Integer, Integer> map = TreeBagMultimap.newMultimap(Comparators.<Integer>reverseNaturalOrder());
+        map.putAll(1, FastList.newListWith(1, 2, 3, 4));
+        map.putAll(2, FastList.newListWith(2, 3, 4, 5));
+        Verify.assertPostSerializedEqualsAndHashCode(map);
+
+        TreeBagMultimap<Integer, Integer> deserialized = SerializeTestHelper.serializeDeserialize(map);
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4),
+                deserialized.get(1));
+
+        deserialized.putAll(3, FastList.newListWith(8, 9, 10));
+        Verify.assertListsEqual(FastList.newListWith(10, 9, 8), deserialized.get(3).toList());
+    }
+
+    @Override
+    public void testClear()
+    {
+        MutableMultimap<Integer, String> multimap = this.newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three");
+        multimap.clear();
+        Verify.assertEmpty(multimap);
     }
 }

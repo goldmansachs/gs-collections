@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,12 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Comparator;
 
+import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
@@ -36,11 +38,12 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
+import com.gs.collections.impl.multimap.bag.sorted.immutable.ImmutableSortedBagMultimapImpl;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.utility.Iterate;
 
 /**
- * @deprecated in 5.0. Use {@link com.gs.collections.impl.multimap.bag.sorted.TreeBagMultimap} instead.
+ * @deprecated in 5.0. Use {@link com.gs.collections.impl.multimap.bag.sorted.mutable.TreeBagMultimap} instead.
  */
 @Deprecated
 public final class TreeBagMultimap<K, V>
@@ -128,7 +131,16 @@ public final class TreeBagMultimap<K, V>
 
     public ImmutableSortedBagMultimap<K, V> toImmutable()
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toImmutable() not implemented yet");
+        final MutableMap<K, ImmutableSortedBag<V>> map = UnifiedMap.newMap();
+
+        this.map.forEachKeyValue(new Procedure2<K, MutableSortedBag<V>>()
+        {
+            public void value(K key, MutableSortedBag<V> bag)
+            {
+                map.put(key, bag.toImmutable());
+            }
+        });
+        return new ImmutableSortedBagMultimapImpl<K, V>(map, this.comparator());
     }
 
     @Override

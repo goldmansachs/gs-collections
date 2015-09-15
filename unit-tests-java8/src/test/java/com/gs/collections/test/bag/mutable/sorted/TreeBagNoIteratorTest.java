@@ -24,7 +24,6 @@ import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.junit.runners.Java8Runner;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(Java8Runner.class)
@@ -47,13 +46,6 @@ public class TreeBagNoIteratorTest implements MutableSortedBagTestCase, OrderedI
     public void RichIterable_iterator_iterationOrder()
     {
         OrderedIterableNoIteratorTest.super.RichIterable_iterator_iterationOrder();
-    }
-
-    @Override
-    @Test(expected = UnsupportedOperationException.class)
-    public void MutableCollection_toImmutable()
-    {
-        MutableSortedBagTestCase.super.MutableCollection_toImmutable();
     }
 
     public static class TreeBagNoIterator<T> extends TreeBag<T>

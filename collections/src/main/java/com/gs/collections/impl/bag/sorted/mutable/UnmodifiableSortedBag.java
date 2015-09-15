@@ -105,7 +105,7 @@ public class UnmodifiableSortedBag<T>
     @Override
     public ImmutableSortedBag<T> toImmutable()
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toImmutable() not implemented yet");
+        return this.getSortedBag().toImmutable();
     }
 
     @Override

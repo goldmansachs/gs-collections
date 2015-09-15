@@ -115,7 +115,7 @@ public abstract class AbstractMutableSortedSetMultimapTestCase extends AbstractM
         expectedMultimap.putAll("Two", FastList.newListWith(4, 2));
         Assert.assertEquals(expectedMultimap, selectedMultimap);
         Verify.assertSortedSetsEqual(expectedMultimap.get("Two"), selectedMultimap.get("Two"));
-        Assert.assertEquals(expectedMultimap.comparator(), selectedMultimap.comparator());
+        Assert.assertSame(expectedMultimap.comparator(), selectedMultimap.comparator());
     }
 
     @Override
@@ -147,7 +147,7 @@ public abstract class AbstractMutableSortedSetMultimapTestCase extends AbstractM
         expectedMultimap.putAll(2, FastList.newListWith(5, 4, 3, 2, 2));
         Assert.assertEquals(expectedMultimap, selectedMultimap);
         Verify.assertSortedSetsEqual(expectedMultimap.get(2), selectedMultimap.get(2));
-        Assert.assertEquals(expectedMultimap.comparator(), selectedMultimap.comparator());
+        Assert.assertSame(expectedMultimap.comparator(), selectedMultimap.comparator());
     }
 
     @Override
@@ -164,7 +164,7 @@ public abstract class AbstractMutableSortedSetMultimapTestCase extends AbstractM
         expectedMultimap.putAll(3, FastList.newListWith(4, 3, 1, 1));
         Assert.assertEquals(expectedMultimap, selectedMultimap);
         Verify.assertSortedSetsEqual(expectedMultimap.get(3), selectedMultimap.get(3));
-        Assert.assertEquals(expectedMultimap.comparator(), selectedMultimap.comparator());
+        Assert.assertSame(expectedMultimap.comparator(), selectedMultimap.comparator());
     }
 
     @Override

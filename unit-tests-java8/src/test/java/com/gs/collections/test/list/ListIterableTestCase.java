@@ -18,7 +18,6 @@ package com.gs.collections.test.list;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
@@ -29,6 +28,7 @@ import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.test.OrderedIterableWithDuplicatesTestCase;
 import org.junit.Test;
 
+import static com.gs.collections.impl.test.Verify.assertThrows;
 import static com.gs.collections.test.IterableTestCase.assertEquals;
 
 public interface ListIterableTestCase extends OrderedIterableWithDuplicatesTestCase, TransformsToListTrait
@@ -85,6 +85,55 @@ public interface ListIterableTestCase extends OrderedIterableWithDuplicatesTestC
         assertEquals(-1, integers.lastIndexOf(null));
         ListIterable<Integer> integers2 = this.newWith(1, 2, 2, null, 3, 3, 3, null, 4, 4, 4, 4);
         assertEquals(7, integers2.lastIndexOf(null));
+    }
+
+    @Test
+    default void OrderedIterable_forEach_from_to()
+    {
+        ListIterable<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
+
+        MutableList<Integer> result = Lists.mutable.empty();
+        integers.forEach(5, 7, result::add);
+        assertEquals(Lists.immutable.with(3, 3, 2), result);
+
+        MutableList<Integer> result2 = Lists.mutable.empty();
+        integers.forEach(0, 9, result2::add);
+        assertEquals(Lists.immutable.with(4, 4, 4, 4, 3, 3, 3, 2, 2, 1), result2);
+
+        ListIterable<Integer> integers2 = this.newWith(4, 4, 4, 4, 3, 3, 3);
+        MutableList<Integer> result3 = Lists.mutable.empty();
+        integers2.forEach(5, 6, result3::add);
+        assertEquals(Lists.immutable.with(3, 3), result3);
+
+        MutableList<Integer> result4 = Lists.mutable.empty();
+        integers2.forEach(3, 3, result4::add);
+        assertEquals(Lists.immutable.with(4), result4);
+
+        MutableList<Integer> result5 = Lists.mutable.empty();
+        integers2.forEach(4, 4, result5::add);
+        assertEquals(Lists.immutable.with(3), result5);
+
+        MutableList<Integer> result6 = Lists.mutable.empty();
+        integers2.forEach(5, 5, result6::add);
+        assertEquals(Lists.immutable.with(3), result6);
+
+        MutableList<Integer> result7 = Lists.mutable.empty();
+        integers2.forEach(6, 6, result7::add);
+        assertEquals(Lists.immutable.with(3), result7);
+
+        assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(-1, 0, result::add));
+        assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(0, -1, result::add));
+        assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(0, 10, result::add));
+        assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(10, 0, result::add));
+    }
+
+    @Test
+    default void OrderedIterable_forEach_from_to_reverse_order()
+    {
+        ListIterable<Integer> integers = this.newWith(4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
+        MutableList<Integer> result = Lists.mutable.empty();
+        integers.forEach(7, 5, result::add);
+        assertEquals(Lists.immutable.with(2, 3, 3), result);
     }
 
     @Test

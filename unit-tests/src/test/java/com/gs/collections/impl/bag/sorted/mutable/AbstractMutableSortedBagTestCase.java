@@ -23,6 +23,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -52,6 +53,7 @@ import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.SortedBags;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.AddToList;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -81,7 +83,7 @@ import org.junit.Test;
  *
  * @since 4.2
  */
-public abstract class AbstractSortedBagTestCase extends MutableBagTestCase
+public abstract class AbstractMutableSortedBagTestCase extends MutableBagTestCase
 {
     @Override
     protected abstract <T> MutableSortedBag<T> newWith(T... littleElements);
@@ -100,11 +102,11 @@ public abstract class AbstractSortedBagTestCase extends MutableBagTestCase
     protected abstract <T> MutableSortedBag<T> newWith(Comparator<? super T> comparator, T... elements);
 
     @Override
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void toImmutable()
     {
-        //not yet supported
-        this.newWith().toImmutable();
+        Verify.assertInstanceOf(ImmutableSortedBag.class, this.newWith(2, 2, 3).toImmutable());
+        Assert.assertEquals(SortedBags.immutable.with(2, 2, 3), this.newWith(2, 2, 3).toImmutable());
     }
 
     @Test(expected = ClassCastException.class)
@@ -675,7 +677,7 @@ public abstract class AbstractSortedBagTestCase extends MutableBagTestCase
         Assert.assertFalse(revIterator.hasNext());
 
         MutableSortedBag<Integer> sortedBag = this.newWith(Collections.reverseOrder(), 1, 1, 1, 1, 2);
-        MutableList<Integer> validate = Lists.mutable.of();
+        MutableList<Integer> validate = Lists.mutable.empty();
         for (Integer each : sortedBag)
         {
             validate.add(each);
@@ -790,7 +792,7 @@ public abstract class AbstractSortedBagTestCase extends MutableBagTestCase
         integers.forEachWithIndex(0, 9, (each, index) -> builder3.append(each).append(index));
         Assert.assertEquals("40414243343536272819", builder3.toString());
 
-        MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> result = Lists.mutable.empty();
         Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(-1, 0, new AddToList(result)));
         Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(0, -1, new AddToList(result)));
         Verify.assertThrows(IllegalArgumentException.class, () -> integers.forEachWithIndex(7, 5, new AddToList(result)));
@@ -1812,6 +1814,22 @@ public abstract class AbstractSortedBagTestCase extends MutableBagTestCase
         super.max_null_safe();
     }
 
+    @Test
+    public void detectIndex()
+    {
+        MutableSortedBag<Integer> integers1 = this.newWith(1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+        Assert.assertEquals(2, integers1.detectIndex(integer -> integer % 2 == 0));
+        Assert.assertEquals(5, integers1.detectIndex(integer -> integer % 3 == 0));
+        Assert.assertEquals(0, integers1.detectIndex(integer -> integer % 2 != 0));
+        Assert.assertEquals(-1, integers1.detectIndex(integer -> integer % 5 == 0));
+
+        MutableSortedBag<Integer> integers2 = this.newWith(Comparators.reverseNaturalOrder(), 4, 4, 4, 4, 3, 3, 3, 2, 2, 1, 1);
+        Assert.assertEquals(0, integers2.detectIndex(integer -> integer % 2 == 0));
+        Assert.assertEquals(4, integers2.detectIndex(integer -> integer % 3 == 0));
+        Assert.assertEquals(9, integers2.detectIndex(integer -> integer == 1));
+        Assert.assertEquals(-1, integers2.detectIndex(integer -> integer % 5 == 0));
+    }
+
     // Like Integer, but not Comparable
     public static final class Holder
     {
@@ -1859,21 +1877,5 @@ public abstract class AbstractSortedBagTestCase extends MutableBagTestCase
         {
             return String.valueOf(this.number);
         }
-    }
-
-    @Test
-    public void detectIndex()
-    {
-        MutableSortedBag<Integer> integers1 = this.newWith(1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4);
-        Assert.assertEquals(2, integers1.detectIndex(integer -> integer % 2 == 0));
-        Assert.assertEquals(5, integers1.detectIndex(integer -> integer % 3 == 0));
-        Assert.assertEquals(0, integers1.detectIndex(integer -> integer % 2 != 0));
-        Assert.assertEquals(-1, integers1.detectIndex(integer -> integer % 5 == 0));
-
-        MutableSortedBag<Integer> integers2 = this.newWith(Comparators.reverseNaturalOrder(), 4, 4, 4, 4, 3, 3, 3, 2, 2, 1, 1);
-        Assert.assertEquals(0, integers2.detectIndex(integer -> integer % 2 == 0));
-        Assert.assertEquals(4, integers2.detectIndex(integer -> integer % 3 == 0));
-        Assert.assertEquals(9, integers2.detectIndex(integer -> integer == 1));
-        Assert.assertEquals(-1, integers2.detectIndex(integer -> integer % 5 == 0));
     }
 }

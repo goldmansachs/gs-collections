@@ -71,6 +71,7 @@ import com.gs.collections.impl.bag.mutable.AbstractMutableBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
+import com.gs.collections.impl.factory.SortedBags;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
@@ -81,7 +82,7 @@ import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
-import com.gs.collections.impl.multimap.bag.sorted.TreeBagMultimap;
+import com.gs.collections.impl.multimap.bag.sorted.mutable.TreeBagMultimap;
 import com.gs.collections.impl.partition.bag.sorted.PartitionTreeBag;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
@@ -90,6 +91,7 @@ import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
 import com.gs.collections.impl.utility.OrderedIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
+import com.gs.collections.impl.utility.internal.SortedBagIterables;
 
 /**
  * A TreeBag is a MutableSortedBag which uses a SortedMap as its underlying data store.  Each key in the SortedMap represents some item,
@@ -173,49 +175,6 @@ public class TreeBag<T>
     {
         //noinspection SSBasedInspection
         return TreeBag.newBag(comparator, Arrays.asList(elements));
-    }
-
-    private static <T> int compare(SortedBag<T> bagA, SortedBag<T> bagB)
-    {
-        Iterator<T> itrA = bagA.iterator();
-        Iterator<T> itrB = bagB.iterator();
-        if (bagA.comparator() != null)
-        {
-            Comparator<? super T> comparator = bagA.comparator();
-            while (itrA.hasNext())
-            {
-                if (itrB.hasNext())
-                {
-                    int val = comparator.compare(itrA.next(), itrB.next());
-                    if (val != 0)
-                    {
-                        return val;
-                    }
-                }
-                else
-                {
-                    return 1;
-                }
-            }
-            return itrB.hasNext() ? -1 : 0;
-        }
-
-        while (itrA.hasNext())
-        {
-            if (itrB.hasNext())
-            {
-                int val = ((Comparable<T>) itrA.next()).compareTo(itrB.next());
-                if (val != 0)
-                {
-                    return val;
-                }
-            }
-            else
-            {
-                return 1;
-            }
-        }
-        return itrB.hasNext() ? -1 : 0;
     }
 
     @Override
@@ -365,7 +324,7 @@ public class TreeBag<T>
 
     public int compareTo(SortedBag<T> otherBag)
     {
-        return TreeBag.compare(this, otherBag);
+        return SortedBagIterables.compare(this, otherBag);
     }
 
     public void writeExternal(final ObjectOutput out) throws IOException
@@ -647,7 +606,7 @@ public class TreeBag<T>
 
     public ImmutableSortedBag<T> toImmutable()
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toImmutable() not implemented yet");
+        return SortedBags.immutable.ofSortedBag(this);
     }
 
     public <P, V> MutableList<V> collectWith(
