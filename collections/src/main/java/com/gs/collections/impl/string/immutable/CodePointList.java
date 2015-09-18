@@ -205,7 +205,7 @@ public class CodePointList extends AbstractIntIterable implements ImmutableIntLi
 
     public ImmutableIntList subList(int fromIndex, int toIndex)
     {
-        throw new UnsupportedOperationException("SubList is not implemented on CodePointStringAdapter");
+        throw new UnsupportedOperationException("SubList is not implemented on CodePointList");
     }
 
     public int get(int index)
@@ -215,12 +215,12 @@ public class CodePointList extends AbstractIntIterable implements ImmutableIntLi
 
     public long dotProduct(IntList list)
     {
-        throw new UnsupportedOperationException("DotProduct is not implemented on CodePointStringAdapter");
+        throw new UnsupportedOperationException("DotProduct is not implemented on CodePointList");
     }
 
     public int binarySearch(int value)
     {
-        throw new UnsupportedOperationException("BinarySearch is not implemented on CodePointStringAdapter");
+        throw new UnsupportedOperationException("BinarySearch is not implemented on CodePointList");
     }
 
     public int lastIndexOf(int value)

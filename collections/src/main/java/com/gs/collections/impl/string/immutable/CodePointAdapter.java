@@ -212,7 +212,7 @@ public class CodePointAdapter extends AbstractIntIterable implements ImmutableIn
 
     public ImmutableIntList subList(int fromIndex, int toIndex)
     {
-        throw new UnsupportedOperationException("SubList is not implemented on CodePointStringAdapter");
+        throw new UnsupportedOperationException("SubList is not implemented on CodePointAdapter");
     }
 
     public int get(int index)
@@ -233,12 +233,12 @@ public class CodePointAdapter extends AbstractIntIterable implements ImmutableIn
 
     public long dotProduct(IntList list)
     {
-        throw new UnsupportedOperationException("DotProduct is not implemented on CodePointStringAdapter");
+        throw new UnsupportedOperationException("DotProduct is not implemented on CodePointAdapter");
     }
 
     public int binarySearch(int value)
     {
-        throw new UnsupportedOperationException("BinarySearch is not implemented on CodePointStringAdapter");
+        throw new UnsupportedOperationException("BinarySearch is not implemented on CodePointAdapter");
     }
 
     public int lastIndexOf(int value)
@@ -614,14 +614,13 @@ public class CodePointAdapter extends AbstractIntIterable implements ImmutableIn
             {
                 return false;
             }
-            for (int i = 0; i < this.adapted.length(); )
+            for (int i = 0; i < size; i++)
             {
-                int codePoint = this.adapted.codePointAt(i);
+                int codePoint = this.get(i);
                 if (codePoint != list.get(i))
                 {
                     return false;
                 }
-                i += Character.charCount(codePoint);
             }
         }
         return true;

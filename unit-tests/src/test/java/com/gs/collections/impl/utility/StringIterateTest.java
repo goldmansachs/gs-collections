@@ -67,8 +67,8 @@ public class StringIterateTest
     @Test
     public void collectCodePointUnicode()
     {
-        Assert.assertEquals("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", StringIterate.collect("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", CodePointFunction.PASS_THRU));
-        Assert.assertEquals("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", StringIterate.collect("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", CodePointFunction.PASS_THRU));
+        Assert.assertEquals("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09", StringIterate.collect("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09", CodePointFunction.PASS_THRU));
+        Assert.assertEquals("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09", StringIterate.collect("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09", CodePointFunction.PASS_THRU));
     }
 
     @Test
@@ -118,8 +118,8 @@ public class StringIterateTest
     @Test
     public void selectCodePointUnicode()
     {
-        String string = StringIterate.select("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", CodePointPredicate.IS_BMP);
-        Assert.assertEquals("あいう", string);
+        String string = StringIterate.select("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09", CodePointPredicate.IS_BMP);
+        Assert.assertEquals("\u3042\u3044\u3046", string);
     }
 
     @Test
@@ -160,8 +160,8 @@ public class StringIterateTest
     @Test
     public void allSatisfyCodePointUnicode()
     {
-        Assert.assertTrue(StringIterate.allSatisfy("あいう", CodePointPredicate.IS_BMP));
-        Assert.assertFalse(StringIterate.allSatisfy("\uD840\uDC00\uD840\uDC03\uD840\uDC06", CodePointPredicate.IS_BMP));
+        Assert.assertTrue(StringIterate.allSatisfy("\u3042\u3044\u3046", CodePointPredicate.IS_BMP));
+        Assert.assertFalse(StringIterate.allSatisfy("\uD840\uDC00\uD840\uDC03\uD83D\uDE09", CodePointPredicate.IS_BMP));
     }
 
     @Test
@@ -181,8 +181,8 @@ public class StringIterateTest
     @Test
     public void anySatisfyCodePointUnicode()
     {
-        Assert.assertTrue(StringIterate.anySatisfy("あいう", CodePointPredicate.IS_BMP));
-        Assert.assertFalse(StringIterate.anySatisfy("\uD840\uDC00\uD840\uDC03\uD840\uDC06", CodePointPredicate.IS_BMP));
+        Assert.assertTrue(StringIterate.anySatisfy("\u3042\u3044\u3046", CodePointPredicate.IS_BMP));
+        Assert.assertFalse(StringIterate.anySatisfy("\uD840\uDC00\uD840\uDC03\uD83D\uDE09", CodePointPredicate.IS_BMP));
     }
 
     @Test
@@ -202,8 +202,8 @@ public class StringIterateTest
     @Test
     public void noneSatisfyCodePointUnicode()
     {
-        Assert.assertFalse(StringIterate.noneSatisfy("あいう", CodePointPredicate.IS_BMP));
-        Assert.assertTrue(StringIterate.noneSatisfy("\uD840\uDC00\uD840\uDC03\uD840\uDC06", CodePointPredicate.IS_BMP));
+        Assert.assertFalse(StringIterate.noneSatisfy("\u3042\u3044\u3046", CodePointPredicate.IS_BMP));
+        Assert.assertTrue(StringIterate.noneSatisfy("\uD840\uDC00\uD840\uDC03\uD83D\uDE09", CodePointPredicate.IS_BMP));
     }
 
     @Test
@@ -378,8 +378,8 @@ public class StringIterateTest
     public void forEachCodePointUnicode()
     {
         StringBuilder builder = new StringBuilder();
-        StringIterate.forEach("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", (CodePointProcedure) builder::appendCodePoint);
-        Assert.assertEquals("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", builder.toString());
+        StringIterate.forEach("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09", (CodePointProcedure) builder::appendCodePoint);
+        Assert.assertEquals("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09", builder.toString());
     }
 
     @Test
@@ -406,8 +406,26 @@ public class StringIterateTest
     public void reverseForEachCodePointUnicode()
     {
         StringBuilder builder = new StringBuilder();
-        StringIterate.reverseForEach("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", (CodePointProcedure) builder::appendCodePoint);
-        Assert.assertEquals("\uD840\uDC06う\uD840\uDC03い\uD840\uDC00あ", builder.toString());
+        StringIterate.reverseForEach("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09", (CodePointProcedure) builder::appendCodePoint);
+        Assert.assertEquals("\uD83D\uDE09\u3046\uD840\uDC03\u3044\uD840\uDC00\u3042", builder.toString());
+        StringIterate.reverseForEach("", (int codePoint) -> Assert.fail());
+    }
+
+    @Test
+    public void reverseForEachCodePointInvalidUnicode()
+    {
+        StringBuilder builder = new StringBuilder();
+        StringIterate.reverseForEach("\u3042\uDC00\uD840\u3044\uDC03\uD840\u3046\uDE09\uD83D", (CodePointProcedure) builder::appendCodePoint);
+        Assert.assertEquals("\uD83D\uDE09\u3046\uD840\uDC03\u3044\uD840\uDC00\u3042", builder.toString());
+
+        StringBuilder builder2 = new StringBuilder();
+        StringIterate.reverseForEach("\u3042\uD840\u3044\uD840\u3046\uD840", (CodePointProcedure) builder2::appendCodePoint);
+        Assert.assertEquals("\uD840\u3046\uD840\u3044\uD840\u3042", builder2.toString());
+
+        StringBuilder builder3 = new StringBuilder();
+        StringIterate.reverseForEach("\u3042\uDC00\u3044\uDC03\u3046\uDC06", (CodePointProcedure) builder3::appendCodePoint);
+        Assert.assertEquals("\uDC06\u3046\uDC03\u3044\uDC00\u3042", builder3.toString());
+
         StringIterate.reverseForEach("", (int codePoint) -> Assert.fail());
     }
 

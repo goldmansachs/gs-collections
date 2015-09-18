@@ -219,55 +219,78 @@ public class CodePointListTest extends AbstractImmutableIntListTestCase
     public void collectCodePointUnicode()
     {
         Assert.assertEquals(
-                "あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06".codePoints().boxed().collect(Collectors.toList()),
-                CodePointList.from("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06").collect(i -> i));
+                "\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09".codePoints().boxed().collect(Collectors.toList()),
+                CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").collect(i -> i));
         Assert.assertEquals(
-                "あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06".codePoints().boxed().collect(Collectors.toList()),
-                CodePointList.from("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06").collect(i -> i));
+                "\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09".codePoints().boxed().collect(Collectors.toList()),
+                CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").collect(i -> i));
     }
 
     @Test
     public void selectCodePointUnicode()
     {
-        String string = CodePointList.from("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06").select(Character::isBmpCodePoint).buildString();
-        Assert.assertEquals("あいう", string);
+        String string = CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").select(Character::isBmpCodePoint).buildString();
+        Assert.assertEquals("\u3042\u3044\u3046", string);
     }
 
     @Test
     public void allSatisfyUnicode()
     {
-        Assert.assertTrue(CodePointList.from("あいう").allSatisfy(Character::isBmpCodePoint));
-        Assert.assertFalse(CodePointList.from("\uD840\uDC00\uD840\uDC03\uD840\uDC06").allSatisfy(Character::isBmpCodePoint));
+        Assert.assertTrue(CodePointList.from("\u3042\u3044\u3046").allSatisfy(Character::isBmpCodePoint));
+        Assert.assertFalse(CodePointList.from("\uD840\uDC00\uD840\uDC03\uD83D\uDE09").allSatisfy(Character::isBmpCodePoint));
     }
 
     @Test
     public void anySatisfyUnicode()
     {
-        Assert.assertTrue(CodePointList.from("あいう").anySatisfy(Character::isBmpCodePoint));
-        Assert.assertFalse(CodePointList.from("\uD840\uDC00\uD840\uDC03\uD840\uDC06").anySatisfy(Character::isBmpCodePoint));
+        Assert.assertTrue(CodePointList.from("\u3042\u3044\u3046").anySatisfy(Character::isBmpCodePoint));
+        Assert.assertFalse(CodePointList.from("\uD840\uDC00\uD840\uDC03\uD83D\uDE09").anySatisfy(Character::isBmpCodePoint));
     }
 
     @Test
     public void noneSatisfyUnicode()
     {
-        Assert.assertFalse(CodePointList.from("あいう").noneSatisfy(Character::isBmpCodePoint));
-        Assert.assertTrue(CodePointList.from("\uD840\uDC00\uD840\uDC03\uD840\uDC06").noneSatisfy(Character::isBmpCodePoint));
+        Assert.assertFalse(CodePointList.from("\u3042\u3044\u3046").noneSatisfy(Character::isBmpCodePoint));
+        Assert.assertTrue(CodePointList.from("\uD840\uDC00\uD840\uDC03\uD83D\uDE09").noneSatisfy(Character::isBmpCodePoint));
     }
 
     @Test
     public void forEachUnicode()
     {
         StringBuilder builder = new StringBuilder();
-        CodePointList.from("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06").forEach(builder::appendCodePoint);
-        Assert.assertEquals("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06", builder.toString());
+        CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").forEach(builder::appendCodePoint);
+        Assert.assertEquals("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09", builder.toString());
     }
 
     @Test
     public void asReversedForEachUnicode()
     {
         StringBuilder builder = new StringBuilder();
-        CodePointList.from("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06").asReversed().forEach(builder::appendCodePoint);
-        Assert.assertEquals("\uD840\uDC06う\uD840\uDC03い\uD840\uDC00あ", builder.toString());
+        CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").asReversed().forEach(builder::appendCodePoint);
+        Assert.assertEquals("\uD83D\uDE09\u3046\uD840\uDC03\u3044\uD840\uDC00\u3042", builder.toString());
+
+        StringBuilder builder2 = new StringBuilder();
+        CodePointList.from("\uD840\uDC00\u3042\uD840\uDC03\u3044\uD83D\uDE09\u3046").asReversed().forEach(builder2::appendCodePoint);
+        Assert.assertEquals("\u3046\uD83D\uDE09\u3044\uD840\uDC03\u3042\uD840\uDC00", builder2.toString());
+
+        CodePointList.from("").asReversed().forEach((int codePoint) -> Assert.fail());
+    }
+
+    @Test
+    public void asReversedForEachInvalidUnicode()
+    {
+        StringBuilder builder = new StringBuilder();
+        CodePointList.from("\u3042\uDC00\uD840\u3044\uDC03\uD840\u3046\uDE09\uD83D").asReversed().forEach(builder::appendCodePoint);
+        Assert.assertEquals("\uD83D\uDE09\u3046\uD840\uDC03\u3044\uD840\uDC00\u3042", builder.toString());
+
+        StringBuilder builder2 = new StringBuilder();
+        CodePointList.from("\u3042\uD840\u3044\uD840\u3046\uD840").asReversed().forEach(builder2::appendCodePoint);
+        Assert.assertEquals("\uD840\u3046\uD840\u3044\uD840\u3042", builder2.toString());
+
+        StringBuilder builder3 = new StringBuilder();
+        CodePointList.from("\u3042\uDC00\u3044\uDC03\u3046\uDC06").asReversed().forEach(builder3::appendCodePoint);
+        Assert.assertEquals("\uDC06\u3046\uDC03\u3044\uDC00\u3042", builder3.toString());
+
         CodePointList.from("").asReversed().forEach((int codePoint) -> Assert.fail());
     }
 
@@ -275,17 +298,76 @@ public class CodePointListTest extends AbstractImmutableIntListTestCase
     public void toReversedForEachUnicode()
     {
         StringBuilder builder = new StringBuilder();
-        CodePointList.from("あ\uD840\uDC00い\uD840\uDC03う\uD840\uDC06").toReversed().forEach(builder::appendCodePoint);
-        Assert.assertEquals("\uD840\uDC06う\uD840\uDC03い\uD840\uDC00あ", builder.toString());
+        CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").toReversed().forEach(builder::appendCodePoint);
+        Assert.assertEquals("\uD83D\uDE09\u3046\uD840\uDC03\u3044\uD840\uDC00\u3042", builder.toString());
+
+        StringBuilder builder2 = new StringBuilder();
+        CodePointList.from("\uD840\uDC00\u3042\uD840\uDC03\u3044\uD83D\uDE09\u3046").toReversed().forEach(builder2::appendCodePoint);
+        Assert.assertEquals("\u3046\uD83D\uDE09\u3044\uD840\uDC03\u3042\uD840\uDC00", builder2.toString());
+
         CodePointList.from("").toReversed().forEach((int codePoint) -> Assert.fail());
+    }
+
+    @Test
+    public void toReversedForEachInvalidUnicode()
+    {
+        StringBuilder builder = new StringBuilder();
+        CodePointList.from("\u3042\uDC00\uD840\u3044\uDC03\uD840\u3046\uDE09\uD83D").toReversed().forEach(builder::appendCodePoint);
+        Assert.assertEquals("\uD83D\uDE09\u3046\uD840\uDC03\u3044\uD840\uDC00\u3042", builder.toString());
+
+        StringBuilder builder2 = new StringBuilder();
+        CodePointList.from("\u3042\uD840\u3044\uD840\u3046\uD840").toReversed().forEach(builder2::appendCodePoint);
+        Assert.assertEquals("\uD840\u3046\uD840\u3044\uD840\u3042", builder2.toString());
+
+        StringBuilder builder3 = new StringBuilder();
+        CodePointList.from("\u3042\uDC00\u3044\uDC03\u3046\uDC06").toReversed().forEach(builder3::appendCodePoint);
+        Assert.assertEquals("\uDC06\u3046\uDC03\u3044\uDC00\u3042", builder3.toString());
+
+        CodePointList.from("").toReversed().forEach((int codePoint) -> Assert.fail());
+    }
+
+    @Test
+    public void newWithUnicode()
+    {
+        CodePointList codePointList = CodePointList.from("");
+        CodePointList collection = codePointList.newWith(12354);
+        CodePointList collection0 = codePointList.newWith(12354).newWith(131072);
+        CodePointList collection1 = codePointList.newWith(12354).newWith(131072).newWith(12356);
+        CodePointList collection2 = codePointList.newWith(12354).newWith(131072).newWith(12356).newWith(131075);
+        CodePointList collection3 = codePointList.newWith(12354).newWith(131072).newWith(12356).newWith(131075).newWith(12358);
+        this.assertSizeAndContains(codePointList);
+        this.assertSizeAndContains(collection, 12354);
+        this.assertSizeAndContains(collection0, 12354, 131072);
+        this.assertSizeAndContains(collection1, 12354, 131072, 12356);
+        this.assertSizeAndContains(collection2, 12354, 131072, 12356, 131075);
+        this.assertSizeAndContains(collection3, 12354, 131072, 12356, 131075, 12358);
+    }
+
+    @Test
+    public void newWithoutUnicode()
+    {
+        CodePointList collection0 = CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046");
+        CodePointList collection1 = collection0.newWithout(12358);
+        CodePointList collection2 = collection1.newWithout(131075);
+        CodePointList collection3 = collection2.newWithout(12356);
+        CodePointList collection4 = collection3.newWithout(131072);
+        CodePointList collection5 = collection4.newWithout(12354);
+        CodePointList collection6 = collection5.newWithout(131078);
+
+        this.assertSizeAndContains(collection6);
+        this.assertSizeAndContains(collection5);
+        this.assertSizeAndContains(collection4, 12354);
+        this.assertSizeAndContains(collection3, 12354, 131072);
+        this.assertSizeAndContains(collection2, 12354, 131072, 12356);
+        this.assertSizeAndContains(collection1, 12354, 131072, 12356, 131075);
     }
 
     @Test
     public void distinctUnicode()
     {
         Assert.assertEquals(
-                "\uD840\uDC00\uD840\uDC03\uD840\uDC06",
-                CodePointList.from("\uD840\uDC00\uD840\uDC03\uD840\uDC06\uD840\uDC00\uD840\uDC03\uD840\uDC06").distinct().buildString());
+                "\uD840\uDC00\uD840\uDC03\uD83D\uDE09",
+                CodePointList.from("\uD840\uDC00\uD840\uDC03\uD83D\uDE09\uD840\uDC00\uD840\uDC03\uD83D\uDE09").distinct().buildString());
     }
 
     @Override
