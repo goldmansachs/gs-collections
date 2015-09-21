@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,13 @@ public interface InternalIterable<T>
     /**
      * The procedure is executed for each element in the iterable.
      * <p>
-     * <pre>e.g.
+     * Example using a Java 8 lambda:
+     * <pre>
+     * people.forEach(Procedures.cast(person -> LOGGER.info(person.getName())));
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
      * people.forEach(new Procedure<Person>()
      * {
      *     public void value(Person person)
@@ -51,8 +57,15 @@ public interface InternalIterable<T>
 
     /**
      * Iterates over the iterable passing each element and the current relative int index to the specified instance of
-     * ObjectIntProcedure
-     * <pre>e.g.
+     * ObjectIntProcedure.
+     * <p>
+     * Example using a Java 8 lambda:
+     * <pre>
+     * people.forEachWithIndex((Person person, int index) -> LOGGER.info("Index: " + index + " person: " + person.getName()));
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
      * people.forEachWithIndex(new ObjectIntProcedure<Person>()
      * {
      *     public void value(Person person, int index)
@@ -71,7 +84,19 @@ public interface InternalIterable<T>
      * The procedure2 is evaluated for each element in the iterable with the specified parameter provided
      * as the second argument.
      * <p>
-     * <pre>e.g.
+     * Example using a Java 8 lambda:
+     * <pre>
+     * people.forEachWith((Person person, Person other) ->
+     *     {
+     *         if (person.isRelatedTo(other))
+     *         {
+     *              LOGGER.info(person.getName());
+     *         }
+     *     }, fred);
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
      * people.forEachWith(new Procedure2<Person, Person>()
      * {
      *     public void value(Person person, Person other)

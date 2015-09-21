@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -158,16 +158,25 @@ public interface
     /**
      * Executes the Procedure for each element in the iterable and returns {@code this}.
      * <p>
-     * <pre>e.g.
-     * return people.<b>tap</b>(new Procedure<Person>()
-     * {
-     *     public void value(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * RichIterable&lt;Person&gt; tapped =
+     *     people.<b>tap</b>(person -> LOGGER.info(person.getName()));
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * RichIterable&lt;Person&gt; tapped =
+     *     people.<b>tap</b>(new Procedure<Person>()
      *     {
-     *         LOGGER.info(person.getName());
-     *     }
-     * });
+     *         public void value(Person person)
+     *         {
+     *             LOGGER.info(person.getName());
+     *         }
+     *     });
      * </pre>
      *
+     * @see #each(Procedure)
      * @see #forEach(Procedure)
      * @since 6.0
      */
@@ -176,7 +185,13 @@ public interface
     /**
      * The procedure is executed for each element in the iterable.
      * <p>
-     * <pre>e.g.
+     * Example using a Java 8 lambda:
+     * <pre>
+     * people.each(person -> LOGGER.info(person.getName()));
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
      * people.each(new Procedure<Person>()
      * {
      *     public void value(Person person)
@@ -199,15 +214,22 @@ public interface
      * Returns all elements of the source collection that return true when evaluating the predicate.  This method is also
      * commonly called filter.
      * <p>
-     * <pre>e.g.
-     * return people.<b>select</b>(new Predicate&lt;Person&gt;()
-     * {
-     *     public boolean accept(Person person)
-     *     {
-     *         return person.getAddress().getCity().equals("Metuchen");
-     *     }
-     * });
+     * Example using a Java 8 lambda:
+     * <pre>
+     * RichIterable&lt;Person&gt; selected =
+     *     people.<b>select</b>(person -> person.getAddress().getCity().equals("London"));
      * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * RichIterable&lt;Person&gt; selected =
+     *     people.<b>select</b>(new Predicate&lt;Person&gt;()
+     *     {
+     *         public boolean accept(Person person)
+     *         {
+     *             return person.getAddress().getCity().equals("London");
+     *         }
+     *     });
      *
      * @since 1.0
      */
@@ -216,19 +238,24 @@ public interface
     /**
      * Same as the select method with one parameter but uses the specified target collection for the results.
      * <p>
-     * <pre>e.g.
-     * return people.select(new Predicate&lt;Person&gt;()
-     * {
-     *     public boolean accept(Person person)
-     *     {
-     *         return person.person.getLastName().equals("Smith");
-     *     }
-     * }, Lists.mutable.of());
+     * Example using a Java 8 lambda:
+     * <pre>
+     * MutableList&lt;Person&gt; selected =
+     *     people.select(person -> person.person.getLastName().equals("Smith"), Lists.mutable.empty());
      * </pre>
      * <p>
-     * <pre>e.g.
-     * return collection.select(Predicates.attributeEqual("lastName", "Smith"), new ArrayList());
+     * Example using an anonymous inner class:
+     * <pre>
+     * MutableList&lt;Person&gt; selected =
+     *     people.select(new Predicate&lt;Person&gt;()
+     *     {
+     *         public boolean accept(Person person)
+     *         {
+     *             return person.person.getLastName().equals("Smith");
+     *         }
+     *     }, Lists.mutable.empty());
      * </pre>
+     * <p>
      *
      * @param predicate a {@link Predicate} to use as the select criteria
      * @param target    the Collection to append to for all elements in this {@code RichIterable} that meet select criteria {@code predicate}
@@ -240,6 +267,26 @@ public interface
 
     /**
      * Similar to {@link #select(Predicate)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
+     * <p>
+     * E.g. return a {@link Collection} of Person elements where the person has an age <b>greater than or equal to</b> 18 years
+     * <p>
+     * Example using a Java 8 lambda:
+     * <pre>
+     * RichIterable&lt;Person&gt; selected =
+     *     people.selectWith((Person person, Integer age) -> person.getAge() >= age, Integer.valueOf(18));
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * RichIterable&lt;Person&gt; rejected =
+     *     people.selectWith(new Predicate2&lt;Person, Integer&gt;()
+     *     {
+     *         public boolean accept(Person person, Integer age)
+     *         {
+     *             return person.getAge() >= age;
+     *         }
+     *     }, Integer.valueOf(18));
+     * </pre>
      *
      * @param predicate a {@link Predicate2} to use as the select criteria
      * @param parameter a parameter to pass in for evaluation of the second argument {@code P} in {@code predicate}
@@ -250,6 +297,26 @@ public interface
 
     /**
      * Similar to {@link #select(Predicate, Collection)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
+     * <p>
+     * E.g. return a {@link Collection} of Person elements where the person has an age <b>greater than or equal to</b> 18 years
+     * <p>
+     * Example using a Java 8 lambda:
+     * <pre>
+     * MutableList&lt;Person&gt; selected =
+     *     people.selectWith((Person person, Integer age) -> person.getAge() >= age, Integer.valueOf(18), Lists.mutable.empty());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * MutableList&lt;Person&gt; rejected =
+     *     people.selectWith(new Predicate2&lt;Person, Integer&gt;()
+     *     {
+     *         public boolean accept(Person person, Integer age)
+     *         {
+     *             return person.getAge() >= age;
+     *         }
+     *     }, Integer.valueOf(18), Lists.mutable.empty());
+     * </pre>
      *
      * @param predicate        a {@link Predicate2} to use as the select criteria
      * @param parameter        a parameter to pass in for evaluation of the second argument {@code P} in {@code predicate}
@@ -268,18 +335,22 @@ public interface
      * Returns all elements of the source collection that return false when evaluating of the predicate.  This method is also
      * sometimes called filterNot and is the equivalent of calling iterable.select(Predicates.not(predicate)).
      * <p>
-     * <pre>e.g.
-     * return people.reject(new Predicate&lt;Person&gt;()
-     * {
-     *     public boolean accept(Person person)
-     *     {
-     *         return person.person.getLastName().equals("Smith");
-     *     }
-     * });
+     * Example using a Java 8 lambda:
+     * <pre>
+     * RichIterable&lt;Person&gt; rejected =
+     *     people.reject(person -> person.person.getLastName().equals("Smith"));
      * </pre>
      * <p>
-     * <pre>e.g.
-     * return people.reject(Predicates.attributeEqual("lastName", "Smith"));
+     * Example using an anonymous inner class:
+     * <pre>
+     * RichIterable&lt;Person&gt; rejected =
+     *     people.reject(new Predicate&lt;Person&gt;()
+     *     {
+     *         public boolean accept(Person person)
+     *         {
+     *             return person.person.getLastName().equals("Smith");
+     *         }
+     *     });
      * </pre>
      *
      * @param predicate a {@link Predicate} to use as the reject criteria
@@ -290,6 +361,26 @@ public interface
 
     /**
      * Similar to {@link #reject(Predicate)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
+     * <p>
+     * E.g. return a {@link Collection} of Person elements where the person has an age <b>greater than or equal to</b> 18 years
+     * <p>
+     * Example using a Java 8 lambda:
+     * <pre>
+     * RichIterable&lt;Person&gt; rejected =
+     *     people.rejectWith((Person person, Integer age) -> person.getAge() < age, Integer.valueOf(18));
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * MutableList&lt;Person&gt; rejected =
+     *     people.rejectWith(new Predicate2&lt;Person, Integer&gt;()
+     *     {
+     *         public boolean accept(Person person, Integer age)
+     *         {
+     *             return person.getAge() < age;
+     *         }
+     *     }, Integer.valueOf(18));
+     * </pre>
      *
      * @param predicate a {@link Predicate2} to use as the select criteria
      * @param parameter a parameter to pass in for evaluation of the second argument {@code P} in {@code predicate}
@@ -301,14 +392,22 @@ public interface
     /**
      * Same as the reject method with one parameter but uses the specified target collection for the results.
      * <p>
-     * <pre>e.g.
-     * return people.reject(new Predicate&lt;Person&gt;()
-     * {
-     *     public boolean accept(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * MutableList&lt;Person&gt; rejected =
+     *     people.reject(person -> person.person.getLastName().equals("Smith"), Lists.mutable.empty());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * MutableList&lt;Person&gt; rejected =
+     *     people.reject(new Predicate&lt;Person&gt;()
      *     {
-     *         return person.person.getLastName().equals("Smith");
-     *     }
-     * }, Lists.mutable.of());
+     *         public boolean accept(Person person)
+     *         {
+     *             return person.person.getLastName().equals("Smith");
+     *         }
+     *     }, Lists.mutable.empty());
      * </pre>
      *
      * @param predicate a {@link Predicate} to use as the reject criteria
@@ -321,15 +420,24 @@ public interface
     /**
      * Similar to {@link #reject(Predicate, Collection)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
      * <p>
-     * E.g. return a {@link Collection} of Person elements where the person has a height <b>greater than</b> 100cm
+     * E.g. return a {@link Collection} of Person elements where the person has an age <b>greater than or equal to</b> 18 years
+     * <p>
+     * Example using a Java 8 lambda:
      * <pre>
-     * return people.reject(new Predicate2&lt;Person, Integer&gt;()
-     * {
-     *     public boolean accept(Person p, Integer i)
+     * MutableList&lt;Person&gt; rejected =
+     *     people.rejectWith((Person person, Integer age) -> person.getAge() < age, Integer.valueOf(18), Lists.mutable.empty());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * MutableList&lt;Person&gt; rejected =
+     *     people.rejectWith(new Predicate2&lt;Person, Integer&gt;()
      *     {
-     *         return p.getHeightInCm() < i.intValue();
-     *     }
-     * }, Integer.valueOf(100), FastList.<Person>newList());
+     *         public boolean accept(Person person, Integer age)
+     *         {
+     *             return person.getAge() < age;
+     *         }
+     *     }, Integer.valueOf(18), Lists.mutable.empty());
      * </pre>
      *
      * @param predicate        a {@link Predicate2} to use as the reject criteria
@@ -348,14 +456,22 @@ public interface
     /**
      * Filters a collection into a PartitionedIterable based on the evaluation of the predicate.
      * <p>
-     * <pre>e.g.
-     * return people.<b>partition</b>(new Predicate&lt;Person&gt;()
-     * {
-     *     public boolean accept(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * PartitionIterable&lt;Person>&gt newYorkersAndNonNewYorkers =
+     *     people.<b>partition</b>(person -> person.getAddress().getState().getName().equals("New York"));
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * PartitionIterable&lt;Person>&gt newYorkersAndNonNewYorkers =
+     *     people.<b>partition</b>(new Predicate&lt;Person&gt;()
      *     {
-     *         return person.getAddress().getState().getName().equals("New York");
-     *     }
-     * });
+     *         public boolean accept(Person person)
+     *         {
+     *             return person.getAddress().getState().getName().equals("New York");
+     *         }
+     *     });
      * </pre>
      *
      * @since 1.0.
@@ -365,14 +481,22 @@ public interface
     /**
      * Filters a collection into a PartitionIterable based on the evaluation of the predicate.
      * <p>
-     * <pre>e.g.
-     * return people.<b>partitionWith</b>(new Predicate2&lt;Person, String&gt;()
-     * {
-     *     public boolean accept(Person person, String state)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * PartitionIterable&lt;Person>&gt newYorkersAndNonNewYorkers =
+     *     people.<b>partitionWith</b>((Person person, String state) -> person.getAddress().getState().getName().equals(state), "New York");
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * PartitionIterable&lt;Person>&gt newYorkersAndNonNewYorkers =
+     *     people.<b>partitionWith</b>(new Predicate2&lt;Person, String&gt;()
      *     {
-     *         return person.getAddress().getState().getName().equals(state);
-     *     }
-     * }, "New York");
+     *         public boolean accept(Person person, String state)
+     *         {
+     *             return person.getAddress().getState().getName().equals(state);
+     *         }
+     *     }, "New York");
      * </pre>
      *
      * @since 5.0.
@@ -390,14 +514,22 @@ public interface
      * Returns a new collection with the results of applying the specified function on each element of the source
      * collection.  This method is also commonly called transform or map.
      * <p>
-     * <pre>e.g.
-     * return people.collect(new Function&lt;Person, String&gt;()
-     * {
-     *     public String valueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * RichIterable&lt;String&gt; names =
+     *     people.collect(person -> person.getFirstName() + " " + person.getLastName());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * RichIterable&lt;String&gt; names =
+     *     people.collect(new Function&lt;Person, String&gt;()
      *     {
-     *         return person.getFirstName() + " " + person.getLastName();
-     *     }
-     * });
+     *         public String valueOf(Person person)
+     *         {
+     *             return person.getFirstName() + " " + person.getLastName();
+     *         }
+     *     });
      * </pre>
      *
      * @since 1.0
@@ -405,17 +537,55 @@ public interface
     <V> RichIterable<V> collect(Function<? super T, ? extends V> function);
 
     /**
+     * Same as {@link #collect(Function)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p>
+     * Example using a Java 8 lambda:
+     * <pre>
+     * MutableList&lt;String&gt; names =
+     *     people.collect(person -> person.getFirstName() + " " + person.getLastName(), Lists.mutable.empty());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * MutableList&lt;String&gt; names =
+     *     people.collect(new Function&lt;Person, String&gt;()
+     *     {
+     *         public String valueOf(Person person)
+     *         {
+     *             return person.getFirstName() + " " + person.getLastName();
+     *         }
+     *     }, Lists.mutable.empty());
+     * </pre>
+     *
+     * @param function a {@link Function} to use as the collect transformation function
+     * @param target   the Collection to append to for all elements in this {@code RichIterable} that meet select criteria {@code function}
+     * @return {@code target}, which contains appended elements as a result of the collect transformation
+     * @see #collect(Function)
+     * @since 1.0
+     */
+    <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target);
+
+    /**
      * Returns a new primitive {@code boolean} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * <pre>e.g.
-     * return people.collectBoolean(new BooleanFunction&lt;Person&gt;()
-     * {
-     *     public boolean booleanValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * BooleanIterable licenses =
+     *     people.collectBoolean(person -> person.hasDrivingLicense());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * BooleanIterable licenses =
+     *     people.collectBoolean(new BooleanFunction&lt;Person&gt;()
      *     {
-     *         return person.hasDrivingLicense();
-     *     }
-     * });
+     *         public boolean booleanValueOf(Person person)
+     *         {
+     *             return person.hasDrivingLicense();
+     *         }
+     *     });
      * </pre>
      *
      * @since 4.0
@@ -426,14 +596,22 @@ public interface
      * Same as {@link #collectBoolean(BooleanFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * <pre>e.g.
-     * return people.collectBoolean(new BooleanFunction&lt;Person&gt;()
-     * {
-     *     public boolean booleanValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * BooleanArrayList licenses =
+     *     people.collectBoolean(person -> person.hasDrivingLicense(), new BooleanArrayList());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * BooleanArrayList licenses =
+     *     people.collectBoolean(new BooleanFunction&lt;Person&gt;()
      *     {
-     *         return person.hasDrivingLicense();
-     *     }
-     * }, new BooleanArrayList());
+     *         public boolean booleanValueOf(Person person)
+     *         {
+     *             return person.hasDrivingLicense();
+     *         }
+     *     }, new BooleanArrayList());
      * </pre>
      *
      * @param booleanFunction a {@link BooleanFunction} to use as the collect transformation function
@@ -447,14 +625,22 @@ public interface
      * Returns a new primitive {@code byte} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * <pre>e.g.
-     * return people.collectByte(new ByteFunction&lt;Person&gt;()
-     * {
-     *     public byte byteValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * ByteIterable bytes =
+     *     people.collectByte(person -> person.getCode());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * ByteIterable bytes =
+     *     people.collectByte(new ByteFunction&lt;Person&gt;()
      *     {
-     *         return person.getCode();
-     *     }
-     * });
+     *         public byte byteValueOf(Person person)
+     *         {
+     *             return person.getCode();
+     *         }
+     *     });
      * </pre>
      *
      * @since 4.0
@@ -465,14 +651,22 @@ public interface
      * Same as {@link #collectByte(ByteFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * <pre>e.g.
-     * return people.collectByte(new ByteFunction&lt;Person&gt;()
-     * {
-     *     public byte byteValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * ByteArrayList bytes =
+     *     people.collectByte(person -> person.getCode(), new ByteArrayList());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * ByteArrayList bytes =
+     *     people.collectByte(new ByteFunction&lt;Person&gt;()
      *     {
-     *         return person.getCode();
-     *     }
-     * }, new ByteArrayList());
+     *         public byte byteValueOf(Person person)
+     *         {
+     *             return person.getCode();
+     *         }
+     *     }, new ByteArrayList());
      * </pre>
      *
      * @param byteFunction a {@link ByteFunction} to use as the collect transformation function
@@ -486,14 +680,22 @@ public interface
      * Returns a new primitive {@code char} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * <pre>e.g.
-     * return people.collectChar(new CharFunction&lt;Person&gt;()
-     * {
-     *     public char charValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * CharIterable chars =
+     *     people.collectChar(person -> person.getMiddleInitial());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * CharIterable chars =
+     *     people.collectChar(new CharFunction&lt;Person&gt;()
      *     {
-     *         return person.getMiddleInitial();
-     *     }
-     * });
+     *         public char charValueOf(Person person)
+     *         {
+     *             return person.getMiddleInitial();
+     *         }
+     *     });
      * </pre>
      *
      * @since 4.0
@@ -504,14 +706,22 @@ public interface
      * Same as {@link #collectChar(CharFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * <pre>e.g.
-     * return people.collectChar(new CharFunction&lt;Person&gt;()
-     * {
-     *     public char charValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * CharArrayList chars =
+     *     people.collectChar(person -> person.getMiddleInitial(), new CharArrayList());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * CharArrayList chars =
+     *     people.collectChar(new CharFunction&lt;Person&gt;()
      *     {
-     *         return person.getMiddleInitial();
-     *     }
-     * }, new CharArrayList());
+     *         public char charValueOf(Person person)
+     *         {
+     *             return person.getMiddleInitial();
+     *         }
+     *     }, new CharArrayList());
      * </pre>
      *
      * @param charFunction a {@link CharFunction} to use as the collect transformation function
@@ -525,14 +735,22 @@ public interface
      * Returns a new primitive {@code double} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * <pre>e.g.
-     * return people.collectDouble(new DoubleFunction&lt;Person&gt;()
-     * {
-     *     public double doubleValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * DoubleIterable doubles =
+     *     people.collectDouble(person -> person.getMilesFromNorthPole());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * DoubleIterable doubles =
+     *     people.collectDouble(new DoubleFunction&lt;Person&gt;()
      *     {
-     *         return person.getMilesFromNorthPole();
-     *     }
-     * });
+     *         public double doubleValueOf(Person person)
+     *         {
+     *             return person.getMilesFromNorthPole();
+     *         }
+     *     });
      * </pre>
      *
      * @since 4.0
@@ -543,14 +761,22 @@ public interface
      * Same as {@link #collectDouble(DoubleFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * <pre>e.g.
-     * return people.collectDouble(new DoubleFunction&lt;Person&gt;()
-     * {
-     *     public double doubleValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * DoubleArrayList doubles =
+     *     people.collectDouble(person -> person.getMilesFromNorthPole(), new DoubleArrayList());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * DoubleArrayList doubles =
+     *     people.collectDouble(new DoubleFunction&lt;Person&gt;()
      *     {
-     *         return person.getMilesFromNorthPole();
-     *     }
-     * }, new DoubleArrayList());
+     *         public double doubleValueOf(Person person)
+     *         {
+     *             return person.getMilesFromNorthPole();
+     *         }
+     *     }, new DoubleArrayList());
      * </pre>
      *
      * @param doubleFunction a {@link DoubleFunction} to use as the collect transformation function
@@ -564,14 +790,22 @@ public interface
      * Returns a new primitive {@code float} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * <pre>e.g.
-     * return people.collectFloat(new FloatFunction&lt;Person&gt;()
-     * {
-     *     public float floatValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * FloatIterable floats =
+     *     people.collectFloat(person -> person.getHeightInInches());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * FloatIterable floats =
+     *     people.collectFloat(new FloatFunction&lt;Person&gt;()
      *     {
-     *         return person.getHeightInInches();
-     *     }
-     * });
+     *         public float floatValueOf(Person person)
+     *         {
+     *             return person.getHeightInInches();
+     *         }
+     *     });
      * </pre>
      *
      * @since 4.0
@@ -582,14 +816,22 @@ public interface
      * Same as {@link #collectFloat(FloatFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * <pre>e.g.
-     * return people.collectFloat(new FloatFunction&lt;Person&gt;()
-     * {
-     *     public float floatValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * FloatArrayList floats =
+     *     people.collectFloat(person -> person.getHeightInInches(), new FloatArrayList());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * FloatArrayList floats =
+     *     people.collectFloat(new FloatFunction&lt;Person&gt;()
      *     {
-     *         return person.getHeightInInches();
-     *     }
-     * }, new FloatArrayList());
+     *         public float floatValueOf(Person person)
+     *         {
+     *             return person.getHeightInInches();
+     *         }
+     *     }, new FloatArrayList());
      * </pre>
      *
      * @param floatFunction a {@link FloatFunction} to use as the collect transformation function
@@ -603,14 +845,22 @@ public interface
      * Returns a new primitive {@code int} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * <pre>e.g.
-     * return people.collectInt(new IntFunction&lt;Person&gt;()
-     * {
-     *     public int intValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * IntIterable ints =
+     *     people.collectInt(person -> person.getAge());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * IntIterable ints =
+     *     people.collectInt(new IntFunction&lt;Person&gt;()
      *     {
-     *         return person.getAge();
-     *     }
-     * });
+     *         public int intValueOf(Person person)
+     *         {
+     *             return person.getAge();
+     *         }
+     *     });
      * </pre>
      *
      * @since 4.0
@@ -621,14 +871,22 @@ public interface
      * Same as {@link #collectInt(IntFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * <pre>e.g.
-     * return people.collectInt(new IntFunction&lt;Person&gt;()
-     * {
-     *     public int intValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * IntArrayList ints =
+     *     people.collectInt(person -> person.getAge(), new IntArrayList());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * IntArrayList ints =
+     *     people.collectInt(new IntFunction&lt;Person&gt;()
      *     {
-     *         return person.getAge();
-     *     }
-     * }, new IntArrayList());
+     *         public int intValueOf(Person person)
+     *         {
+     *             return person.getAge();
+     *         }
+     *     }, new IntArrayList());
      * </pre>
      *
      * @param intFunction a {@link IntFunction} to use as the collect transformation function
@@ -642,14 +900,22 @@ public interface
      * Returns a new primitive {@code long} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * <pre>e.g.
-     * return people.collectLong(new LongFunction&lt;Person&gt;()
-     * {
-     *     public long longValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * LongIterable longs =
+     *     people.collectLong(person -> person.getGuid());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * LongIterable longs =
+     *     people.collectLong(new LongFunction&lt;Person&gt;()
      *     {
-     *         return person.getGuid();
-     *     }
-     * });
+     *         public long longValueOf(Person person)
+     *         {
+     *             return person.getGuid();
+     *         }
+     *     });
      * </pre>
      *
      * @since 4.0
@@ -660,14 +926,22 @@ public interface
      * Same as {@link #collectLong(LongFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * <pre>e.g.
-     * return people.collectLong(new LongFunction&lt;Person&gt;()
-     * {
-     *     public long longValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * LongArrayList longs =
+     *     people.collectLong(person -> person.getGuid(), new LongArrayList());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * LongArrayList longs =
+     *     people.collectLong(new LongFunction&lt;Person&gt;()
      *     {
-     *         return person.getGuid();
-     *     }
-     * }, new LongArrayList());
+     *         public long longValueOf(Person person)
+     *         {
+     *             return person.getGuid();
+     *         }
+     *     }, new LongArrayList());
      * </pre>
      *
      * @param longFunction a {@link LongFunction} to use as the collect transformation function
@@ -681,14 +955,22 @@ public interface
      * Returns a new primitive {@code short} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * <pre>e.g.
-     * return people.collectShort(new ShortFunction&lt;Person&gt;()
-     * {
-     *     public short shortValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * ShortIterable shorts =
+     *     people.collectShort(person -> person.getNumberOfJunkMailItemsReceivedPerMonth());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * ShortIterable shorts =
+     *     people.collectShort(new ShortFunction&lt;Person&gt;()
      *     {
-     *         return person.getNumberOfJunkMailItemsReceivedPerMonth();
-     *     }
-     * });
+     *         public short shortValueOf(Person person)
+     *         {
+     *             return person.getNumberOfJunkMailItemsReceivedPerMonth();
+     *         }
+     *     });
      * </pre>
      *
      * @since 4.0
@@ -699,14 +981,22 @@ public interface
      * Same as {@link #collectShort(ShortFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * <pre>e.g.
-     * return people.collectShort(new ShortFunction&lt;Person&gt;()
-     * {
-     *     public short shortValueOf(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * ShortArrayList shorts =
+     *     people.collectShort(person -> person.getNumberOfJunkMailItemsReceivedPerMonth, new ShortArrayList());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * ShortArrayList shorts =
+     *     people.collectShort(new ShortFunction&lt;Person&gt;()
      *     {
-     *         return person.getNumberOfJunkMailItemsReceivedPerMonth;
-     *     }
-     * }, new ShortArrayList());
+     *         public short shortValueOf(Person person)
+     *         {
+     *             return person.getNumberOfJunkMailItemsReceivedPerMonth;
+     *         }
+     *     }, new ShortArrayList());
      * </pre>
      *
      * @param shortFunction a {@link ShortFunction} to use as the collect transformation function
@@ -717,40 +1007,26 @@ public interface
     <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target);
 
     /**
-     * Same as {@link #collect(Function)}, except that the results are gathered into the specified {@code target}
-     * collection.
+     * Same as {@link #collect(Function)} with a {@code Function2} and specified parameter which is passed to the block.
      * <p>
-     * <pre>e.g.
-     * return people.collect(new Function&lt;Person, String&gt;()
-     * {
-     *     public String valueOf(Person person)
-     *     {
-     *         return person.getFirstName() + " " + person.getLastName();
-     *     }
-     * }, Lists.mutable.of());
+     * Example using a Java 8 lambda:
+     * <pre>
+     * RichIterable&lt;Integer&gt; integers =
+     *     Lists.mutable.with(1, 2, 3).collectWith((each, parameter) -> each + parameter, Integer.valueOf(1));
      * </pre>
-     *
-     * @param function a {@link Function} to use as the collect transformation function
-     * @param target   the Collection to append to for all elements in this {@code RichIterable} that meet select criteria {@code function}
-     * @return {@code target}, which contains appended elements as a result of the collect transformation
-     * @see #collect(Function)
-     * @since 1.0
-     */
-    <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target);
-
-    /**
-     * Same as collect with a {@code Function2} and specified parameter which is passed to the block
      * <p>
-     * <pre>e.g.
-     * Function2<Integer, Integer, Integer> addParameterFunction =
-     * new Function2<Integer, Integer, Integer>()
-     * {
-     *      public Integer value(final Integer each, final Integer parameter)
-     *      {
-     *          return each + parameter;
-     *      }
-     * };
-     * FastList.newListWith(1, 2, 3).collectWith(addParameterFunction, Integer.valueOf(1));
+     * Example using an anonymous inner class:
+     * <pre>
+     * Function2&lt;Integer, Integer, Integer&gt; addParameterFunction =
+     *     new Function2&lt;Integer, Integer, Integer&gt;()
+     *     {
+     *         public Integer value(Integer each, Integer parameter)
+     *         {
+     *             return each + parameter;
+     *         }
+     *     };
+     * RichIterable&lt;Integer&gt; integers =
+     *     Lists.mutable.with(1, 2, 3).collectWith(addParameterFunction, Integer.valueOf(1));
      * </pre>
      *
      * @param function  A {@link Function2} to use as the collect transformation function
@@ -759,23 +1035,29 @@ public interface
      * @see #collect(Function)
      * @since 5.0
      */
-    <P, V> RichIterable<V> collectWith(
-            Function2<? super T, ? super P, ? extends V> function,
-            P parameter);
+    <P, V> RichIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     /**
      * Same as collectWith but with a targetCollection parameter to gather the results.
      * <p>
-     * <pre>e.g.
+     * Example using a Java 8 lambda:
+     * <pre>
+     * MutableSet&lt;Integer&gt; integers =
+     *     Lists.mutable.with(1, 2, 3).collectWith((each, parameter) -> each + parameter, Integer.valueOf(1), Sets.mutable.empty());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
      * Function2<Integer, Integer, Integer> addParameterFunction =
-     * new Function2<Integer, Integer, Integer>()
-     * {
-     *      public Integer value(final Integer each, final Integer parameter)
-     *      {
-     *          return each + parameter;
-     *      }
-     * };
-     * FastList.newListWith(1, 2, 3).collectWith(addParameterFunction, Integer.valueOf(1), UnifiedSet.newSet());
+     *     new Function2<Integer, Integer, Integer>()
+     *     {
+     *         public Integer value(final Integer each, final Integer parameter)
+     *         {
+     *             return each + parameter;
+     *         }
+     *     };
+     * MutableSet&lt;Integer&gt; integers =
+     *     Lists.mutable.with(1, 2, 3).collectWith(addParameterFunction, Integer.valueOf(1), Sets.mutable.empty());
      * </pre>
      *
      * @param function         a {@link Function2} to use as the collect transformation function
@@ -794,8 +1076,14 @@ public interface
      * collection, but only for those elements which return true upon evaluation of the predicate.  This is the
      * the optimized equivalent of calling iterable.select(predicate).collect(function).
      * <p>
-     * <pre>e.g.
-     * Lists.mutable.of().with(1, 2, 3).collectIf(Predicates.notNull(), Functions.getToString())
+     * Example using a Java 8 lambda and method reference:
+     * <pre>
+     * RicIterable&lt;String&gt; strings = Lists.mutable.with(1, 2, 3).collectIf(e -> e != null, Object::toString);
+     * </pre>
+     * <p>
+     * Example using Predicates factory:
+     * <pre>
+     * RicIterable&lt;String&gt; strings = Lists.mutable.with(1, 2, 3).collectIf(Predicates.notNull(), Functions.getToString());
      * </pre>
      *
      * @since 1.0
@@ -824,13 +1112,7 @@ public interface
      * <p>
      * Consider the following example where we have a {@code Person} class, and each {@code Person} has a list of {@code Address} objects.  Take the following {@link Function}:
      * <pre>
-     * Function&lt;Person, List&lt;Address&gt;&gt; addressFunction = new Function&lt;Person, List&lt;Address&gt;&gt;()
-     * {
-     *     public List&lt;Address&gt; valueOf(Person person)
-     *     {
-     *         return person.getAddresses();
-     *     }
-     * };
+     * Function&lt;Person, List&lt;Address&gt;&gt; addressFunction = Person::getAddresses;
      * MutableList&lt;Person&gt; people = ...;
      * </pre>
      * Using {@code collect} returns a collection of collections of addresses.
@@ -862,14 +1144,22 @@ public interface
      * Returns the first element of the iterable for which the predicate evaluates to true or null in the case where no
      * element returns true.  This method is commonly called find.
      * <p>
-     * <pre>e.g.
-     * return people.detect(new Predicate&lt;Person&gt;()
-     * {
-     *     public boolean value(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * Person person =
+     *     people.detect(person -> person.getFirstName().equals("John") && person.getLastName().equals("Smith"));
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * Person person =
+     *     people.detect(new Predicate&lt;Person&gt;()
      *     {
-     *         return person.getFirstName().equals("John") && person.getLastName().equals("Smith");
-     *     }
-     * });
+     *         public boolean value(Person person)
+     *         {
+     *             return person.getFirstName().equals("John") && person.getLastName().equals("Smith");
+     *         }
+     *     });
      * </pre>
      *
      * @since 1.0
@@ -880,14 +1170,22 @@ public interface
      * Returns the first element that evaluates to true for the specified predicate2 and parameter, or null if none
      * evaluate to true.
      * <p>
-     * <pre>e.g.
-     * people.detectWith(new Predicate2&lt;Person, String&gt;()
-     * {
-     *     public boolean value(Person person, String fullName)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * Person person =
+     *     people.detectWith((person, fullName) -> person.getFullName().equals(fullName), "John Smith");
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * Person person =
+     *     people.detectWith(new Predicate2&lt;Person, String&gt;()
      *     {
-     *         return person.getFullName().equals(fullName);
-     *     }
-     * }, "John Smith");
+     *         public boolean value(Person person, String fullName)
+     *         {
+     *             return person.getFullName().equals(fullName);
+     *         }
+     *     }, "John Smith");
      * </pre>
      *
      * @since 5.0
@@ -916,14 +1214,22 @@ public interface
     /**
      * Return the total number of elements that answer true to the specified predicate.
      * <p>
-     * <pre>e.g.
-     * return people.<b>count</b>(new Predicate&lt;Person&gt;()
-     * {
-     *     public boolean value(Person person)
+     * Example using a Java 8 lambda:
+     * <pre>
+     * int count =
+     *     people.<b>count</b>(person -> person.getAddress().getState().getName().equals("New York"));
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * int count =
+     *     people.<b>count</b>(new Predicate&lt;Person&gt;()
      *     {
-     *         return person.getAddress().getState().getName().equals("New York");
-     *     }
-     * });
+     *         public boolean value(Person person)
+     *         {
+     *             return person.getAddress().getState().getName().equals("New York");
+     *         }
+     *     });
      * </pre>
      *
      * @since 1.0
@@ -1342,14 +1648,22 @@ public interface
      * into a new multimap, where the transformed value is the key and the original values are added to the same (or similar)
      * species of collection as the source iterable.
      * <p>
-     * <pre>e.g.
-     * return people.groupBy(new Function&lt;Person, String&gt;()
-     * {
-     *     public String value(Person person)
+     * Example using a Java 8 method reference:
+     * <pre>
+     * Multimap&lt;String, Person&gt; peopleByLastName =
+     *     people.groupBy(Person::getLastName);
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * Multimap&lt;String, Person&gt; peopleByLastName =
+     *     people.groupBy(new Function&lt;Person, String&gt;()
      *     {
-     *         return person.getFirstName() + " " + person.getLastName();
-     *     }
-     * });
+     *         public String value(Person person)
+     *         {
+     *             return person.getLastName();
+     *         }
+     *     });
      * </pre>
      *
      * @since 1.0
@@ -1360,14 +1674,22 @@ public interface
      * Same as {@link #groupBy(Function)}, except that the results are gathered into the specified {@code target}
      * multimap.
      * <p>
-     * <pre>e.g.
-     * return people.groupBy(new Function&lt;Person, String&gt;()
-     * {
-     *     public String value(Person person)
+     * Example using a Java 8 method reference:
+     * <pre>
+     * FastListMultimap&lt;String, Person&gt; peopleByLastName =
+     *     people.groupBy(Person::getLastName, new FastListMultimap&lt;String, Person&gt;());
+     * </pre>
+     * <p>
+     * Example using an anonymous inner class:
+     * <pre>
+     * FastListMultimap&lt;String, Person&gt; peopleByLastName =
+     *     people.groupBy(new Function&lt;Person, String&gt;()
      *     {
-     *         return person.getFirstName() + " " + person.getLastName();
-     *     }
-     * }, new FastListMultimap&lt;String, Person&gt;());
+     *         public String value(Person person)
+     *         {
+     *             return person.getLastName();
+     *         }
+     *     }, new FastListMultimap&lt;String, Person&gt;());
      * </pre>
      *
      * @since 1.0
