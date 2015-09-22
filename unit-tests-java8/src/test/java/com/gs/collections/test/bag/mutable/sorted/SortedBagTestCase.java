@@ -92,6 +92,14 @@ public interface SortedBagTestCase extends SortedIterableTestCase, BagTestCase, 
         assertEquals(3, bag.occurrencesOf(3));
     }
 
+    @Override
+    @Test
+    default void Bag_toStringOfItemToCount()
+    {
+        assertEquals("{}", this.newWith().toStringOfItemToCount());
+        assertEquals("{3=3, 2=2, 1=1}", this.newWith(3, 3, 3, 2, 2, 1).toStringOfItemToCount());
+    }
+
     @Test
     default void SortedBag_forEachWith()
     {

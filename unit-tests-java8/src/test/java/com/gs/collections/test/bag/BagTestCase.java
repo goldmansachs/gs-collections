@@ -24,6 +24,8 @@ import com.gs.collections.test.RichIterableWithDuplicatesTestCase;
 import org.junit.Test;
 
 import static com.gs.collections.test.IterableTestCase.assertEquals;
+import static org.hamcrest.Matchers.isOneOf;
+import static org.junit.Assert.assertThat;
 
 public interface BagTestCase extends RichIterableWithDuplicatesTestCase
 {
@@ -74,5 +76,12 @@ public interface BagTestCase extends RichIterableWithDuplicatesTestCase
         assertEquals(1, bag.occurrencesOf(1));
         assertEquals(2, bag.occurrencesOf(2));
         assertEquals(3, bag.occurrencesOf(3));
+    }
+
+    @Test
+    default void Bag_toStringOfItemToCount()
+    {
+        assertEquals("{}", this.newWith().toStringOfItemToCount());
+        assertThat(this.newWith(2, 2, 1).toStringOfItemToCount(), isOneOf("{1=1, 2=2}", "{2=2, 1=1}"));
     }
 }

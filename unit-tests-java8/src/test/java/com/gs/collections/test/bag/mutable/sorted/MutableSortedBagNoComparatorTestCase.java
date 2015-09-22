@@ -48,6 +48,14 @@ public interface MutableSortedBagNoComparatorTestCase extends SortedBagTestCase,
         return result;
     }
 
+    @Override
+    @Test
+    default void Bag_toStringOfItemToCount()
+    {
+        assertEquals("{}", this.newWith().toStringOfItemToCount());
+        assertEquals("{1=1, 2=2, 3=3}", this.newWith(3, 3, 3, 2, 2, 1).toStringOfItemToCount());
+    }
+
     @Test
     default void MutableBag_addOccurrences()
     {

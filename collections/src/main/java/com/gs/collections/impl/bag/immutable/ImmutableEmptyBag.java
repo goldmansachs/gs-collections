@@ -134,7 +134,7 @@ final class ImmutableEmptyBag<T>
     @Override
     public String toStringOfItemToCount()
     {
-        return "";
+        return "{}";
     }
 
     public int occurrencesOf(Object item)
