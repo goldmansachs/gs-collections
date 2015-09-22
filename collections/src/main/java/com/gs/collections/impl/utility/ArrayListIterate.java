@@ -18,6 +18,7 @@ package com.gs.collections.impl.utility;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1584,7 +1585,7 @@ public final class ArrayListIterate
         int size = list.size();
         if (ArrayListIterate.canAccessInternalArray(list))
         {
-            ArrayIterate.sort(ArrayListIterate.getInternalArray(list), size, comparator);
+            Arrays.sort(ArrayListIterate.getInternalArray(list), 0, size, comparator);
         }
         else
         {

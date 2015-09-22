@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.factory;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
@@ -134,7 +135,7 @@ public final class Sets
             R targetSet,
             Set<? extends E>... sets)
     {
-        ArrayIterate.sort(sets, sets.length, Comparators.descendingCollectionSizeComparator());
+        Arrays.sort(sets, 0, sets.length, Comparators.descendingCollectionSizeComparator());
         return fillSet(targetSet, Sets.<E, R>addAllProcedure(), sets);
     }
 
@@ -163,7 +164,7 @@ public final class Sets
             R targetSet,
             Set<? extends E>... sets)
     {
-        ArrayIterate.sort(sets, sets.length, Comparators.ascendingCollectionSizeComparator());
+        Arrays.sort(sets, 0, sets.length, Comparators.ascendingCollectionSizeComparator());
         return fillSet(targetSet, Sets.<E, R>retainAllProcedure(), sets);
     }
 

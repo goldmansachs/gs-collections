@@ -254,14 +254,14 @@ public class FastList<T>
     @Override
     public FastList<T> sortThis(Comparator<? super T> comparator)
     {
-        ArrayIterate.sort(this.items, this.size, comparator);
+        Arrays.sort(this.items, 0, this.size, comparator);
         return this;
     }
 
     @Override
     public FastList<T> sortThis()
     {
-        ArrayIterate.sort(this.items, this.size, null);
+        Arrays.sort(this.items, 0, this.size);
         return this;
     }
 
