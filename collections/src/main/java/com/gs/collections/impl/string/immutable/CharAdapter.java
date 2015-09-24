@@ -49,7 +49,7 @@ import com.gs.collections.impl.utility.StringIterate;
  *
  * @since 7.0
  */
-public class CharAdapter extends AbstractCharIterable implements ImmutableCharList, Serializable
+public class CharAdapter extends AbstractCharIterable implements CharSequence, ImmutableCharList, Serializable
 {
     private static final long serialVersionUID = 1L;
 
@@ -68,6 +68,21 @@ public class CharAdapter extends AbstractCharIterable implements ImmutableCharLi
     public static CharAdapter build(char... chars)
     {
         return new CharAdapter(new String(chars));
+    }
+
+    public char charAt(int index)
+    {
+        return this.adapted.charAt(index);
+    }
+
+    public int length()
+    {
+        return this.adapted.length();
+    }
+
+    public CharAdapter subSequence(int start, int end)
+    {
+        return CharAdapter.adapt(this.adapted.substring(start, end));
     }
 
     public CharIterator charIterator()

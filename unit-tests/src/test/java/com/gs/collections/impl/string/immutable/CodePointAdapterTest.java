@@ -29,6 +29,8 @@ import org.junit.Test;
 
 public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
 {
+    private static final String UNICODE_STRING = "\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09";
+
     @Override
     protected ImmutableIntList classUnderTest()
     {
@@ -41,6 +43,22 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
         return CodePointAdapter.build(elements);
     }
 
+    @SuppressWarnings("StringBufferReplaceableByString")
+    @Test
+    public void stringBuilder()
+    {
+        CodePointAdapter adapt = CodePointAdapter.adapt(UNICODE_STRING);
+        Assert.assertEquals(UNICODE_STRING, new StringBuilder(adapt).toString());
+    }
+
+    @Test
+    public void subSequence()
+    {
+        CodePointAdapter adapt = CodePointAdapter.adapt(UNICODE_STRING);
+        CharSequence sequence = adapt.subSequence(1, 3);
+        Assert.assertEquals(UNICODE_STRING.subSequence(1, 3), sequence);
+    }
+
     @Override
     @Test
     public void testEquals()
@@ -49,12 +67,12 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
         ImmutableIntList list1 = this.newWith(1, 2, 3, 4);
         ImmutableIntList list2 = this.newWith(4, 3, 2, 1);
         Assert.assertNotEquals(list1, list2);
-        Assert.assertEquals(CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09"), CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09"));
-        Assert.assertNotEquals(CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046"), CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09"));
+        Assert.assertEquals(CodePointAdapter.adapt(UNICODE_STRING), CodePointAdapter.adapt(UNICODE_STRING));
+        Assert.assertNotEquals(CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046"), CodePointAdapter.adapt(UNICODE_STRING));
         Assert.assertEquals(CodePointAdapter.adapt("ABC"), CodePointAdapter.adapt("ABC"));
         Assert.assertNotEquals(CodePointAdapter.adapt("123"), CodePointAdapter.adapt("ABC"));
         Verify.assertEqualsAndHashCode(CodePointAdapter.adapt("ABC"), CodePointList.from("ABC"));
-        Verify.assertEqualsAndHashCode(CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09"), CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09"));
+        Verify.assertEqualsAndHashCode(CodePointAdapter.adapt(UNICODE_STRING), CodePointList.from(UNICODE_STRING));
         Assert.assertNotEquals(CodePointList.from("123"), CodePointAdapter.adapt("ABC"));
         Assert.assertNotEquals(CodePointAdapter.adapt("ABC"), CodePointList.from("123"));
         Assert.assertNotEquals(CodePointList.from("ABCD"), CodePointAdapter.adapt("ABC"));
@@ -242,17 +260,17 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
     public void collectCodePointUnicode()
     {
         Assert.assertEquals(
-                "\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09".codePoints().boxed().collect(Collectors.toList()),
-                CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").collect(i -> i));
+                UNICODE_STRING.codePoints().boxed().collect(Collectors.toList()),
+                CodePointAdapter.adapt(UNICODE_STRING).collect(i -> i));
         Assert.assertEquals(
-                "\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09".codePoints().boxed().collect(Collectors.toList()),
-                CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").collect(i -> i));
+                UNICODE_STRING.codePoints().boxed().collect(Collectors.toList()),
+                CodePointAdapter.adapt(UNICODE_STRING).collect(i -> i));
     }
 
     @Test
     public void selectCodePointUnicode()
     {
-        String string = CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").select(Character::isBmpCodePoint).buildString();
+        String string = CodePointAdapter.adapt(UNICODE_STRING).select(Character::isBmpCodePoint).buildString();
         Assert.assertEquals("\u3042\u3044\u3046", string);
     }
 
@@ -281,15 +299,15 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
     public void forEachUnicode()
     {
         StringBuilder builder = new StringBuilder();
-        CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").forEach(builder::appendCodePoint);
-        Assert.assertEquals("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09", builder.toString());
+        CodePointAdapter.adapt(UNICODE_STRING).forEach(builder::appendCodePoint);
+        Assert.assertEquals(UNICODE_STRING, builder.toString());
     }
 
     @Test
     public void asReversedForEachUnicode()
     {
         StringBuilder builder = new StringBuilder();
-        CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").asReversed().forEach(builder::appendCodePoint);
+        CodePointAdapter.adapt(UNICODE_STRING).asReversed().forEach(builder::appendCodePoint);
         Assert.assertEquals("\uD83D\uDE09\u3046\uD840\uDC03\u3044\uD840\uDC00\u3042", builder.toString());
 
         StringBuilder builder2 = new StringBuilder();
@@ -321,7 +339,7 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
     public void toReversedForEachUnicode()
     {
         StringBuilder builder = new StringBuilder();
-        CodePointAdapter.adapt("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").toReversed().forEach(builder::appendCodePoint);
+        CodePointAdapter.adapt(UNICODE_STRING).toReversed().forEach(builder::appendCodePoint);
         Assert.assertEquals("\uD83D\uDE09\u3046\uD840\uDC03\u3044\uD840\uDC00\u3042", builder.toString());
 
         StringBuilder builder2 = new StringBuilder();

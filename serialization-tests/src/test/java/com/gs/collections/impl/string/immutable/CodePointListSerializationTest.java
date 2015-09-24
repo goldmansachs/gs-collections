@@ -22,17 +22,22 @@ import org.junit.Test;
 public class CodePointListSerializationTest
 {
     public static final String EMPTY_CODE_LIST = "rO0ABXNyADZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zdHJpbmcuaW1tdXRhYmxlLkNvZGVQb2lu\n"
-            + "dExpc3QAAAAAAAAAAQIAAVsACmNvZGVQb2ludHN0AAJbSXhwdXIAAltJTbpgJnbqsqUCAAB4cAAA\n"
-            + "AAA=";
+            + "dExpc3QAAAAAAAAAAgIAAUwACmNvZGVQb2ludHN0ADhMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9s\n"
+            + "aXN0L3ByaW1pdGl2ZS9JbW11dGFibGVJbnRMaXN0O3hwc3IARmNvbS5ncy5jb2xsZWN0aW9ucy5p\n"
+            + "bXBsLmxpc3QuaW1tdXRhYmxlLnByaW1pdGl2ZS5JbW11dGFibGVJbnRFbXB0eUxpc3QAAAAAAAAA\n"
+            + "AQIAAHhw";
     public static final String HELLO_WORLD_STRING = "rO0ABXNyADZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zdHJpbmcuaW1tdXRhYmxlLkNvZGVQb2lu\n"
-            + "dExpc3QAAAAAAAAAAQIAAVsACmNvZGVQb2ludHN0AAJbSXhwdXIAAltJTbpgJnbqsqUCAAB4cAAA\n"
-            + "AAwAAABIAAAAZQAAAGwAAABsAAAAbwAAACAAAABXAAAAbwAAAHIAAABsAAAAZAAAACE=";
+            + "dExpc3QAAAAAAAAAAgIAAUwACmNvZGVQb2ludHN0ADhMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9s\n"
+            + "aXN0L3ByaW1pdGl2ZS9JbW11dGFibGVJbnRMaXN0O3hwc3IARmNvbS5ncy5jb2xsZWN0aW9ucy5p\n"
+            + "bXBsLmxpc3QuaW1tdXRhYmxlLnByaW1pdGl2ZS5JbW11dGFibGVJbnRBcnJheUxpc3QAAAAAAAAA\n"
+            + "AQIAAVsABWl0ZW1zdAACW0l4cHVyAAJbSU26YCZ26rKlAgAAeHAAAAAMAAAASAAAAGUAAABsAAAA\n"
+            + "bAAAAG8AAAAgAAAAVwAAAG8AAAByAAAAbAAAAGQAAAAh";
 
     @Test
     public void serializedForm()
     {
         Verify.assertSerializedForm(
-                1L,
+                2L,
                 EMPTY_CODE_LIST,
                 CodePointList.from(""));
     }
@@ -41,7 +46,7 @@ public class CodePointListSerializationTest
     public void serializedFormNotEmpty()
     {
         Verify.assertSerializedForm(
-                1L,
+                2L,
                 HELLO_WORLD_STRING,
                 CodePointList.from("Hello World!"));
     }

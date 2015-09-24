@@ -21,9 +21,12 @@ import com.gs.collections.api.list.primitive.ImmutableCharList;
 import com.gs.collections.impl.factory.primitive.CharBags;
 import com.gs.collections.impl.list.immutable.primitive.AbstractImmutableCharListTestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class CharAdapterTest extends AbstractImmutableCharListTestCase
 {
+    private static final String UNICODE_STRING = "\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09";
+
     @Override
     protected ImmutableCharList classUnderTest()
     {
@@ -34,6 +37,14 @@ public class CharAdapterTest extends AbstractImmutableCharListTestCase
     protected ImmutableCharList newWith(char... elements)
     {
         return CharAdapter.build(elements);
+    }
+
+    @SuppressWarnings("StringBufferReplaceableByString")
+    @Test
+    public void stringBuilder()
+    {
+        CharAdapter adapt = CharAdapter.adapt(UNICODE_STRING);
+        Assert.assertEquals(UNICODE_STRING, new StringBuilder(adapt).toString());
     }
 
     @Override

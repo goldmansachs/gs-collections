@@ -48,7 +48,7 @@ import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
  *
  * @since 7.0
  */
-public class CodePointAdapter extends AbstractIntIterable implements ImmutableIntList, Serializable
+public class CodePointAdapter extends AbstractIntIterable implements CharSequence, ImmutableIntList, Serializable
 {
     private static final long serialVersionUID = 1L;
 
@@ -73,6 +73,21 @@ public class CodePointAdapter extends AbstractIntIterable implements ImmutableIn
             builder.appendCodePoint(codePoint);
         }
         return new CodePointAdapter(builder.toString());
+    }
+
+    public char charAt(int index)
+    {
+        return this.adapted.charAt(index);
+    }
+
+    public int length()
+    {
+        return this.adapted.length();
+    }
+
+    public CharSequence subSequence(int start, int end)
+    {
+        return this.adapted.subSequence(start, end);
     }
 
     public IntIterator intIterator()
@@ -587,41 +602,49 @@ public class CodePointAdapter extends AbstractIntIterable implements ImmutableIn
         }
         if (otherList instanceof CodePointAdapter)
         {
-            CodePointAdapter adapter = (CodePointAdapter) otherList;
-            if (this.adapted.length() != adapter.adapted.length())
-            {
-                return false;
-            }
-            for (int i = 0; i < this.adapted.length(); )
-            {
-                int codePoint = this.adapted.codePointAt(i);
-                if (codePoint != adapter.adapted.codePointAt(i))
-                {
-                    return false;
-                }
-                i += Character.charCount(codePoint);
-            }
+            return this.equalsCodePointAdapter((CodePointAdapter) otherList);
         }
-        else
+        if (otherList instanceof IntList)
         {
-            if (!(otherList instanceof IntList))
+            return this.equalsIntList((IntList) otherList);
+        }
+        return false;
+    }
+
+    public boolean equalsIntList(IntList list)
+    {
+        int size = 0;
+        for (int i = 0; i < this.adapted.length(); )
+        {
+            size++;
+            int codePoint = this.adapted.codePointAt(i);
+            if (size > list.size() || codePoint != list.get(size - 1))
             {
                 return false;
             }
-            IntList list = (IntList) otherList;
-            int size = this.size();
-            if (size != list.size())
+            i += Character.charCount(codePoint);
+        }
+        if (size < list.size())
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean equalsCodePointAdapter(CodePointAdapter adapter)
+    {
+        if (this.adapted.length() != adapter.adapted.length())
+        {
+            return false;
+        }
+        for (int i = 0; i < this.adapted.length(); )
+        {
+            int codePoint = this.adapted.codePointAt(i);
+            if (codePoint != adapter.adapted.codePointAt(i))
             {
                 return false;
             }
-            for (int i = 0; i < size; i++)
-            {
-                int codePoint = this.get(i);
-                if (codePoint != list.get(i))
-                {
-                    return false;
-                }
-            }
+            i += Character.charCount(codePoint);
         }
         return true;
     }

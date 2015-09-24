@@ -28,6 +28,8 @@ import org.junit.Test;
 
 public class CodePointListTest extends AbstractImmutableIntListTestCase
 {
+    private static final String UNICODE_STRING = "\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09";
+
     @Override
     protected ImmutableIntList classUnderTest()
     {
@@ -38,6 +40,22 @@ public class CodePointListTest extends AbstractImmutableIntListTestCase
     protected ImmutableIntList newWith(int... elements)
     {
         return CodePointList.build(elements);
+    }
+
+    @SuppressWarnings("StringBufferReplaceableByString")
+    @Test
+    public void stringBuilder()
+    {
+        CodePointList list = CodePointList.from(UNICODE_STRING);
+        Assert.assertEquals(UNICODE_STRING, new StringBuilder(list).toString());
+    }
+
+    @Test
+    public void subSequence()
+    {
+        CodePointList adapt = CodePointList.from(UNICODE_STRING);
+        CharSequence sequence = adapt.subSequence(1, 3);
+        Assert.assertEquals(UNICODE_STRING.subSequence(1, 3), sequence);
     }
 
     @Override
@@ -219,17 +237,17 @@ public class CodePointListTest extends AbstractImmutableIntListTestCase
     public void collectCodePointUnicode()
     {
         Assert.assertEquals(
-                "\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09".codePoints().boxed().collect(Collectors.toList()),
-                CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").collect(i -> i));
+                UNICODE_STRING.codePoints().boxed().collect(Collectors.toList()),
+                CodePointList.from(UNICODE_STRING).collect(i -> i));
         Assert.assertEquals(
-                "\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09".codePoints().boxed().collect(Collectors.toList()),
-                CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").collect(i -> i));
+                UNICODE_STRING.codePoints().boxed().collect(Collectors.toList()),
+                CodePointList.from(UNICODE_STRING).collect(i -> i));
     }
 
     @Test
     public void selectCodePointUnicode()
     {
-        String string = CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").select(Character::isBmpCodePoint).buildString();
+        String string = CodePointList.from(UNICODE_STRING).select(Character::isBmpCodePoint).buildString();
         Assert.assertEquals("\u3042\u3044\u3046", string);
     }
 
@@ -258,15 +276,15 @@ public class CodePointListTest extends AbstractImmutableIntListTestCase
     public void forEachUnicode()
     {
         StringBuilder builder = new StringBuilder();
-        CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").forEach(builder::appendCodePoint);
-        Assert.assertEquals("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09", builder.toString());
+        CodePointList.from(UNICODE_STRING).forEach(builder::appendCodePoint);
+        Assert.assertEquals(UNICODE_STRING, builder.toString());
     }
 
     @Test
     public void asReversedForEachUnicode()
     {
         StringBuilder builder = new StringBuilder();
-        CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").asReversed().forEach(builder::appendCodePoint);
+        CodePointList.from(UNICODE_STRING).asReversed().forEach(builder::appendCodePoint);
         Assert.assertEquals("\uD83D\uDE09\u3046\uD840\uDC03\u3044\uD840\uDC00\u3042", builder.toString());
 
         StringBuilder builder2 = new StringBuilder();
@@ -298,7 +316,7 @@ public class CodePointListTest extends AbstractImmutableIntListTestCase
     public void toReversedForEachUnicode()
     {
         StringBuilder builder = new StringBuilder();
-        CodePointList.from("\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09").toReversed().forEach(builder::appendCodePoint);
+        CodePointList.from(UNICODE_STRING).toReversed().forEach(builder::appendCodePoint);
         Assert.assertEquals("\uD83D\uDE09\u3046\uD840\uDC03\u3044\uD840\uDC00\u3042", builder.toString());
 
         StringBuilder builder2 = new StringBuilder();

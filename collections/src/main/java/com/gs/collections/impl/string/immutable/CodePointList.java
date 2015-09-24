@@ -18,7 +18,6 @@ package com.gs.collections.impl.string.immutable;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.NoSuchElementException;
 
 import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIntIterable;
@@ -35,12 +34,9 @@ import com.gs.collections.api.list.primitive.ImmutableIntList;
 import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.set.primitive.MutableIntSet;
-import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
-import com.gs.collections.impl.lazy.primitive.ReverseIntIterable;
-import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.factory.primitive.IntLists;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.primitive.AbstractIntIterable;
-import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 
 /**
  * Calculates and provides the code points stored in a String as an ImmutableIntList.  This is a cleaner more OO way of
@@ -48,11 +44,11 @@ import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
  *
  * @since 7.0
  */
-public class CodePointList extends AbstractIntIterable implements ImmutableIntList, Serializable
+public class CodePointList extends AbstractIntIterable implements CharSequence, ImmutableIntList, Serializable
 {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
-    private final int[] codePoints;
+    private final ImmutableIntList codePoints;
 
     public CodePointList(String value)
     {
@@ -64,12 +60,17 @@ public class CodePointList extends AbstractIntIterable implements ImmutableIntLi
             i += Character.charCount(codePoint);
             list.add(codePoint);
         }
-        this.codePoints = list.toArray();
+        this.codePoints = list.toImmutable();
+    }
+
+    private CodePointList(ImmutableIntList points)
+    {
+        this.codePoints = points;
     }
 
     private CodePointList(int... codePoints)
     {
-        this.codePoints = codePoints;
+        this.codePoints = IntLists.immutable.with(codePoints);
     }
 
     public static CodePointList from(String value)
@@ -79,31 +80,56 @@ public class CodePointList extends AbstractIntIterable implements ImmutableIntLi
 
     public static CodePointList build(int... codePoints)
     {
-        int[] copy = new int[codePoints.length];
-        System.arraycopy(codePoints, 0, copy, 0, codePoints.length);
-        return new CodePointList(copy);
+        return new CodePointList(codePoints);
+    }
+
+    private StringBuilder toStringBuilder()
+    {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < this.size(); i++)
+        {
+            builder.appendCodePoint(this.get(i));
+        }
+        return builder;
+    }
+
+    public String buildString()
+    {
+        StringBuilder builder = this.toStringBuilder();
+        return builder.toString();
+    }
+
+    public char charAt(int index)
+    {
+        StringBuilder builder = this.toStringBuilder();
+        return builder.charAt(index);
+    }
+
+    public int length()
+    {
+        StringBuilder builder = this.toStringBuilder();
+        return builder.length();
+    }
+
+    public CharSequence subSequence(int start, int end)
+    {
+        StringBuilder builder = this.toStringBuilder();
+        return builder.subSequence(start, end);
     }
 
     public IntIterator intIterator()
     {
-        return new InternalIntIterator();
+        return this.codePoints.intIterator();
     }
 
     public int[] toArray()
     {
-        return this.toList().toArray();
+        return this.codePoints.toArray();
     }
 
     public boolean contains(int expected)
     {
-        for (int i = 0; i < this.size(); i++)
-        {
-            if (expected == this.get(i))
-            {
-                return true;
-            }
-        }
-        return false;
+        return this.codePoints.contains(expected);
     }
 
     public void forEach(IntProcedure procedure)
@@ -113,127 +139,62 @@ public class CodePointList extends AbstractIntIterable implements ImmutableIntLi
 
     public void each(IntProcedure procedure)
     {
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            procedure.value(codePoint);
-        }
+        this.codePoints.each(procedure);
     }
 
     public CodePointList distinct()
     {
-        IntArrayList result = new IntArrayList();
-        IntHashSet seenSoFar = new IntHashSet();
-
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (seenSoFar.add(codePoint))
-            {
-                result.add(codePoint);
-            }
-        }
-        return new CodePointList(result.toArray());
+        return new CodePointList(this.codePoints.distinct());
     }
 
     public CodePointList newWith(int element)
     {
-        int oldSize = this.size();
-        int[] target = new int[oldSize + 1];
-        System.arraycopy(this.codePoints, 0, target, 0, oldSize);
-        target[oldSize] = element;
-        return new CodePointList(target);
+        return new CodePointList(this.codePoints.newWith(element));
     }
 
     public CodePointList newWithout(int element)
     {
-        //todo optimize based on code points array
-        IntArrayList list = new IntArrayList();
-        int indexToRemove = this.indexOf(element);
-        if (indexToRemove < 0)
-        {
-            return this;
-        }
-        for (int i = 0; i < this.size(); i++)
-        {
-            if (i != indexToRemove)
-            {
-                int codePoint = this.get(i);
-                list.add(codePoint);
-            }
-        }
-        return new CodePointList(list.toArray());
-    }
-
-    public String buildString()
-    {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < this.size(); i++)
-        {
-            builder.appendCodePoint(this.get(i));
-        }
-        return builder.toString();
+        return new CodePointList(this.codePoints.newWithout(element));
     }
 
     public CodePointList newWithAll(IntIterable elements)
     {
-        MutableIntList mutableIntList = this.toList();
-        mutableIntList.addAll(elements);
-        return new CodePointList(mutableIntList.toArray());
+        return new CodePointList(this.codePoints.newWithAll(elements));
     }
 
     public CodePointList newWithoutAll(IntIterable elements)
     {
-        MutableIntList mutableIntList = this.toList();
-        mutableIntList.removeAll(elements);
-        return new CodePointList(mutableIntList.toArray());
+        return new CodePointList(this.codePoints.newWithoutAll(elements));
     }
 
     public CodePointList toReversed()
     {
-        int[] reversed = new int[this.size()];
-        int swapIndex = this.size() - 1;
-        for (int i = 0; i < this.size(); i++)
-        {
-            int value = this.get(i);
-            reversed[swapIndex--] = value;
-        }
-        return new CodePointList(reversed);
+        return new CodePointList(this.codePoints.toReversed());
     }
 
     public ImmutableIntList subList(int fromIndex, int toIndex)
     {
-        throw new UnsupportedOperationException("SubList is not implemented on CodePointList");
+        return this.codePoints.subList(fromIndex, toIndex);
     }
 
     public int get(int index)
     {
-        return this.codePoints[index];
+        return this.codePoints.get(index);
     }
 
     public long dotProduct(IntList list)
     {
-        throw new UnsupportedOperationException("DotProduct is not implemented on CodePointList");
+        return this.codePoints.dotProduct(list);
     }
 
     public int binarySearch(int value)
     {
-        throw new UnsupportedOperationException("BinarySearch is not implemented on CodePointList");
+        return this.codePoints.binarySearch(value);
     }
 
     public int lastIndexOf(int value)
     {
-        for (int i = this.size() - 1; i >= 0; i--)
-        {
-            int codePoint = this.get(i);
-            if (codePoint == value)
-            {
-                return i;
-            }
-        }
-        return -1;
+        return this.codePoints.lastIndexOf(value);
     }
 
     public ImmutableIntList toImmutable()
@@ -243,272 +204,115 @@ public class CodePointList extends AbstractIntIterable implements ImmutableIntLi
 
     public int getLast()
     {
-        return this.get(this.size() - 1);
+        return this.codePoints.getLast();
     }
 
     public LazyIntIterable asReversed()
     {
-        return ReverseIntIterable.adapt(this);
+        return this.codePoints.asReversed();
     }
 
     public <T> T injectIntoWithIndex(T injectedValue, ObjectIntIntToObjectFunction<? super T, ? extends T> function)
     {
-        T result = injectedValue;
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            result = function.valueOf(result, codePoint, i);
-        }
-        return result;
+        return this.codePoints.injectIntoWithIndex(injectedValue, function);
     }
 
     public int getFirst()
     {
-        return this.get(0);
+        return this.codePoints.getFirst();
     }
 
     public int indexOf(int value)
     {
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (codePoint == value)
-            {
-                return i;
-            }
-        }
-        return -1;
+        return this.codePoints.indexOf(value);
     }
 
     public void forEachWithIndex(IntIntProcedure procedure)
     {
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            procedure.value(codePoint, i);
-        }
+        this.codePoints.forEachWithIndex(procedure);
     }
 
     public CodePointList select(IntPredicate predicate)
     {
-        int size = this.size();
-        IntArrayList selected = new IntArrayList();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (predicate.accept(codePoint))
-            {
-                selected.add(codePoint);
-            }
-        }
-        return new CodePointList(selected.toArray());
+        return new CodePointList(this.codePoints.select(predicate));
     }
 
     public CodePointList reject(IntPredicate predicate)
     {
-        int size = this.size();
-        IntArrayList rejected = new IntArrayList();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (!predicate.accept(codePoint))
-            {
-                rejected.add(codePoint);
-            }
-        }
-        return new CodePointList(rejected.toArray());
+        return new CodePointList(this.codePoints.reject(predicate));
     }
 
     public <V> ImmutableList<V> collect(IntToObjectFunction<? extends V> function)
     {
-        int size = this.size();
-        FastList<V> list = FastList.newList(size);
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            list.add(function.valueOf(codePoint));
-        }
-        return list.toImmutable();
+        return this.codePoints.collect(function);
     }
 
     public int detectIfNone(IntPredicate predicate, int ifNone)
     {
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (predicate.accept(codePoint))
-            {
-                return codePoint;
-            }
-        }
-        return ifNone;
+        return this.codePoints.detectIfNone(predicate, ifNone);
     }
 
     public int count(IntPredicate predicate)
     {
-        int count = 0;
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (predicate.accept(codePoint))
-            {
-                count++;
-            }
-        }
-        return count;
+        return this.codePoints.count(predicate);
     }
 
     public boolean anySatisfy(IntPredicate predicate)
     {
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (predicate.accept(codePoint))
-            {
-                return true;
-            }
-        }
-        return false;
+        return this.codePoints.anySatisfy(predicate);
     }
 
     public boolean allSatisfy(IntPredicate predicate)
     {
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (!predicate.accept(codePoint))
-            {
-                return false;
-            }
-        }
-        return true;
+        return this.codePoints.allSatisfy(predicate);
     }
 
     public boolean noneSatisfy(IntPredicate predicate)
     {
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (predicate.accept(codePoint))
-            {
-                return false;
-            }
-        }
-        return true;
+        return this.codePoints.noneSatisfy(predicate);
     }
 
     @Override
     public MutableIntList toList()
     {
-        int size = this.size();
-        IntArrayList list = new IntArrayList(size);
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            list.add(codePoint);
-        }
-        return list;
+        return this.codePoints.toList();
     }
 
     @Override
     public MutableIntSet toSet()
     {
-        int size = this.size();
-        IntHashSet set = new IntHashSet(size);
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            set.add(codePoint);
-        }
-        return set;
+        return this.codePoints.toSet();
     }
 
     @Override
     public MutableIntBag toBag()
     {
-        int size = this.size();
-        IntHashBag bag = new IntHashBag(size);
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            bag.add(codePoint);
-        }
-        return bag;
+        return this.codePoints.toBag();
     }
 
     public <T> T injectInto(T injectedValue, ObjectIntToObjectFunction<? super T, ? extends T> function)
     {
-        T result = injectedValue;
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            result = function.valueOf(result, codePoint);
-        }
-        return result;
+        return this.codePoints.injectInto(injectedValue, function);
     }
 
     public long sum()
     {
-        long sum = 0;
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            sum += codePoint;
-        }
-        return sum;
+        return this.codePoints.sum();
     }
 
     public int max()
     {
-        if (this.isEmpty())
-        {
-            throw new NoSuchElementException();
-        }
-        int max = this.get(0);
-        int size = this.size();
-        for (int i = 1; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (max < codePoint)
-            {
-                max = codePoint;
-            }
-        }
-        return max;
+        return this.codePoints.max();
     }
 
     public int min()
     {
-        if (this.isEmpty())
-        {
-            throw new NoSuchElementException();
-        }
-        int min = this.get(0);
-        int size = this.size();
-        for (int i = 1; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (codePoint < min)
-            {
-                min = codePoint;
-            }
-        }
-        return min;
+        return this.codePoints.min();
     }
 
     public int size()
     {
-        return this.codePoints.length;
+        return this.codePoints.size();
     }
 
     public void appendString(Appendable appendable, String start, String separator, String end)
@@ -552,64 +356,12 @@ public class CodePointList extends AbstractIntIterable implements ImmutableIntLi
     @Override
     public boolean equals(Object otherList)
     {
-        if (otherList == this)
-        {
-            return true;
-        }
-        if (!(otherList instanceof IntList))
-        {
-            return false;
-        }
-        IntList list = (IntList) otherList;
-        int size = this.size();
-        if (size != list.size())
-        {
-            return false;
-        }
-        for (int i = 0; i < size; i++)
-        {
-            int codePoint = this.get(i);
-            if (codePoint != list.get(i))
-            {
-                return false;
-            }
-        }
-        return true;
+        return this.codePoints.equals(otherList);
     }
 
     @Override
     public int hashCode()
     {
-        int hashCode = 1;
-        for (int i = 0; i < this.size(); i++)
-        {
-            int codePoint = this.get(i);
-            hashCode = 31 * hashCode + codePoint;
-        }
-        return hashCode;
-    }
-
-    private class InternalIntIterator implements IntIterator
-    {
-        /**
-         * Index of element to be returned by subsequent call to next.
-         */
-        private int currentIndex;
-
-        public boolean hasNext()
-        {
-            return this.currentIndex != CodePointList.this.size();
-        }
-
-        public int next()
-        {
-            if (!this.hasNext())
-            {
-                throw new NoSuchElementException();
-            }
-            int next = CodePointList.this.get(this.currentIndex);
-            this.currentIndex++;
-            return next;
-        }
+        return this.codePoints.hashCode();
     }
 }
