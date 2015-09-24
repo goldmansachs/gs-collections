@@ -29,6 +29,8 @@ import org.junit.Test;
 public class CodePointListTest extends AbstractImmutableIntListTestCase
 {
     private static final String UNICODE_STRING = "\u3042\uD840\uDC00\u3044\uD840\uDC03\u3046\uD83D\uDE09";
+    private static final String UNICODE_EMOJI_STRING = "\uD83D\uDE09w\uD83D\uDE09i\uD83D\uDE09n\uD83D\uDE09k";
+    private static final String UNICODE_EMOJI_STRING2 = "w\uD83D\uDE09i\uD83D\uDE09n\uD83D\uDE09k\uD83D\uDE09";
 
     @Override
     protected ImmutableIntList classUnderTest()
@@ -48,6 +50,12 @@ public class CodePointListTest extends AbstractImmutableIntListTestCase
     {
         CodePointList list = CodePointList.from(UNICODE_STRING);
         Assert.assertEquals(UNICODE_STRING, new StringBuilder(list).toString());
+        CodePointList list2 = CodePointList.from(UNICODE_EMOJI_STRING);
+        Assert.assertEquals(UNICODE_EMOJI_STRING, new StringBuilder(list2).toString());
+        CodePointList list3 = CodePointList.from(UNICODE_EMOJI_STRING2);
+        Assert.assertEquals(UNICODE_EMOJI_STRING2, new StringBuilder(list3).toString());
+        CodePointList list4 = CodePointList.from("Hello World!");
+        Assert.assertEquals("Hello World!", new StringBuilder(list4).toString());
     }
 
     @Test

@@ -101,14 +101,36 @@ public class CodePointList extends AbstractIntIterable implements CharSequence, 
 
     public char charAt(int index)
     {
-        StringBuilder builder = this.toStringBuilder();
-        return builder.charAt(index);
+        int currentIndex = 0;
+        for (int i = 0; i < this.codePoints.size(); i++)
+        {
+            int codePoint = this.codePoints.get(i);
+            int charCount = Character.charCount(codePoint);
+            if (index < currentIndex + charCount)
+            {
+                if (charCount == 1)
+                {
+                    return (char) codePoint;
+                }
+                if (index == currentIndex)
+                {
+                    return Character.highSurrogate(codePoint);
+                }
+                return Character.lowSurrogate(codePoint);
+            }
+            currentIndex += charCount;
+        }
+        throw new IndexOutOfBoundsException("Char value at " + index + " is out of bounds for length " + currentIndex);
     }
 
     public int length()
     {
-        StringBuilder builder = this.toStringBuilder();
-        return builder.length();
+        int length = 0;
+        for (int i = 0; i < this.codePoints.size(); i++)
+        {
+            length += Character.charCount(this.codePoints.get(i));
+        }
+        return length;
     }
 
     public CharSequence subSequence(int start, int end)
