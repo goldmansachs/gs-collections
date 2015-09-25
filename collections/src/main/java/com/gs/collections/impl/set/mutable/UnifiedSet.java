@@ -34,46 +34,18 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.Function3;
-import com.gs.collections.api.block.function.primitive.BooleanFunction;
-import com.gs.collections.api.block.function.primitive.ByteFunction;
-import com.gs.collections.api.block.function.primitive.CharFunction;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
-import com.gs.collections.api.set.Pool;
-import com.gs.collections.api.set.SetIterable;
-import com.gs.collections.api.set.UnsortedSetIterable;
-import com.gs.collections.api.set.primitive.MutableBooleanSet;
-import com.gs.collections.api.set.primitive.MutableByteSet;
-import com.gs.collections.api.set.primitive.MutableCharSet;
-import com.gs.collections.api.set.primitive.MutableDoubleSet;
-import com.gs.collections.api.set.primitive.MutableFloatSet;
-import com.gs.collections.api.set.primitive.MutableIntSet;
-import com.gs.collections.api.set.primitive.MutableLongSet;
-import com.gs.collections.api.set.primitive.MutableShortSet;
-import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.AbstractRichIterable;
 import com.gs.collections.impl.block.factory.Procedures2;
-import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
-import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
@@ -89,29 +61,17 @@ import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIter
 import com.gs.collections.impl.lazy.parallel.set.RootUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.SelectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
-import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.partition.set.PartitionUnifiedSet;
-import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
-import com.gs.collections.impl.set.mutable.primitive.ByteHashSet;
-import com.gs.collections.impl.set.mutable.primitive.CharHashSet;
-import com.gs.collections.impl.set.mutable.primitive.DoubleHashSet;
-import com.gs.collections.impl.set.mutable.primitive.FloatHashSet;
-import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
-import com.gs.collections.impl.set.mutable.primitive.LongHashSet;
-import com.gs.collections.impl.set.mutable.primitive.ShortHashSet;
+import com.gs.collections.impl.set.AbstractUnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
-import com.gs.collections.impl.utility.internal.IterableIterate;
-import com.gs.collections.impl.utility.internal.MutableCollectionIterate;
-import com.gs.collections.impl.utility.internal.SetIterables;
 import net.jcip.annotations.NotThreadSafe;
 
 @NotThreadSafe
 public class UnifiedSet<T>
-        extends AbstractRichIterable<T>
-        implements MutableSet<T>, Externalizable, Pool<T>, BatchIterable<T>
+        extends AbstractUnifiedSet<T>
+        implements Externalizable
 {
     protected static final Object NULL_KEY = new Object()
     {
@@ -134,19 +94,11 @@ public class UnifiedSet<T>
         }
     };
 
-    protected static final float DEFAULT_LOAD_FACTOR = 0.75f;
-
-    protected static final int DEFAULT_INITIAL_CAPACITY = 8;
-
     private static final long serialVersionUID = 1L;
 
     protected transient Object[] table;
 
     protected transient int occupied;
-
-    protected float loadFactor = DEFAULT_LOAD_FACTOR;
-
-    protected int maxSize;
 
     public UnifiedSet()
     {
@@ -254,34 +206,16 @@ public class UnifiedSet<T>
         return possibleResult;
     }
 
-    protected int init(int initialCapacity)
+    @Override
+    protected Object[] getTable()
     {
-        int capacity = 1;
-        while (capacity < initialCapacity)
-        {
-            capacity <<= 1;
-        }
-
-        return this.allocate(capacity);
+        return this.table;
     }
 
-    protected int allocate(int capacity)
-    {
-        this.allocateTable(capacity);
-        this.computeMaxSize(capacity);
-
-        return capacity;
-    }
-
+    @Override
     protected void allocateTable(int sizeToAllocate)
     {
         this.table = new Object[sizeToAllocate];
-    }
-
-    protected void computeMaxSize(int capacity)
-    {
-        // need at least one free slot for open addressing
-        this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
     }
 
     protected final int index(Object key)
@@ -404,11 +338,7 @@ public class UnifiedSet<T>
         return true;
     }
 
-    protected void rehash()
-    {
-        this.rehash(this.table.length << 1);
-    }
-
+    @Override
     protected void rehash(int newCapacity)
     {
         int oldLength = this.table.length;
@@ -510,11 +440,6 @@ public class UnifiedSet<T>
             return this.nonNullTableObjectEquals(bucket.three, key);
         }
         while (true);
-    }
-
-    public int getBatchCount(int batchSize)
-    {
-        return Math.max(1, this.table.length / batchSize);
     }
 
     public void batchForEach(Procedure<? super T> procedure, int sectionIndex, int sectionCount)
@@ -818,83 +743,7 @@ public class UnifiedSet<T>
         return result;
     }
 
-    public boolean removeIf(Predicate<? super T> predicate)
-    {
-        return IterableIterate.removeIf(this, predicate);
-    }
-
-    public <P> boolean removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        return IterableIterate.removeIfWith(this, predicate, parameter);
-    }
-
-    public <V> UnifiedSet<V> collect(Function<? super T, ? extends V> function)
-    {
-        return this.collect(function, UnifiedSet.<V>newSet());
-    }
-
-    public MutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction)
-    {
-        return this.collectBoolean(booleanFunction, new BooleanHashSet());
-    }
-
-    public MutableByteSet collectByte(ByteFunction<? super T> byteFunction)
-    {
-        return this.collectByte(byteFunction, new ByteHashSet());
-    }
-
-    public MutableCharSet collectChar(CharFunction<? super T> charFunction)
-    {
-        return this.collectChar(charFunction, new CharHashSet());
-    }
-
-    public MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
-    {
-        return this.collectDouble(doubleFunction, new DoubleHashSet());
-    }
-
-    public MutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
-    {
-        return this.collectFloat(floatFunction, new FloatHashSet());
-    }
-
-    public MutableIntSet collectInt(IntFunction<? super T> intFunction)
-    {
-        return this.collectInt(intFunction, new IntHashSet());
-    }
-
-    public MutableLongSet collectLong(LongFunction<? super T> longFunction)
-    {
-        return this.collectLong(longFunction, new LongHashSet());
-    }
-
-    public MutableShortSet collectShort(ShortFunction<? super T> shortFunction)
-    {
-        return this.collectShort(shortFunction, new ShortHashSet());
-    }
-
-    public <V> UnifiedSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
-    {
-        return this.flatCollect(function, UnifiedSet.<V>newSet());
-    }
-
-    public <P, A> UnifiedSet<A> collectWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
-    {
-        return this.collectWith(function, parameter, UnifiedSet.<A>newSet());
-    }
-
-    public <V> UnifiedSet<V> collectIf(
-            Predicate<? super T> predicate, Function<? super T, ? extends V> function)
-    {
-        return this.collectIf(predicate, function, UnifiedSet.<V>newSet());
-    }
-
     @Override
-    public T detect(Predicate<? super T> predicate)
-    {
-        return this.detect(predicate, 0, this.table.length);
-    }
-
     protected T detect(Predicate<? super T> predicate, int start, int end)
     {
         for (int i = start; i < end; i++)
@@ -962,15 +811,7 @@ public class UnifiedSet<T>
         while (true);
     }
 
-    protected boolean shortCircuit(
-            Predicate<? super T> predicate,
-            boolean expected,
-            boolean onShortCircuit,
-            boolean atEnd)
-    {
-        return this.shortCircuit(predicate, expected, onShortCircuit, atEnd, 0, this.table.length);
-    }
-
+    @Override
     protected boolean shortCircuit(
             Predicate<? super T> predicate,
             boolean expected,
@@ -1042,6 +883,7 @@ public class UnifiedSet<T>
         while (true);
     }
 
+    @Override
     protected <P> boolean shortCircuitWith(
             Predicate2<? super T, ? super P> predicate2,
             P parameter,
@@ -1113,72 +955,6 @@ public class UnifiedSet<T>
         while (true);
     }
 
-    @Override
-    public boolean anySatisfy(Predicate<? super T> predicate)
-    {
-        return this.shortCircuit(predicate, true, true, false);
-    }
-
-    @Override
-    public <P> boolean anySatisfyWith(
-            Predicate2<? super T, ? super P> predicate,
-            P parameter)
-    {
-        return this.shortCircuitWith(predicate, parameter, true, true, false);
-    }
-
-    @Override
-    public boolean allSatisfy(Predicate<? super T> predicate)
-    {
-        return this.shortCircuit(predicate, false, false, true);
-    }
-
-    @Override
-    public <P> boolean allSatisfyWith(
-            Predicate2<? super T, ? super P> predicate,
-            P parameter)
-    {
-        return this.shortCircuitWith(predicate, parameter, false, false, true);
-    }
-
-    @Override
-    public boolean noneSatisfy(Predicate<? super T> predicate)
-    {
-        return this.shortCircuit(predicate, true, false, true);
-    }
-
-    @Override
-    public <P> boolean noneSatisfyWith(
-            Predicate2<? super T, ? super P> predicate,
-            P parameter)
-    {
-        return this.shortCircuitWith(predicate, parameter, true, false, true);
-    }
-
-    public <IV, P> IV injectIntoWith(
-            IV injectValue,
-            final Function3<? super IV, ? super T, ? super P, ? extends IV> function,
-            final P parameter)
-    {
-        return this.injectInto(injectValue, new Function2<IV, T, IV>()
-        {
-            public IV value(IV argument1, T argument2)
-            {
-                return function.value(argument1, argument2, parameter);
-            }
-        });
-    }
-
-    public MutableSet<T> asUnmodifiable()
-    {
-        return UnmodifiableMutableSet.of(this);
-    }
-
-    public MutableSet<T> asSynchronized()
-    {
-        return SynchronizedMutableSet.of(this);
-    }
-
     public ImmutableSet<T> toImmutable()
     {
         return Sets.immutable.withAll(this);
@@ -1227,11 +1003,6 @@ public class UnifiedSet<T>
     {
         this.removeAllIterable(elements);
         return this;
-    }
-
-    public boolean addAll(Collection<? extends T> collection)
-    {
-        return this.addAllIterable(collection);
     }
 
     public boolean addAllIterable(Iterable<? extends T> iterable)
@@ -1584,21 +1355,6 @@ public class UnifiedSet<T>
         while (true);
     }
 
-    public boolean removeAll(Collection<?> collection)
-    {
-        return this.removeAllIterable(collection);
-    }
-
-    public boolean removeAllIterable(Iterable<?> iterable)
-    {
-        boolean changed = false;
-        for (Object each : iterable)
-        {
-            changed |= this.remove(each);
-        }
-        return changed;
-    }
-
     private void addIfFound(T key, UnifiedSet<T> other)
     {
         int index = this.index(key);
@@ -1663,11 +1419,6 @@ public class UnifiedSet<T>
             return;
         }
         while (true);
-    }
-
-    public boolean retainAll(Collection<?> collection)
-    {
-        return this.retainAllIterable(collection);
     }
 
     public boolean retainAllIterable(Iterable<?> iterable)
@@ -2108,101 +1859,6 @@ public class UnifiedSet<T>
         return this.groupBy(function, UnifiedSetMultimap.<V, T>newMultimap());
     }
 
-    public <V> UnifiedSetMultimap<V, T> groupByEach(
-            Function<? super T, ? extends Iterable<V>> function)
-    {
-        return this.groupByEach(function, UnifiedSetMultimap.<V, T>newMultimap());
-    }
-
-    public <V> MutableMap<V, T> groupByUniqueKey(
-            Function<? super T, ? extends V> function)
-    {
-        return this.groupByUniqueKey(function, UnifiedMap.<V, T>newMap());
-    }
-
-    /**
-     * @deprecated in 6.0. Use {@link OrderedIterable#zip(Iterable)} instead.
-     */
-    @Deprecated
-    public <S> MutableSet<Pair<T, S>> zip(Iterable<S> that)
-    {
-        return this.zip(that, UnifiedSet.<Pair<T, S>>newSet());
-    }
-
-    /**
-     * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
-     */
-    @Deprecated
-    public MutableSet<Pair<T, Integer>> zipWithIndex()
-    {
-        return this.zipWithIndex(UnifiedSet.<Pair<T, Integer>>newSet());
-    }
-
-    public RichIterable<RichIterable<T>> chunk(int size)
-    {
-        return MutableCollectionIterate.chunk(this, size);
-    }
-
-    public MutableSet<T> union(SetIterable<? extends T> set)
-    {
-        return SetIterables.unionInto(this, set, this.newEmpty());
-    }
-
-    public <R extends Set<T>> R unionInto(SetIterable<? extends T> set, R targetSet)
-    {
-        return SetIterables.unionInto(this, set, targetSet);
-    }
-
-    public MutableSet<T> intersect(SetIterable<? extends T> set)
-    {
-        return SetIterables.intersectInto(this, set, this.newEmpty());
-    }
-
-    public <R extends Set<T>> R intersectInto(SetIterable<? extends T> set, R targetSet)
-    {
-        return SetIterables.intersectInto(this, set, targetSet);
-    }
-
-    public MutableSet<T> difference(SetIterable<? extends T> subtrahendSet)
-    {
-        return SetIterables.differenceInto(this, subtrahendSet, this.newEmpty());
-    }
-
-    public <R extends Set<T>> R differenceInto(SetIterable<? extends T> subtrahendSet, R targetSet)
-    {
-        return SetIterables.differenceInto(this, subtrahendSet, targetSet);
-    }
-
-    public MutableSet<T> symmetricDifference(SetIterable<? extends T> setB)
-    {
-        return SetIterables.symmetricDifferenceInto(this, setB, this.newEmpty());
-    }
-
-    public <R extends Set<T>> R symmetricDifferenceInto(SetIterable<? extends T> set, R targetSet)
-    {
-        return SetIterables.symmetricDifferenceInto(this, set, targetSet);
-    }
-
-    public boolean isSubsetOf(SetIterable<? extends T> candidateSuperset)
-    {
-        return SetIterables.isSubsetOf(this, candidateSuperset);
-    }
-
-    public boolean isProperSubsetOf(SetIterable<? extends T> candidateSuperset)
-    {
-        return SetIterables.isProperSubsetOf(this, candidateSuperset);
-    }
-
-    public MutableSet<UnsortedSetIterable<T>> powerSet()
-    {
-        return (MutableSet<UnsortedSetIterable<T>>) (MutableSet<?>) SetIterables.powerSet(this);
-    }
-
-    public <B> LazyIterable<Pair<T, B>> cartesianProduct(SetIterable<B> set)
-    {
-        return SetIterables.cartesianProduct(this, set);
-    }
-
     public T get(T key)
     {
         int index = this.index(key);
@@ -2510,26 +2166,6 @@ public class UnifiedSet<T>
     private boolean nonNullTableObjectEquals(Object cur, T key)
     {
         return cur == key || (cur == NULL_KEY ? key == null : cur.equals(key));
-    }
-
-    public <K2, V> MutableMap<K2, V> aggregateInPlaceBy(
-            Function<? super T, ? extends K2> groupBy,
-            Function0<? extends V> zeroValueFactory,
-            Procedure2<? super V, ? super T> mutatingAggregator)
-    {
-        MutableMap<K2, V> map = UnifiedMap.newMap();
-        this.forEach(new MutatingAggregationProcedure<T, K2, V>(map, groupBy, zeroValueFactory, mutatingAggregator));
-        return map;
-    }
-
-    public <K2, V> MutableMap<K2, V> aggregateBy(
-            Function<? super T, ? extends K2> groupBy,
-            Function0<? extends V> zeroValueFactory,
-            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
-    {
-        MutableMap<K2, V> map = UnifiedMap.newMap();
-        this.forEach(new NonMutatingAggregationProcedure<T, K2, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
-        return map;
     }
 
     @Beta
