@@ -158,7 +158,7 @@ public interface
     /**
      * Executes the Procedure for each element in the iterable and returns {@code this}.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * RichIterable&lt;Person&gt; tapped =
      *     people.<b>tap</b>(person -> LOGGER.info(person.getName()));
@@ -185,7 +185,7 @@ public interface
     /**
      * The procedure is executed for each element in the iterable.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * people.each(person -> LOGGER.info(person.getName()));
      * </pre>
@@ -214,7 +214,7 @@ public interface
      * Returns all elements of the source collection that return true when evaluating the predicate.  This method is also
      * commonly called filter.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * RichIterable&lt;Person&gt; selected =
      *     people.<b>select</b>(person -> person.getAddress().getCity().equals("London"));
@@ -238,7 +238,7 @@ public interface
     /**
      * Same as the select method with one parameter but uses the specified target collection for the results.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * MutableList&lt;Person&gt; selected =
      *     people.select(person -> person.person.getLastName().equals("Smith"), Lists.mutable.empty());
@@ -270,7 +270,7 @@ public interface
      * <p>
      * E.g. return a {@link Collection} of Person elements where the person has an age <b>greater than or equal to</b> 18 years
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * RichIterable&lt;Person&gt; selected =
      *     people.selectWith((Person person, Integer age) -> person.getAge() >= age, Integer.valueOf(18));
@@ -278,7 +278,7 @@ public interface
      * <p>
      * Example using an anonymous inner class:
      * <pre>
-     * RichIterable&lt;Person&gt; rejected =
+     * RichIterable&lt;Person&gt; selected =
      *     people.selectWith(new Predicate2&lt;Person, Integer&gt;()
      *     {
      *         public boolean accept(Person person, Integer age)
@@ -300,7 +300,7 @@ public interface
      * <p>
      * E.g. return a {@link Collection} of Person elements where the person has an age <b>greater than or equal to</b> 18 years
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * MutableList&lt;Person&gt; selected =
      *     people.selectWith((Person person, Integer age) -> person.getAge() >= age, Integer.valueOf(18), Lists.mutable.empty());
@@ -308,7 +308,7 @@ public interface
      * <p>
      * Example using an anonymous inner class:
      * <pre>
-     * MutableList&lt;Person&gt; rejected =
+     * MutableList&lt;Person&gt; selected =
      *     people.selectWith(new Predicate2&lt;Person, Integer&gt;()
      *     {
      *         public boolean accept(Person person, Integer age)
@@ -335,7 +335,7 @@ public interface
      * Returns all elements of the source collection that return false when evaluating of the predicate.  This method is also
      * sometimes called filterNot and is the equivalent of calling iterable.select(Predicates.not(predicate)).
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * RichIterable&lt;Person&gt; rejected =
      *     people.reject(person -> person.person.getLastName().equals("Smith"));
@@ -364,7 +364,7 @@ public interface
      * <p>
      * E.g. return a {@link Collection} of Person elements where the person has an age <b>greater than or equal to</b> 18 years
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * RichIterable&lt;Person&gt; rejected =
      *     people.rejectWith((Person person, Integer age) -> person.getAge() < age, Integer.valueOf(18));
@@ -392,7 +392,7 @@ public interface
     /**
      * Same as the reject method with one parameter but uses the specified target collection for the results.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * MutableList&lt;Person&gt; rejected =
      *     people.reject(person -> person.person.getLastName().equals("Smith"), Lists.mutable.empty());
@@ -422,7 +422,7 @@ public interface
      * <p>
      * E.g. return a {@link Collection} of Person elements where the person has an age <b>greater than or equal to</b> 18 years
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * MutableList&lt;Person&gt; rejected =
      *     people.rejectWith((Person person, Integer age) -> person.getAge() < age, Integer.valueOf(18), Lists.mutable.empty());
@@ -456,15 +456,15 @@ public interface
     /**
      * Filters a collection into a PartitionedIterable based on the evaluation of the predicate.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
-     * PartitionIterable&lt;Person>&gt newYorkersAndNonNewYorkers =
+     * PartitionIterable&lt;Person&gt; newYorkersAndNonNewYorkers =
      *     people.<b>partition</b>(person -> person.getAddress().getState().getName().equals("New York"));
      * </pre>
      * <p>
      * Example using an anonymous inner class:
      * <pre>
-     * PartitionIterable&lt;Person>&gt newYorkersAndNonNewYorkers =
+     * PartitionIterable&lt;Person&gt; newYorkersAndNonNewYorkers =
      *     people.<b>partition</b>(new Predicate&lt;Person&gt;()
      *     {
      *         public boolean accept(Person person)
@@ -481,7 +481,7 @@ public interface
     /**
      * Filters a collection into a PartitionIterable based on the evaluation of the predicate.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * PartitionIterable&lt;Person>&gt newYorkersAndNonNewYorkers =
      *     people.<b>partitionWith</b>((Person person, String state) -> person.getAddress().getState().getName().equals(state), "New York");
@@ -514,7 +514,7 @@ public interface
      * Returns a new collection with the results of applying the specified function on each element of the source
      * collection.  This method is also commonly called transform or map.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * RichIterable&lt;String&gt; names =
      *     people.collect(person -> person.getFirstName() + " " + person.getLastName());
@@ -540,7 +540,7 @@ public interface
      * Same as {@link #collect(Function)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * MutableList&lt;String&gt; names =
      *     people.collect(person -> person.getFirstName() + " " + person.getLastName(), Lists.mutable.empty());
@@ -570,7 +570,7 @@ public interface
      * Returns a new primitive {@code boolean} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * BooleanIterable licenses =
      *     people.collectBoolean(person -> person.hasDrivingLicense());
@@ -596,7 +596,7 @@ public interface
      * Same as {@link #collectBoolean(BooleanFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * BooleanArrayList licenses =
      *     people.collectBoolean(person -> person.hasDrivingLicense(), new BooleanArrayList());
@@ -625,7 +625,7 @@ public interface
      * Returns a new primitive {@code byte} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * ByteIterable bytes =
      *     people.collectByte(person -> person.getCode());
@@ -651,7 +651,7 @@ public interface
      * Same as {@link #collectByte(ByteFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * ByteArrayList bytes =
      *     people.collectByte(person -> person.getCode(), new ByteArrayList());
@@ -680,7 +680,7 @@ public interface
      * Returns a new primitive {@code char} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * CharIterable chars =
      *     people.collectChar(person -> person.getMiddleInitial());
@@ -706,7 +706,7 @@ public interface
      * Same as {@link #collectChar(CharFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * CharArrayList chars =
      *     people.collectChar(person -> person.getMiddleInitial(), new CharArrayList());
@@ -735,7 +735,7 @@ public interface
      * Returns a new primitive {@code double} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * DoubleIterable doubles =
      *     people.collectDouble(person -> person.getMilesFromNorthPole());
@@ -761,7 +761,7 @@ public interface
      * Same as {@link #collectDouble(DoubleFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * DoubleArrayList doubles =
      *     people.collectDouble(person -> person.getMilesFromNorthPole(), new DoubleArrayList());
@@ -790,7 +790,7 @@ public interface
      * Returns a new primitive {@code float} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * FloatIterable floats =
      *     people.collectFloat(person -> person.getHeightInInches());
@@ -816,7 +816,7 @@ public interface
      * Same as {@link #collectFloat(FloatFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * FloatArrayList floats =
      *     people.collectFloat(person -> person.getHeightInInches(), new FloatArrayList());
@@ -845,7 +845,7 @@ public interface
      * Returns a new primitive {@code int} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * IntIterable ints =
      *     people.collectInt(person -> person.getAge());
@@ -871,7 +871,7 @@ public interface
      * Same as {@link #collectInt(IntFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * IntArrayList ints =
      *     people.collectInt(person -> person.getAge(), new IntArrayList());
@@ -900,7 +900,7 @@ public interface
      * Returns a new primitive {@code long} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * LongIterable longs =
      *     people.collectLong(person -> person.getGuid());
@@ -926,7 +926,7 @@ public interface
      * Same as {@link #collectLong(LongFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * LongArrayList longs =
      *     people.collectLong(person -> person.getGuid(), new LongArrayList());
@@ -955,7 +955,7 @@ public interface
      * Returns a new primitive {@code short} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * ShortIterable shorts =
      *     people.collectShort(person -> person.getNumberOfJunkMailItemsReceivedPerMonth());
@@ -981,7 +981,7 @@ public interface
      * Same as {@link #collectShort(ShortFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * ShortArrayList shorts =
      *     people.collectShort(person -> person.getNumberOfJunkMailItemsReceivedPerMonth, new ShortArrayList());
@@ -1009,7 +1009,7 @@ public interface
     /**
      * Same as {@link #collect(Function)} with a {@code Function2} and specified parameter which is passed to the block.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * RichIterable&lt;Integer&gt; integers =
      *     Lists.mutable.with(1, 2, 3).collectWith((each, parameter) -> each + parameter, Integer.valueOf(1));
@@ -1040,7 +1040,7 @@ public interface
     /**
      * Same as collectWith but with a targetCollection parameter to gather the results.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * MutableSet&lt;Integer&gt; integers =
      *     Lists.mutable.with(1, 2, 3).collectWith((each, parameter) -> each + parameter, Integer.valueOf(1), Sets.mutable.empty());
@@ -1078,12 +1078,12 @@ public interface
      * <p>
      * Example using a Java 8 lambda and method reference:
      * <pre>
-     * RicIterable&lt;String&gt; strings = Lists.mutable.with(1, 2, 3).collectIf(e -> e != null, Object::toString);
+     * RichIterable&lt;String&gt; strings = Lists.mutable.with(1, 2, 3).collectIf(e -> e != null, Object::toString);
      * </pre>
      * <p>
      * Example using Predicates factory:
      * <pre>
-     * RicIterable&lt;String&gt; strings = Lists.mutable.with(1, 2, 3).collectIf(Predicates.notNull(), Functions.getToString());
+     * RichIterable&lt;String&gt; strings = Lists.mutable.with(1, 2, 3).collectIf(Predicates.notNull(), Functions.getToString());
      * </pre>
      *
      * @since 1.0
@@ -1144,7 +1144,7 @@ public interface
      * Returns the first element of the iterable for which the predicate evaluates to true or null in the case where no
      * element returns true.  This method is commonly called find.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * Person person =
      *     people.detect(person -> person.getFirstName().equals("John") && person.getLastName().equals("Smith"));
@@ -1170,7 +1170,7 @@ public interface
      * Returns the first element that evaluates to true for the specified predicate2 and parameter, or null if none
      * evaluate to true.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * Person person =
      *     people.detectWith((person, fullName) -> person.getFullName().equals(fullName), "John Smith");
@@ -1214,7 +1214,7 @@ public interface
     /**
      * Return the total number of elements that answer true to the specified predicate.
      * <p>
-     * Example using a Java 8 lambda:
+     * Example using a Java 8 lambda expression:
      * <pre>
      * int count =
      *     people.<b>count</b>(person -> person.getAddress().getState().getName().equals("New York"));
@@ -1225,7 +1225,7 @@ public interface
      * int count =
      *     people.<b>count</b>(new Predicate&lt;Person&gt;()
      *     {
-     *         public boolean value(Person person)
+     *         public boolean accept(Person person)
      *         {
      *             return person.getAddress().getState().getName().equals("New York");
      *         }
@@ -1246,16 +1246,16 @@ public interface
     <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     /**
-     * Returns true if the predicate evaluates to true for any element of the iterable. Returns
-     * false if the iterable is empty, or if no element returned true when evaluating the predicate.
+     * Returns true if the predicate evaluates to true for any element of the iterable.
+     * Returns false if the iterable is empty, or if no element returned true when evaluating the predicate.
      *
      * @since 1.0
      */
     boolean anySatisfy(Predicate<? super T> predicate);
 
     /**
-     * Returns true if the predicate evaluates to true for any element of the collection, or return false. Returns
-     * false if the collection is empty.
+     * Returns true if the predicate evaluates to true for any element of the collection, or return false.
+     * Returns false if the collection is empty.
      *
      * @since 5.0
      */
@@ -1285,8 +1285,8 @@ public interface
     boolean noneSatisfy(Predicate<? super T> predicate);
 
     /**
-     * Returns true if the predicate evaluates to false for every element of the collection, or return false. Returns
-     * true if the collection is empty.
+     * Returns true if the predicate evaluates to false for every element of the collection, or return false.
+     * Returns true if the collection is empty.
      *
      * @since 5.0
      */
