@@ -34,13 +34,13 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
     @Override
     protected ImmutableIntList classUnderTest()
     {
-        return CodePointAdapter.build(1, 2, 3);
+        return CodePointAdapter.from(1, 2, 3);
     }
 
     @Override
     protected ImmutableIntList newWith(int... elements)
     {
-        return CodePointAdapter.build(elements);
+        return CodePointAdapter.from(elements);
     }
 
     @SuppressWarnings("StringBufferReplaceableByString")
@@ -148,14 +148,12 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
     @Test
     public void testToString()
     {
-        StringBuilder expectedString = new StringBuilder("[");
+        StringBuilder expectedString = new StringBuilder();
         int size = this.classUnderTest().size();
         for (int each = 0; each < size; each++)
         {
             expectedString.appendCodePoint(each + 1);
-            expectedString.append(each == size - 1 ? "" : ", ");
         }
-        expectedString.append(']');
         Assert.assertEquals(expectedString.toString(), this.classUnderTest().toString());
     }
 
@@ -176,7 +174,6 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
         }
         Assert.assertEquals(expectedString.toString(), list.makeString());
         Assert.assertEquals(expectedString1.toString(), list.makeString("/"));
-        Assert.assertEquals(this.classUnderTest().toString(), this.classUnderTest().makeString("[", ", ", "]"));
     }
 
     @Override
@@ -200,9 +197,6 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
         StringBuilder appendable3 = new StringBuilder();
         list.appendString(appendable3, "/");
         Assert.assertEquals(expectedString1.toString(), appendable3.toString());
-        StringBuilder appendable4 = new StringBuilder();
-        this.classUnderTest().appendString(appendable4, "[", ", ", "]");
-        Assert.assertEquals(this.classUnderTest().toString(), appendable4.toString());
     }
 
     @SuppressWarnings("StringBufferMayBeStringBuilder")
@@ -227,7 +221,7 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
         list.appendString(appendable3, "/");
         Assert.assertEquals(expectedString1.toString(), appendable3.toString());
         StringBuffer appendable4 = new StringBuffer();
-        this.classUnderTest().appendString(appendable4, "[", ", ", "]");
+        this.classUnderTest().appendString(appendable4, "", "", "");
         Assert.assertEquals(this.classUnderTest().toString(), appendable4.toString());
     }
 
@@ -251,9 +245,6 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
         SBAppendable appendable3 = new SBAppendable();
         list.appendString(appendable3, "/");
         Assert.assertEquals(expectedString1.toString(), appendable3.toString());
-        SBAppendable appendable4 = new SBAppendable();
-        this.classUnderTest().appendString(appendable4, "[", ", ", "]");
-        Assert.assertEquals(this.classUnderTest().toString(), appendable4.toString());
     }
 
     @Test
@@ -270,7 +261,7 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
     @Test
     public void selectCodePointUnicode()
     {
-        String string = CodePointAdapter.adapt(UNICODE_STRING).select(Character::isBmpCodePoint).buildString();
+        String string = CodePointAdapter.adapt(UNICODE_STRING).select(Character::isBmpCodePoint).toString();
         Assert.assertEquals("\u3042\u3044\u3046", string);
     }
 
@@ -372,7 +363,7 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
     {
         Assert.assertEquals(
                 "\uD840\uDC00\uD840\uDC03\uD83D\uDE09",
-                CodePointAdapter.adapt("\uD840\uDC00\uD840\uDC03\uD83D\uDE09\uD840\uDC00\uD840\uDC03\uD83D\uDE09").distinct().buildString());
+                CodePointAdapter.adapt("\uD840\uDC00\uD840\uDC03\uD83D\uDE09\uD840\uDC00\uD840\uDC03\uD83D\uDE09").distinct().toString());
     }
 
     @Test
@@ -415,7 +406,7 @@ public class CodePointAdapterTest extends AbstractImmutableIntListTestCase
     public void toReversed()
     {
         super.toReversed();
-        Assert.assertEquals("cba", CodePointAdapter.adapt("abc").toReversed().buildString());
+        Assert.assertEquals("cba", CodePointAdapter.adapt("abc").toReversed().toString());
     }
 
     private static class SBAppendable implements Appendable

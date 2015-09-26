@@ -44,6 +44,9 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.string.immutable.CharAdapter;
+import com.gs.collections.impl.string.immutable.CodePointAdapter;
+import com.gs.collections.impl.string.immutable.CodePointList;
 import com.gs.collections.impl.tuple.Tuples;
 
 /**
@@ -57,6 +60,30 @@ public final class StringIterate
     private StringIterate()
     {
         throw new AssertionError("Suppress default constructor for noninstantiability");
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public static CharAdapter asCharAdapter(String string)
+    {
+        return CharAdapter.adapt(string);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public static CodePointAdapter asCodePointAdapter(String string)
+    {
+        return CodePointAdapter.adapt(string);
+    }
+
+    /**
+     * @since 7.0.
+     */
+    public static CodePointList toCodePointList(String string)
+    {
+        return CodePointList.from(string);
     }
 
     /**

@@ -22,6 +22,7 @@ import java.io.Serializable;
 import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIntIterable;
 import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.block.function.primitive.IntToIntFunction;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectIntIntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectIntToObjectFunction;
@@ -78,12 +79,21 @@ public class CodePointList extends AbstractIntIterable implements CharSequence, 
         return new CodePointList(value);
     }
 
-    public static CodePointList build(int... codePoints)
+    public static CodePointList from(int... codePoints)
     {
         return new CodePointList(codePoints);
     }
 
-    private StringBuilder toStringBuilder()
+    public static CodePointList from(IntIterable iterable)
+    {
+        if (iterable instanceof ImmutableIntList)
+        {
+            return new CodePointList((ImmutableIntList) iterable);
+        }
+        return new CodePointList(iterable.toArray());
+    }
+
+    public StringBuilder toStringBuilder()
     {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < this.size(); i++)
@@ -91,12 +101,6 @@ public class CodePointList extends AbstractIntIterable implements CharSequence, 
             builder.appendCodePoint(this.get(i));
         }
         return builder;
-    }
-
-    public String buildString()
-    {
-        StringBuilder builder = this.toStringBuilder();
-        return builder.toString();
     }
 
     public char charAt(int index)
@@ -133,10 +137,19 @@ public class CodePointList extends AbstractIntIterable implements CharSequence, 
         return length;
     }
 
-    public CharSequence subSequence(int start, int end)
+    public String subSequence(int start, int end)
     {
         StringBuilder builder = this.toStringBuilder();
-        return builder.subSequence(start, end);
+        return builder.substring(start, end);
+    }
+
+    /**
+     * The value of toString must be strictly implemented as defined in CharSequence.
+     */
+    @Override
+    public String toString()
+    {
+        return this.toStringBuilder().toString();
     }
 
     public IntIterator intIterator()
@@ -267,6 +280,17 @@ public class CodePointList extends AbstractIntIterable implements CharSequence, 
     public <V> ImmutableList<V> collect(IntToObjectFunction<? extends V> function)
     {
         return this.codePoints.collect(function);
+    }
+
+    public CodePointList collectInt(IntToIntFunction function)
+    {
+        IntArrayList collected = new IntArrayList(this.size());
+        for (int i = 0; i < this.size(); i++)
+        {
+            int codePoint = this.get(i);
+            collected.add(function.valueOf(codePoint));
+        }
+        return new CodePointList(collected.toImmutable());
     }
 
     public int detectIfNone(IntPredicate predicate, int ifNone)

@@ -20,6 +20,9 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.primitive.CharProcedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.CharList;
+import com.gs.collections.api.list.primitive.ImmutableCharList;
+import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Functions;
@@ -32,7 +35,11 @@ import com.gs.collections.impl.block.predicate.CodePointPredicate;
 import com.gs.collections.impl.block.procedure.primitive.CodePointProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.string.immutable.CharAdapter;
+import com.gs.collections.impl.string.immutable.CodePointAdapter;
+import com.gs.collections.impl.string.immutable.CodePointList;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
@@ -43,6 +50,118 @@ import org.junit.Test;
  */
 public class StringIterateTest
 {
+    @Test
+    public void asCharAdapter()
+    {
+        CharAdapter answer =
+                StringIterate.asCharAdapter("HelloHellow")
+                        .collectChar(Character::toUpperCase)
+                        .select(c -> c != 'W')
+                        .distinct()
+                        .toReversed()
+                        .reject(CharAdapter.adapt("LE")::contains)
+                        .newWith('!');
+
+        Assert.assertEquals("OH!", answer.toString());
+        Assert.assertEquals("OH!", answer.toStringBuilder().toString());
+        Assert.assertEquals("OH!", answer.makeString(""));
+
+        CharList charList = StringIterate.asCharAdapter("HelloHellow")
+                .asLazy()
+                .collectChar(Character::toUpperCase)
+                .select(c -> c != 'W')
+                .toList()
+                .distinct()
+                .toReversed()
+                .reject(CharAdapter.adapt("LE")::contains)
+                .with('!');
+
+        Assert.assertEquals("OH!", CharAdapter.from(charList).toString());
+        Assert.assertEquals("OH!", CharAdapter.from(CharAdapter.from(charList)).toString());
+
+        String helloUppercase2 = StringIterate.asCharAdapter("Hello")
+                .asLazy()
+                .collectChar(Character::toUpperCase)
+                .makeString("");
+        Assert.assertEquals("HELLO", helloUppercase2);
+
+        CharArrayList arraylist = new CharArrayList();
+        StringIterate.asCharAdapter("Hello".toUpperCase())
+                .chars()
+                .sorted()
+                .forEach(e -> arraylist.add((char) e));
+        Assert.assertEquals(CharArrayList.newListWith('E', 'H', 'L', 'L', 'O'), arraylist);
+
+        ImmutableCharList arrayList2 =
+                StringIterate.asCharAdapter("Hello".toUpperCase())
+                        .toSortedList()
+                        .toImmutable();
+
+        Assert.assertEquals(CharArrayList.newListWith('E', 'H', 'L', 'L', 'O'), arrayList2);
+
+        Assert.assertEquals(CharArrayList.newListWith('H', 'E', 'L', 'L', 'O'), CharAdapter.adapt("hello").collectChar(Character::toUpperCase));
+    }
+
+    @Test
+    public void asCodePointAdapter()
+    {
+        CodePointAdapter answer =
+                StringIterate.asCodePointAdapter("HelloHellow")
+                        .collectInt(Character::toUpperCase)
+                        .select(i -> i != 'W')
+                        .distinct()
+                        .toReversed()
+                        .reject(CodePointAdapter.adapt("LE")::contains)
+                        .newWith('!');
+
+        Assert.assertEquals("OH!", answer.toString());
+        Assert.assertEquals("OH!", answer.toStringBuilder().toString());
+        Assert.assertEquals("OH!", answer.makeString(""));
+
+        IntList intList = StringIterate.asCodePointAdapter("HelloHellow")
+                .asLazy()
+                .collectInt(Character::toUpperCase)
+                .select(i -> i != 'W')
+                .toList()
+                .distinct()
+                .toReversed()
+                .reject(CodePointAdapter.adapt("LE")::contains)
+                .with('!');
+
+        Assert.assertEquals("OH!", CodePointAdapter.from(intList).toString());
+        Assert.assertEquals("OH!", CodePointAdapter.from(CodePointAdapter.from(intList)).toString());
+    }
+
+    @Test
+    public void toCodePointList()
+    {
+        CodePointList answer =
+                StringIterate.toCodePointList("Hello")
+                        .collectInt(Character::toUpperCase)
+                        .select(i -> i != 'W')
+                        .distinct()
+                        .toReversed()
+                        .reject(CodePointList.from("LE")::contains)
+                        .newWith('!');
+
+        Assert.assertEquals("OH!", answer.toString());
+        Assert.assertEquals("OH!", answer.toStringBuilder().toString());
+        Assert.assertEquals("OH!", answer.makeString(""));
+
+        IntList intList = StringIterate.toCodePointList("HelloHellow")
+                .asLazy()
+                .collectInt(Character::toUpperCase)
+                .select(i -> i != 'W')
+                .toList()
+                .distinct()
+                .toReversed()
+                .reject(CodePointList.from("LE")::contains)
+                .with('!');
+
+        Assert.assertEquals("OH!", CodePointList.from(intList).toString());
+        Assert.assertEquals("OH!", CodePointList.from(CodePointList.from(intList)).toString());
+    }
+
     @Test
     public void englishToUpperLowerCase()
     {

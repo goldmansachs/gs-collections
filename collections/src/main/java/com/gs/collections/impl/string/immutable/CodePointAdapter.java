@@ -23,6 +23,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIntIterable;
 import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.block.function.primitive.IntToIntFunction;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectIntIntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectIntToObjectFunction;
@@ -64,7 +65,7 @@ public class CodePointAdapter extends AbstractIntIterable implements CharSequenc
         return new CodePointAdapter(value);
     }
 
-    public static CodePointAdapter build(int... codePoints)
+    public static CodePointAdapter from(int... codePoints)
     {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < codePoints.length; i++)
@@ -72,6 +73,22 @@ public class CodePointAdapter extends AbstractIntIterable implements CharSequenc
             int codePoint = codePoints[i];
             builder.appendCodePoint(codePoint);
         }
+        return new CodePointAdapter(builder.toString());
+    }
+
+    public static CodePointAdapter from(IntIterable iterable)
+    {
+        if (iterable instanceof CodePointAdapter)
+        {
+            return new CodePointAdapter(iterable.toString());
+        }
+        StringBuilder builder = iterable.injectInto(new StringBuilder(), new ObjectIntToObjectFunction<StringBuilder, StringBuilder>()
+        {
+            public StringBuilder valueOf(StringBuilder builder, int value)
+            {
+                return builder.appendCodePoint(value);
+            }
+        });
         return new CodePointAdapter(builder.toString());
     }
 
@@ -85,9 +102,28 @@ public class CodePointAdapter extends AbstractIntIterable implements CharSequenc
         return this.adapted.length();
     }
 
-    public CharSequence subSequence(int start, int end)
+    public String subSequence(int start, int end)
     {
-        return this.adapted.subSequence(start, end);
+        return this.adapted.substring(start, end);
+    }
+
+    public StringBuilder toStringBuilder()
+    {
+        StringBuilder builder = new StringBuilder();
+        int length = this.adapted.length();
+        for (int i = 0; i < length; )
+        {
+            int codePoint = this.adapted.codePointAt(i);
+            builder.appendCodePoint(codePoint);
+            i += Character.charCount(codePoint);
+        }
+        return builder;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.adapted;
     }
 
     public IntIterator intIterator()
@@ -195,20 +231,7 @@ public class CodePointAdapter extends AbstractIntIterable implements CharSequenc
     {
         MutableIntList mutableIntList = this.toList();
         mutableIntList.removeAll(elements);
-        return CodePointAdapter.build(mutableIntList.toArray());
-    }
-
-    public String buildString()
-    {
-        StringBuilder builder = new StringBuilder();
-        int length = this.adapted.length();
-        for (int i = 0; i < length; )
-        {
-            int codePoint = this.adapted.codePointAt(i);
-            builder.appendCodePoint(codePoint);
-            i += Character.charCount(codePoint);
-        }
-        return builder.toString();
+        return CodePointAdapter.from(mutableIntList.toArray());
     }
 
     public CodePointAdapter toReversed()
@@ -369,6 +392,18 @@ public class CodePointAdapter extends AbstractIntIterable implements CharSequenc
             i += Character.charCount(codePoint);
         }
         return list.toImmutable();
+    }
+
+    public CodePointAdapter collectInt(IntToIntFunction function)
+    {
+        StringBuilder collected = new StringBuilder(this.length());
+        for (int i = 0; i < this.adapted.length(); )
+        {
+            int codePoint = this.adapted.codePointAt(i);
+            collected.appendCodePoint(function.valueOf(codePoint));
+            i += Character.charCount(codePoint);
+        }
+        return CodePointAdapter.adapt(collected.toString());
     }
 
     public int detectIfNone(IntPredicate predicate, int ifNone)

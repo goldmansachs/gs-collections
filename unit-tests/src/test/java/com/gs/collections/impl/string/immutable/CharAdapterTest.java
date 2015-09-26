@@ -30,13 +30,13 @@ public class CharAdapterTest extends AbstractImmutableCharListTestCase
     @Override
     protected ImmutableCharList classUnderTest()
     {
-        return CharAdapter.build((char) 1, (char) 2, (char) 3);
+        return CharAdapter.from((char) 1, (char) 2, (char) 3);
     }
 
     @Override
     protected ImmutableCharList newWith(char... elements)
     {
-        return CharAdapter.build(elements);
+        return CharAdapter.from(elements);
     }
 
     @SuppressWarnings("StringBufferReplaceableByString")
@@ -45,6 +45,14 @@ public class CharAdapterTest extends AbstractImmutableCharListTestCase
     {
         CharAdapter adapt = CharAdapter.adapt(UNICODE_STRING);
         Assert.assertEquals(UNICODE_STRING, new StringBuilder(adapt).toString());
+    }
+
+    @Test
+    public void subSequence()
+    {
+        CharAdapter adapt = CharAdapter.adapt(UNICODE_STRING);
+        CharSequence sequence = adapt.subSequence(1, 3);
+        Assert.assertEquals(UNICODE_STRING.subSequence(1, 3), sequence);
     }
 
     @Override
@@ -56,5 +64,60 @@ public class CharAdapterTest extends AbstractImmutableCharListTestCase
         expected.addOccurrences('b', 3);
         expected.addOccurrences('c', 3);
         Assert.assertEquals(expected, CharAdapter.adapt("aaabbbccc").toBag());
+    }
+
+    @Override
+    @Test
+    public void makeString()
+    {
+        ImmutableCharList list = this.classUnderTest();
+        StringBuilder expectedString = new StringBuilder("");
+        StringBuilder expectedString1 = new StringBuilder("");
+        int size = list.size();
+        for (char each = 0; each < size; each++)
+        {
+            expectedString.append((char) (each + (char) 1));
+            expectedString1.append((char) (each + (char) 1));
+            expectedString.append(each == size - 1 ? "" : ", ");
+            expectedString1.append(each == size - 1 ? "" : "/");
+        }
+        Assert.assertEquals(expectedString.toString(), list.makeString());
+        Assert.assertEquals(expectedString1.toString(), list.makeString("/"));
+    }
+
+    @Override
+    @Test
+    public void appendString()
+    {
+        StringBuilder expectedString = new StringBuilder("");
+        StringBuilder expectedString1 = new StringBuilder("");
+        int size = this.classUnderTest().size();
+        for (char each = 0; each < size; each++)
+        {
+            expectedString.append((char) (each + (char) 1));
+            expectedString1.append((char) (each + (char) 1));
+            expectedString.append(each == size - 1 ? "" : ", ");
+            expectedString1.append(each == size - 1 ? "" : "/");
+        }
+        ImmutableCharList list = this.classUnderTest();
+        StringBuilder appendable2 = new StringBuilder();
+        list.appendString(appendable2);
+        Assert.assertEquals(expectedString.toString(), appendable2.toString());
+        StringBuilder appendable3 = new StringBuilder();
+        list.appendString(appendable3, "/");
+        Assert.assertEquals(expectedString1.toString(), appendable3.toString());
+    }
+
+    @Override
+    @Test
+    public void testToString()
+    {
+        StringBuilder expectedString = new StringBuilder();
+        int size = this.classUnderTest().size();
+        for (char each = 0; each < size; each++)
+        {
+            expectedString.append((char) (each + (char) 1));
+        }
+        Assert.assertEquals(expectedString.toString(), this.classUnderTest().toString());
     }
 }

@@ -23,6 +23,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.CharIterable;
 import com.gs.collections.api.LazyCharIterable;
 import com.gs.collections.api.bag.primitive.MutableCharBag;
+import com.gs.collections.api.block.function.primitive.CharToCharFunction;
 import com.gs.collections.api.block.function.primitive.CharToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectCharIntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectCharToObjectFunction;
@@ -65,9 +66,18 @@ public class CharAdapter extends AbstractCharIterable implements CharSequence, I
         return new CharAdapter(value);
     }
 
-    public static CharAdapter build(char... chars)
+    public static CharAdapter from(char... chars)
     {
         return new CharAdapter(new String(chars));
+    }
+
+    public static CharAdapter from(CharIterable iterable)
+    {
+        if (iterable instanceof CharAdapter)
+        {
+            return new CharAdapter(iterable.toString());
+        }
+        return new CharAdapter(iterable.makeString(""));
     }
 
     public char charAt(int index)
@@ -80,9 +90,29 @@ public class CharAdapter extends AbstractCharIterable implements CharSequence, I
         return this.adapted.length();
     }
 
-    public CharAdapter subSequence(int start, int end)
+    public String subSequence(int start, int end)
     {
-        return CharAdapter.adapt(this.adapted.substring(start, end));
+        return this.adapted.substring(start, end);
+    }
+
+    public StringBuilder toStringBuilder()
+    {
+        StringBuilder builder = new StringBuilder();
+        int size = this.size();
+        for (int i = 0; i < size; i++)
+        {
+            builder.append(this.get(i));
+        }
+        return builder;
+    }
+
+    /**
+     * The value of toString must be strictly implemented as defined in CharSequence.
+     */
+    @Override
+    public String toString()
+    {
+        return this.adapted;
     }
 
     public CharIterator charIterator()
@@ -116,7 +146,7 @@ public class CharAdapter extends AbstractCharIterable implements CharSequence, I
         StringIterate.forEachChar(this.adapted, procedure);
     }
 
-    public ImmutableCharList distinct()
+    public CharAdapter distinct()
     {
         StringBuilder builder = new StringBuilder();
         CharHashSet seenSoFar = new CharHashSet();
@@ -133,12 +163,12 @@ public class CharAdapter extends AbstractCharIterable implements CharSequence, I
         return new CharAdapter(builder.toString());
     }
 
-    public ImmutableCharList newWith(char element)
+    public CharAdapter newWith(char element)
     {
         return new CharAdapter(this.adapted + element);
     }
 
-    public ImmutableCharList newWithout(char element)
+    public CharAdapter newWithout(char element)
     {
         StringBuilder builder = new StringBuilder(this.adapted);
         int indexToRemove = this.indexOf(element);
@@ -150,26 +180,21 @@ public class CharAdapter extends AbstractCharIterable implements CharSequence, I
         return new CharAdapter(builder.toString());
     }
 
-    public String getAdapted()
-    {
-        return this.adapted;
-    }
-
-    public ImmutableCharList newWithAll(CharIterable elements)
+    public CharAdapter newWithAll(CharIterable elements)
     {
         MutableCharList mutableCharList = this.toList();
         mutableCharList.addAll(elements);
         return new CharAdapter(new String(mutableCharList.toArray()));
     }
 
-    public ImmutableCharList newWithoutAll(CharIterable elements)
+    public CharAdapter newWithoutAll(CharIterable elements)
     {
         MutableCharList mutableCharList = this.toList();
         mutableCharList.removeAll(elements);
         return new CharAdapter(new String(mutableCharList.toArray()));
     }
 
-    public ImmutableCharList toReversed()
+    public CharAdapter toReversed()
     {
         StringBuilder builder = new StringBuilder(this.adapted);
         return new CharAdapter(builder.reverse().toString());
@@ -265,12 +290,12 @@ public class CharAdapter extends AbstractCharIterable implements CharSequence, I
         }
     }
 
-    public ImmutableCharList select(CharPredicate predicate)
+    public CharAdapter select(CharPredicate predicate)
     {
         return new CharAdapter(StringIterate.selectChar(this.adapted, predicate));
     }
 
-    public ImmutableCharList reject(CharPredicate predicate)
+    public CharAdapter reject(CharPredicate predicate)
     {
         return new CharAdapter(StringIterate.rejectChar(this.adapted, predicate));
     }
@@ -284,6 +309,17 @@ public class CharAdapter extends AbstractCharIterable implements CharSequence, I
             list.add(function.valueOf(this.get(i)));
         }
         return list.toImmutable();
+    }
+
+    public CharAdapter collectChar(CharToCharFunction function)
+    {
+        StringBuilder builder = new StringBuilder(this.length());
+        int size = this.size();
+        for (int i = 0; i < size; i++)
+        {
+            builder.append(function.valueOf(this.get(i)));
+        }
+        return new CharAdapter(builder.toString());
     }
 
     public char detectIfNone(CharPredicate predicate, char ifNone)
