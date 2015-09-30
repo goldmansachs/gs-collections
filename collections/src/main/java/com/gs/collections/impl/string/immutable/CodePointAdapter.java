@@ -109,15 +109,7 @@ public class CodePointAdapter extends AbstractIntIterable implements CharSequenc
 
     public StringBuilder toStringBuilder()
     {
-        StringBuilder builder = new StringBuilder();
-        int length = this.adapted.length();
-        for (int i = 0; i < length; )
-        {
-            int codePoint = this.adapted.codePointAt(i);
-            builder.appendCodePoint(codePoint);
-            i += Character.charCount(codePoint);
-        }
-        return builder;
+        return new StringBuilder(this.adapted);
     }
 
     @Override

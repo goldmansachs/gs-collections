@@ -97,13 +97,7 @@ public class CharAdapter extends AbstractCharIterable implements CharSequence, I
 
     public StringBuilder toStringBuilder()
     {
-        StringBuilder builder = new StringBuilder();
-        int size = this.size();
-        for (int i = 0; i < size; i++)
-        {
-            builder.append(this.get(i));
-        }
-        return builder;
+        return new StringBuilder(this.adapted);
     }
 
     /**

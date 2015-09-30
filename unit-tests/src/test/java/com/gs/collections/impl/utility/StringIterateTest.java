@@ -25,6 +25,9 @@ import com.gs.collections.api.list.primitive.ImmutableCharList;
 import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.ImmutableCharSet;
+import com.gs.collections.api.set.primitive.ImmutableIntSet;
+import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.block.factory.primitive.CharPredicates;
@@ -34,6 +37,8 @@ import com.gs.collections.impl.block.function.primitive.CodePointFunction;
 import com.gs.collections.impl.block.predicate.CodePointPredicate;
 import com.gs.collections.impl.block.procedure.primitive.CodePointProcedure;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.primitive.CharSets;
+import com.gs.collections.impl.factory.primitive.IntSets;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -50,6 +55,12 @@ import org.junit.Test;
  */
 public class StringIterateTest
 {
+    public static final String THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG = "The quick brown fox jumps over the lazy dog.";
+    public static final String ALPHABET_LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
+    public static final Twin<String> HALF_ABET = StringIterate.splitAtIndex(ALPHABET_LOWERCASE, 13);
+    public static final String TQBFJOTLD_MINUS_HALF_ABET_1 = "t qu rown ox ups ovr t zy o.";
+    public static final String TQBFJOTLD_MINUS_HALF_ABET_2 = "he ick b f jm e he la dg.";
+
     @Test
     public void asCharAdapter()
     {
@@ -90,16 +101,66 @@ public class StringIterateTest
                 .chars()
                 .sorted()
                 .forEach(e -> arraylist.add((char) e));
-        Assert.assertEquals(CharArrayList.newListWith('E', 'H', 'L', 'L', 'O'), arraylist);
+        Assert.assertEquals(StringIterate.asCharAdapter("EHLLO"), arraylist);
 
         ImmutableCharList arrayList2 =
                 StringIterate.asCharAdapter("Hello".toUpperCase())
                         .toSortedList()
                         .toImmutable();
 
-        Assert.assertEquals(CharArrayList.newListWith('E', 'H', 'L', 'L', 'O'), arrayList2);
+        Assert.assertEquals(StringIterate.asCharAdapter("EHLLO"), arrayList2);
 
-        Assert.assertEquals(CharArrayList.newListWith('H', 'E', 'L', 'L', 'O'), CharAdapter.adapt("hello").collectChar(Character::toUpperCase));
+        Assert.assertEquals(StringIterate.asCharAdapter("HELLO"), CharAdapter.adapt("hello").collectChar(Character::toUpperCase));
+    }
+
+    @Test
+    public void asCharAdapterExtra()
+    {
+        Assert.assertEquals(9,
+                StringIterate.asCharAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG)
+                        .count(c -> !Character.isLetter(c)));
+
+        Assert.assertTrue(
+                StringIterate.asCharAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG).anySatisfy(Character::isWhitespace));
+
+        Assert.assertEquals(8,
+                StringIterate.asCharAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG)
+                        .count(Character::isWhitespace));
+
+        Verify.assertSize(26,
+                StringIterate.asCharAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG)
+                        .asLazy()
+                        .select(Character::isLetter)
+                        .collectChar(Character::toLowerCase).toSet());
+
+        ImmutableCharSet alphaCharAdapter =
+                StringIterate.asCharAdapter(ALPHABET_LOWERCASE).toSet().toImmutable();
+        Assert.assertTrue(
+                StringIterate.asCharAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG).containsAll(alphaCharAdapter));
+        Assert.assertEquals(
+                CharSets.immutable.empty(),
+                alphaCharAdapter.newWithoutAll(StringIterate.asCharAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG.toLowerCase())));
+        Assert.assertEquals(
+                TQBFJOTLD_MINUS_HALF_ABET_1,
+                StringIterate.asCharAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG.toLowerCase())
+                        .newWithoutAll(StringIterate.asCharAdapter(HALF_ABET.getOne()))
+                        .toString());
+        Assert.assertEquals(
+                TQBFJOTLD_MINUS_HALF_ABET_2,
+                StringIterate.asCharAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG.toLowerCase())
+                        .newWithoutAll(StringIterate.asCharAdapter(HALF_ABET.getTwo()))
+                        .toString());
+    }
+
+    @Test
+    public void buildTheAlphabetFromEmpty()
+    {
+        String alphabet = StringIterate.asCharAdapter("")
+                .newWith('a')
+                .newWithAll(StringIterate.asCharAdapter(HALF_ABET.getOne()))
+                .newWithAll(StringIterate.asCharAdapter(HALF_ABET.getTwo()))
+                .newWithout('a').toString();
+        Assert.assertEquals(ALPHABET_LOWERCASE, alphabet);
     }
 
     @Test
@@ -133,6 +194,45 @@ public class StringIterateTest
     }
 
     @Test
+    public void asCodePointAdapterExtra()
+    {
+        Assert.assertEquals(9,
+                StringIterate.asCodePointAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG)
+                        .count(i -> !Character.isLetter(i)));
+
+        Assert.assertTrue(
+                StringIterate.asCodePointAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG).anySatisfy(Character::isWhitespace));
+
+        Assert.assertEquals(8,
+                StringIterate.asCodePointAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG)
+                        .count(Character::isWhitespace));
+
+        Verify.assertSize(26,
+                StringIterate.asCodePointAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG)
+                        .asLazy()
+                        .select(Character::isLetter)
+                        .collectInt(Character::toLowerCase).toSet());
+
+        ImmutableIntSet alphaints =
+                StringIterate.asCodePointAdapter(ALPHABET_LOWERCASE).toSet().toImmutable();
+        Assert.assertTrue(
+                StringIterate.asCodePointAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG).containsAll(alphaints));
+        Assert.assertEquals(
+                IntSets.immutable.empty(),
+                alphaints.newWithoutAll(StringIterate.asCodePointAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG.toLowerCase())));
+        Assert.assertEquals(
+                TQBFJOTLD_MINUS_HALF_ABET_1,
+                StringIterate.asCodePointAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG.toLowerCase())
+                        .newWithoutAll(StringIterate.asCodePointAdapter(HALF_ABET.getOne()))
+                        .toString());
+        Assert.assertEquals(
+                TQBFJOTLD_MINUS_HALF_ABET_2,
+                StringIterate.asCodePointAdapter(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG.toLowerCase())
+                        .newWithoutAll(StringIterate.asCodePointAdapter(HALF_ABET.getTwo()))
+                        .toString());
+    }
+
+    @Test
     public void toCodePointList()
     {
         CodePointList answer =
@@ -160,6 +260,48 @@ public class StringIterateTest
 
         Assert.assertEquals("OH!", CodePointList.from(intList).toString());
         Assert.assertEquals("OH!", CodePointList.from(CodePointList.from(intList)).toString());
+    }
+
+    @Test
+    public void toCodePointListExtra()
+    {
+        Assert.assertEquals(9,
+                StringIterate.toCodePointList(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG)
+                        .count(i -> !Character.isLetter(i)));
+
+        Assert.assertTrue(
+                StringIterate.toCodePointList(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG).anySatisfy(Character::isWhitespace));
+
+        Assert.assertEquals(8,
+                StringIterate.toCodePointList(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG)
+                        .count(Character::isWhitespace));
+
+        Verify.assertSize(26,
+                StringIterate.toCodePointList(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG)
+                        .asLazy()
+                        .select(Character::isLetter)
+                        .collectInt(Character::toLowerCase).toSet());
+
+        ImmutableIntSet alphaints =
+                StringIterate.toCodePointList(ALPHABET_LOWERCASE).toSet().toImmutable();
+        Assert.assertTrue(
+                StringIterate.toCodePointList(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG).containsAll(alphaints));
+        Assert.assertEquals(
+                IntSets.immutable.empty(),
+                alphaints.newWithoutAll(StringIterate.toCodePointList(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG.toLowerCase())));
+        Assert.assertTrue(
+                StringIterate.toCodePointList(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG)
+                        .containsAll(StringIterate.toCodePointList(HALF_ABET.getOne())));
+        Assert.assertEquals(
+                TQBFJOTLD_MINUS_HALF_ABET_1,
+                StringIterate.toCodePointList(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG.toLowerCase())
+                        .newWithoutAll(StringIterate.toCodePointList(HALF_ABET.getOne()))
+                        .toString());
+        Assert.assertEquals(
+                TQBFJOTLD_MINUS_HALF_ABET_2,
+                StringIterate.toCodePointList(THE_QUICK_BROWN_FOX_JUMPS_OVER_THE_LAZY_DOG.toLowerCase())
+                        .newWithoutAll(StringIterate.toCodePointList(HALF_ABET.getTwo()))
+                        .toString());
     }
 
     @Test
