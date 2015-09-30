@@ -171,4 +171,23 @@ public final class SynchronizedPutHashBagMultimap<K, V>
     {
         return Iterate.flip(this);
     }
+
+    public void putOccurrences(K key, V value, int occurrences)
+    {
+        if (occurrences < 0)
+        {
+            throw new IllegalArgumentException("Cannot add a negative number of occurrences");
+        }
+
+        if (occurrences > 0)
+        {
+            MutableBag<V> bag = this.map.getIfAbsentPutWith(key, this.createCollectionBlock(), this);
+
+            synchronized (bag)
+            {
+                bag.addOccurrences(value, occurrences);
+                this.addToTotalSize(occurrences);
+            }
+        }
+    }
 }

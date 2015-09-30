@@ -20,9 +20,11 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.multimap.bag.BagMultimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.AbstractMutableMultimapTestCase;
+import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
@@ -171,5 +173,39 @@ public abstract class AbstractMutableBagMultimapTestCase extends AbstractMutable
         expectedMultimap.putAll("1", FastList.newListWith("1Value", "2Value", "3Value", "4Value", "4Value"));
         expectedMultimap.putAll("2", FastList.newListWith("2Value", "3Value", "4Value", "5Value", "3Value", "2Value"));
         Assert.assertEquals(expectedMultimap, collectedMultimap);
+    }
+
+    @Test
+    public void putOccurrences()
+    {
+        MutableBagMultimap<String, String> multimap = this.newMultimap();
+
+        Verify.assertThrows(IllegalArgumentException.class, () -> multimap.putOccurrences("1", "a", -1));
+
+        multimap.putOccurrences("1", "a", 0);
+        Verify.assertEmpty(multimap);
+
+        multimap.putOccurrences("2", "b", 1);
+        Verify.assertSize(1, multimap);
+        Verify.assertBagsEqual(HashBag.<String>newBagWith("b"), multimap.get("2"));
+
+        multimap.putOccurrences("2", "b", 2);
+        Verify.assertSize(3, multimap);
+        Verify.assertBagsEqual(HashBag.<String>newBagWith("b", "b", "b"), multimap.get("2"));
+
+        multimap.putOccurrences("2", "b", 0);
+        Verify.assertSize(3, multimap);
+        Verify.assertBagsEqual(HashBag.<String>newBagWith("b", "b", "b"), multimap.get("2"));
+
+        Verify.assertThrows(IllegalArgumentException.class, () -> multimap.putOccurrences("2", "b", -1));
+
+        multimap.putOccurrences("2", "c", 2);
+        Verify.assertSize(5, multimap);
+        Verify.assertBagsEqual(HashBag.<String>newBagWith("b", "b", "b", "c", "c"), multimap.get("2"));
+
+        multimap.putOccurrences("3", "d", 3);
+        Verify.assertSize(8, multimap);
+        Verify.assertBagsEqual(HashBag.<String>newBagWith("b", "b", "b", "c", "c"), multimap.get("2"));
+        Verify.assertBagsEqual(HashBag.<String>newBagWith("d", "d", "d"), multimap.get("3"));
     }
 }

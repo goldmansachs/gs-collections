@@ -123,4 +123,19 @@ public abstract class AbstractMutableBagMultimap<K, V> extends AbstractMutableMu
             this.putAll(key, bag);
         }
     }
+
+    public void putOccurrences(K key, V value, int occurrences)
+    {
+        if (occurrences < 0)
+        {
+            throw new IllegalArgumentException("Cannot add a negative number of occurrences");
+        }
+        if (occurrences > 0)
+        {
+            MutableBag<V> bag = this.map.getIfAbsentPutWith(key, this.createCollectionBlock(), this);
+
+            bag.addOccurrences(value, occurrences);
+            this.addToTotalSize(occurrences);
+        }
+    }
 }

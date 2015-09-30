@@ -36,6 +36,8 @@ public interface MutableBagMultimap<K, V>
 
     MutableBag<V> get(K key);
 
+    void putOccurrences(K key, V value, int occurrences);
+
     MutableBagMultimap<V, K> flip();
 
     MutableBagMultimap<K, V> selectKeysValues(Predicate2<? super K, ? super V> predicate);
