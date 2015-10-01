@@ -25,44 +25,26 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.bag.sorted.SortedBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
-import com.gs.collections.api.multimap.sortedbag.ImmutableSortedBagMultimap;
 import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.bag.sorted.PartitionImmutableSortedBag;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
-import com.gs.collections.api.stack.MutableStack;
-import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.SortedSets;
-import com.gs.collections.impl.factory.Stacks;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
-import com.gs.collections.impl.multimap.bag.sorted.mutable.TreeBagMultimap;
 import com.gs.collections.impl.partition.bag.sorted.PartitionImmutableSortedBagImpl;
 import com.gs.collections.impl.partition.bag.sorted.PartitionTreeBag;
 import com.gs.collections.impl.utility.ArrayIterate;
@@ -71,7 +53,9 @@ import com.gs.collections.impl.utility.internal.SortedBagIterables;
 import net.jcip.annotations.Immutable;
 
 @Immutable
-class ImmutableSortedBagImpl<T> extends AbstractImmutableSortedBag<T> implements Serializable
+class ImmutableSortedBagImpl<T>
+        extends AbstractImmutableSortedBag<T>
+        implements Serializable
 {
     private static final long serialVersionUID = 1L;
     private final T[] elements;
@@ -199,21 +183,21 @@ class ImmutableSortedBagImpl<T> extends AbstractImmutableSortedBag<T> implements
     }
 
     @Override
+    public T min()
+    {
+        return ArrayIterate.min(this.elements);
+    }
+
+    @Override
     public T min(Comparator<? super T> comparator)
     {
         return ArrayIterate.min(this.elements, comparator);
     }
 
     @Override
-    public T max(Comparator<? super T> comparator)
+    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.max(this.elements, comparator);
-    }
-
-    @Override
-    public T min()
-    {
-        return ArrayIterate.min(this.elements);
+        return ArrayIterate.minBy(this.elements, function);
     }
 
     @Override
@@ -223,15 +207,15 @@ class ImmutableSortedBagImpl<T> extends AbstractImmutableSortedBag<T> implements
     }
 
     @Override
-    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
+    public T max(Comparator<? super T> comparator)
     {
-        return ArrayIterate.maxBy(this.elements, function);
+        return ArrayIterate.max(this.elements, comparator);
     }
 
     @Override
-    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
+    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.minBy(this.elements, function);
+        return ArrayIterate.maxBy(this.elements, function);
     }
 
     public ImmutableSortedBag<T> takeWhile(Predicate<? super T> predicate)
@@ -306,14 +290,22 @@ class ImmutableSortedBagImpl<T> extends AbstractImmutableSortedBag<T> implements
         return new PartitionImmutableSortedBagImpl<T>(result);
     }
 
-    public int size()
+    public void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure)
     {
-        return this.size;
+        for (int i = 0; i < this.occurrences.length; i++)
+        {
+            procedure.value(this.elements[i], this.occurrences[i]);
+        }
     }
 
     public int sizeDistinct()
     {
         return this.elements.length;
+    }
+
+    public int size()
+    {
+        return this.size;
     }
 
     public int indexOf(Object object)
@@ -445,14 +437,6 @@ class ImmutableSortedBagImpl<T> extends AbstractImmutableSortedBag<T> implements
         }
     }
 
-    public void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure)
-    {
-        for (int i = 0; i < this.occurrences.length; i++)
-        {
-            procedure.value(this.elements[i], this.occurrences[i]);
-        }
-    }
-
     public int occurrencesOf(Object item)
     {
         int index = Arrays.binarySearch(this.elements, (T) item, this.comparator);
@@ -461,16 +445,6 @@ class ImmutableSortedBagImpl<T> extends AbstractImmutableSortedBag<T> implements
             return this.occurrences[index];
         }
         return 0;
-    }
-
-    public <V> ImmutableSortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
-    {
-        return this.groupBy(function, TreeBagMultimap.<V, T>newMultimap(this.comparator())).toImmutable();
-    }
-
-    public <V> ImmutableSortedBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
-    {
-        return this.groupByEach(function, TreeBagMultimap.<V, T>newMultimap(this.comparator())).toImmutable();
     }
 
     public ImmutableSortedSet<T> distinct()
@@ -525,33 +499,6 @@ class ImmutableSortedBagImpl<T> extends AbstractImmutableSortedBag<T> implements
     }
 
     @Override
-    public MutableList<T> toSortedList(final Comparator<? super T> comparator)
-    {
-        MutableList<ObjectIntPair<T>> sorted = this.toListWithOccurrences().sortThis(new Comparator<ObjectIntPair<T>>()
-        {
-            public int compare(ObjectIntPair<T> o1, ObjectIntPair<T> o2)
-            {
-                return comparator.compare(o1.getOne(), o2.getOne());
-            }
-        });
-
-        final MutableList<T> result = FastList.newList(this.size());
-        sorted.forEach(new Procedure<ObjectIntPair<T>>()
-        {
-            public void value(ObjectIntPair<T> each)
-            {
-                T object = each.getOne();
-                int occurrences = each.getTwo();
-                for (int i = 0; i < occurrences; i++)
-                {
-                    result.add(object);
-                }
-            }
-        });
-        return result;
-    }
-
-    @Override
     public MutableSortedSet<T> toSortedSet()
     {
         return SortedSets.mutable.with(this.elements);
@@ -561,36 +508,6 @@ class ImmutableSortedBagImpl<T> extends AbstractImmutableSortedBag<T> implements
     public MutableSortedSet<T> toSortedSet(Comparator<? super T> comparator)
     {
         return SortedSets.mutable.with(comparator, this.elements);
-    }
-
-    @Override
-    public MutableSortedBag<T> toSortedBag()
-    {
-        final MutableSortedBag<T> bag = TreeBag.newBag();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                bag.addOccurrences(each, occurrences);
-            }
-        });
-
-        return bag;
-    }
-
-    @Override
-    public MutableSortedBag<T> toSortedBag(Comparator<? super T> comparator)
-    {
-        final MutableSortedBag<T> bag = TreeBag.newBag(comparator);
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                bag.addOccurrences(each, occurrences);
-            }
-        });
-
-        return bag;
     }
 
     @Override
@@ -639,194 +556,6 @@ class ImmutableSortedBagImpl<T> extends AbstractImmutableSortedBag<T> implements
             }
         });
         return map;
-    }
-
-    public String toStringOfItemToCount()
-    {
-        if (this.isEmpty())
-        {
-            return "{}";
-        }
-        StringBuilder builder = new StringBuilder().append('{');
-
-        for (int i = 0; i < this.elements.length; i++)
-        {
-            builder.append(this.elements[i]);
-            builder.append('=');
-            builder.append(this.occurrences[i]);
-            builder.append(", ");
-        }
-        builder.deleteCharAt(builder.length() - 1);
-        builder.deleteCharAt(builder.length() - 1);
-        return builder.append('}').toString();
-    }
-
-    public MutableStack<T> toStack()
-    {
-        return Stacks.mutable.withAll(this);
-    }
-
-    @Override
-    public RichIterable<RichIterable<T>> chunk(int size)
-    {
-        if (size <= 0)
-        {
-            throw new IllegalArgumentException("Size for groups must be positive but was: " + size);
-        }
-
-        MutableList<RichIterable<T>> result = Lists.mutable.empty();
-        T[] objects = (T[]) this.toArray();
-        MutableCollection<T> batch = this.newMutable(size);
-        int j = 0;
-
-        while (j < objects.length)
-        {
-            for (int i = 0; i < size && j < objects.length; i++)
-            {
-                batch.add(objects[j]);
-                j++;
-            }
-            result.add(batch.toImmutable());
-        }
-        return result.toImmutable();
-    }
-
-    @Override
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
-    {
-        IV result = injectedValue;
-        for (int i = 0; i < this.elements.length; i++)
-        {
-            for (int j = 0; j < this.occurrences[i]; j++)
-            {
-                result = function.value(result, this.elements[i]);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
-    {
-        int result = injectedValue;
-        for (int i = 0; i < this.elements.length; i++)
-        {
-            for (int j = 0; j < this.occurrences[i]; j++)
-            {
-                result = function.intValueOf(result, this.elements[i]);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
-    {
-        long result = injectedValue;
-        for (int i = 0; i < this.elements.length; i++)
-        {
-            for (int j = 0; j < this.occurrences[i]; j++)
-            {
-                result = function.longValueOf(result, this.elements[i]);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
-    {
-        double result = injectedValue;
-        for (int i = 0; i < this.elements.length; i++)
-        {
-            for (int j = 0; j < this.occurrences[i]; j++)
-            {
-                result = function.doubleValueOf(result, this.elements[i]);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function)
-    {
-        float result = injectedValue;
-        for (int i = 0; i < this.elements.length; i++)
-        {
-            for (int j = 0; j < this.occurrences[i]; j++)
-            {
-                result = function.floatValueOf(result, this.elements[i]);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public long sumOfInt(IntFunction<? super T> function)
-    {
-        long sum = 0L;
-        for (int i = 0; i < this.elements.length; i++)
-        {
-            long value = (long) function.intValueOf(this.elements[i]);
-            for (int j = 0; j < this.occurrences[i]; j++)
-            {
-                sum += value;
-            }
-        }
-        return sum;
-    }
-
-    @Override
-    public double sumOfFloat(FloatFunction<? super T> function)
-    {
-        double sum = 0.0d;
-        double compensation = 0.0d;
-        for (int i = 0; i < this.elements.length; i++)
-        {
-            float value = function.floatValueOf(this.elements[i]);
-            for (int j = 0; j < this.occurrences[i]; j++)
-            {
-                double adjustedValue = value - compensation;
-                double nextSum = sum + adjustedValue;
-                compensation = nextSum - sum - adjustedValue;
-                sum = nextSum;
-            }
-        }
-        return sum;
-    }
-
-    @Override
-    public long sumOfLong(LongFunction<? super T> function)
-    {
-        long sum = 0L;
-        for (int i = 0; i < this.elements.length; i++)
-        {
-            long value = function.longValueOf(this.elements[i]);
-            for (int j = 0; j < this.occurrences[i]; j++)
-            {
-                sum += value;
-            }
-        }
-        return sum;
-    }
-
-    @Override
-    public double sumOfDouble(DoubleFunction<? super T> function)
-    {
-        double sum = 0.0d;
-        double compensation = 0.0d;
-        for (int i = 0; i < this.elements.length; i++)
-        {
-            double value = function.doubleValueOf(this.elements[i]);
-            for (int j = 0; j < this.occurrences[i]; j++)
-            {
-                double adjustedValue = value - compensation;
-                double nextSum = sum + adjustedValue;
-                compensation = nextSum - sum - adjustedValue;
-                sum = nextSum;
-            }
-        }
-        return sum;
     }
 
     public int compareTo(SortedBag<T> otherBag)

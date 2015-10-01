@@ -105,7 +105,12 @@ public abstract class AbstractMutableSortedBagTestCase extends MutableBagTestCas
     @Test
     public void toImmutable()
     {
-        Verify.assertInstanceOf(ImmutableSortedBag.class, this.newWith(2, 2, 3).toImmutable());
+        super.toImmutable();
+
+        Verify.assertInstanceOf(MutableSortedBag.class, this.newWith());
+        Verify.assertInstanceOf(ImmutableSortedBag.class, this.newWith().toImmutable());
+        Assert.assertFalse(this.newWith().toImmutable() instanceof MutableSortedBag);
+
         Assert.assertEquals(SortedBags.immutable.with(2, 2, 3), this.newWith(2, 2, 3).toImmutable());
     }
 
@@ -301,6 +306,7 @@ public abstract class AbstractMutableSortedBagTestCase extends MutableBagTestCas
         Assert.assertNotEquals(HashBag.newBagWith(1, 1, 1, 2, 3, 4), sortedBag);
         Assert.assertNotEquals(HashBag.newBagWith(1, 1, 2, 3), sortedBag);
         Assert.assertNotEquals(HashBag.newBagWith(1, 2, 3, 4), sortedBag);
+        Assert.assertNotEquals(HashBag.newBagWith(1, 2, 3, 4, 5), sortedBag);
 
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3, 4), sortedBag);
     }

@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
 import com.gs.collections.api.bag.sorted.SortedBag;
@@ -33,6 +34,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.sortedbag.ImmutableSortedBagMultimap;
 import com.gs.collections.api.ordered.OrderedIterable;
@@ -42,6 +44,7 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.EmptyIterator;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.SortedBags;
 import com.gs.collections.impl.factory.SortedMaps;
 import com.gs.collections.impl.factory.SortedSets;
@@ -53,7 +56,9 @@ import com.gs.collections.impl.utility.OrderedIterate;
 import net.jcip.annotations.Immutable;
 
 @Immutable
-class ImmutableEmptySortedBag<T> extends AbstractImmutableSortedBag<T> implements Serializable
+class ImmutableEmptySortedBag<T>
+        extends AbstractImmutableSortedBag<T>
+        implements Serializable
 {
     static final ImmutableSortedBag<?> INSTANCE = new ImmutableEmptySortedBag<Object>();
 
@@ -106,12 +111,16 @@ class ImmutableEmptySortedBag<T> extends AbstractImmutableSortedBag<T> implement
         return 0;
     }
 
-    public int size()
+    public void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure)
+    {
+    }
+
+    public int sizeDistinct()
     {
         return 0;
     }
 
-    public int sizeDistinct()
+    public int size()
     {
         return 0;
     }
@@ -162,6 +171,11 @@ class ImmutableEmptySortedBag<T> extends AbstractImmutableSortedBag<T> implement
         return TreeBagMultimap.<V, T>newMultimap(this.comparator).toImmutable();
     }
 
+    public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        return Maps.immutable.empty();
+    }
+
     @Override
     public boolean contains(Object object)
     {
@@ -198,10 +212,6 @@ class ImmutableEmptySortedBag<T> extends AbstractImmutableSortedBag<T> implement
     }
 
     public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
-    {
-    }
-
-    public void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure)
     {
     }
 
@@ -267,12 +277,6 @@ class ImmutableEmptySortedBag<T> extends AbstractImmutableSortedBag<T> implement
         return SortedSets.immutable.with((Comparator<? super Pair<T, Integer>>) this.comparator);
     }
 
-    @Override
-    public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
-    {
-        return target;
-    }
-
     public PartitionImmutableSortedBag<T> partitionWhile(Predicate<? super T> predicate)
     {
         return new PartitionImmutableSortedBagImpl<T>(new PartitionTreeBag<T>(this.comparator()));
@@ -314,6 +318,7 @@ class ImmutableEmptySortedBag<T> extends AbstractImmutableSortedBag<T> implement
         return 0;
     }
 
+    @Override
     public MutableStack<T> toStack()
     {
         return Stacks.mutable.empty();
@@ -329,9 +334,14 @@ class ImmutableEmptySortedBag<T> extends AbstractImmutableSortedBag<T> implement
         return o.size() * -1;
     }
 
-    public String toStringOfItemToCount()
+    @Override
+    public RichIterable<RichIterable<T>> chunk(int size)
     {
-        return "{}";
+        if (size <= 0)
+        {
+            throw new IllegalArgumentException("Size for groups must be positive but was: " + size);
+        }
+        return Lists.immutable.empty();
     }
 
     public MutableSortedMap<T, Integer> toMapOfItemToCount()

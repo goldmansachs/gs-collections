@@ -18,7 +18,6 @@ package com.gs.collections.impl.bag.immutable;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -54,19 +53,10 @@ import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
-import com.gs.collections.api.collection.primitive.MutableByteCollection;
-import com.gs.collections.api.collection.primitive.MutableCharCollection;
-import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
-import com.gs.collections.api.collection.primitive.MutableFloatCollection;
-import com.gs.collections.api.collection.primitive.MutableIntCollection;
-import com.gs.collections.api.collection.primitive.MutableLongCollection;
-import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
-import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
@@ -131,12 +121,6 @@ final class ImmutableEmptyBag<T>
         return 0;
     }
 
-    @Override
-    public String toStringOfItemToCount()
-    {
-        return "{}";
-    }
-
     public int occurrencesOf(Object item)
     {
         return 0;
@@ -149,11 +133,6 @@ final class ImmutableEmptyBag<T>
     public MutableMap<T, Integer> toMapOfItemToCount()
     {
         return Maps.mutable.empty();
-    }
-
-    public ImmutableBag<T> toImmutable()
-    {
-        return this;
     }
 
     @Override
@@ -247,11 +226,6 @@ final class ImmutableEmptyBag<T>
         return HashBag.newBag(elements).toImmutable();
     }
 
-    public ImmutableBag<T> newWithoutAll(Iterable<? extends T> elements)
-    {
-        return this;
-    }
-
     public ImmutableBag<T> selectByOccurrences(IntPredicate predicate)
     {
         return this;
@@ -263,22 +237,9 @@ final class ImmutableEmptyBag<T>
     }
 
     @Override
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
-    {
-        return target;
-    }
-
-    @Override
     public <P> ImmutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this;
-    }
-
-    @Override
-    public <P, R extends Collection<T>> R selectWith(
-            Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
-    {
-        return targetCollection;
     }
 
     public ImmutableBag<T> reject(Predicate<? super T> predicate)
@@ -287,22 +248,9 @@ final class ImmutableEmptyBag<T>
     }
 
     @Override
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
-    {
-        return target;
-    }
-
-    @Override
     public <P> ImmutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this;
-    }
-
-    @Override
-    public <P, R extends Collection<T>> R rejectWith(
-            Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
-    {
-        return targetCollection;
     }
 
     @Override
@@ -334,21 +282,9 @@ final class ImmutableEmptyBag<T>
     }
 
     @Override
-    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
-    {
-        return target;
-    }
-
-    @Override
     public ImmutableByteBag collectByte(ByteFunction<? super T> byteFunction)
     {
         return ByteBags.immutable.empty();
-    }
-
-    @Override
-    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
-    {
-        return target;
     }
 
     @Override
@@ -358,21 +294,9 @@ final class ImmutableEmptyBag<T>
     }
 
     @Override
-    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
-    {
-        return target;
-    }
-
-    @Override
     public ImmutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return DoubleBags.immutable.empty();
-    }
-
-    @Override
-    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
-    {
-        return target;
     }
 
     @Override
@@ -382,21 +306,9 @@ final class ImmutableEmptyBag<T>
     }
 
     @Override
-    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
-    {
-        return target;
-    }
-
-    @Override
     public ImmutableIntBag collectInt(IntFunction<? super T> intFunction)
     {
         return IntBags.immutable.empty();
-    }
-
-    @Override
-    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
-    {
-        return target;
     }
 
     @Override
@@ -406,40 +318,15 @@ final class ImmutableEmptyBag<T>
     }
 
     @Override
-    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
-    {
-        return target;
-    }
-
-    @Override
     public ImmutableShortBag collectShort(ShortFunction<? super T> shortFunction)
     {
         return ShortBags.immutable.empty();
     }
 
     @Override
-    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
-    {
-        return target;
-    }
-
-    @Override
-    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
-    {
-        return target;
-    }
-
-    @Override
     public <P, V> ImmutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
         return (ImmutableBag<V>) INSTANCE;
-    }
-
-    @Override
-    public <P, V, R extends Collection<V>> R collectWith(
-            Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
-    {
-        return targetCollection;
     }
 
     public <V> ImmutableBag<V> collectIf(
@@ -449,39 +336,15 @@ final class ImmutableEmptyBag<T>
         return (ImmutableBag<V>) INSTANCE;
     }
 
-    @Override
-    public <V, R extends Collection<V>> R collectIf(
-            Predicate<? super T> predicate,
-            Function<? super T, ? extends V> function,
-            R target)
-    {
-        return target;
-    }
-
     public <V> ImmutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         return (ImmutableBag<V>) INSTANCE;
-    }
-
-    @Override
-    public <V, R extends Collection<V>> R flatCollect(
-            Function<? super T, ? extends Iterable<V>> function,
-            R target)
-    {
-        return target;
     }
 
     public <V> ImmutableBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         // TODO: Create a Singleton ImmutableEmptyBagMultimap for efficiency
         return HashBagMultimap.<V, T>newMultimap().toImmutable();
-    }
-
-    @Override
-    public <V, R extends MutableMultimap<V, T>> R groupBy(
-            Function<? super T, ? extends V> function, R target)
-    {
-        return target;
     }
 
     public <V> ImmutableBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
@@ -491,24 +354,9 @@ final class ImmutableEmptyBag<T>
     }
 
     @Override
-    public <V, R extends MutableMultimap<V, T>> R groupByEach(
-            Function<? super T, ? extends Iterable<V>> function, R target)
-    {
-        return target;
-    }
-
-    @Override
     public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
     {
         return Maps.immutable.empty();
-    }
-
-    @Override
-    public <V, R extends MutableMap<V, T>> R groupByUniqueKey(
-            Function<? super T, ? extends V> function,
-            R target)
-    {
-        return target;
     }
 
     @Override
@@ -782,12 +630,6 @@ final class ImmutableEmptyBag<T>
         return Bags.immutable.empty();
     }
 
-    @Override
-    public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
-    {
-        return target;
-    }
-
     /**
      * @deprecated in 6.0. Use {@link OrderedIterable#zipWithIndex()} instead.
      */
@@ -795,12 +637,6 @@ final class ImmutableEmptyBag<T>
     public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
         return Sets.immutable.empty();
-    }
-
-    @Override
-    public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
-    {
-        return target;
     }
 
     @Override

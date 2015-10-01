@@ -75,6 +75,7 @@ import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.bag.sorted.mutable.TreeBagMultimap;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
@@ -443,11 +444,17 @@ public abstract class AbstractImmutableSortedBagTestCase extends AbstractImmutab
     public void partition()
     {
         ImmutableSortedBag<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
-        PartitionImmutableSortedBag<Integer> partition = integers.partition(Predicates.greaterThan(integers.size()));
-        Verify.assertIterableEmpty(partition.getSelected());
-        Assert.assertEquals(integers, partition.getRejected());
-        Assert.assertSame(integers.comparator(), partition.getSelected().comparator());
-        Assert.assertSame(integers.comparator(), partition.getRejected().comparator());
+        PartitionImmutableSortedBag<Integer> partition1 = integers.partition(Predicates.greaterThan(integers.size()));
+        Verify.assertIterableEmpty(partition1.getSelected());
+        Assert.assertEquals(integers, partition1.getRejected());
+        Assert.assertSame(integers.comparator(), partition1.getSelected().comparator());
+        Assert.assertSame(integers.comparator(), partition1.getRejected().comparator());
+
+        PartitionImmutableSortedBag<Integer> partition2 = integers.partition(integer -> integer % 2 == 0);
+        Verify.assertSortedBagsEqual(integers.select(integer -> integer % 2 == 0), partition2.getSelected());
+        Verify.assertSortedBagsEqual(integers.reject(integer -> integer % 2 == 0), partition2.getRejected());
+        Assert.assertSame(integers.comparator(), partition2.getSelected().comparator());
+        Assert.assertSame(integers.comparator(), partition2.getRejected().comparator());
     }
 
     @Override
@@ -455,11 +462,17 @@ public abstract class AbstractImmutableSortedBagTestCase extends AbstractImmutab
     public void partitionWith()
     {
         ImmutableSortedBag<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
-        PartitionImmutableSortedBag<Integer> partition = integers.partitionWith(Predicates2.<Integer>greaterThan(), integers.size());
-        Verify.assertIterableEmpty(partition.getSelected());
-        Assert.assertEquals(integers, partition.getRejected());
-        Assert.assertSame(integers.comparator(), partition.getSelected().comparator());
-        Assert.assertSame(integers.comparator(), partition.getRejected().comparator());
+        PartitionImmutableSortedBag<Integer> partition1 = integers.partitionWith(Predicates2.<Integer>greaterThan(), integers.size());
+        Verify.assertIterableEmpty(partition1.getSelected());
+        Assert.assertEquals(integers, partition1.getRejected());
+        Assert.assertSame(integers.comparator(), partition1.getSelected().comparator());
+        Assert.assertSame(integers.comparator(), partition1.getRejected().comparator());
+
+        PartitionImmutableSortedBag<Integer> partition2 = integers.partitionWith((integer, divisor) -> integer % divisor == 0, 2);
+        Verify.assertSortedBagsEqual(integers.select(integer -> integer % 2 == 0), partition2.getSelected());
+        Verify.assertSortedBagsEqual(integers.reject(integer -> integer % 2 == 0), partition2.getRejected());
+        Assert.assertSame(integers.comparator(), partition2.getSelected().comparator());
+        Assert.assertSame(integers.comparator(), partition2.getRejected().comparator());
     }
 
     @Test
@@ -975,6 +988,28 @@ public abstract class AbstractImmutableSortedBagTestCase extends AbstractImmutab
     }
 
     @Test
+    public void groupByUniqueKey()
+    {
+        ImmutableSortedBag<Integer> bag1 = this.newWith(1, 2, 3);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3), bag1.groupByUniqueKey(id -> id));
+
+        ImmutableSortedBag<Integer> bag2 = this.classUnderTest(Comparators.reverseNaturalOrder());
+        Verify.assertThrows(IllegalStateException.class, () -> bag2.groupByUniqueKey(id -> id));
+    }
+
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        ImmutableSortedBag<Integer> bag1 = this.newWith(1, 2, 3);
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(0, 0, 1, 1, 2, 2, 3, 3),
+                bag1.groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(0, 0)));
+
+        ImmutableSortedBag<Integer> bag2 = this.newWith(1, 2, 3);
+        Verify.assertThrows(IllegalStateException.class, () -> bag2.groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(2, 2)));
+    }
+
+    @Test
     public void distinct()
     {
         ImmutableSortedBag<Integer> bag1 = this.classUnderTest();
@@ -1207,45 +1242,56 @@ public abstract class AbstractImmutableSortedBagTestCase extends AbstractImmutab
     public void forEachFromTo()
     {
         MutableSortedBag<Integer> integersMutable = SortedBags.mutable.of(Comparators.reverseNaturalOrder(), 4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
-        ImmutableSortedBag<Integer> integers = integersMutable.toImmutable();
+        ImmutableSortedBag<Integer> integers1 = integersMutable.toImmutable();
 
         MutableList<Integer> result = Lists.mutable.empty();
-        integers.forEach(5, 7, result::add);
+        integers1.forEach(5, 7, result::add);
         Assert.assertEquals(Lists.immutable.with(3, 3, 2), result);
 
         MutableList<Integer> result2 = Lists.mutable.empty();
-        integers.forEach(5, 5, result2::add);
+        integers1.forEach(5, 5, result2::add);
         Assert.assertEquals(Lists.immutable.with(3), result2);
 
         MutableList<Integer> result3 = Lists.mutable.empty();
-        integers.forEach(0, 9, result3::add);
+        integers1.forEach(0, 9, result3::add);
         Assert.assertEquals(Lists.immutable.with(4, 4, 4, 4, 3, 3, 3, 2, 2, 1), result3);
 
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(-1, 0, result::add));
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEach(0, -1, result::add));
-        Verify.assertThrows(IllegalArgumentException.class, () -> integers.forEach(7, 5, result::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers1.forEach(-1, 0, result::add));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers1.forEach(0, -1, result::add));
+        Verify.assertThrows(IllegalArgumentException.class, () -> integers1.forEach(7, 5, result::add));
+
+        ImmutableSortedBag<Integer> integers2 = this.classUnderTest();
+        MutableList<Integer> mutableList = Lists.mutable.of();
+        integers2.forEach(0, integers2.size() - 1, mutableList::add);
+        Assert.assertEquals(this.classUnderTest().toList(), mutableList);
     }
 
     @Test
     public void forEachWithIndexWithFromTo()
     {
-        ImmutableSortedBag<Integer> integers = SortedBags.immutable.of(Comparators.reverseNaturalOrder(), 4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
+        ImmutableSortedBag<Integer> integers1 = SortedBags.immutable.of(Comparators.reverseNaturalOrder(), 4, 4, 4, 4, 3, 3, 3, 2, 2, 1);
         StringBuilder builder = new StringBuilder();
-        integers.forEachWithIndex(5, 7, (each, index) -> builder.append(each).append(index));
+        integers1.forEachWithIndex(5, 7, (each, index) -> builder.append(each).append(index));
         Assert.assertEquals("353627", builder.toString());
 
         StringBuilder builder2 = new StringBuilder();
-        integers.forEachWithIndex(5, 5, (each, index) -> builder2.append(each).append(index));
+        integers1.forEachWithIndex(5, 5, (each, index) -> builder2.append(each).append(index));
         Assert.assertEquals("35", builder2.toString());
 
         StringBuilder builder3 = new StringBuilder();
-        integers.forEachWithIndex(0, 9, (each, index) -> builder3.append(each).append(index));
+        integers1.forEachWithIndex(0, 9, (each, index) -> builder3.append(each).append(index));
         Assert.assertEquals("40414243343536272819", builder3.toString());
 
-        MutableList<Integer> result = Lists.mutable.empty();
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(-1, 0, new AddToList(result)));
-        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers.forEachWithIndex(0, -1, new AddToList(result)));
-        Verify.assertThrows(IllegalArgumentException.class, () -> integers.forEachWithIndex(7, 5, new AddToList(result)));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers1.forEachWithIndex(-1, 0, new AddToList(Lists.mutable.empty())));
+        Verify.assertThrows(IndexOutOfBoundsException.class, () -> integers1.forEachWithIndex(0, -1, new AddToList(Lists.mutable.empty())));
+        Verify.assertThrows(IllegalArgumentException.class, () -> integers1.forEachWithIndex(7, 5, new AddToList(Lists.mutable.empty())));
+
+        ImmutableSortedBag<Integer> integers2 = this.classUnderTest();
+        MutableList<Integer> mutableList1 = Lists.mutable.of();
+        integers2.forEachWithIndex(0, integers2.size() - 1, (each, index) -> mutableList1.add(each + index));
+        MutableList<Integer> result = Lists.mutable.of();
+        Lists.mutable.ofAll(integers2).forEachWithIndex(0, integers2.size() - 1, (each, index) -> result.add(each + index));
+        Assert.assertEquals(result, mutableList1);
     }
 
     @Test

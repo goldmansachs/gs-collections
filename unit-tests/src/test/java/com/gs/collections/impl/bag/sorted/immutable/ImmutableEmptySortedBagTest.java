@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
@@ -45,9 +44,9 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Iterables;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.SortedBags;
 import com.gs.collections.impl.factory.SortedMaps;
 import com.gs.collections.impl.factory.SortedSets;
@@ -61,6 +60,7 @@ import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -185,6 +185,15 @@ public class ImmutableEmptySortedBagTest extends AbstractImmutableSortedBagTestC
 
     @Override
     @Test
+    public void forEachWithIndexWithFromTo()
+    {
+        MutableList<Integer> mutableList = Lists.mutable.empty();
+        this.classUnderTest().forEachWithIndex(0, 0, (each, index) -> mutableList.add(each + index));
+        Verify.assertEmpty(mutableList);
+    }
+
+    @Override
+    @Test
     public void chunk_large_size()
     {
         Assert.assertEquals(Lists.immutable.empty(), this.classUnderTest().chunk(10));
@@ -283,6 +292,24 @@ public class ImmutableEmptySortedBagTest extends AbstractImmutableSortedBagTestC
     {
         Assert.assertEquals("{}", this.classUnderTest().toStringOfItemToCount());
         Assert.assertEquals("{}", this.classUnderTest(Comparator.reverseOrder()).toStringOfItemToCount());
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey()
+    {
+        ImmutableSortedBag<Integer> bag = this.classUnderTest();
+        Assert.assertEquals(Maps.mutable.empty(), bag.groupByUniqueKey(integer -> integer));
+    }
+
+    @Override
+    @Test
+    public void groupByUniqueKey_target()
+    {
+        ImmutableSortedBag<Integer> bag = this.classUnderTest();
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(0, 0),
+                bag.groupByUniqueKey(id -> id, UnifiedMap.newWithKeysValues(0, 0)));
     }
 
     @Override
@@ -509,15 +536,6 @@ public class ImmutableEmptySortedBagTest extends AbstractImmutableSortedBagTestC
         Verify.assertPostSerializedEqualsAndHashCode(bagWithComparator);
     }
 
-    @Override
-    @Test
-    public void forEach()
-    {
-        MutableBag<Integer> result = HashBag.newBag();
-        ImmutableSortedBag<Integer> bag = this.classUnderTest();
-        bag.forEach(CollectionAddProcedure.on(result));
-        Assert.assertEquals(bag, result);
-    }
 
     @Override
     @Test

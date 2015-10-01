@@ -53,7 +53,6 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.utility.Iterate;
 
@@ -120,11 +119,6 @@ public class ImmutableHashBag<T>
         return Iterate.addAllTo(elements, HashBag.newBag(this.delegate)).toImmutable();
     }
 
-    public ImmutableBag<T> newWithoutAll(Iterable<? extends T> elements)
-    {
-        return this.reject(Predicates.in(elements));
-    }
-
     public int size()
     {
         return this.delegate.size();
@@ -137,7 +131,8 @@ public class ImmutableHashBag<T>
 
     @Override
     public <V, R extends MutableMultimap<V, T>> R groupBy(
-            Function<? super T, ? extends V> function, R target)
+            Function<? super T, ? extends V> function,
+            R target)
     {
         return this.delegate.groupBy(function, target);
     }
@@ -149,7 +144,8 @@ public class ImmutableHashBag<T>
 
     @Override
     public <V, R extends MutableMultimap<V, T>> R groupByEach(
-            Function<? super T, ? extends Iterable<V>> function, R target)
+            Function<? super T, ? extends Iterable<V>> function,
+            R target)
     {
         return this.delegate.groupByEach(function, target);
     }
@@ -255,53 +251,19 @@ public class ImmutableHashBag<T>
         this.delegate.forEachWithIndex(objectIntProcedure);
     }
 
-    public ImmutableBag<T> selectByOccurrences(IntPredicate predicate)
-    {
-        return this.delegate.selectByOccurrences(predicate).toImmutable();
-    }
-
-    public ImmutableBag<T> select(Predicate<? super T> predicate)
-    {
-        return this.delegate.select(predicate).toImmutable();
-    }
-
-    public ImmutableBag<T> reject(Predicate<? super T> predicate)
-    {
-        return this.delegate.reject(predicate).toImmutable();
-    }
-
-    @Override
-    public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
-    {
-        return this.delegate.partition(predicate).toImmutable();
-    }
-
     public <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz)
     {
         return this.delegate.selectInstancesOf(clazz).toImmutable();
     }
 
-    public <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function)
+    public ImmutableBag<T> selectByOccurrences(IntPredicate predicate)
     {
-        return this.delegate.collect(function).toImmutable();
+        return this.delegate.selectByOccurrences(predicate).toImmutable();
     }
 
-    public <V> ImmutableBag<V> collectIf(
-            Predicate<? super T> predicate,
-            Function<? super T, ? extends V> function)
+    public void forEachWithOccurrences(ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        return this.delegate.collectIf(predicate, function).toImmutable();
-    }
-
-    public <V> ImmutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
-    {
-        return this.delegate.flatCollect(function).toImmutable();
-    }
-
-    @Override
-    public MutableList<T> toList()
-    {
-        return this.delegate.toList();
+        this.delegate.forEachWithOccurrences(objectIntProcedure);
     }
 
     public int sizeDistinct()
@@ -314,9 +276,10 @@ public class ImmutableHashBag<T>
         return this.delegate.occurrencesOf(item);
     }
 
-    public void forEachWithOccurrences(ObjectIntProcedure<? super T> objectIntProcedure)
+    @Override
+    public MutableList<T> toList()
     {
-        this.delegate.forEachWithOccurrences(objectIntProcedure);
+        return this.delegate.toList();
     }
 
     @Override
@@ -355,10 +318,20 @@ public class ImmutableHashBag<T>
         return this.delegate.toSortedMap(comparator, keyFunction, valueFunction);
     }
 
+    public ImmutableBag<T> select(Predicate<? super T> predicate)
+    {
+        return this.delegate.select(predicate).toImmutable();
+    }
+
     @Override
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
     {
         return this.delegate.select(predicate, target);
+    }
+
+    public ImmutableBag<T> reject(Predicate<? super T> predicate)
+    {
+        return this.delegate.reject(predicate).toImmutable();
     }
 
     @Override
@@ -368,23 +341,47 @@ public class ImmutableHashBag<T>
     }
 
     @Override
+    public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
+    {
+        return this.delegate.partition(predicate).toImmutable();
+    }
+
+    public <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function)
+    {
+        return this.delegate.collect(function).toImmutable();
+    }
+
+    @Override
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {
         return this.delegate.collect(function, target);
     }
 
-    @Override
-    public <V, R extends Collection<V>> R flatCollect(
-            Function<? super T, ? extends Iterable<V>> function, R target)
+    public <V> ImmutableBag<V> collectIf(
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function)
     {
-        return this.delegate.flatCollect(function, target);
+        return this.delegate.collectIf(predicate, function).toImmutable();
     }
 
     @Override
     public <V, R extends Collection<V>> R collectIf(
-            Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function,
+            R target)
     {
         return this.delegate.collectIf(predicate, function, target);
+    }
+
+    public <V> ImmutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    {
+        return this.delegate.flatCollect(function).toImmutable();
+    }
+
+    @Override
+    public <V, R extends Collection<V>> R flatCollect(Function<? super T, ? extends Iterable<V>> function, R target)
+    {
+        return this.delegate.flatCollect(function, target);
     }
 
     @Override
@@ -522,11 +519,6 @@ public class ImmutableHashBag<T>
     public <V extends Comparable<? super V>> MutableSortedBag<T> toSortedBagBy(Function<? super T, ? extends V> function)
     {
         return this.delegate.toSortedBagBy(function);
-    }
-
-    public ImmutableBag<T> toImmutable()
-    {
-        return this;
     }
 
     @Override

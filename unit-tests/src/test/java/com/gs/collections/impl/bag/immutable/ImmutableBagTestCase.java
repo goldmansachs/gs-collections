@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.bag.immutable;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -207,6 +208,52 @@ public abstract class ImmutableBagTestCase extends AbstractRichIterableTestCase
         super.containsAllIterable();
 
         Assert.assertTrue(this.newBag().containsAllIterable(this.newBag()));
+    }
+
+    @Test
+    public void add()
+    {
+        Verify.assertThrows(
+                UnsupportedOperationException.class,
+                () -> ((Collection<String>) this.newBag()).add("1"));
+    }
+
+    @Test
+    public void remove()
+    {
+        Verify.assertThrows(
+                UnsupportedOperationException.class,
+                () -> ((Collection<String>) this.newBag()).remove("1"));
+    }
+
+    @Test
+    public void addAll()
+    {
+        Verify.assertThrows(
+                UnsupportedOperationException.class,
+                () -> ((Collection<String>) this.newBag()).addAll(FastList.newListWith("1", "2", "3")));
+    }
+
+    @Test
+    public void removeAll()
+    {
+        Verify.assertThrows(
+                UnsupportedOperationException.class,
+                () -> ((Collection<String>) this.newBag()).removeAll(FastList.newListWith("1", "2", "3")));
+    }
+
+    @Test
+    public void retainAll()
+    {
+        Verify.assertThrows(
+                UnsupportedOperationException.class,
+                () -> ((Collection<String>) this.newBag()).retainAll(FastList.newListWith("1", "2", "3")));
+    }
+
+    @Test
+    public void clear()
+    {
+        Verify.assertThrows(UnsupportedOperationException.class, () -> ((Collection<String>) this.newBag()).clear());
     }
 
     @Override
@@ -430,7 +477,6 @@ public abstract class ImmutableBagTestCase extends AbstractRichIterableTestCase
     public void collectByteWithTarget()
     {
         super.collectByteWithTarget();
-
 
         ByteHashBag target = new ByteHashBag();
         ByteHashBag result = this.newBag().collectByte(Byte::parseByte, target);
