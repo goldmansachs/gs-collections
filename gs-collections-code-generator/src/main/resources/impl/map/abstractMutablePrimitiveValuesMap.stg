@@ -365,15 +365,30 @@ public abstract class AbstractMutable<name>ValuesMap extends Abstract<name>Itera
         return true;
     }
 
-    public <wideType.(type)> sum()
-    {
-        <wideType.(type)> result = <wideZero.(type)>;
+    <if(primitive.floatingPoint)>public <wideType.(type)> sum()
+{
+    <wideType.(type)> result = <wideZero.(type)>;
+    <wideType.(type)> compensation = <wideZero.(type)>;
 
-        <forEachValue(template = {result += <value>})>
+    <forEachValue(template = {
+<wideType.(type)> adjustedValue = <value> - compensation;
+<wideType.(type)> nextSum = result + adjustedValue;
+compensation = nextSum - result - adjustedValue;
+result = nextSum})>
 
-        return result;
-    }
+    return result;
+}
 
+    <else>public <wideType.(type)> sum()
+{
+    <wideType.(type)> result = <wideZero.(type)>;
+
+    <forEachValue(template = {result += <value>})>
+
+    return result;
+}
+
+    <endif>
     public boolean containsValue(<type> value)
     {
         if (this.getSentinelValues() != null && this.getSentinelValues().containsValue(value))

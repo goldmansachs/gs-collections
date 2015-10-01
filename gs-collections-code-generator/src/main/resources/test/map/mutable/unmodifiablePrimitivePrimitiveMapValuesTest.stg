@@ -14,10 +14,10 @@ targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 fileName(primitive1, primitive2, sameTwoPrimitives) ::= "Unmodifiable<primitive1.name><primitive2.name>MapValuesTest"
 
 class(primitive1, primitive2, sameTwoPrimitives) ::= <<
-<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name, primitive2.wrapperName)>
+<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name, primitive1.wrapperName, primitive2.wrapperName)>
 >>
 
-body(type1, type2, name1, name2, wrapperName) ::= <<
+body(type1, type2, name1, name2, wrapperName1, wrapperName2) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.map.mutable.primitive;
@@ -34,6 +34,7 @@ import com.gs.collections.impl.block.factory.primitive.<name2>Predicates;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutable<name2>CollectionTestCase;
 import com.gs.collections.impl.collection.mutable.primitive.Synchronized<name2>Collection;
 import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name2>Collection;
+<if(primitive2.floatingPoint)>import com.gs.collections.impl.list.Interval;<endif>
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;
 import com.gs.collections.impl.test.Verify;
@@ -70,7 +71,7 @@ public class Unmodifiable<name1><name2>MapValuesTest extends AbstractMutable<nam
     }
 
     @Override
-    protected MutableList\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements)
+    protected MutableList\<<wrapperName2>\> newObjectCollectionWith(<wrapperName2>... elements)
     {
         return FastList.newListWith(elements);
     }
@@ -272,7 +273,7 @@ public class Unmodifiable<name1><name2>MapValuesTest extends AbstractMutable<nam
     @Test
     public void collect()
     {
-        <name2>ToObjectFunction\<<wrapperName>\> function = (<type2> parameter) -> <(castIntToNarrowTypeWithParens.(type2))("parameter - 1")>;
+        <name2>ToObjectFunction\<<wrapperName2>\> function = (<type2> parameter) -> <(castIntToNarrowTypeWithParens.(type2))("parameter - 1")>;
         Assert.assertEquals(this.newObjectCollectionWith(<["0", "1", "2"]:(literal.(type2))(); separator=", ">).toBag(), this.newWith(<["1", "2", "3"]:(literal.(type2))(); separator=", ">).collect(function).toBag());
         <name2>Iterable iterable = this.newWith(<["1", "2", "3"]:(literal.(type2))(); separator=", ">);
         Assert.assertEquals(this.newObjectCollectionWith(<["0", "1", "2"]:(literal.(type2))(); separator=", ">).toBag(), iterable.collect(function).toBag());
@@ -398,6 +399,9 @@ public class Unmodifiable<name1><name2>MapValuesTest extends AbstractMutable<nam
                 || "[<["1", "0"]:(toStringLiteral.(type2))(); separator="/">]".equals(appendable12.toString()));
     }
 
+    <if(primitive2.floatPrimitive)><(sumMethodFloat.(type1))()>
+    <elseif(primitive2.doublePrimitive)><(sumMethodDouble.(type1))()>
+    <endif>
     @Override
     @Test
     public void asSynchronized()
@@ -446,3 +450,81 @@ public void testEquals_NaN()
     //Testing equals() is not applicable for Mutable<name2>Collection.
 }
 >>
+
+sumMethodFloat ::= [
+    "byte": "sumOverrideFloat",
+    "short": "sumOverrideFloat",
+    "char": "sumOverrideFloat",
+    "default" : "noTest"
+]
+
+sumMethodDouble ::= [
+    "byte": "sumOverrideDouble",
+    "short": "sumOverrideDouble",
+    "char": "sumOverrideDouble",
+    "default" : "noTest"
+]
+
+sumOverrideFloat() ::= <<
+@Override
+@Test
+public void sumConsistentRounding()
+{
+    <name2>Iterable iterable = this.newWith(
+            Interval.fromTo(<wrapperName1>.MIN_VALUE, <wrapperName1>.MAX_VALUE)
+                    .toList()
+                    .shuffleThis()
+                    .reject(i -> i == 0)
+                    .collect<name2>(i -> <["1.0"]:(decimalLiteral.(type2))()> / (i.<type2>Value() * i.<type2>Value() * i.<type2>Value() * i.<type2>Value()))
+                    .toArray());
+
+    Assert.assertEquals(
+            <(floatResults.(type1))()>,
+            iterable.sum(),
+            1.0e-15);
+}
+
+>>
+
+sumOverrideDouble() ::= <<
+@Override
+@Test
+public void sumConsistentRounding()
+{
+    <name2>Iterable iterable = this.newWith(
+            Interval.fromTo(<wrapperName1>.MIN_VALUE, <wrapperName1>.MAX_VALUE)
+                    .toList()
+                    .shuffleThis()
+                    .reject(i -> i == 0)
+                    .collect<name2>(i -> <["1.0"]:(decimalLiteral.(type2))()> / (i.<type2>Value() * i.<type2>Value() * i.<type2>Value() * i.<type2>Value()))
+                    .toArray());
+
+    Assert.assertEquals(
+            <(doubleResults.(type1))()>,
+            iterable.sum(),
+            1.0e-15);
+}
+
+>>
+
+floatResults ::= [
+    "byte": "byteFloatResult",
+    "short": "shortFloatResult",
+    "char": "charFloatResult"
+]
+
+doubleResults ::= [
+    "byte": "byteDoubleResult",
+    "short": "shortDoubleResult",
+    "char": "charDoubleResult"
+]
+
+byteFloatResult() ::= "2.1646461496124854"
+shortFloatResult() ::= "2.1646464675233075"
+charFloatResult() ::= "1.0823232337616622"
+
+byteDoubleResult() ::= "2.1646461495114355"
+shortDoubleResult() ::= "2.1646464674222576"
+charDoubleResult() ::= "1.082323233711138"
+
+noTest() ::= ""

@@ -134,6 +134,39 @@ public class Collect<name>IterableTest
         Assert.assertEquals(<(wideLiteral.(type))("6")>, this.<type>Iterable.sum()<(delta.(type))>);
     }
 
+    <if(primitive.floatPrimitive)>@Test
+public void sumConsistentRounding()
+{
+    <name>Iterable iterable =
+        Interval.oneTo(100_000)
+            .toList()
+            .shuffleThis()
+            .collect<name>(i -> 1.0f / (i.floatValue() * i.floatValue() * i.floatValue() * i.floatValue()));
+
+    // The test only ensures the consistency/stability of rounding. This is not meant to test the "correctness" of the float calculation result.
+    // Indeed the lower bits of this calculation result are always incorrect due to the information loss of original float values.
+    Assert.assertEquals(
+            1.082323233761663,
+            iterable.sum(),
+            1.0e-15);
+}
+
+    <elseif(primitive.doublePrimitive)>@Test
+public void sumConsistentRounding()
+{
+    <name>Iterable iterable =
+        Interval.oneTo(100_000)
+            .toList()
+            .shuffleThis()
+            .collect<name>(i -> <["1.0"]:(decimalLiteral.(type))()> / (i.<type>Value() * i.<type>Value() * i.<type>Value() * i.<type>Value()));
+
+    Assert.assertEquals(
+            1.082323233711138,
+            iterable.sum(),
+            1.0e-15);
+}
+
+    <endif>
     @Test
     public void max()
     {

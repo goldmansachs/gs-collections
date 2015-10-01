@@ -832,20 +832,39 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         return result;
     }
 
-    public <wideType.(type)> sum()
+    <if(primitive.floatingPoint)>public <wideType.(type)> sum()
+{
+    <wideType.(type)> result = <wideZero.(type)>;
+    <wideType.(type)> compensation = <wideZero.(type)>;
+
+    for (int i = 0; i \< this.keys.length; i++)
     {
-        <wideType.(type)> sum = <wideZero.(type)>;
-
-        for (int i = 0; i \< this.keys.length; i++)
+        if (isNonSentinel(this.keys[i]))
         {
-            if (isNonSentinel(this.keys[i]))
-            {
-                sum += this.values[i];
-            }
+            <wideType.(type)> adjustedValue = this.values[i] - compensation;
+            <wideType.(type)> nextSum = result + adjustedValue;
+            compensation = nextSum - result - adjustedValue;
+            result = nextSum;
         }
-        return sum;
     }
+    return result;
+}
 
+    <else>public <wideType.(type)> sum()
+{
+    <wideType.(type)> result = <wideZero.(type)>;
+
+    for (int i = 0; i \< this.keys.length; i++)
+    {
+        if (isNonSentinel(this.keys[i]))
+        {
+            result += this.values[i];
+        }
+    }
+    return result;
+}
+
+    <endif>
     public <type> max()
     {
         if (this.isEmpty())

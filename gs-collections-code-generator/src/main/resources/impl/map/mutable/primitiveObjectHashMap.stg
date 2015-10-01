@@ -1940,23 +1940,33 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     public double sumOfFloat(FloatFunction\<? super V> function)
     {
         double sum = 0.0;
+        double compensation = 0.0;
 
         if (this.sentinelValues != null)
         {
             if (this.sentinelValues.containsZeroKey)
             {
-                sum += function.floatValueOf(this.sentinelValues.zeroValue);
+                double adjustedValue = function.floatValueOf(this.sentinelValues.zeroValue) - compensation;
+                double nextSum = sum + adjustedValue;
+                compensation = nextSum - sum - adjustedValue;
+                sum = nextSum;
             }
             if (this.sentinelValues.containsOneKey)
             {
-                sum += function.floatValueOf(this.sentinelValues.oneValue);
+                double adjustedValue = function.floatValueOf(this.sentinelValues.oneValue) - compensation;
+                double nextSum = sum + adjustedValue;
+                compensation = nextSum - sum - adjustedValue;
+                sum = nextSum;
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]))
             {
-                sum += function.floatValueOf(this.values[i]);
+                double adjustedValue = function.floatValueOf(this.values[i]) - compensation;
+                double nextSum = sum + adjustedValue;
+                compensation = nextSum - sum - adjustedValue;
+                sum = nextSum;
             }
         }
         return sum;
@@ -1990,23 +2000,33 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     public double sumOfDouble(DoubleFunction\<? super V> function)
     {
         double sum = 0.0;
+        double compensation = 0.0;
 
         if (this.sentinelValues != null)
         {
             if (this.sentinelValues.containsZeroKey)
             {
-                sum += function.doubleValueOf(this.sentinelValues.zeroValue);
+                double adjustedValue = function.doubleValueOf(this.sentinelValues.zeroValue) - compensation;
+                double nextSum = sum + adjustedValue;
+                compensation = nextSum - sum - adjustedValue;
+                sum = nextSum;
             }
             if (this.sentinelValues.containsOneKey)
             {
-                sum += function.doubleValueOf(this.sentinelValues.oneValue);
+                double adjustedValue = function.doubleValueOf(this.sentinelValues.oneValue) - compensation;
+                double nextSum = sum + adjustedValue;
+                compensation = nextSum - sum - adjustedValue;
+                sum = nextSum;
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]))
             {
-                sum += function.doubleValueOf(this.values[i]);
+                double adjustedValue = function.doubleValueOf(this.values[i]) - compensation;
+                double nextSum = sum + adjustedValue;
+                compensation = nextSum - sum - adjustedValue;
+                sum = nextSum;
             }
         }
         return sum;
@@ -3187,30 +3207,65 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             return Synchronized<name>Set.of(this);
         }
 
-        public <wideType.(type)> sum()
+        <if(primitive.floatingPoint)>public <wideType.(type)> sum()
+{
+    <wideType.(type)> result = <wideZero.(type)>;
+    <wideType.(type)> compensation = <wideZero.(type)>;
+    if (<name>ObjectHashMap.this.sentinelValues != null)
+    {
+        if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
         {
-            <wideType.(type)> sum = <wideZero.(type)>;
-            if (<name>ObjectHashMap.this.sentinelValues != null)
-            {
-                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
-                {
-                    sum += EMPTY_KEY;
-                }
-                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
-                {
-                    sum += REMOVED_KEY;
-                }
-            }
-            for (<type> key : <name>ObjectHashMap.this.keys)
-            {
-                if (isNonSentinel(key))
-                {
-                    sum += key;
-                }
-            }
-            return sum;
+            <wideType.(type)> adjustedValue = EMPTY_KEY - compensation;
+            <wideType.(type)> nextSum = result + adjustedValue;
+            compensation = nextSum - result - adjustedValue;
+            result = nextSum;
         }
+        if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
+        {
+            <wideType.(type)> adjustedValue = REMOVED_KEY - compensation;
+            <wideType.(type)> nextSum = result + adjustedValue;
+            compensation = nextSum - result - adjustedValue;
+            result = nextSum;
+        }
+    }
+    for (<type> key : <name>ObjectHashMap.this.keys)
+    {
+        if (isNonSentinel(key))
+        {
+            <wideType.(type)> adjustedValue = key - compensation;
+            <wideType.(type)> nextSum = result + adjustedValue;
+            compensation = nextSum - result - adjustedValue;
+            result = nextSum;
+        }
+    }
+    return result;
+}
 
+        <else>public <wideType.(type)> sum()
+{
+    <wideType.(type)> result = <wideZero.(type)>;
+    if (<name>ObjectHashMap.this.sentinelValues != null)
+    {
+        if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
+        {
+            result += EMPTY_KEY;
+        }
+        if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
+        {
+            result += REMOVED_KEY;
+        }
+    }
+    for (<type> key : <name>ObjectHashMap.this.keys)
+    {
+        if (isNonSentinel(key))
+        {
+            result += key;
+        }
+    }
+    return result;
+}
+
+        <endif>
         public <type> max()
         {
             if (<name>ObjectHashMap.this.isEmpty())

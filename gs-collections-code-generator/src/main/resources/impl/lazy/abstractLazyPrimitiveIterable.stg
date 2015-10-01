@@ -406,7 +406,26 @@ private static final class <name>MinProcedure implements <name>Procedure
     }
 }
 
-private static final class <name>SumProcedure implements <name>Procedure
+<if(primitive.floatingPoint)>private static final class <name>SumProcedure implements <name>Procedure
+{
+    private <wideType.(type)> sum = <wideZero.(type)>;
+    private <wideType.(type)> compensation = <wideZero.(type)>;
+
+    public void value(<type> each)
+    {
+        <wideType.(type)> adjustedValue = each - this.compensation;
+        <wideType.(type)> nextSum = this.sum + adjustedValue;
+        this.compensation = nextSum - this.sum - adjustedValue;
+        this.sum = nextSum;
+    }
+
+    public <wideType.(type)> getValue()
+    {
+        return this.sum;
+    }
+}
+
+<elseif(!primitive.booleanPrimitive)>private static final class <name>SumProcedure implements <name>Procedure
 {
     private <type> sum = 0;
 
@@ -421,6 +440,7 @@ private static final class <name>SumProcedure implements <name>Procedure
     }
 }
 
+<endif>
 >>
 
 noMethods() ::= ""

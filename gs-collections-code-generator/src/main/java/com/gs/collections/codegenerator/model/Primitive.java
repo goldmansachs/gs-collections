@@ -61,4 +61,29 @@ public enum Primitive
     {
         return this == BYTE;
     }
+
+    public boolean isBooleanPrimitive()
+    {
+        return this == BOOLEAN;
+    }
+
+    public boolean isCharPrimitive()
+    {
+        return this == CHAR;
+    }
+
+    public boolean isShortPrimitive()
+    {
+        return this == SHORT;
+    }
+
+    public boolean isFloatPrimitive()
+    {
+        return this == FLOAT;
+    }
+
+    public boolean isDoublePrimitive()
+    {
+        return this == DOUBLE;
+    }
 }

@@ -245,16 +245,31 @@ final class Immutable<name>ArrayList
         return target.toImmutable();
     }
 
-    public <wideType.(type)> sum()
+    <if(primitive.floatingPoint)>public <wideType.(type)> sum()
+{
+    <wideType.(type)> result = <wideZero.(type)>;
+    <wideType.(type)> compensation = <wideZero.(type)>;
+    for (<type> item : this.items)
     {
-        <wideType.(type)> result = <wideZero.(type)>;
-        for (<type> item : this.items)
-        {
-            result += item;
-        }
-        return result;
+        <wideType.(type)> adjustedValue = item - compensation;
+        <wideType.(type)> nextSum = result + adjustedValue;
+        compensation = nextSum - result - adjustedValue;
+        result = nextSum;
     }
+    return result;
+}
 
+    <else>public <wideType.(type)> sum()
+{
+    <wideType.(type)> result = <wideZero.(type)>;
+    for (<type> item : this.items)
+    {
+        result += item;
+    }
+    return result;
+}
+
+    <endif>
     public <type> max()
     {
         <type> max = this.items[0];

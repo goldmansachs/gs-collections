@@ -594,19 +594,40 @@ public final class <name>HashBag extends Abstract<name>Iterable implements Mutab
         return this.items.keysView().min();
     }
 
-    public <wideType.(type)> sum()
+    <if(primitive.floatingPoint)>public <wideType.(type)> sum()
+{
+    final <wideType.(type)>[] result = {<wideZero.(type)>};
+    final <wideType.(type)>[] compensation = {<wideZero.(type)>};
+    this.forEachWithOccurrences(new <name>IntProcedure()
     {
-        final <wideType.(type)>[] result = {<wideZero.(type)>};
-        this.forEachWithOccurrences(new <name>IntProcedure()
+        public void value(<type> each, int occurrences)
         {
-            public void value(<type> each, int occurrences)
+            for(int i = 0; i \< occurrences; i++)
             {
-                result[0] += (<wideType.(type)>) each * occurrences;
+                <wideType.(type)> adjustedValue = (<wideType.(type)>) each - compensation[0];
+                <wideType.(type)> nextSum = result[0] + adjustedValue;
+                compensation[0] = nextSum - result[0] - adjustedValue;
+                result[0] = nextSum;
             }
-        });
-        return result[0];
-    }
+        }
+    });
+    return result[0];
+}
 
+    <else>public <wideType.(type)> sum()
+{
+    final <wideType.(type)>[] result = {<wideZero.(type)>};
+    this.forEachWithOccurrences(new <name>IntProcedure()
+    {
+        public void value(<type> each, int occurrences)
+        {
+            result[0] += (<wideType.(type)>) each * occurrences;
+        }
+    });
+    return result[0];
+}
+
+    <endif>
     public <type>[] toArray()
     {
         final <type>[] array = new <type>[this.size()];
