@@ -92,6 +92,9 @@ public abstract class AbstractUnifiedSet<T>
 
     protected abstract T detect(Predicate<? super T> predicate, int start, int end);
 
+    @SuppressWarnings("AbstractMethodOverridesAbstractMethod")
+    public abstract MutableSet<T> clone();
+
     protected abstract boolean shortCircuit(
             Predicate<? super T> predicate,
             boolean expected,
@@ -144,13 +147,6 @@ public abstract class AbstractUnifiedSet<T>
             boolean atEnd)
     {
         return this.shortCircuit(predicate, expected, onShortCircuit, atEnd, 0, this.getTable().length);
-    }
-
-    @Override
-    public MutableSet<T> clone()
-    {
-        // Required to ensure clone() has public visibility.
-        throw new UnsupportedOperationException("Clone should be implemented by the subclass");
     }
 
     public int getBatchCount(int batchSize)
