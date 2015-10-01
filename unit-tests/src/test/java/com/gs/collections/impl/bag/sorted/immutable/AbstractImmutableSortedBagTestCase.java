@@ -160,15 +160,50 @@ public abstract class AbstractImmutableSortedBagTestCase extends AbstractImmutab
     public void newWithTest()
     {
         ImmutableSortedBag<Integer> immutable = this.classUnderTest();
-        ImmutableSortedBag<Integer> actualBag = immutable.newWith(1);
-        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 1, 1, 1, 2), actualBag);
+        immutable = immutable.newWith(4);
+
+        // inserting at the beginning point (existing element)
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 1, 1, 1, 2, 4), immutable.newWith(1));
+
+        // inserting at the middle point (existing element)
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 1, 1, 2, 2, 4), immutable.newWith(2));
+
+        // inserting at the end point (existing element)
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 1, 1, 2, 4, 4), immutable.newWith(4));
+
+        // inserting at the beginning point (not existing element)
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(0, 1, 1, 1, 2, 4), immutable.newWith(0));
+
+        // inserting at the middle point (not existing element)
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 1, 1, 2, 3, 4), immutable.newWith(3));
+
+        // inserting at the end point (not existing element)
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 1, 1, 2, 4, 5), immutable.newWith(5));
     }
 
     @Test
     public void newWithout()
     {
         ImmutableSortedBag<Integer> immutable = this.classUnderTest();
-        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 1, 1), immutable.newWithout(2).toSortedBag());
+        immutable = immutable.newWith(4);
+
+        // removing at the beginning point (existing element)
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 1, 2, 4), immutable.newWithout(1));
+
+        // removing at the middle point (existing element)
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 1, 1, 4), immutable.newWithout(2));
+
+        // removing at the end point (existing element)
+        Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 1, 1, 2), immutable.newWithout(4));
+
+        // removing at the beginning point (not existing element)
+        Assert.assertEquals(immutable, immutable.newWithout(0));
+
+        // removing at the middle point (not existing element)
+        Assert.assertEquals(immutable, immutable.newWithout(3));
+
+        // removing at the end point (not existing element)
+        Assert.assertEquals(immutable, immutable.newWithout(5));
     }
 
     @Test

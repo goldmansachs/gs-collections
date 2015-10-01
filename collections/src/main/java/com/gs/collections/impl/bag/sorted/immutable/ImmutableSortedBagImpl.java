@@ -103,17 +103,80 @@ class ImmutableSortedBagImpl<T> extends AbstractImmutableSortedBag<T> implements
         });
     }
 
+    private ImmutableSortedBagImpl(T[] elements, int[] occurrences, Comparator<? super T> comparator)
+    {
+        if (elements.length != occurrences.length)
+        {
+            throw new IllegalArgumentException();
+        }
+
+        this.comparator = comparator;
+        this.elements = elements;
+        this.occurrences = occurrences;
+
+        int size = 0;
+        for (int occurrence : occurrences)
+        {
+            size += occurrence;
+        }
+
+        this.size = size;
+    }
+
     public ImmutableSortedBag<T> newWith(T element)
     {
-        return TreeBag.newBag(this).with(element).toImmutable();
+        int index = Arrays.binarySearch(this.elements, element, this.comparator);
+
+        if (index >= 0)
+        {
+            int[] occurrences = this.occurrences.clone();
+            occurrences[index] += 1;
+            return new ImmutableSortedBagImpl<T>(this.elements.clone(), occurrences, this.comparator);
+        }
+
+        int insertionPoint = (index + 1) * -1;
+
+        T[] elements = (T[]) new Object[this.elements.length + 1];
+        int[] occurrences = new int[this.occurrences.length + 1];
+
+        System.arraycopy(this.elements, 0, elements, 0, insertionPoint);
+        System.arraycopy(this.occurrences, 0, occurrences, 0, insertionPoint);
+
+        elements[insertionPoint] = element;
+        occurrences[insertionPoint] = 1;
+
+        System.arraycopy(this.elements, insertionPoint, elements, insertionPoint + 1, this.elements.length - insertionPoint);
+        System.arraycopy(this.occurrences, insertionPoint, occurrences, insertionPoint + 1, this.occurrences.length - insertionPoint);
+
+        return new ImmutableSortedBagImpl<T>(elements, occurrences, this.comparator);
     }
 
     public ImmutableSortedBag<T> newWithout(T element)
     {
-        MutableSortedBag<T> result = TreeBag.newBag(this);
-        result.remove(element);
+        int index = Arrays.binarySearch(this.elements, element, this.comparator);
 
-        return result.toImmutable();
+        if (index < 0)
+        {
+            return this;
+        }
+
+        if (this.occurrences[index] > 1)
+        {
+            int[] occurrences = this.occurrences.clone();
+            occurrences[index] -= 1;
+            return new ImmutableSortedBagImpl<T>(this.elements.clone(), occurrences, this.comparator);
+        }
+
+        T[] elements = (T[]) new Object[this.elements.length - 1];
+        int[] occurrences = new int[this.occurrences.length - 1];
+
+        System.arraycopy(this.elements, 0, elements, 0, index);
+        System.arraycopy(this.occurrences, 0, occurrences, 0, index);
+
+        System.arraycopy(this.elements, index + 1, elements, index, elements.length - index);
+        System.arraycopy(this.occurrences, index + 1, occurrences, index, occurrences.length - index);
+
+        return new ImmutableSortedBagImpl<T>(elements, occurrences, this.comparator);
     }
 
     public ImmutableSortedBag<T> newWithAll(Iterable<? extends T> elements)
