@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,13 +31,13 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction0;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ObjectDoubleProcedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectLongProcedure;
 import com.gs.collections.api.list.ListIterable;
@@ -45,19 +45,22 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ObjectDoubleMap;
 import com.gs.collections.api.map.primitive.ObjectLongMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.tuple.primitive.DoubleDoublePair;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 import com.gs.collections.impl.multimap.list.SynchronizedPutFastListMultimap;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import com.gs.collections.impl.utility.Iterate;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iList;
 
 /**
  * The ParallelIterate class contains several parallel algorithms that work with Collections.  All of the higher
@@ -1377,7 +1380,7 @@ public final class ParallelIterate
 
     private static final class SumByDoubleProcedure<T, V> implements Procedure<T>, ProcedureFactory<SumByDoubleProcedure<T, V>>
     {
-        private final ObjectDoubleHashMap<V> map = ObjectDoubleHashMap.newMap();
+        private final MutableMap<V, DoubleDoublePair> map = Maps.mutable.of();
         private final Function<T, V> groupBy;
         private final DoubleFunction<? super T> function;
 
@@ -1389,10 +1392,24 @@ public final class ParallelIterate
 
         public void value(T each)
         {
-            this.map.addToValue(this.groupBy.valueOf(each), this.function.doubleValueOf(each));
+            V groupKey = this.groupBy.valueOf(each);
+            DoubleDoublePair sumCompensation = this.map.getIfAbsentPut(groupKey, new Function0<DoubleDoublePair>()
+            {
+                public DoubleDoublePair value()
+                {
+                    return PrimitiveTuples.pair(0.0d, 0.0d);
+                }
+            });
+            double sum = sumCompensation.getOne();
+            double compensation = sumCompensation.getTwo();
+            double adjustedValue = this.function.doubleValueOf(each) - compensation;
+            double nextSum = sum + adjustedValue;
+            compensation = nextSum - sum - adjustedValue;
+            sum = nextSum;
+            this.map.put(groupKey, PrimitiveTuples.pair(sum, compensation));
         }
 
-        public ObjectDoubleHashMap<V> getResult()
+        public MutableMap<V, DoubleDoublePair> getResult()
         {
             return this.map;
         }
@@ -1406,6 +1423,7 @@ public final class ParallelIterate
     private static final class SumByDoubleCombiner<T, V> extends AbstractProcedureCombiner<SumByDoubleProcedure<T, V>>
     {
         private final ObjectDoubleHashMap<V> result;
+        private final ObjectDoubleHashMap<V> compensation = ObjectDoubleHashMap.newMap();
 
         private SumByDoubleCombiner(ObjectDoubleHashMap<V> result)
         {
@@ -1417,15 +1435,34 @@ public final class ParallelIterate
         {
             if (this.result.isEmpty())
             {
-                this.result.putAll(thingToCombine.getResult());
+                thingToCombine.getResult().forEachKeyValue(new Procedure2<V, DoubleDoublePair>()
+                {
+                    public void value(V each, DoubleDoublePair sumCompensation)
+                    {
+                        SumByDoubleCombiner.this.result.put(each, sumCompensation.getOne());
+                        SumByDoubleCombiner.this.compensation.put(each, sumCompensation.getTwo());
+                    }
+                });
             }
             else
             {
-                thingToCombine.getResult().forEachKeyValue(new ObjectDoubleProcedure<V>()
+                thingToCombine.getResult().forEachKeyValue(new Procedure2<V, DoubleDoublePair>()
                 {
-                    public void value(V each, double value)
+                    public void value(V each, DoubleDoublePair sumCompensation)
                     {
-                        SumByDoubleCombiner.this.result.addToValue(each, value);
+                        double sum = SumByDoubleCombiner.this.result.get(each);
+                        double currentCompensation = SumByDoubleCombiner.this.compensation.getIfAbsentPut(each, new DoubleFunction0()
+                        {
+                            public double value()
+                            {
+                                return 0.0d;
+                            }
+                        }) + sumCompensation.getTwo();
+
+                        double adjustedValue = sumCompensation.getOne() - currentCompensation;
+                        double nextSum = sum + adjustedValue;
+                        SumByDoubleCombiner.this.compensation.put(each, nextSum - sum - adjustedValue);
+                        SumByDoubleCombiner.this.result.put(each, nextSum);
                     }
                 });
             }
@@ -1434,7 +1471,7 @@ public final class ParallelIterate
 
     private static final class SumByFloatProcedure<T, V> implements Procedure<T>, ProcedureFactory<SumByFloatProcedure<T, V>>
     {
-        private final ObjectDoubleHashMap<V> map = ObjectDoubleHashMap.newMap();
+        private final MutableMap<V, DoubleDoublePair> map = Maps.mutable.of();
         private final Function<T, V> groupBy;
         private final FloatFunction<? super T> function;
 
@@ -1446,10 +1483,24 @@ public final class ParallelIterate
 
         public void value(T each)
         {
-            this.map.addToValue(this.groupBy.valueOf(each), (double) this.function.floatValueOf(each));
+            V groupKey = this.groupBy.valueOf(each);
+            DoubleDoublePair sumCompensation = this.map.getIfAbsentPut(groupKey, new Function0<DoubleDoublePair>()
+            {
+                public DoubleDoublePair value()
+                {
+                    return PrimitiveTuples.pair(0.0d, 0.0d);
+                }
+            });
+            double sum = sumCompensation.getOne();
+            double compensation = sumCompensation.getTwo();
+            double adjustedValue = this.function.floatValueOf(each) - compensation;
+            double nextSum = sum + adjustedValue;
+            compensation = nextSum - sum - adjustedValue;
+            sum = nextSum;
+            this.map.put(groupKey, PrimitiveTuples.pair(sum, compensation));
         }
 
-        public ObjectDoubleHashMap<V> getResult()
+        public MutableMap<V, DoubleDoublePair> getResult()
         {
             return this.map;
         }
@@ -1463,6 +1514,7 @@ public final class ParallelIterate
     private static final class SumByFloatCombiner<T, V> extends AbstractProcedureCombiner<SumByFloatProcedure<T, V>>
     {
         private final ObjectDoubleHashMap<V> result;
+        private final ObjectDoubleHashMap<V> compensation = ObjectDoubleHashMap.newMap();
 
         private SumByFloatCombiner(ObjectDoubleHashMap<V> result)
         {
@@ -1474,15 +1526,34 @@ public final class ParallelIterate
         {
             if (this.result.isEmpty())
             {
-                this.result.putAll(thingToCombine.getResult());
+                thingToCombine.getResult().forEachKeyValue(new Procedure2<V, DoubleDoublePair>()
+                {
+                    public void value(V each, DoubleDoublePair sumCompensation)
+                    {
+                        SumByFloatCombiner.this.result.put(each, sumCompensation.getOne());
+                        SumByFloatCombiner.this.compensation.put(each, sumCompensation.getTwo());
+                    }
+                });
             }
             else
             {
-                thingToCombine.getResult().forEachKeyValue(new ObjectDoubleProcedure<V>()
+                thingToCombine.getResult().forEachKeyValue(new Procedure2<V, DoubleDoublePair>()
                 {
-                    public void value(V each, double value)
+                    public void value(V each, DoubleDoublePair sumCompensation)
                     {
-                        SumByFloatCombiner.this.result.addToValue(each, value);
+                        double sum = SumByFloatCombiner.this.result.get(each);
+                        double currentCompensation = SumByFloatCombiner.this.compensation.getIfAbsentPut(each, new DoubleFunction0()
+                        {
+                            public double value()
+                            {
+                                return 0.0d;
+                            }
+                        }) + sumCompensation.getTwo();
+
+                        double adjustedValue = sumCompensation.getOne() - currentCompensation;
+                        double nextSum = sum + adjustedValue;
+                        SumByFloatCombiner.this.compensation.put(each, nextSum - sum - adjustedValue);
+                        SumByFloatCombiner.this.result.put(each, nextSum);
                     }
                 });
             }

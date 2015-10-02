@@ -46,7 +46,6 @@ import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectIfProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectProcedure;
@@ -956,10 +955,16 @@ public final class InternalArrayIterate
     public static <V, T> ObjectDoubleMap<V> sumByFloat(T[] array, int size, Function<T, V> groupBy, FloatFunction<? super T> function)
     {
         ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        ObjectDoubleHashMap<V> groupKeyToCompensation = ObjectDoubleHashMap.newMap();
         for (int i = 0; i < size; i++)
         {
             T item = array[i];
-            result.addToValue(groupBy.valueOf(item), function.floatValueOf(item));
+            V groupByKey = groupBy.valueOf(item);
+            double compensation = groupKeyToCompensation.getIfAbsentPut(groupByKey, 0.0d);
+            double adjustedValue = function.floatValueOf(item) - compensation;
+            double nextSum = result.get(groupByKey) + adjustedValue;
+            groupKeyToCompensation.put(groupByKey, nextSum - result.get(groupByKey) - adjustedValue);
+            result.put(groupByKey, nextSum);
         }
         return result;
     }
@@ -967,10 +972,16 @@ public final class InternalArrayIterate
     public static <V, T> ObjectDoubleMap<V> sumByDouble(T[] array, int size, Function<T, V> groupBy, DoubleFunction<? super T> function)
     {
         ObjectDoubleHashMap<V> result = ObjectDoubleHashMap.newMap();
+        ObjectDoubleHashMap<V> groupKeyToCompensation = ObjectDoubleHashMap.newMap();
         for (int i = 0; i < size; i++)
         {
             T item = array[i];
-            result.addToValue(groupBy.valueOf(item), function.doubleValueOf(item));
+            V groupByKey = groupBy.valueOf(item);
+            double compensation = groupKeyToCompensation.getIfAbsentPut(groupByKey, 0.0d);
+            double adjustedValue = function.doubleValueOf(item) - compensation;
+            double nextSum = result.get(groupByKey) + adjustedValue;
+            groupKeyToCompensation.put(groupByKey, nextSum - result.get(groupByKey) - adjustedValue);
+            result.put(groupByKey, nextSum);
         }
         return result;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
+import com.gs.collections.api.map.primitive.MutableObjectDoubleMap;
+import com.gs.collections.impl.factory.primitive.ObjectDoubleMaps;
 import com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap;
 
@@ -125,6 +127,7 @@ public final class PrimitiveFunctions
     {
         return new Function2<ObjectLongHashMap<V>, T, ObjectLongHashMap<V>>()
         {
+            private static final long serialVersionUID = 1L;
             public ObjectLongHashMap<V> value(ObjectLongHashMap<V> map, T each)
             {
                 map.addToValue(groupBy.valueOf(each), function.intValueOf(each));
@@ -137,9 +140,17 @@ public final class PrimitiveFunctions
     {
         return new Function2<ObjectDoubleHashMap<V>, T, ObjectDoubleHashMap<V>>()
         {
+            private static final long serialVersionUID = 1L;
+            private final MutableObjectDoubleMap<V> compensation = ObjectDoubleMaps.mutable.of();
+
             public ObjectDoubleHashMap<V> value(ObjectDoubleHashMap<V> map, T each)
             {
-                map.addToValue(groupBy.valueOf(each), function.floatValueOf(each));
+                V groupKey = groupBy.valueOf(each);
+                double compensation = this.compensation.getIfAbsent(groupKey, 0.0d);
+                double adjustedValue = function.floatValueOf(each) - compensation;
+                double nextSum = map.get(groupKey) + adjustedValue;
+                this.compensation.put(groupKey, nextSum - map.get(groupKey) - adjustedValue);
+                map.put(groupKey, nextSum);
                 return map;
             }
         };
@@ -149,6 +160,7 @@ public final class PrimitiveFunctions
     {
         return new Function2<ObjectLongHashMap<V>, T, ObjectLongHashMap<V>>()
         {
+            private static final long serialVersionUID = 1L;
             public ObjectLongHashMap<V> value(ObjectLongHashMap<V> map, T each)
             {
                 map.addToValue(groupBy.valueOf(each), function.longValueOf(each));
@@ -161,9 +173,17 @@ public final class PrimitiveFunctions
     {
         return new Function2<ObjectDoubleHashMap<V>, T, ObjectDoubleHashMap<V>>()
         {
+            private static final long serialVersionUID = 1L;
+            private final MutableObjectDoubleMap<V> compensation = ObjectDoubleMaps.mutable.of();
+
             public ObjectDoubleHashMap<V> value(ObjectDoubleHashMap<V> map, T each)
             {
-                map.addToValue(groupBy.valueOf(each), function.doubleValueOf(each));
+                V groupKey = groupBy.valueOf(each);
+                double compensation = this.compensation.getIfAbsent(groupKey, 0.0d);
+                double adjustedValue = function.doubleValueOf(each) - compensation;
+                double nextSum = map.get(groupKey) + adjustedValue;
+                this.compensation.put(groupKey, nextSum - map.get(groupKey) - adjustedValue);
+                map.put(groupKey, nextSum);
                 return map;
             }
         };

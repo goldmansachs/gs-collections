@@ -568,6 +568,32 @@ public class ParallelIterateTest
     }
 
     @Test
+    public void sumByDoubleConsistentRounding()
+    {
+        MutableList<Integer> group1 = Interval.oneTo(100_000).toList().shuffleThis();
+        MutableList<Integer> group2 = Interval.fromTo(100_001, 200_000).toList().shuffleThis();
+        MutableList<Integer> integers = Lists.mutable.withAll(group1);
+        integers.addAll(group2);
+        ObjectDoubleMap<Integer> result = ParallelIterate.<Integer, Integer>sumByDouble(
+                integers,
+                integer -> integer > 100_000 ? 2 : 1,
+                integer -> {
+                    Integer i = integer > 100_000 ? integer - 100_000 : integer;
+                    return 1.0d / (i.doubleValue() * i.doubleValue() * i.doubleValue() * i.doubleValue());
+                });
+
+        Assert.assertEquals(
+                1.082323233711138,
+                result.get(1),
+                1.0e-15);
+
+        Assert.assertEquals(
+                1.082323233711138,
+                result.get(2),
+                1.0e-15);
+    }
+
+    @Test
     public void sumByFloat()
     {
         Interval interval = Interval.oneTo(100000);
@@ -587,6 +613,34 @@ public class ParallelIterateTest
         ObjectDoubleMap<String> smallSumByCount = ParallelIterate.sumByFloat(small, EVEN_OR_ODD, i -> 1.0f);
         Assert.assertEquals(5.0, smallSumByCount.get("Even"), 0.0);
         Assert.assertEquals(6.0, smallSumByCount.get("Odd"), 0.0);
+    }
+
+    @Test
+    public void sumByFloatConsistentRounding()
+    {
+        MutableList<Integer> group1 = Interval.oneTo(100_000).toList().shuffleThis();
+        MutableList<Integer> group2 = Interval.fromTo(100_001, 200_000).toList().shuffleThis();
+        MutableList<Integer> integers = Lists.mutable.withAll(group1);
+        integers.addAll(group2);
+        ObjectDoubleMap<Integer> result = ParallelIterate.<Integer, Integer>sumByFloat(
+                integers,
+                integer -> integer > 100_000 ? 2 : 1,
+                integer -> {
+                    Integer i = integer > 100_000 ? integer - 100_000 : integer;
+                    return 1.0f / (i.floatValue() * i.floatValue() * i.floatValue() * i.floatValue());
+                });
+
+        // The test only ensures the consistency/stability of rounding. This is not meant to test the "correctness" of the float calculation result.
+        // Indeed the lower bits of this calculation result are always incorrect due to the information loss of original float values.
+        Assert.assertEquals(
+                1.082323233761663,
+                result.get(1),
+                1.0e-15);
+
+        Assert.assertEquals(
+                1.082323233761663,
+                result.get(2),
+                1.0e-15);
     }
 
     @Test

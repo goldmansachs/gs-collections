@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -160,5 +160,59 @@ public class PrimitiveFunctionsSerializationTest
                 "rO0ABXNyAEpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByaW1pdGl2ZUZ1\n"
                         + "bmN0aW9ucyRVbmJveEZsb2F0VG9GbG9hdAAAAAAAAAABAgAAeHA=",
                 PrimitiveFunctions.unboxFloatToFloat());
+    }
+
+    @Test
+    public void sumByInt()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyADpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByaW1pdGl2ZUZ1\n"
+                        + "bmN0aW9ucyQxAAAAAAAAAAECAAJMAAx2YWwkZnVuY3Rpb250AD1MY29tL2dzL2NvbGxlY3Rpb25z\n"
+                        + "L2FwaS9ibG9jay9mdW5jdGlvbi9wcmltaXRpdmUvSW50RnVuY3Rpb247TAALdmFsJGdyb3VwQnl0\n"
+                        + "ADBMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9jay9mdW5jdGlvbi9GdW5jdGlvbjt4cHBw",
+                PrimitiveFunctions.sumByIntFunction(null, null));
+    }
+
+    @Test
+    public void sumByLong()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyADpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByaW1pdGl2ZUZ1\n"
+                        + "bmN0aW9ucyQzAAAAAAAAAAECAAJMAAx2YWwkZnVuY3Rpb250AD5MY29tL2dzL2NvbGxlY3Rpb25z\n"
+                        + "L2FwaS9ibG9jay9mdW5jdGlvbi9wcmltaXRpdmUvTG9uZ0Z1bmN0aW9uO0wAC3ZhbCRncm91cEJ5\n"
+                        + "dAAwTGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vRnVuY3Rpb247eHBwcA==\n",
+                PrimitiveFunctions.sumByLongFunction(null, null));
+    }
+
+    @Test
+    public void sumByFloat()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyADpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByaW1pdGl2ZUZ1\n"
+                        + "bmN0aW9ucyQyAAAAAAAAAAECAANMAAxjb21wZW5zYXRpb250AD1MY29tL2dzL2NvbGxlY3Rpb25z\n"
+                        + "L2FwaS9tYXAvcHJpbWl0aXZlL011dGFibGVPYmplY3REb3VibGVNYXA7TAAMdmFsJGZ1bmN0aW9u\n"
+                        + "dAA/TGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vcHJpbWl0aXZlL0Zsb2F0\n"
+                        + "RnVuY3Rpb247TAALdmFsJGdyb3VwQnl0ADBMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9jay9m\n"
+                        + "dW5jdGlvbi9GdW5jdGlvbjt4cHNyAEFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJs\n"
+                        + "ZS5wcmltaXRpdmUuT2JqZWN0RG91YmxlSGFzaE1hcAAAAAAAAAABDAAAeHB3BAAAAAB4cHA=",
+                PrimitiveFunctions.sumByFloatFunction(null, null));
+    }
+
+    @Test
+    public void sumByDouble()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyADpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByaW1pdGl2ZUZ1\n"
+                        + "bmN0aW9ucyQ0AAAAAAAAAAECAANMAAxjb21wZW5zYXRpb250AD1MY29tL2dzL2NvbGxlY3Rpb25z\n"
+                        + "L2FwaS9tYXAvcHJpbWl0aXZlL011dGFibGVPYmplY3REb3VibGVNYXA7TAAMdmFsJGZ1bmN0aW9u\n"
+                        + "dABATGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vcHJpbWl0aXZlL0RvdWJs\n"
+                        + "ZUZ1bmN0aW9uO0wAC3ZhbCRncm91cEJ5dAAwTGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvYmxvY2sv\n"
+                        + "ZnVuY3Rpb24vRnVuY3Rpb247eHBzcgBBY29tLmdzLmNvbGxlY3Rpb25zLmltcGwubWFwLm11dGFi\n"
+                        + "bGUucHJpbWl0aXZlLk9iamVjdERvdWJsZUhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeHBw",
+                PrimitiveFunctions.sumByDoubleFunction(null, null));
     }
 }
