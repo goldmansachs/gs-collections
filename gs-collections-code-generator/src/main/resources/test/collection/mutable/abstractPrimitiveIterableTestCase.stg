@@ -365,7 +365,7 @@ public abstract class Abstract<name>IterableTestCase
         int size = iterable.size();
         Assert.assertEquals(size >= 4 ? <(wideLiteral.(type))("4")> : <(wideLiteral.(type))("0")>, iterable.detectIfNone(<name>Predicates.equal(<(literal.(type))("4")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
         Assert.assertEquals(size >= 2 ? <(wideLiteral.(type))("2")> : <(wideLiteral.(type))("0")>, iterable.detectIfNone(<name>Predicates.equal(<(literal.(type))("2")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
-        Assert.assertEquals(size > 0 ? <(wideLiteral.(type))("1")> : <(wideLiteral.(type))("0")>, iterable.detectIfNone(<name>Predicates.lessThan(<(literal.(type))("4")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(size > 0 ? <(wideLiteral.(type))("1")> : <(wideLiteral.(type))("0")>, iterable.detectIfNone(<name>Predicates.lessThan(<(literal.(type))("2")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
         Assert.assertEquals(size > 3 ? <(wideLiteral.(type))("4")> : <(wideLiteral.(type))("0")>, iterable.detectIfNone(<name>Predicates.greaterThan(<(literal.(type))("3")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
 
         <name>Iterable iterable1 = this.newWith(<["0", "1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);

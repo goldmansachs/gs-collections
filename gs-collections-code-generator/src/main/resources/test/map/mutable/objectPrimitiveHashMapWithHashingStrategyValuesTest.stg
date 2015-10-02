@@ -1,0 +1,94 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+skipBoolean() ::= "true"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
+
+fileName(primitive) ::= "Object<primitive.name>HashMapWithHashingStrategyValuesTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name, primitive.wrapperName)>
+>>
+
+body(type, name, wrapperName) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.mutable.primitive;
+
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.HashingStrategy;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.primitive.MutableObject<name>Map;
+import com.gs.collections.impl.block.factory.HashingStrategies;
+import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractMutable<name>CollectionTestCase;
+import com.gs.collections.impl.collection.mutable.primitive.Synchronized<name>Collection;
+import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name>Collection;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.test.domain.Person;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * JUnit test for {@link Object<name>HashMapWithHashingStrategyWithHashingStrategy#values()}.
+ * This file was automatically generated from template file objectPrimitiveHashMapValuesTest.stg.
+ */
+public class Object<name>HashMapWithHashingStrategyValuesTest extends Object<name>HashMapValuesTestCase
+{
+    private static final HashingStrategy\<String> STRING_HASHING_STRATEGY = HashingStrategies.nullSafeHashingStrategy(new HashingStrategy\<String>()
+        {
+            public int computeHashCode(String object)
+            {
+                return object.hashCode();
+            }
+
+            public boolean equals(String object1, String object2)
+            {
+                return object1.equals(object2);
+            }
+        });
+
+    @Override
+    public MutableObject<name>Map\<String> newMapWithKeysValues(String key1, <type> value1)
+    {
+        return Object<name>HashMapWithHashingStrategy.newWithKeysValues(STRING_HASHING_STRATEGY, key1, value1);
+    }
+
+    @Override
+    public MutableObject<name>Map\<String> newMapWithKeysValues(String key1, <type> value1, String key2, <type> value2)
+    {
+        return Object<name>HashMapWithHashingStrategy.newWithKeysValues(STRING_HASHING_STRATEGY, key1, value1, key2, value2);
+    }
+
+    @Override
+    public MutableObject<name>Map\<String> newMapWithKeysValues(String key1, <type> value1, String key2, <type> value2, String key3, <type> value3)
+    {
+        return Object<name>HashMapWithHashingStrategy.newWithKeysValues(STRING_HASHING_STRATEGY, key1, value1, key2, value2, key3, value3);
+    }
+
+    @Override
+    public MutableObject<name>Map\<String> newMapWithKeysValues(String key1, <type> value1, String key2, <type> value2, String key3, <type> value3, String key4, <type> value4)
+    {
+        return Object<name>HashMapWithHashingStrategy.newWithKeysValues(STRING_HASHING_STRATEGY, key1, value1, key2, value2, key3, value3, key4, value4);
+    }
+
+    @Override
+    public MutableObject<name>Map\<String> newEmptyMap()
+    {
+        return Object<name>HashMapWithHashingStrategy.newMap(STRING_HASHING_STRATEGY);
+    }
+}
+
+>>
