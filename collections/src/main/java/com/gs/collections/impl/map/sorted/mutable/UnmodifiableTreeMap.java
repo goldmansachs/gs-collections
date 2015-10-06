@@ -1017,7 +1017,7 @@ public class UnmodifiableTreeMap<K, V>
 
     public MutableSortedMap<K, V> take(int count)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
+        return this.getMutableSortedMap().take(count);
     }
 
     public MutableSortedMap<K, V> takeWhile(Predicate<? super V> predicate)
@@ -1027,7 +1027,7 @@ public class UnmodifiableTreeMap<K, V>
 
     public MutableSortedMap<K, V> drop(int count)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
+        return this.getMutableSortedMap().drop(count);
     }
 
     public MutableSortedMap<K, V> dropWhile(Predicate<? super V> predicate)

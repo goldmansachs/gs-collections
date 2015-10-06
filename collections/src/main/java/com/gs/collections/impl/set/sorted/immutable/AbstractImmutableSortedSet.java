@@ -35,7 +35,6 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
@@ -471,30 +470,5 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
     public int detectLastIndex(Predicate<? super T> predicate)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".detectLastIndex() not implemented yet");
-    }
-
-    public ImmutableSortedSet<T> take(int count)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
-    }
-
-    public ImmutableSortedSet<T> drop(int count)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
-    }
-
-    public int indexOf(Object object)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".indexOf() not implemented yet");
-    }
-
-    public void forEach(int startIndex, int endIndex, Procedure<? super T> procedure)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEach() not implemented yet");
-    }
-
-    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEachWithIndex() not implemented yet");
     }
 }

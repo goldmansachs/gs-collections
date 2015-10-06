@@ -53,6 +53,7 @@ import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
 import com.gs.collections.impl.utility.OrderedIterate;
+import com.gs.collections.impl.utility.internal.IterableIterate;
 import com.gs.collections.impl.utility.internal.SortedBagIterables;
 
 /**
@@ -661,6 +662,26 @@ public class TreeBag<T>
     public MutableStack<T> toStack()
     {
         return ArrayStack.newStack(this);
+    }
+
+    public MutableSortedBag<T> take(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+
+        return IterableIterate.take(this, Math.min(this.size(), count), this.newEmpty());
+    }
+
+    public MutableSortedBag<T> drop(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+
+        return IterableIterate.drop(this, count, this.newEmpty());
     }
 
     public Comparator<? super T> comparator()

@@ -49,7 +49,6 @@ import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
-import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.AbstractMutableBagIterable;
 import com.gs.collections.impl.factory.SortedBags;
@@ -255,24 +254,9 @@ public abstract class AbstractMutableSortedBag<T>
         return this.zip(that, FastList.<Pair<T, S>>newList());
     }
 
-    public MutableSortedSet<T> distinct()
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".distinct() not implemented yet");
-    }
-
     public MutableSortedBag<T> toReversed()
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toReversed() not implemented yet");
-    }
-
-    public MutableSortedBag<T> take(int count)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
-    }
-
-    public MutableSortedBag<T> drop(int count)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
     }
 
     public void reverseForEach(Procedure<? super T> procedure)

@@ -1039,6 +1039,51 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
+    public void take()
+    {
+        ImmutableSortedSet<Integer> integers1 = this.classUnderTest();
+        Assert.assertEquals(SortedSets.immutable.of(integers1.comparator()), integers1.take(0));
+        Assert.assertSame(integers1.comparator(), integers1.take(0).comparator());
+        Assert.assertEquals(SortedSets.immutable.of(integers1.comparator(), 1, 2, 3), integers1.take(3));
+        Assert.assertSame(integers1.comparator(), integers1.take(3).comparator());
+        Assert.assertEquals(SortedSets.immutable.of(integers1.comparator(), 1, 2, 3), integers1.take(integers1.size() - 1));
+
+        ImmutableSortedSet<Integer> integers2 = this.classUnderTest(Comparators.reverseNaturalOrder());
+        Assert.assertSame(integers2, integers2.take(integers2.size()));
+        Assert.assertSame(integers2, integers2.take(10));
+        Assert.assertSame(integers2, integers2.take(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void take_throws()
+    {
+        this.classUnderTest().take(-1);
+    }
+
+    @Test
+    public void drop()
+    {
+        ImmutableSortedSet<Integer> integers1 = this.classUnderTest();
+        Assert.assertSame(integers1, integers1.drop(0));
+        Assert.assertSame(integers1.comparator(), integers1.drop(0).comparator());
+        Assert.assertEquals(SortedSets.immutable.of(integers1.comparator(), 4), integers1.drop(3));
+        Assert.assertSame(integers1.comparator(), integers1.drop(3).comparator());
+        Assert.assertEquals(SortedSets.immutable.of(integers1.comparator(), 4), integers1.drop(integers1.size() - 1));
+
+        ImmutableSortedSet<Integer> expectedSet = SortedSets.immutable.of(Comparators.reverseNaturalOrder());
+        ImmutableSortedSet<Integer> integers2 = this.classUnderTest(Comparators.reverseNaturalOrder());
+        Assert.assertEquals(expectedSet, integers2.drop(integers2.size()));
+        Assert.assertEquals(expectedSet, integers2.drop(10));
+        Assert.assertEquals(expectedSet, integers2.drop(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_throws()
+    {
+        this.classUnderTest().drop(-1);
+    }
+
+    @Test
     public abstract void subSet();
 
     @Test

@@ -837,4 +837,51 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         Assert.assertEquals(1, integers2.detectIndex(integer -> integer % 2 != 0));
         Assert.assertEquals(-1, integers2.detectIndex(integer -> integer % 5 == 0));
     }
+
+    @Test
+    public void take()
+    {
+        MutableSortedSet<Integer> integers1 = this.newWith(1, 2, 3, 4);
+        Assert.assertEquals(SortedSets.mutable.of(integers1.comparator()), integers1.take(0));
+        Assert.assertSame(integers1.comparator(), integers1.take(0).comparator());
+        Assert.assertEquals(SortedSets.mutable.of(integers1.comparator(), 1, 2, 3), integers1.take(3));
+        Assert.assertSame(integers1.comparator(), integers1.take(3).comparator());
+        Assert.assertEquals(SortedSets.mutable.of(integers1.comparator(), 1, 2, 3), integers1.take(integers1.size() - 1));
+
+        MutableSortedSet<Integer> expectedSet = this.newWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1);
+        MutableSortedSet<Integer> integers2 = this.newWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1);
+        Assert.assertEquals(expectedSet, integers2.take(integers2.size()));
+        Assert.assertEquals(expectedSet, integers2.take(10));
+        Assert.assertEquals(expectedSet, integers2.take(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void take_throws()
+    {
+        this.newWith(1, 2, 3).take(-1);
+    }
+
+    @Test
+    public void drop()
+    {
+        MutableSortedSet<Integer> integers1 = this.newWith(1, 2, 3, 4);
+        Assert.assertEquals(integers1, integers1.drop(0));
+        Assert.assertSame(integers1.comparator(), integers1.drop(0).comparator());
+        Assert.assertNotSame(integers1, integers1.drop(0));
+        Assert.assertEquals(SortedSets.mutable.of(integers1.comparator(), 4), integers1.drop(3));
+        Assert.assertSame(integers1.comparator(), integers1.drop(3).comparator());
+        Assert.assertEquals(SortedSets.mutable.of(integers1.comparator(), 4), integers1.drop(integers1.size() - 1));
+
+        MutableSortedSet<Integer> expectedSet = SortedSets.mutable.of(Comparators.reverseNaturalOrder());
+        MutableSortedSet<Integer> integers2 = this.newWith(Comparators.reverseNaturalOrder(), 4, 3, 2, 1);
+        Assert.assertEquals(expectedSet, integers2.drop(integers2.size()));
+        Assert.assertEquals(expectedSet, integers2.drop(10));
+        Assert.assertEquals(expectedSet, integers2.drop(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_throws()
+    {
+        this.newWith(1, 2, 3).drop(-1);
+    }
 }

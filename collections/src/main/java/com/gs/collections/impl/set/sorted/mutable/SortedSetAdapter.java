@@ -639,12 +639,12 @@ public final class SortedSetAdapter<T>
 
     public MutableSortedSet<T> take(int count)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
+        return IterableIterate.take(this.getDelegate(), Math.min(this.size(), count), TreeSortedSet.newSet(this.comparator()));
     }
 
     public MutableSortedSet<T> drop(int count)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
+        return IterableIterate.drop(this.getDelegate(), count, TreeSortedSet.newSet(this.comparator()));
     }
 
     public void reverseForEach(Procedure<? super T> procedure)

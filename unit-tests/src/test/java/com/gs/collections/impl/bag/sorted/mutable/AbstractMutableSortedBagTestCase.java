@@ -1836,6 +1836,48 @@ public abstract class AbstractMutableSortedBagTestCase extends MutableBagTestCas
         Assert.assertEquals(-1, integers2.detectIndex(integer -> integer % 5 == 0));
     }
 
+    @Test
+    public void take()
+    {
+        MutableSortedBag<Integer> integers1 = this.newWith(1, 1, 1, 2);
+        Assert.assertEquals(SortedBags.mutable.empty(integers1.comparator()), integers1.take(0));
+        Assert.assertSame(integers1.comparator(), integers1.take(0).comparator());
+        Assert.assertEquals(this.newWith(integers1.comparator(), 1, 1, 1), integers1.take(3));
+        Assert.assertSame(integers1.comparator(), integers1.take(3).comparator());
+        Assert.assertEquals(this.newWith(integers1.comparator(), 1, 1, 1), integers1.take(integers1.size() - 1));
+
+        MutableSortedBag<Integer> expectedBag = this.newWith(Comparators.reverseNaturalOrder(), 3, 3, 3, 2, 2, 1);
+        MutableSortedBag<Integer> integers2 = this.newWith(Comparators.reverseNaturalOrder(), 3, 3, 3, 2, 2, 1);
+        Assert.assertEquals(expectedBag, integers2.take(integers2.size()));
+        Assert.assertEquals(expectedBag, integers2.take(10));
+        Assert.assertEquals(expectedBag, integers2.take(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void take_throws()
+    {
+        this.newWith(1, 2, 3).take(-1);
+    }
+
+    @Test
+    public void drop()
+    {
+        MutableSortedBag<Integer> integers1 = this.newWith(1, 1, 1, 2);
+        Assert.assertEquals(integers1, integers1.drop(0));
+        Assert.assertNotSame(integers1, integers1.drop(0));
+        Assert.assertEquals(this.newWith(integers1.comparator(), 2), integers1.drop(3));
+        Assert.assertEquals(this.newWith(integers1.comparator(), 2), integers1.drop(integers1.size() - 1));
+        Assert.assertEquals(SortedBags.mutable.empty(integers1.comparator()), integers1.drop(integers1.size()));
+        Assert.assertEquals(SortedBags.mutable.empty(integers1.comparator()), integers1.drop(10));
+        Assert.assertEquals(SortedBags.mutable.empty(integers1.comparator()), integers1.drop(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_throws()
+    {
+        this.newWith(1, 2, 3).drop(-1);
+    }
+
     // Like Integer, but not Comparable
     public static final class Holder
     {

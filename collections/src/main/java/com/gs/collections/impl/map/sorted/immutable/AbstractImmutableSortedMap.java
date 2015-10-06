@@ -461,19 +461,9 @@ public abstract class AbstractImmutableSortedMap<K, V>
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".detectLastIndex() not implemented yet");
     }
 
-    public ImmutableSortedMap<K, V> take(int count)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
-    }
-
     public ImmutableSortedMap<K, V> takeWhile(Predicate<? super V> predicate)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".takeWhile() not implemented yet");
-    }
-
-    public ImmutableSortedMap<K, V> drop(int count)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
     }
 
     public ImmutableSortedMap<K, V> dropWhile(Predicate<? super V> predicate)

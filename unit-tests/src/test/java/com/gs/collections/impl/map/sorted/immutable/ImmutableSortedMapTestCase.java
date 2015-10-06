@@ -37,6 +37,7 @@ import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
+import com.gs.collections.impl.factory.SortedMaps;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -581,6 +582,51 @@ public abstract class ImmutableSortedMapTestCase extends MapIterableTestCase
 
     @Test
     public abstract void testToString();
+
+    @Test
+    public void take()
+    {
+        ImmutableSortedMap<Integer, String> strings1 = this.classUnderTest();
+        Assert.assertEquals(SortedMaps.immutable.of(strings1.comparator()), strings1.take(0));
+        Assert.assertSame(strings1.comparator(), strings1.take(0).comparator());
+        Assert.assertEquals(SortedMaps.immutable.of(strings1.comparator(), 1, "1", 2, "2", 3, "3"), strings1.take(3));
+        Assert.assertSame(strings1.comparator(), strings1.take(3).comparator());
+        Assert.assertEquals(SortedMaps.immutable.of(strings1.comparator(), 1, "1", 2, "2", 3, "3"), strings1.take(strings1.size() - 1));
+
+        ImmutableSortedMap<Integer, String> strings2 = this.classUnderTest(Comparators.reverseNaturalOrder());
+        Assert.assertSame(strings2, strings2.take(strings2.size()));
+        Assert.assertSame(strings2, strings2.take(10));
+        Assert.assertSame(strings2, strings2.take(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void take_throws()
+    {
+        this.classUnderTest().take(-1);
+    }
+
+    @Test
+    public void drop()
+    {
+        ImmutableSortedMap<Integer, String> strings1 = this.classUnderTest();
+        Assert.assertSame(strings1, strings1.drop(0));
+        Assert.assertSame(strings1.comparator(), strings1.drop(0).comparator());
+        Assert.assertEquals(SortedMaps.immutable.of(strings1.comparator(), 4, "4"), strings1.drop(3));
+        Assert.assertSame(strings1.comparator(), strings1.drop(3).comparator());
+        Assert.assertEquals(SortedMaps.immutable.of(strings1.comparator(), 4, "4"), strings1.drop(strings1.size() - 1));
+
+        ImmutableSortedMap<Integer, String> expectedMap = SortedMaps.immutable.of(Comparators.reverseNaturalOrder());
+        ImmutableSortedMap<Integer, String> strings2 = this.classUnderTest(Comparators.reverseNaturalOrder());
+        Assert.assertEquals(expectedMap, strings2.drop(strings2.size()));
+        Assert.assertEquals(expectedMap, strings2.drop(10));
+        Assert.assertEquals(expectedMap, strings2.drop(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_throws()
+    {
+        this.classUnderTest().drop(-1);
+    }
 
     protected MutableMap<Integer, String> equalUnifiedMap()
     {

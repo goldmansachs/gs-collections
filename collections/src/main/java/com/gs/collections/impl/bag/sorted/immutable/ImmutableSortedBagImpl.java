@@ -43,6 +43,7 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.factory.SortedBags;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.partition.bag.sorted.PartitionImmutableSortedBagImpl;
@@ -167,13 +168,6 @@ class ImmutableSortedBagImpl<T>
     {
         MutableSortedBag<T> result = TreeBag.newBag(this);
         result.addAllIterable(elements);
-        return result.toImmutable();
-    }
-
-    public ImmutableSortedBag<T> newWithoutAll(Iterable<? extends T> elements)
-    {
-        MutableSortedBag<T> result = TreeBag.newBag(this);
-        this.removeAllFrom(elements, result);
         return result.toImmutable();
     }
 
@@ -614,6 +608,71 @@ class ImmutableSortedBagImpl<T>
     public Iterator<T> iterator()
     {
         return new InternalIterator();
+    }
+
+    public ImmutableSortedBag<T> take(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        if (count == 0)
+        {
+            return SortedBags.immutable.empty(this.comparator());
+        }
+        if (count >= this.size())
+        {
+            return this;
+        }
+
+        MutableSortedBag<T> output = TreeBag.newBag(this.comparator());
+        int index = 0;
+        for (int i = 0; i < this.elements.length; i++)
+        {
+            for (int j = 0; j < this.occurrences[i]; j++)
+            {
+                output.add(this.elements[i]);
+                index++;
+                if (index >= count)
+                {
+                    return output.toImmutable();
+                }
+            }
+        }
+
+        throw new AssertionError();
+    }
+
+    public ImmutableSortedBag<T> drop(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        if (count == 0)
+        {
+            return this;
+        }
+        if (count >= this.size())
+        {
+            return SortedBags.immutable.empty(this.comparator());
+        }
+
+        MutableSortedBag<T> output = TreeBag.newBag(this.comparator());
+        int index = 0;
+        for (int i = 0; i < this.elements.length; i++)
+        {
+            for (int j = 0; j < this.occurrences[i]; j++)
+            {
+                if (index >= count)
+                {
+                    output.add(this.elements[i]);
+                }
+                index++;
+            }
+        }
+
+        return output.toImmutable();
     }
 
     @Override

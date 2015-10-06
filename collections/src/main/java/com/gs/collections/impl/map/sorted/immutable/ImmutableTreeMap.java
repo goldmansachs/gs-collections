@@ -32,10 +32,12 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
+import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.factory.SortedMaps;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
@@ -247,6 +249,57 @@ public class ImmutableTreeMap<K, V>
     protected Object writeReplace()
     {
         return new ImmutableSortedMapSerializationProxy<K, V>(this);
+    }
+
+    public ImmutableSortedMap<K, V> take(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        if (count == 0)
+        {
+            return SortedMaps.immutable.of(this.comparator());
+        }
+        if (count >= this.size())
+        {
+            return this;
+        }
+
+        MutableSortedMap<K, V> output = SortedMaps.mutable.of(this.comparator());
+        for (int i = 0; i < count; i++)
+        {
+            output.put(this.keys[i], this.values[i]);
+        }
+
+        return output.toImmutable();
+    }
+
+    public ImmutableSortedMap<K, V> drop(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        if (count == 0)
+        {
+            return this;
+        }
+        if (count >= this.size())
+        {
+            return SortedMaps.immutable.of(this.comparator());
+        }
+
+        MutableSortedMap<K, V> output = SortedMaps.mutable.of(this.comparator());
+        for (int i = 0; i < this.size(); i++)
+        {
+            if (i >= count)
+            {
+                output.put(this.keys[i], this.values[i]);
+            }
+        }
+
+        return output.toImmutable();
     }
 
     private static final class EntryComparator<K, V> implements Comparator<Entry<K, V>>

@@ -34,8 +34,10 @@ import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
+import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
@@ -478,5 +480,58 @@ final class ImmutableTreeSet<T>
     public int indexOf(Object object)
     {
         return ArrayIterate.indexOf(this.delegate, object);
+    }
+
+    public ImmutableSortedSet<T> take(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        if (count >= this.size())
+        {
+            return this;
+        }
+        if (count == 0)
+        {
+            return SortedSets.immutable.empty(this.comparator());
+        }
+
+        MutableSortedSet<T> output = SortedSets.mutable.of(this.comparator());
+
+        for (int i = 0; i < count; i++)
+        {
+            output.add(this.delegate[i]);
+        }
+
+        return output.toImmutable();
+    }
+
+    public ImmutableSortedSet<T> drop(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+
+        if (count == 0)
+        {
+            return this;
+        }
+        if (count >= this.size())
+        {
+            return SortedSets.immutable.empty(this.comparator());
+        }
+
+        MutableSortedSet<T> output = SortedSets.mutable.of(this.comparator());
+        for (int i = 0; i < this.size(); i++)
+        {
+            if (i >= count)
+            {
+                output.add(this.delegate[i]);
+            }
+        }
+
+        return output.toImmutable();
     }
 }

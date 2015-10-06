@@ -366,4 +366,18 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
 
         Assert.assertTrue(this.classUnderTest().keyValuesView().isEmpty());
     }
+
+    @Override
+    @Test
+    public void take()
+    {
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().take(2));
+    }
+
+    @Override
+    @Test
+    public void drop()
+    {
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().drop(2));
+    }
 }

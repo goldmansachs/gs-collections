@@ -416,16 +416,6 @@ abstract class AbstractImmutableSortedBag<T>
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toReversed() not implemented yet");
     }
 
-    public ImmutableSortedBag<T> take(int count)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
-    }
-
-    public ImmutableSortedBag<T> drop(int count)
-    {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
-    }
-
     public int detectLastIndex(Predicate<? super T> predicate)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".detectLastIndex() not implemented yet");

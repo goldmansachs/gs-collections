@@ -266,4 +266,22 @@ final class ImmutableEmptySortedSet<T>
     {
         return o.size() * -1;
     }
+
+    public ImmutableSortedSet<T> take(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        return this;
+    }
+
+    public ImmutableSortedSet<T> drop(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        return this;
+    }
 }

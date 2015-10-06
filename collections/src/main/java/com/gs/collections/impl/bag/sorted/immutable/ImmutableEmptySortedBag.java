@@ -348,4 +348,22 @@ class ImmutableEmptySortedBag<T>
     {
         return SortedMaps.mutable.of(this.comparator);
     }
+
+    public ImmutableSortedBag<T> take(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        return this;
+    }
+
+    public ImmutableSortedBag<T> drop(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+        return this;
+    }
 }

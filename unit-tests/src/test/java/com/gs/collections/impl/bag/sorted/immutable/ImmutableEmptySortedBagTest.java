@@ -536,7 +536,6 @@ public class ImmutableEmptySortedBagTest extends AbstractImmutableSortedBagTestC
         Verify.assertPostSerializedEqualsAndHashCode(bagWithComparator);
     }
 
-
     @Override
     @Test
     public void getLast()
@@ -818,5 +817,19 @@ public class ImmutableEmptySortedBagTest extends AbstractImmutableSortedBagTestC
         MutableList<Integer> copy = FastList.newList(integers);
         Assert.assertArrayEquals(integers.toArray(), copy.toArray());
         Assert.assertArrayEquals(integers.toArray(new Integer[integers.size()]), copy.toArray(new Integer[integers.size()]));
+    }
+
+    @Override
+    @Test
+    public void take()
+    {
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().take(2));
+    }
+
+    @Override
+    @Test
+    public void drop()
+    {
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().drop(2));
     }
 }

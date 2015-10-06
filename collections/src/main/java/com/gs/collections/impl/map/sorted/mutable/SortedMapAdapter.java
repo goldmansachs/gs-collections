@@ -33,6 +33,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.collection.mutable.CollectionAdapter;
+import com.gs.collections.impl.factory.SortedMaps;
 import com.gs.collections.impl.set.mutable.SetAdapter;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.MapIterate;
@@ -218,7 +219,20 @@ public class SortedMapAdapter<K, V>
 
     public MutableSortedMap<K, V> take(int count)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+
+        MutableSortedMap<K, V> output = SortedMaps.mutable.of(this.comparator());
+        Iterator<Entry<K, V>> iterator = this.delegate.entrySet().iterator();
+        int countCopy = count;
+        while (iterator.hasNext() && countCopy-- > 0)
+        {
+            Entry<K, V> next = iterator.next();
+            output.put(next.getKey(), next.getValue());
+        }
+        return output;
     }
 
     public MutableSortedMap<K, V> takeWhile(Predicate<? super V> predicate)
@@ -228,7 +242,33 @@ public class SortedMapAdapter<K, V>
 
     public MutableSortedMap<K, V> drop(int count)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+
+        MutableSortedMap<K, V> output = SortedMaps.mutable.of(this.comparator());
+        Iterator<Entry<K, V>> iterator = this.delegate.entrySet().iterator();
+        int start = Math.min(count, this.size());
+        if (start == this.size())
+        {
+            return output;
+        }
+        int i = 0;
+        while (iterator.hasNext())
+        {
+            if (i >= start)
+            {
+                Entry<K, V> next = iterator.next();
+                output.put(next.getKey(), next.getValue());
+            }
+            else
+            {
+                iterator.next();
+            }
+            i++;
+        }
+        return output;
     }
 
     public MutableSortedMap<K, V> dropWhile(Predicate<? super V> predicate)

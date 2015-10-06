@@ -260,4 +260,24 @@ final class ImmutableEmptySortedMap<K, V>
     {
         return new ImmutableSortedMapSerializationProxy<K, V>(this);
     }
+
+    public ImmutableSortedMap<K, V> take(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+
+        return this;
+    }
+
+    public ImmutableSortedMap<K, V> drop(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be greater than zero, but was: " + count);
+        }
+
+        return this;
+    }
 }

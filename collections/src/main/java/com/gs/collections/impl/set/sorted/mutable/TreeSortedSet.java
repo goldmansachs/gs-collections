@@ -708,12 +708,12 @@ public class TreeSortedSet<T> extends AbstractMutableCollection<T>
 
     public MutableSortedSet<T> take(int count)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
+        return IterableIterate.take(this, Math.min(this.size(), count), this.newEmpty());
     }
 
     public MutableSortedSet<T> drop(int count)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
+        return IterableIterate.drop(this, count, this.newEmpty());
     }
 
     public void reverseForEach(Procedure<? super T> procedure)

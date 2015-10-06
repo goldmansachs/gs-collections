@@ -1396,6 +1396,46 @@ public abstract class AbstractImmutableSortedBagTestCase extends AbstractImmutab
         Assert.assertEquals(-1, integers.indexOf(5));
     }
 
+    @Test
+    public void take()
+    {
+        ImmutableSortedBag<Integer> integers1 = this.classUnderTest();
+        Assert.assertEquals(SortedBags.immutable.empty(integers1.comparator()), integers1.take(0));
+        Assert.assertSame(integers1.comparator(), integers1.take(0).comparator());
+        Assert.assertEquals(this.newWith(integers1.comparator(), 1, 1, 1), integers1.take(3));
+        Assert.assertSame(integers1.comparator(), integers1.take(3).comparator());
+        Assert.assertEquals(this.newWith(integers1.comparator(), 1, 1, 1), integers1.take(integers1.size() - 1));
+
+        ImmutableSortedBag<Integer> integers2 = this.newWith(Comparators.reverseNaturalOrder(), 3, 3, 3, 2, 2, 1);
+        Assert.assertSame(integers2, integers2.take(integers2.size()));
+        Assert.assertSame(integers2, integers2.take(10));
+        Assert.assertSame(integers2, integers2.take(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void take_throws()
+    {
+        this.classUnderTest().take(-1);
+    }
+
+    @Test
+    public void drop()
+    {
+        ImmutableSortedBag<Integer> integers1 = this.classUnderTest();
+        Assert.assertSame(integers1, integers1.drop(0));
+        Assert.assertEquals(this.newWith(integers1.comparator(), 2), integers1.drop(3));
+        Assert.assertEquals(this.newWith(integers1.comparator(), 2), integers1.drop(integers1.size() - 1));
+        Assert.assertEquals(SortedBags.immutable.empty(integers1.comparator()), integers1.drop(integers1.size()));
+        Assert.assertEquals(SortedBags.immutable.empty(integers1.comparator()), integers1.drop(10));
+        Assert.assertEquals(SortedBags.immutable.empty(integers1.comparator()), integers1.drop(Integer.MAX_VALUE));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void drop_throws()
+    {
+        this.classUnderTest().drop(-1);
+    }
+
     private static final class Holder
     {
         private final int number;
