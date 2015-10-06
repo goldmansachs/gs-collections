@@ -21,6 +21,7 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Procedures;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.utility.LazyIterate;
@@ -134,6 +135,14 @@ public class CollectIterableTest extends AbstractLazyIterableTestCase
     {
         CollectIterable<Integer, String> collect = new CollectIterable<>(FastList.newList(), String::valueOf);
         Assert.assertNull(collect.getLast());
+    }
+
+    @Test
+    public void toArray()
+    {
+        LazyIterable<String> stringNums = Interval.fromTo(0, 3).collect(Functions.getToString());
+        stringNums.toArray();
+        Assert.assertEquals(Lists.immutable.of("0", "1", "2", "3"), Lists.immutable.ofAll(stringNums));
     }
 }
 
