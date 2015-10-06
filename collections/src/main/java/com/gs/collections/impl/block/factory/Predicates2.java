@@ -588,12 +588,12 @@ public abstract class Predicates2<T, P>
         }
     }
 
-    private static class ThrowingPredicate2Adapter<T, P> extends CheckedPredicate2<T, P>
+    private static final class ThrowingPredicate2Adapter<T, P> extends CheckedPredicate2<T, P>
     {
         private static final long serialVersionUID = 1L;
         private final ThrowingPredicate2<T, P> throwingPredicate2;
 
-        public ThrowingPredicate2Adapter(ThrowingPredicate2<T, P> throwingPredicate2)
+        private ThrowingPredicate2Adapter(ThrowingPredicate2<T, P> throwingPredicate2)
         {
             this.throwingPredicate2 = throwingPredicate2;
         }

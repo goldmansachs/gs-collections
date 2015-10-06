@@ -20,8 +20,9 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import com.carrotsearch.hppc.Containers;
+import com.carrotsearch.hppc.ObjectObjectHashMap;
 import com.carrotsearch.hppc.ObjectObjectMap;
-import com.carrotsearch.hppc.ObjectObjectOpenHashMap;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
@@ -80,7 +81,7 @@ public class MapMemoryTest
                     .printContainerMemoryUsage("Map", size, new UnifiedMapFactory(size, loadFactor));
             MemoryTestBench.on(Hashtable.class, suffix)
                     .printContainerMemoryUsage("Map", size, new HashtableFactory(size, loadFactor));
-            MemoryTestBench.on(ObjectObjectOpenHashMap.class, suffix)
+            MemoryTestBench.on(ObjectObjectHashMap.class, suffix)
                     .printContainerMemoryUsage("Map", size, new HppcMapFactory(size, loadFactor));
         }
 
@@ -263,7 +264,7 @@ public class MapMemoryTest
         @Override
         public ObjectObjectMap<Integer, String> value()
         {
-            final ObjectObjectMap<Integer, String> map = new ObjectObjectOpenHashMap<>(ObjectObjectOpenHashMap.DEFAULT_CAPACITY, this.loadFactor);
+            final ObjectObjectMap<Integer, String> map = new ObjectObjectHashMap<>(Containers.DEFAULT_EXPECTED_ELEMENTS, this.loadFactor);
 
             this.data.forEach(new Procedure<Integer>()
             {

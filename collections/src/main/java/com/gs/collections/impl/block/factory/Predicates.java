@@ -1487,12 +1487,12 @@ public abstract class Predicates<T>
         }
     }
 
-    private static class ThrowingPredicateAdapter<T> extends CheckedPredicate<T>
+    private static final class ThrowingPredicateAdapter<T> extends CheckedPredicate<T>
     {
         private static final long serialVersionUID = 1L;
         private final ThrowingPredicate<T> throwingPredicate;
 
-        public ThrowingPredicateAdapter(ThrowingPredicate<T> throwingPredicate)
+        private ThrowingPredicateAdapter(ThrowingPredicate<T> throwingPredicate)
         {
             this.throwingPredicate = throwingPredicate;
         }

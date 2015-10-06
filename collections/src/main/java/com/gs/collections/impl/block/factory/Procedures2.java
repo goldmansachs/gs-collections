@@ -92,12 +92,12 @@ public final class Procedures2
         }
     }
 
-    private static class ThrowingProcedure2Adapter<T, P> extends CheckedProcedure2<T, P>
+    private static final class ThrowingProcedure2Adapter<T, P> extends CheckedProcedure2<T, P>
     {
         private static final long serialVersionUID = 1L;
         private final ThrowingProcedure2<T, P> throwingProcedure2;
 
-        public ThrowingProcedure2Adapter(ThrowingProcedure2<T, P> throwingProcedure2)
+        private ThrowingProcedure2Adapter(ThrowingProcedure2<T, P> throwingProcedure2)
         {
             this.throwingProcedure2 = throwingProcedure2;
         }

@@ -220,12 +220,12 @@ public final class Procedures
         }
     }
 
-    private static class ThrowingProcedureAdapter<T> extends CheckedProcedure<T>
+    private static final class ThrowingProcedureAdapter<T> extends CheckedProcedure<T>
     {
         private static final long serialVersionUID = 1L;
         private final ThrowingProcedure<T> throwingProcedure;
 
-        public ThrowingProcedureAdapter(ThrowingProcedure<T> throwingProcedure)
+        private ThrowingProcedureAdapter(ThrowingProcedure<T> throwingProcedure)
         {
             this.throwingProcedure = throwingProcedure;
         }

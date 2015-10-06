@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+<module type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
@@ -12,23 +12,17 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.scala-lang:scala-library:2.11.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.google.guava:guava:17.0" level="project" />
     <orderEntry type="module" module-name="gs-collections-api" scope="TEST" />
     <orderEntry type="module" module-name="gs-collections" scope="TEST" />
     <orderEntry type="module" module-name="gs-collections-testutils" scope="TEST" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-codec:commons-codec:1.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-api:1.7.7" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: ch.qos.logback:logback-classic:1.1.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: ch.qos.logback:logback-core:1.1.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.sf.trove4j:trove4j:3.0.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.scala-lang:scala-library:2.11.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.google.guava:guava:18.0" level="project" />
-    <orderEntry type="library" name="Maven: com.carrotsearch:hppc:0.6.0" level="project" />
-    <orderEntry type="library" name="Maven: net.openhft:koloboke-api-jdk6-7:0.6.6" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:2.0.3" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: net.openhft:koloboke-impl-jdk6-7:0.6.6" level="project" />
+    <orderEntry type="library" name="Maven: com.carrotsearch:hppc:0.7.1" level="project" />
+    <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.11.7" level="project" />
   </component>
 </module>

@@ -19,8 +19,8 @@ package com.gs.collections.impl.jmh.map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import com.carrotsearch.hppc.ObjectObjectHashMap;
 import com.carrotsearch.hppc.ObjectObjectMap;
-import com.carrotsearch.hppc.ObjectObjectOpenHashMap;
 import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import org.apache.commons.lang.RandomStringUtils;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -53,7 +53,7 @@ public class HppcMutableMapGetTest extends AbstractJMHTestRunner
         Random random = new Random(123456789012345L);
 
         this.elements = new String[this.size];
-        this.hppcMap = new ObjectObjectOpenHashMap<>(this.size);
+        this.hppcMap = new ObjectObjectHashMap<>(this.size);
 
         for (int i = 0; i < this.size; i++)
         {

@@ -343,12 +343,12 @@ final class ImmutableTreeSet<T>
         }
     }
 
-    public class ImmutableTreeSetBatch extends AbstractBatch<T> implements RootSortedSetBatch<T>
+    private final class ImmutableTreeSetBatch extends AbstractBatch<T> implements RootSortedSetBatch<T>
     {
         private final int chunkStartIndex;
         private final int chunkEndIndex;
 
-        public ImmutableTreeSetBatch(int chunkStartIndex, int chunkEndIndex)
+        private ImmutableTreeSetBatch(int chunkStartIndex, int chunkEndIndex)
         {
             this.chunkStartIndex = chunkStartIndex;
             this.chunkEndIndex = chunkEndIndex;

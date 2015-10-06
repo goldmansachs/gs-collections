@@ -1433,7 +1433,7 @@ public interface RichIterableTestCase extends IterableTestCase
     {
         private final T field;
 
-        public Holder(T field)
+        Holder(T field)
         {
             this.field = field;
         }

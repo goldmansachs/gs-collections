@@ -557,12 +557,12 @@ public class AggregateByTest extends AbstractJMHTestRunner
         private final double min;
         private final double max;
 
-        public ImmutableMarketValueStatistics()
+        private ImmutableMarketValueStatistics()
         {
             this(0, 0.0, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
         }
 
-        public ImmutableMarketValueStatistics(long count, double sum, double min, double max)
+        private ImmutableMarketValueStatistics(long count, double sum, double min, double max)
         {
             this.count = count;
             this.sum = sum;

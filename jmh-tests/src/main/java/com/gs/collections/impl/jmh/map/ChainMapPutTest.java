@@ -21,8 +21,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import com.carrotsearch.hppc.Containers;
+import com.carrotsearch.hppc.ObjectObjectHashMap;
 import com.carrotsearch.hppc.ObjectObjectMap;
-import com.carrotsearch.hppc.ObjectObjectOpenHashMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.jmh.runner.AbstractJMHTestRunner;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -94,9 +95,9 @@ public class ChainMapPutTest extends AbstractJMHTestRunner
         int localSize = this.size;
         float localLoadFactor = this.loadFactor;
         String[] localElements = this.elements;
-        int defaultInitialCapacity = ObjectObjectOpenHashMap.DEFAULT_CAPACITY;
+        int defaultInitialCapacity = Containers.DEFAULT_EXPECTED_ELEMENTS;
 
-        ObjectObjectMap<String, String> hppc = this.isPresized ? new ObjectObjectOpenHashMap<>(localSize, localLoadFactor) : new ObjectObjectOpenHashMap<>(defaultInitialCapacity, localLoadFactor);
+        ObjectObjectMap<String, String> hppc = this.isPresized ? new ObjectObjectHashMap<>(localSize, localLoadFactor) : new ObjectObjectHashMap<>(defaultInitialCapacity, localLoadFactor);
 
         for (int i = 0; i < localSize; i++)
         {

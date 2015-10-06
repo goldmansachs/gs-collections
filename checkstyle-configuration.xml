@@ -43,8 +43,6 @@
     <module name="TreeWalker">
         <property name="tabWidth" value="4" />
 
-        <property name="cacheFile" value="build/checkstyleCache" />
-
         <!-- Checks for Naming Conventions.                  -->
         <!-- See http://checkstyle.sf.net/config_naming.html -->
 
@@ -255,7 +253,8 @@
 
         <module name="NoLineWrap" />
 
-        <module name="OneStatementPerLine" />
+        <!-- Comment until the check handles lambda expression with throw statement. -->
+        <!-- <module name="OneStatementPerLine" /> -->
 
     </module>
 
