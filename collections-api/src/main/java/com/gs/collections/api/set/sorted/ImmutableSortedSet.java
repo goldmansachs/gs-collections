@@ -122,6 +122,12 @@ public interface ImmutableSortedSet<T>
 
     ImmutableSortedSet<Pair<T, Integer>> zipWithIndex();
 
+    ImmutableSortedSet<T> toReversed();
+
+    ImmutableSortedSet<T> take(int count);
+
+    ImmutableSortedSet<T> drop(int count);
+
     SortedSet<T> castToSortedSet();
 
     ImmutableSortedSet<T> union(SetIterable<? extends T> set);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,13 @@ package com.gs.collections.api.partition.bag.sorted;
 
 import com.gs.collections.api.bag.sorted.SortedBag;
 import com.gs.collections.api.partition.bag.PartitionBag;
+import com.gs.collections.api.partition.ordered.PartitionReversibleIterable;
 import com.gs.collections.api.partition.ordered.PartitionSortedIterable;
 
 /**
  * @since 4.2
  */
-public interface PartitionSortedBag<T> extends PartitionBag<T>, PartitionSortedIterable<T>
+public interface PartitionSortedBag<T> extends PartitionBag<T>, PartitionSortedIterable<T>, PartitionReversibleIterable<T>
 {
     SortedBag<T> getSelected();
 

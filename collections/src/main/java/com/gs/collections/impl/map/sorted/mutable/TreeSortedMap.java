@@ -25,9 +25,12 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
+import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
@@ -314,6 +317,41 @@ public class TreeSortedMap<K, V>
     public boolean containsValue(Object value)
     {
         return this.treeMap.containsValue(value);
+    }
+
+    public MutableSortedMap<K, V> toReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toReversed() not implemented yet");
+    }
+
+    public MutableSortedMap<K, V> take(int count)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
+    }
+
+    public MutableSortedMap<K, V> takeWhile(Predicate<? super V> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".takeWhile() not implemented yet");
+    }
+
+    public MutableSortedMap<K, V> drop(int count)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
+    }
+
+    public MutableSortedMap<K, V> dropWhile(Predicate<? super V> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".dropWhile() not implemented yet");
+    }
+
+    public PartitionMutableList<V> partitionWhile(Predicate<? super V> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".partitionWhile() not implemented yet");
+    }
+
+    public MutableList<V> distinct()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".distinct() not implemented yet");
     }
 
     @Override

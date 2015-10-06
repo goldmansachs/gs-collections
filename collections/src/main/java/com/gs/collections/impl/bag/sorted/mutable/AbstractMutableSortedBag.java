@@ -19,6 +19,7 @@ package com.gs.collections.impl.bag.sorted.mutable;
 import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
@@ -48,6 +49,7 @@ import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
+import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.AbstractMutableBagIterable;
 import com.gs.collections.impl.factory.SortedBags;
@@ -251,6 +253,41 @@ public abstract class AbstractMutableSortedBag<T>
     public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {
         return this.zip(that, FastList.<Pair<T, S>>newList());
+    }
+
+    public MutableSortedSet<T> distinct()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".distinct() not implemented yet");
+    }
+
+    public MutableSortedBag<T> toReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toReversed() not implemented yet");
+    }
+
+    public MutableSortedBag<T> take(int count)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
+    }
+
+    public MutableSortedBag<T> drop(int count)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
+    }
+
+    public void reverseForEach(Procedure<? super T> procedure)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".reverseForEach() not implemented yet");
+    }
+
+    public LazyIterable<T> asReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asReversed() not implemented yet");
+    }
+
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".detectLastIndex() not implemented yet");
     }
 
     @Beta

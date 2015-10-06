@@ -140,4 +140,10 @@ public interface ImmutableSortedBag<T>
     ImmutableSortedSet<Pair<T, Integer>> zipWithIndex();
 
     MutableSortedMap<T, Integer> toMapOfItemToCount();
+
+    ImmutableSortedBag<T> toReversed();
+
+    ImmutableSortedBag<T> take(int count);
+
+    ImmutableSortedBag<T> drop(int count);
 }

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.api.map.sorted;
-
-import java.util.SortedMap;
+package com.gs.collections.api.map;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -42,49 +40,39 @@ import com.gs.collections.api.list.primitive.ImmutableFloatList;
 import com.gs.collections.api.list.primitive.ImmutableIntList;
 import com.gs.collections.api.list.primitive.ImmutableLongList;
 import com.gs.collections.api.list.primitive.ImmutableShortList;
-import com.gs.collections.api.map.ImmutableMap;
-import com.gs.collections.api.map.ImmutableMapIterable;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
-import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.tuple.Pair;
-import net.jcip.annotations.Immutable;
 
-/**
- * An ImmutableSortedMap is different than a JCF SortedMap in that it has no mutating methods, but it shares
- * the read-only protocol of a SortedMap.
- */
-@Immutable
-public interface ImmutableSortedMap<K, V>
-        extends SortedMapIterable<K, V>, ImmutableMapIterable<K, V>
+public interface ImmutableOrderedMap<K, V> extends OrderedMap<K, V>, ImmutableMapIterable<K, V>
 {
-    SortedMap<K, V> castToMap();
+    ImmutableOrderedMap<K, V> tap(Procedure<? super V> procedure);
 
-    SortedMap<K, V> castToSortedMap();
+    ImmutableOrderedMap<V, K> flipUniqueValues();
 
-    // TODO: Keys could be ordered
-    ImmutableSortedSetMultimap<V, K> flip();
+    ImmutableListMultimap<V, K> flip();
 
-    ImmutableSortedMap<K, V> newWithKeyValue(K key, V value);
+    ImmutableOrderedMap<K, V> select(Predicate2<? super K, ? super V> predicate);
 
-    ImmutableSortedMap<K, V> newWithAllKeyValues(Iterable<? extends Pair<? extends K, ? extends V>> keyValues);
+    ImmutableOrderedMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
 
-    ImmutableSortedMap<K, V> newWithAllKeyValueArguments(Pair<? extends K, ? extends V>... keyValuePairs);
+    <K2, V2> ImmutableOrderedMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
-    ImmutableSortedMap<K, V> newWithoutKey(K key);
+    <R> ImmutableOrderedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
 
-    ImmutableSortedMap<K, V> newWithoutAllKeys(Iterable<? extends K> keys);
+    ImmutableOrderedMap<K, V> toReversed();
 
-    MutableSortedMap<K, V> toSortedMap();
+    ImmutableOrderedMap<K, V> take(int count);
 
-    // TODO: When we have implementations of linked hash maps
-    // ImmutableOrderedMap<V, K> flipUniqueValues();
+    ImmutableOrderedMap<K, V> takeWhile(Predicate<? super V> predicate);
 
-    ImmutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate);
+    ImmutableOrderedMap<K, V> drop(int count);
 
-    ImmutableSortedMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
+    ImmutableOrderedMap<K, V> dropWhile(Predicate<? super V> predicate);
 
-    ImmutableSortedMap<K, V> tap(Procedure<? super V> procedure);
+    PartitionImmutableList<V> partitionWhile(Predicate<? super V> predicate);
+
+    ImmutableList<V> distinct();
 
     ImmutableList<V> select(Predicate<? super V> predicate);
 
@@ -94,25 +82,9 @@ public interface ImmutableSortedMap<K, V>
 
     <P> ImmutableList<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter);
 
-    <S> ImmutableList<S> selectInstancesOf(Class<S> clazz);
-
     PartitionImmutableList<V> partition(Predicate<? super V> predicate);
 
     <P> PartitionImmutableList<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
-
-    <R> ImmutableList<R> collect(Function<? super V, ? extends R> function);
-
-    <P, VV> ImmutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter);
-
-    <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
-
-    <R> ImmutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
-
-    <R> ImmutableList<R> collectIf(
-            Predicate<? super V> predicate,
-            Function<? super V, ? extends R> function);
-
-    <R> ImmutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function);
 
     ImmutableBooleanList collectBoolean(BooleanFunction<? super V> booleanFunction);
 
@@ -134,19 +106,21 @@ public interface ImmutableSortedMap<K, V>
 
     ImmutableList<Pair<V, Integer>> zipWithIndex();
 
-    <VV> ImmutableListMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function);
+    <P, V1> ImmutableList<V1> collectWith(Function2<? super V, ? super P, ? extends V1> function, P parameter);
 
-    <VV> ImmutableListMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
+    <V1> ImmutableList<V1> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends V1> function);
 
-    <VV> ImmutableMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function);
+    <S> ImmutableList<S> selectInstancesOf(Class<S> clazz);
 
-    <K2, V2> ImmutableMap<K2, V2> aggregateInPlaceBy(
-            Function<? super V, ? extends K2> groupBy,
-            Function0<? extends V2> zeroValueFactory,
-            Procedure2<? super V2, ? super V> mutatingAggregator);
+    <V1> ImmutableList<V1> flatCollect(Function<? super V, ? extends Iterable<V1>> function);
 
-    <K2, V2> ImmutableMap<K2, V2> aggregateBy(
-            Function<? super V, ? extends K2> groupBy,
-            Function0<? extends V2> zeroValueFactory,
-            Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator);
+    <V1> ImmutableListMultimap<V1, V> groupBy(Function<? super V, ? extends V1> function);
+
+    <V1> ImmutableListMultimap<V1, V> groupByEach(Function<? super V, ? extends Iterable<V1>> function);
+
+    <V1> ImmutableOrderedMap<V1, V> groupByUniqueKey(Function<? super V, ? extends V1> function);
+
+    <KK, VV> ImmutableOrderedMap<KK, VV> aggregateInPlaceBy(Function<? super V, ? extends KK> groupBy, Function0<? extends VV> zeroValueFactory, Procedure2<? super VV, ? super V> mutatingAggregator);
+
+    <KK, VV> ImmutableOrderedMap<KK, VV> aggregateBy(Function<? super V, ? extends KK> groupBy, Function0<? extends VV> zeroValueFactory, Function2<? super VV, ? super V, ? extends VV> nonMutatingAggregator);
 }

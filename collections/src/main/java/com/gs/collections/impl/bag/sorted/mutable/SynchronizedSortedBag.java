@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.ParallelBag;
 import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
@@ -547,6 +548,51 @@ public class SynchronizedSortedBag<T>
         synchronized (this.getLock())
         {
             return this.getDelegate().toImmutable();
+        }
+    }
+
+    public MutableSortedBag<T> drop(int count)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().drop(count);
+        }
+    }
+
+    public MutableSortedBag<T> take(int count)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().take(count);
+        }
+    }
+
+    public MutableSortedBag<T> toReversed()
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().toReversed();
+        }
+    }
+
+    public void reverseForEach(Procedure<? super T> procedure)
+    {
+        synchronized (this.lock)
+        {
+            this.getDelegate().reverseForEach(procedure);
+        }
+    }
+
+    public LazyIterable<T> asReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asReversed() not implemented yet");
+    }
+
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().detectLastIndex(predicate);
         }
     }
 

@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
@@ -408,5 +409,35 @@ abstract class AbstractImmutableSortedBag<T>
             result.add(batch.toImmutable());
         }
         return result.toImmutable();
+    }
+
+    public ImmutableSortedBag<T> toReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toReversed() not implemented yet");
+    }
+
+    public ImmutableSortedBag<T> take(int count)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
+    }
+
+    public ImmutableSortedBag<T> drop(int count)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
+    }
+
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".detectLastIndex() not implemented yet");
+    }
+
+    public void reverseForEach(Procedure<? super T> procedure)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".reverseForEach() not implemented yet");
+    }
+
+    public LazyIterable<T> asReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asReversed() not implemented yet");
     }
 }

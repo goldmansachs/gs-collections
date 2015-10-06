@@ -631,4 +631,34 @@ public final class SortedSetAdapter<T>
         }
         return new NonParallelSortedSetIterable<T>(this);
     }
+
+    public MutableSortedSet<T> toReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toReversed() not implemented yet");
+    }
+
+    public MutableSortedSet<T> take(int count)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
+    }
+
+    public MutableSortedSet<T> drop(int count)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
+    }
+
+    public void reverseForEach(Procedure<? super T> procedure)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".reverseForEach() not implemented yet");
+    }
+
+    public LazyIterable<T> asReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asReversed() not implemented yet");
+    }
+
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".detectLastIndex() not implemented yet");
+    }
 }

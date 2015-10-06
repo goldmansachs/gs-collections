@@ -72,9 +72,11 @@ import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
@@ -1006,5 +1008,85 @@ public class UnmodifiableTreeMap<K, V>
         MutableMap<K2, V2> map = UnifiedMap.newMap();
         this.forEach(new NonMutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map;
+    }
+
+    public MutableSortedMap<K, V> toReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toReversed() not implemented yet");
+    }
+
+    public MutableSortedMap<K, V> take(int count)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".take() not implemented yet");
+    }
+
+    public MutableSortedMap<K, V> takeWhile(Predicate<? super V> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".takeWhile() not implemented yet");
+    }
+
+    public MutableSortedMap<K, V> drop(int count)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".drop() not implemented yet");
+    }
+
+    public MutableSortedMap<K, V> dropWhile(Predicate<? super V> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".dropWhile() not implemented yet");
+    }
+
+    public PartitionMutableList<V> partitionWhile(Predicate<? super V> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".partitionWhile() not implemented yet");
+    }
+
+    public MutableList<V> distinct()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".distinct() not implemented yet");
+    }
+
+    public void reverseForEach(Procedure<? super V> procedure)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".reverseForEach() not implemented yet");
+    }
+
+    public LazyIterable<V> asReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asReversed() not implemented yet");
+    }
+
+    public int detectLastIndex(Predicate<? super V> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".detectLastIndex() not implemented yet");
+    }
+
+    public int indexOf(Object object)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".indexOf() not implemented yet");
+    }
+
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super V, ? super S> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".corresponds() not implemented yet");
+    }
+
+    public void forEach(int startIndex, int endIndex, Procedure<? super V> procedure)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEach() not implemented yet");
+    }
+
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super V> objectIntProcedure)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEachWithIndex() not implemented yet");
+    }
+
+    public MutableStack<V> toStack()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toStack() not implemented yet");
+    }
+
+    public int detectIndex(Predicate<? super V> predicate)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".detectIndex() not implemented yet");
     }
 }

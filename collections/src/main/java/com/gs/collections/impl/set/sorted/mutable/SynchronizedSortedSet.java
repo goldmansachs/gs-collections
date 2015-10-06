@@ -615,4 +615,49 @@ public class SynchronizedSortedSet<T>
             return SynchronizedSortedSet.of(this.getDelegate().tailSet(fromElement), this.getLock());
         }
     }
+
+    public void reverseForEach(Procedure<? super T> procedure)
+    {
+        synchronized (this.getLock())
+        {
+            this.getDelegate().reverseForEach(procedure);
+        }
+    }
+
+    public LazyIterable<T> asReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asReversed() not implemented yet");
+    }
+
+    public MutableSortedSet<T> toReversed()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().toReversed();
+        }
+    }
+
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().detectLastIndex(predicate);
+        }
+    }
+
+    public MutableSortedSet<T> take(int count)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().take(count);
+        }
+    }
+
+    public MutableSortedSet<T> drop(int count)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getDelegate().drop(count);
+        }
+    }
 }

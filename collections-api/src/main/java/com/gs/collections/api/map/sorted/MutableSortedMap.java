@@ -84,6 +84,7 @@ public interface MutableSortedMap<K, V>
 
     MutableSortedMap<K, V> asSynchronized();
 
+    // TODO: Keys could be ordered
     MutableSortedSetMultimap<V, K> flip();
 
     MutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate);
@@ -138,6 +139,20 @@ public interface MutableSortedMap<K, V>
 
     MutableList<Pair<V, Integer>> zipWithIndex();
 
+    MutableSortedMap<K, V> toReversed();
+
+    MutableSortedMap<K, V> take(int count);
+
+    MutableSortedMap<K, V> takeWhile(Predicate<? super V> predicate);
+
+    MutableSortedMap<K, V> drop(int count);
+
+    MutableSortedMap<K, V> dropWhile(Predicate<? super V> predicate);
+
+    PartitionMutableList<V> partitionWhile(Predicate<? super V> predicate);
+
+    MutableList<V> distinct();
+
     MutableSet<Entry<K, V>> entrySet();
 
     /**
@@ -174,8 +189,8 @@ public interface MutableSortedMap<K, V>
             Function0<? extends V2> zeroValueFactory,
             Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator);
 
-    // TODO
-    // OrderedMutableMap<V, K> flipUniqueValues();
+    // TODO: When we have implementations of linked hash maps
+    // MutableOrderedMap<V, K> flipUniqueValues();
 
     MutableSortedMap<K, V> withKeyValue(K key, V value);
 

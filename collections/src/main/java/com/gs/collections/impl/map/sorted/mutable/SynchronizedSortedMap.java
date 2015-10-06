@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.SortedMap;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -36,6 +37,7 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
@@ -52,8 +54,10 @@ import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
+import com.gs.collections.api.ordered.OrderedIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
 import com.gs.collections.impl.factory.SortedMaps;
@@ -582,6 +586,131 @@ public class SynchronizedSortedMap<K, V>
         synchronized (this.lock)
         {
             return SynchronizedSortedMap.of(this.getDelegate().subMap(fromKey, toKey), this.lock);
+        }
+    }
+
+    public void reverseForEach(Procedure<? super V> procedure)
+    {
+        synchronized (this.lock)
+        {
+            this.getDelegate().reverseForEach(procedure);
+        }
+    }
+
+    public LazyIterable<V> asReversed()
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asReversed() not implemented yet");
+    }
+
+    public int detectLastIndex(Predicate<? super V> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().detectLastIndex(predicate);
+        }
+    }
+
+    public int indexOf(Object object)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().indexOf(object);
+        }
+    }
+
+    public <S> boolean corresponds(OrderedIterable<S> other, Predicate2<? super V, ? super S> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().corresponds(other, predicate);
+        }
+    }
+
+    public void forEach(int startIndex, int endIndex, Procedure<? super V> procedure)
+    {
+        synchronized (this.lock)
+        {
+            this.getDelegate().forEach(startIndex, endIndex, procedure);
+        }
+    }
+
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super V> objectIntProcedure)
+    {
+        synchronized (this.lock)
+        {
+            this.getDelegate().forEachWithIndex(fromIndex, toIndex, objectIntProcedure);
+        }
+    }
+
+    public MutableStack<V> toStack()
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().toStack();
+        }
+    }
+
+    public int detectIndex(Predicate<? super V> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().detectIndex(predicate);
+        }
+    }
+
+    public MutableSortedMap<K, V> toReversed()
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().toReversed();
+        }
+    }
+
+    public MutableSortedMap<K, V> take(int count)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().take(count);
+        }
+    }
+
+    public MutableSortedMap<K, V> takeWhile(Predicate<? super V> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().takeWhile(predicate);
+        }
+    }
+
+    public MutableSortedMap<K, V> drop(int count)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().drop(count);
+        }
+    }
+
+    public MutableSortedMap<K, V> dropWhile(Predicate<? super V> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().dropWhile(predicate);
+        }
+    }
+
+    public PartitionMutableList<V> partitionWhile(Predicate<? super V> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().partitionWhile(predicate);
+        }
+    }
+
+    public MutableList<V> distinct()
+    {
+        synchronized (this.lock)
+        {
+            return this.getDelegate().distinct();
         }
     }
 }

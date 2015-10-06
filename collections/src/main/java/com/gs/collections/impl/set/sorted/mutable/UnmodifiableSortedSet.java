@@ -440,6 +440,36 @@ public class UnmodifiableSortedSet<T>
         this.getSortedSet().forEachWithIndex(fromIndex, toIndex, objectIntProcedure);
     }
 
+    public MutableSortedSet<T> toReversed()
+    {
+        return this.getSortedSet().toReversed();
+    }
+
+    public MutableSortedSet<T> take(int count)
+    {
+        return this.getSortedSet().take(count);
+    }
+
+    public MutableSortedSet<T> drop(int count)
+    {
+        return this.getSortedSet().drop(count);
+    }
+
+    public void reverseForEach(Procedure<? super T> procedure)
+    {
+        this.getSortedSet().reverseForEach(procedure);
+    }
+
+    public LazyIterable<T> asReversed()
+    {
+        return this.getSortedSet().asReversed();
+    }
+
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        return this.getSortedSet().detectLastIndex(predicate);
+    }
+
     @Override
     public MutableSortedSet<T> with(T element)
     {

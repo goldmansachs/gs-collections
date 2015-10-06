@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.bag.sorted.SortedBag;
@@ -394,6 +395,36 @@ public class UnmodifiableSortedBag<T>
     public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
     {
         return this.getSortedBag().zipWithIndex(target);
+    }
+
+    public MutableSortedBag<T> toReversed()
+    {
+        return this.getSortedBag().toReversed();
+    }
+
+    public MutableSortedBag<T> take(int count)
+    {
+        return this.getSortedBag().take(count);
+    }
+
+    public MutableSortedBag<T> drop(int count)
+    {
+        return this.getSortedBag().drop(count);
+    }
+
+    public void reverseForEach(Procedure<? super T> procedure)
+    {
+        this.getSortedBag().reverseForEach(procedure);
+    }
+
+    public LazyIterable<T> asReversed()
+    {
+        return this.getSortedBag().asReversed();
+    }
+
+    public int detectLastIndex(Predicate<? super T> predicate)
+    {
+        return this.getSortedBag().detectLastIndex(predicate);
     }
 
     public Comparator<? super T> comparator()

@@ -140,6 +140,12 @@ public interface MutableSortedSet<T>
 
     MutableSortedSet<Pair<T, Integer>> zipWithIndex();
 
+    MutableSortedSet<T> toReversed();
+
+    MutableSortedSet<T> take(int count);
+
+    MutableSortedSet<T> drop(int count);
+
     MutableSortedSet<T> union(SetIterable<? extends T> set);
 
     MutableSortedSet<T> intersect(SetIterable<? extends T> set);

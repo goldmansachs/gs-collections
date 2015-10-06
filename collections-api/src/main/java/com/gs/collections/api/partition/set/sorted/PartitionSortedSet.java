@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.partition.set.sorted;
 
+import com.gs.collections.api.partition.ordered.PartitionReversibleIterable;
 import com.gs.collections.api.partition.ordered.PartitionSortedIterable;
 import com.gs.collections.api.partition.set.PartitionSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
@@ -25,7 +26,7 @@ import com.gs.collections.api.set.sorted.SortedSetIterable;
  * The results that answer true for the Predicate will be returned from the getSelected() method and the results that answer
  * false for the predicate will be returned from the getRejected() method.
  */
-public interface PartitionSortedSet<T> extends PartitionSet<T>, PartitionSortedIterable<T>
+public interface PartitionSortedSet<T> extends PartitionSet<T>, PartitionSortedIterable<T>, PartitionReversibleIterable<T>
 {
     SortedSetIterable<T> getSelected();
 
