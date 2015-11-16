@@ -74,7 +74,7 @@ Yes, we use GS Collections in many of our internal applications.
 ## Acquiring GS Collections
 
 ### Download
-* [Version 6.2.0](http://www.goldmansachs.com/gs-collections/binaries/gs-collections-6.2.0.zip)
+* [Version 7.0.0](https://github.com/goldmansachs/gs-collections/releases/tag/7.0.0)
 * [Older versions](https://github.com/goldmansachs/gs-collections/releases)
 
 ### Maven
@@ -82,45 +82,45 @@ Yes, we use GS Collections in many of our internal applications.
 <dependency>
   <groupId>com.goldmansachs</groupId>
   <artifactId>gs-collections-api</artifactId>
-  <version>6.2.0</version>
+  <version>7.0.0</version>
 </dependency>
 
 <dependency>
   <groupId>com.goldmansachs</groupId>
   <artifactId>gs-collections</artifactId>
-  <version>6.2.0</version>
+  <version>7.0.0</version>
 </dependency>
 
 <dependency>
   <groupId>com.goldmansachs</groupId>
   <artifactId>gs-collections-testutils</artifactId>
-  <version>6.2.0</version>
+  <version>7.0.0</version>
   <scope>test</scope>
 </dependency>
 
 <dependency>
   <groupId>com.goldmansachs</groupId>
   <artifactId>gs-collections-forkjoin</artifactId>
-  <version>6.2.0</version>
+  <version>7.0.0</version>
 </dependency>
 ```
 
 ### Gradle
 
 ```groovy
-compile 'com.goldmansachs:gs-collections-api:6.2.0'
-compile 'com.goldmansachs:gs-collections:6.2.0'
-testCompile 'com.goldmansachs:gs-collections-testutils:6.2.0'
-compile 'com.goldmansachs:gs-collections-forkjoin:6.2.0'
+compile 'com.goldmansachs:gs-collections-api:7.0.0'
+compile 'com.goldmansachs:gs-collections:7.0.0'
+testCompile 'com.goldmansachs:gs-collections-testutils:7.0.0'
+compile 'com.goldmansachs:gs-collections-forkjoin:7.0.0'
 ```
 
 ### Ivy
 
 ```xml
-<dependency org="com.goldmansachs" name="gs-collections-api" rev="6.2.0" />
-<dependency org="com.goldmansachs" name="gs-collections" rev="6.2.0" />
-<dependency org="com.goldmansachs" name="gs-collections-testutils" rev="6.2.0" />
-<dependency org="com.goldmansachs" name="gs-collections-forkjoin" rev="6.2.0"/>
+<dependency org="com.goldmansachs" name="gs-collections-api" rev="7.0.0" />
+<dependency org="com.goldmansachs" name="gs-collections" rev="7.0.0" />
+<dependency org="com.goldmansachs" name="gs-collections-testutils" rev="7.0.0" />
+<dependency org="com.goldmansachs" name="gs-collections-forkjoin" rev="7.0.0"/>
 ```
 
 [travis]:https://travis-ci.org/goldmansachs/gs-collections
