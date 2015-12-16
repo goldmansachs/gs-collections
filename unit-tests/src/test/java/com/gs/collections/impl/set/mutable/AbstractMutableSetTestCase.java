@@ -69,18 +69,9 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     protected static final MutableList<Integer> MORE_COLLISIONS = FastList.newList(COLLISIONS)
             .with(COLLISION_6, COLLISION_7, COLLISION_8, COLLISION_9);
     protected static final int SIZE = 8;
-    protected static final String[] FREQUENT_COLLISIONS = {
-            "\u9103\ufffe",
-            "\u9104\uffdf",
-            "\u9105\uffc0",
-            "\u9106\uffa1",
-            "\u9107\uff82",
-            "\u9108\uff63",
-            "\u9109\uff44",
-            "\u910a\uff25",
-            "\u910b\uff06",
-            "\u910c\ufee7"
-    };
+    protected static final String[] FREQUENT_COLLISIONS = {"\u9103\ufffe", "\u9104\uffdf",
+            "\u9105\uffc0", "\u9106\uffa1", "\u9107\uff82", "\u9108\uff63", "\u9109\uff44",
+            "\u910a\uff25", "\u910b\uff06", "\u910c\ufee7"};
 
     @Override
     protected abstract <T> MutableSet<T> newWith(T... littleElements);

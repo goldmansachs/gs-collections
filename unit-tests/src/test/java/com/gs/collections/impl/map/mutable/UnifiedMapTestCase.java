@@ -62,18 +62,9 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
             Lists.mutable.of(COLLISION_1, COLLISION_2, COLLISION_3, COLLISION_4, COLLISION_5);
     protected static final MutableList<Integer> MORE_COLLISIONS = FastList.newList(COLLISIONS)
             .with(COLLISION_6, COLLISION_7, COLLISION_8, COLLISION_9);
-    protected static final String[] FREQUENT_COLLISIONS = {
-            "\u9103\ufffe",
-            "\u9104\uffdf",
-            "\u9105\uffc0",
-            "\u9106\uffa1",
-            "\u9107\uff82",
-            "\u9108\uff63",
-            "\u9109\uff44",
-            "\u910a\uff25",
-            "\u910b\uff06",
-            "\u910c\ufee7"
-    };
+    protected static final String[] FREQUENT_COLLISIONS = {"\u9103\ufffe", "\u9104\uffdf",
+            "\u9105\uffc0", "\u9106\uffa1", "\u9107\uff82", "\u9108\uff63", "\u9109\uff44",
+            "\u910a\uff25", "\u910b\uff06", "\u910c\ufee7"};
 
     @Test
     public void valuesCollection_toArray()
