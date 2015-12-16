@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,8 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
@@ -41,7 +43,8 @@ import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iMap;
+import static com.gs.collections.impl.factory.Iterables.mList;
 
 public abstract class UnifiedMapTestCase extends MutableMapTestCase
 {
@@ -59,6 +62,18 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
             Lists.mutable.of(COLLISION_1, COLLISION_2, COLLISION_3, COLLISION_4, COLLISION_5);
     protected static final MutableList<Integer> MORE_COLLISIONS = FastList.newList(COLLISIONS)
             .with(COLLISION_6, COLLISION_7, COLLISION_8, COLLISION_9);
+    protected static final String[] FREQUENT_COLLISIONS = {
+            "\u9103\ufffe",
+            "\u9104\uffdf",
+            "\u9105\uffc0",
+            "\u9106\uffa1",
+            "\u9107\uff82",
+            "\u9108\uff63",
+            "\u9109\uff44",
+            "\u910a\uff25",
+            "\u910b\uff06",
+            "\u910c\ufee7"
+    };
 
     @Test
     public void valuesCollection_toArray()
@@ -827,6 +842,29 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         Assert.assertNotEquals(mapC, mapD);
 
         Assert.assertEquals(0, this.newMapWithKeyValue(null, null).hashCode());
+    }
+
+    @Test
+    public void frequentCollision()
+    {
+        String[] expected = ArrayAdapter.adapt(FREQUENT_COLLISIONS)
+                .subList(0, FREQUENT_COLLISIONS.length - 2)
+                .toArray(new String[FREQUENT_COLLISIONS.length - 2]);
+        MutableMap<String, String> map = this.newMap();
+        MutableSet<String> set = Sets.mutable.of(expected);
+
+        ArrayIterate.forEach(FREQUENT_COLLISIONS, each -> map.put(each, each));
+
+        Iterator<String> itr = map.iterator();
+        while (itr.hasNext())
+        {
+            if (!set.contains(itr.next()))
+            {
+                itr.remove();
+            }
+        }
+
+        Verify.assertArrayEquals(expected, map.keysView().toArray());
     }
 
     private static final class NoInstanceOfInEquals

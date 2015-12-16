@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Goldman Sachs.
+ * Copyright 2015 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,13 +39,15 @@ import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static com.gs.collections.impl.factory.Iterables.iSet;
+import static com.gs.collections.impl.factory.Iterables.mList;
 
 /**
  * JUnit test for {@link AbstractMutableSet}.
@@ -67,6 +69,18 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     protected static final MutableList<Integer> MORE_COLLISIONS = FastList.newList(COLLISIONS)
             .with(COLLISION_6, COLLISION_7, COLLISION_8, COLLISION_9);
     protected static final int SIZE = 8;
+    protected static final String[] FREQUENT_COLLISIONS = {
+            "\u9103\ufffe",
+            "\u9104\uffdf",
+            "\u9105\uffc0",
+            "\u9106\uffa1",
+            "\u9107\uff82",
+            "\u9108\uff63",
+            "\u9109\uff44",
+            "\u910a\uff25",
+            "\u910b\uff06",
+            "\u910c\ufee7"
+    };
 
     @Override
     protected abstract <T> MutableSet<T> newWith(T... littleElements);
@@ -885,5 +899,22 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         RichIterable<Integer> integers = this.newWith(2, 4, 1, 3);
         MutableSortedBag<Integer> bag = integers.toSortedBagBy(String::valueOf);
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(1, 2, 3, 4), bag);
+    }
+
+    @Test
+    public void frequentCollisions()
+    {
+        String[] expected = ArrayAdapter.adapt(FREQUENT_COLLISIONS)
+                .subList(0, FREQUENT_COLLISIONS.length - 2)
+                .toArray(new String[FREQUENT_COLLISIONS.length - 2]);
+        MutableSet<String> set1 = this.newWith();
+        MutableSet<String> set2 = this.newWith();
+
+        Collections.addAll(set1, FREQUENT_COLLISIONS);
+        Collections.addAll(set2, expected);
+
+        set1.retainAll(set2);
+
+        Verify.assertArrayEquals(expected, set1.toArray());
     }
 }
