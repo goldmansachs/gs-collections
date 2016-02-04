@@ -47,6 +47,11 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
         return <name>ArrayList.newListWith(elements);
     }
 
+    protected <name>ArrayList newWithCapacity(int capacity)
+    {
+        return new <name>ArrayList(capacity);
+    }
+
     @Test
     public void test<name>ArrayListWithInitialCapacity() throws Exception
     {
@@ -151,6 +156,16 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
         list.add(<(literal.(type))("5")>);
         list.removeAtIndex(0);
         Assert.assertEquals(list, list.toImmutable());
+    }
+
+    @Test
+    public void testReverseThisForSingleElementList()
+    {
+        <name>ArrayList list = this.newWithCapacity(10);
+        list.add(<(literal.(type))("1")>);
+        list.reverseThis();
+        Verify.assertSize(1, list);
+        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>), list);
     }
 }
 
