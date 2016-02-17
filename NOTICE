@@ -1,17 +1,5 @@
 GS Collections
-Copyright 2013 Goldman Sachs
-
-This product includes software (slf4j) developed by
-QOS.ch (http://www.slf4j.org/index.html).
-
-This product includes software (JCIP Annotations) developed by
-Brian Goetz and Tim Peierls (http://jcip.net/).
-
-This product includes software (JUnit) developed by
-JUnit.org (http://www.junit.org/).
+Copyright 2016 Goldman Sachs
 
 This product includes software developed by
 Dr. Heinz M. Kabutz (http://www.javaspecialists.eu/archive/Issue193.html).
-
-This product includes software (StringTemplate) developed by
-Terence Parr and Sam Harwell (http://www.stringtemplate.org/).
