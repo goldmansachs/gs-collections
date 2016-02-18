@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Goldman Sachs.
+ * Copyright 2016 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,11 @@
 
 package com.gs.collections.impl.bimap.mutable;
 
+import com.gs.collections.api.bimap.MutableBiMap;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.test.domain.Key;
+import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -107,5 +110,50 @@ public class HashBiMapTest extends AbstractMutableBiMapTestCase
         AbstractMutableBiMapTestCase.assertBiMapsEqual(HashBiMap.newWithKeysValues(1, 'a', 2, 'b', 3, 'c', 4, 'd'), map44);
         Assert.assertSame(map, map44);
         Assert.assertSame(map3, map4);
+    }
+
+    @Test
+    public void inverseKeyPreservation()
+    {
+        Key key = new Key("key");
+        Key duplicateKey = new Key("key");
+
+        MutableBiMap<Key, Integer> biMap = this.newMapWithKeysValues(key, 1, duplicateKey, 2);
+        Assert.assertSame(key, Iterate.getFirst(biMap.entrySet()).getKey());
+        Assert.assertSame(key, Iterate.getFirst(biMap.inverse().entrySet()).getValue());
+    }
+
+    @Test
+    public void valuePreservation()
+    {
+        Key value = new Key("value");
+        Key duplicateValue = new Key("value");
+
+        MutableBiMap<Integer, Key> biMap = this.newMapWithKeyValue(1, value);
+        biMap.forcePut(2, duplicateValue);
+        Assert.assertSame(value, Iterate.getFirst(biMap.entrySet()).getValue());
+        Assert.assertSame(value, Iterate.getFirst(biMap.inverse().entrySet()).getKey());
+    }
+
+    @Test
+    public void forcePut_inverseKeyAndValuePreservation()
+    {
+        Key key1 = new Key("1");
+        Key value2 = new Key("xyz");
+
+        HashBiMap<Key, Key> biMap = this.newMapWithKeysValues(key1, new Key("abc"), new Key("2"), value2);
+
+        Key duplicateOfKey1 = new Key("1");
+        Key duplicateOfValue2 = new Key("xyz");
+
+        biMap.forcePut(duplicateOfKey1, duplicateOfValue2);
+
+        Verify.assertSize(1, biMap);
+
+        Assert.assertSame(key1, Iterate.getFirst(biMap.entrySet()).getKey());
+        Assert.assertSame(key1, Iterate.getFirst(biMap.inverse().entrySet()).getValue());
+
+        Assert.assertSame(value2, Iterate.getFirst(biMap.entrySet()).getValue());
+        Assert.assertSame(value2, Iterate.getFirst(biMap.inverse().entrySet()).getKey());
     }
 }
