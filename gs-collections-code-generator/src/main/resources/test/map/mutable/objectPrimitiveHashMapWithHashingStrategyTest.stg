@@ -233,6 +233,8 @@ public class Object<name>HashMapWithHashingStrategyTest extends Object<name>Hash
         Assert.assertEquals(mapWithConstantHashcodeStrategy, map2);
         Assert.assertEquals(map2, mapWithConstantHashcodeStrategy);
         Assert.assertNotEquals(map1.hashCode(), map2.hashCode());
+        Assert.assertNotEquals(map1.hashCode(), mapWithConstantHashcodeStrategy.hashCode());
+        Assert.assertNotEquals(map2.hashCode(), mapWithConstantHashcodeStrategy.hashCode());
 
         Object<name>HashMapWithHashingStrategy\<Person> map3 = Object<name>HashMapWithHashingStrategy.newWithKeysValues(LAST_NAME_HASHING_STRATEGY, <allPeople()>);
 
