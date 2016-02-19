@@ -23,7 +23,7 @@
 
     <artifactId>gs-collections-code-generator</artifactId>
     <groupId>com.goldmansachs</groupId>
-    <version>7.0.3</version>
+    <version>7.0.4-SNAPSHOT</version>
 
     <name>Goldman Sachs Collections Code Generator</name>
 
