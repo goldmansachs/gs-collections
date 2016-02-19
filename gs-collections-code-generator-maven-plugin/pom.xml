@@ -22,7 +22,7 @@
 
     <groupId>com.goldmansachs</groupId>
     <artifactId>gs-collections-code-generator-maven-plugin</artifactId>
-    <version>7.0.2</version>
+    <version>7.0.3</version>
 
     <packaging>maven-plugin</packaging>
 
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections-code-generator</artifactId>
-            <version>7.0.2</version>
+            <version>7.0.3</version>
         </dependency>
 
         <dependency>

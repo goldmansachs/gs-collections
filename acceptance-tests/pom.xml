@@ -23,7 +23,7 @@
     <parent>
         <artifactId>gs-collections-parent</artifactId>
         <groupId>com.goldmansachs</groupId>
-        <version>7.0.2</version>
+        <version>7.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
