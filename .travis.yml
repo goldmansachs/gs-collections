@@ -1,9 +1,55 @@
 language: java
-jdk:
-  - oraclejdk8
+dist: trusty
+sudo: false
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+      - oracle-java9-installer
 
 before_install:
-  - cat /etc/mavenrc
-  - sudo rm /etc/mavenrc
-  - export MAVEN_OPTS="-Dmaven.repo.local=$HOME/.m2/repository -Xmx2g -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss:SSS"
+  - wget https://archive.apache.org/dist/maven/maven-3/3.5.0/binaries/apache-maven-3.5.0-bin.zip
+  - unzip -qq apache-maven-3.5.0-bin.zip
+  - export M2_HOME=$PWD/apache-maven-3.5.0
+  - export PATH=$M2_HOME/bin:$PATH
+  - echo "MAVEN_OPTS='-Dmaven.repo.local=$HOME/.m2/repository -Xmx1g -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss:SSS'" > ~/.mavenrc
 
+install:
+  -
+
+matrix:
+  fast_finish: true
+  include:
+    - jdk: oraclejdk8
+      env:
+        - DESC="acceptance tests"
+        - JDK=Java8
+        - CMD="mvn install --projects acceptance-tests --also-make --activate-profiles all --batch-mode --show-version --errors"
+
+    - jdk: oraclejdk8
+      env:
+        - DESC="findbugs"
+        - JDK=Java8
+        - CMD="mvn install findbugs:check --projects '!scala-unit-tests,!jmh-scala-tests,!jmh-tests,!p2-repository' --activate-profiles all -DskipTests=true --batch-mode --show-version --errors"
+
+    - jdk: oraclejdk8
+      env:
+        - DESC="checkstyle"
+        - JDK=Java8
+        - CMD="mvn install checkstyle:check --activate-profiles all -DskipTests=true --batch-mode --show-version --errors"
+
+    - jdk: oraclejdk8
+      env:
+        - DESC="unit tests"
+        - JDK=Java8
+        - CMD="mvn install --batch-mode --show-version --errors"
+
+    - jdk: oraclejdk8
+      env:
+        - DESC="compile jmh-tests and performance-tests"
+        - JDK=Java8
+        - CMD="mvn install --projects jmh-tests,performance-tests --also-make --activate-profiles all -DskipTests=true --batch-mode --show-version --errors"
+
+cache:
+  directories:
+  - ~/.m2
